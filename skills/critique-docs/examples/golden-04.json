@@ -1,0 +1,44 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-docs/examples/docs-golden-04-explanation-context.md",
+  "expected_envelope": {
+    "run": {
+      "skill": "critique-docs",
+      "skill_version": "0.1.0",
+      "contract_version": "1.0.0",
+      "artifact": "skills/critique-docs/examples/docs-golden-04-explanation-context.md",
+      "artifact_sha256": "3636fd4932abf4170da7c9f7c5cb2af62bce976ab0d9220b6087a50141b54b79",
+      "model": "claude-sonnet-4-5-20250929",
+      "timestamp": "2026-07-31T18:28:00Z",
+      "rubrics": [
+        "DIATAXIS"
+      ]
+    },
+    "findings": [
+      {
+        "id": "F-001",
+        "criterion": "DIATAXIS-EXPLANATION-CONTEXT",
+        "lane": "judged",
+        "severity": 2,
+        "location": "the Why we chose event sourcing for the order pipeline heading, the migration list",
+        "evidence": "The page's three-item numbered list, Duplicate the events table, Point the new consumer, Cut traffic over, is an ordered, imperative migration procedure set between two discursive paragraphs on why event sourcing was chosen and what it costs.",
+        "violation": "The page is filed as an explanation of a design decision, and every paragraph around the list is discursive background and reasoning, but the three-item list itself is an ordered sequence of actions a reader would carry out while migrating a service, which is DIATAXIS-EXPLANATION-CONTEXT's own boundary between background and an executable procedure.",
+        "fix": "Move the three migration steps to a how-to page and link to it from this explanation, leaving this page to the reasoning alone.",
+        "confidence": "medium"
+      }
+    ],
+    "summary": {
+      "by_severity": {
+        "0": 0,
+        "1": 0,
+        "2": 1,
+        "3": 0,
+        "4": 0
+      },
+      "suppressed_count": 0,
+      "gate": "pass",
+      "severity_3_threshold": 0
+    }
+  },
+  "note": "docs-golden-04-explanation-context.md declares explanation mode and stays discursive throughout except for one three-item numbered list instructing how to migrate an existing service onto the new pattern, set between paragraphs on why event sourcing was chosen and what it costs; that is exactly DIATAXIS-EXPLANATION-CONTEXT's operational test for a stretch that shifts from background into an imperative, ordered procedure, and its severity-2 anchor names precisely this shape, one short numbered list among otherwise discursive paragraphs. No scripted criterion fires: scripts/checks.py returns zero findings against this page, because the list items open with plain imperative verbs, Duplicate, Point, Cut, rather than any action-marker string in the closed DIATAXIS-MODE lexicon, and the page's headings and list length are both well inside every scripted threshold, so the finding above is judged-lane only."
+}

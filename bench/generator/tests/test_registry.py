@@ -13,15 +13,16 @@ def test_domain_modules_is_an_explicit_tuple():
     assert DOMAIN_MODULES == (
         "bench.generator.domains.toy",
         "bench.generator.domains.argument",
+        "bench.generator.domains.docs",
     )
 
 
 def test_load_domains_returns_domain_instances():
     domains = load_domains()
-    assert len(domains) == 2
+    assert len(domains) == 3
     assert all(isinstance(d, Domain) for d in domains)
     assert [d.name for d in domains] == [
-        "toy", "argument",
+        "toy", "argument", "docs",
     ]
 
 

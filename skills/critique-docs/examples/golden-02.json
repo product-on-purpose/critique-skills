@@ -1,0 +1,55 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-docs/examples/docs-golden-02-mode-and-goal.md",
+  "expected_envelope": {
+    "run": {
+      "skill": "critique-docs",
+      "skill_version": "0.1.0",
+      "contract_version": "1.0.0",
+      "artifact": "skills/critique-docs/examples/docs-golden-02-mode-and-goal.md",
+      "artifact_sha256": "39ef4cd8fe88e52eb2e2862774b5957bee5c609ca545be9a0c64edae81d1f4a3",
+      "model": "claude-sonnet-4-5-20250929",
+      "timestamp": "2026-07-31T18:12:00Z",
+      "rubrics": [
+        "DIATAXIS"
+      ]
+    },
+    "findings": [
+      {
+        "id": "F-001",
+        "criterion": "DIATAXIS-HOWTO-GOAL",
+        "lane": "judged",
+        "severity": 3,
+        "location": "the Step 2: Enable two-factor authentication heading",
+        "evidence": "Step 2 is titled Enable two-factor authentication and instructs toggling on 2FA, scanning a QR code, and enabling it, placed between Step 1 (opening account settings) and Step 3 (choosing a new password).",
+        "violation": "The page's named goal is resetting the account password, but Step 2 carries the reader through a second, unrelated task, enabling two-factor authentication, positioned between the first and third steps of the password reset itself, so a reader who wants only to reset a password must read and perform an unrelated security change to reach the step that finishes their actual task.",
+        "fix": "Remove Step 2 from this page and link to a separate how-to page for enabling two-factor authentication instead, keeping this page to the three steps that actually reset a password.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-002",
+        "criterion": "DIATAXIS-MODE",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "Step 2: Enable two-factor authentication, list item 3",
+        "evidence": "Because two-factor authentication protects the account from password reuse elsewhere, we recommend turning it on now.",
+        "violation": "This sentence opens with a lexical marker belonging to a different mode's register than this page's declared how-to mode.",
+        "fix": "Rewrite the sentence in the page's own declared mode's register, or move this content to a page in the mode it actually belongs to.",
+        "confidence": "high"
+      }
+    ],
+    "summary": {
+      "by_severity": {
+        "0": 0,
+        "1": 0,
+        "2": 1,
+        "3": 1,
+        "4": 0
+      },
+      "suppressed_count": 0,
+      "gate": "fail",
+      "severity_3_threshold": 0
+    }
+  },
+  "note": "docs-golden-02-mode-and-goal.md's Step 2 list item 3 opens with Because, a fixed explanation-mode marker, on a page declared how-to, which is exactly DIATAXIS-MODE's operational test; severity 2 because it is a single instance rather than a pervasive pattern. Step 2 itself, Enable two-factor authentication, is a second task the page's named goal, resetting a password, never asked for, inserted between Step 1 and Step 3 so a reader following the page straight through must complete it before reaching the password step, which is DIATAXIS-HOWTO-GOAL's operational test for a page that widens into a task beyond the one it names; severity 3 because the unrelated task blocks the reader's path to finishing the one they came for, not merely mentions something adjacent. The two findings are distinct violations of the same page for the same underlying reason, Step 2 does not belong here, but each fails a different criterion's own test, exactly the distinction DIATAXIS-MODE and the four per-mode-fit criteria preserve."
+}

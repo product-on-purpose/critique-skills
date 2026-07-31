@@ -17,6 +17,7 @@ from bench.generator.api import Domain
 DOMAIN_MODULES: tuple[str, ...] = (
     "bench.generator.domains.toy",
     "bench.generator.domains.argument",
+    "bench.generator.domains.docs",
 )
 
 

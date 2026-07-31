@@ -1,0 +1,55 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-docs/examples/docs-golden-01-heading-and-nav.md",
+  "expected_envelope": {
+    "run": {
+      "skill": "critique-docs",
+      "skill_version": "0.1.0",
+      "contract_version": "1.0.0",
+      "artifact": "skills/critique-docs/examples/docs-golden-01-heading-and-nav.md",
+      "artifact_sha256": "71d1413cdaa5cd1f96b604bb0edf743cff7416b3f8b0d59cd6ba08ce5a5d8a6f",
+      "model": "claude-sonnet-4-5-20250929",
+      "timestamp": "2026-07-31T18:05:00Z",
+      "rubrics": [
+        "DIATAXIS"
+      ]
+    },
+    "findings": [
+      {
+        "id": "F-001",
+        "criterion": "DIATAXIS-HEADING-DEPTH",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "the Confirm the retry count updated heading",
+        "evidence": "Heading level jumped from 2 (Step 2: Set the new retry limit) to 4 (Confirm the retry count updated) with no intermediate level between them.",
+        "violation": "This heading is nested more than one level deeper than the heading immediately before it, so a reader or a tool relying on heading level cannot reconstruct which section this one belongs under.",
+        "fix": "Insert a level 3 heading between Step 2: Set the new retry limit and Confirm the retry count updated, or promote Confirm the retry count updated to level 3.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-002",
+        "criterion": "DIATAXIS-NAV-LENGTH",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "the Related pages listing",
+        "evidence": "9 flat items, no sub-headings or nested items breaking them into groups.",
+        "violation": "This listing holds 9 items, more than 7 a reader can scan in one glance, with no subgrouping to break it up.",
+        "fix": "Split this listing into named subgroups, either nested sub-lists or sub-headings, each holding a smaller set of related items.",
+        "confidence": "high"
+      }
+    ],
+    "summary": {
+      "by_severity": {
+        "0": 0,
+        "1": 0,
+        "2": 2,
+        "3": 0,
+        "4": 0
+      },
+      "suppressed_count": 0,
+      "gate": "pass",
+      "severity_3_threshold": 0
+    }
+  },
+  "note": "docs-golden-01-heading-and-nav.md's fourth heading, Confirm the retry count updated, jumps from level 2 straight to level 4 with no level-3 heading between it and Step 2, exactly DIATAXIS-HEADING-DEPTH's operational test for a single jump, severity 2 because it is the page's only jump rather than the two-or-more recurrence its severity-3 anchor names. The Related pages listing at the bottom carries 9 flat items with no sub-headings or nested grouping, one more than DIATAXIS-NAV-LENGTH's 7-item threshold and well under the 20-item severity-3 boundary, so it also lands at severity 2; it is the only listing under its heading, so naming the heading identifies it unambiguously and no line number is appended. Both are scripted findings: the heading jump is arithmetic on level numbers and the listing count is arithmetic on parsed list items, neither needs a judgment call. No judged-lane criterion fires, and the page is deliberately written so that verdict is not arguable: DIATAXIS-HOWTO-GOAL's test asks whether the page re-teaches a known concept or widens into a second task, and the three steps here open the settings, set the retry limit the title names, and confirm it took, with no fourth task and no definition of a term a reader who can find the integrations panel would need. DIATAXIS-CROSSLINK and DIATAXIS-ORPHAN have no counterpart or sibling-page data to evaluate against in this standalone single-page artifact, and DIATAXIS-MODE does not fire because no sentence opens with an explanation-register marker, which is the only thing its closed lexicon looks for on a declared how-to page."
+}
