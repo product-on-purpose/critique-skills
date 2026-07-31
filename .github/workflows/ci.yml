@@ -1,0 +1,181 @@
+name: CI
+
+# Per Standard sec 4.1/4.4 and this repo's CI plan (see _local/initial-plan/04-ci-plan.md, a local
+# planning archive, not shipped), this workflow contains NO validation logic of its own: every job
+# is exactly one documented command, each reproducible locally with identical results (AGENTS.md
+# "Checks"). CI is a scheduler, not a judge.
+#
+# Seven jobs (S-07 CI-pipeline spec, AC-1): conformance, unit-python, unit-node, schema, corpus,
+# drift, audit. Each command a job runs is marked "# doc-check"; scripts/gen-plugin-manifest.mjs
+# --check (the "drift" job) fails if any "# doc-check" command is not documented in AGENTS.md
+# (AC-5).
+#
+# Node matrix: 22.12.0 (floor) and 24 (current). Python: 3.12.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  # agent-skills-toolkit, pinned for reproducibility; bump deliberately to adopt toolkit changes
+  # (docs/internal/decisions/0011-gate-wiring-toolkit-wrapper.md).
+  TOOLKIT_REF: 6cfd68b1565da56a591117ea29ec315d2988e7f7
+
+jobs:
+  conformance:
+    name: conformance (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['22.12.0', '24']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Checkout the toolkit validators (pinned)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: product-on-purpose/agent-skills-toolkit
+          ref: ${{ env.TOOLKIT_REF }}
+          path: .agent-skills-toolkit
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install toolkit dependencies
+        run: npm ci
+        working-directory: .agent-skills-toolkit
+
+      - name: Run conformance gate
+        env:
+          AGENT_SKILLS_TOOLKIT: ${{ github.workspace }}/.agent-skills-toolkit
+        run: npm run check # doc-check
+
+  unit-python:
+    name: unit-python (Python 3.12)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Install Python test dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Run Python unit tests
+        run: python -m pytest # doc-check
+
+  unit-node:
+    name: unit-node (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['22.12.0', '24']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Run Node unit tests
+        run: npm test # doc-check
+
+  schema:
+    name: schema (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['22.12.0', '24']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Setup Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Validate every bench result envelope against the contract schema
+        run: npm run validate:envelopes # doc-check
+
+  corpus:
+    name: corpus (Python 3.12)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Regenerate the corpus from seed and verify it matches bench/corpus/
+        run: python -m bench.generator verify --corpus bench/corpus # doc-check
+
+  drift:
+    name: drift (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['22.12.0', '24']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Checkout the toolkit validators (pinned)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: product-on-purpose/agent-skills-toolkit
+          ref: ${{ env.TOOLKIT_REF }}
+          path: .agent-skills-toolkit
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Check generated artifacts and documented commands for drift
+        env:
+          AGENT_SKILLS_TOOLKIT: ${{ github.workspace }}/.agent-skills-toolkit
+        run: npm run gen -- --check # doc-check
+
+  audit:
+    name: audit (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['22.12.0', '24']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Audit npm dependencies
+        run: npm audit --audit-level=high # doc-check
