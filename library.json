@@ -3,11 +3,21 @@
   "version": "0.1.0",
   "description": "Rubric-cited, machine-parseable critique skills that produce measured, evidence-graded findings (usability, accessibility, clarity) instead of freeform opinion. Use when you need a structured review of an interface, document, or piece of writing with defects cited against a rubric and reported in a machine-parseable output.",
   "standard": "0.12",
-  "tier": "universal",
+  "tier": "convergent",
+  "agent-targets": ["claude"],
   "prefix": "critique-",
   "components": {
-    "skills": [],
-    "subagents": [],
+    "skills": [
+      { "name": "critique-accessibility", "path": "skills/critique-accessibility", "version": "0.1.0", "tier": "universal", "status": "active" },
+      { "name": "critique-argument", "path": "skills/critique-argument", "version": "0.1.0", "tier": "universal", "status": "active" },
+      { "name": "critique-clarity", "path": "skills/critique-clarity", "version": "0.1.0", "tier": "universal", "status": "active" },
+      { "name": "critique-docs", "path": "skills/critique-docs", "version": "0.1.0", "tier": "universal", "status": "active" },
+      { "name": "critique-microcopy", "path": "skills/critique-microcopy", "version": "0.1.0", "tier": "universal", "status": "active" },
+      { "name": "critique-usability", "path": "skills/critique-usability", "version": "0.1.0", "tier": "universal", "status": "active" }
+    ],
+    "subagents": [
+      { "name": "critique-critic", "path": "agents/critique-critic.md", "version": "0.1.0", "tier": "convergent", "status": "active", "agent-targets": ["claude"] }
+    ],
     "commands": []
   },
   "license": "Apache-2.0",

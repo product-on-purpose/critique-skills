@@ -4,7 +4,7 @@ Agent navigation entrypoint for this plugin.
 
 ## What this is
 
-`critique-skills` is an Advanced Skill Library Standard plugin (`tier: universal` at v0.1.0) of
+`critique-skills` is an Advanced Skill Library Standard plugin (`tier: convergent` at v0.1.0) of
 rubric-cited, machine-parseable critique skills: structured review of interfaces, documents, and
 writing that reports measured, evidence-graded findings against a defect rubric instead of
 freeform opinion. See `library.json` for the authoritative name, version, and tier.
@@ -24,8 +24,12 @@ freeform opinion. See `library.json` for the authoritative name, version, and ti
 
 ## Components
 
-- **Skills:** none yet. Add the first with `askit-build-skill` (create mode).
-- **Subagents:** none yet.
+- **Skills:** `critique-accessibility`, `critique-argument`, `critique-clarity`, `critique-docs`,
+  `critique-microcopy`, `critique-usability` (all `skills/critique-*`, v0.1.0, `active`). The toy
+  fixture at `skills/_template-fixture` is a scaffolding sample, not a shipped skill, and is
+  deliberately not registered in `library.json`.
+- **Subagents:** `critique-critic` (`agents/critique-critic.md`, v0.1.0, `active`, Claude-only) - the
+  clean-context critic every `critique-<domain>` skill delegates to.
 - **Commands:** none yet.
 
 ## Checks
