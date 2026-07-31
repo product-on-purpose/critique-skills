@@ -1,0 +1,380 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/product-on-purpose/critique-skills/main/bench/generator/manifest.schema.json",
+  "title": "Bench artifact manifest",
+  "description": "Ground truth for one generated corpus artifact: where it lives, what bytes it is, what seed produced it, and every defect planted in it. One manifest per artifact, written beside the artifact by bench/generator. This file is manifest version 1.0.0 and validates 1.x manifests only. The metrics module reads manifests and run envelopes and nothing else; a claim that cannot be computed from those two is not a benchmark claim.",
+  "$comment": "Manifest version 1.0.0. Several definitions here are deliberate copies from contract/critique-contract.schema.json (criterionId, sha256, artifactPath, prose, noEmDash, trimmed). The contract is authoritative; the copies exist so this schema validates standalone with no remote reference resolution. A CI drift check compares each copied pattern byte for byte against its contract original and fails on divergence. See bench/README.md.",
+  "type": "object",
+  "required": [
+    "manifest_version",
+    "artifact",
+    "artifact_sha256",
+    "seed",
+    "domain",
+    "artifact_type",
+    "recipe",
+    "defects"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "manifest_version": {
+      "$ref": "#/$defs/manifestVersion"
+    },
+    "artifact": {
+      "$ref": "#/$defs/artifactPath",
+      "description": "Repository-relative POSIX path to the generated artifact. The same value a run envelope carries in run.artifact, so a manifest and an envelope join on path and, more strongly, on artifact_sha256.",
+      "examples": ["bench/corpus/toy/toy-001.md", "bench/corpus/accessibility/accessibility-002.html"]
+    },
+    "artifact_sha256": {
+      "$ref": "#/$defs/sha256",
+      "description": "SHA-256 of the artifact file bytes exactly as written: UTF-8, no BOM, LF line endings, single trailing newline. The artifact's true identity. A run envelope whose run.artifact_sha256 differs was scored against different bytes and its numbers do not belong to this corpus."
+    },
+    "seed": {
+      "$ref": "#/$defs/seedHex",
+      "description": "The derived artifact seed, 32 lowercase hex characters. Sufficient on its own to regenerate this artifact: bench/generator regenerates from (seed, domain, recipe) with no reference to the corpus root seed. Derivation from the root seed is documented in bench/generator/README.md."
+    },
+    "domain": {
+      "$ref": "#/$defs/slug",
+      "description": "The domain module that produced this artifact, matching the suffix of its owning skill: 'clarity' for critique-clarity. 'toy' is the worked example domain and is not part of the scored corpus.",
+      "examples": ["clarity", "accessibility", "usability", "docs", "microcopy", "argument", "toy"]
+    },
+    "artifact_type": {
+      "$ref": "#/$defs/artifactType",
+      "description": "Which location-tolerance rule the metrics module applies to findings against this artifact. Carried per artifact rather than looked up per domain, so a domain can add a second artifact type without a metrics change."
+    },
+    "recipe": {
+      "$ref": "#/$defs/slug",
+      "description": "Identifier of the declarative recipe that produced this artifact, unique within its domain. Opaque by rule: a recipe id MUST NOT encode defect presence, defect count, or any criterion, because the artifact path reaches the skill under test.",
+      "examples": ["toy-001", "clarity-004"]
+    },
+    "defects": {
+      "title": "Planted defects",
+      "description": "Every defect the generator planted, in document order, ties broken by criterion ID. An empty array is meaningful and required for a clean artifact: it asserts 'nothing was planted here', which is the assertion the false-positive measurement rests on. Absence of the key would assert only 'not recorded', which is why the key is required.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/defect"
+      }
+    }
+  },
+
+  "$defs": {
+
+    "defect": {
+      "title": "Planted defect",
+      "description": "One deliberately injected breach of one criterion at one recorded location. The unit of recall: a skill run either produces a finding matching this criterion at this location within the artifact type's tolerance, or it does not.",
+      "type": "object",
+      "required": ["criterion", "location", "severity_expected", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "criterion": {
+          "$ref": "#/$defs/criterionId",
+          "description": "The criterion this defect breaches. Matched against a finding's criterion by exact string equality, never by namespace or prefix."
+        },
+        "location": {
+          "$ref": "#/$defs/location"
+        },
+        "severity_expected": {
+          "$ref": "#/$defs/severityExpected"
+        },
+        "description": {
+          "$ref": "#/$defs/prose",
+          "maxLength": 500,
+          "description": "What was done to the artifact, in meta-language. MUST NOT quote or paraphrase the injected text: a description that quotes the artifact makes the defect findable by string search rather than by critique, and the leak check rejects it. 'One sentence recast into passive voice with the acting party deleted' is a description; quoting that sentence back is a leak.",
+          "examples": ["One sentence recast into passive voice with the acting party deleted."]
+        }
+      }
+    },
+
+    "location": {
+      "title": "Ground-truth location",
+      "description": "Where the defect sits, in the canonical anchor vocabulary of the artifact type. This is bench ground truth, not the contract's reserved finding.selector: no skill writes it and no envelope carries it. The metrics module resolves a finding's free-text location into this vocabulary and compares within the artifact type's tolerance. The vocabulary evidence collected here is the intended input to the selector vocabulary decision deferred by ADR 0012.",
+      "type": "object",
+      "required": ["kind", "text"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "title": "Anchor kind",
+          "description": "Which anchor the structured fields carry. Constrains which sibling fields may appear.",
+          "type": "string",
+          "enum": [
+            "paragraph",
+            "heading-path",
+            "css",
+            "element-id",
+            "item-index",
+            "page-path"
+          ]
+        },
+        "text": {
+          "$ref": "#/$defs/prose",
+          "maxLength": 400,
+          "description": "The location as a correct finding would plausibly write it. Same shape and limit as the contract's locationText, so a manifest location and a finding location are comparable by eye. Never used as the match key: matching runs on the structured fields.",
+          "examples": ["Service window, second paragraph", "the site header logo image"]
+        },
+        "paragraph": {
+          "title": "Paragraph index",
+          "description": "1-based index of the paragraph block in document order, counting paragraph blocks only. Headings, list items, fenced code, blockquotes, tables, and HTML blocks are not paragraphs. The normative parser is the metrics module's block parser, documented in bench/README.md; the generator asserts its own addresses against that parser at build time.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "sentence": {
+          "title": "Sentence index",
+          "description": "1-based index of the sentence within the paragraph. Recorded for human review and for a future finer tolerance; the v0.1 match rule does not read it, because requiring sentence agreement would score a correct paragraph-level finding as a miss.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "heading_path": {
+          "title": "Heading path",
+          "description": "Heading titles from the document root down to the section containing the defect, outermost first, verbatim as rendered. Compared after Unicode NFC normalization, casefolding, and whitespace collapse.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/prose",
+            "maxLength": 200
+          },
+          "examples": [["Field operations notice", "Service window"]]
+        },
+        "css": {
+          "title": "CSS path",
+          "description": "A CSS selector resolving to exactly one element in the artifact as generated. Used when the target element carries no id.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 400,
+          "examples": ["main > section:nth-of-type(2) > figure > img"]
+        },
+        "element_id": {
+          "title": "Element id",
+          "description": "The target element's id attribute, compared case-sensitively per HTML id semantics. The generator assigns content-derived ids to every element of an injectable class in clean and seeded artifacts alike, so the presence of an id never signals a plant.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]*(?![\\s\\S])",
+          "examples": ["pricing-cta"]
+        },
+        "item_index": {
+          "title": "Item index",
+          "description": "1-based index of the string in the list. Tolerance on this anchor is zero: adjacency in a string list carries no meaning, so item 4 and item 5 are unrelated strings, not neighbours.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "item_key": {
+          "title": "Item key",
+          "description": "The stable key of the string, for example a message id, recorded in addition to item_index rather than instead of it. Compared case-sensitively. A string-list artifact is parsed as an ordered list of (key, value) pairs, so every item has a position whether or not it has a key, and there is deliberately no item-key anchor kind: a keyed item is kind item-index carrying both fields. The string-list tolerance rule matches on either, so recording the key widens what a correct finding may say without weakening the exact-match requirement.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "examples": ["billing.card-declined"]
+        },
+        "page_path": {
+          "title": "Page path",
+          "description": "Path of the page within its documentation tree, relative to the tree root, POSIX separators. Used for defects that are properties of a page as a whole rather than of a block inside it. One artifact is one page, so a defect inside a block records its block anchor and takes its page from the manifest artifact field; this anchor is not repeated on the other kinds, and the schema forbids it there.",
+          "$ref": "#/$defs/artifactPath",
+          "examples": ["reference/rate-table.md"]
+        }
+      },
+      "allOf": [
+        {
+          "$comment": "Each anchor kind fixes exactly which structured fields are required and which are forbidden. Setting a property schema to false rejects that property's presence, which keeps error messages precise: a css field on an item-index location is reported as that, not as a failed oneOf branch.",
+          "if": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": { "kind": { "const": "paragraph" } }
+          },
+          "then": {
+            "required": ["paragraph"],
+            "properties": {
+              "css": false,
+              "element_id": false,
+              "item_index": false,
+              "item_key": false,
+              "page_path": false
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": { "kind": { "const": "heading-path" } }
+          },
+          "then": {
+            "required": ["heading_path"],
+            "properties": {
+              "paragraph": false,
+              "sentence": false,
+              "css": false,
+              "element_id": false,
+              "item_index": false,
+              "item_key": false,
+              "page_path": false
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": { "kind": { "const": "css" } }
+          },
+          "then": {
+            "required": ["css"],
+            "properties": {
+              "paragraph": false,
+              "sentence": false,
+              "heading_path": false,
+              "item_index": false,
+              "item_key": false,
+              "page_path": false
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": { "kind": { "const": "element-id" } }
+          },
+          "then": {
+            "required": ["element_id"],
+            "properties": {
+              "paragraph": false,
+              "sentence": false,
+              "heading_path": false,
+              "item_index": false,
+              "item_key": false,
+              "page_path": false
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": { "kind": { "const": "item-index" } }
+          },
+          "then": {
+            "required": ["item_index"],
+            "properties": {
+              "paragraph": false,
+              "sentence": false,
+              "heading_path": false,
+              "css": false,
+              "element_id": false,
+              "page_path": false
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": { "kind": { "const": "page-path" } }
+          },
+          "then": {
+            "required": ["page_path"],
+            "properties": {
+              "paragraph": false,
+              "sentence": false,
+              "css": false,
+              "element_id": false,
+              "item_index": false,
+              "item_key": false
+            }
+          }
+        }
+      ]
+    },
+
+    "artifactType": {
+      "title": "Artifact type",
+      "description": "The four generated artifact shapes of v0.1, each with its own location-tolerance rule. 'markdown-prose' is a single prose document; 'markdown-tree' is one page of a documentation tree; 'html' is a page or fragment; 'string-list' is an ordered or keyed list of user-facing strings. Adding a type is a manifest minor version and requires a tolerance rule in bench/README.md first.",
+      "type": "string",
+      "enum": ["markdown-prose", "markdown-tree", "html", "string-list"]
+    },
+
+    "severityExpected": {
+      "title": "Expected severity",
+      "description": "The severity a correct finding would assign, on the contract's single 0 to 4 scale. Bounded to 1 through 4 here: severity 0 means 'not a problem', so a defect planted at severity 0 is not a defect. v0.1 metrics do not score severity agreement; the field is recorded so severity calibration is measurable in v0.2 without regenerating the corpus.",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4
+    },
+
+    "manifestVersion": {
+      "title": "Manifest version",
+      "description": "Version of this manifest format, versioned independently of both the plugin and the critique contract. This file validates 1.x manifests only. Patch is editorial, minor adds optional fields, major changes required fields and ships as a new file at a new path.",
+      "type": "string",
+      "maxLength": 16,
+      "pattern": "^1\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?![\\s\\S])",
+      "examples": ["1.0.0"]
+    },
+
+    "seedHex": {
+      "title": "Seed",
+      "description": "A 128-bit seed as 32 lowercase hex characters, the output of the blake2b key derivation documented in bench/generator/README.md.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{32}(?![\\s\\S])"
+    },
+
+    "slug": {
+      "title": "Slug",
+      "description": "Lowercase alphanumerics in hyphen-separated segments. No underscores, no uppercase, no leading or trailing hyphen.",
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+    },
+
+    "criterionId": {
+      "title": "Criterion ID",
+      "description": "Copied verbatim from the critique contract's criterionId. Permanent, uppercase, namespaced SOURCE-CRITERION. A manifest criterion that appears in no skill's criterion registry is a corpus bug, caught by a cross-check in CI rather than by this schema.",
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+(?:\\.[A-Z0-9]+)*)+(?![\\s\\S])",
+      "examples": ["PLAIN-ACTIVE", "WCAG-1.4.3", "NNG-H4", "TOY-ACTIVE"]
+    },
+
+    "artifactPath": {
+      "title": "Artifact path",
+      "description": "Copied verbatim from the critique contract's artifactPath. Relative POSIX path. Rejects absolute paths, drive letters, backslashes, leading and trailing whitespace, and newlines, so a manifest generated on Windows reads identically to one generated on Linux.",
+      "type": "string",
+      "maxLength": 512,
+      "allOf": [
+        { "$ref": "#/$defs/noEmDash" },
+        { "pattern": "^(?!\\s)(?![/\\\\])(?![A-Za-z]:)[^\\\\\\r\\n]*\\S(?![\\s\\S])" }
+      ]
+    },
+
+    "sha256": {
+      "title": "SHA-256",
+      "description": "Copied verbatim from the critique contract's sha256. Lowercase hex, 64 characters, no prefix.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+    },
+
+    "prose": {
+      "title": "Prose field",
+      "description": "Copied verbatim from the critique contract's prose. Non-empty, no leading or trailing whitespace, no em dash, no en dash.",
+      "type": "string",
+      "minLength": 1,
+      "allOf": [
+        { "$ref": "#/$defs/noEmDash" },
+        { "$ref": "#/$defs/trimmed" }
+      ]
+    },
+
+    "noEmDash": {
+      "title": "No em dash or en dash",
+      "description": "Copied verbatim from the critique contract. Rejects U+2014 EM DASH and U+2013 EN DASH anywhere in the string. Use ' - ', a comma, or a colon; ranges use a plain hyphen.",
+      "type": "string",
+      "pattern": "^[^\u2014\u2013]*(?![\\s\\S])"
+    },
+
+    "trimmed": {
+      "title": "Trimmed and non-empty",
+      "description": "Copied verbatim from the critique contract. No leading or trailing whitespace, and at least one non-whitespace character.",
+      "type": "string",
+      "pattern": "^\\S(?:[\\s\\S]*\\S)?(?![\\s\\S])"
+    }
+  }
+}

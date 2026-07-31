@@ -1,0 +1,562 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/product-on-purpose/critique-skills/main/contract/critique-contract.schema.json",
+  "title": "Critique contract",
+  "description": "The machine-parseable interface every critique-skills component produces and consumes. Three document types are defined: a finding (#/$defs/finding), a run envelope (#/$defs/envelope), and a disposition log (#/$defs/dispositionLog). This file is contract version 1.0.0 and validates contract 1.x documents only. Where this file and docs/explanation/methodology.md disagree, the methodology is correct and this file is a bug.",
+  "$comment": "Contract version 1.0.0. Root dispatch: a document carrying a 'dispositions' key is validated as a disposition log; every other object is validated as a run envelope. To validate a bare finding, reference #/$defs/finding directly. Rules this schema cannot express are listed in contract/README.md and MUST be implemented by the validator.",
+  "type": "object",
+  "if": {
+    "type": "object",
+    "required": ["dispositions"]
+  },
+  "then": {
+    "$ref": "#/$defs/dispositionLog"
+  },
+  "else": {
+    "$ref": "#/$defs/envelope"
+  },
+
+  "$defs": {
+
+    "finding": {
+      "$anchor": "finding",
+      "title": "Finding",
+      "description": "One defect claim, against one criterion, at one location, in one artifact. Methodology section 5.",
+      "type": "object",
+      "required": [
+        "id",
+        "criterion",
+        "lane",
+        "severity",
+        "location",
+        "evidence",
+        "violation",
+        "fix",
+        "confidence"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/findingId",
+          "description": "Finding identifier, unique within its envelope. Uniqueness is a validator rule; JSON Schema cannot express it."
+        },
+        "criterion": {
+          "$ref": "#/$defs/criterionId",
+          "description": "The permanent criterion identifier this finding is raised against. Its namespace (the text before the first hyphen) MUST appear in run.rubrics."
+        },
+        "lane": {
+          "$ref": "#/$defs/lane"
+        },
+        "severity": {
+          "$ref": "#/$defs/severity"
+        },
+        "location": {
+          "$ref": "#/$defs/locationText"
+        },
+        "evidence": {
+          "$ref": "#/$defs/prose",
+          "maxLength": 2000,
+          "description": "A short quotation from the artifact or a measurement taken from it, never a characterization of it. This is the field that makes the finding falsifiable. Whether the text is a quotation or a characterization is review-lane, not schema-checkable.",
+          "examples": ["body text #8a8a8a on background #f5f5f5"]
+        },
+        "violation": {
+          "$ref": "#/$defs/prose",
+          "maxLength": 1000,
+          "description": "Which part of the criterion was breached, not merely that something is bad.",
+          "examples": ["Contrast ratio 2.9:1, below the 4.5:1 AA minimum"]
+        },
+        "fix": {
+          "$ref": "#/$defs/prose",
+          "maxLength": 1000,
+          "description": "An actionable, specific change. 'Improve clarity' is not a fix.",
+          "examples": ["Darken text to #595959 or darker"]
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "instances": {
+          "title": "Instance list",
+          "description": "Further locations at which this same criterion is breached in the same way. Use either one finding per instance or one finding with an instance list, never both for the same occurrences. The finding's own location, evidence, violation, and fix describe the representative instance.",
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/instance"
+          }
+        },
+        "rubric_source": {
+          "$ref": "#/$defs/rubricSource"
+        },
+        "selector": {
+          "$ref": "#/$defs/selector"
+        }
+      },
+      "allOf": [
+        {
+          "$comment": "Methodology section 5: scripted-lane findings are always high confidence or they are bugs.",
+          "if": {
+            "type": "object",
+            "required": ["lane"],
+            "properties": {
+              "lane": { "const": "scripted" }
+            }
+          },
+          "then": {
+            "properties": {
+              "confidence": { "const": "high" }
+            }
+          }
+        },
+        {
+          "$comment": "Methodology section 3: a criterion in the BYOR namespace is by construction a user-supplied rubric criterion. The converse is deliberately not enforced, since a user rubric may declare its own namespace.",
+          "if": {
+            "type": "object",
+            "required": ["criterion"],
+            "properties": {
+              "criterion": { "pattern": "^BYOR-" }
+            }
+          },
+          "then": {
+            "required": ["rubric_source"],
+            "properties": {
+              "rubric_source": { "const": "byor" }
+            }
+          }
+        }
+      ]
+    },
+
+    "envelope": {
+      "$anchor": "envelope",
+      "title": "Run envelope",
+      "description": "One skill run against one artifact: what was run, what it found, and what the gate makes of it. Methodology section 5.",
+      "type": "object",
+      "required": ["run", "findings", "summary"],
+      "additionalProperties": false,
+      "properties": {
+        "run": {
+          "title": "Run record",
+          "description": "Everything needed to reproduce and compare this run.",
+          "type": "object",
+          "required": [
+            "skill",
+            "skill_version",
+            "contract_version",
+            "artifact",
+            "artifact_sha256",
+            "model",
+            "timestamp",
+            "rubrics"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "skill": {
+              "$ref": "#/$defs/skillName",
+              "description": "The emitting skill, full name including the plugin prefix: 'critique-clarity'. Baseline runners emit their own frozen name, for example 'baseline-generic'.",
+              "examples": ["critique-clarity", "baseline-generic"]
+            },
+            "skill_version": {
+              "$ref": "#/$defs/semver",
+              "description": "Semantic version of the emitting skill."
+            },
+            "contract_version": {
+              "$ref": "#/$defs/contractVersion",
+              "description": "Version of this contract the envelope was written against. Versioned independently of the plugin, starting at 1.0.0. See docs/internal/decisions/0013-contract-versioning-independent.md."
+            },
+            "artifact": {
+              "$ref": "#/$defs/artifactPath",
+              "description": "Repository-relative or workspace-relative POSIX path to the artifact critiqued. Absolute paths, drive letters, and backslashes are rejected so envelopes stay portable and publishable.",
+              "examples": ["docs/prd.md", "bench/corpus/clarity/artifact-003.md"]
+            },
+            "artifact_sha256": {
+              "$ref": "#/$defs/sha256",
+              "description": "SHA-256 of the artifact bytes as critiqued. The artifact's true identity; the path is a convenience."
+            },
+            "model": {
+              "$ref": "#/$defs/modelId",
+              "description": "Identifier of the model that performed the judged lane, pinned exactly. Use 'none' for a run with no judged lane.",
+              "examples": ["claude-sonnet-4-5-20250929", "none"]
+            },
+            "timestamp": {
+              "$ref": "#/$defs/timestamp",
+              "description": "Run start time, RFC 3339, UTC, with a literal trailing Z."
+            },
+            "rubrics": {
+              "title": "Rubric namespaces",
+              "description": "Every criterion namespace this run drew on. The namespace of a criterion ID is the text before its first hyphen: WCAG-1.4.3 has namespace WCAG. Every finding's namespace MUST appear here; that check is a validator rule.",
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/rubricNamespace"
+              },
+              "examples": [["PLAIN", "WILLIAMS"]]
+            },
+            "stripped_context": {
+              "$ref": "#/$defs/strippedContext"
+            }
+          }
+        },
+        "findings": {
+          "title": "Findings",
+          "description": "The findings this run emits, after bounding. Empty is valid and expected for a clean artifact. Suppressed findings are not listed here; they are counted in summary.by_severity and summary.suppressed_count.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/finding"
+          }
+        },
+        "summary": {
+          "title": "Summary",
+          "description": "The gate reads this object and nothing else. Every value needed to compute an exit code is present here.",
+          "type": "object",
+          "required": ["by_severity", "suppressed_count", "gate", "severity_3_threshold"],
+          "additionalProperties": false,
+          "properties": {
+            "by_severity": {
+              "$ref": "#/$defs/bySeverity"
+            },
+            "suppressed_count": {
+              "$ref": "#/$defs/count",
+              "description": "How many findings the output bound removed from findings[]. They remain counted in by_severity, so nothing disappears silently. Zero when nothing was suppressed."
+            },
+            "gate": {
+              "title": "Gate verdict",
+              "description": "'fail' when by_severity['4'] is above zero or by_severity['3'] is above severity_3_threshold; 'pass' otherwise. The validator recomputes this and treats a mismatch as a contract violation.",
+              "type": "string",
+              "enum": ["pass", "fail"]
+            },
+            "severity_3_threshold": {
+              "$ref": "#/$defs/count",
+              "description": "The severity-3 count this run was allowed to carry without failing the gate. Default 0. Recorded here so the exit code is computable from summary alone."
+            }
+          }
+        }
+      }
+    },
+
+    "dispositionLog": {
+      "$anchor": "dispositionLog",
+      "title": "Disposition log",
+      "description": "The human's accept, reject, or defer decision per finding of one run. The source of the acceptance-rate signal that drives criterion pruning. Methodology sections 8 and 10.",
+      "type": "object",
+      "required": ["contract_version", "envelope", "dispositions"],
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "$ref": "#/$defs/contractVersion",
+          "description": "Version of this contract the log was written against."
+        },
+        "envelope": {
+          "$ref": "#/$defs/envelopeRef",
+          "description": "The run whose findings are being dispositioned. Finding IDs are unique only within a run, so a log without this reference is unresolvable."
+        },
+        "dispositions": {
+          "title": "Dispositions",
+          "description": "One entry per finding decided. A log need not cover every finding in the envelope; undecided findings are simply absent.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/dispositionEntry"
+          }
+        }
+      }
+    },
+
+    "dispositionEntry": {
+      "title": "Disposition entry",
+      "type": "object",
+      "required": ["finding_id", "disposition"],
+      "additionalProperties": false,
+      "properties": {
+        "finding_id": {
+          "$ref": "#/$defs/findingId",
+          "description": "A finding ID from the referenced envelope. Resolvability is a validator rule, checked whenever the envelope is available."
+        },
+        "disposition": {
+          "title": "Disposition",
+          "type": "string",
+          "enum": ["accept", "reject", "defer"]
+        },
+        "note": {
+          "$ref": "#/$defs/prose",
+          "maxLength": 1000,
+          "description": "Why. Optional, and most valuable on reject."
+        },
+        "criterion": {
+          "$ref": "#/$defs/criterionId",
+          "description": "The criterion of the referenced finding, denormalized so acceptance rate per criterion is computable from the log alone. Optional; when present it MUST match the finding in the referenced envelope."
+        },
+        "decided_at": {
+          "$ref": "#/$defs/timestamp",
+          "description": "When the decision was recorded. Optional."
+        }
+      }
+    },
+
+    "envelopeRef": {
+      "title": "Envelope reference",
+      "description": "Identifies one run envelope. skill plus artifact_sha256 plus timestamp is the composite key; path and envelope_sha256 bind the reference to a specific file when one exists.",
+      "type": "object",
+      "required": ["skill", "artifact_sha256", "timestamp"],
+      "additionalProperties": false,
+      "properties": {
+        "skill": { "$ref": "#/$defs/skillName" },
+        "skill_version": { "$ref": "#/$defs/semver" },
+        "artifact": { "$ref": "#/$defs/artifactPath" },
+        "artifact_sha256": { "$ref": "#/$defs/sha256" },
+        "timestamp": { "$ref": "#/$defs/timestamp" },
+        "path": {
+          "$ref": "#/$defs/artifactPath",
+          "description": "Path to the envelope file, when the envelope is stored on disk."
+        },
+        "envelope_sha256": {
+          "$ref": "#/$defs/sha256",
+          "description": "SHA-256 of the envelope file bytes, when a strong binding is wanted."
+        }
+      }
+    },
+
+    "instance": {
+      "title": "Instance",
+      "description": "One further location of the same breach. Carries the same location pair the finding carries at top level, in object form.",
+      "type": "object",
+      "required": ["location"],
+      "additionalProperties": false,
+      "properties": {
+        "location": { "$ref": "#/$defs/locationText" },
+        "selector": { "$ref": "#/$defs/selector" },
+        "evidence": {
+          "$ref": "#/$defs/prose",
+          "maxLength": 2000,
+          "description": "Quotation or measurement for this instance. Optional, and the only way an instance list keeps the evidence contract for occurrences other than the representative one."
+        }
+      }
+    },
+
+    "strippedContext": {
+      "title": "Stripped context",
+      "description": "The clean-context ledger: authorial framing, requester opinion, prior critique, or scope steering that arrived with the artifact and was disregarded. Methodology section 7. Present only when something was stripped; an absent field asserts that nothing was. An empty array carries no information a missing key does not, so it is rejected.",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["kind", "note"],
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "title": "Stripped context kind",
+            "description": "What class of framing was disregarded. 'other' exists so a novel case produces a valid envelope rather than a lost note; note is required either way.",
+            "type": "string",
+            "enum": [
+              "authorial-framing",
+              "requester-opinion",
+              "prior-critique",
+              "scope-steering",
+              "other"
+            ]
+          },
+          "note": {
+            "$ref": "#/$defs/prose",
+            "maxLength": 1000,
+            "description": "What was disregarded, in the critic's own words.",
+            "examples": [
+              "Requester stated section 2 was fine and asked for focus elsewhere; section 2 was swept on the same terms as every other section."
+            ]
+          }
+        }
+      }
+    },
+
+    "selector": {
+      "title": "Structured selector",
+      "description": "RESERVED. A structured, machine-resolvable pointer to the same place location names in prose: a CSS selector, a heading path, a page and bounding box, a slide index. Deliberately unvalidated in contract 1.x, and the only object in this schema that accepts unknown properties. No vocabulary has been agreed across text, HTML, and visual artifacts, and freezing the wrong one is worse than freezing none. Producers MAY write it, consumers MUST NOT depend on it, and no v0.1 metric reads it. Unvalidated does not mean exempt from house style: because this object is the one place a schema pattern cannot reach, the validator's rule 9 rejects an em dash or en dash in any string inside it, keys included. See docs/internal/decisions/0012-location-grammar-freetext-plus-reserved-selector.md.",
+      "type": "object",
+      "minProperties": 1
+    },
+
+    "bySeverity": {
+      "title": "Severity histogram",
+      "description": "Count of every finding this run produced, including findings the output bound suppressed. All five keys are required so the totals are always complete. The sum of by_severity equals the length of findings[] plus suppressed_count; that check is a validator rule.",
+      "type": "object",
+      "required": ["0", "1", "2", "3", "4"],
+      "additionalProperties": false,
+      "properties": {
+        "0": { "$ref": "#/$defs/count" },
+        "1": { "$ref": "#/$defs/count" },
+        "2": { "$ref": "#/$defs/count" },
+        "3": { "$ref": "#/$defs/count" },
+        "4": { "$ref": "#/$defs/count" }
+      },
+      "examples": [{ "0": 0, "1": 3, "2": 5, "3": 2, "4": 0 }]
+    },
+
+    "severity": {
+      "title": "Severity",
+      "description": "The single 0-4 scale used in every domain, weighed on impact, then frequency, then persistence. 0 not a problem, 1 cosmetic, 2 minor, 3 major, 4 catastrophic. Methodology section 6 and docs/reference/severity-scale.md. MUST be a JSON integer literal; 3.0 is a bug, and rejecting it is a validator rule because JSON Schema's integer type accepts it.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4
+    },
+
+    "lane": {
+      "title": "Lane",
+      "description": "Whether the finding came from a deterministic script or from model judgment. Honesty here is the basis of the library's determinism claims. Methodology section 7.",
+      "type": "string",
+      "enum": ["scripted", "judged"]
+    },
+
+    "confidence": {
+      "title": "Confidence",
+      "description": "Applies to the judged lane. Scripted findings are always high.",
+      "type": "string",
+      "enum": ["high", "medium", "low"]
+    },
+
+    "rubricSource": {
+      "title": "Rubric source",
+      "description": "Whether the criterion came from a rubric bundled with the skill or from a user-supplied one. Absent means bundled.",
+      "type": "string",
+      "enum": ["bundled", "byor"],
+      "default": "bundled"
+    },
+
+    "criterionId": {
+      "title": "Criterion ID",
+      "description": "Permanent, uppercase, namespaced criterion identifier of the form SOURCE-CRITERION. The source is a letter followed by letters and digits. The criterion is one or more hyphen-separated segments of letters and digits, each of which may carry dot-separated parts so upstream numbering survives verbatim. Methodology section 4 and docs/reference/criterion-ids.md.",
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+(?:\\.[A-Z0-9]+)*)+(?![\\s\\S])",
+      "examples": [
+        "NNG-H4",
+        "WCAG-1.4.3",
+        "PLAIN-ACTIVE",
+        "TOULMIN-WARRANT",
+        "PYRAMID-MECE",
+        "DIATAXIS-MODE",
+        "AE-TITLE",
+        "NNG-EM-CONSTRUCTIVE",
+        "BYOR-BRAND-VOICE"
+      ]
+    },
+
+    "rubricNamespace": {
+      "title": "Rubric namespace",
+      "description": "The source half of a criterion ID: the text before its first hyphen.",
+      "type": "string",
+      "maxLength": 32,
+      "pattern": "^[A-Z][A-Z0-9]*(?![\\s\\S])",
+      "examples": ["WCAG", "NNG", "PLAIN", "BYOR"]
+    },
+
+    "findingId": {
+      "title": "Finding ID",
+      "description": "Sequence identifier for a finding, unique within its envelope. Canonical form is F- followed by digits, zero padding allowed. Deliberately narrow: finding IDs are join keys for disposition logs and run diffs, not prose.",
+      "type": "string",
+      "pattern": "^F-[0-9]{1,6}(?![\\s\\S])",
+      "examples": ["F-007", "F-1"]
+    },
+
+    "locationText": {
+      "title": "Location",
+      "description": "Where in the artifact, in prose specific enough that a reader navigates there unaided. 'Section 2, hero banner' is a location; 'throughout the document' is not, and that judgment is review-lane, not schema-checkable. Methodology section 5, with the grammar decision in docs/internal/decisions/0012-location-grammar-freetext-plus-reserved-selector.md.",
+      "$ref": "#/$defs/prose",
+      "maxLength": 400,
+      "examples": ["Section 2, hero banner", "slide 7 title", "line 84, second sentence"]
+    },
+
+    "artifactPath": {
+      "title": "Artifact path",
+      "description": "Relative POSIX path. Rejects absolute paths, drive letters, backslashes, leading and trailing whitespace, and newlines, so an envelope produced on one machine reads the same on another and carries no local filesystem layout.",
+      "type": "string",
+      "maxLength": 512,
+      "allOf": [
+        { "$ref": "#/$defs/noEmDash" },
+        { "pattern": "^(?!\\s)(?![/\\\\])(?![A-Za-z]:)[^\\\\\\r\\n]*\\S(?![\\s\\S])" }
+      ]
+    },
+
+    "skillName": {
+      "title": "Skill name",
+      "description": "Lowercase, hyphen-separated. Not constrained to the critique- prefix: baseline runners emit envelopes too.",
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+    },
+
+    "modelId": {
+      "title": "Model ID",
+      "description": "Exact model identifier, no whitespace. Benchmark numbers are only honest if this is pinned.",
+      "type": "string",
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*(?![\\s\\S])"
+    },
+
+    "semver": {
+      "title": "Semantic version",
+      "description": "Semantic Versioning 2.0.0, with no leading v.",
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?![\\s\\S])",
+      "examples": ["1.2.0", "0.1.0-rc.1"]
+    },
+
+    "contractVersion": {
+      "title": "Contract version",
+      "description": "Version of the critique contract, versioned independently of the plugin and starting at 1.0.0. This schema file validates 1.x documents only; a 2.x document is rejected here by design and validates against the 2.x schema file.",
+      "type": "string",
+      "maxLength": 16,
+      "pattern": "^1\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?![\\s\\S])",
+      "examples": ["1.0.0"]
+    },
+
+    "sha256": {
+      "title": "SHA-256",
+      "description": "Lowercase hex, 64 characters, no prefix.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+    },
+
+    "timestamp": {
+      "title": "Timestamp",
+      "description": "RFC 3339 in UTC with a literal trailing Z, optional fractional seconds. Offsets other than Z are rejected so timestamps sort lexically and compare across machines.",
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,9})?Z(?![\\s\\S])",
+      "examples": ["2026-07-17T14:22:03Z"]
+    },
+
+    "count": {
+      "title": "Count",
+      "type": "integer",
+      "minimum": 0
+    },
+
+    "prose": {
+      "title": "Prose field",
+      "description": "A human-readable string: non-empty, no leading or trailing whitespace, no em dash, no en dash.",
+      "type": "string",
+      "minLength": 1,
+      "allOf": [
+        { "$ref": "#/$defs/noEmDash" },
+        { "$ref": "#/$defs/trimmed" }
+      ]
+    },
+
+    "noEmDash": {
+      "title": "No em dash or en dash",
+      "description": "House style, enforced at the contract boundary because it is the cheapest single enforcement point. Rejects U+2014 EM DASH and U+2013 EN DASH anywhere in the string. Use ' - ', a comma, or a colon; ranges use a plain hyphen. This pattern reaches only the fields this schema types as prose; the validator's rule 9 applies the same test to every string in a document, keys included, which is how the reserved selector object is covered.",
+      "type": "string",
+      "pattern": "^[^\u2014\u2013]*(?![\\s\\S])"
+    },
+
+    "trimmed": {
+      "title": "Trimmed and non-empty",
+      "description": "No leading or trailing whitespace, and at least one non-whitespace character.",
+      "type": "string",
+      "pattern": "^\\S(?:[\\s\\S]*\\S)?(?![\\s\\S])"
+    }
+  }
+}
