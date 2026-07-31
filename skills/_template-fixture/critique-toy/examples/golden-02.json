@@ -1,0 +1,58 @@
+{
+  "kind": "golden",
+  "artifact": "bench/corpus/toy/toy-002.md",
+  "expected_envelope": {
+    "run": {
+      "skill": "critique-toy",
+      "skill_version": "0.1.0",
+      "contract_version": "1.0.0",
+      "artifact": "bench/corpus/toy/toy-002.md",
+      "artifact_sha256": "962463e38fc37921a3cb55bd66c6e4ca970efaed1d7ac4723364474d293fe25b",
+      "model": "none",
+      "timestamp": "2026-07-31T16:52:19Z",
+      "rubrics": ["TOY"]
+    },
+    "findings": [
+      {
+        "id": "F-001",
+        "criterion": "TOY-ORPHAN",
+        "lane": "scripted",
+        "severity": 3,
+        "location": "the Escalation heading",
+        "evidence": "heading: Escalation",
+        "violation": "No paragraph appears between this heading and the next heading of equal or higher level, so the heading introduces no body.",
+        "fix": "Add a body paragraph under the Escalation heading, or remove the heading.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-002",
+        "criterion": "TOY-ACTIVE",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "Meter replacement, paragraph 3, first sentence",
+        "evidence": "The meter log is closed within one business day.",
+        "violation": "The sentence is recast into a passive construction that deletes the actor, where the toy grammar's active form would have named it directly.",
+        "fix": "Rewrite the sentence in active voice, naming the actor that performs the action.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-003",
+        "criterion": "TOY-HEDGE",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "Service window, paragraph 1, first sentence",
+        "evidence": "It may possibly be the case that the field crew files the service ticket before the shift ends.",
+        "violation": "A hedging phrase is stacked ahead of an otherwise direct statement, with no stated reason for the qualification.",
+        "fix": "Delete the hedge and state the sentence directly.",
+        "confidence": "high"
+      }
+    ],
+    "summary": {
+      "by_severity": {"0": 0, "1": 0, "2": 2, "3": 1, "4": 0},
+      "suppressed_count": 0,
+      "gate": "fail",
+      "severity_3_threshold": 0
+    }
+  },
+  "note": "toy-002.md's own manifest (bench/corpus/toy/toy-002.manifest.json) plants three defects: an orphan Escalation subheading at the end of the document (TOY-ORPHAN, severity 3), a passive recast in Meter replacement's first paragraph (TOY-ACTIVE), and a stacked hedge in Service window's first paragraph (TOY-HEDGE). The severity-3 TOY-ORPHAN finding is above the default threshold of 0, so the gate fails."
+}

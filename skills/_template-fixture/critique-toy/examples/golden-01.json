@@ -1,0 +1,47 @@
+{
+  "kind": "golden",
+  "artifact": "bench/corpus/toy/toy-001.md",
+  "expected_envelope": {
+    "run": {
+      "skill": "critique-toy",
+      "skill_version": "0.1.0",
+      "contract_version": "1.0.0",
+      "artifact": "bench/corpus/toy/toy-001.md",
+      "artifact_sha256": "e746f0c4b5870452b1e21031ad5ccefdb9364da4aacfa57a4018ebfc47d973d5",
+      "model": "none",
+      "timestamp": "2026-07-31T16:52:14Z",
+      "rubrics": ["TOY"]
+    },
+    "findings": [
+      {
+        "id": "F-001",
+        "criterion": "TOY-ACTIVE",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "Service window, paragraph 2, first sentence",
+        "evidence": "The meter log is signed off on at the start of each week.",
+        "violation": "The sentence is recast into a passive construction that deletes the actor, where the toy grammar's active form would have named it directly.",
+        "fix": "Rewrite the sentence in active voice, naming the actor that performs the action.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-002",
+        "criterion": "TOY-HEDGE",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "Billing adjustments, paragraph 4, first sentence",
+        "evidence": "It may possibly be the case that the billing team files the meter log before the shift ends.",
+        "violation": "A hedging phrase is stacked ahead of an otherwise direct statement, with no stated reason for the qualification.",
+        "fix": "Delete the hedge and state the sentence directly.",
+        "confidence": "high"
+      }
+    ],
+    "summary": {
+      "by_severity": {"0": 0, "1": 0, "2": 2, "3": 0, "4": 0},
+      "suppressed_count": 0,
+      "gate": "pass",
+      "severity_3_threshold": 0
+    }
+  },
+  "note": "toy-001.md's own manifest (bench/corpus/toy/toy-001.manifest.json) plants exactly these two defects: paragraph 2's lead sentence loses its actor to a passive recast (TOY-ACTIVE), and paragraph 4's lead sentence opens with a stacked hedge (TOY-HEDGE). Both are severity 2 on a single occurrence per references/severity-anchors.md, so the gate passes."
+}
