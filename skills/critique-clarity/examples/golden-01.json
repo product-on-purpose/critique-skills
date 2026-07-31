@@ -1,0 +1,69 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-clarity/examples/clarity-golden-01-passive-and-nominalization.md",
+  "expected_envelope": {
+    "run": {
+      "skill": "critique-clarity",
+      "skill_version": "0.1.0",
+      "contract_version": "1.0.0",
+      "artifact": "skills/critique-clarity/examples/clarity-golden-01-passive-and-nominalization.md",
+      "artifact_sha256": "10e2c8bde7e7427efb74b6f306aa2f6630f8aef35cd145131ba5b6a5eaf3efa2",
+      "model": "claude-sonnet-4-5-20250929",
+      "timestamp": "2026-07-31T18:05:00Z",
+      "rubrics": ["PLAIN", "WILLIAMS"]
+    },
+    "findings": [
+      {
+        "id": "F-001",
+        "criterion": "PLAIN-ACTIVE",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "Current Status, paragraph 1",
+        "evidence": "The vendor contract was reviewed by the finance team last quarter.",
+        "violation": "The sentence uses a be-verb plus past-participle passive construction in a context where the actor is recoverable and worth naming directly.",
+        "fix": "Rewrite the sentence in active voice, naming the actor that performs the action.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-002",
+        "criterion": "PLAIN-ACTIVE",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "Current Status, paragraph 1",
+        "evidence": "An extension was granted by the compliance office after several concerns were raised about the pricing structure.",
+        "violation": "The sentence uses a be-verb plus past-participle passive construction in a context where the actor is recoverable and worth naming directly.",
+        "fix": "Rewrite the sentence in active voice, naming the actor that performs the action.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-003",
+        "criterion": "PLAIN-NOMINALIZATION",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "Current Status, paragraph 2",
+        "evidence": "The working group made a determination about the renewal timeline last week.",
+        "violation": "The action is buried inside the noun 'determination', carried by a generic support verb, instead of stated as the sentence's own main verb.",
+        "fix": "Restate the nominalized noun as the sentence's main verb.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-004",
+        "criterion": "PLAIN-TRANSITIONS",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "Current Status, paragraph 2",
+        "evidence": "The working group made a determination about the renewal timeline last week.",
+        "violation": "The paragraph opens with none of the fixed transition words, so the reader is not told how it relates to the paragraph before it.",
+        "fix": "Open the paragraph with a transition word that states its relationship to the prior paragraph.",
+        "confidence": "high"
+      }
+    ],
+    "summary": {
+      "by_severity": {"0": 0, "1": 0, "2": 4, "3": 0, "4": 0},
+      "suppressed_count": 0,
+      "gate": "pass",
+      "severity_3_threshold": 0
+    }
+  },
+  "note": "clarity-golden-01-passive-and-nominalization.md's first paragraph is two consecutive sentences each using a be-verb plus past-participle construction with the actor still named in a by-phrase, exactly PLAIN-ACTIVE's operational test for a passive sentence whose actor is recoverable and relevant; severity 2 because the passage is short and does not compound across a whole procedure. The second paragraph's only sentence buries the action inside the noun determination, carried by the generic support verb made, which is PLAIN-NOMINALIZATION's own operational test, and the same paragraph opens with none of the fixed transition words after a paragraph that established a different claim, which is PLAIN-TRANSITIONS' operational test. All four findings are scripted: each is a fixed lexical or structural pattern (a be-plus-participle regex, a support-verb-plus-suffixed-noun regex, and a closed transition-word list checked at the paragraph's first word) that needs no judgment call, matching this skill's scripted-heavy lane balance for readability mechanics. The judged lane swept both namespaces and reported nothing: the passives keep their actors in by-phrases, so WILLIAMS-CHARACTER-ACTION does not fire, and a two-paragraph update is too short to carry a coherence or stress breach. run.rubrics still lists PLAIN and WILLIAMS because a run records every namespace it swept, not only the ones that produced a finding."
+}

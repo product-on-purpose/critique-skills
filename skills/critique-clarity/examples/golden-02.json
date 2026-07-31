@@ -1,0 +1,69 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-clarity/examples/clarity-golden-02-negation-and-audience.md",
+  "expected_envelope": {
+    "run": {
+      "skill": "critique-clarity",
+      "skill_version": "0.1.0",
+      "contract_version": "1.0.0",
+      "artifact": "skills/critique-clarity/examples/clarity-golden-02-negation-and-audience.md",
+      "artifact_sha256": "fd6c86cef898989d65139445ef02eeec8457ef11f9a50891da166de647b9578b",
+      "model": "claude-sonnet-4-5-20250929",
+      "timestamp": "2026-07-31T18:10:00Z",
+      "rubrics": ["PLAIN", "WILLIAMS"]
+    },
+    "findings": [
+      {
+        "id": "F-001",
+        "criterion": "PLAIN-AUDIENCE",
+        "lane": "judged",
+        "severity": 3,
+        "location": "Next Steps, paragraph 1",
+        "evidence": "Gather pay stubs before the appointment. Confirm the intake date and update the tracking system during the same appointment. Bring a photo ID and retain a copy of the application for the file.",
+        "violation": "None of the three imperative sentences states who performs it, and the actions plainly belong to two different readers, the applicant gathering documents and the caseworker updating internal systems, so a reader working through this paragraph cannot tell which sentences describe their own next step and which describe staff's.",
+        "fix": "Split this paragraph into two clearly labeled lists, one addressed to you as the applicant and one describing what the caseworker will do, so each reader can tell at a glance which items are theirs to act on.",
+        "confidence": "medium"
+      },
+      {
+        "id": "F-002",
+        "criterion": "PLAIN-DOUBLE-NEGATIVE",
+        "lane": "scripted",
+        "severity": 3,
+        "location": "Review Status, paragraph 1",
+        "evidence": "The application cannot be processed unless the missing information is not withheld.",
+        "violation": "3 negation markers from the fixed negation list co-occur in one clause, so the reader has to work out the statement's logical sign before understanding it.",
+        "fix": "Restate the sentence with at most one negation, or recast it as a positive statement.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-003",
+        "criterion": "PLAIN-ACTIVE",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "Review Status, paragraph 1",
+        "evidence": "The application cannot be processed unless the missing information is not withheld.",
+        "violation": "The sentence uses a be-verb plus past-participle passive construction in a context where the actor is recoverable and worth naming directly.",
+        "fix": "Rewrite the sentence in active voice, naming the actor that performs the action.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-004",
+        "criterion": "PLAIN-ACTIVE",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "Review Status, paragraph 1",
+        "evidence": "The renewal packet was mailed to every applicant on file.",
+        "violation": "The sentence uses a be-verb plus past-participle passive construction in a context where the actor is recoverable and worth naming directly.",
+        "fix": "Rewrite the sentence in active voice, naming the actor that performs the action.",
+        "confidence": "high"
+      }
+    ],
+    "summary": {
+      "by_severity": {"0": 0, "1": 0, "2": 2, "3": 2, "4": 0},
+      "suppressed_count": 0,
+      "gate": "fail",
+      "severity_3_threshold": 0
+    }
+  },
+  "note": "clarity-golden-02-negation-and-audience.md's opening sentence stacks three negation markers, cannot, unless, and not, in one clause, exactly PLAIN-DOUBLE-NEGATIVE's operational test for co-occurring negation, at severity 3 because the reader must work out the statement's logical sign before understanding what actually happens to the application. Both sentences under Review Status are also flagged by PLAIN-ACTIVE for the same fixed be-plus-participle pattern, at severity 2 since the lapse is brief and the actor stays recoverable. The Next Steps paragraph is scripted-clean, no lexical pattern fires on it, but reading it whole shows three imperative sentences with no stated subject, mixing an applicant task (gather pay stubs, bring a photo ID) with a caseworker task (confirm the intake date, update the tracking system) with no signal separating the two, exactly PLAIN-AUDIENCE's operational test for two distinct readers addressed in the same passage with no way to tell which sentence is for whom. That finding is judged, at medium confidence, because it rests on reading the paragraph's meaning as a whole rather than a fixed pattern, and it is what pushes the gate to fail alongside the double negative."
+}

@@ -1,0 +1,69 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-clarity/examples/clarity-golden-03-parallelism-and-cohesion.md",
+  "expected_envelope": {
+    "run": {
+      "skill": "critique-clarity",
+      "skill_version": "0.1.0",
+      "contract_version": "1.0.0",
+      "artifact": "skills/critique-clarity/examples/clarity-golden-03-parallelism-and-cohesion.md",
+      "artifact_sha256": "be3c18d614740a732bd65efd9abb6bbd96240a01e142a7072e3a36809fe45211",
+      "model": "claude-sonnet-4-5-20250929",
+      "timestamp": "2026-07-31T18:15:00Z",
+      "rubrics": ["PLAIN", "WILLIAMS"]
+    },
+    "findings": [
+      {
+        "id": "F-001",
+        "criterion": "PLAIN-PARAGRAPH",
+        "lane": "scripted",
+        "severity": 3,
+        "location": "Notification Flow, paragraph 1",
+        "evidence": "The system routes new tickets to the queue.",
+        "violation": "The paragraph's opening sentence shares almost no vocabulary with the rest of the paragraph, so it does not preview the paragraph's actual topic.",
+        "fix": "Rewrite the opening sentence to state the topic the rest of the paragraph covers.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-002",
+        "criterion": "PLAIN-LISTS",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "Week One Checklist, paragraph 1",
+        "evidence": "The manual covers filing the report, to review the log, and closing the ticket.",
+        "violation": "The sentence embeds three or more comma- or semicolon-separated parallel items inline rather than presenting them as a formatted list.",
+        "fix": "Reformat the inline items as a numbered or bulleted list.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-003",
+        "criterion": "WILLIAMS-COHESION",
+        "lane": "judged",
+        "severity": 2,
+        "location": "Notification Flow, paragraph 1",
+        "evidence": "The system routes new tickets to the queue. Slack sends a notification to the on-call engineer. The engineer confirms receipt within the hour.",
+        "violation": "The opening sentence's subject, the system, is never picked up again; the second sentence introduces a wholly new subject, Slack, with nothing in the first sentence giving the reader a basis for it, so the reader has to re-orient before the paragraph recovers its thread once the engineer carries over into the third sentence.",
+        "fix": "Open the paragraph with the actor that connects all three sentences, for example the ticket, so each sentence's subject picks up where the one before it left off.",
+        "confidence": "medium"
+      },
+      {
+        "id": "F-004",
+        "criterion": "WILLIAMS-PARALLELISM",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "Week One Checklist, paragraph 1",
+        "evidence": "The manual covers filing the report, to review the log, and closing the ticket.",
+        "violation": "The series' 3 items mix grammatical forms (gerund, infinitive) at their head words instead of sharing one form.",
+        "fix": "Restate every item in the series with the same grammatical form.",
+        "confidence": "high"
+      }
+    ],
+    "summary": {
+      "by_severity": {"0": 0, "1": 0, "2": 3, "3": 1, "4": 0},
+      "suppressed_count": 0,
+      "gate": "fail",
+      "severity_3_threshold": 0
+    }
+  },
+  "note": "clarity-golden-03-parallelism-and-cohesion.md's checklist sentence mixes filing (gerund), to review (infinitive), and closing (gerund) as the heads of one coordinated series, exactly WILLIAMS-PARALLELISM's operational test for a series that does not share one grammatical form at the head word; the same sentence also embeds three comma-separated items inline, which is PLAIN-LISTS' own separate operational test, so both fire on the identical sentence at severity 2. The Notification Flow paragraph is where the two lanes diverge on the same passage: PLAIN-PARAGRAPH's scripted word-overlap heuristic flags the opening sentence directly, at severity 3, because the system, routes, and queue never recur anywhere else in the paragraph. WILLIAMS-COHESION's judged pass reads the same three sentences as connected discourse and reports a narrower, different breach, that the subject changes with no carryover from sentence one to sentence two specifically, even though the engineer does carry the topic from sentence two into sentence three, which is why this finding lands at severity 2 rather than 3: a single disruption the paragraph partly recovers from, not a subject that changes in every sentence with nothing ever picked back up."
+}
