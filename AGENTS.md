@@ -111,5 +111,12 @@ Reproduce the guard locally against the tag you are about to push:
 node scripts/check-release-versions.mjs v0.1.0
 ```
 
+It then extracts that version's `RELEASE-NOTES.md` section into the release body, failing clearly if
+the section is missing or empty rather than publishing the whole changelog. Reproduce locally:
+
+```
+node scripts/extract-release-notes.mjs v0.1.0
+```
+
 <!-- More checks land here as later phases add them (skills, evals, docs generation). Append new
      commands below this line; do not reorder the gate command above. -->
