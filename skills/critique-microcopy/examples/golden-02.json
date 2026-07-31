@@ -1,0 +1,80 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-microcopy/examples/microcopy-golden-02-payment-sync.md",
+  "expected_envelope": {
+    "run": {
+      "skill": "critique-microcopy",
+      "skill_version": "0.1.0",
+      "contract_version": "1.0.0",
+      "artifact": "skills/critique-microcopy/examples/microcopy-golden-02-payment-sync.md",
+      "artifact_sha256": "3b884fb43b295a215f598fad4ed25f4f714b54f269035fde0d83b7bec3bbbf57",
+      "model": "claude-sonnet-4-5-20250929",
+      "timestamp": "2026-07-31T19:10:00Z",
+      "rubrics": ["NNG"]
+    },
+    "findings": [
+      {
+        "id": "F-001",
+        "criterion": "NNG-EM-CONSTRUCTIVE",
+        "lane": "scripted",
+        "severity": 3,
+        "location": "Payment form, card number field, message 1",
+        "evidence": "Card number invalid.",
+        "violation": "The message states that a problem exists with no imperative instruction or named next step anywhere in the text.",
+        "fix": "Add a concrete next step: name the action the reader should take to resolve this.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-002",
+        "criterion": "NNG-EM-CONSTRUCTIVE",
+        "lane": "scripted",
+        "severity": 3,
+        "location": "Sync status, background save, message 1",
+        "evidence": "Sync failed, changes not saved.",
+        "violation": "The message states that a problem exists with no imperative instruction or named next step anywhere in the text.",
+        "fix": "Add a concrete next step: name the action the reader should take to resolve this.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-003",
+        "criterion": "NNG-EM-GRACE",
+        "lane": "judged",
+        "severity": 3,
+        "location": "Sync status, background save, message 1",
+        "evidence": "Sync failed, changes not saved.",
+        "violation": "The screen context shows this status line is the only notice of a total, unrecoverable failure, no retry, no fix, nothing else offered on the screen, and the message itself is a bare technical notice with no acknowledgment of what the lost changes mean for the reader.",
+        "fix": "Acknowledge the reader's situation and offer a concrete next step, for example an option to retry or contact support, rather than a bare technical status line.",
+        "confidence": "medium"
+      },
+      {
+        "id": "F-004",
+        "criterion": "NNG-EM-PROXIMITY",
+        "lane": "judged",
+        "severity": 3,
+        "location": "Payment form, card number field, message 1",
+        "evidence": "Placement: bottom of the page, in a separate error-summary section reached by scrolling away from the card field",
+        "violation": "The message is reported only in a separate error-summary section at the bottom of the page, reached by scrolling away from the card field it concerns, so the reader loses sight of the field entirely and must navigate back and forth to reconcile the two.",
+        "fix": "Move the message beside the card number field itself rather than requiring the reader to scroll to a separate error-summary section.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-005",
+        "criterion": "NNG-EM-SEVERITY-CONTAINER",
+        "lane": "judged",
+        "severity": 3,
+        "location": "Payment form, card number field, message 1",
+        "evidence": "Container: toast",
+        "violation": "The screen context shows an invalid card number blocks checkout completion entirely, but the message is presented in a toast that clears itself after a few seconds, so a reader who looks away misses the one message explaining why checkout will not proceed.",
+        "fix": "Present this blocking payment failure in a container that stays on screen until the reader acts on it, a modal or a persistent inline banner beside the field, rather than a self-clearing toast.",
+        "confidence": "high"
+      }
+    ],
+    "summary": {
+      "by_severity": {"0": 0, "1": 0, "2": 0, "3": 5, "4": 0},
+      "suppressed_count": 0,
+      "gate": "fail",
+      "severity_3_threshold": 0
+    }
+  },
+  "note": "microcopy-golden-02-payment-sync.md is severity-3-heavy on purpose, to show that a genuinely bad screen does not get softened by the output bound: every finding here clears severity 3 so none is suppressed. NNG-EM-CONSTRUCTIVE fires twice on the same script logic golden-01 exercises. The three judged findings are where this example earns its place: NNG-EM-PROXIMITY and NNG-EM-SEVERITY-CONTAINER both fire on the card-number message and both track this skill's own severity-3 anchors closely, a validation error banished to a separate error-summary section reached by scrolling away, and a checkout-blocking failure shown in a toast that clears itself, exactly the anchor's own toast example. NNG-EM-GRACE fires on the sync-status message at medium confidence rather than high, because unlike the other two findings it rests on reading the screen context as a whole, that this status line is the only notice of an unrecoverable loss, offers nothing else, and states the failure in bare technical language, rather than on a single stated field. That confidence distinction is itself part of what the golden demonstrates: not every judged call is equally certain, even when the criterion clearly fires."
+}

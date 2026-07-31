@@ -1,0 +1,135 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-microcopy/examples/microcopy-golden-01-signup-checkout.md",
+  "expected_envelope": {
+    "run": {
+      "skill": "critique-microcopy",
+      "skill_version": "0.1.0",
+      "contract_version": "1.0.0",
+      "artifact": "skills/critique-microcopy/examples/microcopy-golden-01-signup-checkout.md",
+      "artifact_sha256": "f8df984e8ac086edc2c6dfeed2c3e2b9404ef0035d7623677d5eac897adcc283",
+      "model": "claude-sonnet-4-5-20250929",
+      "timestamp": "2026-07-31T19:05:00Z",
+      "rubrics": ["NNG"]
+    },
+    "findings": [
+      {
+        "id": "F-001",
+        "criterion": "NNG-EM-CONSTRUCTIVE",
+        "lane": "scripted",
+        "severity": 3,
+        "location": "Checkout form, submit, message 1",
+        "evidence": "Something went wrong. Try again.",
+        "violation": "The message states that a problem exists with no imperative instruction or named next step anywhere in the text.",
+        "fix": "Add a concrete next step: name the action the reader should take to resolve this.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-002",
+        "criterion": "NNG-EM-CONSTRUCTIVE",
+        "lane": "scripted",
+        "severity": 3,
+        "location": "Signup form, confirm-password field, message 1",
+        "evidence": "You failed to match the passwords. Error code: 004.",
+        "violation": "The message states that a problem exists with no imperative instruction or named next step anywhere in the text.",
+        "fix": "Add a concrete next step: name the action the reader should take to resolve this.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-003",
+        "criterion": "NNG-EM-CONSTRUCTIVE",
+        "lane": "scripted",
+        "severity": 3,
+        "location": "Signup form, password field, message 1",
+        "evidence": "Password must be at least 8 characters.",
+        "violation": "The message states that a problem exists with no imperative instruction or named next step anywhere in the text.",
+        "fix": "Add a concrete next step: name the action the reader should take to resolve this.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-004",
+        "criterion": "NNG-EM-SPECIFIC",
+        "lane": "judged",
+        "severity": 3,
+        "location": "Checkout form, submit, message 1",
+        "evidence": "Something went wrong. Try again.",
+        "violation": "The message names no field, value, or rule, a bare something-went-wrong statement, even though the screen context is a checkout submission where a specific, nameable cause, a declined payment, an expired session, a network timeout, was available to state.",
+        "fix": "Name the actual cause, for example a declined payment method, a network timeout, or a specific invalid field, rather than a generic failure statement.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-005",
+        "criterion": "NNG-EM-TIMING",
+        "lane": "scripted",
+        "severity": 3,
+        "location": "Signup form, password field, message 1, Fires field",
+        "evidence": "Fires: mid-keystroke",
+        "violation": "The message can appear before the reader has had a fair chance to finish entering the relevant input.",
+        "fix": "Delay the message until the field loses focus or the form is submitted, not while the reader is still typing or before they have entered anything.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-006",
+        "criterion": "NNG-EM-EXPLAIN",
+        "lane": "judged",
+        "severity": 2,
+        "location": "Signup form, password field, message 1",
+        "evidence": "Password must be at least 8 characters.",
+        "violation": "The screen context shows a rule based password length policy, but the message states the eight-character minimum with no reason attached for why that minimum exists, so a reader who does not already know the policy has nothing to help them understand it.",
+        "fix": "Add a brief reason for the eight-character minimum, for example a short clause naming the security reason the policy exists.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-007",
+        "criterion": "NNG-EM-NEUTRAL-TONE",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "Signup form, confirm-password field, message 1",
+        "evidence": "You failed to match the passwords. Error code: 004.",
+        "violation": "The message frames the problem as something the reader personally did wrong or should have known better than to do, using a second-person accusatory construction.",
+        "fix": "Rewrite the sentence to state the problem neutrally, without blaming the reader.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-008",
+        "criterion": "NNG-EM-NOT-COLOR-ONLY",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "Signup form, password field, message 1, Signal field",
+        "evidence": "Signal: same weight as the label text, none",
+        "violation": "The Signal field's non-color-cue token is none, so color or highlight is the message's only stated cue.",
+        "fix": "Add a non-color cue: an icon, a text label, a shape change, or bold or underline styling.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-009",
+        "criterion": "NNG-EM-PLAIN-LANGUAGE",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "Signup form, confirm-password field, message 1",
+        "evidence": "You failed to match the passwords. Error code: 004.",
+        "violation": "The message text carries an internal error code, a code-style token, or an engineering-jargon term standing in for a plain-language explanation.",
+        "fix": "Replace the code or jargon term with a plain-language sentence a non-technical reader can act on.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-010",
+        "criterion": "NNG-EM-PRESERVE-INPUT",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "Checkout form, submit, message 1, Input on resubmission field",
+        "evidence": "Input on resubmission: cleared",
+        "violation": "A failed submission clears what the reader already entered instead of preserving it so they can correct the specific problem in place.",
+        "fix": "Preserve the reader's entered input across the failed submission.",
+        "confidence": "high"
+      }
+    ],
+    "summary": {
+      "by_severity": {"0": 0, "1": 0, "2": 5, "3": 5, "4": 0},
+      "suppressed_count": 0,
+      "gate": "fail",
+      "severity_3_threshold": 0
+    }
+  },
+  "note": "microcopy-golden-01-signup-checkout.md pushes on three screens at once and demonstrates the mixed lane the S-05 slate calls for. All three NNG-EM-CONSTRUCTIVE hits are exact: none of \"must be\", \"you failed to match\", or \"try again\" contains a marker from the fixed instruction lexicon, and the third message is the same \"Something went wrong. Try again.\" wording docs/reference/severity-scale.md cites as the canonical severity-3 example of a message with no real instruction. NNG-EM-TIMING fires because Fires is mid-keystroke, before the reader can have finished typing a password. NNG-EM-NEUTRAL-TONE and NNG-EM-PLAIN-LANGUAGE both fire on the confirm-password message: \"you failed to\" is a fixed blame phrase, and \"Error code: 004\" matches the status-code pattern. NNG-EM-NOT-COLOR-ONLY fires because the password field's Signal token is none, and NNG-EM-PRESERVE-INPUT fires because the checkout screen clears the form on a failed submission. The two judged findings extend past what the lexicons can see: NNG-EM-EXPLAIN because the password-length message states a rule with no reason, matching this skill's own severity-2 anchor almost exactly, and NNG-EM-SPECIFIC at severity 3 because a checkout failure is exactly the kind of screen where a real cause, a declined card, a network timeout, was available and the message names none of it."
+}

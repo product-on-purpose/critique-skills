@@ -44,7 +44,7 @@ determinism check on the next CI run, which is the intended behaviour.
 | accessibility | critique-accessibility | core | 4 | 1 | `html` | `WCAG` |
 | usability | critique-usability | core | 4 | 1 | `html` | `NNG` |
 | docs | critique-docs | stretch | 3 | 1 | `markdown-tree` | `DIATAXIS` |
-| microcopy | critique-microcopy | stretch | 3 | 1 | `string-list` | `NNG` |
+| microcopy | critique-microcopy | stretch | 4 | 1 | `markdown-prose` | `NNG` |
 | argument | critique-argument | stretch | 3 | 1 | `markdown-prose` | `TOULMIN` |
 | toy | none | fixture | 3 | 1 | `markdown-prose` | `TOY` |
 
@@ -53,11 +53,12 @@ core domain) with margin, and S-05's per-skill floor of at least 3 artifacts inc
 clean. Clean artifacts are not padding: they are the only place a false positive can be observed
 without a human adjudicating whether an unplanted finding is genuine.
 
-`critique-microcopy`'s artifact type depends on S-05 OQ-2, which the microcopy pipeline decides. If
-it chooses bare string lists, the type is `string-list` and the item-index rule applies. If it
-chooses annotated context, the type becomes `markdown-prose` with one string per paragraph and the
-paragraph rule applies unchanged. Both rules are specified below, so the pipeline's decision does
-not reopen this design.
+`critique-microcopy`'s artifact type depended on S-05 OQ-2, which the microcopy pipeline has now
+decided in [ADR 0018](../docs/internal/decisions/0018-microcopy-artifact-format-annotated-context.md):
+annotated context, so the type is `markdown-prose` with one message block per paragraph and the
+paragraph rule applies unchanged. The `string-list` alternative and its item-index rule are still
+specified below, unused by any v0.1 domain, because both rules were written before the decision so
+that it would not reopen this design.
 
 ### Invariants
 
