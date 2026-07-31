@@ -10,14 +10,19 @@ from bench.generator.registry import DOMAIN_MODULES, load_domains
 
 def test_domain_modules_is_an_explicit_tuple():
     assert isinstance(DOMAIN_MODULES, tuple)
-    assert DOMAIN_MODULES == ("bench.generator.domains.toy",)
+    assert DOMAIN_MODULES == (
+        "bench.generator.domains.toy",
+        "bench.generator.domains.argument",
+    )
 
 
 def test_load_domains_returns_domain_instances():
     domains = load_domains()
-    assert len(domains) == 1
+    assert len(domains) == 2
     assert all(isinstance(d, Domain) for d in domains)
-    assert domains[0].name == "toy"
+    assert [d.name for d in domains] == [
+        "toy", "argument",
+    ]
 
 
 def test_load_domains_rejects_a_module_missing_domain(tmp_path, monkeypatch):

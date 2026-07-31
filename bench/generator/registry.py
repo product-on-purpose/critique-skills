@@ -4,8 +4,8 @@ is not listed here does not exist.
 
 `bench/generator/README.md` shows the full six-launch-domain roster this
 tuple grows to as each skill pipeline (S-05) contributes its own module.
-Only `toy` exists as of this implementation stage; a later stage appends
-its own module's dotted path here, it does not replace this file wholesale.
+Each stage appends its own module's dotted path here; it does not replace
+this file wholesale.
 """
 
 from __future__ import annotations
@@ -16,6 +16,7 @@ from bench.generator.api import Domain
 
 DOMAIN_MODULES: tuple[str, ...] = (
     "bench.generator.domains.toy",
+    "bench.generator.domains.argument",
 )
 
 

@@ -1,0 +1,47 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-argument/examples/argument-golden-01-warrant-gap.md",
+  "expected_envelope": {
+    "run": {
+      "skill": "critique-argument",
+      "skill_version": "0.1.0",
+      "contract_version": "1.0.0",
+      "artifact": "skills/critique-argument/examples/argument-golden-01-warrant-gap.md",
+      "artifact_sha256": "64ab59a38fe597cbc5c0ea40dc2b59154f2aeff30b0ad5708348eaaf730567c7",
+      "model": "claude-sonnet-4-5-20250929",
+      "timestamp": "2026-07-31T18:05:00Z",
+      "rubrics": ["TOULMIN"]
+    },
+    "findings": [
+      {
+        "id": "F-001",
+        "criterion": "TOULMIN-REBUTTAL",
+        "lane": "judged",
+        "severity": 3,
+        "location": "the whole document, under its \"Recommendation: Switch Ticketing Platforms to Vendor A\" heading",
+        "evidence": "0 of the memo's 4 paragraphs raise or answer an objection. The nearest thing to a limiting condition is its closing sentence, \"We should complete the migration before the next contract renewal date.\", which sets a deadline rather than naming a circumstance under which switching would be the wrong call.",
+        "violation": "The memo answers none of the conditions its own grounds leave open: the migration cost and disruption its recommendation creates, and the alternative of renegotiating with Vendor B, which a price increase on its own does not rule out. A reader reaches the ask with no exception, cost, or competing option stated anywhere in the artifact.",
+        "fix": "Add a short paragraph naming one condition the grounds leave open, for example the migration cost the switch creates or the option of renegotiating with Vendor B, and answer it.",
+        "confidence": "medium"
+      },
+      {
+        "id": "F-002",
+        "criterion": "TOULMIN-WARRANT",
+        "lane": "judged",
+        "severity": 3,
+        "location": "the whole document, under its \"Recommendation: Switch Ticketing Platforms to Vendor A\" heading",
+        "evidence": "The memo's only supporting paragraph is entirely about Vendor B: \"Vendor B's per-seat licensing price rose 40 percent at our last renewal, from 12 dollars to 17 dollars per agent per month.\" Vendor A's price, features, or any other property is never stated anywhere in the artifact.",
+        "violation": "The claim recommends adopting Vendor A, but the grounds establish only a fact about Vendor B's price increase; the memo never states the principle connecting a fact about Vendor B to a conclusion about Vendor A, so a reader cannot see why this evidence supports switching to Vendor A specifically rather than negotiating with Vendor B or choosing a third vendor.",
+        "fix": "State the principle connecting the grounds to the claim explicitly, for example by adding Vendor A's own price, or by naming a standing policy that a price increase past a stated threshold triggers a vendor search.",
+        "confidence": "high"
+      }
+    ],
+    "summary": {
+      "by_severity": {"0": 0, "1": 0, "2": 0, "3": 2, "4": 0},
+      "suppressed_count": 0,
+      "gate": "fail",
+      "severity_3_threshold": 0
+    }
+  },
+  "note": "argument-golden-01-warrant-gap.md's only grounds paragraph is entirely about Vendor B's price increase, and the memo never states the principle connecting that fact to its claim about adopting Vendor A, which is exactly TOULMIN-WARRANT's operational test for a missing connecting principle. The memo also never raises or answers any objection to switching vendors, which is TOULMIN-REBUTTAL's own operational test. Both are severity 3 because a reader cannot reconstruct why the conclusion follows, or see any condition the memo's own grounds leave open, purely from what the artifact supplies. The two tie on severity, so they are ordered by criterion ID ascending, which is SKILL.md's ranking tiebreak and skills/_shared/envelope.py's own _rank_key; that is why REBUTTAL is F-001 and WARRANT is F-002 rather than the order a reader would notice them in. Neither scripted criterion fires: \"we recommend\" and \"we should\" are both in the conclusion-marker lexicon, and the text contains no hedging-lexicon term at all, so the gate fails on the two judged findings alone."
+}
