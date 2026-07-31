@@ -1,0 +1,58 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-usability/examples/artifacts/golden-02-workspace-danger-zone.md",
+  "expected_envelope": {
+    "run": {
+      "skill": "critique-usability",
+      "skill_version": "0.1.0",
+      "contract_version": "1.0.0",
+      "artifact": "skills/critique-usability/examples/artifacts/golden-02-workspace-danger-zone.md",
+      "artifact_sha256": "1d4fcad7631afb2897d6efc03302a07ad81096d055a3d98e4abf33f3137ff547",
+      "model": "claude-sonnet-4-5-20250929",
+      "timestamp": "2026-07-31T18:20:00Z",
+      "rubrics": ["NNG"]
+    },
+    "findings": [
+      {
+        "id": "F-001",
+        "criterion": "NNG-H5-CONFIRM",
+        "lane": "judged",
+        "severity": 3,
+        "location": "the \"Team workspace settings\" screen, \"Danger zone\" section, the Delete workspace control",
+        "evidence": "\"Activating it removes the workspace, all of its documents, and every member's access, then lands the user on the workspace list. The workspace list is the next screen in the flow; this spec defines no screen between the two, and no later screen that acts on a removed workspace.\"",
+        "violation": "The path this spec gives the Delete workspace control runs straight from the control to the workspace list, so nothing gates an action that destroys every document and every member's access, and no later screen restores what it removed.",
+        "fix": "Add a confirmation step before Delete workspace fires, naming the workspace and stating that the action is permanent, or add an undo path if any part of it is reasonably recoverable.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-002",
+        "criterion": "NNG-H6-LABELED",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "the \"Controls\" list, item 3 (\"Button\")",
+        "evidence": "list entry \"Button\"",
+        "violation": "This control list entry names the control only by its role, with no distinguishing label a user could read to tell it apart from another control of the same kind.",
+        "fix": "Add the control's own label to this entry, alongside its role.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-003",
+        "criterion": "NNG-H9-IDENTIFY",
+        "lane": "judged",
+        "severity": 2,
+        "location": "the \"Team workspace settings\" screen, \"Import errors\" section",
+        "evidence": "\"the screen shows the message \\\"Something went wrong. Try again,\\\" a Retry button, and the number of rows that were submitted. The row table is not redisplayed and no per-row state is shown.\"",
+        "violation": "The failure message reports only that the import failed, and the screen around it shows a row count rather than row state, so the user cannot tell which of the 12 rows caused it or what condition on those rows failed.",
+        "fix": "Report which rows failed and the specific condition that failed for each, for example the row number and the field that did not validate.",
+        "confidence": "medium"
+      }
+    ],
+    "summary": {
+      "by_severity": {"0": 0, "1": 0, "2": 2, "3": 1, "4": 0},
+      "suppressed_count": 0,
+      "gate": "fail",
+      "severity_3_threshold": 0
+    }
+  },
+  "note": "This envelope mixes both lanes on one artifact, as a real run's four-pass protocol always does. The scripted lane (verified by running scripts/checks.py against this file) flags the bare list entry Button under the Controls heading per NNG-H6-LABELED, severity 2 because the other two entries in the same list are named. The judged lane adds two findings the scripted lane cannot see, and both are inferred from what the spec commits to rather than read off a sentence in which the spec states its own verdict: NNG-H5-CONFIRM at severity 3, because the path this spec gives the Delete workspace control runs directly to the workspace list with no screen between, which is what its operational test means by a control whose own path reaches no confirmation, and no later screen restores what the action removed; and NNG-H9-IDENTIFY at severity 2, because the failure screen names neither the failing rows nor the failing condition, rated 2 rather than 3 because the batch is bounded at 12 rows and the screen does offer a Retry, so the user retains a slow path to narrowing the problem down. The gate fails on the single severity 3 finding."
+}

@@ -1,0 +1,24 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-usability/examples/artifacts/golden-03-archive-project-clean.html",
+  "expected_envelope": {
+    "run": {
+      "skill": "critique-usability",
+      "skill_version": "0.1.0",
+      "contract_version": "1.0.0",
+      "artifact": "skills/critique-usability/examples/artifacts/golden-03-archive-project-clean.html",
+      "artifact_sha256": "4db7979fbcf6c207ad0ba404319c75856b86702e3c6c8adb28df76a0ec7f2281",
+      "model": "claude-sonnet-4-5-20250929",
+      "timestamp": "2026-07-31T18:25:00Z",
+      "rubrics": ["NNG"]
+    },
+    "findings": [],
+    "summary": {
+      "by_severity": {"0": 0, "1": 0, "2": 0, "3": 0, "4": 0},
+      "suppressed_count": 0,
+      "gate": "pass",
+      "severity_3_threshold": 0
+    }
+  },
+  "note": "golden-03-archive-project-clean.html is this skill's own clean recipe: a full sweep of both lanes reports zero findings, which is the correct output for a genuinely clean artifact, not a report to be padded out. The scripted lane (verified by running scripts/checks.py) finds no dead end, since every one of the three states carries an outgoing link to another defined state, and no control-naming clash, since Cancel and Archive each appear only once. The judged lane also finds nothing to report: the archive-confirm state names the project and states its consequence before anything commits (NNG-H5-CONFIRM), the same screen states the action is reversible from Archived projects (NNG-H3-UNDO), its Cancel exit is visible and costs nothing already entered (NNG-H3-EXIT), and every control carries a stable, single label throughout (NNG-H4-CONTROL-NAMING, NNG-H4-INTERNAL). A correct sweep that finds nothing is what proves the judged lane is not manufacturing findings to avoid an empty report."
+}

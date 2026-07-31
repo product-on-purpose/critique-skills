@@ -1,0 +1,58 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-usability/examples/artifacts/golden-01-settings.html",
+  "expected_envelope": {
+    "run": {
+      "skill": "critique-usability",
+      "skill_version": "0.1.0",
+      "contract_version": "1.0.0",
+      "artifact": "skills/critique-usability/examples/artifacts/golden-01-settings.html",
+      "artifact_sha256": "1040d2d9b5978592c89db0b177845b16545f89c2ca7994855194471096e8a95d",
+      "model": "none",
+      "timestamp": "2026-07-31T18:05:00Z",
+      "rubrics": ["NNG"]
+    },
+    "findings": [
+      {
+        "id": "F-001",
+        "criterion": "NNG-H3-DEADEND",
+        "lane": "scripted",
+        "severity": 3,
+        "location": "the \"workspace-deleted\" section",
+        "evidence": "the \"workspace-deleted\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+        "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact.",
+        "fix": "Add a control inside the \"workspace-deleted\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-002",
+        "criterion": "NNG-H4-CONTROL-NAMING",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "the \"notifications-tab\" section, the second button",
+        "evidence": "control labeled \"Apply changes\"",
+        "violation": "This artifact uses 2 different labels for what reads as the same commit action: \"Apply changes\", \"Save\". A user cannot tell from the label alone whether these controls perform the same action or different ones.",
+        "fix": "Pick one label for this commit action, for example \"Apply changes\", and use it everywhere the action appears.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-003",
+        "criterion": "NNG-H4-CONTROL-NAMING",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "the \"profile-tab\" section, the first button",
+        "evidence": "control labeled \"Save\"",
+        "violation": "This artifact uses 2 different labels for what reads as the same commit action: \"Apply changes\", \"Save\". A user cannot tell from the label alone whether these controls perform the same action or different ones.",
+        "fix": "Pick one label for this commit action, for example \"Apply changes\", and use it everywhere the action appears.",
+        "confidence": "high"
+      }
+    ],
+    "summary": {
+      "by_severity": {"0": 0, "1": 0, "2": 2, "3": 1, "4": 0},
+      "suppressed_count": 0,
+      "gate": "fail",
+      "severity_3_threshold": 0
+    }
+  },
+  "note": "This is the scripted lane's own output, run directly via scripts/checks.py against golden-01-settings.html, so every field below is verified script output rather than a hand-authored guess. The workspace-deleted section is reachable only from notifications-tab's Delete this workspace link and defines no control back to any other state, which is exactly NNG-H3-DEADEND's structural test; it is severity 3 because it has an incoming link, matching the fixed-severity rule in references/severity-anchors.md. Separately, the settings area's commit button reads Save on the profile tab and Apply changes on the notifications tab, both members of the same commit synonym set with no other signal the two mean the same thing, which is NNG-H4-CONTROL-NAMING's operational test at its severity 2 anchor; two occurrences produce two findings rather than one finding with an instances list, per the contract's minItems 2 rule for instances."
+}

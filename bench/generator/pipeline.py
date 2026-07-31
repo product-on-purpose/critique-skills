@@ -23,6 +23,7 @@ from bench.generator import blockparse, leak
 from bench.generator.api import Domain, InjectionResult, Location, Plant, Recipe
 from bench.generator.markdown import Document
 from bench.generator.rng import SeededRng, derive, root_seed
+from bench.metrics import resolve_html
 
 MANIFEST_VERSION = "1.0.0"
 CORPUS_ROOT = "bench/corpus"
@@ -212,6 +213,39 @@ def _round_trip_check_markdown(
     return problems
 
 
+def _round_trip_check_html(
+    rendered_text: str,
+    records: list[_DefectRecord],
+    locations: list[Location],
+) -> list[str]:
+    """Re-parses the rendered bytes with `bench/metrics/resolve_html.py`,
+    the metrics module's own normative HTML parser, the same relationship
+    `_round_trip_check_markdown` has with the metrics block parser: this
+    is what keeps the generator and the scorer honest with each other,
+    rather than a second, independently-written HTML parser here. An
+    `element-id` location round-trips when the reparsed document has
+    exactly one element carrying that id; a `css` location round-trips
+    when the reparsed document's own bounded selector engine resolves it
+    to exactly one element."""
+    problems: list[str] = []
+    doc = resolve_html.parse_html(rendered_text)
+    for record, location in zip(records, locations):
+        if location.kind == "element-id":
+            if doc.by_id(location.element_id) is None:
+                problems.append(
+                    f"round-trip: element id {location.element_id!r} not found in the "
+                    f"reparsed HTML for slot {record.slot!r}"
+                )
+        elif location.kind == "css":
+            matched = resolve_html.resolve_css(doc, location.css)
+            if len(matched) != 1:
+                problems.append(
+                    f"round-trip: css {location.css!r} resolved to {len(matched)} element(s) "
+                    f"in the reparsed HTML, expected exactly 1, for slot {record.slot!r}"
+                )
+    return problems
+
+
 def _round_trip_check(
     domain: Domain,
     composed: object,
@@ -226,9 +260,10 @@ def _round_trip_check(
                 f"markdown.Document composition, got {type(composed).__name__}"
             ]
         return _round_trip_check_markdown(composed, rendered_text, records, locations)
-    # html and string-list round-trip checks are established when their
-    # first domain module lands; not exercised at this implementation
-    # stage, since only markdown-prose (toy) is registered.
+    if domain.artifact_type == "html":
+        return _round_trip_check_html(rendered_text, records, locations)
+    # string-list round-trip checks are established when their first
+    # domain module lands; not exercised at this implementation stage.
     return []
 
 

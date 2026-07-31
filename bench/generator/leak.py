@@ -1,9 +1,12 @@
 """The leak check. Manifest content must not be discoverable inside the
 artifact. AC-8 tests this; the generator enforces it at build time so a
 violation never reaches the corpus. See `bench/generator/README.md`,
-"The leak rule", rules 1 through 4 (rule 5, content-derived HTML ids, is
-not implemented here: no html domain exists yet at this implementation
-stage, and `bench/generator/html.py` is not part of this stage's scope).
+"The leak rule", rules 1 through 4. Rule 5, content-derived HTML ids, is
+not code in this module: it is a construction invariant an html domain
+module upholds itself, by assigning an `id` attribute to every element of
+an injectable class unconditionally in `compose`, before any injector
+runs, in the clean recipe and every seeded one alike (see
+`bench/generator/domains/usability.py`'s module docstring).
 """
 
 from __future__ import annotations
