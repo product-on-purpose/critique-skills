@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/product-on-purpose/critique-skills/main/bench/results/results.schema.json",
+  "title": "Bench results",
+  "description": "Every computed number for one run set, produced by `python -m bench.metrics score` from committed manifests and run envelopes and nothing else. The README results table (bench/report.py) is generated from this file and only this file: no number appears in any document in this repository that is not present here. This file is results version 1.0.0 and validates 1.x documents only.",
+  "$comment": "Results version 1.0.0. `entries[]` holds one row per (skill, skill_version, model, domain) group, baseline rows included: a baseline run carries skill \"baseline-generic\" in the same array, at the same shape, so a report script computes a skill-versus-baseline comparison by matching (domain, model) pairs rather than reading a separately stored, and therefore possibly stale, comparison table.",
+  "type": "object",
+  "required": ["results_version", "run_set", "generated_at", "entries"],
+  "additionalProperties": false,
+  "properties": {
+    "results_version": {
+      "$ref": "#/$defs/resultsVersion"
+    },
+    "run_set": {
+      "title": "Run set identifier",
+      "description": "Matches the directory name under bench/results/ this file lives in, for example bench/results/p3-2026-08-01/results.json has run_set \"p3-2026-08-01\".",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+    },
+    "generated_at": {
+      "$ref": "#/$defs/timestamp",
+      "description": "When `python -m bench.metrics score` produced this file."
+    },
+    "entries": {
+      "title": "Scored entries",
+      "description": "One entry per (skill, skill_version, model, domain) group actually present in --runs. Empty is valid: a run set with no matched envelopes produces an empty array rather than an error, so an incomplete run set is still a well-formed file.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    }
+  },
+
+  "$defs": {
+
+    "entry": {
+      "title": "One scored (skill, model, domain) group",
+      "type": "object",
+      "required": [
+        "skill",
+        "skill_version",
+        "model",
+        "domain",
+        "artifact_type",
+        "artifacts_scored",
+        "unresolvable_claims",
+        "recall",
+        "precision",
+        "clean_fp_rate",
+        "consistency",
+        "consistency_exact"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "skill": {
+          "title": "Skill name",
+          "description": "The emitting skill, matching the contract's run.skill: \"critique-clarity\", or \"baseline-generic\" for the frozen baseline comparison.",
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+        },
+        "skill_version": {
+          "$ref": "#/$defs/semver"
+        },
+        "model": {
+          "title": "Model ID",
+          "description": "Exact pinned model identifier, matching the contract's run.model. Benchmark numbers are only honest if this is pinned.",
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1
+        },
+        "domain": {
+          "title": "Domain",
+          "description": "The bench domain scored, matching manifest.schema.json's domain field.",
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+        },
+        "artifact_type": {
+          "title": "Artifact type",
+          "description": "The location-tolerance rule this domain's artifacts use, matching manifest.schema.json's artifactType.",
+          "type": "string",
+          "enum": ["markdown-prose", "markdown-tree", "html", "string-list"]
+        },
+        "artifacts_scored": {
+          "title": "Artifacts scored",
+          "description": "How many (manifest, envelope) pairs contributed to this entry's recall, precision, and clean_fp_rate. Not necessarily the corpus's full artifact count for this domain: an entry only reflects the envelopes actually present under --runs.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "unresolvable_claims": {
+          "title": "Unresolvable claims",
+          "description": "Count of claims whose location resolved to no anchor at all, summed across every scored artifact in this entry. Reported per S-03 OQ-1's RC review question: whether the resolver's parse failures are common enough to distort the numbers. An unresolvable claim is still a miss for recall and still counts against precision; this field does not change either computation, it only makes the size of that approximation visible.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "recall": {
+          "$ref": "#/$defs/metricValue"
+        },
+        "precision": {
+          "$ref": "#/$defs/metricValue"
+        },
+        "clean_fp_rate": {
+          "$ref": "#/$defs/metricValue",
+          "description": "Mean claims per clean artifact (bench/README.md, \"False positives on clean artifacts\"). Reported separately from precision because it isolates the behavior that matters most to a user: what the skill says about a document with nothing wrong with it."
+        },
+        "consistency": {
+          "$ref": "#/$defs/consistencyValue",
+          "description": "Mean pairwise Jaccard, tolerance-aware, over k runs of the same skill against the same artifact, averaged with equal weight across every scored artifact that had at least two runs to compare."
+        },
+        "consistency_exact": {
+          "$ref": "#/$defs/consistencyValue",
+          "description": "The same aggregation as consistency, computed with zero tolerance on the canonical (criterion, key) sets. The gap between consistency and consistency_exact is the skill's location-phrasing instability."
+        }
+      }
+    },
+
+    "metricValue": {
+      "title": "A ratio, plus the integers it was formed from",
+      "description": "value is null when denominator is 0: the metric is not computable from what was scored, a different claim from \"scored and found to be zero\". Value, when not null, is rounded to three decimal places (bench/README.md, \"Metrics\": \"a ratio is formed once, at the end, and reported to three decimal places\"); numerator and denominator are the exact integers the ratio was formed from, so the rounding is always auditable.",
+      "type": "object",
+      "required": ["value", "numerator", "denominator"],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": ["number", "null"],
+          "minimum": 0
+        },
+        "numerator": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "denominator": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "denominator": { "const": 0 } },
+            "required": ["denominator"]
+          },
+          "then": {
+            "properties": { "value": { "const": null } }
+          }
+        }
+      ]
+    },
+
+    "consistencyValue": {
+      "title": "A consistency figure, plus how many artifacts and pairs it was formed from",
+      "description": "Aggregated with equal weight across every scored artifact that had at least two runs to compare (see bench/metrics/score.py's module docstring for why this module, not bench/README.md, fixes that convention). value is null when no artifact in this entry had two or more runs.",
+      "type": "object",
+      "required": ["value", "artifacts_with_pairs", "total_pairs"],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "artifacts_with_pairs": {
+          "title": "Artifacts with pairs",
+          "description": "How many artifacts contributed a computable per-artifact consistency value to this entry's mean.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "total_pairs": {
+          "title": "Total pairs",
+          "description": "Sum, across every contributing artifact, of the C(k, 2) unordered run pairs compared.",
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "artifacts_with_pairs": { "const": 0 } },
+            "required": ["artifacts_with_pairs"]
+          },
+          "then": {
+            "properties": { "value": { "const": null } }
+          }
+        }
+      ]
+    },
+
+    "resultsVersion": {
+      "title": "Results version",
+      "description": "Version of this results format, versioned independently of both the plugin and the critique contract. This file validates 1.x results documents only.",
+      "type": "string",
+      "maxLength": 16,
+      "pattern": "^1\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?![\\s\\S])",
+      "examples": ["1.0.0"]
+    },
+
+    "semver": {
+      "title": "Semantic version",
+      "description": "Copied verbatim from the critique contract's semver. Semantic Versioning 2.0.0, with no leading v.",
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?![\\s\\S])"
+    },
+
+    "timestamp": {
+      "title": "Timestamp",
+      "description": "Copied verbatim from the critique contract's timestamp. RFC 3339 in UTC with a literal trailing Z, optional fractional seconds.",
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,9})?Z(?![\\s\\S])"
+    }
+  }
+}
