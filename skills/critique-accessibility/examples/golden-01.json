@@ -1,0 +1,69 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-accessibility/examples/artifacts/golden-01.html",
+  "expected_envelope": {
+    "run": {
+      "skill": "critique-accessibility",
+      "skill_version": "0.1.0",
+      "contract_version": "1.0.0",
+      "artifact": "skills/critique-accessibility/examples/artifacts/golden-01.html",
+      "artifact_sha256": "b2c93a10d7f805d4ca77232eb445c7946536a1cf88c1915b4d609108e257a25f",
+      "model": "none",
+      "timestamp": "2026-07-31T18:05:05Z",
+      "rubrics": ["WCAG"]
+    },
+    "findings": [
+      {
+        "id": "F-001",
+        "criterion": "WCAG-1.1.1",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "line 19, <img> element",
+        "evidence": "<img src=\"/img/crew-photo.jpg\">",
+        "violation": "No text alternative is present and the element is not marked decorative.",
+        "fix": "Add an alt attribute (or aria-label) describing the image, or mark it decorative with alt=\"\".",
+        "confidence": "high"
+      },
+      {
+        "id": "F-002",
+        "criterion": "WCAG-2.4.4",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "line 21, <a> link, text 'click here'",
+        "evidence": "<a href=\"/outages/history\">click here</a>",
+        "violation": "The link's accessible name is a generic phrase that gives no clue to its destination out of context.",
+        "fix": "Rewrite the link text to describe its destination or purpose, or add an aria-label.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-003",
+        "criterion": "WCAG-2.5.3",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "line 32, <button> control, visible label 'Submit'",
+        "evidence": "visible text 'Submit', accessible name 'Send form now'",
+        "violation": "The control's visible text does not appear within its accessible name, so a voice-control user naming the visible label cannot activate it.",
+        "fix": "Include the visible label text at the start of the aria-label value, or remove the aria-label and rely on the visible text.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-004",
+        "criterion": "WCAG-3.3.2",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "line 30, <input> control",
+        "evidence": "<input type=\"tel\" placeholder=\"Phone number\">",
+        "violation": "No label, aria-label, aria-labelledby, or title identifies what this control expects.",
+        "fix": "Add a <label for> pointing at this control's id, wrap the control in a <label>, or set aria-label.",
+        "confidence": "high"
+      }
+    ],
+    "summary": {
+      "by_severity": {"0": 0, "1": 0, "2": 4, "3": 0, "4": 0},
+      "suppressed_count": 0,
+      "gate": "pass",
+      "severity_3_threshold": 0
+    }
+  },
+  "note": "golden-01.html plants four single-occurrence defects: the crew photo carries no alt attribute and is not marked decorative (WCAG-1.1.1), the outage-history link's only text is the generic phrase click here (WCAG-2.4.4), the submit button's aria-label Send form now drops the visible word Submit so a voice-control user cannot activate it by the label they see (WCAG-2.5.3), and the phone input has no label, aria-label, aria-labelledby, or title of any kind (WCAG-3.3.2). Every other control in the form (the topic select and email input) is correctly labeled, and the page has a valid title, a well-formed lang attribute, and a main landmark, which is why none of those checks also fire. Each defect is a single instance, so all four sit at severity 2 per references/WCAG.md's anchor rows, and the gate passes because nothing reaches severity 3."
+}

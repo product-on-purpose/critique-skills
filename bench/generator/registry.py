@@ -20,6 +20,7 @@ DOMAIN_MODULES: tuple[str, ...] = (
     "bench.generator.domains.docs",
     "bench.generator.domains.microcopy",
     "bench.generator.domains.usability",
+    "bench.generator.domains.accessibility",
 )
 
 

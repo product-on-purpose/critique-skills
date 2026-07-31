@@ -1,0 +1,69 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-accessibility/examples/artifacts/golden-02.html",
+  "expected_envelope": {
+    "run": {
+      "skill": "critique-accessibility",
+      "skill_version": "0.1.0",
+      "contract_version": "1.0.0",
+      "artifact": "skills/critique-accessibility/examples/artifacts/golden-02.html",
+      "artifact_sha256": "5c6ad95fe336c6980656eeeda9d66030a4e7e115a94b296fac46be25dd831a73",
+      "model": "none",
+      "timestamp": "2026-07-31T18:05:05Z",
+      "rubrics": ["WCAG"]
+    },
+    "findings": [
+      {
+        "id": "F-001",
+        "criterion": "WCAG-1.3.1",
+        "lane": "scripted",
+        "severity": 3,
+        "location": "line 18, <table> element",
+        "evidence": "table with 3 rows and 3 columns, no th, scope, or headers attributes present",
+        "violation": "A multi-row, multi-column data table has no th, scope, or headers markup associating cells with their headers.",
+        "fix": "Mark header cells with <th>, and set scope (or headers/id pairs) linking data cells to their header cells.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-002",
+        "criterion": "WCAG-2.4.2",
+        "lane": "scripted",
+        "severity": 3,
+        "location": "line 5, <title> element",
+        "evidence": "<title></title>",
+        "violation": "The page has no usable title: the title element is missing or empty.",
+        "fix": "Give the page a specific <title> describing its topic or purpose.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-003",
+        "criterion": "WCAG-1.3.1",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "line 15, <h4> heading, 'Billing cycle'",
+        "evidence": "<h4>",
+        "violation": "Heading level skips from <h2> to <h4> with no intervening level.",
+        "fix": "Change this heading to <h3>, or add the missing intervening heading level.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-004",
+        "criterion": "WCAG-1.4.3",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "line 10, <p> element, text 'Compare plan tiers below before you switch service.'",
+        "evidence": "text color #808080 on background #ffffff, contrast ratio 3.95:1",
+        "violation": "Contrast ratio 3.95:1 is below the 4.5:1 AA minimum for normal text.",
+        "fix": "Darken the text or lighten the background until the ratio reaches at least 4.5:1.",
+        "confidence": "high"
+      }
+    ],
+    "summary": {
+      "by_severity": {"0": 0, "1": 0, "2": 2, "3": 2, "4": 0},
+      "suppressed_count": 0,
+      "gate": "fail",
+      "severity_3_threshold": 0
+    }
+  },
+  "note": "golden-02.html plants four defects across two severities. The Residential plans section steps from an h2 straight to an h4 with no intervening h3, one skip, so WCAG-1.3.1 lands at severity 2; the plan-comparison table uses plain td cells throughout with no th, scope, or headers anywhere, which is the whole-table structural failure references/WCAG.md's anchor row fixes at severity 3 regardless of count. The lead paragraph's inline color #808080 on the default white background resolves to a 3.95:1 ratio, under the 4.5:1 AA minimum but within one point of it, so WCAG-1.4.3 lands at severity 2 rather than 3. The empty title element trips WCAG-2.4.2's all-or-nothing missing-title condition at severity 3. The two severity-3 findings exceed the default zero threshold, so the gate fails."
+}

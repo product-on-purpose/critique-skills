@@ -1,0 +1,99 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-accessibility/examples/artifacts/golden-04.html",
+  "expected_envelope": {
+    "run": {
+      "skill": "critique-accessibility",
+      "skill_version": "0.1.0",
+      "contract_version": "1.0.0",
+      "artifact": "skills/critique-accessibility/examples/artifacts/golden-04.html",
+      "artifact_sha256": "bf557d919a3f6c77aa2d312d27ef9062faac6364ca9bd20258140da4606b762a",
+      "model": "none",
+      "timestamp": "2026-07-31T18:05:06Z",
+      "rubrics": [
+        "WCAG"
+      ]
+    },
+    "findings": [
+      {
+        "id": "F-001",
+        "criterion": "WCAG-1.4.4",
+        "lane": "scripted",
+        "severity": 3,
+        "location": "line 5, meta name=\"viewport\" element",
+        "evidence": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\">",
+        "violation": "The viewport meta tag sets user-scalable=no, disabling browser zoom entirely.",
+        "fix": "Remove user-scalable=no so readers can zoom the page.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-002",
+        "criterion": "WCAG-2.4.1",
+        "lane": "scripted",
+        "severity": 3,
+        "location": "line 13, <body> opening tag",
+        "evidence": "<body>; 2 focusable element(s) precede the first heading",
+        "violation": "The page provides neither a main landmark (a <main> element or role=\"main\") nor a leading same-page skip link.",
+        "fix": "Add a <main> element wrapping the primary content, or a skip link as the first focusable element linking to it.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-003",
+        "criterion": "WCAG-3.1.1",
+        "lane": "scripted",
+        "severity": 3,
+        "location": "line 2, <html> element",
+        "evidence": "<html lang=\"englandshire\">",
+        "violation": "The <html> element's lang attribute 'englandshire' is not a well-formed BCP 47 language tag.",
+        "fix": "Set lang to a well-formed BCP 47 tag identifying the page's default language, for example lang=\"en\".",
+        "confidence": "high"
+      },
+      {
+        "id": "F-004",
+        "criterion": "WCAG-1.4.10",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "line 21, <div> element",
+        "evidence": "declared width: 400px",
+        "violation": "A fixed width of 400px forces horizontal scrolling once the viewport narrows to 320px, with no responsive override.",
+        "fix": "Cap the element's width with a relative max-width (a percentage or viewport unit), or add a media query that shrinks it below 320px.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-005",
+        "criterion": "WCAG-1.4.11",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "line 29, <button> element boundary",
+        "evidence": "boundary color #a8a8a8 against adjacent background #ffffff, contrast ratio 2.38:1",
+        "violation": "Component boundary contrast ratio 2.38:1 is below the 3:1 AA minimum.",
+        "fix": "Darken the border or outline color, or change the adjacent background, until the ratio reaches at least 3:1.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-006",
+        "criterion": "WCAG-1.4.12",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "line 25, <div> element",
+        "evidence": "height: 60px; overflow: hidden",
+        "violation": "A fixed height combined with clipped overflow truncates this element's text once a reader applies wider line, paragraph, letter, or word spacing.",
+        "fix": "Remove the fixed height so the element grows with its content, or replace the clipped overflow with visible or auto.",
+        "confidence": "high"
+      }
+    ],
+    "summary": {
+      "by_severity": {
+        "0": 0,
+        "1": 0,
+        "2": 3,
+        "3": 3,
+        "4": 0
+      },
+      "suppressed_count": 0,
+      "gate": "fail",
+      "severity_3_threshold": 0
+    }
+  },
+  "note": "golden-04.html plants six defects covering the criteria the other goldens leave untouched, and it is the example that exercises the three checks graded by which branch of their condition fired rather than by how often the defect recurs. All three fired on their severity-3 branch here: the viewport meta's user-scalable=no blocks zoom outright rather than merely capping it (WCAG-1.4.4); the page has neither a main landmark nor a leading skip link, and two navigation links sit ahead of its first heading, so a keyboard reader tabs through the whole masthead on every load (WCAG-2.4.1); and the html lang value englandshire is not a well-formed BCP 47 tag, with no element inside the page declaring a usable one either, so the entire page falls back to the reader's own default (WCAG-3.1.1). Three are severity 2: the promo banner's fixed 400px width with no responsive override forces horizontal scroll at a 320px viewport and stays under the 600px whole-page boundary (WCAG-1.4.10), the status box's fixed 60px height paired with overflow hidden clips its paragraph once spacing widens (WCAG-1.4.12), and the secondary button's #a8a8a8 border resolves to 2.38:1 against white, under the 3:1 minimum but above the 2:1 point where a boundary stops being locatable at all (WCAG-1.4.11). The three severity-3 findings fail the gate against the default zero threshold."
+}
