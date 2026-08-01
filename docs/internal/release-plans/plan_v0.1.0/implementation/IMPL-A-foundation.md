@@ -2,9 +2,9 @@
 id: IMPL-A
 title: "Foundation: scaffold, contract, bench core, CI"
 type: implementation-plan
-status: draft
+status: executed
 created: 2026-07-31
-updated: 2026-07-31
+updated: 2026-08-01
 linked-spec: covers ../S-01_repo-scaffold/spec.md, ../S-02_critique-contract/spec.md, ../S-03_bench-harness/spec.md, ../S-07_ci-pipeline/spec.md
 linked-release: ../plan_v0.1.0.md
 phase-count: 4
@@ -18,18 +18,26 @@ audience: agent
 
 ## Task Summary
 
-- Status: draft
-- Phases: [ ] A1 [ ] A2 [ ] A3 [ ] A4
-- Last-updated: 2026-07-31
+- Status: executed
+- Phases: [x] A1 [x] A2 [x] A3 [x] A4
+- Phase evidence:
+  - A1: docs/internal/execution/P0-report.md (S01-AC1..AC5, AC7, HOUSE-1/2 all PASS).
+  - A2: docs/internal/execution/P0-report.md (S01-AC6 PASS, migration commit `2fee459`).
+  - A3: docs/internal/execution/P1-report.md (S02-AC1..AC8 all PASS).
+  - A4: docs/internal/execution/P1-report.md (S03/S07 ACs in this phase's own declared scope PASS,
+    with S03-AC3 and S07-AC1/AC4/AC6 deferred to P4-P5 as this phase's verification line names; per
+    docs/internal/execution/P5-report.md, S07-AC6 (CI runtime) is the one deferral still unmeasured
+    at release time).
+- Last-updated: 2026-08-01
 
 ## Completion Status
 
 | Phase | Goal | Fulfills AC | Owner (subagent, model) | Status |
 |-------|------|-------------|------------------------|--------|
-| A1 | Conformant scaffold on build branch | S-01 AC-1..AC-5, AC-7 | scaffold-builder (sonnet) + gate-verifier (haiku) | Not started |
-| A2 | Plan-suite migration into repo | S-01 AC-6 | migrator (haiku) | Not started |
-| A3 | Contract frozen: schema, validator, severity, methodology promoted | S-02 AC-1..AC-8 | contract-designer (opus), validator-impl (sonnet), adversarial-reviewer (opus) | Not started |
-| A4 | Bench core + CI live | S-03 AC-1..AC-8; S-07 AC-1..AC-5 (AC-6 measured at P5) | bench-architect (opus), harness-impl (sonnet x2), ci-impl (sonnet), reviewers (sonnet/haiku) | Not started |
+| A1 | Conformant scaffold on build branch | S-01 AC-1..AC-5, AC-7 | scaffold-builder (sonnet) + gate-verifier (haiku) | Executed - docs/internal/execution/P0-report.md |
+| A2 | Plan-suite migration into repo | S-01 AC-6 | migrator (haiku) | Executed - docs/internal/execution/P0-report.md |
+| A3 | Contract frozen: schema, validator, severity, methodology promoted | S-02 AC-1..AC-8 | contract-designer (opus), validator-impl (sonnet), adversarial-reviewer (opus) | Executed - docs/internal/execution/P1-report.md |
+| A4 | Bench core + CI live | S-03 AC-1..AC-8; S-07 AC-1..AC-5 (AC-6 measured at P5) | bench-architect (opus), harness-impl (sonnet x2), ci-impl (sonnet), reviewers (sonnet/haiku) | Executed, one deferral open - docs/internal/execution/P1-report.md; S07-AC6 still unmeasured per P5-report.md |
 
 ## Phase A1: Conformant scaffold
 

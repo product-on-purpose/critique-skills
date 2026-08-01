@@ -237,3 +237,159 @@ this report are committed to `build/v0.1.0`. Per the autonomous-run publish boun
 not tag, push, or open a PR. Handing over to the release owner for RC review; the open items above,
 especially the missing external-validator output and the truncated fix-now item 8, are worth a
 direct look before tagging `v0.1.0`.
+
+## Remediation addendum (2026-08-01)
+
+A follow-on critic pass, working from this report, found two more issues in the packaging draft
+this report had signed off on plus two hygiene gaps outside it. A remediation pass fixed all four
+and this addendum records what closed and what is still open, so a single section can be cited by
+`rc-handover.md` instead of two more reports.
+
+### What the critic found and what closed
+
+1. **Front page led with a structurally rigged comparison.** The criterion-level baseline
+   comparison table pinned `baseline-generic` at 0.000 recall/precision by construction (it has no
+   rubric to cite a criterion under, so it can never match a planted defect at that level), which
+   made every "beats baseline" verdict at that level true regardless of measurement, and it ran
+   *before* the one comparison in the file the baseline could actually lose. Worse, the
+   location-level table's verdict was recall-only: `critique-usability`/sonnet read "beats
+   baseline" on 0.857 recall against the baseline's 0.829 while quietly losing precision, 0.169
+   against 0.181.
+   **Fixed:** `bench/report.py` reordered the front page to lead with the fair, location-level
+   table; the criterion-level table is retitled "Rubric operationalization (criterion-level)",
+   drops the baseline and verdict columns entirely (a caption explains why, rather than showing a
+   comparison that cannot lose), and moves after the full per-run entries table. A new
+   `_dominance_verdict` checks recall *and* precision, so `critique-usability`/sonnet now reads
+   `no pass on this tier (qualifies via haiku)`, generically computed by looking at the same
+   skill+version+domain's other pinned tier, not hardcoded to this one case. `README.md` and
+   `bench/README.md` were regenerated from the changed generator, never hand-edited; both pass
+   `python -m bench.report table --check` with no drift. 9 tests in `bench/tests/test_report.py`
+   rewritten or added to cover the new verdict logic, the dropped columns, and the front-page
+   ordering; `python -m pytest bench/tests/test_report.py` is 19 passed.
+2. **The "lowest number" sentence was hedged but unfalsifiable.** `README.md` named 0.309 as a
+   floor while parenthetically admitting lower numbers existed elsewhere "for other metrics and for
+   the baseline" without ever naming them, which does not survive a one-click check.
+   **Fixed:** the sentence now names 0.309 explicitly as the consistency floor (cited to
+   `docs/internal/decisions/0022-consistency-floor-overall-lane-min-core.md`) and states plainly
+   that it is not the lowest published number, then names three verified lower ones by category:
+   precision 0.155 (`critique-accessibility` 0.1.0/Sonnet, present in the criterion-level table on
+   the same page), judged-lane recall 0.130 and judged-lane consistency 0.150 (both
+   `critique-clarity`/Haiku, verified against `bench/results/README.md` lines 284 and 242 where the
+   source document states them directly), with a pointer to `bench/results/README.md` for the full
+   account.
+3. **`checks.py` heading-skip fix string named the wrong target level.** `_check_structure`'s
+   detection loop and its separate reporting loop both used variables named `prev_level`/`cur_level`;
+   Python loop variables leak, so the reporting loop silently reused whatever pair the detection loop
+   had examined *last*, not the skip pair actually being reported. On the real corpus artifact
+   (`bench/corpus/accessibility/accessibility-001.html`) this produced `<h5>` for an h2-to-h4 skip
+   where `<h3>` is correct; a synthetic 3-heading test case had masked the bug because its skip pair
+   happened to also be the last pair scanned.
+   **Fixed:** `prev_level` is now recomputed from the skip pair's own `prev` node inside the
+   reporting loop (`checks.py`, `_check_structure`). Two regression tests added
+   (`test_heading_skip_fix_recommends_next_sequential_level`,
+   `test_multiple_heading_skips_each_recommend_their_own_prev_level`);
+   `python -m pytest skills/critique-accessibility` is 101 passed, `python
+   scripts/skill-selftest.py skills/critique-accessibility` is 0 errors/0 warnings, and re-running
+   `checks.py` against `accessibility-001.html` now emits `<h3>`, matching `golden-02.json`'s
+   pre-existing expectation. No envelope under `bench/results/runs*/` was touched (the historical
+   `runs-cal1/critique-accessibility/.../haiku-r5.json` envelope, which already happened to read
+   `<h3>`, stays exactly as produced; every sibling envelope in `runs/` and `runs-cal1/` still reads
+   the pre-fix `<h5>`). `bench/results/README.md`'s existing disclosure of this discrepancy now has
+   an added paragraph explaining the root cause and that it is fixed going forward in 0.1.1 code
+   without touching the frozen historical envelopes.
+4. **QUICKSTART.md's install path silently assumed a repo checkout.** Step 4 runs `python -m
+   contract.validate disposition.json`, which depends on `jsonschema`; the plugin-install path
+   (`/plugin install critique-skills@product-on-purpose`) sets up the skill only, not a Python
+   environment, and the walkthrough never named the dependency or distinguished the two install
+   paths' different working-directory assumptions.
+   **Fixed:** `QUICKSTART.md` now documents both install paths (plugin vs. repo checkout) with
+   path-relative guidance for each, and names `jsonschema` as the one prerequisite either way with
+   `pip install "jsonschema>=4.20,<5"`.
+
+A related but separate finding surfaced while auditing item 3 above's neighborhood: `S-04`
+(skill-template)'s Task Summary had six of seven ACs marked unchecked with "not evidenced" notes
+even though the template and toy skill had shipped in P2. A fresh per-criterion audit this pass
+found AC-1, AC-2, AC-4, AC-5, AC-6, AC-7 all genuinely PASS (each independently re-verified: the
+template guide's coverage read directly, the five AC-2 failure-mode tests run by name, `--gate`
+exit codes checked against two real skills, golden/anti-example shape spot-checked,
+paraphrase-policy tests run by name). **AC-3 is a real FAIL, not a documentation gap**: nothing in
+`.github/workflows/ci.yml` or any test module runs `skill-selftest.py` against the real
+`skills/critique-*` directories in CI; the only place all six skills were ever swept with it is a
+one-time manual audit recorded in `P2-report.md`, which is not CI. `S-04_skill-template/spec.md`
+now records this per-criterion breakdown (6 PASS, 1 FAIL, named). `IMPL-A-foundation.md` and
+`IMPL-B-skills-to-rc.md` were updated from `status: draft` to `status: executed` with phase
+checkboxes and evidence pointers, which also closes gate (e) (staleness) in `plan_v0.1.0.md` from
+FAIL to PASS (the two implementation plans' `updated` field now matches the specs' `2026-08-01`,
+closing the exact gap this report's own Open Items section named above under "Already-recorded
+gaps").
+
+### Suite outputs, re-run after the remediation pass
+
+| Command | Result |
+|---|---|
+| `python -m pytest -q` | **777 passed** (up from this report's own 771; net +6 from 2 new accessibility regression tests plus net new tests in `bench/tests/test_report.py`) |
+| `node scripts/check.mjs` | **0 error(s), 0 warning(s)** (same 12 above-tier informational notes as this report recorded) |
+| `python -m bench.report table --results bench/results/results.json --target README.md --check` | **no drift** |
+| `python -m bench.report table --results bench/results/results.json --target bench/README.md --check` | **no drift** |
+| `node scripts/gen-plugin-manifest.mjs --check` | **matches library.json; AGENTS.md documents all 7 ci.yml commands** |
+| `node scripts/gen-index.mjs --check` | **matches library.json + component frontmatter** |
+| `node scripts/gen-readme-catalog.mjs --check` | **matches library.json + SKILL.md frontmatter** |
+| `python -m contract.validate_envelopes` | **502 file(s) valid** |
+| `GITHUB_REF_NAME=v0.1.0 node scripts/check-release-versions.mjs` | **version guard passed**: all three manifests at `0.1.0` |
+| `node scripts/extract-release-notes.mjs v0.1.0` | **wrote 65 line(s)** to `RELEASE_BODY.md` (deleted after verification, same as this report's own run) |
+| Codepoint scan of every file this pass touched | **zero U+2014/U+2013** |
+
+No envelope under `bench/results/runs*/` and no line of `bench/results/results.json` was touched;
+confirmed via `git diff` showing no changes to those paths.
+
+### Open items (carried forward verbatim from this report's own list, still open)
+
+None of the items below were in scope for or touched by this remediation pass; they are repeated
+here unedited so `rc-handover.md` has one place to read the full open-items list rather than two
+reports.
+
+- The fix-now list's item 8 arrived truncated mid-sentence. This pass reconstructed and verified a
+  correction from the actual repository state, but the critic's original wording for item 8, and
+  whether it specified something beyond what this pass inferred, could not be confirmed.
+- No separate open-items list or narrative verdict document from the completeness critic was
+  included in what this pass received, only the eight-item fix-now list. If the critic produced a
+  fuller report, it was not passed through to this pass.
+- No external-validator (`plugin-dev:plugin-validator`, `plugin-dev:skill-reviewer`) output was
+  available to this pass, though the release plan's B5 phase row names both. `node scripts/check.mjs`
+  is the closest in-repo automated proxy and passes (0 errors, 0 warnings), but it is not a
+  substitute for those two named validators.
+- S-03 AC-3, S-04 AC-1/2/4/5/6/7 are now individually evidenced PASS (closed by this addendum's
+  S-04 audit, above); S-04 AC-3 is now a confirmed FAIL, not merely unevidenced (also closed to a
+  verdict by this addendum). S-07 AC-1/4/6, S-08 AC-6/7 remain unevidenced or deferred per each
+  spec's own Task Summary. S-07 AC-6 in particular means CI runtime on GitHub-hosted runners has
+  never been measured.
+- Gate (e) (staleness) is now PASS, not FAIL: this addendum's `IMPL-A-foundation.md` /
+  `IMPL-B-skills-to-rc.md` update closed the exact gap named here (their `updated` field now reads
+  `2026-08-01`, matching the specs).
+- `plan_v0.1.0.md`'s Open Questions table still marks R1 (consistency floor), R2 (usability
+  artifact-type claim), and R3 (baseline model tiers) as `Open`, even though all three are
+  functionally settled elsewhere (R1: ADR 0022 sets the floor at 0.309; R2: `SKILL.md`'s narrow
+  claim, also in `README.md` per fix-now item 6; R3: both tiers pinned and used throughout
+  `bench/results/`). The table's `Status` column was not updated by this pass.
+- `rc-handover.md` does not exist anywhere in the repository (S-08 AC-7). The Doc-Update Checklist
+  in `plan_v0.1.0.md` still shows the git-tag and `agent-plugins` registry rows unchecked, both
+  marked "(human)".
+- `S-05/spec.md`'s AC-8 evidence citation still points only to `P2-report.md`; it was not updated
+  to also cite this report's README fix (fix-now item 6), even though that fix is what makes the
+  AC-8 checkbox now literally true.
+- `bench/results/README.md`'s own "Known issues in the measurement tooling" section: `results.json`
+  cannot say which run set an individual entry came from (a schema limitation, already flagged as
+  a v0.2 item), and scoring `bench/results/runs` directly (without excluding `runs/steering/`)
+  silently changes the `critique-clarity`/sonnet numbers, a documented but still-fragile gotcha in
+  the reproduction recipe.
+- No human acceptance data exists yet (disposition-based acceptance rate is a stated v0.2 measure,
+  per `RELEASE-NOTES.md`'s "Known limitations").
+
+### Recommendation
+
+All four remediation items verified fixed; the S-04 AC-3 FAIL is now an honestly recorded gap
+rather than a silent "not evidenced" checkbox. Suite is green (777 passed, 502 envelopes valid, all
+generator `--check` commands clean, version guard passed). Still worth a direct look before tagging
+`v0.1.0`: the missing external-validator output, the truncated fix-now item 8, S-07 AC-6 (CI
+runtime never measured), S-04 AC-3 (skill-template conformance not actually run in CI), and the
+absent `rc-handover.md`.

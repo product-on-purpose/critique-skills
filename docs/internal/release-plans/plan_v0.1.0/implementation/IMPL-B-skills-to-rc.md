@@ -2,9 +2,9 @@
 id: IMPL-B
 title: "Skills to RC: template, slate, critic, measurement, docs, release prep"
 type: implementation-plan
-status: draft
+status: executed
 created: 2026-07-31
-updated: 2026-07-31
+updated: 2026-08-01
 linked-spec: covers ../S-04_skill-template/spec.md, ../S-05_skills-slate/spec.md, ../S-06_critic-subagent/spec.md, ../S-08_docs-and-packaging/spec.md
 linked-release: ../plan_v0.1.0.md
 phase-count: 5
@@ -16,19 +16,33 @@ audience: agent
 
 ## Task Summary
 
-- Status: draft
-- Phases: [ ] B1 [ ] B2 [ ] B3 [ ] B4 [ ] B5
-- Last-updated: 2026-07-31
+- Status: executed
+- Phases: [x] B1 [x] B2 [x] B3 [x] B4 [x] B5
+- Phase evidence:
+  - B1: docs/internal/execution/P2-report.md (phase summary, commit `1095663`, "P2 template") for the
+    guide and toy skill's construction; the per-criterion S-04 AC-1..AC-7 verdicts P2-report.md itself
+    never recorded (flagged by docs/internal/execution/P5-report.md) were verified fresh in this
+    hygiene pass and are now recorded in `../S-04_skill-template/spec.md`'s own Task Summary (6 of 7
+    ACs PASS; AC-3 FAIL, named there).
+  - B2: docs/internal/execution/P2-report.md (S05-AC1..AC4, AC8, S06-AC1/AC4/AC5 all PASS).
+  - B3: docs/internal/execution/P3-report.md (S05-AC5..AC7, S06-AC2 (PASS narrowly, provenance gap
+    noted), S06-AC3 all PASS); docs/internal/execution/P3-cal1-report.md and P3-provenance.md for the
+    later accessibility calibration and provenance record.
+  - B4: docs/internal/execution/P4-report.md (S08-AC1..AC5, each with its own named section).
+  - B5: docs/internal/execution/P5-report.md, with two open items that report itself names and this
+    pass did not close (out of this pass's scope): S07-AC6 (CI runtime never measured) and S08-AC7
+    (`rc-handover.md` does not exist).
+- Last-updated: 2026-08-01
 
 ## Completion Status
 
 | Phase | Goal | Fulfills AC | Owner (subagent, model) | Status |
 |-------|------|-------------|------------------------|--------|
-| B1 | Template + toy skill proven | S-04 AC-1..AC-7 | template-author (sonnet), toy-builder (sonnet), reviewer (opus) | Not started |
-| B2 | Six skills built in parallel | S-05 AC-1..AC-4, AC-8; S-06 AC-1, AC-4, AC-5 | 6 pipelines: rubric-researcher (sonnet), operationalizer (opus for judged-heavy domains, sonnet otherwise), checks-impl (sonnet), evals-author (sonnet), corpus-contributor (sonnet), skill-adversary (opus) | Not started |
-| B3 | Measurement and gating | S-05 AC-5..AC-7; S-06 AC-2, AC-3 | run-orchestrator (sonnet), k5-runners (haiku/sonnet per pinned tier), metrics-verifier (haiku), calibration-judge (opus) | Not started |
-| B4 | Docs and generated views | S-08 AC-1..AC-5 | docs-author (sonnet), cold-reader (haiku), quickstart-executor (haiku), sweep-verifier (haiku) | Not started |
-| B5 | Release prep and RC handover | S-08 AC-6, AC-7; S-07 AC-6; release-plan checklist and gates | release-packager (sonnet), completeness-critic (opus), external validators (plugin-dev:plugin-validator, plugin-dev:skill-reviewer) | Not started |
+| B1 | Template + toy skill proven | S-04 AC-1..AC-7 | template-author (sonnet), toy-builder (sonnet), reviewer (opus) | Executed - docs/internal/execution/P2-report.md; per-criterion S-04 verdicts recorded in this pass, see spec |
+| B2 | Six skills built in parallel | S-05 AC-1..AC-4, AC-8; S-06 AC-1, AC-4, AC-5 | 6 pipelines: rubric-researcher (sonnet), operationalizer (opus for judged-heavy domains, sonnet otherwise), checks-impl (sonnet), evals-author (sonnet), corpus-contributor (sonnet), skill-adversary (opus) | Executed - docs/internal/execution/P2-report.md |
+| B3 | Measurement and gating | S-05 AC-5..AC-7; S-06 AC-2, AC-3 | run-orchestrator (sonnet), k5-runners (haiku/sonnet per pinned tier), metrics-verifier (haiku), calibration-judge (opus) | Executed - docs/internal/execution/P3-report.md, P3-cal1-report.md |
+| B4 | Docs and generated views | S-08 AC-1..AC-5 | docs-author (sonnet), cold-reader (haiku), quickstart-executor (haiku), sweep-verifier (haiku) | Executed - docs/internal/execution/P4-report.md |
+| B5 | Release prep and RC handover | S-08 AC-6, AC-7; S-07 AC-6; release-plan checklist and gates | release-packager (sonnet), completeness-critic (opus), external validators (plugin-dev:plugin-validator, plugin-dev:skill-reviewer) | Executed, two open items - docs/internal/execution/P5-report.md; S07-AC6 unmeasured, S08-AC7 `rc-handover.md` missing |
 
 ## Phase B1: Template + toy skill
 

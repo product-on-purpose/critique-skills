@@ -187,6 +187,40 @@ def test_multiple_heading_skips_escalate_to_severity_3():
     assert all(f.severity == 3 for f in findings if "level skips" in f.violation)
 
 
+def test_heading_skip_fix_recommends_next_sequential_level():
+    """Regression test for a stale-loop-variable defect: the fix string
+    used to be built from `prev_level`/`cur_level` left over from the
+    heading-pair *detection* loop rather than recomputed for the actual
+    skip pair being reported, so a heading appearing after the skip (as
+    this fixture has, and as the real corpus artifact
+    bench/corpus/accessibility/accessibility-001.html does) silently
+    corrupted the recommended level. An h2-to-h4 skip must recommend
+    <h3>, the next sequential level after <h2>, never <h5>."""
+    html = "<h1>Report</h1><h2>A</h2><h4>B</h4><h2>C</h2>"
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.1")
+    assert len(findings) == 1
+    assert findings[0].fix == "Change this heading to <h3>, or add the missing intervening heading level."
+
+
+def test_multiple_heading_skips_each_recommend_their_own_prev_level():
+    """A second, sharper regression case: two skips whose `prev` headings
+    are at different levels. The stale-variable defect would give both
+    skips the level left over from the last pair the detection loop
+    examined, rather than each skip's own prev level."""
+    html = "<h1>R</h1><h2>A</h2><h5>B</h5><h3>C</h3><h6>D</h6>"
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.1")
+    skip_findings = sorted(
+        (f for f in findings if "level skips" in f.violation),
+        key=lambda f: f.location,
+    )
+    assert len(skip_findings) == 2
+    fixes = {f.fix for f in skip_findings}
+    assert fixes == {
+        "Change this heading to <h3>, or add the missing intervening heading level.",
+        "Change this heading to <h4>, or add the missing intervening heading level.",
+    }
+
+
 def test_sequential_headings_are_not_flagged():
     html = "<h1>Report</h1><h2>Section</h2><h3>Subsection</h3>"
     findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.1")

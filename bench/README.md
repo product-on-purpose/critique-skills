@@ -445,7 +445,28 @@ has been scored yet, so it holds a placeholder.
 
 Run set `p3-2026-07-31-plus-cal1-2026-08-01`, generated 2026-08-01T06:56:00Z.
 
-| Skill | Version | Model | Domain | Artifact type | Artifacts | Recall | Precision | Clean FP rate | Consistency | Consistency (exact) | Unresolvable |
+**Baseline comparison (location-level, criterion ignored).** The fair cross-condition comparison, first because it is the one the baseline could actually have failed; not pinned at 0.000. A skill passes a tier by beating baseline recall at equal-or-better precision, or by tying recall and winning precision; a tier that wins one metric and loses the other reads "no pass on this tier", annotated with the sibling tier that qualifies the skill if one does. See bench/results/README.md, "Baseline comparison", and bench/results/verdicts.md, "The gate".
+
+| Skill | Version | Domain | Model | Skill recall (location) | Baseline recall (location) | Skill precision (location) | Baseline precision (location) | Verdict |
+|---|---|---|---|---|---|---|---|---|
+| critique-accessibility | 0.1.0 | accessibility | claude-haiku-4-5-20251001 | 0.176 | 0.376 | 0.158 | 0.258 | below baseline |
+| critique-accessibility | 0.1.1 | accessibility | claude-haiku-4-5-20251001 | 0.988 | 0.376 | 0.875 | 0.258 | beats baseline |
+| critique-accessibility | 0.1.0 | accessibility | claude-sonnet-5 | 0.306 | 0.776 | 0.202 | 0.293 | below baseline |
+| critique-accessibility | 0.1.1 | accessibility | claude-sonnet-5 | 0.965 | 0.776 | 0.672 | 0.293 | beats baseline |
+| critique-argument | 0.1.0 | argument | claude-haiku-4-5-20251001 | 0.825 | 0.525 | 0.579 | 0.189 | beats baseline |
+| critique-argument | 0.1.0 | argument | claude-sonnet-5 | 0.775 | 0.725 | 0.470 | 0.228 | beats baseline |
+| critique-clarity | 0.1.0 | clarity | claude-haiku-4-5-20251001 | 0.780 | 0.540 | 0.419 | 0.329 | beats baseline |
+| critique-clarity | 0.1.0 | clarity | claude-sonnet-5 | 0.890 | 0.880 | 0.434 | 0.335 | beats baseline |
+| critique-docs | 0.1.0 | docs | claude-haiku-4-5-20251001 | 0.933 | 0.933 | 0.875 | 0.275 | ties baseline |
+| critique-docs | 0.1.0 | docs | claude-sonnet-5 | 1.000 | 1.000 | 1.000 | 0.238 | ties baseline |
+| critique-microcopy | 0.1.0 | microcopy | claude-haiku-4-5-20251001 | 0.920 | 0.813 | 0.831 | 0.581 | beats baseline |
+| critique-microcopy | 0.1.0 | microcopy | claude-sonnet-5 | 0.960 | 0.840 | 0.911 | 0.481 | beats baseline |
+| critique-usability | 0.1.0 | usability | claude-haiku-4-5-20251001 | 0.800 | 0.000 | 0.231 | 0.000 | beats baseline |
+| critique-usability | 0.1.0 | usability | claude-sonnet-5 | 0.857 | 0.829 | 0.169 | 0.181 | no pass on this tier (qualifies via haiku) |
+
+**Full per-run figures.** Every skill, baseline, model, and domain in this run set; the location-level table above and the rubric-operationalization table below are both derived from these rows.
+
+| Skill | Version | Model | Domain | Artifact type | Artifact-runs (k=5) | Recall | Precision | Clean FP rate | Consistency | Consistency (exact) | Unresolvable |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | baseline-generic | 1.0.0 | claude-haiku-4-5-20251001 | accessibility | html | 20 | 0.000 | 0.000 | 5.000 | 0.175 | 0.172 | 66 |
 | baseline-generic | 1.0.0 | claude-sonnet-5 | accessibility | html | 20 | 0.000 | 0.000 | 8.200 | 0.653 | 0.326 | 8 |
@@ -474,43 +495,24 @@ Run set `p3-2026-07-31-plus-cal1-2026-08-01`, generated 2026-08-01T06:56:00Z.
 | critique-usability | 0.1.0 | claude-haiku-4-5-20251001 | usability | html | 20 | 0.686 | 0.198 | 4.400 | 0.378 | 0.373 | 4 |
 | critique-usability | 0.1.0 | claude-sonnet-5 | usability | html | 20 | 0.857 | 0.169 | 7.600 | 0.642 | 0.653 | 0 |
 
-**Baseline comparison (criterion-level).** Structurally 0.000 for baseline-generic in every row; see bench/results/README.md, "Baseline comparison".
+**Rubric operationalization (criterion-level).** Each skill's own recall and precision against its own cited criteria; not a baseline comparison. `baseline-generic` has no rubric to cite, so none of its claims can ever match a planted defect's criterion string and its criterion-level recall and precision are structurally 0.000 in every row, not measured; it is omitted from this table rather than shown as a comparison it cannot lose. See bench/results/README.md, "Baseline comparison".
 
-| Skill | Version | Domain | Model | Skill recall | Baseline recall | Skill precision | Baseline precision | Verdict |
-|---|---|---|---|---|---|---|---|---|
-| critique-accessibility | 0.1.0 | accessibility | claude-haiku-4-5-20251001 | 0.176 | 0.000 | 0.158 | 0.000 | beats baseline |
-| critique-accessibility | 0.1.1 | accessibility | claude-haiku-4-5-20251001 | 0.976 | 0.000 | 0.865 | 0.000 | beats baseline |
-| critique-accessibility | 0.1.0 | accessibility | claude-sonnet-5 | 0.235 | 0.000 | 0.155 | 0.000 | beats baseline |
-| critique-accessibility | 0.1.1 | accessibility | claude-sonnet-5 | 0.965 | 0.000 | 0.672 | 0.000 | beats baseline |
-| critique-argument | 0.1.0 | argument | claude-haiku-4-5-20251001 | 0.775 | 0.000 | 0.544 | 0.000 | beats baseline |
-| critique-argument | 0.1.0 | argument | claude-sonnet-5 | 0.775 | 0.000 | 0.470 | 0.000 | beats baseline |
-| critique-clarity | 0.1.0 | clarity | claude-haiku-4-5-20251001 | 0.710 | 0.000 | 0.382 | 0.000 | beats baseline |
-| critique-clarity | 0.1.0 | clarity | claude-sonnet-5 | 0.770 | 0.000 | 0.376 | 0.000 | beats baseline |
-| critique-docs | 0.1.0 | docs | claude-haiku-4-5-20251001 | 0.933 | 0.000 | 0.875 | 0.000 | beats baseline |
-| critique-docs | 0.1.0 | docs | claude-sonnet-5 | 1.000 | 0.000 | 1.000 | 0.000 | beats baseline |
-| critique-microcopy | 0.1.0 | microcopy | claude-haiku-4-5-20251001 | 0.840 | 0.000 | 0.759 | 0.000 | beats baseline |
-| critique-microcopy | 0.1.0 | microcopy | claude-sonnet-5 | 0.920 | 0.000 | 0.873 | 0.000 | beats baseline |
-| critique-usability | 0.1.0 | usability | claude-haiku-4-5-20251001 | 0.686 | 0.000 | 0.198 | 0.000 | beats baseline |
-| critique-usability | 0.1.0 | usability | claude-sonnet-5 | 0.857 | 0.000 | 0.169 | 0.000 | beats baseline |
-
-**Baseline comparison (location-level, criterion ignored).** The fair cross-condition comparison; not pinned at 0.000.
-
-| Skill | Version | Domain | Model | Skill recall (location) | Baseline recall (location) | Skill precision (location) | Baseline precision (location) | Verdict |
-|---|---|---|---|---|---|---|---|---|
-| critique-accessibility | 0.1.0 | accessibility | claude-haiku-4-5-20251001 | 0.176 | 0.376 | 0.158 | 0.258 | below baseline |
-| critique-accessibility | 0.1.1 | accessibility | claude-haiku-4-5-20251001 | 0.988 | 0.376 | 0.875 | 0.258 | beats baseline |
-| critique-accessibility | 0.1.0 | accessibility | claude-sonnet-5 | 0.306 | 0.776 | 0.202 | 0.293 | below baseline |
-| critique-accessibility | 0.1.1 | accessibility | claude-sonnet-5 | 0.965 | 0.776 | 0.672 | 0.293 | beats baseline |
-| critique-argument | 0.1.0 | argument | claude-haiku-4-5-20251001 | 0.825 | 0.525 | 0.579 | 0.189 | beats baseline |
-| critique-argument | 0.1.0 | argument | claude-sonnet-5 | 0.775 | 0.725 | 0.470 | 0.228 | beats baseline |
-| critique-clarity | 0.1.0 | clarity | claude-haiku-4-5-20251001 | 0.780 | 0.540 | 0.419 | 0.329 | beats baseline |
-| critique-clarity | 0.1.0 | clarity | claude-sonnet-5 | 0.890 | 0.880 | 0.434 | 0.335 | beats baseline |
-| critique-docs | 0.1.0 | docs | claude-haiku-4-5-20251001 | 0.933 | 0.933 | 0.875 | 0.275 | ties baseline |
-| critique-docs | 0.1.0 | docs | claude-sonnet-5 | 1.000 | 1.000 | 1.000 | 0.238 | ties baseline |
-| critique-microcopy | 0.1.0 | microcopy | claude-haiku-4-5-20251001 | 0.920 | 0.813 | 0.831 | 0.581 | beats baseline |
-| critique-microcopy | 0.1.0 | microcopy | claude-sonnet-5 | 0.960 | 0.840 | 0.911 | 0.481 | beats baseline |
-| critique-usability | 0.1.0 | usability | claude-haiku-4-5-20251001 | 0.800 | 0.000 | 0.231 | 0.000 | beats baseline |
-| critique-usability | 0.1.0 | usability | claude-sonnet-5 | 0.857 | 0.829 | 0.169 | 0.181 | beats baseline |
+| Skill | Version | Domain | Model | Recall | Precision |
+|---|---|---|---|---|---|
+| critique-accessibility | 0.1.0 | accessibility | claude-haiku-4-5-20251001 | 0.176 | 0.158 |
+| critique-accessibility | 0.1.1 | accessibility | claude-haiku-4-5-20251001 | 0.976 | 0.865 |
+| critique-accessibility | 0.1.0 | accessibility | claude-sonnet-5 | 0.235 | 0.155 |
+| critique-accessibility | 0.1.1 | accessibility | claude-sonnet-5 | 0.965 | 0.672 |
+| critique-argument | 0.1.0 | argument | claude-haiku-4-5-20251001 | 0.775 | 0.544 |
+| critique-argument | 0.1.0 | argument | claude-sonnet-5 | 0.775 | 0.470 |
+| critique-clarity | 0.1.0 | clarity | claude-haiku-4-5-20251001 | 0.710 | 0.382 |
+| critique-clarity | 0.1.0 | clarity | claude-sonnet-5 | 0.770 | 0.376 |
+| critique-docs | 0.1.0 | docs | claude-haiku-4-5-20251001 | 0.933 | 0.875 |
+| critique-docs | 0.1.0 | docs | claude-sonnet-5 | 1.000 | 1.000 |
+| critique-microcopy | 0.1.0 | microcopy | claude-haiku-4-5-20251001 | 0.840 | 0.759 |
+| critique-microcopy | 0.1.0 | microcopy | claude-sonnet-5 | 0.920 | 0.873 |
+| critique-usability | 0.1.0 | usability | claude-haiku-4-5-20251001 | 0.686 | 0.198 |
+| critique-usability | 0.1.0 | usability | claude-sonnet-5 | 0.857 | 0.169 |
 <!-- bench-results:end -->
 
 ---

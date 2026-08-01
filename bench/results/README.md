@@ -652,7 +652,15 @@ Stated so no reader has to infer them from an absence.
   violation match exactly, so no scored figure is affected, but a scripted-lane finding is supposed to
   be bit-for-bit what the script produced and this one is not. Separately, `<h3>` is the substantively
   correct fix for an h2-to-h4 skip, so `checks.py`'s `<h5>` wording looks like a latent defect of its
-  own. Neither is fixed here.
+  own. Neither is fixed here. **Update, 0.1.1 hygiene pass:** the `checks.py` defect is now fixed. The
+  fix string was built from a `prev_level`/`cur_level` pair left over from the heading-pair detection
+  loop rather than recomputed for the skip actually being reported, so any heading after the skip (as
+  `accessibility-001.html` has) silently corrupted the recommended level; `checks.py` now recomputes it
+  from the reported skip pair and emits `<h3>` for this artifact, verified with a new regression test
+  and a determinism double-run. The historical envelope cited above stays exactly as produced and was
+  not edited; it is the one envelope in this run set that already read `<h3>`, and every sibling envelope
+  in both `runs/` and `runs-cal1/` still reads the pre-fix `<h5>`, which is now explained rather than
+  resolved.
 - **Six clean artifacts, one per domain.** Every clean-artifact false-positive figure rests on a single
   artifact scored five times.
 - **Small defect counts in three domains.** docs 6 planted defects, usability 7, argument 8. A recall of

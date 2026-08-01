@@ -883,6 +883,12 @@ def _check_structure(tree):
     # is severity 3 (see "Severity policy" in the module docstring).
     heading_severity = _severity_for_count(len(skips))
     for prev, cur in skips:
+        # prev_level is recomputed here, from this skip pair's own `prev`,
+        # rather than reused from the detection loop above: that loop's
+        # `prev_level`/`cur_level` are left holding whichever heading pair
+        # it examined last (not necessarily this skip), and reusing them
+        # named the wrong target level once a heading followed the skip.
+        prev_level = int(prev.tag[1])
         heading_text = _normalize_ws(cur.text_content())[:60]
         findings.append(RawFinding(
             criterion="WCAG-1.3.1",

@@ -1,17 +1,43 @@
 # QUICKSTART
 
-One path, no branches: install, run one critique against a file already in this repo, read what
-comes back, record one decision on it. Five minutes, inside a single Claude Code session. No
+One path, no branches beyond how you installed: install, run one critique against a file, read
+what comes back, record one decision on it. Five minutes, inside a single Claude Code session. No
 separate API key: critique runs as a skill in the session you already have open.
 
 ## 1. Install
 
-In Claude Code:
+Two ways to get `critique-skills` in place. The rest of this walkthrough assumes the plugin path;
+a repo checkout is a clearly-labeled alternative, needed only if you want to run the benchmark or
+the contract validator directly rather than through a skill invocation.
+
+**As a Claude Code plugin (this walkthrough's main path):**
 
 ```
 /plugin marketplace add product-on-purpose/agent-plugins
 /plugin install critique-skills@product-on-purpose
 ```
+
+**Alternative, a repo checkout** (for `bench/` reproduction or scripting `contract/validate.py`
+directly):
+
+```
+git clone https://github.com/product-on-purpose/critique-skills.git
+cd critique-skills
+```
+
+Wherever this walkthrough gives a path relative to the plugin's own files, a repo checkout already
+has that path relative to its own root; the checkout-specific notes below say where that shortcut
+applies.
+
+**One prerequisite either way.** Step 4 runs `contract/validate.py` to check a disposition log; its
+only runtime dependency is `jsonschema`, and `/plugin install` does not install it, that command
+sets up the skill, not a Python environment for it. Install it once:
+
+```
+pip install "jsonschema>=4.20,<5"
+```
+
+(`python -m pip install "jsonschema>=4.20,<5"` if `pip` is not directly on your PATH.)
 
 ## 2. Run one critique
 
@@ -21,14 +47,27 @@ two short paragraphs, two passive-voice sentences and one nominalization planted
 `critique-clarity` has something concrete to find. It ships in the repo specifically to be the
 first thing you critique.
 
-Ask, in plain language:
+**Plugin install:** that path is relative to the plugin's own installed files, not your working
+directory, so ask Claude to fetch it rather than typing the path yourself as if it were local:
+
+> Copy `skills/critique-clarity/examples/clarity-golden-01-passive-and-nominalization.md` from the
+> installed `critique-skills` plugin into this directory, then critique the copy for clarity.
+
+Claude Code can read its own installed plugin files directly, typically cached locally under
+`~/.claude/plugins/cache/product-on-purpose/critique-skills/` (the exact version-numbered folder
+under it varies by release, which is exactly why this asks Claude to find the file rather than
+naming that folder). If Claude cannot locate it from that description, ask it to list the plugin's
+installed files first.
+
+**Repo checkout:** the file is already at that path relative to your checkout's root; skip the copy
+and ask directly:
 
 > Critique `skills/critique-clarity/examples/clarity-golden-01-passive-and-nominalization.md` for
 > clarity.
 
 `critique-clarity`'s own description names "review," "feedback," "clarity," and "prose document,"
-so a request like this triggers it without naming the skill directly. If nothing triggers, ask
-explicitly: "Use critique-clarity on that file."
+so a request like either one above triggers it without naming the skill directly. If nothing
+triggers, ask explicitly: "Use critique-clarity on that file."
 
 ## 3. Read the envelope
 
@@ -108,13 +147,22 @@ convenient (`disposition.json` in your working directory is fine):
 }
 ```
 
-If your own run's `artifact_sha256` or `timestamp` differ from the reference envelope above, use
-your own run's values instead; the disposition log's `envelope` block has to name the actual run it
-disposes findings from. Confirm the log itself is well-formed:
+Use your own run's values, not the ones above, for every field in `envelope`: `artifact_sha256` and
+`timestamp` will differ from this reference run regardless of install path, and `artifact` itself
+will differ too if you copied the example into a plugin-install working directory rather than
+critiquing it at its repo-checkout path. The disposition log's `envelope` block has to name the
+actual run it disposes findings from. Confirm the log itself is well-formed:
 
 ```
 python -m contract.validate disposition.json
 ```
+
+**Repo checkout:** run that command from the repo root; `contract` resolves with no extra setup.
+**Plugin install:** `contract` is not on your Python path by default, since only the skill was
+installed, not a package. Ask Claude to run the validator instead of invoking it yourself:
+
+> Validate `disposition.json` against the critique contract, using `contract/validate.py` from the
+> installed `critique-skills` plugin.
 
 `valid` means the document holds together as a disposition log. It does not mean the disposition
 you recorded was the right call; that judgment is yours, which is the whole point of Section 10.

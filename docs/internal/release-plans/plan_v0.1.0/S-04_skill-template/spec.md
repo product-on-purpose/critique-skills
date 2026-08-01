@@ -19,25 +19,66 @@ audience: agent
 ## Task Summary
 
 - Status: committed
-- AC: [ ] AC-1 [ ] AC-2 [ ] AC-3 [ ] AC-4 [ ] AC-5 [x] AC-6 [ ] AC-7
+- AC: [x] AC-1 [x] AC-2 [ ] AC-3 [x] AC-4 [x] AC-5 [x] AC-6 [x] AC-7
 - AC evidence:
-  - AC-1: the template guide (`docs/internal/skill-template.md`) and self-test runner shipped in P2
-    (docs/internal/execution/P2-report.md phase summary, commit `1095663`), but no report records a
-    per-criterion verdict for AC-1 itself. Not evidenced; left unchecked.
-  - AC-2: docs/internal/execution/P2-report.md's S05-AC1 row confirms the self-test runner passes
-    on all six built skills, but AC-2's own text (the runner failing correctly on each of five
-    named bad-input modes) was never separately verified in any report. Not evidenced; left
-    unchecked.
-  - AC-3: no report records a per-criterion verdict for the template-conformance CI check. Not
-    evidenced; left unchecked.
-  - AC-4: no report records a per-criterion verdict for the shared gate/check library requirement.
-    Not evidenced; left unchecked.
-  - AC-5: no report records a per-criterion verdict for golden/anti-example correctness. Not
-    evidenced; left unchecked.
-  - AC-6: docs/internal/execution/P2-report.md (S04-AC6, PASS: all six skills score 1.00 on the
+  - AC-1: PASS. `docs/internal/skill-template.md` (803 lines) covers directory shape, SKILL.md
+    frontmatter (format, required fields, description scoring, two worked examples), SKILL.md body
+    structure and delegation, scripted-lane discipline and what determinism does and does not cover,
+    `references/` file formats, a full worked `scripts/checks.py` wiring example plus the shared
+    `skills/_shared` API surface, `evals/` and `examples/` formats, the corpus-module obligation, what
+    the self-test does and does not check, and a 13-step "Building a skill end to end" walkthrough
+    that references only `skills/_template-fixture/critique-toy/`, never another domain skill's
+    source. Re-ran `python scripts/skill-selftest.py skills/<name>` fresh against all six shipped
+    skills this pass: all six print `skill-selftest: 0 errors, 0 warning(s). PASS`, consistent with
+    having been built from this guide alone.
+  - AC-2: PASS. `scripts/tests/test_skill_selftest.py` names and exercises exactly AC-2's five
+    failure modes, each with its own test asserting the distinct rule name:
+    `test_missing_lane_declaration_fails_distinctly`, `test_criterion_in_both_lanes_fails_distinctly`,
+    `test_undeclared_scripted_check_fails_distinctly`, `test_schema_invalid_example_fails_distinctly`,
+    `test_under_20_trigger_evals_fails_distinctly`. Ran `python -m pytest
+    scripts/tests/test_skill_selftest.py -k "..."` naming all five: 5 passed. Independently
+    reproduced one mode outside pytest: truncated a copy of the toy fixture's
+    `evals/triggers.eval.json` to 5 cases and ran `python scripts/skill-selftest.py` directly against
+    it, which printed `[trigger-evals-too-few] ...: 5 case(s), need at least 20` distinctly.
+  - AC-3: FAIL, verified. AC-3's text requires the template-conformance script to validate all six
+    skills "uniformly in CI." Nothing does: `.github/workflows/ci.yml`'s only Python job runs
+    `python -m pytest`, and `scripts/tests/test_skill_selftest.py`'s own cases run
+    `scripts/skill-selftest.py` only against the synthetic `skills/_template-fixture/critique-toy`
+    fixture and broken `tmp_path` copies, never against a real `skills/critique-*` directory; grepped
+    `.github/workflows/`, `package.json`, and every `*.py`/`*.mjs`/`*.js` file in the repo for
+    `skill-selftest`, finding only the script itself, its own test module, and skills' own
+    `checks.py` docstring comments that name it in passing. The only place all six real skills were
+    ever swept with this script is a one-time manual audit command recorded in
+    `docs/internal/execution/P2-report.md`'s S05-AC1 row, which is not CI. Re-ran that sweep by hand
+    this pass (`for d in skills/critique-*/; do python scripts/skill-selftest.py "$d"; done`): all six
+    still pass cleanly, so the validator itself is sound, but AC-3's specific "in CI" claim is not
+    met. Left unchecked; closing this needs a CI job (or a pytest case) that globs
+    `skills/critique-*` and runs `skill-selftest.py` against each.
+  - AC-4: PASS. `skills/_shared/gate.py`'s own module docstring: "the load-bearing file for S-04
+    AC-4," re-exporting `gate_exit_code`/`validate_document` from `contract/validate.py` rather than
+    reimplementing them. Grepped all six skills' `scripts/checks.py`: every one imports
+    `run_scripted_lane` from `skills._shared.runner` (which itself resolves to
+    `skills._shared.gate.gate_exit_code`) with an identical `main()` shape; none reimplements gate
+    logic locally. Ran `--gate` directly against two skills with severity-3 findings present and the
+    default threshold 0 (`critique-accessibility` on `bench/corpus/accessibility/accessibility-001.html`,
+    `critique-usability` on `examples/artifacts/golden-01-settings.html`): both exit 2, matching S-02
+    semantics. `pytest contract/tests/test_gate.py`: 14 passed.
+  - AC-5: PASS. `scripts/skill-selftest.py`'s golden/anti-example checks
+    (`EXAMPLES_MIN_GOLDEN=3`, `EXAMPLES_MIN_ANTI=1`, `GOLDEN_NOTE_MIN_LENGTH=40`) are exercised
+    distinctly by `test_too_few_golden_examples_fails` and `test_missing_anti_example_fails`, both
+    passing. Spot-checked `skills/critique-accessibility/examples/golden-02.json` and `anti-01.json`
+    directly: the golden carries `artifact`, `expected_envelope`, and a `note` explaining why each
+    finding is correct; the anti-example carries a `query` plus a `note` explaining why it must not
+    trigger the skill. All six real skills pass `skill-selftest.py` fresh (re-run above), which
+    enforces this shape for every skill, not only accessibility.
+  - AC-6: PASS. docs/internal/execution/P2-report.md (S04-AC6, PASS: all six skills score 1.00 on the
     family U5 description scorer, threshold 0.70).
-  - AC-7: no report records a per-criterion verdict for the paraphrase-policy self-test detection.
-    Not evidenced; left unchecked.
+  - AC-7: PASS. `test_over_long_quote_in_references_fails` and `test_quoted_operationalization_cell_fails`
+    (both in `scripts/tests/test_skill_selftest.py`) independently exercise the paraphrase-policy
+    detector (`MAX_ANCHOR_QUOTE_WORDS=25`, D6): a references quote over 25 words and a quoted
+    Operationalization-column cell each fail distinctly. Ran `python -m pytest
+    scripts/tests/test_skill_selftest.py -k "over_long_quote_in_references_fails or
+    quoted_operationalization_cell_fails"`: 2 passed.
 - Open questions: 1
 - Last-updated: 2026-08-01
 

@@ -31,11 +31,15 @@ def _fmt_metric(metric_value: dict[str, Any]) -> str:
     return "n/a" if value is None else f"{value:.3f}"
 
 
+def _fmt_value(value: float | None) -> str:
+    return "n/a" if value is None else f"{value:.3f}"
+
+
 def render_entries_table(entries: list[dict[str, Any]]) -> str:
     if not entries:
         return "_No run set has been scored yet._"
     header = (
-        "| Skill | Version | Model | Domain | Artifact type | Artifacts | Recall | Precision | "
+        "| Skill | Version | Model | Domain | Artifact type | Artifact-runs (k=5) | Recall | Precision | "
         "Clean FP rate | Consistency | Consistency (exact) | Unresolvable |\n"
         "|---|---|---|---|---|---|---|---|---|---|---|---|"
     )
@@ -92,67 +96,104 @@ def _find_baseline(skills: dict[tuple[str, str], dict[str, Any]]) -> dict[str, A
     return skills[candidates[0]] if candidates else None
 
 
-def _verdict(skill_value: float | None, baseline_value: float | None) -> str:
-    if skill_value is None or baseline_value is None:
-        return "n/a"
-    if skill_value > baseline_value:
-        return "beats baseline"
-    if skill_value == baseline_value:
-        return "ties baseline"
-    return "below baseline"
-
-
-def render_baseline_comparison(entries: list[dict[str, Any]]) -> str:
-    """A skill-versus-baseline table, computed by matching `(domain,
-    model)` pairs where one side carries `skill: "baseline-generic"`
-    (bench/README.md, "Baseline comparison"). Nothing here is stored
-    anywhere else: every figure already lives in `entries[]`, read once.
-
-    Criterion-level: a claim matches a planted defect only when its
-    criterion string equals the defect's. `baseline-generic` carries the
-    fixed criterion `BASELINE-GENERIC`, which no manifest plants a defect
-    under, so every baseline row here reads recall 0.000 and precision
-    0.000 by construction, not by measurement. See
-    `render_baseline_comparison_location` for the comparison that is not
-    pinned this way.
+def render_criterion_table(entries: list[dict[str, Any]]) -> str:
+    """Each skill's own recall and precision against its own cited
+    rubric, by `(domain, model)`. This is not a baseline comparison: a
+    claim matches a planted defect only when its criterion string equals
+    the defect's, `baseline-generic` carries the fixed criterion
+    `BASELINE-GENERIC` (no manifest plants a defect under it, because a
+    prompt with no rubric has nothing to cite), so a baseline column here
+    would read exactly 0.000 in every row by construction, not by
+    measurement, and a verdict column built on that column would be
+    vacuous. Neither is rendered. What is meaningful at this level, and
+    is rendered, is whether a skill's own criterion-tagged findings land
+    on the planted defects, i.e. whether the rubric was operationalized.
+    See `render_baseline_comparison_location` for the skill-versus-
+    baseline comparison, which is not pinned this way.
     """
     rows: list[str] = []
     for (domain, model), skills in sorted(_by_domain_model(entries).items()):
-        baseline = _find_baseline(skills)
-        if baseline is None:
-            continue
         for skill_name, skill_version in sorted(skills):
             if skill_name == BASELINE_SKILL:
                 continue
             entry = skills[(skill_name, skill_version)]
-            verdict = _verdict(entry["recall"]["value"], baseline["recall"]["value"])
             rows.append(
                 f"| {skill_name} | {skill_version} | {domain} | {model} | {_fmt_metric(entry['recall'])} | "
-                f"{_fmt_metric(baseline['recall'])} | {_fmt_metric(entry['precision'])} | "
-                f"{_fmt_metric(baseline['precision'])} | {verdict} |"
+                f"{_fmt_metric(entry['precision'])} |"
             )
 
     if not rows:
-        return "_No baseline comparison available yet._"
-    header = (
-        "| Skill | Version | Domain | Model | Skill recall | Baseline recall | Skill precision | "
-        "Baseline precision | Verdict |\n|---|---|---|---|---|---|---|---|---|"
-    )
+        return "_No rubric-operationalization figures available yet._"
+    header = "| Skill | Version | Domain | Model | Recall | Precision |\n|---|---|---|---|---|---|"
     return "\n".join([header, *rows])
 
 
+def _tier_label(model: str) -> str:
+    """A short tier name for a pinned model ID, for verdict prose only
+    (`claude-haiku-4-5-20251001` to `haiku`). Falls back to the full
+    model ID for any model this library has not pinned before, so a new
+    tier degrades to a longer but still correct label instead of a wrong
+    one."""
+    lower = model.lower()
+    for tier in ("haiku", "sonnet", "opus"):
+        if tier in lower:
+            return tier
+    return model
+
+
+def _dominance_verdict(
+    skill_recall: float | None,
+    baseline_recall: float | None,
+    skill_precision: float | None,
+    baseline_precision: float | None,
+) -> str:
+    """AC-6's own rule (`bench/results/verdicts.md`, "The gate"): a skill
+    passes a tier by beating the baseline's recall at equal-or-better
+    precision, or by tying recall and winning precision. Recall alone is
+    not enough: `critique-usability` on sonnet wins recall (0.857 against
+    0.829) while losing precision (0.169 against 0.181), which is a
+    dominance loss even though the recall column alone would read as a
+    win (bench/results/README.md, "Core skills, S-05 AC-6"). Anything
+    that does not dominate on at least one metric while losing nothing
+    on the other reads as a flat loss; anything that wins one metric and
+    loses the other reads as a mixed non-pass, distinct from a flat
+    loss, so a reader is not told a skill lost everything when it only
+    lost precision."""
+    if skill_recall is None or baseline_recall is None or skill_precision is None or baseline_precision is None:
+        return "n/a"
+    if skill_recall > baseline_recall and skill_precision >= baseline_precision:
+        return "beats baseline"
+    if skill_recall == baseline_recall and skill_precision >= baseline_precision:
+        return "ties baseline"
+    if skill_recall <= baseline_recall and skill_precision <= baseline_precision:
+        return "below baseline"
+    return "no pass on this tier"
+
+
+_QUALIFYING_VERDICTS = ("beats baseline", "ties baseline")
+
+
 def render_baseline_comparison_location(entries: list[dict[str, Any]]) -> str:
-    """The location-level counterpart to `render_baseline_comparison`:
-    same `(domain, model)` matching, but reads `recall_location` and
-    `precision_location`, where a claim matches a planted defect when its
-    location resolves within the artifact type's tolerance, criterion ID
-    ignored entirely (`bench/metrics/score.py`, `score_artifact_location`).
-    This is the fair cross-condition comparison: it is the one baseline
-    figure in this file that is not pinned at 0.000 by construction, and
-    in several cells below it is the baseline, not the skill, that reads
-    the higher number.
+    """The fair skill-versus-baseline comparison: reads `recall_location`
+    and `precision_location`, where a claim matches a planted defect when
+    its location resolves within the artifact type's tolerance, criterion
+    ID ignored entirely (`bench/metrics/score.py`,
+    `score_artifact_location`). Unlike the criterion-level cut, the
+    baseline is not pinned at 0.000 by construction here, and in several
+    cells below it is the baseline, not the skill, that reads the higher
+    number.
+
+    The verdict is decided by `_dominance_verdict`, which reads both
+    columns, not recall alone: a tier that wins recall but loses
+    precision is a mixed non-pass ("no pass on this tier"), not a win.
+    When a row reads that way, this function looks at the same skill's
+    other pinned tier for the same domain and version; if that tier
+    passes, the row is annotated "(qualifies via <tier>)" so a reader
+    sees the skill still ships without mistaking the failing tier for a
+    pass (`bench/results/README.md`, "Core skills, S-05 AC-6": "passes on
+    haiku only, ... not a pass on either reading" for the sonnet cell).
     """
-    rows: list[str] = []
+    raw_rows: list[dict[str, Any]] = []
     for (domain, model), skills in sorted(_by_domain_model(entries).items()):
         baseline = _find_baseline(skills)
         if baseline is None:
@@ -161,16 +202,52 @@ def render_baseline_comparison_location(entries: list[dict[str, Any]]) -> str:
             if skill_name == BASELINE_SKILL:
                 continue
             entry = skills[(skill_name, skill_version)]
-            verdict = _verdict(entry["recall_location"]["value"], baseline["recall_location"]["value"])
-            rows.append(
-                f"| {skill_name} | {skill_version} | {domain} | {model} | "
-                f"{_fmt_metric(entry['recall_location'])} | "
-                f"{_fmt_metric(baseline['recall_location'])} | {_fmt_metric(entry['precision_location'])} | "
-                f"{_fmt_metric(baseline['precision_location'])} | {verdict} |"
+            raw_rows.append(
+                {
+                    "skill": skill_name,
+                    "version": skill_version,
+                    "domain": domain,
+                    "model": model,
+                    "recall": entry["recall_location"]["value"],
+                    "baseline_recall": baseline["recall_location"]["value"],
+                    "precision": entry["precision_location"]["value"],
+                    "baseline_precision": baseline["precision_location"]["value"],
+                }
             )
 
-    if not rows:
+    if not raw_rows:
         return "_No baseline comparison available yet._"
+
+    verdicts = {
+        (r["skill"], r["version"], r["domain"], r["model"]): _dominance_verdict(
+            r["recall"], r["baseline_recall"], r["precision"], r["baseline_precision"]
+        )
+        for r in raw_rows
+    }
+
+    def _qualifying_sibling_tier(row: dict[str, Any]) -> str | None:
+        for other in raw_rows:
+            if other["model"] == row["model"]:
+                continue
+            if (other["skill"], other["version"], other["domain"]) != (row["skill"], row["version"], row["domain"]):
+                continue
+            if verdicts[(other["skill"], other["version"], other["domain"], other["model"])] in _QUALIFYING_VERDICTS:
+                return _tier_label(other["model"])
+        return None
+
+    rows: list[str] = []
+    for r in raw_rows:
+        verdict = verdicts[(r["skill"], r["version"], r["domain"], r["model"])]
+        if verdict == "no pass on this tier":
+            sibling_tier = _qualifying_sibling_tier(r)
+            if sibling_tier is not None:
+                verdict = f"no pass on this tier (qualifies via {sibling_tier})"
+        rows.append(
+            f"| {r['skill']} | {r['version']} | {r['domain']} | {r['model']} | "
+            f"{_fmt_value(r['recall'])} | {_fmt_value(r['baseline_recall'])} | "
+            f"{_fmt_value(r['precision'])} | {_fmt_value(r['baseline_precision'])} | {verdict} |"
+        )
+
     header = (
         "| Skill | Version | Domain | Model | Skill recall (location) | Baseline recall (location) | "
         "Skill precision (location) | Baseline precision (location) | Verdict |"
@@ -204,17 +281,30 @@ def render_block(results: dict[str, Any]) -> str:
             "",
             f"Run set `{results.get('run_set', '?')}`, generated {results.get('generated_at', '?')}.",
             "",
-            render_entries_table(entries),
-            "",
-            "**Baseline comparison (criterion-level).** Structurally 0.000 for baseline-generic in "
-            "every row; see bench/results/README.md, \"Baseline comparison\".",
-            "",
-            render_baseline_comparison(entries),
-            "",
             "**Baseline comparison (location-level, criterion ignored).** The fair cross-condition "
-            "comparison; not pinned at 0.000.",
+            "comparison, first because it is the one the baseline could actually have failed; not "
+            "pinned at 0.000. A skill passes a tier by beating baseline recall at equal-or-better "
+            "precision, or by tying recall and winning precision; a tier that wins one metric and "
+            "loses the other reads \"no pass on this tier\", annotated with the sibling tier that "
+            "qualifies the skill if one does. See bench/results/README.md, \"Baseline comparison\", "
+            "and bench/results/verdicts.md, \"The gate\".",
             "",
             render_baseline_comparison_location(entries),
+            "",
+            "**Full per-run figures.** Every skill, baseline, model, and domain in this run set; "
+            "the location-level table above and the rubric-operationalization table below are both "
+            "derived from these rows.",
+            "",
+            render_entries_table(entries),
+            "",
+            "**Rubric operationalization (criterion-level).** Each skill's own recall and precision "
+            "against its own cited criteria; not a baseline comparison. `baseline-generic` has no "
+            "rubric to cite, so none of its claims can ever match a planted defect's criterion string "
+            "and its criterion-level recall and precision are structurally 0.000 in every row, not "
+            "measured; it is omitted from this table rather than shown as a comparison it cannot "
+            "lose. See bench/results/README.md, \"Baseline comparison\".",
+            "",
+            render_criterion_table(entries),
             END_MARKER,
         ]
     )

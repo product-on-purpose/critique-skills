@@ -5,14 +5,21 @@ against a published standard, instead of freeform opinion.
 
 ## Results
 
-The table below is generated, unedited, from the run envelopes in `bench/results/`. It leads
-because the receipts come before the claim. `bench/results/` holds three things, all one click
-away from this table, not just referenced after it: the raw run envelopes the table below is
-generated from, `bench/results/README.md` (the full narrative, unflattering numbers first), and
-`bench/results/verdicts.md` (the per-skill ship or hold reasoning). Read the `Verdict` columns
-first: `beats baseline` means the skill found and located more of the seeded defects than a
-generic "critique this" prompt given no rubric at all, on the same artifacts, on the same pinned
-model.
+The tables below are generated, unedited, from the run envelopes in `bench/results/`. They lead
+because the receipts come before the claim, and the first table is the fair one: location-level,
+criterion ignored, the one comparison here the frozen baseline could actually have failed. A
+criterion-level table further down looks similar but measures something else, whether each skill
+operationalizes its own rubric, not whether it beats an unrubricked prompt; the baseline has no
+rubric to cite, so a baseline-versus-skill verdict at that level would be true by construction, not
+by measurement, and is not shown there. `bench/results/` holds three things, all one click away
+from this table, not just referenced after it: the raw run envelopes the tables below are generated
+from, `bench/results/README.md` (the full narrative, unflattering numbers first), and
+`bench/results/verdicts.md` (the per-skill ship or hold reasoning, see "The gate"). Read the first
+table's `Verdict` column: `beats baseline` means the skill located more of the seeded defects than a
+generic "critique this" prompt given no rubric at all, at equal-or-better precision, on the same
+artifacts, on the same pinned model; `no pass on this tier` means it did not, even on a row where it
+won one of the two metrics, and where a skill's other pinned tier does pass, that tier is named in
+parentheses.
 
 Regenerate with `python -m bench.report table --results bench/results/results.json --target
 README.md`. Check it has not drifted with the same command plus `--check`.
@@ -22,7 +29,28 @@ README.md`. Check it has not drifted with the same command plus `--check`.
 
 Run set `p3-2026-07-31-plus-cal1-2026-08-01`, generated 2026-08-01T06:56:00Z.
 
-| Skill | Version | Model | Domain | Artifact type | Artifacts | Recall | Precision | Clean FP rate | Consistency | Consistency (exact) | Unresolvable |
+**Baseline comparison (location-level, criterion ignored).** The fair cross-condition comparison, first because it is the one the baseline could actually have failed; not pinned at 0.000. A skill passes a tier by beating baseline recall at equal-or-better precision, or by tying recall and winning precision; a tier that wins one metric and loses the other reads "no pass on this tier", annotated with the sibling tier that qualifies the skill if one does. See bench/results/README.md, "Baseline comparison", and bench/results/verdicts.md, "The gate".
+
+| Skill | Version | Domain | Model | Skill recall (location) | Baseline recall (location) | Skill precision (location) | Baseline precision (location) | Verdict |
+|---|---|---|---|---|---|---|---|---|
+| critique-accessibility | 0.1.0 | accessibility | claude-haiku-4-5-20251001 | 0.176 | 0.376 | 0.158 | 0.258 | below baseline |
+| critique-accessibility | 0.1.1 | accessibility | claude-haiku-4-5-20251001 | 0.988 | 0.376 | 0.875 | 0.258 | beats baseline |
+| critique-accessibility | 0.1.0 | accessibility | claude-sonnet-5 | 0.306 | 0.776 | 0.202 | 0.293 | below baseline |
+| critique-accessibility | 0.1.1 | accessibility | claude-sonnet-5 | 0.965 | 0.776 | 0.672 | 0.293 | beats baseline |
+| critique-argument | 0.1.0 | argument | claude-haiku-4-5-20251001 | 0.825 | 0.525 | 0.579 | 0.189 | beats baseline |
+| critique-argument | 0.1.0 | argument | claude-sonnet-5 | 0.775 | 0.725 | 0.470 | 0.228 | beats baseline |
+| critique-clarity | 0.1.0 | clarity | claude-haiku-4-5-20251001 | 0.780 | 0.540 | 0.419 | 0.329 | beats baseline |
+| critique-clarity | 0.1.0 | clarity | claude-sonnet-5 | 0.890 | 0.880 | 0.434 | 0.335 | beats baseline |
+| critique-docs | 0.1.0 | docs | claude-haiku-4-5-20251001 | 0.933 | 0.933 | 0.875 | 0.275 | ties baseline |
+| critique-docs | 0.1.0 | docs | claude-sonnet-5 | 1.000 | 1.000 | 1.000 | 0.238 | ties baseline |
+| critique-microcopy | 0.1.0 | microcopy | claude-haiku-4-5-20251001 | 0.920 | 0.813 | 0.831 | 0.581 | beats baseline |
+| critique-microcopy | 0.1.0 | microcopy | claude-sonnet-5 | 0.960 | 0.840 | 0.911 | 0.481 | beats baseline |
+| critique-usability | 0.1.0 | usability | claude-haiku-4-5-20251001 | 0.800 | 0.000 | 0.231 | 0.000 | beats baseline |
+| critique-usability | 0.1.0 | usability | claude-sonnet-5 | 0.857 | 0.829 | 0.169 | 0.181 | no pass on this tier (qualifies via haiku) |
+
+**Full per-run figures.** Every skill, baseline, model, and domain in this run set; the location-level table above and the rubric-operationalization table below are both derived from these rows.
+
+| Skill | Version | Model | Domain | Artifact type | Artifact-runs (k=5) | Recall | Precision | Clean FP rate | Consistency | Consistency (exact) | Unresolvable |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | baseline-generic | 1.0.0 | claude-haiku-4-5-20251001 | accessibility | html | 20 | 0.000 | 0.000 | 5.000 | 0.175 | 0.172 | 66 |
 | baseline-generic | 1.0.0 | claude-sonnet-5 | accessibility | html | 20 | 0.000 | 0.000 | 8.200 | 0.653 | 0.326 | 8 |
@@ -51,43 +79,24 @@ Run set `p3-2026-07-31-plus-cal1-2026-08-01`, generated 2026-08-01T06:56:00Z.
 | critique-usability | 0.1.0 | claude-haiku-4-5-20251001 | usability | html | 20 | 0.686 | 0.198 | 4.400 | 0.378 | 0.373 | 4 |
 | critique-usability | 0.1.0 | claude-sonnet-5 | usability | html | 20 | 0.857 | 0.169 | 7.600 | 0.642 | 0.653 | 0 |
 
-**Baseline comparison (criterion-level).** Structurally 0.000 for baseline-generic in every row; see bench/results/README.md, "Baseline comparison".
+**Rubric operationalization (criterion-level).** Each skill's own recall and precision against its own cited criteria; not a baseline comparison. `baseline-generic` has no rubric to cite, so none of its claims can ever match a planted defect's criterion string and its criterion-level recall and precision are structurally 0.000 in every row, not measured; it is omitted from this table rather than shown as a comparison it cannot lose. See bench/results/README.md, "Baseline comparison".
 
-| Skill | Version | Domain | Model | Skill recall | Baseline recall | Skill precision | Baseline precision | Verdict |
-|---|---|---|---|---|---|---|---|---|
-| critique-accessibility | 0.1.0 | accessibility | claude-haiku-4-5-20251001 | 0.176 | 0.000 | 0.158 | 0.000 | beats baseline |
-| critique-accessibility | 0.1.1 | accessibility | claude-haiku-4-5-20251001 | 0.976 | 0.000 | 0.865 | 0.000 | beats baseline |
-| critique-accessibility | 0.1.0 | accessibility | claude-sonnet-5 | 0.235 | 0.000 | 0.155 | 0.000 | beats baseline |
-| critique-accessibility | 0.1.1 | accessibility | claude-sonnet-5 | 0.965 | 0.000 | 0.672 | 0.000 | beats baseline |
-| critique-argument | 0.1.0 | argument | claude-haiku-4-5-20251001 | 0.775 | 0.000 | 0.544 | 0.000 | beats baseline |
-| critique-argument | 0.1.0 | argument | claude-sonnet-5 | 0.775 | 0.000 | 0.470 | 0.000 | beats baseline |
-| critique-clarity | 0.1.0 | clarity | claude-haiku-4-5-20251001 | 0.710 | 0.000 | 0.382 | 0.000 | beats baseline |
-| critique-clarity | 0.1.0 | clarity | claude-sonnet-5 | 0.770 | 0.000 | 0.376 | 0.000 | beats baseline |
-| critique-docs | 0.1.0 | docs | claude-haiku-4-5-20251001 | 0.933 | 0.000 | 0.875 | 0.000 | beats baseline |
-| critique-docs | 0.1.0 | docs | claude-sonnet-5 | 1.000 | 0.000 | 1.000 | 0.000 | beats baseline |
-| critique-microcopy | 0.1.0 | microcopy | claude-haiku-4-5-20251001 | 0.840 | 0.000 | 0.759 | 0.000 | beats baseline |
-| critique-microcopy | 0.1.0 | microcopy | claude-sonnet-5 | 0.920 | 0.000 | 0.873 | 0.000 | beats baseline |
-| critique-usability | 0.1.0 | usability | claude-haiku-4-5-20251001 | 0.686 | 0.000 | 0.198 | 0.000 | beats baseline |
-| critique-usability | 0.1.0 | usability | claude-sonnet-5 | 0.857 | 0.000 | 0.169 | 0.000 | beats baseline |
-
-**Baseline comparison (location-level, criterion ignored).** The fair cross-condition comparison; not pinned at 0.000.
-
-| Skill | Version | Domain | Model | Skill recall (location) | Baseline recall (location) | Skill precision (location) | Baseline precision (location) | Verdict |
-|---|---|---|---|---|---|---|---|---|
-| critique-accessibility | 0.1.0 | accessibility | claude-haiku-4-5-20251001 | 0.176 | 0.376 | 0.158 | 0.258 | below baseline |
-| critique-accessibility | 0.1.1 | accessibility | claude-haiku-4-5-20251001 | 0.988 | 0.376 | 0.875 | 0.258 | beats baseline |
-| critique-accessibility | 0.1.0 | accessibility | claude-sonnet-5 | 0.306 | 0.776 | 0.202 | 0.293 | below baseline |
-| critique-accessibility | 0.1.1 | accessibility | claude-sonnet-5 | 0.965 | 0.776 | 0.672 | 0.293 | beats baseline |
-| critique-argument | 0.1.0 | argument | claude-haiku-4-5-20251001 | 0.825 | 0.525 | 0.579 | 0.189 | beats baseline |
-| critique-argument | 0.1.0 | argument | claude-sonnet-5 | 0.775 | 0.725 | 0.470 | 0.228 | beats baseline |
-| critique-clarity | 0.1.0 | clarity | claude-haiku-4-5-20251001 | 0.780 | 0.540 | 0.419 | 0.329 | beats baseline |
-| critique-clarity | 0.1.0 | clarity | claude-sonnet-5 | 0.890 | 0.880 | 0.434 | 0.335 | beats baseline |
-| critique-docs | 0.1.0 | docs | claude-haiku-4-5-20251001 | 0.933 | 0.933 | 0.875 | 0.275 | ties baseline |
-| critique-docs | 0.1.0 | docs | claude-sonnet-5 | 1.000 | 1.000 | 1.000 | 0.238 | ties baseline |
-| critique-microcopy | 0.1.0 | microcopy | claude-haiku-4-5-20251001 | 0.920 | 0.813 | 0.831 | 0.581 | beats baseline |
-| critique-microcopy | 0.1.0 | microcopy | claude-sonnet-5 | 0.960 | 0.840 | 0.911 | 0.481 | beats baseline |
-| critique-usability | 0.1.0 | usability | claude-haiku-4-5-20251001 | 0.800 | 0.000 | 0.231 | 0.000 | beats baseline |
-| critique-usability | 0.1.0 | usability | claude-sonnet-5 | 0.857 | 0.829 | 0.169 | 0.181 | beats baseline |
+| Skill | Version | Domain | Model | Recall | Precision |
+|---|---|---|---|---|---|
+| critique-accessibility | 0.1.0 | accessibility | claude-haiku-4-5-20251001 | 0.176 | 0.158 |
+| critique-accessibility | 0.1.1 | accessibility | claude-haiku-4-5-20251001 | 0.976 | 0.865 |
+| critique-accessibility | 0.1.0 | accessibility | claude-sonnet-5 | 0.235 | 0.155 |
+| critique-accessibility | 0.1.1 | accessibility | claude-sonnet-5 | 0.965 | 0.672 |
+| critique-argument | 0.1.0 | argument | claude-haiku-4-5-20251001 | 0.775 | 0.544 |
+| critique-argument | 0.1.0 | argument | claude-sonnet-5 | 0.775 | 0.470 |
+| critique-clarity | 0.1.0 | clarity | claude-haiku-4-5-20251001 | 0.710 | 0.382 |
+| critique-clarity | 0.1.0 | clarity | claude-sonnet-5 | 0.770 | 0.376 |
+| critique-docs | 0.1.0 | docs | claude-haiku-4-5-20251001 | 0.933 | 0.875 |
+| critique-docs | 0.1.0 | docs | claude-sonnet-5 | 1.000 | 1.000 |
+| critique-microcopy | 0.1.0 | microcopy | claude-haiku-4-5-20251001 | 0.840 | 0.759 |
+| critique-microcopy | 0.1.0 | microcopy | claude-sonnet-5 | 0.920 | 0.873 |
+| critique-usability | 0.1.0 | usability | claude-haiku-4-5-20251001 | 0.686 | 0.198 |
+| critique-usability | 0.1.0 | usability | claude-sonnet-5 | 0.857 | 0.169 |
 <!-- bench-results:end -->
 
 Every number above traces to a committed run envelope under `bench/results/runs*/`: the scored
@@ -122,12 +131,17 @@ for wiring `--gate` mode into a pipeline.
 
 And the library publishes its own performance rather than asserting it. Every skill runs against a
 seeded-defect corpus with known ground truth, five times per artifact per model, on two pinned
-model tiers, compared against that same rubric-free generic prompt. The lowest consistency among
-the shipped core skills is stated plainly, not buried: `critique-clarity` on the Haiku tier holds a
-run-to-run consistency of **0.309**, which is the stretch-gate floor precisely because it is where
-the library actually measured (lower numbers exist elsewhere in the published tables, for other
-metrics and for the baseline; see `bench/results/README.md` for the full, unflattering-numbers-first
-account). The most instructive number is `critique-accessibility`'s own
+model tiers, compared against that same rubric-free generic prompt. The lowest number that gates a
+release is stated plainly, not buried: `critique-clarity` on the Haiku tier holds a run-to-run
+consistency of **0.309**, the stretch-gate consistency floor, set at exactly that value because it
+is the lowest overall-lane consistency any core skill measured (`docs/internal/decisions/0022-consistency-floor-overall-lane-min-core.md`).
+**0.309 is the floor, not the lowest number this library publishes.** Precision falls to **0.155**
+(`critique-accessibility` 0.1.0 on Sonnet, in the table above), judged-lane recall to **0.130** and
+judged-lane consistency to **0.150** (both `critique-clarity` on Haiku, a derived cut computed from
+the same committed envelopes but not itself a gate). None of those three numbers gates anything;
+only the overall-lane consistency floor does, and it is not the smallest figure in the run set. The
+full, unflattering-numbers-first account naming every one of them is `bench/results/README.md`. The
+most instructive number is `critique-accessibility`'s own
 history. Version 0.1.0 shipped, then lost to the unrubricked baseline on location-level recall on
 both pinned tiers, 0.176 against 0.376 on Haiku and 0.306 against 0.776 on Sonnet, and the root
 cause turned out to be a location-*reporting* defect, not a detection one: one helper was printing
@@ -135,7 +149,7 @@ a line number where the location grammar required a navigable anchor. Version 0.
 that and nothing else, and recall reads 0.976 on Haiku and 0.965 on Sonnet, beating baseline on
 both tiers, on both metrics. Both versions are published side by side in the table above; the
 failure was not deleted when the fix arrived. That is this library's best evidence that measurement
-catches what intuition misses, and it is why the results table above is the front page rather than
+catches what intuition misses, and it is why the results tables above are the front page rather than
 an appendix.
 
 ## Install
