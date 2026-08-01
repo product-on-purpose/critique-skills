@@ -90,8 +90,10 @@ Run set `p3-2026-07-31-plus-cal1-2026-08-01`, generated 2026-08-01T06:56:00Z.
 | critique-usability | 0.1.0 | usability | claude-sonnet-5 | 0.857 | 0.829 | 0.169 | 0.181 | beats baseline |
 <!-- bench-results:end -->
 
-Every number above traces to a committed run envelope under `bench/results/runs/`. Nothing here
-is estimated, sampled from memory, or asserted without a run that produced it. The full narrative,
+Every number above traces to a committed run envelope under `bench/results/runs*/`: the scored
+grid and steering probes for `p3-2026-07-31` live under `bench/results/runs/`, and the
+`critique-accessibility` 0.1.1 calibration numbers live under `bench/results/runs-cal1/`. Nothing
+here is estimated, sampled from memory, or asserted without a run that produced it. The full narrative,
 including every unflattering number first, is `bench/results/README.md`; the per-skill ship or
 hold reasoning is `bench/results/verdicts.md`.
 
@@ -120,10 +122,12 @@ for wiring `--gate` mode into a pipeline.
 
 And the library publishes its own performance rather than asserting it. Every skill runs against a
 seeded-defect corpus with known ground truth, five times per artifact per model, on two pinned
-model tiers, compared against that same rubric-free generic prompt. The lowest number in the whole
-published run set is stated plainly, not buried: `critique-clarity` on the Haiku tier holds a
+model tiers, compared against that same rubric-free generic prompt. The lowest consistency among
+the shipped core skills is stated plainly, not buried: `critique-clarity` on the Haiku tier holds a
 run-to-run consistency of **0.309**, which is the stretch-gate floor precisely because it is where
-the library actually measured. The most instructive number is `critique-accessibility`'s own
+the library actually measured (lower numbers exist elsewhere in the published tables, for other
+metrics and for the baseline; see `bench/results/README.md` for the full, unflattering-numbers-first
+account). The most instructive number is `critique-accessibility`'s own
 history. Version 0.1.0 shipped, then lost to the unrubricked baseline on location-level recall on
 both pinned tiers, 0.176 against 0.376 on Haiku and 0.306 against 0.776 on Sonnet, and the root
 cause turned out to be a location-*reporting* defect, not a detection one: one helper was printing
@@ -182,6 +186,10 @@ Regenerate with `node scripts/gen-readme-catalog.mjs`. Check for drift with the 
 | [`critique-microcopy`](skills/critique-microcopy/SKILL.md) | Reviews error messages, empty states, and other short microcopy strings, including screens annotated with placement, container, timing, and behavior context, against NN/g's error-message guidelines: plain language, specificity, constructive next steps, neutral tone, and recovery grace. | NNG-EM | 0.1.0 |
 | [`critique-usability`](skills/critique-usability/SKILL.md) | Reviews HTML or markdown UI specs, wireframe write-ups, and page mockups against Nielsen's 10 usability heuristics: system status, user control and exits, consistency, error prevention and recovery, recognition over recall, and minimalist design. | NNG-HEURISTICS, NNG-SEVERITY | 0.1.0 |
 <!-- skill-catalog:end -->
+
+`critique-usability`'s claim above is narrower than it looks at a glance: it covers static specs
+and mockups, HTML/markdown UI specs, wireframe write-ups, and page mockups, not live running
+applications. See `skills/critique-usability/SKILL.md` for the full claim.
 
 Where the subagent tool is available, every skill above delegates to the `critique-critic`
 subagent (`agents/critique-critic.md`) so critique always runs in a fresh context that has not

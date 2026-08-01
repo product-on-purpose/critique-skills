@@ -2,9 +2,9 @@
 id: S-06
 title: Clean-context critic subagent
 type: spec
-status: draft
+status: fulfilled
 created: 2026-07-31
-updated: 2026-07-31
+updated: 2026-08-01
 linked-effort: S-06
 linked-plan: ../implementation/IMPL-B-skills-to-rc.md
 linked-strategy-brief: "01-strategy-brief.md (local planning archive, not committed)"
@@ -18,10 +18,18 @@ audience: agent
 
 ## Task Summary
 
-- Status: draft
-- AC: [ ] AC-1 [ ] AC-2 [ ] AC-3 [ ] AC-4 [ ] AC-5
+- Status: fulfilled
+- AC: [x] AC-1 [x] AC-2 [x] AC-3 [x] AC-4 [x] AC-5
+- AC evidence:
+  - AC-1: docs/internal/execution/P2-report.md (S06-AC1, PASS)
+  - AC-2: docs/internal/execution/P3-report.md (S06-AC2, PASS narrowly: schema-valid, no prose
+    wrapper; the report separately names a provenance gap in how the grid was produced, closed by
+    docs/internal/execution/P3-provenance.md)
+  - AC-3: docs/internal/execution/P3-report.md (S06-AC3, PASS)
+  - AC-4: docs/internal/execution/P2-report.md (S06-AC4, PASS)
+  - AC-5: docs/internal/execution/P2-report.md (S06-AC5, PASS)
 - Open questions: 1
-- Last-updated: 2026-07-31
+- Last-updated: 2026-08-01
 
 ## Purpose
 

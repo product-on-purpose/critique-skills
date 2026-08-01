@@ -2,9 +2,9 @@
 id: S-05
 title: "Skills slate: 3 core + 3 stretch"
 type: spec
-status: draft
+status: fulfilled
 created: 2026-07-31
-updated: 2026-07-31
+updated: 2026-08-01
 linked-effort: S-05
 linked-plan: ../implementation/IMPL-B-skills-to-rc.md
 linked-strategy-brief: "01-strategy-brief.md (local planning archive, not committed)"
@@ -18,10 +18,24 @@ audience: agent
 
 ## Task Summary
 
-- Status: draft
-- AC: [ ] AC-1 [ ] AC-2 [ ] AC-3 [ ] AC-4 [ ] AC-5 [ ] AC-6 [ ] AC-7 [ ] AC-8
+- Status: fulfilled
+- AC: [x] AC-1 [x] AC-2 [x] AC-3 [x] AC-4 [x] AC-5 [x] AC-6 [x] AC-7 [x] AC-8
+- AC evidence:
+  - AC-1: docs/internal/execution/P2-report.md (S05-AC1, PASS)
+  - AC-2: docs/internal/execution/P2-report.md (S05-AC2, PASS)
+  - AC-3: docs/internal/execution/P2-report.md (S05-AC3, PASS)
+  - AC-4: docs/internal/execution/P2-report.md (S05-AC4, PASS)
+  - AC-5: docs/internal/execution/P3-report.md (S05-AC5, PASS)
+  - AC-6: docs/internal/execution/P3-report.md first read S05-AC6 PASS on the criterion-level cut
+    only; ADR 0026 then found `critique-accessibility` 0.1.0 substantively FAILING at location
+    level on both tiers. The one permitted calibration iteration (ADR 0027) fixed a
+    location-emission defect, and re-measurement (docs/internal/execution/P3-cal1-report.md, ADR
+    0028) shows `critique-accessibility` 0.1.1 passing AC-6 literally, on both tiers, on both
+    metrics. Checked on the final, corrected state.
+  - AC-7: docs/internal/execution/P3-report.md (S05-AC7, PASS; all three stretch skills SHIP)
+  - AC-8: docs/internal/execution/P2-report.md (S05-AC8, PASS)
 - Open questions: 2
-- Last-updated: 2026-07-31
+- Last-updated: 2026-08-01
 
 ## Purpose
 

@@ -2,9 +2,9 @@
 id: S-08
 title: Documentation and release packaging
 type: spec
-status: draft
+status: committed
 created: 2026-07-31
-updated: 2026-07-31
+updated: 2026-08-01
 linked-effort: S-08
 linked-plan: ../implementation/IMPL-B-skills-to-rc.md
 linked-strategy-brief: "01-strategy-brief.md (local planning archive, not committed)"
@@ -18,10 +18,26 @@ audience: agent
 
 ## Task Summary
 
-- Status: draft
-- AC: [ ] AC-1 [ ] AC-2 [ ] AC-3 [ ] AC-4 [ ] AC-5 [ ] AC-6 [ ] AC-7
+- Status: committed
+- AC: [x] AC-1 [x] AC-2 [x] AC-3 [x] AC-4 [x] AC-5 [ ] AC-6 [ ] AC-7
+- AC evidence:
+  - AC-1: docs/internal/execution/P4-report.md (S08-AC1, Pass with a caveat: the two named
+    cold-read weak spots were fixed and confirmed at their cited locations, not re-verified by an
+    independent fresh-context 90-second read, since no subagent tool was available to that pass).
+  - AC-2: docs/internal/execution/P4-report.md (S08-AC2, Pass)
+  - AC-3: docs/internal/execution/P4-report.md (S08-AC3, Pass)
+  - AC-4: docs/internal/execution/P4-report.md (S08-AC4, Pass)
+  - AC-5: docs/internal/execution/P4-report.md (S08-AC5, Pass)
+  - AC-6: not evidenced by a docs/internal/execution report as of P4. Version 0.1.0 consistency
+    across `library.json`, `.claude-plugin/plugin.json`, the CHANGELOG section, the RELEASE-NOTES
+    entry, and every `SKILL.md` frontmatter now holds per this release-packaging pass's own
+    version-guard run (`GITHUB_REF_NAME=v0.1.0 node scripts/check-release-versions.mjs`, all three
+    manifests agree), but that is this pass's own verification, not a prior execution report. Left
+    unchecked pending a future execution-report citation.
+  - AC-7: `marketplace-listing-pr.md` exists (`_local/initial-plan/marketplace-listing-pr.md`);
+    `rc-handover.md` does not exist anywhere in the repository. Partially met; left unchecked.
 - Open questions: 0
-- Last-updated: 2026-07-31
+- Last-updated: 2026-08-01
 
 ## Purpose
 

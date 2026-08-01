@@ -27,8 +27,15 @@ bench/
     <domain>/<recipe>.manifest.json
     corpus.lock.json            root seed, generator version, sha256 of every manifest
   results/
-    <run-set>/*.json            contract-valid run envelopes, one per skill per artifact per run
-    <run-set>/results.json      the computed numbers, machine-readable
+    runs/<skill>/<artifact>/*.json       contract-valid run envelopes, run set `p3-2026-07-31`
+                                          (plus `runs/steering/`, two probe envelopes excluded
+                                          from scoring)
+    runs-cal1/<skill>/<artifact>/*.json  contract-valid run envelopes, run set `cal1-2026-08-01`
+    results.json                         the computed numbers for every committed run set,
+                                          machine-readable (see `bench/results/README.md`,
+                                          "Reproduction", for the actual scoring commands: this
+                                          design section's per-run-set path convention below was
+                                          never how the committed file is laid out on disk)
 ```
 
 Nothing in `corpus/` is hand-edited, ever. It is generator output, and a hand edit breaks the
@@ -36,14 +43,14 @@ determinism check on the next CI run, which is the intended behaviour.
 
 ## Corpus design
 
-21 scored artifacts across the six launch domains, plus 3 unscored `toy` fixtures.
+23 scored artifacts across the six launch domains, plus 3 unscored `toy` fixtures.
 
 | Domain | Skill | Status | Artifacts | Clean | Artifact type | Namespaces |
 |---|---|---|---|---|---|---|
 | clarity | critique-clarity | core | 4 | 1 | `markdown-prose` | `PLAIN`, `WILLIAMS` |
 | accessibility | critique-accessibility | core | 4 | 1 | `html` | `WCAG` |
 | usability | critique-usability | core | 4 | 1 | `html` | `NNG` |
-| docs | critique-docs | stretch | 3 | 1 | `markdown-tree` | `DIATAXIS` |
+| docs | critique-docs | stretch | 4 | 1 | `markdown-tree` | `DIATAXIS` |
 | microcopy | critique-microcopy | stretch | 4 | 1 | `markdown-prose` | `NNG` |
 | argument | critique-argument | stretch | 3 | 1 | `markdown-prose` | `TOULMIN` |
 | toy | none | fixture | 3 | 1 | `markdown-prose` | `TOY` |
@@ -415,17 +422,18 @@ the first published run invalidates the comparison and requires a new run set.
 
 ### Results
 
-`bench/results/<run-set>/results.json` carries every computed number for a run set, and the README
-results table is generated from it by script with a drift check (S-03 AC-6). No number appears in
-any document in this repository that is not present in a committed `results.json`, and no table is
-hand-edited. The schema for that file is [`bench/results/results.schema.json`](results/results.schema.json);
-the table below is generated and checked by `bench/report.py`:
+`bench/results/results.json` carries every computed number for every committed run set, and the
+README results table is generated from it by script with a drift check (S-03 AC-6). No number
+appears in any document in this repository that is not present in the committed `results.json`,
+and no table is hand-edited. The schema for that file is
+[`bench/results/results.schema.json`](results/results.schema.json); the table below is generated
+and checked by `bench/report.py`. Each run set is scored into its own file first, then concatenated
+into the one committed `results.json` (`bench/results/README.md`, "Reproduction", has the full
+per-run-set recipe); regenerating and checking the published table itself needs only:
 
 ```
-python -m bench.metrics score --corpus bench/corpus --runs bench/results/<run-set> \
-    --out bench/results/<run-set>/results.json
-python -m bench.report table --results bench/results/<run-set>/results.json      # regenerate
-python -m bench.report table --results bench/results/<run-set>/results.json --check   # verify, exits 1 on drift
+python -m bench.report table --results bench/results/results.json      # regenerate
+python -m bench.report table --results bench/results/results.json --check   # verify, exits 1 on drift
 ```
 
 The block below the two marker comments is generated; hand edits inside it are overwritten by the
@@ -524,12 +532,15 @@ python -m bench.generator verify --corpus bench/corpus
 # 2. Confirm no manifest content leaked into any artifact.
 python -m bench.generator leak-check --corpus bench/corpus
 
-# 3. Score the committed envelopes against the corpus.
-python -m bench.metrics score --corpus bench/corpus --runs bench/results/<run-set> \
-    --out bench/results/<run-set>/results.json
+# 3. Score the committed envelopes against the corpus. Two run sets are committed
+#    (`bench/results/runs/`, excluding the two `runs/steering/` probe envelopes, and
+#    `bench/results/runs-cal1/`) and concatenated into one file; see `bench/results/README.md`,
+#    "Reproduction", for the full per-run-set command sequence.
+python -m bench.metrics score --corpus bench/corpus --runs bench/results/runs-cal1 \
+    --out /tmp/results-cal1.json --run-set cal1-2026-08-01
 
 # 4. Recompute the published table and confirm it matches the committed one.
-python -m bench.report table --results bench/results/<run-set>/results.json --check
+python -m bench.report table --results bench/results/results.json --check
 ```
 
 Step 3 is the one that matters: it takes the committed envelopes, which are the raw output of the

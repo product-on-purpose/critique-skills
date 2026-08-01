@@ -2,9 +2,9 @@
 id: S-04
 title: Skill template pattern
 type: spec
-status: draft
+status: committed
 created: 2026-07-31
-updated: 2026-07-31
+updated: 2026-08-01
 linked-effort: S-04
 linked-plan: ../implementation/IMPL-B-skills-to-rc.md
 linked-strategy-brief: "01-strategy-brief.md (local planning archive, not committed)"
@@ -18,10 +18,28 @@ audience: agent
 
 ## Task Summary
 
-- Status: draft
-- AC: [ ] AC-1 [ ] AC-2 [ ] AC-3 [ ] AC-4 [ ] AC-5 [ ] AC-6 [ ] AC-7
+- Status: committed
+- AC: [ ] AC-1 [ ] AC-2 [ ] AC-3 [ ] AC-4 [ ] AC-5 [x] AC-6 [ ] AC-7
+- AC evidence:
+  - AC-1: the template guide (`docs/internal/skill-template.md`) and self-test runner shipped in P2
+    (docs/internal/execution/P2-report.md phase summary, commit `1095663`), but no report records a
+    per-criterion verdict for AC-1 itself. Not evidenced; left unchecked.
+  - AC-2: docs/internal/execution/P2-report.md's S05-AC1 row confirms the self-test runner passes
+    on all six built skills, but AC-2's own text (the runner failing correctly on each of five
+    named bad-input modes) was never separately verified in any report. Not evidenced; left
+    unchecked.
+  - AC-3: no report records a per-criterion verdict for the template-conformance CI check. Not
+    evidenced; left unchecked.
+  - AC-4: no report records a per-criterion verdict for the shared gate/check library requirement.
+    Not evidenced; left unchecked.
+  - AC-5: no report records a per-criterion verdict for golden/anti-example correctness. Not
+    evidenced; left unchecked.
+  - AC-6: docs/internal/execution/P2-report.md (S04-AC6, PASS: all six skills score 1.00 on the
+    family U5 description scorer, threshold 0.70).
+  - AC-7: no report records a per-criterion verdict for the paraphrase-policy self-test detection.
+    Not evidenced; left unchecked.
 - Open questions: 1
-- Last-updated: 2026-07-31
+- Last-updated: 2026-08-01
 
 ## Purpose
 

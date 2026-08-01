@@ -2,9 +2,9 @@
 id: S-02
 title: "Critique Contract: schema, envelope, severity"
 type: spec
-status: draft
+status: fulfilled
 created: 2026-07-31
-updated: 2026-07-31
+updated: 2026-08-01
 linked-effort: S-02
 linked-plan: ../implementation/IMPL-A-foundation.md
 linked-strategy-brief: "01-strategy-brief.md (local planning archive, not committed)"
@@ -18,10 +18,19 @@ audience: agent
 
 ## Task Summary
 
-- Status: draft
-- AC: [ ] AC-1 [ ] AC-2 [ ] AC-3 [ ] AC-4 [ ] AC-5 [ ] AC-6 [ ] AC-7 [ ] AC-8
+- Status: fulfilled
+- AC: [x] AC-1 [x] AC-2 [x] AC-3 [x] AC-4 [x] AC-5 [x] AC-6 [x] AC-7 [x] AC-8
+- AC evidence:
+  - AC-1: docs/internal/execution/P1-report.md (S02-AC1, PASS)
+  - AC-2: docs/internal/execution/P1-report.md (S02-AC2, PASS)
+  - AC-3: docs/internal/execution/P1-report.md (S02-AC3, PASS)
+  - AC-4: docs/internal/execution/P1-report.md (S02-AC4, PASS)
+  - AC-5: docs/internal/execution/P1-report.md (S02-AC5, PASS)
+  - AC-6: docs/internal/execution/P1-report.md (S02-AC6, PASS)
+  - AC-7: docs/internal/execution/P1-report.md (S02-AC7, PASS)
+  - AC-8: docs/internal/execution/P1-report.md (S02-AC8, PASS)
 - Open questions: 2
-- Last-updated: 2026-07-31
+- Last-updated: 2026-08-01
 
 ## Purpose
 

@@ -2,9 +2,9 @@
 id: S-07
 title: CI pipeline
 type: spec
-status: draft
+status: committed
 created: 2026-07-31
-updated: 2026-07-31
+updated: 2026-08-01
 linked-effort: S-07
 linked-plan: ../implementation/IMPL-A-foundation.md
 linked-strategy-brief: "01-strategy-brief.md (local planning archive, not committed)"
@@ -18,10 +18,28 @@ audience: agent
 
 ## Task Summary
 
-- Status: draft
-- AC: [ ] AC-1 [ ] AC-2 [ ] AC-3 [ ] AC-4 [ ] AC-5 [ ] AC-6
+- Status: committed
+- AC: [ ] AC-1 [x] AC-2 [x] AC-3 [ ] AC-4 [x] AC-5 [ ] AC-6
+- AC evidence:
+  - AC-1: docs/internal/execution/P1-report.md (S07-AC1, DEFERRED, scheduled for P4).
+    docs/internal/execution/P4-report.md ("S07-AC1-local") reports all seven planted failures
+    failed locally and were reverted, but that is a narrower local replay, not the live-Actions
+    test-branch verification the criterion names. Strictly honest reading: still deferred; left
+    unchecked.
+  - AC-2: docs/internal/execution/P1-report.md (S07-AC2, FAIL: `release.yml` computed a verdict
+    inline via shell/`awk`). Fixed in P2 (docs/internal/execution/P2-report.md phase summary,
+    commit `9ef369d`) and independently reconfirmed this pass: `release.yml` now calls
+    `scripts/extract-release-notes.mjs`, no inline `awk`.
+  - AC-3: docs/internal/execution/P1-report.md (S07-AC3, PASS)
+  - AC-4: docs/internal/execution/P1-report.md (S07-AC4, DEFERRED, scheduled for P4-P5).
+    docs/internal/execution/P4-report.md ("AC-4-local") reports the tag guard blocks a mismatched
+    tag locally, but that is not the scratch-clone test-tag scenario the criterion names. Strictly
+    honest reading: still deferred; left unchecked.
+  - AC-5: docs/internal/execution/P1-report.md (S07-AC5, PASS)
+  - AC-6: docs/internal/execution/P1-report.md (S07-AC6, DEFERRED, "measured at P5"). No P5 report
+    exists; `ci.yml` runtime on GitHub-hosted runners has never been measured. Left unchecked.
 - Open questions: 0
-- Last-updated: 2026-07-31
+- Last-updated: 2026-08-01
 
 ## Purpose
 

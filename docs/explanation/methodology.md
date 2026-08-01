@@ -59,7 +59,7 @@ Part 1 alone produces structured guesswork: findings with locations but no autho
 
 ### The gate applied
 
-**Status: Provisional.** The domain slate below is a working proposal and needs reconciliation with the author's original 40-candidate, 13-domain survey. Treat the pass/fail column as directionally right and the specific membership as unsettled.
+**Status: Provisional.** The domain slate below is a working proposal. No completed candidate survey exists yet to reconcile it against; a critique-framework survey is a tracked v0.2 deliverable, not a document already in hand. Treat the pass/fail column as directionally right and the specific membership as unsettled.
 
 Passes both parts:
 
@@ -367,7 +367,7 @@ Step 7 is the one most likely to be skipped and the one least negotiable. The li
 
 These are unresolved and are stated here rather than hidden:
 
-- **Domain slate.** The Section 2 table is a working proposal and needs reconciliation against the original 40-candidate survey. Membership will change.
+- **Domain slate.** The Section 2 table is a working proposal with no completed candidate survey behind it yet. A critique-framework survey is a tracked v0.2 deliverable. Membership will change.
 - **Cross-domain severity.** Whether Nielsen's anchors transfer cleanly to prose and argumentation is untested. Per-domain anchor wording under a shared numeric scale is the current hypothesis.
 - **Consistency ceiling.** The 0.7 target is a placeholder with no empirical basis yet.
 - **Location granularity.** There is no settled convention for locating findings in non-linear artifacts such as designs and dashboards. Text artifacts are straightforward; visual ones are not.

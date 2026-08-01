@@ -24,10 +24,11 @@ freeform opinion. See `library.json` for the authoritative name, version, and ti
 
 ## Components
 
-- **Skills:** `critique-accessibility`, `critique-argument`, `critique-clarity`, `critique-docs`,
-  `critique-microcopy`, `critique-usability` (all `skills/critique-*`, v0.1.0, `active`). The toy
-  fixture at `skills/_template-fixture` is a scaffolding sample, not a shipped skill, and is
-  deliberately not registered in `library.json`.
+- **Skills:** `critique-accessibility` (v0.1.1, calibrated after P3 measurement; see ADR 0027 and
+  ADR 0028), `critique-argument`, `critique-clarity`, `critique-docs`, `critique-microcopy`,
+  `critique-usability` (v0.1.0 each) (all `skills/critique-*`, `active`). The toy fixture at
+  `skills/_template-fixture` is a scaffolding sample, not a shipped skill, and is deliberately not
+  registered in `library.json`.
 - **Subagents:** `critique-critic` (`agents/critique-critic.md`, v0.1.0, `active`, Claude-only) - the
   clean-context critic every `critique-<domain>` skill delegates to.
 - **Commands:** none yet.

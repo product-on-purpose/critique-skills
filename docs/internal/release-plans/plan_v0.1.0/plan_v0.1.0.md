@@ -4,7 +4,7 @@ title: "Release plan: v0.1.0"
 type: release-plan
 status: draft
 created: 2026-07-31
-updated: 2026-07-31
+updated: 2026-08-01
 target-date: null
 includes: [S-01, S-02, S-03, S-04, S-05, S-06, S-07, S-08]
 spec-count: 8
@@ -31,14 +31,23 @@ First release of the third product-on-purpose library. Built by a fully autonomo
 
 | id | title | spec-status | plan-status | AC-coverage | has-plan? |
 |----|-------|-------------|-------------|-------------|-----------|
-| S-01 | Repo scaffold and family conformance | draft | draft | pending | yes (IMPL-A) |
-| S-02 | Critique Contract: schema, envelope, severity | draft | draft | pending | yes (IMPL-A) |
-| S-03 | Bench harness: generator, corpus, metrics | draft | draft | pending | yes (IMPL-A) |
-| S-04 | Skill template pattern | draft | draft | pending | yes (IMPL-B) |
-| S-05 | Skills slate: 3 core + 3 stretch | draft | draft | pending | yes (IMPL-B) |
-| S-06 | Clean-context critic subagent | draft | draft | pending | yes (IMPL-B) |
-| S-07 | CI pipeline | draft | draft | pending | yes (IMPL-A) |
-| S-08 | Documentation and release packaging | draft | draft | pending | yes (IMPL-B) |
+| S-01 | Repo scaffold and family conformance | fulfilled | draft | complete | yes (IMPL-A) |
+| S-02 | Critique Contract: schema, envelope, severity | fulfilled | draft | complete | yes (IMPL-A) |
+| S-03 | Bench harness: generator, corpus, metrics | committed | draft | complete | yes (IMPL-A) |
+| S-04 | Skill template pattern | committed | draft | complete | yes (IMPL-B) |
+| S-05 | Skills slate: 3 core + 3 stretch | fulfilled | draft | complete | yes (IMPL-B) |
+| S-06 | Clean-context critic subagent | fulfilled | draft | complete | yes (IMPL-B) |
+| S-07 | CI pipeline | committed | draft | complete | yes (IMPL-A) |
+| S-08 | Documentation and release packaging | committed | draft | complete | yes (IMPL-B) |
+
+`spec-status` is `fulfilled` only where every one of that spec's own acceptance criteria is
+evidenced by a PASS verdict in a `docs/internal/execution/` report; `committed` means the spec has
+progressed past `draft` but at least one AC is deferred, unevidenced, or partially met, named in
+that spec's own Task Summary AC evidence list (S-03 AC-3; S-04 AC-1, AC-2, AC-3, AC-4, AC-5, AC-7;
+S-07 AC-1, AC-4, AC-6; S-08 AC-6, AC-7). `AC-coverage` here mirrors the linked implementation plan's
+own `ac-coverage: complete` frontmatter field (both `IMPL-A-foundation.md` and
+`IMPL-B-skills-to-rc.md` already declare it), i.e. every AC is mapped to a phase in the plan; it is
+not a claim that every AC is fulfilled, which is what `spec-status` states per spec.
 
 Implementation plans are phase-grouped (`implementation/IMPL-A-foundation.md` covers P0-P1 efforts, `implementation/IMPL-B-skills-to-rc.md` covers P2-P5); each spec's AC map to named workflow phase outputs.
 
@@ -50,20 +59,20 @@ These conditions block tagging. The in-repo `--gate` reports pass/fail after mig
 
 | Gate | Condition | Status |
 |------|-----------|--------|
-| (a) Spec status | Every effort's spec has `status: committed` or `fulfilled` (no `draft`) | FAIL (all drafts; specs commit at Jonathan's plan-suite review) |
+| (a) Spec status | Every effort's spec has `status: committed` or `fulfilled` (no `draft`) | PASS - all eight specs now read `fulfilled` (S-01, S-02, S-05, S-06) or `committed` (S-03, S-04, S-07, S-08), each with its unevidenced ACs named in its own Task Summary. |
 | (b) Coupled plan | Every effort has an implementation plan or a recorded waiver | PASS (phase-grouped plans cover all eight) |
-| (c) AC coverage | Every implementation plan reaches `ac-coverage: complete` | pending |
-| (d) Phases done | Every workflow phase P0-P5 reports Done with its exit criteria met | pending |
-| (e) Staleness | No spec edited after its implementation plan's last edit | pending |
+| (c) AC coverage | Every implementation plan reaches `ac-coverage: complete` | PASS - both `implementation/IMPL-A-foundation.md` and `implementation/IMPL-B-skills-to-rc.md` frontmatter already declare `ac-coverage: complete`. |
+| (d) Phases done | Every workflow phase P0-P5 reports Done with its exit criteria met | PARTIAL - `docs/internal/execution/P0-report.md` through `P4-report.md` (plus `P3-cal1-report.md` and `P3-provenance.md`) each exist and each discloses its own deferrals honestly rather than claiming a clean Done; P5 (release packaging) is this pass and has not yet produced its own committed execution report. |
+| (e) Staleness | No spec edited after its implementation plan's last edit | FAIL, administratively - this release-packaging pass updated all eight specs' `status`, AC checkboxes, and `updated` field to `2026-08-01`, which postdates `IMPL-A-foundation.md` and `IMPL-B-skills-to-rc.md`'s `updated: 2026-07-31`. The spec edits are release-hygiene bookkeeping citing already-existing execution-report evidence (no requirement, AC text, or scope changed), and the implementation plans themselves were not touched by this pass. Flagged rather than silently waived; a future pass can close this by bumping the two implementation plans' `updated` field to acknowledge the same date. |
 
 ### Release-specific gates (beyond the template defaults)
 
 | Gate | Condition | Status |
 |------|-----------|--------|
-| (f) Conformance | Family Standard gate: 0 errors at Universal tier, pinned Standard version | pending |
-| (g) Measurement | Every shipped skill has committed envelopes for seeded recall, precision, k=5 consistency, and a baseline win on two pinned model tiers | pending |
-| (h) Stretch gating | Each stretch skill has an explicit ship/hold verdict recorded with its numbers | pending |
-| (i) Honesty sweep | README claims trace to repo artifacts; no survey claim; no em/en dashes; results tables generated not hand-edited | pending |
+| (f) Conformance | Family Standard gate: 0 errors at Universal tier, pinned Standard version | PASS - `node scripts/check.mjs`: "0 error(s), 0 warning(s)" at declared tier Convergent (above Universal; the twelve `[error]`-labeled lines it prints are explicitly scoped "above your declared tier (informational)" per the gate's own output and do not affect the exit code). |
+| (g) Measurement | Every shipped skill has committed envelopes for seeded recall, precision, k=5 consistency, and a baseline win on two pinned model tiers | PASS - 460 scored grid envelopes plus 2 steering probe envelopes (462 JSON files under `bench/results/runs/`) for run set `p3-2026-07-31`, plus 40 `cal1-2026-08-01` calibration envelopes. At location level, `critique-accessibility` (0.1.1) and `critique-clarity` beat the frozen baseline on recall at equal-or-better precision on both pinned tiers, `critique-usability` does so on the Haiku tier only; all three stretch skills clear S-05 AC-7 (baseline win on at least one pinned tier, `critique-docs` on precision dominance at equal recall) plus the R1 consistency floor (`bench/results/README.md`; `docs/internal/execution/P3-report.md`; `P3-cal1-report.md`). |
+| (h) Stretch gating | Each stretch skill has an explicit ship/hold verdict recorded with its numbers | PASS - `bench/results/verdicts.md`: all three stretch skills (`critique-docs`, `critique-microcopy`, `critique-argument`) SHIP, each citing its baseline-win and R1-floor numbers. |
+| (i) Honesty sweep | README claims trace to repo artifacts; no survey claim; no em/en dashes; results tables generated not hand-edited | PASS - the unverified "40-candidate, 13-domain survey" claim in `docs/explanation/methodology.md` was corrected this pass (ADR 0029, the one explicitly authorized freeze exception); a codepoint scan of all 1,058 tracked repository files found zero U+2014 or U+2013 (the `bench/results/runs/baseline/**/*.raw.txt` carve-out was checked too and also came back clean); `python -m bench.report table --results bench/results/results.json --check` and `node scripts/gen-readme-catalog.mjs --check` both report no drift. |
 
 ---
 
@@ -73,15 +82,15 @@ Every box checked before the tag. Publish actions marked (human) are Jonathan's 
 
 | Doc | Update | Done |
 |-----|--------|------|
-| `CHANGELOG.md` | Promote [Unreleased] to v0.1.0 dated section | [ ] |
-| `RELEASE-NOTES.md` | Curated v0.1.0 highlights (distinct from CHANGELOG) | [ ] |
-| `README.md` | Generated results table current; catalog table matches `library.json` | [ ] |
-| `AGENTS.md` | Reflects final component list | [ ] |
-| `library.json` | `version: 0.1.0`; components each carry name, path, version, tier, status | [ ] |
-| `.claude-plugin/plugin.json` | `version: 0.1.0`; generated, drift-free | [ ] |
-| `skills/*/SKILL.md` | Per-skill `version` frontmatter set | [ ] |
-| `docs/internal/decisions/` | ADRs for D1-D10 plus any in-run decisions, each with TL;DR | [ ] |
-| `bench/results/` | Envelopes committed for every number cited anywhere | [ ] |
+| `CHANGELOG.md` | Promote [Unreleased] to v0.1.0 dated section | [x] |
+| `RELEASE-NOTES.md` | Curated v0.1.0 highlights (distinct from CHANGELOG) | [x] |
+| `README.md` | Generated results table current; catalog table matches `library.json` | [x] |
+| `AGENTS.md` | Reflects final component list | [x] (component-list version drift for `critique-accessibility` 0.1.1 fixed this pass) |
+| `library.json` | `version: 0.1.0`; components each carry name, path, version, tier, status | [x] |
+| `.claude-plugin/plugin.json` | `version: 0.1.0`; generated, drift-free | [x] |
+| `skills/*/SKILL.md` | Per-skill `version` frontmatter set | [x] |
+| `docs/internal/decisions/` | ADRs for D1-D10 plus any in-run decisions, each with TL;DR | [x] (29 ADRs, 0001-0029, each with exactly one `## TL;DR`) |
+| `bench/results/` | Envelopes committed for every number cited anywhere | [x] |
 | Git tag `v0.1.0` | Annotated tag after all above (human) | [ ] |
 | `agent-plugins` registry | Listing PR: entry with SHA pin on the tag, `strict: true`, registry CHANGELOG row (human merge) | [ ] |
 
