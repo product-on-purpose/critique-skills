@@ -145,6 +145,7 @@ def build_results(
         return artifact_text_cache[sha]
 
     recall_groups: dict[GroupKey, list[score.ArtifactScore]] = {}
+    location_recall_groups: dict[GroupKey, list[score.ArtifactScore]] = {}
     consistency_envelope_groups: dict[tuple[str, str, str, str], list[dict[str, Any]]] = {}
 
     for env in envelopes:
@@ -154,7 +155,9 @@ def build_results(
         if manifest is None:
             continue  # no corpus artifact matches this envelope; not scorable
         key: GroupKey = (run["skill"], run["skill_version"], run["model"], manifest["domain"])
-        recall_groups.setdefault(key, []).append(score.score_artifact(manifest, env, text_for(manifest)))
+        text = text_for(manifest)
+        recall_groups.setdefault(key, []).append(score.score_artifact(manifest, env, text))
+        location_recall_groups.setdefault(key, []).append(score.score_artifact_location(manifest, env, text))
 
         consistency_key = (run["skill"], run["skill_version"], run["model"], sha)
         consistency_envelope_groups.setdefault(consistency_key, []).append(env)
@@ -170,6 +173,7 @@ def build_results(
     for key in sorted(recall_groups):
         skill, skill_version, model, domain = key
         artifact_scores = recall_groups[key]
+        location_scores = location_recall_groups[key]
         consistency_scores = consistency_by_group.get(key, [])
         entries.append(
             {
@@ -182,6 +186,8 @@ def build_results(
                 "unresolvable_claims": sum(s.unresolvable_claims for s in artifact_scores),
                 "recall": _metric_value(score.aggregate_recall(artifact_scores)),
                 "precision": _metric_value(score.aggregate_precision(artifact_scores)),
+                "recall_location": _metric_value(score.aggregate_recall(location_scores)),
+                "precision_location": _metric_value(score.aggregate_precision(location_scores)),
                 "clean_fp_rate": _metric_value(score.aggregate_clean_fp_rate(artifact_scores)),
                 "consistency": _consistency_value(score.aggregate_consistency(consistency_scores), consistency_scores),
                 "consistency_exact": _consistency_value(
@@ -191,7 +197,7 @@ def build_results(
         )
 
     results = {
-        "results_version": "1.0.0",
+        "results_version": "1.1.0",
         "run_set": run_set,
         "generated_at": generated_at,
         "entries": entries,

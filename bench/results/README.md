@@ -8,8 +8,21 @@ The library's claim is that it publishes its own performance rather than asserti
 that publication for v0.1.0, and it leads with the numbers that do not flatter the library, because a
 results page that buries them is an advertisement.
 
+**Rescored (results version 1.1.0) to add location-level recall and precision**, computed from the
+same 460 committed envelopes, no new runs: see
+[unflattering number 1](#1-the-baseline-comparison-honestly-measured). Every number that was here
+before this rescore is unchanged; the location-level figures are additions, not corrections.
+
+**Both release gates were then re-read against those numbers** and the result is the single most
+important thing on this page: **a core skill, `critique-accessibility`, loses to the unrubricked
+baseline prompt on both tiers and on both metrics.** The three stretch skills hold.
+[ADR 0026](../../docs/internal/decisions/0026-location-level-re-examination-of-baseline-gates.md)
+records the ruling.
+
 - Machine-readable numbers: [`results.json`](results.json)
 - Stretch-skill ship/hold decisions: [`verdicts.md`](verdicts.md)
+- Gate re-examination against the fair comparison:
+  [ADR 0026 (location-level re-examination of the baseline gates)](../../docs/internal/decisions/0026-location-level-re-examination-of-baseline-gates.md)
 - Measurement basis: [`measurement-manifest.json`](measurement-manifest.json) and
   [ADR 0023 (v0.1.0 measurement basis)](../../docs/internal/decisions/0023-v0.1.0-measurement-basis-two-pinned-tiers-k5.md)
 - Consistency floor: [ADR 0022 (consistency floor: 0.309, overall lane)](../../docs/internal/decisions/0022-consistency-floor-overall-lane-min-core.md)
@@ -19,25 +32,80 @@ results page that buries them is an advertisement.
 
 ## Read this first: the numbers that do not flatter the library
 
-### 1. The baseline comparison is structurally uninformative
+### 1. The baseline comparison, honestly measured
 
-Every baseline row in every table reads recall 0.000 and precision 0.000, in all six domains, on both
-tiers. **That is not a measurement of the generic prompt. It is arithmetic.**
+Every baseline row in every table used to read recall 0.000 and precision 0.000, in all six domains, on
+both tiers. **That was not a measurement of the generic prompt. It was arithmetic**, and this rescore's
+whole point is to stop mistaking one for the other.
 
 `bench/metrics/match.py` matches a claim to a planted defect only when the claim's criterion string
 equals the defect's criterion string. `bench/baseline/postprocess.py` assigns every baseline finding
 the fixed criterion `BASELINE-GENERIC`, because a prompt with no rubric has nothing to cite. No
-manifest in the corpus plants a defect under that criterion. The baseline's recall and precision could
-not have been anything but exactly zero, no matter what the model wrote.
+manifest in the corpus plants a defect under that criterion. The baseline's **criterion-level** recall
+and precision could not have been anything but exactly zero, no matter what the model wrote. That
+number is kept in `results.json` and quoted below, not deleted: it is a genuine finding about the
+comparison, and it is worth keeping as a lesson in what a metric can be satisfied by construction rather
+than by measurement, before it is used to gate anything again.
 
-Consequence: **"beats the baseline on recall at equal-or-better precision" is satisfied by any skill
-scoring above zero.** It is the gate condition in
+**Location-level recall and precision are the fair comparison**, computed by
+`bench/metrics/score.py`'s `score_artifact_location` from the same 460 committed envelopes, no new
+runs. A claim matches a planted defect when its location resolves, within the artifact type's
+documented tolerance, to the defect's location, criterion ID ignored entirely. Both cuts sit side by
+side in `results.json` for every row, skill and baseline alike: `recall`/`precision` (criterion-level,
+primary for a skill, because it measures rubric operationalization, not just noticing) and
+`recall_location`/`precision_location` (location-level, the number that is not pinned at zero by
+construction). The full twelve-row comparison, both cuts, is generated into
+[`../README.md`](../README.md); the cells that matter most are these five:
+
+| Skill | Tier | Recall (location) | Baseline recall (location) | Precision (location) | Baseline precision (location) | Verdict |
+|---|---|---|---|---|---|---|
+| critique-accessibility | haiku | 0.176 | 0.376 | 0.158 | 0.258 | **below baseline, both metrics** |
+| critique-accessibility | sonnet | 0.306 | 0.776 | 0.202 | 0.293 | **below baseline, both metrics** |
+| critique-docs | haiku | 0.933 | 0.933 | 0.875 | 0.275 | **ties baseline on recall** |
+| critique-docs | sonnet | 1.000 | 1.000 | 1.000 | 0.238 | **ties baseline on recall** |
+| critique-usability | sonnet | 0.857 | 0.829 | 0.169 | 0.181 | wins recall, **below baseline on precision** |
+
+**`critique-accessibility` loses to an unaccountable generic prompt at literally pointing near the right
+defect, on both tiers, on both metrics.** Not "wins by less than the criterion-level number suggested."
+Loses. Given no rubric and no domain framing, the generic prompt resolves a location within tolerance
+of a planted WCAG defect more than twice as often as the skill does on sonnet, 0.776 against 0.306.
+[Unflattering number 5](#5-worst-recall) below traces part of this to unresolvable locations, but the
+location-level number says the problem is not only that unresolvable claims make the criterion-level
+recall look worse than it is: crediting every correct-but-mislabeled finding, `critique-accessibility`
+is still behind the prompt it is supposed to beat.
+
+**`critique-docs`'s "beats baseline" win rests entirely on criterion labeling, not on finding the right
+places.** At location level its recall exactly ties the baseline's, on both tiers: 0.933 against 0.933
+on haiku (28 of 30 planted defects, both sides), 1.000 against 1.000 on sonnet. The generic prompt
+resolves a location near every one of the same planted defects the skill does. What actually separates
+them is precision: the skill emits 32 (haiku) or 30 (sonnet) claims in total and nearly all of them land
+near a real defect (0.875, 1.000), while the baseline needs 102 or 126 claims to reach the same recall
+(0.275, 0.238). On this evidence, `critique-docs`'s real advantage is emitting fewer, better-targeted
+claims, not finding defects the baseline misses.
+
+**Consequence for the AC-6 and AC-7 gates: one core skill fails the gate on the merits.**
 [S-05 (skills slate)](../../docs/internal/release-plans/plan_v0.1.0/S-05_skills-slate/spec.md) AC-6 and
-AC-7, all twelve skill-tier cells pass it, and it discriminates nothing. Every "beats baseline" verdict
-in `bench/README.md` should be read as "scored above zero against a comparison pinned at zero".
+AC-7 are written against the frozen methodology's own recall and precision definitions, which are
+criterion-level, and every gated cell still reads a **formal** pass under that definition. That formal
+pass is worth nothing on its own, because the comparison it is made against could not have failed. The
+verdict-review pass of 2026-07-31 therefore re-read both gates against the location-level cut and ruled
+([ADR 0026](../../docs/internal/decisions/0026-location-level-re-examination-of-baseline-gates.md)):
 
-The baseline comparison is still informative on the two metrics that do not route through criterion
-matching, and those are the ones worth quoting:
+- **`critique-accessibility` fails AC-6 substantively, on both tiers, on both metrics.** It is a core
+  skill. AC-6's own remedy for a core skill that does not beat the baseline is that "the release halts
+  with a handover diagnosis". The diagnosis is in [Core skills: S-05 AC-6](#core-skills-s-05-ac-6)
+  below; the halt-or-iterate decision is escalated to the release owner and is not made here.
+- **`critique-clarity` and `critique-usability` pass**, clarity by strict dominance on both tiers,
+  usability on haiku only and with a caveat about what its comparator did on that tier.
+- **All three stretch skills are re-affirmed SHIP** under AC-7, but `critique-docs` now ships on a
+  precision-dominance argument at *equal* recall rather than on a recall win. Full reasoning per skill:
+  [`verdicts.md`](verdicts.md#location-level-re-examination-2026-07-31).
+
+The short version: "beats baseline", quoted without qualification, overstates what was measured in two
+of the twelve gated cells, and in a third it conceals the opposite result.
+
+The baseline comparison is also informative, criterion-level and location-level alike, on two metrics
+that never routed through criterion matching in the first place:
 
 | Comparison (like-for-like) | Baseline | Skills |
 |---|---|---|
@@ -47,7 +115,11 @@ matching, and those are the ones worth quoting:
 
 ### 2. Cells where a skill is worse than the generic prompt
 
-Four consistency cells and one clean-artifact cell.
+Nine cells now: four consistency cells, four location-level recall or precision cells, and one
+clean-artifact cell. The consistency and location-level groups are not the same kind of comparison; see
+the note under each.
+
+**Consistency (not like-for-like).**
 
 | Skill | Tier | Metric | Skill | Baseline | Gap |
 |---|---|---|---|---|---|
@@ -55,14 +127,35 @@ Four consistency cells and one clean-artifact cell.
 | critique-clarity | sonnet | Consistency | 0.466 | 0.672 | -0.206 |
 | critique-argument | haiku | Consistency | 0.371 | 0.600 | -0.229 |
 | critique-accessibility | sonnet | Consistency | 0.605 | 0.653 | -0.048 |
+
+This comparison is not like-for-like and the gap is smaller than it looks: every baseline finding
+carries one criterion, so two baseline findings agree whenever their locations agree, while two skill
+findings must agree on criterion **and** location. The skills are scored on a strictly harder predicate.
+
+**Location-level recall and precision (like-for-like: identical tolerance rule, criterion ignored on
+both sides).**
+
+| Skill | Tier | Metric | Skill | Baseline | Gap |
+|---|---|---|---|---|---|
+| critique-accessibility | sonnet | Recall (location) | 0.306 | 0.776 | -0.470 |
+| critique-accessibility | haiku | Recall (location) | 0.176 | 0.376 | -0.200 |
+| critique-accessibility | haiku | Precision (location) | 0.158 | 0.258 | -0.100 |
+| critique-accessibility | sonnet | Precision (location) | 0.202 | 0.293 | -0.091 |
+| critique-usability | sonnet | Precision (location) | 0.169 | 0.181 | -0.012 |
+
+Unlike the consistency comparison above, this one has no such excuse: both sides are scored by the
+identical tolerance rule under the identical criterion-agnostic match. `critique-accessibility`'s gap on
+sonnet, -0.470 on recall, is the largest gap in this file by a wide margin: the skill's location-level
+recall is under 40 percent of the baseline's, on the domain's stronger tier.
+
+**Clean-artifact cell.**
+
+| Skill | Tier | Metric | Skill | Baseline | Gap |
+|---|---|---|---|---|---|
 | critique-usability | sonnet | Clean-artifact findings per run | 7.600 | 6.800 | +0.800 worse |
 
-The consistency comparison is not like-for-like and the gap is smaller than it looks: every baseline
-finding carries one criterion, so two baseline findings agree whenever their locations agree, while two
-skill findings must agree on criterion **and** location. The skills are scored on a strictly harder
-predicate. The clean-artifact row has no such excuse: on an artifact with nothing planted in it,
-`critique-usability` on sonnet emits more findings per run than the prompt that was given no rubric at
-all.
+On an artifact with nothing planted in it, `critique-usability` on sonnet emits more findings per run
+than the prompt that was given no rubric at all.
 
 Two more cells are close enough to be worth naming: `critique-clarity` emits 8.600 findings per run on
 a clean artifact against the baseline's 8.800 (haiku) and 9.400 against 10.000 (sonnet). On clean
@@ -150,9 +243,17 @@ five runs per (skill, artifact, tier), plus the frozen `baseline-generic` prompt
 in `bench/metrics/`:
 
 - **Recall:** planted defects matched by at least one finding, over planted defects, on seeded
-  artifacts only, pooled across all k runs.
+  artifacts only, pooled across all k runs. Criterion-level: a match requires the finding's criterion
+  string to equal the defect's, plus a location within tolerance. Primary for a skill, because it
+  measures rubric operationalization.
 - **Precision:** findings matched to a planted defect, over all findings emitted, including on clean
-  artifacts.
+  artifacts. Same criterion-level match as recall.
+- **Recall (location) and precision (location):** the same two definitions with the criterion-equality
+  requirement dropped, a location within tolerance is the whole match
+  (`bench/metrics/score.py`, `score_artifact_location`). Added in this rescore, computed from the same
+  envelopes, no new runs. This is the fair comparison against `baseline-generic`, whose findings all
+  carry the fixed criterion `BASELINE-GENERIC` and can never satisfy the criterion-level match; see
+  [unflattering number 1](#1-the-baseline-comparison-honestly-measured).
 - **Consistency:** mean pairwise Jaccard over `(criterion, location)` pairs across the k runs of one
   artifact, then the equal-weight mean across the domain's artifacts. Published twice: tolerance-aware
   (`consistency`) and exact-location (`consistency_exact`). The gap between the two is the skill's
@@ -218,34 +319,75 @@ cheapest lead in the run set to chase: it is a code-level defect, not a calibrat
 
 ### Core skills: S-05 AC-6
 
-**All three core skills pass as the criterion is written, and the pass is worth very little.** See
-[unflattering number 1](#1-the-baseline-comparison-is-structurally-uninformative): the baseline scores
-zero by construction, so any nonzero recall clears the bar.
+**All three core skills pass as the criterion is written, the pass is worth nothing, and on the fair
+comparison one of the three fails.** See
+[unflattering number 1](#1-the-baseline-comparison-honestly-measured): at criterion level the baseline
+scores zero by construction, so any nonzero recall clears the bar and every core skill clears it. At
+location level, where the baseline is a real comparator, `critique-accessibility` reads below it on
+both tiers and on both metrics.
 
-| Core skill | Tier | Recall | Baseline recall | Precision | Baseline precision | AC-6 |
-|---|---|---|---|---|---|---|
-| critique-clarity | haiku | 0.710 | 0.000 | 0.382 | 0.000 | pass |
-| critique-clarity | sonnet | 0.770 | 0.000 | 0.376 | 0.000 | pass |
-| critique-accessibility | haiku | 0.176 | 0.000 | 0.158 | 0.000 | pass |
-| critique-accessibility | sonnet | 0.235 | 0.000 | 0.155 | 0.000 | pass |
-| critique-usability | haiku | 0.686 | 0.000 | 0.198 | 0.000 | pass |
-| critique-usability | sonnet | 0.857 | 0.000 | 0.169 | 0.000 | pass |
+Location-level cells are the substantive reading. A skill passes there by meeting AC-6 literally
+(higher recall at equal-or-better precision) or by dominance (no worse on either metric, strictly
+better on one). Nothing else counts.
 
-No release halt is triggered. Two of the three core skills nevertheless carry numbers that would not
-survive a substantive bar, and the likeliest calibration levers are named here so the decision to
-iterate or to ship as measured is an informed one. **Nothing has been changed. These are diagnoses, not
-fixes.**
+| Core skill | Tier | Recall | Baseline recall | Recall (location) | Baseline recall (location) | Precision (location) | Baseline precision (location) | AC-6 as written | AC-6 on the merits |
+|---|---|---|---|---|---|---|---|---|---|
+| critique-clarity | haiku | 0.710 | 0.000 | 0.780 | 0.540 | 0.419 | 0.329 | pass | **pass**, dominates |
+| critique-clarity | sonnet | 0.770 | 0.000 | 0.890 | 0.880 | 0.434 | 0.335 | pass | **pass**, dominates (recall +0.010) |
+| critique-accessibility | haiku | 0.176 | 0.000 | 0.176 | 0.376 | 0.158 | 0.258 | pass | **FAIL**, below on both |
+| critique-accessibility | sonnet | 0.235 | 0.000 | 0.306 | 0.776 | 0.202 | 0.293 | pass | **FAIL**, below on both |
+| critique-usability | haiku | 0.686 | 0.000 | 0.800 | 0.000 | 0.231 | 0.000 | pass | **pass**, dominates |
+| critique-usability | sonnet | 0.857 | 0.000 | 0.857 | 0.829 | 0.169 | 0.181 | pass | no pass on this tier (recall +0.028, precision -0.012) |
 
-- **`critique-accessibility`, recall 0.176 and 0.235.** Most likely lever: **bounding and location
+**The ruling** ([ADR 0026](../../docs/internal/decisions/0026-location-level-re-examination-of-baseline-gates.md)):
+
+- **`critique-clarity` passes** on both tiers by strict dominance. The sonnet recall margin is +0.010,
+  which is one defect instance out of a hundred, so the haiku cell (+0.240 recall, +0.090 precision) is
+  what carries it.
+- **`critique-usability` passes on haiku only**, and the tier it passes on is the tier where its
+  comparator collapsed: `baseline-generic` on haiku left 107 of its 137 usability claims unresolvable,
+  and of the 30 that did resolve, **none** landed within tolerance of any of the 7 planted defects. A
+  win over a comparator that scored zero is a real pass under the rule as written, and it is a weak one
+  to quote. On sonnet, where the baseline works, the skill wins recall by one defect instance and loses
+  precision by 0.012, which is not a pass on either reading. A robustness check that is worth knowing:
+  under a deliberately harsher match (exact truth node only, no ancestor or descendant credit, a
+  diagnostic cut and not a published metric, recipe in
+  [ADR 0026](../../docs/internal/decisions/0026-location-level-re-examination-of-baseline-gates.md))
+  usability's sonnet cell dominates as well, 0.686 recall against 0.514 and 0.135 precision against
+  0.113. Its sonnet precision deficit under the published tolerance is an ancestor-window effect that
+  favours the high-volume emitter.
+- **`critique-accessibility` fails, on both tiers, on both metrics, and the failure survives every
+  adversarial re-cut available from these envelopes.** On sonnet the baseline resolves a location within
+  tolerance of a planted WCAG defect more than twice as often as the skill does, 0.776 against 0.306,
+  and does it at higher precision, 0.293 against 0.202. Under the harsher exact-node cut the gap
+  narrows but does not reverse: baseline recall 0.212 against the skill's 0.176 on haiku, and 0.588
+  against 0.224 on sonnet. There is no cut of this run set in which this skill beats the prompt it is
+  supposed to beat.
+
+**Consequence.** [S-05](../../docs/internal/release-plans/plan_v0.1.0/S-05_skills-slate/spec.md)'s
+Requirements section makes a core skill failing to beat baseline "a release blocker for core", and AC-6
+names the remedy: iterate within P3, or halt with a handover diagnosis. The diagnosis is below. **The
+choice between halting, iterating, and shipping with this published as measured belongs to the release
+owner and is not made in this file.** Nothing about `critique-accessibility` has been changed or
+de-listed on the strength of this reading: the spec is frozen, and de-listing a core skill is not a
+measurement decision.
+
+The likeliest calibration levers for all three core skills are named here so that decision is an
+informed one. **Nothing has been changed. These are diagnoses, not fixes.**
+
+- **`critique-accessibility`, recall 0.176 and 0.235, and below the baseline at location level on both
+  tiers (0.176 against 0.376, 0.306 against 0.776).** Most likely lever: **bounding and location
   grammar, before anchors.** 75 percent of its haiku claims and 50 percent of its sonnet claims are
   unresolvable, against 10 percent or less for every other skill. Findings that cannot be anchored
   cannot match, so the recall number is partly measuring location emission rather than detection. The
   skill is emitting locations in a form the HTML resolver cannot bind, and the fix lives in the
   location grammar's reserved selector form
   ([ADR 0012 (location grammar: free text plus reserved selector)](../../docs/internal/decisions/0012-location-grammar-freetext-plus-reserved-selector.md))
-  and in the protocol's instruction about how to cite an element. Secondary lever: anchor wording on
-  the judged WCAG subset, where judged recall is 0.047 on haiku and judged consistency is 0.090, the
-  worst pair of numbers in the run set.
+  and in the protocol's instruction about how to cite an element. This is not only a criterion-labeling
+  gap: the location-level number shows that even crediting every correct-but-mislabeled finding, the
+  skill still resolves fewer usable locations than an unrubricked prompt does. Secondary lever: anchor
+  wording on the judged WCAG subset, where judged recall is 0.047 on haiku and judged consistency is
+  0.090, the worst pair of numbers in the run set.
 - **`critique-usability`, precision 0.169 to 0.198 with 4.400 to 7.600 findings per run on a clean
   artifact.** Most likely lever: **severity anchor wording, to make the existing output bound bite.**
   Methodology section 7 bounds output at every severity 3 and 4 finding plus at most five below that,
@@ -269,13 +411,33 @@ fixes.**
 
 **Floor: 0.309**, the minimum core-skill overall-lane consistency, per
 [ADR 0022](../../docs/internal/decisions/0022-consistency-floor-overall-lane-min-core.md). All three
-stretch skills ship. Full reasoning and the per-skill numbers are in [`verdicts.md`](verdicts.md).
+stretch skills ship, and all three were re-examined against the location-level cut on 2026-07-31 and
+re-affirmed. Full reasoning and the per-skill numbers are in
+[`verdicts.md`](verdicts.md#location-level-re-examination-2026-07-31).
 
-| Skill | Baseline win | Consistency vs 0.309 | Verdict |
-|---|---|---|---|
-| critique-docs | yes, both tiers | 0.842 haiku, 1.000 sonnet | **SHIP** |
-| critique-microcopy | yes, both tiers | 0.768 haiku, 0.853 sonnet | **SHIP** |
-| critique-argument | yes, both tiers | 0.371 haiku (+0.062), 0.737 sonnet | **SHIP**, thinnest margin in the slate |
+| Skill | Baseline win (criterion) | Baseline win (location) | Consistency vs 0.309 | Verdict |
+|---|---|---|---|---|
+| critique-docs | yes, both tiers | **ties on recall, both tiers** (0.933/0.933 haiku, 1.000/1.000 sonnet); wins on precision | 0.842 haiku, 1.000 sonnet | **SHIP**, on precision dominance at equal recall |
+| critique-microcopy | yes, both tiers | yes, both tiers, both metrics | 0.768 haiku, 0.853 sonnet | **SHIP** |
+| critique-argument | yes, both tiers | yes, both tiers, both metrics | 0.371 haiku (+0.062), 0.737 sonnet | **SHIP**, thinnest margin in the slate |
+
+`critique-docs` is the one stretch skill whose "baseline win" changes character at location level: see
+[unflattering number 1](#1-the-baseline-comparison-honestly-measured) for the numbers and what they
+say about where its advantage actually comes from. Its verdict is re-affirmed, but on a different
+argument than the one originally recorded: at equal recall it emits 32 claims where the baseline needs
+102, and 30 where the baseline needs 126, so it ships as a precision result, not a detection result.
+No stretch verdict flipped, so `library.json` `components.skills` is unchanged and `plugin.json` was
+not regenerated.
+
+## Provenance
+
+**The 462 envelope files under `bench/results/runs/` were produced by a documented Claude Code
+multi-agent workflow, not by `bench/run_bench.py`.** `bench/run_bench.py`, committed in this phase,
+is the reproduction path for re-measurement going forward, not the mechanism that produced the
+numbers published in this file; the two mechanisms are not byte-equivalent, and a re-run through
+`bench/run_bench.py` should be expected to differ from the figures published here. Full mechanism
+record, including model routing, ground-truth isolation, and the mid-run interruption and resume:
+[`docs/internal/execution/P3-provenance.md`](../../docs/internal/execution/P3-provenance.md).
 
 ## Limitations
 
@@ -291,8 +453,29 @@ Stated so no reader has to infer them from an absence.
   planted is scored as a miss. Unplanted genuine findings are counted against precision and not
   adjudicated. The true precision of every skill is higher than the number published here by an unknown
   amount, and by more for the noisy skills than for the quiet ones.
-- **The baseline comparison cannot discriminate** (see unflattering number 1). Recall and precision
-  against the baseline are pinned at zero by the criterion-matching rule.
+- **The criterion-level baseline comparison cannot discriminate** (see
+  [unflattering number 1](#1-the-baseline-comparison-honestly-measured)). Recall and precision against
+  the baseline are pinned at zero by the criterion-matching rule; this is the reason the location-level
+  cut exists. Location-level scoring answers the discrimination problem, not the deeper one:
+  `bench/metrics/score_artifact_location` still requires a location, resolved by the same per-artifact
+  tolerance the criterion-level metric uses, so it does not measure whether a finding's stated reasoning
+  is any good, only whether it landed somewhere real.
+- **Location-level recall and precision are new to this run set and unaudited against the same review
+  the criterion-level numbers had.** They are computed by the identical scoring pipeline
+  (`bench/metrics/`) from the same 460 committed envelopes, no new runs, and unit-tested
+  (`bench/metrics/tests/test_score_location.py`), but they have not yet been through a P3-style
+  self-audit of their own.
+- **On `html`, location-level scoring rewards naming a container.** The
+  [ADR 0015](../../docs/internal/decisions/0015-location-tolerance-per-artifact-type.md) tolerance
+  credits a claim that resolves to an ancestor of the truth node at distance 1 or 2, so an emitter that
+  points at enclosing elements collects credit that a precise emitter does not need. Measured on this
+  run set, that window supplies 14 of `baseline-generic`'s 32 haiku accessibility matches and 16 of its
+  66 sonnet matches, against 0 of 15 and 7 of 26 for `critique-accessibility`, and it is the whole of
+  `baseline-generic`'s sonnet precision edge over `critique-usability`. The window is symmetric by
+  construction and applies identically to both conditions; it nonetheless flatters volume, and every
+  `html` location-level figure on this page should be read with that in mind. It does not reverse any
+  verdict: see
+  [ADR 0026](../../docs/internal/decisions/0026-location-level-re-examination-of-baseline-gates.md).
 - **Six clean artifacts, one per domain.** Every clean-artifact false-positive figure rests on a single
   artifact scored five times.
 - **Small defect counts in three domains.** docs 6 planted defects, usability 7, argument 8. A recall of
@@ -344,7 +527,9 @@ python -m bench.generator leak-check --corpus bench/corpus
 #    critique-clarity/sonnet and will not reproduce the committed file.
 mkdir -p /tmp/p3-grid && cp -r bench/results/runs/* /tmp/p3-grid/ && rm -rf /tmp/p3-grid/steering
 
-# 3. Rescore. Output matches the committed results.json apart from `generated_at`.
+# 3. Rescore. Output matches the committed results.json apart from `generated_at`. Every entry now
+#    carries recall_location and precision_location alongside the criterion-level recall and
+#    precision, computed in the same pass from the same envelopes.
 python -m bench.metrics score --corpus bench/corpus --runs /tmp/p3-grid \
     --out /tmp/results-check.json --run-set p3-2026-07-31
 

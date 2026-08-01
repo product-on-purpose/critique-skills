@@ -4,21 +4,31 @@ This is the CI "schema" job's entry point (S-07 CI-pipeline spec): every run env
 bench/results/ must be a contract-valid document, reusing the same validator contract/validate.py's
 own CLI wraps. See contract/README.md for what "contract-valid" means.
 
-Per bench/README.md "Layout", bench/results/ holds one directory per run set, each containing the
-envelopes plus one non-envelope aggregate:
+Per bench/README.md "Layout", the harness writes envelopes three to four levels below
+bench/results/, not one:
 
     results/
-      <run-set>/*.json          contract-valid run envelopes, one per skill per artifact per run
-      <run-set>/results.json    the computed numbers: a different, non-envelope schema
-      results.schema.json       the schema *for* results.json, not a document to validate
+      runs/<skill>/<artifact>/<run>.json           a skill's own condition
+      runs/baseline/<domain>/<artifact>/<run>.json  the frozen baseline condition
+      runs/<...>/<run>.json.raw.txt                 the baseline lane's raw model text, a
+                                                     companion file, never a document to validate
+      results.json                                  the computed numbers: a different, non-envelope
+                                                      schema
+      results.schema.json                           the schema *for* results.json, not a document
+                                                      to validate
 
-so discovery is scoped to `<run-set>/*.json` one level down and excludes both `results.json` (it is
-never a contract envelope; contract/README.md's dispatch would misclassify it as one and fail it)
-and any `*.schema.json` file (a schema definition, not data).
+so discovery walks the whole tree under bench/results/runs/, not bench/results/ itself:
+bench/results/ also holds measurement-manifest.json, results.json, and results.schema.json, none
+of them envelopes, and a glob scoped no narrower than bench/results/ would misclassify
+measurement-manifest.json as a failed envelope (it has none of run/findings/summary). Within
+runs/, any `*.raw.txt` companion (the baseline lane's raw model text, not JSON at all) is excluded
+explicitly, so a future glob change cannot silently start matching it
+(docs/internal/execution/P3-report.md, "Known validator wiring gap", names the original
+one-level-too-shallow glob as the reason 462 committed envelopes were invisible to this command).
 
-bench/results/ does not exist until a benchmark has actually been run (bench/run_bench.py, the
-bench.yml dispatch entry point). Until then this command succeeds vacuously: there is nothing to be
-wrong about a set of files with zero members.
+bench/results/runs/ does not exist until a benchmark has actually been run (bench/run_bench.py,
+the bench.yml dispatch entry point). Until then this command succeeds vacuously: there is nothing
+to be wrong about a set of files with zero members.
 
 Usage:
     python -m contract.validate_envelopes [--strict]
@@ -37,19 +47,26 @@ from pathlib import Path
 from contract.validate import load_document, validate_document
 
 RESULTS_DIR = Path(__file__).resolve().parent.parent / "bench" / "results"
+RUNS_DIR = RESULTS_DIR / "runs"
 
 
-def find_envelope_files(root: Path) -> list[Path]:
-    """Every `<run-set>/*.json` envelope file under `root`, sorted for deterministic output,
-    excluding each run set's own `results.json` aggregate and any `*.schema.json` schema
-    definition. Empty list if `root` does not exist, which is the normal state before any bench
-    run has landed."""
-    if not root.is_dir():
+def find_envelope_files(runs_root: Path) -> list[Path]:
+    """Every envelope `*.json` file anywhere under `runs_root` (bench/results/runs/), sorted for
+    deterministic output, excluding a stray `results.json` or `*.schema.json` should one ever
+    land inside this subtree, and any `*.raw.txt` companion (which this glob would never match as
+    `*.json` in the first place, but is excluded explicitly so a future glob change cannot
+    silently start matching it). Empty list if `runs_root` does not exist, which is the normal
+    state before any bench run has landed.
+    """
+    if not runs_root.is_dir():
         return []
     return sorted(
         p
-        for p in root.glob("*/*.json")
-        if p.is_file() and p.name != "results.json" and not p.name.endswith(".schema.json")
+        for p in runs_root.rglob("*.json")
+        if p.is_file()
+        and p.name != "results.json"
+        and not p.name.endswith(".schema.json")
+        and not p.name.endswith(".raw.txt")
     )
 
 
@@ -65,10 +82,10 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    files = find_envelope_files(RESULTS_DIR)
+    files = find_envelope_files(RUNS_DIR)
     if not files:
         print(
-            f"validate-envelopes: {RESULTS_DIR} does not exist or is empty; "
+            f"validate-envelopes: {RUNS_DIR} does not exist or is empty; "
             "nothing to validate yet (no bench run has landed)."
         )
         return 0

@@ -65,7 +65,7 @@ def test_build_results_end_to_end(tmp_path: Path) -> None:
         corpus_dir, runs_dir, run_set="test-run-set", generated_at="2026-07-31T00:00:00Z", repo_root=repo_root
     )
 
-    assert results["results_version"] == "1.0.0"
+    assert results["results_version"] == "1.1.0"
     assert results["run_set"] == "test-run-set"
     assert len(results["entries"]) == 1
 

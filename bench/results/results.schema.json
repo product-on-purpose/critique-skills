@@ -2,8 +2,8 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/product-on-purpose/critique-skills/main/bench/results/results.schema.json",
   "title": "Bench results",
-  "description": "Every computed number for one run set, produced by `python -m bench.metrics score` from committed manifests and run envelopes and nothing else. The README results table (bench/report.py) is generated from this file and only this file: no number appears in any document in this repository that is not present here. This file is results version 1.0.0 and validates 1.x documents only.",
-  "$comment": "Results version 1.0.0. `entries[]` holds one row per (skill, skill_version, model, domain) group, baseline rows included: a baseline run carries skill \"baseline-generic\" in the same array, at the same shape, so a report script computes a skill-versus-baseline comparison by matching (domain, model) pairs rather than reading a separately stored, and therefore possibly stale, comparison table.",
+  "description": "Every computed number for one run set, produced by `python -m bench.metrics score` from committed manifests and run envelopes and nothing else. The README results table (bench/report.py) is generated from this file and only this file: no number appears in any document in this repository that is not present here. This file is results version 1.1.0 and validates 1.x documents only.",
+  "$comment": "Results version 1.1.0. `entries[]` holds one row per (skill, skill_version, model, domain) group, baseline rows included: a baseline run carries skill \"baseline-generic\" in the same array, at the same shape, so a report script computes a skill-versus-baseline comparison by matching (domain, model) pairs rather than reading a separately stored, and therefore possibly stale, comparison table. 1.1.0 added recall_location and precision_location (P3 rescore, bench/results/README.md, \"Baseline comparison\"): recall.value and precision.value require an exact criterion-string match between a finding and a planted defect, which pins baseline-generic at exactly 0.0 everywhere because every baseline finding carries the fixed criterion BASELINE-GENERIC that no manifest plants a defect under; recall_location and precision_location apply the same per-artifact-type location tolerance with the criterion check dropped, so a skill and the baseline can be compared on whether either one pointed at the right place at all. Additive and backward-compatible: every 1.0.0 field keeps its old meaning and value.",
   "type": "object",
   "required": ["results_version", "run_set", "generated_at", "entries"],
   "additionalProperties": false,
@@ -49,6 +49,8 @@
         "unresolvable_claims",
         "recall",
         "precision",
+        "recall_location",
+        "precision_location",
         "clean_fp_rate",
         "consistency",
         "consistency_exact"
@@ -98,10 +100,20 @@
           "minimum": 0
         },
         "recall": {
-          "$ref": "#/$defs/metricValue"
+          "$ref": "#/$defs/metricValue",
+          "description": "Criterion-level recall: matched planted defects, over planted defects, where a match requires exact criterion-string equality plus a location within the artifact type's tolerance (bench/README.md, \"Recall\"). Primary for a skill: it measures rubric operationalization, whether the skill named the defect under the criterion the rubric assigns it, not only whether it noticed something at the right place. Pinned at 0.0 for baseline-generic by construction; see recall_location for the comparison that is not."
         },
         "precision": {
-          "$ref": "#/$defs/metricValue"
+          "$ref": "#/$defs/metricValue",
+          "description": "Criterion-level precision: claims matched to a planted defect under the same criterion-plus-location predicate as recall, over all claims emitted (bench/README.md, \"Precision\"). Pinned at 0.0 for baseline-generic by construction; see precision_location."
+        },
+        "recall_location": {
+          "$ref": "#/$defs/metricValue",
+          "description": "Location-level recall: matched planted defects, over planted defects, where a match requires only a location within the artifact type's tolerance, criterion ID ignored entirely (bench/metrics/score.py, score_artifact_location). Computed from the same envelopes as recall, no new runs. This is the fair cross-condition figure: baseline-generic findings carry no rubric criterion, so criterion-level recall could not have been anything but 0.0 no matter what the model wrote, and recall_location is the number that is not pinned by that construction."
+        },
+        "precision_location": {
+          "$ref": "#/$defs/metricValue",
+          "description": "Location-level precision: claims matched to a planted defect by location alone, criterion ID ignored, over all claims emitted (bench/metrics/score.py, score_artifact_location). Computed from the same envelopes as precision, no new runs. Read beside precision the same way recall_location is read beside recall."
         },
         "clean_fp_rate": {
           "$ref": "#/$defs/metricValue",

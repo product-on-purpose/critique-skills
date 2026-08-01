@@ -36,24 +36,40 @@ def match_claims_to_defects(
     claims: list[Claim],
     resolved: list,
     defects: list[dict],
+    *,
+    ignore_criterion: bool = False,
 ) -> tuple[set[int], set[int]]:
     """Greedy assignment over every (claim, defect) pair that is a HIT
     under `locate.is_hit`, restricted to matching criterion (exact string
-    equality). Candidates are sorted by `(criterion, truth_anchor_key,
-    claim_anchor_key, finding_id)` and taken when both sides are still
-    unclaimed, per bench/README.md. Returns `(matched_defect_indices,
-    matched_claim_indices)`, indices into `defects` and `claims`
-    respectively.
+    equality) unless `ignore_criterion` is set. Candidates are sorted by
+    `(criterion, truth_anchor_key, claim_anchor_key, finding_id)` and
+    taken when both sides are still unclaimed, per bench/README.md.
+    Returns `(matched_defect_indices, matched_claim_indices)`, indices
+    into `defects` and `claims` respectively.
+
+    `ignore_criterion=True` is the location-level match mode
+    (`bench/metrics/score.py`'s `score_artifact_location`): a claim can
+    match any defect whose location resolves within the artifact type's
+    tolerance, criterion aside. This is what makes a skill and the
+    criterion-less `baseline-generic` prompt comparable on a common
+    footing (bench/results/README.md, "Baseline comparison"), since the
+    default criterion-level match can never credit a baseline finding,
+    every one of which carries the fixed criterion `BASELINE-GENERIC`
+    that no manifest plants a defect under. The sort key still groups by
+    criterion when it is in play; when it is ignored, every candidate
+    sorts under the same empty string, so the deterministic tie-break
+    falls through to the truth and claim anchor keys.
     """
     candidates: list[tuple[str, str, str, str, int, int]] = []
     for claim_index, (claim, r) in enumerate(zip(claims, resolved)):
         for defect_index, defect in enumerate(defects):
-            if defect["criterion"] != claim.criterion:
+            if not ignore_criterion and defect["criterion"] != claim.criterion:
                 continue
             if locate.is_hit(parsed, artifact_type, r, defect["location"]):
+                sort_criterion = "" if ignore_criterion else claim.criterion
                 candidates.append(
                     (
-                        claim.criterion,
+                        sort_criterion,
                         _truth_anchor_key(defect["location"]),
                         locate.canonical_key(r),
                         claim.finding_id,

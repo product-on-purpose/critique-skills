@@ -8,7 +8,16 @@ from pathlib import Path
 
 import pytest
 
-from bench.report import END_MARKER, START_MARKER, main, render_baseline_comparison, render_block, render_entries_table, splice
+from bench.report import (
+    END_MARKER,
+    START_MARKER,
+    main,
+    render_baseline_comparison,
+    render_baseline_comparison_location,
+    render_block,
+    render_entries_table,
+    splice,
+)
 
 
 def _metric(value, numerator=0, denominator=0) -> dict:
@@ -30,6 +39,8 @@ def _entry(skill: str, **overrides) -> dict:
         "unresolvable_claims": 0,
         "recall": _metric(0.667, 2, 3),
         "precision": _metric(1.0, 2, 2),
+        "recall_location": _metric(0.667, 2, 3),
+        "precision_location": _metric(1.0, 2, 2),
         "clean_fp_rate": _metric(0.0, 0, 1),
         "consistency": _consistency(0.8, 2, 4),
         "consistency_exact": _consistency(0.6, 2, 4),
@@ -77,6 +88,49 @@ def test_baseline_comparison_below_baseline_verdict() -> None:
     ]
     table = render_baseline_comparison(entries)
     assert "below baseline" in table
+
+
+def test_baseline_comparison_location_reads_location_fields_not_criterion_fields() -> None:
+    """Criterion-level and location-level must read independent columns:
+    a skill can beat the baseline criterion-level while losing to it
+    location-level, which is exactly the accessibility-domain finding
+    this table exists to surface (bench/results/README.md, "Baseline
+    comparison")."""
+    entries = [
+        _entry(
+            "critique-weak",
+            recall=_metric(0.2, 2, 10),  # beats baseline criterion-level
+            recall_location=_metric(0.3, 3, 10),  # but loses location-level
+            precision_location=_metric(0.4, 3, 8),
+        ),
+        _entry(
+            "baseline-generic",
+            recall=_metric(0.0, 0, 10),
+            recall_location=_metric(0.5, 5, 10),
+            precision_location=_metric(0.6, 5, 9),
+        ),
+    ]
+    criterion_table = render_baseline_comparison(entries)
+    location_table = render_baseline_comparison_location(entries)
+
+    assert "beats baseline" in criterion_table  # 0.2 > 0.0, criterion-level
+    assert "below baseline" in location_table  # 0.3 < 0.5, location-level
+    assert "0.300" in location_table and "0.500" in location_table
+    assert "0.400" in location_table and "0.600" in location_table
+
+
+def test_baseline_comparison_location_absent_says_so() -> None:
+    entries = [_entry("critique-toy")]
+    assert render_baseline_comparison_location(entries) == "_No baseline comparison available yet._"
+
+
+def test_baseline_comparison_location_ties_verdict() -> None:
+    entries = [
+        _entry("critique-toy", recall_location=_metric(0.5, 5, 10)),
+        _entry("baseline-generic", recall_location=_metric(0.5, 5, 10)),
+    ]
+    table = render_baseline_comparison_location(entries)
+    assert "ties baseline" in table
 
 
 def test_render_block_empty_entries_is_a_short_placeholder() -> None:

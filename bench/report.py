@@ -59,18 +59,39 @@ def render_entries_table(entries: list[dict[str, Any]]) -> str:
     return "\n".join([header, *rows])
 
 
+def _by_domain_model(entries: list[dict[str, Any]]) -> dict[tuple[str, str], dict[str, dict[str, Any]]]:
+    by_domain_model: dict[tuple[str, str], dict[str, dict[str, Any]]] = {}
+    for e in entries:
+        by_domain_model.setdefault((e["domain"], e["model"]), {})[e["skill"]] = e
+    return by_domain_model
+
+
+def _verdict(skill_value: float | None, baseline_value: float | None) -> str:
+    if skill_value is None or baseline_value is None:
+        return "n/a"
+    if skill_value > baseline_value:
+        return "beats baseline"
+    if skill_value == baseline_value:
+        return "ties baseline"
+    return "below baseline"
+
+
 def render_baseline_comparison(entries: list[dict[str, Any]]) -> str:
     """A skill-versus-baseline table, computed by matching `(domain,
     model)` pairs where one side carries `skill: "baseline-generic"`
     (bench/README.md, "Baseline comparison"). Nothing here is stored
     anywhere else: every figure already lives in `entries[]`, read once.
-    """
-    by_domain_model: dict[tuple[str, str], dict[str, dict[str, Any]]] = {}
-    for e in entries:
-        by_domain_model.setdefault((e["domain"], e["model"]), {})[e["skill"]] = e
 
+    Criterion-level: a claim matches a planted defect only when its
+    criterion string equals the defect's. `baseline-generic` carries the
+    fixed criterion `BASELINE-GENERIC`, which no manifest plants a defect
+    under, so every baseline row here reads recall 0.000 and precision
+    0.000 by construction, not by measurement. See
+    `render_baseline_comparison_location` for the comparison that is not
+    pinned this way.
+    """
     rows: list[str] = []
-    for (domain, model), skills in sorted(by_domain_model.items()):
+    for (domain, model), skills in sorted(_by_domain_model(entries).items()):
         baseline = skills.get("baseline-generic")
         if baseline is None:
             continue
@@ -78,16 +99,7 @@ def render_baseline_comparison(entries: list[dict[str, Any]]) -> str:
             if skill_name == "baseline-generic":
                 continue
             entry = skills[skill_name]
-            skill_recall = entry["recall"]["value"]
-            baseline_recall = baseline["recall"]["value"]
-            verdict = "n/a"
-            if skill_recall is not None and baseline_recall is not None:
-                if skill_recall > baseline_recall:
-                    verdict = "beats baseline"
-                elif skill_recall == baseline_recall:
-                    verdict = "ties baseline"
-                else:
-                    verdict = "below baseline"
+            verdict = _verdict(entry["recall"]["value"], baseline["recall"]["value"])
             rows.append(
                 f"| {skill_name} | {domain} | {model} | {_fmt_metric(entry['recall'])} | "
                 f"{_fmt_metric(baseline['recall'])} | {_fmt_metric(entry['precision'])} | "
@@ -99,6 +111,42 @@ def render_baseline_comparison(entries: list[dict[str, Any]]) -> str:
     header = (
         "| Skill | Domain | Model | Skill recall | Baseline recall | Skill precision | "
         "Baseline precision | Verdict |\n|---|---|---|---|---|---|---|---|"
+    )
+    return "\n".join([header, *rows])
+
+
+def render_baseline_comparison_location(entries: list[dict[str, Any]]) -> str:
+    """The location-level counterpart to `render_baseline_comparison`:
+    same `(domain, model)` matching, but reads `recall_location` and
+    `precision_location`, where a claim matches a planted defect when its
+    location resolves within the artifact type's tolerance, criterion ID
+    ignored entirely (`bench/metrics/score.py`, `score_artifact_location`).
+    This is the fair cross-condition comparison: it is the one baseline
+    figure in this file that is not pinned at 0.000 by construction, and
+    in several cells below it is the baseline, not the skill, that reads
+    the higher number.
+    """
+    rows: list[str] = []
+    for (domain, model), skills in sorted(_by_domain_model(entries).items()):
+        baseline = skills.get("baseline-generic")
+        if baseline is None:
+            continue
+        for skill_name in sorted(skills):
+            if skill_name == "baseline-generic":
+                continue
+            entry = skills[skill_name]
+            verdict = _verdict(entry["recall_location"]["value"], baseline["recall_location"]["value"])
+            rows.append(
+                f"| {skill_name} | {domain} | {model} | {_fmt_metric(entry['recall_location'])} | "
+                f"{_fmt_metric(baseline['recall_location'])} | {_fmt_metric(entry['precision_location'])} | "
+                f"{_fmt_metric(baseline['precision_location'])} | {verdict} |"
+            )
+
+    if not rows:
+        return "_No baseline comparison available yet._"
+    header = (
+        "| Skill | Domain | Model | Skill recall (location) | Baseline recall (location) | "
+        "Skill precision (location) | Baseline precision (location) | Verdict |\n|---|---|---|---|---|---|---|---|"
     )
     return "\n".join([header, *rows])
 
@@ -130,9 +178,15 @@ def render_block(results: dict[str, Any]) -> str:
             "",
             render_entries_table(entries),
             "",
-            "**Baseline comparison.**",
+            "**Baseline comparison (criterion-level).** Structurally 0.000 for baseline-generic in "
+            "every row; see bench/results/README.md, \"Baseline comparison\".",
             "",
             render_baseline_comparison(entries),
+            "",
+            "**Baseline comparison (location-level, criterion ignored).** The fair cross-condition "
+            "comparison; not pinned at 0.000.",
+            "",
+            render_baseline_comparison_location(entries),
             END_MARKER,
         ]
     )

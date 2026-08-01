@@ -46,19 +46,11 @@ class ArtifactScore:
     unresolvable_claims: int
 
 
-def score_artifact(manifest: dict, envelope: dict, artifact_text: str) -> ArtifactScore:
-    """Score one run envelope against the manifest of the artifact it was
-    run on.
-
-    `artifact_text` is the artifact's own bytes, decoded, so the resolver
-    can re-derive the artifact's structure "using the artifact itself as
-    the vocabulary" (bench/README.md). The caller is responsible for
-    having confirmed identity before calling this: that `artifact_text`
-    hashes to `manifest["artifact_sha256"]`, and that
-    `envelope["run"]["artifact_sha256"] == manifest["artifact_sha256"]`
-    (the join key). This function does not re-derive either check, only
-    trusts the caller matched the right pair, so it stays a pure function
-    of its three arguments and is cheap to unit test.
+def _score_artifact(manifest: dict, envelope: dict, artifact_text: str, *, ignore_criterion: bool) -> ArtifactScore:
+    """Shared body of `score_artifact` and `score_artifact_location`: the
+    two differ only in whether `match.match_claims_to_defects` is asked
+    to require criterion equality, so the parse-resolve-match pipeline
+    lives here once.
     """
     artifact_type = manifest["artifact_type"]
     defects = manifest["defects"]
@@ -72,7 +64,7 @@ def score_artifact(manifest: dict, envelope: dict, artifact_text: str) -> Artifa
     unresolvable = sum(1 for r in resolved if not r.resolvable)
 
     matched_defects, matched_claims = match.match_claims_to_defects(
-        parsed, artifact_type, claim_list, resolved, defects
+        parsed, artifact_type, claim_list, resolved, defects, ignore_criterion=ignore_criterion
     )
 
     return ArtifactScore(
@@ -86,6 +78,49 @@ def score_artifact(manifest: dict, envelope: dict, artifact_text: str) -> Artifa
         claims_matched=len(matched_claims),
         unresolvable_claims=unresolvable,
     )
+
+
+def score_artifact(manifest: dict, envelope: dict, artifact_text: str) -> ArtifactScore:
+    """Score one run envelope against the manifest of the artifact it was
+    run on, criterion-level: a claim matches a planted defect only when
+    its criterion ID equals the defect's and its location resolves
+    within tolerance. This is the primary metric for a skill, because it
+    measures rubric operationalization (bench/results/README.md): did
+    the skill not just notice something at the right place, but name it
+    under the criterion the rubric assigns it.
+
+    `artifact_text` is the artifact's own bytes, decoded, so the resolver
+    can re-derive the artifact's structure "using the artifact itself as
+    the vocabulary" (bench/README.md). The caller is responsible for
+    having confirmed identity before calling this: that `artifact_text`
+    hashes to `manifest["artifact_sha256"]`, and that
+    `envelope["run"]["artifact_sha256"] == manifest["artifact_sha256"]`
+    (the join key). This function does not re-derive either check, only
+    trusts the caller matched the right pair, so it stays a pure function
+    of its three arguments and is cheap to unit test.
+    """
+    return _score_artifact(manifest, envelope, artifact_text, ignore_criterion=False)
+
+
+def score_artifact_location(manifest: dict, envelope: dict, artifact_text: str) -> ArtifactScore:
+    """Score one run envelope against the manifest of the artifact it was
+    run on, location-level: a claim matches a planted defect when its
+    location resolves within tolerance, criterion ID ignored entirely.
+
+    This is the fair cross-condition comparison, not a replacement for
+    `score_artifact`. Criterion-level recall and precision are pinned at
+    exactly 0.0 for `baseline-generic` in every domain, on every tier, by
+    construction: the baseline has no rubric, so every baseline finding
+    carries the fixed criterion `BASELINE-GENERIC`
+    (`bench/baseline/postprocess.py`), and no manifest plants a defect
+    under that criterion. Location-level scoring is the same tolerance
+    rules bench/README.md's "Location tolerance" section defines,
+    applied without the criterion-equality gate, so a skill and the
+    baseline can be compared on whether either one pointed at the right
+    place at all. Same three arguments and the same identity contract as
+    `score_artifact`.
+    """
+    return _score_artifact(manifest, envelope, artifact_text, ignore_criterion=True)
 
 
 @dataclass(frozen=True, slots=True)
