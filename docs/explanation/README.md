@@ -8,4 +8,9 @@ level: intermediate
 # Explanation
 
 Understanding-oriented discussion: methodology rationale, severity-scale design, scope
-trade-offs. None yet; the first lands alongside the methodology write-up.
+trade-offs.
+
+## Inventory
+
+- [`methodology.md`](methodology.md) - How this library decides what belongs in it, how its
+  skills produce findings, and how those findings are measured.

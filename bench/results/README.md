@@ -154,7 +154,7 @@ that never routed through criterion matching in the first place:
 
 ### 2. Cells where a skill is worse than the generic prompt
 
-Nine cells now: four consistency cells, four location-level recall or precision cells, and one
+Ten cells now: four consistency cells, five location-level recall or precision cells, and one
 clean-artifact cell. The consistency and location-level groups are not the same kind of comparison; see
 the note under each.
 
@@ -165,11 +165,14 @@ the note under each.
 | critique-clarity | haiku | Consistency | 0.309 | 0.463 | -0.154 |
 | critique-clarity | sonnet | Consistency | 0.466 | 0.672 | -0.206 |
 | critique-argument | haiku | Consistency | 0.371 | 0.600 | -0.229 |
-| critique-accessibility | sonnet | Consistency | 0.605 | 0.653 | -0.048 |
+| critique-accessibility 0.1.0 | sonnet | Consistency | 0.605 | 0.653 | -0.048 |
 
 This comparison is not like-for-like and the gap is smaller than it looks: every baseline finding
 carries one criterion, so two baseline findings agree whenever their locations agree, while two skill
 findings must agree on criterion **and** location. The skills are scored on a strictly harder predicate.
+The `critique-accessibility` row is a 0.1.0 row and it closed on re-measurement: 0.1.1 reads 0.808 on
+sonnet against the same unchanged baseline figure of 0.653. The three `critique-clarity` and
+`critique-argument` rows stand.
 
 **Location-level recall and precision (like-for-like: identical tolerance rule, criterion ignored on
 both sides).**
@@ -187,7 +190,8 @@ identical tolerance rule under the identical criterion-agnostic match. `critique
 gap on sonnet, -0.470 on recall, is the largest gap in this file by a wide margin: the skill's
 location-level recall was under 40 percent of the baseline's, on the domain's stronger tier.
 
-**Four of these five rows are 0.1.0 rows and are closed.** On re-measurement, `critique-accessibility`
+**All five rows are 0.1.0 rows, and the four `critique-accessibility` ones are closed.** On
+re-measurement, `critique-accessibility`
 0.1.1 reads +0.612 and +0.189 on recall and +0.617 and +0.379 on precision against the same baseline
 figures. `critique-usability`'s sonnet precision cell is the one that stands: it was not re-measured,
 and [ADR 0026](../../docs/internal/decisions/0026-location-level-re-examination-of-baseline-gates.md)
@@ -226,14 +230,17 @@ Restricted to the judged lane, which is the honest reading of the part that need
 | critique-clarity / sonnet | 0.466 | 0.418 |
 
 **0.090** means that between two runs of `critique-accessibility` 0.1.0 on haiku against the same HTML
-page, about one judged finding in eleven repeats. The methodology's stated aspiration is 0.7. No
-core-skill cell in this run set reaches it on either lane, on either tier. The best core cell is
+page, about one judged finding in eleven repeats. The methodology's stated aspiration is 0.7. No 0.1.0
+core-skill cell reaches it on either lane, on either tier, and the best 0.1.0 core cell is
 `critique-usability` on sonnet at 0.642 overall.
 
 **Post-calibration, that worst cell is no longer the library's.** `critique-accessibility` 0.1.1 reads
 0.625 overall on haiku (from 0.362) and 0.808 on sonnet (from 0.605), and on the judged-only cut 0.286
-(from 0.090) and 0.736 (from 0.449). The lowest judged-only core cell is now `critique-clarity` on
-haiku at 0.150, and the floor-setting overall cell is still `critique-clarity` on haiku at 0.309:
+(from 0.090) and 0.736 (from 0.449). Its sonnet cell is the first core cell in the library to reach the
+0.7 aspiration, and it reaches it on both lanes; its haiku cells (0.625 overall, 0.286 judged) do not,
+and no cell of the other two core skills comes near it. The lowest judged-only core cell is now
+`critique-clarity` on haiku at 0.150, and the floor-setting overall cell is still `critique-clarity` on
+haiku at 0.309:
 accessibility never set the floor, so the
 [ADR 0022](../../docs/internal/decisions/0022-consistency-floor-overall-lane-min-core.md) floor value
 is unmoved and no stretch gate moves with it. Consistency rising alongside location quality is what

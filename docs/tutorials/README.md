@@ -7,5 +7,8 @@ level: beginner
 
 # Tutorials
 
-Learning-oriented walkthroughs for getting a critique skill running end to end. None yet; the
-first lands alongside the first shipped skill.
+Learning-oriented walkthroughs for getting a critique skill running end to end.
+
+## Inventory
+
+- none yet; the first lands alongside the first shipped skill.

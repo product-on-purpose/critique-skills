@@ -12,19 +12,26 @@ bench/results/, not one:
       runs/baseline/<domain>/<artifact>/<run>.json  the frozen baseline condition
       runs/<...>/<run>.json.raw.txt                 the baseline lane's raw model text, a
                                                      companion file, never a document to validate
+      runs-cal1/<skill>/<artifact>/<run>.json       a calibration re-measurement run set, same
+                                                     shape as runs/ (docs/internal/execution/
+                                                     P3-cal1-report.md); further re-measurement
+                                                     sets, if any, land as runs-cal2/ and so on
       results.json                                  the computed numbers: a different, non-envelope
                                                       schema
       results.schema.json                           the schema *for* results.json, not a document
                                                       to validate
 
-so discovery walks the whole tree under bench/results/runs/, not bench/results/ itself:
-bench/results/ also holds measurement-manifest.json, results.json, and results.schema.json, none
-of them envelopes, and a glob scoped no narrower than bench/results/ would misclassify
-measurement-manifest.json as a failed envelope (it has none of run/findings/summary). Within
-runs/, any `*.raw.txt` companion (the baseline lane's raw model text, not JSON at all) is excluded
-explicitly, so a future glob change cannot silently start matching it
-(docs/internal/execution/P3-report.md, "Known validator wiring gap", names the original
-one-level-too-shallow glob as the reason 462 committed envelopes were invisible to this command).
+so discovery walks the whole tree under every `bench/results/runs*` directory (`runs/` plus any
+`runs-<label>/` calibration set), not `bench/results/` itself: `bench/results/` also holds
+measurement-manifest.json, results.json, and results.schema.json, none of them envelopes, and a
+glob scoped no narrower than `bench/results/` would misclassify measurement-manifest.json as a
+failed envelope (it has none of run/findings/summary). Within each run root, any `*.raw.txt`
+companion (the baseline lane's raw model text, not JSON at all) is excluded explicitly, so a
+future glob change cannot silently start matching it (docs/internal/execution/P3-report.md,
+"Known validator wiring gap", names the original one-level-too-shallow glob as the reason 462
+committed envelopes were invisible to this command; a second gap, the glob missing the
+`runs-cal1/` root entirely once it was added in P3-cal1, was closed in the same P4 integration
+pass that added the multi-root discovery below).
 
 bench/results/runs/ does not exist until a benchmark has actually been run (bench/run_bench.py,
 the bench.yml dispatch entry point). Until then this command succeeds vacuously: there is nothing
@@ -48,15 +55,28 @@ from contract.validate import load_document, validate_document
 
 RESULTS_DIR = Path(__file__).resolve().parent.parent / "bench" / "results"
 RUNS_DIR = RESULTS_DIR / "runs"
+RUN_ROOT_GLOB = "runs*"
+
+
+def discover_run_roots(results_dir: Path) -> list[Path]:
+    """Every run-set root directly under `results_dir` whose name matches `runs*`: the primary
+    `bench/results/runs/` set plus any calibration re-measurement set such as
+    `bench/results/runs-cal1/` (docs/internal/execution/P3-cal1-report.md). Sorted for
+    deterministic output. Empty list if `results_dir` does not exist yet, which is the normal
+    state before any bench run has landed.
+    """
+    if not results_dir.is_dir():
+        return []
+    return sorted(p for p in results_dir.glob(RUN_ROOT_GLOB) if p.is_dir())
 
 
 def find_envelope_files(runs_root: Path) -> list[Path]:
-    """Every envelope `*.json` file anywhere under `runs_root` (bench/results/runs/), sorted for
-    deterministic output, excluding a stray `results.json` or `*.schema.json` should one ever
-    land inside this subtree, and any `*.raw.txt` companion (which this glob would never match as
-    `*.json` in the first place, but is excluded explicitly so a future glob change cannot
-    silently start matching it). Empty list if `runs_root` does not exist, which is the normal
-    state before any bench run has landed.
+    """Every envelope `*.json` file anywhere under `runs_root` (e.g. bench/results/runs/ or
+    bench/results/runs-cal1/), sorted for deterministic output, excluding a stray `results.json`
+    or `*.schema.json` should one ever land inside this subtree, and any `*.raw.txt` companion
+    (which this glob would never match as `*.json` in the first place, but is excluded explicitly
+    so a future glob change cannot silently start matching it). Empty list if `runs_root` does not
+    exist, which is the normal state before any bench run has landed.
     """
     if not runs_root.is_dir():
         return []
@@ -82,11 +102,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    files = find_envelope_files(RUNS_DIR)
+    roots = discover_run_roots(RESULTS_DIR)
+    files = sorted(f for root in roots for f in find_envelope_files(root))
     if not files:
         print(
-            f"validate-envelopes: {RUNS_DIR} does not exist or is empty; "
-            "nothing to validate yet (no bench run has landed)."
+            f"validate-envelopes: no {RUN_ROOT_GLOB!r} directory under {RESULTS_DIR} exists or "
+            "all are empty; nothing to validate yet (no bench run has landed)."
         )
         return 0
 

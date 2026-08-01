@@ -1,17 +1,21 @@
 #!/usr/bin/env node
 // what-it-is:   the native-manifest generator (repo-local wrapper), plus the repo's drift gate
 // what-it-does: regenerates .claude-plugin/plugin.json from library.json via the toolkit's
-//               gen-manifest.mjs, so the native manifest is never hand-authored (Standard sec 5, G4).
-//               Under --check, instead of writing, it diffs the native manifest against what
-//               library.json would generate, notes any generated docs this repo does not have yet
-//               (INDEX.md, README result tables), and checks that AGENTS.md documents every command
+//               gen-manifest.mjs, then regenerates INDEX.md via gen-index.mjs (this repo's own
+//               wrapper over the toolkit's gen-index.mjs), so neither generated file is ever
+//               hand-authored (Standard sec 5 G4 for the manifest, sec 2.6 G4 for INDEX.md). Under
+//               --check, instead of writing, it diffs the native manifest and INDEX.md against what
+//               library.json (plus component frontmatter, for INDEX.md) would generate, notes any
+//               other generated doc this repo does not have yet (the README result and catalog
+//               tables), and checks that AGENTS.md documents every command
 //               .github/workflows/ci.yml runs, marked "# doc-check" (S-07 CI-pipeline spec, AC-5).
 // why:          library.json is the single source of truth; regenerating deterministically from it
-//               keeps the two manifests diff-free instead of hand-edited in parallel and drifting.
-//               --check is the "drift" job's one command (S-07): CI must never hand-compute a
-//               verdict, so this file is where that verdict lives instead.
-// used-by:      contributors ("npm run gen"), the manifest-drift check (U8) that this keeps green,
-//               and .github/workflows/ci.yml's "drift" job ("npm run gen -- --check")
+//               keeps the manifest and INDEX.md diff-free instead of hand-edited in parallel and
+//               drifting. --check is the "drift" job's one command (S-07): CI must never
+//               hand-compute a verdict, so this file is where that verdict lives instead.
+// used-by:      contributors ("npm run gen"), the manifest-drift check (U8) and index-drift check
+//               (G4) that this keeps green, and .github/workflows/ci.yml's "drift" job
+//               ("npm run gen -- --check")
 //
 // Usage:  node scripts/gen-plugin-manifest.mjs [--target=claude|codex|resolved|all]
 //         node scripts/gen-plugin-manifest.mjs --check
@@ -22,6 +26,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { resolveToolkit, toolkitCandidates, TOOLKIT_REPO_URL } from "./lib/resolve-toolkit.mjs";
+import { checkIndexDrift, writeIndex } from "./gen-index.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "..");
@@ -75,18 +80,23 @@ function checkManifestDrift() {
 }
 
 /**
- * Generated docs this repo does not have yet (INDEX.md is a Gold-tier concern, and the bench
- * results tables need bench/results/ to exist first). Vacuously OK: there is nothing to diff
- * against a file that legitimately does not exist yet (S-07 CI-pipeline spec: "the script must
- * succeed vacuously with a clear message, not fail"). Kept here, rather than silently omitted, so a
- * future reader sees this drift job already knows about both and will start checking them the day
- * they show up.
+ * INDEX.md drift, via this repo's scripts/gen-index.mjs wrapper (itself a thin spawnSync wrapper
+ * over the toolkit's scripts/generators/gen-index.mjs, mirroring checkManifestDrift() above).
+ */
+function checkIndexMd() {
+  return checkIndexDrift();
+}
+
+/**
+ * Generated docs this repo does not have yet (the README result and catalog tables need
+ * bench/results/ and library.json's skill catalog wiring respectively). Vacuously OK: there is
+ * nothing to diff against a file that legitimately does not exist yet (S-07 CI-pipeline spec: "the
+ * script must succeed vacuously with a clear message, not fail"). Kept here, rather than silently
+ * omitted, so a future reader sees this drift job already knows about it and will start checking it
+ * the day it shows up.
  */
 function checkGeneratedDocsPlaceholder() {
   const messages = [];
-  if (!existsSync(resolve(ROOT, "INDEX.md"))) {
-    messages.push("gen --check: INDEX.md does not exist yet (Gold-tier concern); nothing to check.");
-  }
   if (!existsSync(resolve(ROOT, "bench", "results"))) {
     messages.push("gen --check: bench/results/ does not exist yet; no README result tables to check.");
   }
@@ -142,7 +152,7 @@ function checkAgentsDocCoverage() {
 const args = process.argv.slice(2);
 
 if (args.includes("--check")) {
-  const results = [checkManifestDrift(), checkGeneratedDocsPlaceholder(), checkAgentsDocCoverage()];
+  const results = [checkManifestDrift(), checkIndexMd(), checkGeneratedDocsPlaceholder(), checkAgentsDocCoverage()];
   let ok = true;
   for (const r of results) {
     for (const m of r.messages) console.log(m);
@@ -153,9 +163,12 @@ if (args.includes("--check")) {
 
 const targetArg = args.find((a) => a.startsWith("--target=")) ?? "--target=claude";
 
-const result = spawnSync(
+const manifestResult = spawnSync(
   "node",
   [resolve(toolkit, "scripts", "generators", "gen-manifest.mjs"), ROOT, targetArg, "--write"],
   { stdio: "inherit" },
 );
-process.exit(result.status ?? 1);
+if ((manifestResult.status ?? 1) !== 0) process.exit(manifestResult.status ?? 1);
+
+const indexResult = writeIndex();
+process.exit(indexResult.status ?? 1);

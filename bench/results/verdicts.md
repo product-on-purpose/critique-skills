@@ -1,6 +1,8 @@
 # Stretch-skill ship/hold verdicts
 
-Run set `p3-2026-07-31`, measured 2026-07-31 on `claude-haiku-4-5-20251001` and `claude-sonnet-5`
+Run sets `p3-2026-07-31`, measured 2026-07-31, and `cal1-2026-08-01`, measured 2026-08-01 and covering
+the [post-calibration section](#post-calibration-verdict-cal1-2026-08-01) only. Both on
+`claude-haiku-4-5-20251001` and `claude-sonnet-5`
 at k=5. Every number below is read from [`results.json`](results.json) except the judged-lane
 column, which is a derived cut (see [Judged-lane figures](#judged-lane-figures) for the recipe).
 
@@ -123,8 +125,10 @@ number in the run set. It is no longer in the library.
 
 ### Why this is a measurement and not a story about one
 
-Four checks were run against the result before it was accepted, because a jump this large is exactly
-the shape a rigged result would have.
+Six checks were run against the result before it was accepted
+([ADR 0028](../../docs/internal/decisions/0028-post-calibration-verdict-accessibility-clears-ac-6.md)
+records all six), because a jump this large is exactly the shape a rigged result would have. The four
+that bear directly on the numbers in this file:
 
 1. **The scripted lane is reproducible with no model in the loop.** Every scripted finding in 39 of
    the 40 cal1 envelopes is byte-identical to what committed `scripts/checks.py` emits when run
