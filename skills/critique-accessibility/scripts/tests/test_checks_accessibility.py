@@ -28,10 +28,14 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+import pytest
+
+from bench.metrics import resolve_html
 from skills._shared.artifact import Artifact
 from skills._shared.runner import run_scripted_lane
 
@@ -692,6 +696,160 @@ def test_disabled_input_is_not_flagged():
 
 
 # ---------------------------------------------------------------------------
+# Location emission (ADR 0027).
+#
+# Through 0.1.0 every scripted location read `line <n>, <tag> element`,
+# which names no element: the html location grammar resolves an element
+# id, a quoted bounded selector, an ordinal over a noun table, or a
+# quoted span of element text, and a line number is none of the four, so
+# a correctly detected defect was reported at a place nothing could
+# navigate to. These tests hold the fix in place from both ends: the
+# string's own shape, and, below, whether the family's own html resolver
+# (`bench.metrics.resolve_html`, the module that actually reads these
+# strings) lands on the element the corpus planted the defect in.
+#
+# Importing the bench resolver here is deliberate. Asserting a location
+# merely "contains the id" would pass for a string the resolver still
+# cannot use; the only assertion worth making is the one the reader of
+# these strings makes.
+# ---------------------------------------------------------------------------
+
+_BARE_LINE_NUMBER_LEAD = re.compile(r"^line \d+,")
+
+LOCATION_PAGE = """<!DOCTYPE html>
+<html lang="en" id="page">
+<head id="head"><title id="head-title"></title></head>
+<body id="body">
+<img src="hero.jpg" id="s1-img1">
+<h1 id="s1-h">Report</h1>
+<h4 id="s2-h">Detail skipping levels</h4>
+<a href="/x" id="s2-link1">Click here</a>
+<form id="s2-form"><input id="email" type="text"></form>
+</body>
+</html>
+"""
+
+
+def test_location_leads_with_the_element_id_when_the_element_has_one():
+    findings = checks.check(_artifact(LOCATION_PAGE))
+    assert findings
+    for finding in findings:
+        assert finding.location.startswith("#"), finding.location
+
+    by_criterion = {f.criterion: f.location for f in findings}
+    assert by_criterion["WCAG-1.1.1"] == "#s1-img1, <img> element, line 5"
+    assert by_criterion["WCAG-3.3.2"] == "#email, <input> control, line 9"
+
+
+def test_location_falls_back_to_a_bounded_css_path_when_the_element_has_no_id():
+    html = '<html lang="en"><body><p>Intro.</p><img src="hero.jpg"></body></html>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.1.1")
+    assert len(findings) == 1
+    assert findings[0].location == '"html > body > img", <img> element, line 1'
+
+
+def test_a_bounded_css_path_fallback_still_resolves_to_the_right_element():
+    html = (
+        '<html lang="en"><body>'
+        "<div><p>First card.</p></div>"
+        '<div><img src="hero.jpg"></div>'
+        "</body></html>"
+    )
+    doc = resolve_html.parse_html(html)
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.1.1")
+    assert len(findings) == 1
+    assert findings[0].location.startswith('"html > body > div:nth-of-type(2) > img"')
+    resolved = resolve_html.resolve(doc, findings[0].location)
+    assert resolved.resolvable
+    assert resolved.canonical_key == "html > body > div:nth-of-type(2) > img"
+
+
+def test_no_location_leads_with_a_bare_line_number():
+    """The 0.1.0 regression itself: `line 21, <img> element` resolves to
+    nothing, so a line number may trail a location but never open one."""
+    for page in (LOCATION_PAGE, SEEDED_PAGE, CLEAN_PAGE):
+        for finding in checks.check(_artifact(page)):
+            assert not _BARE_LINE_NUMBER_LEAD.match(finding.location), finding.location
+
+
+def test_every_location_stays_within_the_contract_length_bound():
+    long_label = "Submit " + ("the quarterly field report for review " * 20)
+    html = f'<html lang="en"><body><button id="b1" aria-label="Send it">{long_label}</button></body></html>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-2.5.3")
+    assert len(findings) == 1
+    assert len(findings[0].location) <= 400
+    assert findings[0].location.startswith("#b1,")
+
+
+def test_truncation_takes_the_descriptor_and_leaves_the_anchor_resolvable():
+    """A truncated descriptor still resolves; a truncated anchor does
+    not, so the bound is spent on the tail."""
+    long_label = "Submit " + ("the quarterly field report for review " * 20)
+    html = f'<html lang="en"><body><button aria-label="Send it">{long_label}</button></body></html>'
+    doc = resolve_html.parse_html(html)
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-2.5.3")
+    assert len(findings) == 1
+    location = findings[0].location
+    assert len(location) <= 400
+    assert location.startswith('"html > body > button"')
+    assert resolve_html.resolve(doc, location).resolvable
+
+
+# ---------------------------------------------------------------------------
+# Corpus regression: one case per scripted-lane defect the bench plants.
+#
+# Every one of these was detected under 0.1.0 and reported at a location
+# that resolved to nothing (11 of 13), or resolved only because the tag
+# name printed in the descriptor happened to equal the planted id (#html
+# and #body). Each case here fails if that ever returns.
+# ---------------------------------------------------------------------------
+
+_CORPUS_DIR = _REPO_ROOT / "bench" / "corpus" / "accessibility"
+
+
+def _scripted_corpus_defects():
+    cases = []
+    for manifest_path in sorted(_CORPUS_DIR.glob("*.manifest.json")):
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        artifact_path = _REPO_ROOT / manifest["artifact"]
+        for defect in manifest["defects"]:
+            if defect["criterion"] not in checks.IMPLEMENTED_CRITERIA:
+                continue  # a judged-lane criterion; checks.py is right not to fire
+            case_id = f"{manifest_path.stem.split('.')[0]}-{defect['criterion']}-{defect['location']['element_id']}"
+            cases.append(pytest.param(artifact_path, defect, id=case_id))
+    return cases
+
+
+@pytest.mark.parametrize("artifact_path,defect", _scripted_corpus_defects())
+def test_scripted_corpus_defect_is_reported_at_a_location_that_resolves_to_it(artifact_path, defect):
+    text = artifact_path.read_text(encoding="utf-8")
+    doc = resolve_html.parse_html(text)
+    findings = _by_criterion(checks.check(_artifact(text)), defect["criterion"])
+    assert findings, f"{defect['criterion']} was not detected at all in {artifact_path.name}"
+
+    hits = [
+        f
+        for f in findings
+        if resolve_html.is_hit(doc, resolve_html.resolve(doc, f.location), defect["location"])
+    ]
+    assert hits, (
+        f"{defect['criterion']} in {artifact_path.name} was detected but no finding's location "
+        f"resolves to the planted element '{defect['location']['element_id']}': "
+        f"{[f.location for f in findings]}"
+    )
+
+
+@pytest.mark.parametrize(
+    "artifact_path", sorted(_CORPUS_DIR.glob("*.html")), ids=lambda p: p.stem
+)
+def test_no_corpus_finding_is_unresolvable(artifact_path):
+    text = artifact_path.read_text(encoding="utf-8")
+    doc = resolve_html.parse_html(text)
+    for finding in checks.check(_artifact(text)):
+        assert resolve_html.resolve(doc, finding.location).resolvable, finding.location
+
+
+# ---------------------------------------------------------------------------
 # Determinism: same artifact, same output, across two independent runs.
 # ---------------------------------------------------------------------------
 
@@ -728,7 +886,7 @@ def test_cli_run_is_deterministic_across_two_runs(tmp_path, monkeypatch):
         with contextlib.redirect_stdout(buf):
             run_scripted_lane(
                 skill_name="critique-accessibility",
-                skill_version="0.1.0",
+                skill_version="0.1.1",
                 rubrics=["WCAG"],
                 check_fn=checks.check,
                 argv=[str(target)],
@@ -752,7 +910,7 @@ def test_clean_page_gate_exits_zero(tmp_path, monkeypatch):
 
     code = run_scripted_lane(
         skill_name="critique-accessibility",
-        skill_version="0.1.0",
+        skill_version="0.1.1",
         rubrics=["WCAG"],
         check_fn=checks.check,
         argv=[str(target), "--gate"],
@@ -768,7 +926,7 @@ def test_seeded_page_gate_fails(tmp_path, monkeypatch):
 
     code = run_scripted_lane(
         skill_name="critique-accessibility",
-        skill_version="0.1.0",
+        skill_version="0.1.1",
         rubrics=["WCAG"],
         check_fn=checks.check,
         argv=[str(target), "--gate"],

@@ -1,0 +1,72 @@
+{
+  "run": {
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "69ff628078a107c11bd403359666e3fafdba2d4ab204fdec80881f7db5374db6",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T18:30:00Z",
+    "rubrics": [
+      "WCAG"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-1",
+      "criterion": "WCAG-1.3.2",
+      "lane": "judged",
+      "severity": 3,
+      "location": "#s3-wizard, <div> container, style order property reverses steps, lines 47-57",
+      "evidence": "DOM order: Step 3 (order:3), Step 2 (order:2), Step 1 (order:1); visual/CSS order: Step 1, Step 2, Step 3",
+      "violation": "Steps appear in reversed order to screen readers; linearized reading presents confirm step before entry step, reversing the checkout sequence",
+      "fix": "Reorder DOM to match visual order: choose plan first, then payment, then confirm; or remove order property and adjust visual CSS differently",
+      "confidence": "high"
+    },
+    {
+      "id": "F-2",
+      "criterion": "WCAG-4.1.2",
+      "lane": "judged",
+      "severity": 3,
+      "location": "#s3-customcontrol, <div> with class icon-delete, line 44",
+      "evidence": "Custom div element with img child (trash icon), no role, no aria-label, no onclick handler visible in markup",
+      "violation": "Custom control lacks role, accessible name, and state; appears intended as delete button but exposes nothing to assistive technology",
+      "fix": "Add role=\"button\" (or role=\"menuitem\" if part of a menu), add aria-label=\"Delete\", add click handler with keyboard support (Enter/Space), or use native <button> element",
+      "confidence": "high"
+    },
+    {
+      "id": "F-3",
+      "criterion": "WCAG-1.4.1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "#s3-form-phone-label, <label> element, line 64",
+      "evidence": "Label styled with color:#cc0000 (red); no asterisk, no \"required\" attribute, no other non-color signal present",
+      "violation": "Color alone signals required status; color-blind reader cannot distinguish this field from optional fields",
+      "fix": "Add visible required indicator: append \" *\" text, or add aria-required=\"true\" with CSS-generated asterisk, or add \"(required)\" text",
+      "confidence": "high"
+    },
+    {
+      "id": "F-4",
+      "criterion": "WCAG-3.3.1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "#s3-form-promo-error, <span> with class error-text, line 68",
+      "evidence": "Error message reads \"Error.\" with no indication of field name or problem type",
+      "violation": "Error text is generic and does not identify which field failed or why; reader must guess the issue",
+      "fix": "Replace \"Error.\" with specific message: e.g., \"Promo code not found\" or \"Promo code expired\"; or prepend field name: \"Promo code: invalid format\"",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 2,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

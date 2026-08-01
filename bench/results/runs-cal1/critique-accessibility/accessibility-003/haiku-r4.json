@@ -1,0 +1,61 @@
+{
+  "run": {
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "69ff628078a107c11bd403359666e3fafdba2d4ab204fdec80881f7db5374db6",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T00:00:00Z",
+    "rubrics": [
+      "WCAG"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-1",
+      "criterion": "WCAG-1.3.2",
+      "lane": "judged",
+      "severity": 3,
+      "location": "#s3-wizard, div.wizard-steps containing three ordered steps",
+      "evidence": "DOM order of step elements: s3-step3 (style order:3), s3-step2 (style order:2), s3-step1 (style order:1). Visual CSS order renders them 1-2-3, but DOM linearization reads them 3-2-1.",
+      "violation": "The wizard steps have a meaningful sequence (Choose a plan -> Enter payment details -> Confirm your order), but DOM order reverses this sequence. A screen reader user will hear the steps in backward order, reversing the decision sequence the page intends.",
+      "fix": "Reorder the step elements in the DOM to match the visual order: Choose a plan (order 1), Enter payment details (order 2), Confirm your order (order 3). Alternatively, use aria-flowto to establish the correct reading order.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-2",
+      "criterion": "WCAG-1.4.1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "#s3-form-phone-label, label element with text 'Phone number'",
+      "evidence": "Label uses inline style color:#cc0000 (red text) as the only visual signal that the field is required. No accompanying asterisk, text label, or other non-color indicator.",
+      "violation": "Color is the only visual signal indicating the phone number field is required. A color-blind reader cannot perceive this requirement and cannot tell the field is required until submitting and receiving an error.",
+      "fix": "Add a visible, non-color text indicator such as an asterisk (*) or '(required)' within or immediately after the label. This provides redundant signaling so the required status is clear to all readers.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-3",
+      "criterion": "WCAG-3.3.1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "#s3-form-promo-error, span element containing error message after promo input",
+      "evidence": "Error text is a single word: 'Error.' with no explanation of what is wrong or how to fix it.",
+      "violation": "The error message does not identify what is wrong with the promo code input or what the user should do to correct it. The message provides no actionable guidance beyond confirming that an error occurred.",
+      "fix": "Replace 'Error.' with a specific, actionable error message such as 'Invalid promo code' or 'Promo code must be between 5 and 20 characters' that clearly explains the problem and how to resolve it.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 1,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

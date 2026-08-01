@@ -1,0 +1,37 @@
+{
+  "run": {
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "393fe58fac52d6953cd372944cd352ef9181df5c42ae778bd6d17214acb080c7",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-08-01T06:00:54Z",
+    "rubrics": ["WCAG"]
+  },
+  "findings": [
+    {
+      "id": "F-1",
+      "criterion": "WCAG-2.4.5",
+      "lane": "judged",
+      "severity": 3,
+      "location": "#nav, <nav> element, header navigation, line 11",
+      "evidence": "The page provides only a header navigation menu (#nav) with two links: Plan a trip, Accessibility. No search form, sitemap link, breadcrumb trail, or independent related-links list is present. Footer links lead to policy pages, not to related content.",
+      "violation": "A content page should expose multiple independent navigation mechanisms so readers can locate it within the site. This page relies solely on the primary navigation menu, providing fewer than two independent mechanisms. A reader who lands on this page directly from a search engine has no alternative way to explore related pages or navigate to other content sections.",
+      "fix": "Add a second independent navigation mechanism such as a site search form, a sitemap link, a breadcrumb trail, or a related-links list. For example, add a breadcrumb showing the hierarchy (Home > Service Updates) or a related-pages section listing other updates.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 1,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

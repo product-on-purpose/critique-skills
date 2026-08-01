@@ -1,0 +1,127 @@
+{
+  "run": {
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/accessibility/accessibility-001.html",
+    "artifact_sha256": "f620e43c2035d9380934dbe1b09dba438bb38bc1fb7f1feeb58010af44eaf176",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T04:57:46Z",
+    "rubrics": [
+      "WCAG"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "WCAG-2.4.1",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "#body, <body> opening tag, line 8",
+      "evidence": "<body id=\"body\">; 2 focusable element(s) precede the first heading",
+      "violation": "The page provides neither a main landmark (a <main> element or role=\"main\") nor a leading same-page skip link.",
+      "fix": "Add a <main> element wrapping the primary content, or a skip link as the first focusable element linking to it.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "WCAG-2.4.2",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "#head-title, <title> element, line 6",
+      "evidence": "<title></title>",
+      "violation": "The page has no usable title: the title element is missing or empty.",
+      "fix": "Give the page a specific <title> describing its topic or purpose.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "WCAG-3.1.1",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "#html, <html> element, line 2",
+      "evidence": "<html lang=\"translanguage\" id=\"html\">",
+      "violation": "The <html> element's lang attribute 'translanguage' is not a well-formed BCP 47 language tag.",
+      "fix": "Set lang to a well-formed BCP 47 tag identifying the page's default language, for example lang=\"en\".",
+      "confidence": "high"
+    },
+    {
+      "id": "F-008",
+      "criterion": "WCAG-2.4.5",
+      "lane": "judged",
+      "severity": 3,
+      "location": "#nav, <nav> element, line 10",
+      "evidence": "Header navigation offers links to \"Plan a trip\" and \"Accessibility\"; footer offers links to privacy and terms. No site search, sitemap, breadcrumb trail, or other independent navigation mechanisms.",
+      "violation": "The page exposes only one primary navigation mechanism. A reader landing on this page directly has only one way to navigate to related pages.",
+      "fix": "Add a second independent navigation mechanism, such as a breadcrumb trail, site search, or sitemap link.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "WCAG-1.1.1",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "#s1-img1, <img> element, line 21",
+      "evidence": "<img src=\"/img/platform-update.jpg\" id=\"s1-img1\">",
+      "violation": "No text alternative is present and the element is not marked decorative.",
+      "fix": "Add an alt attribute (or aria-label) describing the image, or mark it decorative with alt=\"\".",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "WCAG-1.3.1",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "#s2-h, <h4> heading, 'Accessibility improvements', line 24",
+      "evidence": "<h4 id=\"s2-h\">",
+      "violation": "Heading level skips from <h2> to <h4> with no intervening level.",
+      "fix": "Change this heading to <h5>, or add the missing intervening heading level.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "WCAG-2.4.4",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "#s3-link1, <a> link, text 'click here', line 57",
+      "evidence": "<a href=\"/fares/history\" id=\"s3-link1\">click here</a>",
+      "violation": "The link's accessible name is a generic phrase that gives no clue to its destination out of context.",
+      "fix": "Rewrite the link text to describe its destination or purpose, or add an aria-label.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "WCAG-2.5.3",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "#s3-form-submit, <button> control, visible label 'Submit', line 68",
+      "evidence": "visible text 'Submit', accessible name 'Send form now'",
+      "violation": "The control's visible text does not appear within its accessible name, so a voice-control user naming the visible label cannot activate it.",
+      "fix": "Include the visible label text at the start of the aria-label value, or remove the aria-label and rely on the visible text.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-009",
+      "criterion": "WCAG-3.3.1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "#promo, <input type=\"text\"> control, line 66",
+      "evidence": "Input id=\"promo\" marked aria-invalid=\"true\"; error text in span below reads \"Enter a 6 character code using letters and numbers only.\" No aria-describedby or aria-errormessage attribute linking the error text to the field.",
+      "violation": "Error text is present but not programmatically associated with the invalid input field, and reads as a format instruction rather than describing the specific error.",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the input element to programmatically associate the error message, and ensure the error text describes what is currently wrong, not just the format requirement.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 4,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

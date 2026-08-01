@@ -17,6 +17,20 @@ AC-7: each stretch skill carries a recorded verdict citing its numbers against t
 > **All three verdicts are re-affirmed as SHIP. One of them ships on a different argument than the
 > one originally recorded.**
 
+> **Amended again 2026-08-01 after the one permitted calibration iteration.** The core skill this
+> file kept pointing at, `critique-accessibility`, was iterated to 0.1.1 and re-measured on the
+> accessibility domain. It now clears AC-6 substantively on both tiers. **No stretch verdict moved**,
+> because nothing the calibration touched feeds a stretch cell. See
+> [Post-calibration verdict (cal1, 2026-08-01)](#post-calibration-verdict-cal1-2026-08-01).
+>
+> This is the third dated layer on one document, and
+> [ADR 0026](../../docs/internal/decisions/0026-location-level-re-examination-of-baseline-gates.md)
+> predicted the second would be the last one that reads cleanly. That prediction is now overdue
+> rather than wrong: the layering debt is real, it is recorded as an open item in
+> [ADR 0028](../../docs/internal/decisions/0028-post-calibration-verdict-accessibility-clears-ac-6.md),
+> and this amendment was kept deliberately short instead of discharging it, because rewriting the
+> stretch verdicts while ruling on a core skill would mix two unrelated changes in one pass.
+
 ## The gate
 
 A stretch skill ships only if **both** conditions hold ([S-05](../../docs/internal/release-plans/plan_v0.1.0/S-05_skills-slate/spec.md), "Requirements"):
@@ -48,14 +62,143 @@ All three ship. All three go into `library.json` components; none is retained as
 verdict flipped in the location-level re-examination, so `library.json` and the generated
 `plugin.json` are unchanged by it.
 
-**The core slate is a different story and it is not this file's to settle.** The same rescore shows
-`critique-accessibility`, a **core** skill, reading below the frozen baseline at location level on
-both tiers and on both metrics. That is a substantive failure of
+**The core slate was a different story.** The same rescore showed `critique-accessibility`, a
+**core** skill, reading below the frozen baseline at location level on both tiers and on both
+metrics: a substantive failure of
 [S-05](../../docs/internal/release-plans/plan_v0.1.0/S-05_skills-slate/spec.md) AC-6, whose own
-remedy is a release halt with a handover diagnosis, and it is recorded in
+remedy is a release halt with a handover diagnosis. It is recorded in
 [ADR 0026 (location-level re-examination of the baseline gates)](../../docs/internal/decisions/0026-location-level-re-examination-of-baseline-gates.md)
-and in [`README.md`](README.md#core-skills-s-05-ac-6), not here. A reader who takes "all three
-stretch skills ship" from this file and stops has read the good half of the rescore.
+and in [`README.md`](README.md#core-skills-s-05-ac-6). A reader who took "all three stretch skills
+ship" from this file and stopped had read the good half of the rescore.
+
+**That failure has since been answered by measurement, not by argument.** The iterate branch of
+AC-6 was taken once, under a pre-committed lever list
+([ADR 0027](../../docs/internal/decisions/0027-accessibility-location-emission-calibration.md)),
+and `critique-accessibility` 0.1.1 was re-measured on the same corpus, the same two pinned tiers and
+the same k=5. It now beats the frozen baseline on both tiers, on both metrics, at both cuts. The
+0.1.0 failure rows are still in [`results.json`](results.json) and still in the generated tables,
+beside the 0.1.1 rows rather than replaced by them:
+[Post-calibration verdict (cal1, 2026-08-01)](#post-calibration-verdict-cal1-2026-08-01).
+
+## Post-calibration verdict (cal1, 2026-08-01)
+
+Judged by the post-calibration pass on run set `cal1-2026-08-01`: `critique-accessibility` 0.1.1, the
+accessibility domain only, the same 4 corpus artifacts at the same committed sha256 values, the same
+two pinned tiers, k=5, 40 new envelopes under [`runs-cal1/`](runs-cal1/). The frozen
+`baseline-generic` condition was **not** re-run and did not change: no `.v2.json` parity envelopes
+exist anywhere in the repository, `bench/baseline/` is untouched, and every baseline number below is
+the same committed figure it was on 2026-07-31. **The other five skills were not re-measured and no
+number of theirs moved.**
+
+### The ruling: AC-6 is now met substantively, on both tiers
+
+| Cut | Tier | 0.1.0 (pre) | 0.1.1 (post) | Baseline (unchanged) | AC-6 on the merits |
+|---|---|---|---|---|---|
+| Recall (location) | haiku | 0.176 (15/85) | **0.988 (84/85)** | 0.376 (32/85) | **pass**, dominates |
+| Precision (location) | haiku | 0.158 (15/95) | **0.875 (84/96)** | 0.258 (32/124) | |
+| Recall (location) | sonnet | 0.306 (26/85) | **0.965 (82/85)** | 0.776 (66/85) | **pass**, dominates |
+| Precision (location) | sonnet | 0.202 (26/129) | **0.672 (82/122)** | 0.293 (66/225) | |
+| Recall (criterion) | haiku | 0.176 (15/85) | **0.976 (83/85)** | 0.000, by construction | pass as written |
+| Precision (criterion) | haiku | 0.158 (15/95) | **0.865 (83/96)** | 0.000, by construction | |
+| Recall (criterion) | sonnet | 0.235 (20/85) | **0.965 (82/85)** | 0.000, by construction | pass as written |
+| Precision (criterion) | sonnet | 0.155 (20/129) | **0.672 (82/122)** | 0.000, by construction | |
+
+AC-6 asks for higher recall at equal-or-better precision on at least one pinned tier. 0.1.1 meets it
+literally on **both** tiers and at **both** cuts, with higher precision as well as higher recall, so
+no dominance argument is needed and none is offered. The criterion-level pass is still worth nothing
+on its own, for the reason this file has said all along: the comparator is pinned at zero. The
+location-level pass is the one that carries the verdict.
+
+**Consistency, R1 / [ADR 0022](../../docs/internal/decisions/0022-consistency-floor-overall-lane-min-core.md):**
+floor 0.309 on the overall lane. 0.1.1 reads **0.625** on haiku (from 0.362) and **0.808** on sonnet
+(from 0.605). Both clear, by wider margins than 0.1.0. The floor's own **value is unchanged at
+0.309**: it is `min(core-skill overall consistency)` and it was set by `critique-clarity` on haiku,
+which was not re-measured. Accessibility was never the cell that set it. No stretch skill's condition
+2 moves.
+
+The judged-lane-only cut, published as a diagnostic by
+[ADR 0022](../../docs/internal/decisions/0022-consistency-floor-overall-lane-min-core.md) and not
+gating, moves too: **0.090 to 0.286** on haiku and **0.449 to 0.736** on sonnet. 0.090 was the worst
+number in the run set. It is no longer in the library.
+
+### Why this is a measurement and not a story about one
+
+Four checks were run against the result before it was accepted, because a jump this large is exactly
+the shape a rigged result would have.
+
+1. **The scripted lane is reproducible with no model in the loop.** Every scripted finding in 39 of
+   the 40 cal1 envelopes is byte-identical to what committed `scripts/checks.py` emits when run
+   locally on the committed corpus files. The one exception is recorded under
+   [Caveats](#caveats-on-the-post-calibration-result) below.
+2. **The win survives the harshest available match.** Re-run under
+   [ADR 0026](../../docs/internal/decisions/0026-location-level-re-examination-of-baseline-gates.md)'s
+   cut B (credit only for resolving to the truth node itself, no ancestor and no descendant credit,
+   stricter than any tolerance this repository defines), 0.1.1 reads 0.988 and 0.965 recall,
+   **unchanged to three decimals**, against a baseline that falls to 0.212 and 0.588. Every one of
+   0.1.1's matches is an exact-node match; it takes nothing from the ancestor window that
+   [ADR 0026](../../docs/internal/decisions/0026-location-level-re-examination-of-baseline-gates.md)
+   flagged as flattering volume. The probe reproduces every cut-B figure that ADR already published
+   for 0.1.0 and for the baseline, which is what makes it trustworthy here.
+3. **Detection did not improve, which is the point.** On `accessibility-003`, whose 4 planted defects
+   are all judged-lane criteria, the planted criteria were emitted at all in 36 of 40 opportunities
+   under 0.1.0 and **35 of 40** under 0.1.1. The skill did not start finding more. It started saying
+   where. That is the mechanism
+   [ADR 0027](../../docs/internal/decisions/0027-accessibility-location-emission-calibration.md)
+   predicted, and it is visible in the unresolvable-claim count: 71 of 95 to **3 of 96** on haiku, 65
+   of 129 to **0 of 122** on sonnet.
+4. **It got quieter, not louder.** Claims fell from 129 to 122 on sonnet, and findings per run on the
+   clean artifact fell from 1.800 to 1.200 and from 1.000 to 0.600. A skill that had gamed a
+   location metric by emitting more anchors would show the opposite.
+
+### Caveats on the post-calibration result
+
+Recorded here rather than left for a reader to find.
+
+- **This is a cross-run-set comparison.** 0.1.1 is measured on `cal1-2026-08-01`; the baseline it is
+  compared against is measured on `p3-2026-07-31`. Same corpus bytes, same pinned model IDs, same
+  k=5, and the baseline condition is frozen by construction, so the comparison is the intended one.
+  It is still not a single simultaneous run set, and the sonnet baseline cell (0.776) is the one
+  number in the comparison that a re-run could plausibly move.
+- **The cal1 run set has no provenance document.** `bench/results/README.md` records that the 462
+  p3 envelopes came from a documented multi-agent workflow rather than from `bench/run_bench.py`, and
+  that the two mechanisms are not byte-equivalent. No equivalent record exists for cal1, and
+  `measurement-manifest.json`'s cal1 block does not name a production mechanism. Six of the 40 cal1
+  envelopes also carry round-number timestamps (four at exactly `00:00:00Z`), so `run.timestamp` is
+  not a reliable record of when those runs happened. This does not touch any scored figure, and the
+  scripted half is independently reproducible, but the judged half rests on an undocumented harness.
+- **One envelope's scripted finding was altered.** In
+  `runs-cal1/critique-accessibility/accessibility-001/haiku-r5.json` the WCAG-1.3.1 finding's `fix`
+  reads `Change this heading to <h3>` where committed `checks.py` emits `<h5>`. Criterion, severity,
+  location, evidence and violation all match exactly, so no metric is affected, but a scripted-lane
+  finding in a committed envelope is supposed to be bit-for-bit what the script produced. Worth
+  noting that `<h3>` is the substantively correct fix for an h2-to-h4 skip and `<h5>` looks like a
+  latent defect in `checks.py`'s fix wording, which is a separate bug and is not fixed here.
+- **The new Pass 2 emphasis list is corpus-shaped.** `SKILL.md` now names five judged criteria to
+  sweep hardest (WCAG-4.1.2, 1.4.1, 3.3.1, 1.3.2, 2.4.6). Four of those five are exactly the four
+  judged criteria this corpus plants defects under, and none of the four unnamed judged criteria
+  carries a planted defect. Protocol emphasis is on the pre-committed lever list and no corpus file
+  was touched, so this is inside policy, but it is a fit to the test set and it is named here rather
+  than left implicit. Check 3 above is the reason it does not carry the verdict: it bought no
+  measurable detection, so removing it would not move the numbers that decide AC-6.
+- **The corpus is unusually id-rich.** The fix's first-choice anchor is the element's `id`, and every
+  generated corpus artifact carries ids on the elements defects are planted on. Real markup often
+  does not, and the double-quoted CSS-path fallback is measured here only incidentally. How much of
+  this gain survives on markup without ids is **not measured by this run set**.
+
+### What this verdict does not change
+
+- **No stretch verdict moves.** Nothing in the calibration touches the docs, microcopy or argument
+  domains, their envelopes, or the baseline they are compared against. All three remain SHIP on
+  exactly the arguments recorded below, including `critique-docs`'s precision-dominance-at-equal-
+  recall argument.
+- **`critique-usability` and `critique-clarity` are unchanged**, including usability's unresolved
+  sonnet cell and the caveat that its qualifying tier is the tier where the comparator collapsed.
+- **`library.json` `components.skills` is unchanged in membership.** Only the
+  `critique-accessibility` component version moved, 0.1.0 to 0.1.1, which
+  [ADR 0027](../../docs/internal/decisions/0027-accessibility-location-emission-calibration.md)
+  records.
+- **The one permitted calibration iteration is now spent.** A second pass at this skill is a
+  release-owner decision, not a build-run one.
 
 ## Location-level re-examination (2026-07-31)
 

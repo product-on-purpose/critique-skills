@@ -68,6 +68,18 @@ Every threshold this file applies is restated, with its reasoning, in
 references/severity-anchors.md, "Thresholds the scripted lane applies",
 so a judged-lane reviewer grades the same defect the same way rather
 than having to read this module to find out where a boundary sits.
+
+Location emission (`_loc`, `_element_anchor`): every finding names the
+element it is about by that element's own id, written as a `#id` token,
+and falls back to a bounded CSS path in double quotes for an element
+that carries no id. A line number is kept at the end of the string as a
+human convenience, never as the anchor: an html location resolves
+through an element id, a quoted bounded selector, an ordinal over a noun
+table, or a quoted span of element text, and a line number is none of
+those, so a location built only from one names no element at all. See
+SKILL.md, "Naming a location", which states the same rule for the judged
+lane, and ADR 0027 (accessibility location-emission calibration), in
+docs/internal/decisions/, for why this was worth a version.
 """
 
 from __future__ import annotations
@@ -670,8 +682,83 @@ def _truncate(s, n=300):
     return s if len(s) <= n else s[: n - 3] + "..."
 
 
+_MAX_LOCATION_CHARS = 400  # contract/critique-contract.schema.json, $defs/locationText
+
+# An element id the html location grammar recognizes as a bare `#id`
+# token: it starts with a letter, then word characters and hyphens
+# (bench/README.md, "Location tolerance", the `html` row).
+_BARE_ID_RE = re.compile(r"[A-Za-z][\w-]*")
+
+
+def _css_path_parts(node):
+    """The document-root-to-`node` path as a list of simple selectors,
+    using tag names and `:nth-of-type` only. That subset, joined by the
+    child combinator, is inside the bounded selector engine the location
+    grammar defines (tag, `#id`, `.class`, descendant, child, and
+    `:nth-of-type`), so a reader and a resolver read the same path."""
+    parts = []
+    cur = node
+    while cur is not None and cur.tag != "#root":
+        parent = cur.parent
+        siblings = (
+            [c for c in parent.children if isinstance(c, Node) and c.tag == cur.tag]
+            if parent is not None
+            else []
+        )
+        if len(siblings) > 1:
+            parts.append(f"{cur.tag}:nth-of-type({siblings.index(cur) + 1})")
+        else:
+            parts.append(cur.tag)
+        cur = parent
+    parts.reverse()
+    return parts
+
+
+def _element_anchor(node):
+    """The part of a location string that names *which element* the
+    finding is about, in the artifact type's own location grammar: the
+    element's id as a `#id` token when it has one, and otherwise a
+    bounded CSS path in double quotes.
+
+    This exists because a line number is not an anchor. `line 21, <img>
+    element` tells a reader roughly where to look and tells a resolver
+    nothing at all: the html grammar recognizes an element id, a quoted
+    bounded selector, an ordinal over a noun table, or a quoted string of
+    element text, and a bare line number is none of the four. Every check
+    below already holds the node, so the id is free; discarding it was
+    the defect ADR 0027 fixes."""
+    element_id = (node.attrs.get("id") or "").strip()
+    if element_id and _BARE_ID_RE.fullmatch(element_id):
+        return f"#{element_id}"
+
+    parts = _css_path_parts(node)
+    if element_id:
+        # An id outside the bare-token grammar (one not starting with a
+        # letter) still resolves inside a bounded selector, so carry it
+        # there rather than dropping it. It replaces the last step's
+        # `:nth-of-type`, which it makes redundant anyway.
+        last = f"{node.tag}#{element_id}"
+        parts = parts[:-1] + [last] if parts else [last]
+    if not parts:
+        parts = [node.tag]
+    return '"' + " > ".join(parts) + '"'
+
+
 def _loc(node, descriptor):
-    return f"line {node.line}, {descriptor}"
+    """`<anchor>, <descriptor>, line <n>`.
+
+    The anchor comes first because it is the part that has to resolve;
+    the descriptor says what kind of thing it is, and the line number is
+    a human convenience at the end, never the anchor itself. A location
+    long enough to reach the contract's 400-character bound loses the
+    tail rather than the anchor, for the same reason: a truncated
+    descriptor still resolves, and a truncated anchor does not."""
+    anchor = _element_anchor(node)
+    tail = f", {descriptor}, line {node.line}"
+    budget = _MAX_LOCATION_CHARS - len(anchor)
+    if len(tail) > budget:
+        tail = tail[: max(0, budget - 3)].rstrip() + "..."
+    return (anchor + tail)[:_MAX_LOCATION_CHARS]
 
 
 def _has_direct_text(node):
@@ -930,7 +1017,7 @@ def _check_viewport_zoom(tree):
     return [RawFinding(
         criterion="WCAG-1.4.4",
         severity=severity,
-        location=_loc(meta, 'meta name="viewport" element'),
+        location=_loc(meta, "<meta> viewport element"),
         evidence=_truncate(meta.raw),
         violation=violation,
         fix=fix,
@@ -1424,7 +1511,7 @@ def check(artifact):
 def main(argv=None):
     return run_scripted_lane(
         skill_name="critique-accessibility",
-        skill_version="0.1.0",
+        skill_version="0.1.1",
         rubrics=["WCAG"],
         check_fn=check,
         argv=argv,

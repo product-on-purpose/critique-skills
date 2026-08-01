@@ -4,9 +4,15 @@
 - **Decision:** for run set `p3-2026-07-31`, the **location-level** cut (`recall_location`, `precision_location` in [`bench/results/results.json`](../../../bench/results/results.json), results version 1.1.0) is the reading of "beats the frozen baseline" that the [S-05 (skills slate)](../release-plans/plan_v0.1.0/S-05_skills-slate/spec.md) AC-6 and AC-7 gates are judged on substantively. The criterion-level cut those criteria are literally written against is retained as the primary per-skill metric and as the formal pass condition, but it cannot fail, so it cannot gate. A skill clears the substantive reading by meeting AC-6 literally (higher recall at equal-or-better precision) or by stated dominance (no worse on either metric, strictly better on one).
 - **Verdicts:** all three stretch skills are **re-affirmed SHIP** under AC-7; `critique-docs` ships on a precision-dominance argument at *equal* recall, not on the recall win originally recorded. `critique-clarity` and `critique-usability` **pass** AC-6 substantively. **`critique-accessibility` fails AC-6 substantively on both tiers and on both metrics** (location recall 0.176 against the baseline's 0.376 on haiku, 0.306 against 0.776 on sonnet; location precision 0.158 against 0.258 and 0.202 against 0.293). That is a core-skill release blocker whose remedy AC-6 itself names; this ADR records the failure and hands the halt-or-iterate choice to the release owner rather than making it.
 - **Why:** the criterion-level baseline is pinned at exactly 0.000 recall and 0.000 precision by construction, so the condition "beats baseline" was satisfied by any nonzero number and discriminated nothing. A gate that cannot fail is not a gate, and a verdict resting on it is not a verdict. The location-level cut is computed from the same 460 committed envelopes under the same tolerance rules, so re-reading the gates cost no new measurement and changed no evidence.
-- **Status:** Accepted (2026-07-31).
+- **Status:** Accepted (2026-07-31). **Amended 2026-08-01: the escalated core failure is discharged,
+  and one of this ADR's twelve gated cells no longer reads as recorded here.** See
+  [0028 - Post-calibration verdict: critique-accessibility 0.1.1 clears AC-6 on re-measurement](0028-post-calibration-verdict-accessibility-clears-ac-6.md).
+  The `critique-accessibility` rows in the twelve-cell table below are the 0.1.0 measurement and stay
+  correct as such; they are no longer the current state of that skill. Every other ruling here,
+  including all three stretch re-affirmations and `critique-usability`'s single-tier pass, stands
+  unmodified and unaffected.
 
-- **Status:** Accepted
+- **Status:** Accepted, amended by [0028](0028-post-calibration-verdict-accessibility-clears-ac-6.md)
 - **Date:** 2026-07-31
 - **Deciders:** Jonathan Prisant, P3 verdict-review pass (Claude)
 
@@ -105,7 +111,7 @@ Option 1.
 
 ## Open items handed to the orchestrator
 
-- **The AC-6 halt-or-iterate decision for `critique-accessibility`.** Blocking for v0.1.0. The three options are named in S-05 itself; the diagnosis is written; nothing else in the run set is waiting on it.
+- **The AC-6 halt-or-iterate decision for `critique-accessibility`.** ~~Blocking for v0.1.0. The three options are named in S-05 itself; the diagnosis is written; nothing else in the run set is waiting on it.~~ **Closed 2026-08-01.** The iterate branch was taken once, under the pre-committed lever list in [0027](0027-accessibility-location-emission-calibration.md), and the re-measurement recorded in [0028](0028-post-calibration-verdict-accessibility-clears-ac-6.md) clears the gate on both tiers and on both metrics. The diagnosis written above is what the fix was built from, and it held: the failure was location emission, not detection.
 - **The `html` ancestor window flatters volume.** Quantified above for the first time. If location-level metrics survive into v0.2 as a gating cut, the window needs either an asymmetric rule (credit the truth node and descendants, not ancestors) or a published companion figure, because as it stands a skill can lose a precision comparison to a noisier condition purely on container-level credit, which is what happened to `critique-usability` on sonnet.
 - **Methodology section 8 still defines recall and precision criterion-level only**, and now understates what the bench computes. It is frozen for this run; the update is flagged, not made. Same treatment as [0022](0022-consistency-floor-overall-lane-min-core.md)'s flag about the 0.7 placeholder, and the two should be resolved in one pass.
 - **`bench/results/verdicts.md` is now a layered document**, original criterion-level entries plus a dated re-examination. It reads correctly and it will not survive a second amendment cleanly. Whoever writes the v0.2 verdicts should rewrite rather than layer again.

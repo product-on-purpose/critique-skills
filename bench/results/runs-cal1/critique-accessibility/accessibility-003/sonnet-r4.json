@@ -1,0 +1,92 @@
+{
+  "run": {
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "69ff628078a107c11bd403359666e3fafdba2d4ab204fdec80881f7db5374db6",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T06:09:53Z",
+    "rubrics": ["WCAG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "WCAG-1.3.2",
+      "lane": "judged",
+      "severity": 3,
+      "location": "#s3-wizard, <div> class \"wizard-steps\" step-sequence container, line 47",
+      "evidence": "#s3-step3 style=\"order:3\" (\"Confirm your order\") precedes #s3-step2 style=\"order:2\" (\"Enter payment details\") precedes #s3-step1 style=\"order:1\" (\"Choose a plan\") in DOM order",
+      "violation": "DOM order presents the steps as Confirm your order, then Enter payment details, then Choose a plan, the reverse of the sequence the order property (3, 2, 1) declares for visual placement, so a linearized reading receives the confirmation step before the two steps it depends on.",
+      "fix": "Reorder the three .step elements in the markup to match the intended completion sequence (Choose a plan, Enter payment details, Confirm your order), or remove the order property and rely on source order alone.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-002",
+      "criterion": "WCAG-2.4.5",
+      "lane": "judged",
+      "severity": 3,
+      "location": "#body, <body> element, page-wide navigation mechanisms, line 8",
+      "evidence": "The page exposes one navigation mechanism, #nav with links \"Plan a trip\" and \"Service alerts\"; no search form, sitemap link, or breadcrumb trail appears anywhere in the document.",
+      "violation": "Fewer than two independent navigation mechanisms are present, and the page's content is a general service-update article, not one step in a linear process exempted by the criterion.",
+      "fix": "Add a second independent mechanism, such as a site search form, a sitemap link, or a breadcrumb trail, alongside the existing primary navigation.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-003",
+      "criterion": "WCAG-4.1.2",
+      "lane": "judged",
+      "severity": 3,
+      "location": "#s3-customcontrol, <div> class \"icon-delete\" custom control, line 44",
+      "evidence": "<div class=\"icon-delete\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>, no role, tabindex, or accessible name attribute on the div",
+      "violation": "A custom control built from a div, named by its own class as a delete action, carries no role, no programmatically determinable name, and no keyboard access; a screen reader exposes nothing at this location for a user to discover the control exists.",
+      "fix": "Use a native <button> element with a visible or aria-label accessible name (for example \"Delete\"), or add role=\"button\", tabindex=\"0\", a keyboard handler, and an aria-label to the div.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-004",
+      "criterion": "WCAG-1.4.1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "#s3-form-phone-label, <label> control, visible label 'Phone number', line 64",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label>, the only field label in the form styled with a non-default text color",
+      "violation": "The Phone number label is distinguished from the form's other three labels only by red text color, with no accompanying text, icon, or symbol carrying the same signal.",
+      "fix": "Add a non-color signal alongside the red styling, such as a \"(required)\" text suffix or an asterisk with an accessible equivalent, or remove the color-only distinction if it carries no meaning.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-005",
+      "criterion": "WCAG-2.4.6",
+      "lane": "judged",
+      "severity": 2,
+      "location": "#s1-h, <h2> heading, 'Accessibility improvements', line 19",
+      "evidence": "Heading text \"Accessibility improvements\" is followed by #s1-p1 (\"Riders may request a fare adjustment through the mobile app...\") and #s1-p2 (\"Passengers can check real time arrivals by calling rider services...\"), neither of which describes an accessibility improvement; only the section's image, #s1-img1, relates to accessibility.",
+      "violation": "The heading's wording promises accessibility-specific content, but two of the section's three items describe an unrelated fare-adjustment and arrivals process, so a reader scanning headings for accessibility information is misled about what most of the section actually covers.",
+      "fix": "Rename the heading to match the fare-adjustment and arrivals content it actually introduces, or move that content under a heading that already covers it and keep this heading for genuinely accessibility-related content.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "WCAG-3.3.1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "#s3-form-promo-error, <span> error text, 'Error.', line 68",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\">, <span class=\"error-text\" id=\"s3-form-promo-error\">Error.</span>",
+      "violation": "The only error text associated with the invalid Promo code field reads \"Error.\", a generic phrase that does not state what is wrong with the entered value.",
+      "fix": "Replace the error text with a specific description, for example \"Promo code not recognized, check for typos or an expired code.\"",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 3,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

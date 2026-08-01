@@ -1,0 +1,91 @@
+{
+  "run": {
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "69ff628078a107c11bd403359666e3fafdba2d4ab204fdec80881f7db5374db6",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T05:49:17Z",
+    "rubrics": ["WCAG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "WCAG-1.4.1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "#s3-form-phone-label, <label> element, visible text 'Phone number', line 64",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label>",
+      "violation": "The label is styled with inline color:#cc0000 (red) while every sibling label in the same form uses default text color, with no accompanying asterisk, required/optional text, or icon carrying the same signal as the color change.",
+      "fix": "Add a non-color signal alongside the red styling, such as an asterisk plus a visible 'required' note, or remove the color-only distinction.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-002",
+      "criterion": "WCAG-2.4.5",
+      "lane": "judged",
+      "severity": 3,
+      "location": "#nav, <nav> element, line 11",
+      "evidence": "<nav id=\"nav\"> contains exactly two links, 'Plan a trip' (/plan) and 'Service alerts' (/alerts); no search form, sitemap link, breadcrumb trail, or related-links list appears anywhere else in the document.",
+      "violation": "The page exposes only one navigation mechanism, the primary nav menu; the operational test requires at least two independent mechanisms unless the page is one step in a linear process, and nothing in this page's content marks it as such a step.",
+      "fix": "Add a second independent way to reach this page, such as a site search form, a sitemap link, or a breadcrumb trail.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "WCAG-2.4.6",
+      "lane": "judged",
+      "severity": 3,
+      "location": "#s1-h, <h2> heading, 'Accessibility improvements', line 19",
+      "evidence": "Heading text 'Accessibility improvements' is followed by 'Riders may request a fare adjustment through the mobile app. Station staff can also help with the same request in person.' and 'Passengers can check real time arrivals by calling rider services. Updates post to the schedule page within one business day.'; only the section's image (alt: 'Crews repainting the accessible parking spaces near the station entrance.') is on topic.",
+      "violation": "The heading reads 'Accessibility improvements' but most of the section body describes fare adjustments and real-time arrival calls, neither of which is an accessibility improvement, so the heading misdescribes what actually follows it.",
+      "fix": "Rename the heading to describe fare adjustments and arrival information (for example 'Fares and arrival updates'), or move the off-topic paragraphs to a section whose heading names them, keeping only accessibility-related content under this heading.",
+      "confidence": "medium",
+      "instances": [
+        {
+          "location": "#s2-h, <h2> heading, 'Weekend service', line 25",
+          "evidence": "Heading text 'Weekend service' is followed by 'Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person.' and a Zone/Status table (North: On time, South: On time), neither of which is specific to weekend service."
+        },
+        {
+          "location": "#s3-h, <h2> heading, 'Schedule changes', line 34",
+          "evidence": "Heading text 'Schedule changes' introduces a three-step wizard reading 'Confirm your order', 'Enter payment details', 'Choose a plan' and a form requesting Route, Email address, Phone number, and Promo code, none of which is a schedule change."
+        }
+      ]
+    },
+    {
+      "id": "F-004",
+      "criterion": "WCAG-3.3.1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "#s3-form-promo-error, <span> element, line 68",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> is paired with <span class=\"error-text\" id=\"s3-form-promo-error\">Error.</span>",
+      "violation": "The promo code field is marked invalid, but its only associated error text reads 'Error.', a generic phrase that names neither the field's specific problem nor what to change.",
+      "fix": "Replace 'Error.' with text naming the specific problem, for example 'This promo code has expired' or 'Enter a promo code in the format ABC-1234', and associate it with the input via aria-describedby.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "WCAG-4.1.2",
+      "lane": "judged",
+      "severity": 3,
+      "location": "#s3-customcontrol, <div> element, line 44",
+      "evidence": "<div class=\"icon-delete\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>",
+      "violation": "This div carries no role, no programmatic accessible name, and no tabindex or keyboard handler, yet its class name icon-delete and trash-icon image indicate it functions as a delete control, so a screen-reader or keyboard-only user cannot detect that the control exists at all.",
+      "fix": "Convert this to a native <button> with a visible or aria-label accessible name (for example 'Delete'), or add role=\"button\", a programmatic name, and keyboard access (tabindex plus a key handler) to the div.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 3,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

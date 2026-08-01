@@ -194,5 +194,67 @@
       "stagedPath": "bench/results/staging/usability/usability-004.html",
       "sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380"
     }
-  ]
+  ],
+  "calibration": {
+    "cal1": {
+      "date": "2026-08-01",
+      "purpose": "One pre-committed calibration iteration for critique-accessibility, scoped to the permitted-lever list in ADR 0027 (location-emission wording and the scripted-check bug it corrects). Re-measures the accessibility domain only; the other five skills are unchanged and not restaged here.",
+      "adr": "docs/internal/decisions/0027-accessibility-location-emission-calibration.md",
+      "skill_versions": [
+        { "skill": "critique-accessibility", "version": "0.1.1" }
+      ],
+      "models": [
+        { "alias": "haiku", "id": "claude-haiku-4-5-20251001" },
+        { "alias": "sonnet", "id": "claude-sonnet-5" }
+      ],
+      "k": 5,
+      "run_set": "bench/results/runs-cal1/",
+      "staging_dir": "bench/results/staging-cal1",
+      "corpus": {
+        "generator_version": "0.1.0",
+        "corpus_seed": "critique-skills/bench/corpus/v1",
+        "root_seed": "b7470f08a0096e0192161ee2b062cb16",
+        "lock_file": "bench/corpus/corpus.lock.json",
+        "included_domains": ["accessibility"],
+        "hash_algorithm": "sha256",
+        "hash_method": "sha256 of the sorted list of 'stagedPath:sha256\\n' lines, one line per staged artifact, LF-joined, accessibility domain only",
+        "hash": "9ebda388c2cb6b37d00881e17da21978b5eb1b9ccec66ed093ec3332fde97b04",
+        "artifact_count": 4
+      },
+      "verification": {
+        "generator_build_verify": "OK: 53 file(s) byte-identical (python -m bench.generator verify --corpus bench/corpus)",
+        "staged_copies_byte_identical_to_corpus": true
+      },
+      "artifacts": [
+        {
+          "domain": "accessibility",
+          "skill": "critique-accessibility",
+          "originalPath": "bench/corpus/accessibility/accessibility-001.html",
+          "stagedPath": "bench/results/staging-cal1/accessibility/accessibility-001.html",
+          "sha256": "f620e43c2035d9380934dbe1b09dba438bb38bc1fb7f1feeb58010af44eaf176"
+        },
+        {
+          "domain": "accessibility",
+          "skill": "critique-accessibility",
+          "originalPath": "bench/corpus/accessibility/accessibility-002.html",
+          "stagedPath": "bench/results/staging-cal1/accessibility/accessibility-002.html",
+          "sha256": "b49ce74681df60732a6ef3b5309ce82264ad1b6ad48c6fa8b85989f2c712f113"
+        },
+        {
+          "domain": "accessibility",
+          "skill": "critique-accessibility",
+          "originalPath": "bench/corpus/accessibility/accessibility-003.html",
+          "stagedPath": "bench/results/staging-cal1/accessibility/accessibility-003.html",
+          "sha256": "69ff628078a107c11bd403359666e3fafdba2d4ab204fdec80881f7db5374db6"
+        },
+        {
+          "domain": "accessibility",
+          "skill": "critique-accessibility",
+          "originalPath": "bench/corpus/accessibility/accessibility-004.html",
+          "stagedPath": "bench/results/staging-cal1/accessibility/accessibility-004.html",
+          "sha256": "393fe58fac52d6953cd372944cd352ef9181df5c42ae778bd6d17214acb080c7"
+        }
+      ]
+    }
+  }
 }

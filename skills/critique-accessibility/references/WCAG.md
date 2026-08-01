@@ -27,6 +27,12 @@ Two exclusions follow from that boundary, both settled in this pass:
 - **WCAG 2.2's former SC 4.1.1 Parsing is correctly absent**, deprecated by WCAG 2.2 itself, not an
   oversight of this registry.
 
+Every finding raised against a criterion below names its element the way `SKILL.md`, "Naming a
+location", requires: the element's `id` as a `#id` token, or a double-quoted bounded CSS selector,
+or a double-quoted span of its own text. This applies to the judged rows exactly as it does to the
+scripted ones. Operational tests below are written in terms of the element they examine precisely
+because that element, not the passage around it, is what the finding has to name.
+
 ## Lane assignment, revised from the draft pass
 
 The draft registry grouped criteria into "likely scripted" and "likely judged" buckets for orientation

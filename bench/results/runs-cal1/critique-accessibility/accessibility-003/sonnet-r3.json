@@ -1,0 +1,103 @@
+{
+  "run": {
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "69ff628078a107c11bd403359666e3fafdba2d4ab204fdec80881f7db5374db6",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T05:56:27Z",
+    "rubrics": ["WCAG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "WCAG-1.3.2",
+      "lane": "judged",
+      "severity": 3,
+      "location": "#s3-wizard, <div> wizard-steps container, three steps in DOM order reversed by inline CSS order values, line 47",
+      "evidence": "#s3-step3 style=\"order:3\" 'Confirm your order' (first in DOM); #s3-step2 style=\"order:2\" 'Enter payment details'; #s3-step1 style=\"order:1\" 'Choose a plan' (last in DOM)",
+      "violation": "DOM order lists the steps as Confirm your order, Enter payment details, Choose a plan, while each div's inline order value renders them visually in the opposite sequence, Choose a plan, Enter payment details, Confirm your order. A linearized reading hears the confirm-and-pay step before hearing what is being chosen or paid for, reversing the actual decision sequence.",
+      "fix": "Reorder the three .step divs in the DOM to match the intended sequence, Choose a plan, Enter payment details, Confirm your order, or remove the CSS order property so DOM order and visual order match.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "WCAG-2.4.5",
+      "lane": "judged",
+      "severity": 3,
+      "location": "#nav, <nav> element, primary navigation, line 11",
+      "evidence": "nav#nav contains exactly two links, 'Plan a trip' (href=/plan) and 'Service alerts' (href=/alerts); no search form, sitemap link, breadcrumb trail, or related-links list appears anywhere on the page",
+      "violation": "The page exposes exactly one navigation mechanism, its primary navigation menu, with no site search, sitemap, or breadcrumb trail, and nothing marks this page as one step in a linear process, so a reader who lands on it directly has exactly one way to find any related page.",
+      "fix": "Add a second independent way to reach this page or its related content, such as a breadcrumb trail, a site search, or a sitemap link.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-003",
+      "criterion": "WCAG-2.4.6",
+      "lane": "judged",
+      "severity": 3,
+      "location": "#s3-h, <h2> heading, 'Schedule changes', line 34",
+      "evidence": "Heading 'Schedule changes' is followed by a step sequence reading 'Choose a plan', 'Enter payment details', 'Confirm your order', and a form with Route, Email address, Phone number, and Promo code fields",
+      "violation": "The heading promises schedule information, but the section it introduces is a purchase-style step flow and a form asking for a promo code, none of which describes a schedule change, so a reader scanning headings to find schedule information is misled for the entire section.",
+      "fix": "Retitle the heading to describe the checkout or contact flow that actually follows it, or move this content under a heading that matches it.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "WCAG-4.1.2",
+      "lane": "judged",
+      "severity": 3,
+      "location": "#s3-customcontrol, <div> element, icon-delete control, line 44",
+      "evidence": "<div class=\"icon-delete\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>, no role attribute, no tabindex attribute, no accessible-name attribute anywhere on the div",
+      "violation": "A div styled and named as a delete control carries no role, no programmatically determinable accessible name, and no keyboard affordance, so assistive technology cannot detect that this control exists, let alone that activating it deletes something.",
+      "fix": "Rebuild this as a native button element with a visible or aria-label naming its action, for example aria-label=\"Delete\", or add role=\"button\", a tabindex, and a keyboard handler to the existing div.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-005",
+      "criterion": "WCAG-1.4.1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "#s3-form-phone-label, <label> element, visible text 'Phone number', line 64",
+      "evidence": "style=\"color:#cc0000\" on the Phone number label; no asterisk, no 'required' text, and no other non-color indicator on this label or its associated input",
+      "violation": "The Phone number label is distinguished from every other label in the same form only by red text color, with no icon, asterisk, or text signal carrying the same meaning, so a reader who cannot perceive color has no way to know why this label differs from its neighbors.",
+      "fix": "Add a non-color indicator alongside the red styling, such as a visible asterisk plus 'required' text, or a short explanatory note, so the distinction survives without color.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "WCAG-2.4.6",
+      "lane": "judged",
+      "severity": 2,
+      "location": "#s1-h, <h2> heading, 'Accessibility improvements', line 19",
+      "evidence": "Heading 'Accessibility improvements' is followed by a paragraph on fare adjustments, a paragraph on real-time arrivals by phone, and one image captioned about repainted accessible parking spaces",
+      "violation": "Two of the section's three elements, the fare-adjustment and real-time-arrivals paragraphs, are generic rider-service content unrelated to accessibility, so a reader scanning this heading cannot predict most of what actually follows it.",
+      "fix": "Retitle the heading to match its actual content, for example 'Rider services', or move the unrelated paragraphs to a section whose heading covers them.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-007",
+      "criterion": "WCAG-3.3.1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "#s3-form-promo-error, <span> element, error text 'Error.', line 68",
+      "evidence": "input#promo carries aria-invalid=\"true\" with no aria-describedby attribute; the adjacent span#s3-form-promo-error reads only 'Error.'",
+      "violation": "The error text paired with the invalid promo field names neither the field nor what is wrong with the value entered, and nothing associates the two programmatically, so a screen-reader user learns only that something failed.",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" on input#promo, and replace 'Error.' with text naming the field and the specific problem, for example 'Promo code not recognized.'",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 4,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

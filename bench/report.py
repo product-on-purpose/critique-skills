@@ -35,14 +35,15 @@ def render_entries_table(entries: list[dict[str, Any]]) -> str:
     if not entries:
         return "_No run set has been scored yet._"
     header = (
-        "| Skill | Model | Domain | Artifact type | Artifacts | Recall | Precision | "
+        "| Skill | Version | Model | Domain | Artifact type | Artifacts | Recall | Precision | "
         "Clean FP rate | Consistency | Consistency (exact) | Unresolvable |\n"
-        "|---|---|---|---|---|---|---|---|---|---|---|"
+        "|---|---|---|---|---|---|---|---|---|---|---|---|"
     )
     rows = [
-        "| {skill} | {model} | {domain} | {artifact_type} | {n} | {recall} | {precision} | "
+        "| {skill} | {version} | {model} | {domain} | {artifact_type} | {n} | {recall} | {precision} | "
         "{fp} | {cons} | {cons_exact} | {unresolved} |".format(
             skill=e["skill"],
+            version=e["skill_version"],
             model=e["model"],
             domain=e["domain"],
             artifact_type=e["artifact_type"],
@@ -54,16 +55,41 @@ def render_entries_table(entries: list[dict[str, Any]]) -> str:
             cons_exact=_fmt_metric(e["consistency_exact"]),
             unresolved=e["unresolvable_claims"],
         )
-        for e in sorted(entries, key=lambda e: (e["domain"], e["skill"], e["model"]))
+        for e in sorted(entries, key=lambda e: (e["domain"], e["skill"], e["skill_version"], e["model"]))
     ]
     return "\n".join([header, *rows])
 
 
-def _by_domain_model(entries: list[dict[str, Any]]) -> dict[tuple[str, str], dict[str, dict[str, Any]]]:
-    by_domain_model: dict[tuple[str, str], dict[str, dict[str, Any]]] = {}
+BASELINE_SKILL = "baseline-generic"
+
+
+def _by_domain_model(
+    entries: list[dict[str, Any]],
+) -> dict[tuple[str, str], dict[tuple[str, str], dict[str, Any]]]:
+    """`(domain, model)` to `(skill, skill_version)` to entry.
+
+    Keyed on `(skill, skill_version)` rather than on the skill name alone
+    because `results.json` may legitimately carry two versions of the
+    same skill in the same `(domain, model)` cell: a run set that
+    re-measures one skill after a calibration iteration holds the before
+    and the after side by side, distinguished only by `skill_version`
+    (`results.schema.json`: "one entry per (skill, skill_version, model,
+    domain) group"). Keying on the name alone silently dropped whichever
+    row was inserted first, which would have deleted a published failure
+    from the comparison tables rather than showing it beside its fix.
+    """
+    by_domain_model: dict[tuple[str, str], dict[tuple[str, str], dict[str, Any]]] = {}
     for e in entries:
-        by_domain_model.setdefault((e["domain"], e["model"]), {})[e["skill"]] = e
+        by_domain_model.setdefault((e["domain"], e["model"]), {})[(e["skill"], e["skill_version"])] = e
     return by_domain_model
+
+
+def _find_baseline(skills: dict[tuple[str, str], dict[str, Any]]) -> dict[str, Any] | None:
+    """The `baseline-generic` entry in one `(domain, model)` cell, whatever
+    version it carries. The baseline is frozen, so exactly one is expected;
+    the lowest version is taken if a future run set ever holds more."""
+    candidates = sorted((k for k in skills if k[0] == BASELINE_SKILL))
+    return skills[candidates[0]] if candidates else None
 
 
 def _verdict(skill_value: float | None, baseline_value: float | None) -> str:
@@ -92,16 +118,16 @@ def render_baseline_comparison(entries: list[dict[str, Any]]) -> str:
     """
     rows: list[str] = []
     for (domain, model), skills in sorted(_by_domain_model(entries).items()):
-        baseline = skills.get("baseline-generic")
+        baseline = _find_baseline(skills)
         if baseline is None:
             continue
-        for skill_name in sorted(skills):
-            if skill_name == "baseline-generic":
+        for skill_name, skill_version in sorted(skills):
+            if skill_name == BASELINE_SKILL:
                 continue
-            entry = skills[skill_name]
+            entry = skills[(skill_name, skill_version)]
             verdict = _verdict(entry["recall"]["value"], baseline["recall"]["value"])
             rows.append(
-                f"| {skill_name} | {domain} | {model} | {_fmt_metric(entry['recall'])} | "
+                f"| {skill_name} | {skill_version} | {domain} | {model} | {_fmt_metric(entry['recall'])} | "
                 f"{_fmt_metric(baseline['recall'])} | {_fmt_metric(entry['precision'])} | "
                 f"{_fmt_metric(baseline['precision'])} | {verdict} |"
             )
@@ -109,8 +135,8 @@ def render_baseline_comparison(entries: list[dict[str, Any]]) -> str:
     if not rows:
         return "_No baseline comparison available yet._"
     header = (
-        "| Skill | Domain | Model | Skill recall | Baseline recall | Skill precision | "
-        "Baseline precision | Verdict |\n|---|---|---|---|---|---|---|---|"
+        "| Skill | Version | Domain | Model | Skill recall | Baseline recall | Skill precision | "
+        "Baseline precision | Verdict |\n|---|---|---|---|---|---|---|---|---|"
     )
     return "\n".join([header, *rows])
 
@@ -128,16 +154,17 @@ def render_baseline_comparison_location(entries: list[dict[str, Any]]) -> str:
     """
     rows: list[str] = []
     for (domain, model), skills in sorted(_by_domain_model(entries).items()):
-        baseline = skills.get("baseline-generic")
+        baseline = _find_baseline(skills)
         if baseline is None:
             continue
-        for skill_name in sorted(skills):
-            if skill_name == "baseline-generic":
+        for skill_name, skill_version in sorted(skills):
+            if skill_name == BASELINE_SKILL:
                 continue
-            entry = skills[skill_name]
+            entry = skills[(skill_name, skill_version)]
             verdict = _verdict(entry["recall_location"]["value"], baseline["recall_location"]["value"])
             rows.append(
-                f"| {skill_name} | {domain} | {model} | {_fmt_metric(entry['recall_location'])} | "
+                f"| {skill_name} | {skill_version} | {domain} | {model} | "
+                f"{_fmt_metric(entry['recall_location'])} | "
                 f"{_fmt_metric(baseline['recall_location'])} | {_fmt_metric(entry['precision_location'])} | "
                 f"{_fmt_metric(baseline['precision_location'])} | {verdict} |"
             )
@@ -145,8 +172,9 @@ def render_baseline_comparison_location(entries: list[dict[str, Any]]) -> str:
     if not rows:
         return "_No baseline comparison available yet._"
     header = (
-        "| Skill | Domain | Model | Skill recall (location) | Baseline recall (location) | "
-        "Skill precision (location) | Baseline precision (location) | Verdict |\n|---|---|---|---|---|---|---|---|"
+        "| Skill | Version | Domain | Model | Skill recall (location) | Baseline recall (location) | "
+        "Skill precision (location) | Baseline precision (location) | Verdict |"
+        "\n|---|---|---|---|---|---|---|---|---|"
     )
     return "\n".join([header, *rows])
 

@@ -1,0 +1,64 @@
+{
+  "run": {
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "69ff628078a107c11bd403359666e3fafdba2d4ab204fdec80881f7db5374db6",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T05:59:55Z",
+    "rubrics": ["WCAG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "WCAG-2.4.5",
+      "lane": "judged",
+      "severity": 3,
+      "location": "#nav, <nav> element, the page's sole navigation mechanism, line 11",
+      "evidence": "<nav id=\"nav\">, containing 2 links (Plan a trip, Service alerts); no search form, sitemap link, breadcrumb trail, or related-links list appears anywhere else in the document",
+      "violation": "The page offers only this primary navigation menu, with no site search, sitemap link, or breadcrumb trail anywhere else in the document, and the page's own content is a general service-updates page rather than one step in a linear process, so a reader relying on anything other than already knowing this menu has no other way to reach this page or its related content.",
+      "fix": "Add a second, independent way to reach this page and related pages, such as a site search, a sitemap link, or a breadcrumb trail that does not merely repeat the primary navigation menu's links.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "WCAG-1.4.1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "#s3-form-phone-label, <label> element, visible text 'Phone number', line 64",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label>; every other label in the form (Route, Email address, Promo code) uses the default text color",
+      "violation": "The 'Phone number' label is set apart from every other label in the form by red text color alone (#cc0000), with no accompanying text, icon, asterisk, or attribute conveying what the color distinguishes, so a reader who cannot perceive that color gets none of the information the styling is meant to carry.",
+      "fix": "Add a non-color signal alongside the red styling, such as label text or an icon carrying its own accessible name conveying the same distinction, or set aria-required or required on the phone input if the color is meant to mark it mandatory.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "WCAG-2.4.6",
+      "lane": "judged",
+      "severity": 2,
+      "location": "#s3-h, <h2> heading, 'Schedule changes', line 34",
+      "evidence": "<h2 id=\"s3-h\">Schedule changes</h2>, introducing a three-step 'Choose a plan / Enter payment details / Confirm your order' sequence and a form whose fields include a Promo code",
+      "violation": "The heading 'Schedule changes' does not describe the purchase-style wizard steps and promotional-code form that follow it, so a reader scanning headings alone cannot predict that this section contains a purchase flow rather than schedule information.",
+      "fix": "Give the wizard and promo-code form their own heading describing what they actually collect, or rename 'Schedule changes' to cover that content.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-004",
+      "criterion": "WCAG-3.3.1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "#s3-form-promo-error, <span> error text, 'Error.', line 68",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> paired with <span class=\"error-text\" id=\"s3-form-promo-error\">Error.</span>",
+      "violation": "The promo code field is marked aria-invalid=\"true\" but its associated error text reads only 'Error.', naming neither the field nor what is wrong with the value entered.",
+      "fix": "Replace the error text with one that names the field and the specific problem, for example 'Promo code is not valid or has expired.'",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {"0": 0, "1": 0, "2": 3, "3": 1, "4": 0},
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

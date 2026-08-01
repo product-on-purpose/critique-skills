@@ -1,0 +1,37 @@
+{
+  "run": {
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "393fe58fac52d6953cd372944cd352ef9181df5c42ae778bd6d17214acb080c7",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T06:10:44Z",
+    "rubrics": ["WCAG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "WCAG-2.4.5",
+      "lane": "judged",
+      "severity": 3,
+      "location": "#body, <body> element, page level: the only navigation mechanism present is nav#nav, line 8",
+      "evidence": "nav#nav contains 2 links (Plan a trip, Accessibility); no search form, sitemap, or breadcrumb trail appears anywhere in the document; footer#footer contains only Privacy policy and Terms of service links.",
+      "violation": "The page relies solely on the primary navigation menu, nav#nav, as its only way to locate this page or reach related content: no site search, sitemap, or breadcrumb trail is present anywhere in the document, and nothing in the page's content marks it as one step in a linear process.",
+      "fix": "Add a second independent navigation mechanism, such as a site search form or a breadcrumb trail, so a reader who lands directly on this page has more than one way to find related pages.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 1,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

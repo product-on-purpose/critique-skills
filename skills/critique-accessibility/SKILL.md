@@ -1,7 +1,7 @@
 ---
 name: critique-accessibility
 description: "Reviews HTML pages and fragments (markdown where mappable) against WCAG 2.2 AA: contrast, alt text, heading structure, link text, and keyboard and screen-reader access. Use when the user asks for an accessibility review, feedback, a second opinion, a red-line pass, an a11y audit, or a pre-launch quality check on a page or component."
-version: 0.1.0
+version: 0.1.1
 license: Apache-2.0
 rubric_sources:
   - id: WCAG
@@ -53,17 +53,50 @@ Every finding this skill emits conforms to `contract/critique-contract.schema.js
 location navigable unaided, evidence quoted or measured rather than characterized, violation naming
 the breach, fix actionable and specific.
 
+## Naming a location
+
+A finding names the element it is about, not the region the element sits in. For an HTML artifact,
+in this order of preference:
+
+1. **The element's `id`, written as a `#hero-image` token**, whenever the markup carries one. This
+   is the first choice every time, and generated or hand-written markup usually carries ids.
+2. **A CSS selector in double quotes** for an element with no id: `"main > section:nth-of-type(2) >
+   p"`. Keep it to tag, `#id`, `.class`, descendant, child, and `:nth-of-type`. The double quotes
+   are part of the rule, not decoration: a bare `div.wizard-steps` dropped into a sentence reads as
+   prose, and a reader following it by hand has to guess which one was meant.
+3. **The element's own text in double quotes**, at least eight characters and unique on the page,
+   when the markup offers neither of the above: `"Reset your password"`.
+
+Then say what kind of element it is, and anything else that helps a person get there:
+`#s3-form-submit, <button> control, visible label 'Submit', line 68`.
+
+A line number on its own is not a location, and neither is a section title, a class name mentioned
+in prose, nor a phrase like "the wizard near the top of the schedule section". Each describes a
+neighbourhood and leaves the reader to find the element inside it. `scripts/checks.py` emits
+locations in exactly the form above; a judged-lane finding written by hand is held to the same
+rule, because a reader cannot tell which lane a finding came from and should not have to.
+
 ## Protocol
 
 Follow these four passes in order. Do not skip ahead to severity or fixes while still sweeping.
 
 1. **Inventory.** Map the artifact's structure (sections, headings, components, whatever the
    artifact type has). No judgments yet, no findings yet. This pass exists so the sweep in step 2
-   does not anchor on whatever was noticed first.
+   does not anchor on whatever was noticed first. Record each element's `id` while mapping: the
+   sweep needs it to name locations, and recovering it afterwards is where locations decay into
+   line numbers and section titles.
 2. **Criterion sweep, in ID order.** Walk every criterion in `checks.scripted` and `checks.judged`,
    in ascending ID order, evaluating each against the whole artifact before moving to the next.
    Run the scripted lane via `scripts/checks.py <artifact>`; perform the judged lane yourself,
    criterion by criterion, in the same fixed order.
+
+   Sweep each judged criterion against every element it governs, not against the first one that
+   looks wrong: every custom control for WCAG-4.1.2, every label, state marker, and error message
+   for WCAG-1.4.1 and WCAG-3.3.1, every sequence whose order carries meaning for WCAG-1.3.2, every
+   heading and label for WCAG-2.4.6. Name the element you are judging, by `id`, as you judge it. A
+   criterion with nothing to report has still been swept; a criterion is never skipped because the
+   scripted lane already reported something nearby, and the scripted lane's silence on a judged
+   criterion means only that no script was asked to look.
 3. **Severity assignment, as a separate pass.** Once every criterion has been swept, go back and
    assign severity to every finding using the weighing order in
    `docs/reference/severity-scale.md` (impact, then frequency, then persistence) and this skill's

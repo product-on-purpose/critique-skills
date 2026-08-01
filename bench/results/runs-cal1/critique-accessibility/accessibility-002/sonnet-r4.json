@@ -1,0 +1,125 @@
+{
+  "run": {
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/accessibility/accessibility-002.html",
+    "artifact_sha256": "b49ce74681df60732a6ef3b5309ce82264ad1b6ad48c6fa8b85989f2c712f113",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T05:35:28Z",
+    "rubrics": ["WCAG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "WCAG-1.4.3",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "#s1-p1, <p> element, text 'Passengers should review the updated schedule at any station kiosk. Updates p...', line 20",
+      "evidence": "text color #999999 on background #ffffff, contrast ratio 2.85:1",
+      "violation": "Contrast ratio 2.85:1 is below the 4.5:1 AA minimum for normal text.",
+      "fix": "Darken the text or lighten the background until the ratio reaches at least 4.5:1.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "WCAG-1.4.4",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "#head-viewport, <meta> viewport element, line 5",
+      "evidence": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\" id=\"head-viewport\">",
+      "violation": "The viewport meta tag sets user-scalable=no, disabling browser zoom entirely.",
+      "fix": "Remove user-scalable=no so readers can zoom the page.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "WCAG-1.4.10",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "#s3-banner, <div> element, line 37",
+      "evidence": "declared width: 960px",
+      "violation": "A fixed width of 960px forces horizontal scrolling once the viewport narrows to 320px, with no responsive override.",
+      "fix": "Cap the element's width with a relative max-width (a percentage or viewport unit), or add a media query that shrinks it below 320px.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "WCAG-2.4.5",
+      "lane": "judged",
+      "severity": 3,
+      "location": "#nav, <nav> element, sole navigation mechanism on the page, line 11",
+      "evidence": "nav contains 2 links (Accessibility, Fares and passes); no search form, sitemap link, or breadcrumb trail is present anywhere in the document",
+      "violation": "The page provides only one navigation mechanism, the primary nav, with no site search, sitemap, or breadcrumb trail, and the page is not one step of a linear process that would exempt it.",
+      "fix": "Add a second, independent mechanism for locating this page, such as a site search form, a sitemap link, or a breadcrumb trail.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "WCAG-1.4.11",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "#s3-button1, <button> element boundary, line 43",
+      "evidence": "boundary color #9d9d9d against adjacent background #ffffff, contrast ratio 2.71:1",
+      "violation": "Component boundary contrast ratio 2.71:1 is below the 3:1 AA minimum.",
+      "fix": "Darken the border or outline color, or change the adjacent background, until the ratio reaches at least 3:1.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "WCAG-1.4.12",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "#s3-statuscard, <div> element, line 40",
+      "evidence": "height: 60px; overflow: hidden",
+      "violation": "A fixed height combined with clipped overflow truncates this element's text once a reader applies wider line, paragraph, letter, or word spacing.",
+      "fix": "Remove the fixed height so the element grows with its content, or replace the clipped overflow with visible or auto.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "WCAG-2.4.6",
+      "lane": "judged",
+      "severity": 2,
+      "location": "#s1-h, <h2> heading, 'Accessibility improvements', line 19",
+      "evidence": "heading text 'Accessibility improvements'; the section's body covers a schedule-kiosk notice, a mobile-app fare adjustment, and a photo of a platform operator, none of which concern accessibility",
+      "violation": "The heading's wording names an accessibility topic, but the section it introduces covers schedule and fare-adjustment content with no accessibility subject matter, misdescribing what actually follows it.",
+      "fix": "Rename the heading to describe the section's actual content, for example 'Schedule and fare updates', or move genuine accessibility content into this section.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-008",
+      "criterion": "WCAG-3.3.1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "#promo, <input> control, line 67",
+      "evidence": "input id=\"promo\" type=\"text\" aria-invalid=\"true\" carries no aria-describedby; the sibling #s3-form-promo-error text 'Enter a 6 character code using letters and numbers only.' is not referenced by any attribute on the input",
+      "violation": "The invalid promo field's error text exists in the markup but is not programmatically associated with the field, so a screen-reader user who tabs to the field does not hear the error description automatically.",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the promo input so its error text is announced when the field receives focus.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-009",
+      "criterion": "WCAG-3.3.2",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "#topic, <select> control, line 61",
+      "evidence": "<select id=\"topic\">",
+      "violation": "No label, aria-label, aria-labelledby, or title identifies what this control expects.",
+      "fix": "Add a <label for> pointing at this control's id, wrap the control in a <label>, or set aria-label.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 4,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}
