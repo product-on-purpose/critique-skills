@@ -18,8 +18,8 @@ audience: agent
 
 ## Task Summary
 
-- Status: committed
-- AC: [x] AC-1 [x] AC-2 [x] AC-3 [x] AC-4 [x] AC-5 [ ] AC-6 [ ] AC-7
+- Status: fulfilled
+- AC: [x] AC-1 [x] AC-2 [x] AC-3 [x] AC-4 [x] AC-5 [x] AC-6 [x] AC-7
 - AC evidence:
   - AC-1: docs/internal/execution/P4-report.md (S08-AC1, Pass with a caveat: the two named
     cold-read weak spots were fixed and confirmed at their cited locations, not re-verified by an
@@ -28,14 +28,13 @@ audience: agent
   - AC-3: docs/internal/execution/P4-report.md (S08-AC3, Pass)
   - AC-4: docs/internal/execution/P4-report.md (S08-AC4, Pass)
   - AC-5: docs/internal/execution/P4-report.md (S08-AC5, Pass)
-  - AC-6: not evidenced by a docs/internal/execution report as of P4. Version 0.1.0 consistency
-    across `library.json`, `.claude-plugin/plugin.json`, the CHANGELOG section, the RELEASE-NOTES
-    entry, and every `SKILL.md` frontmatter now holds per this release-packaging pass's own
-    version-guard run (`GITHUB_REF_NAME=v0.1.0 node scripts/check-release-versions.mjs`, all three
-    manifests agree), but that is this pass's own verification, not a prior execution report. Left
-    unchecked pending a future execution-report citation.
-  - AC-7: `marketplace-listing-pr.md` exists (`_local/initial-plan/marketplace-listing-pr.md`);
-    `rc-handover.md` does not exist anywhere in the repository. Partially met; left unchecked.
+  - AC-6: docs/internal/execution/P5-report.md, Remediation addendum (2026-08-01): version guard
+    passed (`GITHUB_REF_NAME=v0.1.0 node scripts/check-release-versions.mjs`) as part of the full
+    deterministic suite run recorded there, independent of the packaging pass's self-report.
+  - AC-7: `_local/initial-plan/marketplace-listing-pr.md` and `_local/initial-plan/rc-handover.md`
+    both exist (handover written 2026-08-01 by the orchestrating session at run close). Note:
+    both live in gitignored `_local/` by design (local working documents for the human publish
+    steps); the repository intentionally does not track them.
 - Open questions: 0
 - Last-updated: 2026-08-01
 
