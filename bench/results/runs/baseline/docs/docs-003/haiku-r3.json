@@ -1,0 +1,72 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:24:19Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Related pages section, line 23-29",
+      "evidence": "\"- Metric catalog reference\", \"- Notification channel reference\", \"- Webhook delivery reference\", \"- Escalation policy reference\", \"- Time window reference\", \"- Retry backoff reference\", \"- Alert rule schema\", \"- Rate limit reference\", \"- Delivery status codes\"",
+      "violation": "The related pages are listed as bare text without actual hyperlinks, making them not functional as references that readers can navigate to",
+      "fix": "Convert each line to a proper markdown link with format \"[Link text](path/to/document)\" or URL, or remove the section if the links are not yet available",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "timeout field section, line 10",
+      "evidence": "\"The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000.\"",
+      "violation": "No guidance on when to actually change the timeout from the default, leaving users without clear decision criteria for this configuration",
+      "fix": "Add guidance stating when raising the timeout is appropriate, such as \"Raise this value only when a specific integration needs the extra room\" (or provide concrete examples)",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "retries field section, line 13-15",
+      "evidence": "\"The retries field takes an integer from 0 to 10, and it defaults to 3.\"",
+      "violation": "No explanation of the tradeoff between retries and behavior (e.g., what happens at 0 retries vs 10 retries, or total time implications)",
+      "fix": "Add a sentence explaining the practical impact of retry counts, such as \"Higher retry counts increase robustness but may delay alert delivery\"",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "logging field section, line 18-19",
+      "evidence": "\"The logging field accepts one of debug, info, warn, or error, and the default value is info.\"",
+      "violation": "No context provided about where these logs are sent or how verbose each level is, making it unclear how to choose an appropriate level",
+      "fix": "Add clarification such as \"Logs are sent to [location]. Debug includes full request/response bodies, info shows summary data, warn alerts to potential issues, error shows failures only\"",
+      "confidence": "medium",
+      "id": "F-004"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

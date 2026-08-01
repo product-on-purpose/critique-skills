@@ -1,0 +1,34 @@
+Location: Checkout form, shipping address section, second message ("Error code: 502")
+Evidence: Please correct the highlighted field. Error code: 502.
+Problem: 502 is an HTTP gateway error code, not a field level validation code, and it is shown to the reader with no explanation of what it means or what to do about it.
+Fix: Remove the error code from the reader facing message, or replace it with a plain language reason the field is invalid, and log the numeric code separately for support use.
+
+Location: Checkout form, shipping address section, second message ("Error code: 502")
+Evidence: Placement: directly below the shipping address block / Signal: bold text set above the address block at a larger size than its labels, icon
+Problem: The placement says the message sits below the address block, but the signal description says the bold text sits above it, so the two fields describing the same message disagree on where it actually appears.
+Fix: Make Placement and Signal agree on one position, either below the block with Signal changed to match, or above it with Placement changed to match.
+
+Location: Password reset, new password section, first message (character minimum)
+Evidence: Choose a password of at least 8 characters, long enough that a guessing attack cannot work through every combination.
+Problem: An 8 character minimum is not long enough to make exhaustive guessing infeasible, so the stated justification is inaccurate and could give the reader false confidence in a weak password.
+Fix: Either raise the stated minimum to a length that actually resists guessing attacks, or drop the "long enough" justification and state the real reason for the 8 character floor.
+
+Location: Password reset, new password section, first message (character minimum)
+Evidence: Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page
+Problem: Every other message in this document is placed directly next to the field it concerns, but this one sits at the top of the form, forcing the reader to scroll away from the visible field to find out why it was rejected.
+Fix: Move the message inline, directly below the password field, consistent with the placement used everywhere else in the document.
+
+Location: Password reset, new password section, second message (reset link expired)
+Evidence: Container: toast / Placement: in a dialog centered on the password reset step, over the new password field it blocks
+Problem: A toast is a small, non blocking notification, but the placement describes a centered modal dialog that blocks the field, so the container type and the described placement describe two different UI patterns for the same message.
+Fix: Pick one pattern: label the container "dialog" to match the described placement, or change the placement to a non blocking toast position.
+
+Location: Password reset, new password section, second message (reset link expired)
+Evidence: Fires: on-focus
+Problem: Firing only when the reader focuses the new password field lets them start filling out a form that can never be submitted, instead of learning the link is dead as soon as the page loads.
+Fix: Change Fires to on page load, or an equivalent earlier trigger, so the reader learns the link is expired before investing effort in the field.
+
+Location: Account settings, username section, only message
+Evidence: The last changes were not saved and cannot be recovered.
+Problem: "The last changes" does not say what was changed, so a reader cannot tell whether it was the username edit or something else that was lost.
+Fix: Name the specific change that was lost, for example "Your username change was not saved and cannot be recovered."

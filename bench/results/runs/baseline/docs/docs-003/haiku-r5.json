@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Leaving this field at its default is the right choice for most teams\"",
+      "fix": "Add a sentence stating the default timeout value in milliseconds.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section \"timeout\"",
+      "severity": 3,
+      "violation": "The document does not specify what the default timeout value is."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "These sections discuss related functionality but do not reference each other",
+      "fix": "Add a sentence to each section noting its relationship to the other field.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section \"timeout\" and \"retries\"",
+      "severity": 3,
+      "violation": "The timeout and retries fields work together but are documented in isolation with no cross-references."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The retries field takes an integer from 0 to 10, and it defaults to 3.\"",
+      "fix": "Add a sentence explaining the retry strategy and whether there is exponential backoff, linear intervals, or immediate retries.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section \"retries\"",
+      "severity": 3,
+      "violation": "The section does not explain what happens on each retry attempt or whether there is a backoff strategy."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The logging field accepts one of debug, info, warn, or error, and the default value is info.\"",
+      "fix": "Add a brief description of what each logging level logs (e.g., \"debug logs all internal state changes\").",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section \"logging\"",
+      "severity": 3,
+      "violation": "The document does not explain what information is logged at each level."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"- Metric catalog reference\\n- Notification channel reference\\n- Webhook delivery reference\"",
+      "fix": "Convert the plain text items to markdown links pointing to the actual reference pages.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section \"Related pages\"",
+      "severity": 3,
+      "violation": "These related pages are listed as plain text without links, making them unhelpful for navigation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"raising it is worth doing only when a specific integration needs the extra room\"",
+      "fix": "Add concrete examples of scenarios where increasing the timeout is necessary.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section \"timeout\"",
+      "severity": 3,
+      "violation": "The guidance is vague about when timeout should actually be raised beyond \"specific integration needs the extra room\"."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Each field section describes functionality but not whether the field is required or optional",
+      "fix": "Add a designation (Required/Optional) for each field, either as a prefix in each heading or in a table at the top.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Throughout the document",
+      "severity": 3,
+      "violation": "The document does not indicate which fields are required and which are optional in an alert rule configuration."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"the validator rejects any value below 1000\"",
+      "fix": "Add a sentence describing the validator error or rejection behavior (e.g., \"the validator rejects values below 1000 with an error message\").",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Section \"timeout\"",
+      "severity": 3,
+      "violation": "The section does not specify what error message or behavior occurs when an invalid value is provided."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "run": {
+    "artifact": "bench/results/staging/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-08-01T02:03:15Z"
+  },
+  "findings": [
+    {
+      "id": "F-003",
+      "criterion": "NNG-H3-EXIT",
+      "lane": "judged",
+      "severity": 3,
+      "location": "project-settings section, the project-settings-archive-link",
+      "evidence": "The archive link points directly to #project-archived with no intermediate confirmation step or cancel option",
+      "violation": "The archive flow commits immediately to the archived state with no visible exit or cancel control, so a user who clicks the link by mistake cannot back out",
+      "fix": "Change the archive link to point to the archive-confirm section so the user sees a confirmation step before the action is committed, or add a cancel button on the archived state",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-H5-CONFIRM",
+      "lane": "judged",
+      "severity": 3,
+      "location": "project-settings section, the project-settings-archive-link",
+      "evidence": "The archive link bypasses the archive-confirm section entirely and targets #project-archived directly, committing the action in one click",
+      "violation": "The archive action is destructive and affects all team members, but the artifact presents no confirmation dialog or step that names the consequence before committing",
+      "fix": "Ensure the archive link navigates to the archive-confirm section first, so the user sees the confirmation message before the action commits",
+      "confidence": "high"
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H4-CONTROL-NAMING",
+      "evidence": "control labeled \"Save\"",
+      "fix": "Pick one label for this commit action, for example \"Save\", and use it everywhere the action appears.",
+      "id": "F-001",
+      "instances": [
+        {
+          "evidence": "control labeled \"Save\"",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "control labeled \"Submit\"",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "This artifact uses 2 different labels for what reads as the same commit action: \"Save\", \"Submit\". A user cannot tell from the label alone whether these controls perform the same action or different ones."
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "project-settings section, the project-settings-save-btn button",
+      "evidence": "The form contains a Save button with type='submit', but the artifact does not define what state or feedback the user receives after clicking it",
+      "violation": "The form submission action lacks a defined outcome state or feedback element to indicate success or failure",
+      "fix": "Define a success state or feedback message that appears after the form is submitted, such as a confirmation screen or a success message",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "invite-member section, the invite-member-save-btn button",
+          "evidence": "Form submission with no defined next state or feedback"
+        },
+        {
+          "location": "notification-settings section, the notification-settings-save-btn button",
+          "evidence": "Form submission with no defined next state or feedback"
+        }
+      ]
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 2,
+      "location": "project-archived section",
+      "evidence": "The project-archived state offers only a Back button to return to the workspace overview; no restore or unarchive control is available",
+      "violation": "The archive action is reversible in principle but no undo or restore path is documented or accessible in the artifact",
+      "fix": "Add an Unarchive or Restore control to the project-archived screen, or provide a link to the archived projects management interface where restoration is available",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-H10-FINDABLE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "project-settings section, the project-settings-archive-link",
+      "evidence": "The archive link text says only 'Archive project' with no accompanying explanation. The consequence is documented only in the unreachable archive-confirm section",
+      "violation": "The archive action's consequence is documented only in a screen that is not reachable from the user's path, so the user cannot find the explanation when considering whether to proceed",
+      "fix": "Add inline help text, a tooltip, or a description link on the archive control itself, or navigate the archive link to the confirmation screen so the consequence is visible on the path",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 2,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

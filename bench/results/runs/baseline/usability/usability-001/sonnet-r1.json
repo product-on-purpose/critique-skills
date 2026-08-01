@@ -1,0 +1,160 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 3 projects, synced last week.\" is followed by a list containing only \"Data Warehouse Cutover\" and \"Mobile App Revamp\"",
+      "fix": "Either list all 3 projects, or label the list \"Recent projects\" and add a \"View all 3 projects\" link so the stated count and the visible list agree.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Workspace overview section, \"Your projects\" paragraph and the recent-projects list below it (id=\"workspace-overview-recent\")",
+      "severity": 3,
+      "violation": "The stated project count (3) does not match the number of projects actually listed (2), and nothing marks the list as a partial or \"recent\" subset, so a user cannot tell whether a project is missing or the count is simply wrong."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Invite 3 teammates this month to unlock the advanced reporting add-on.\"",
+      "fix": "Move the promo below the primary navigation, or into a separate dismissible panel, and give it a close control.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Workspace overview section, promo banner (id=\"workspace-overview-promo-referral\")",
+      "severity": 3,
+      "violation": "This promotional upsell sits ahead of the primary navigation links (\"Open project settings\", \"View last import result\") with no visual separation and no way to dismiss it, competing with the user's actual task on the page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a id=\"workspace-overview-projects-link\" href=\"#project-settings\">Open project settings</a>",
+      "fix": "Make the settings link per-project (e.g. next to each entry in the project list) or add a project picker before opening settings.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Workspace overview section, \"Open project settings\" link (id=\"workspace-overview-projects-link\")",
+      "severity": 3,
+      "violation": "The workspace holds multiple projects, but this single link is not tied to any particular project, so it is unclear whose settings will open."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "input value=\"Design System Refresh\"",
+      "fix": "Show \"Design System Refresh\" in the workspace overview's project list, or display the current project's name prominently at the top of the Project Settings page.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Project settings section, project name field (id=\"project-settings-name-input\")",
+      "severity": 3,
+      "violation": "\"Design System Refresh\" is the project shown in Project Settings, but that name never appears in the \"Your projects\" list on the workspace overview, so a user arriving from the overview cannot confirm they are editing the intended project."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\"></button>",
+      "fix": "Add visible button text, for example \"Duplicate project\".",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Project settings section, duplicate button (id=\"project-settings-duplicate-btn\")",
+      "severity": 3,
+      "violation": "This button has no visible text or label, so a user cannot tell what it does before clicking it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button> with no linked confirmation state",
+      "fix": "Add a save-confirmation state, such as an inline success message or a redirect to a confirmation section, consistent with how Archive confirms its result.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Project settings section, Save button (id=\"project-settings-save-btn\")",
+      "severity": 3,
+      "violation": "Nothing in the document shows what happens after Save is clicked, no success message and no redirect target, unlike the Archive action, which has a dedicated confirmation screen."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>",
+      "fix": "Relabel the button \"Send invite\".",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Invite a team member section, Save button (id=\"invite-member-save-btn\")",
+      "severity": 3,
+      "violation": "\"Save\" implies storing a draft, but this action actually sends an email invitation to another person, which is a stronger and less reversible action than the label suggests."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button> followed by <a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>",
+      "fix": "Combine these into a single action, such as \"Send invite\", that both submits the form and advances to the confirmation screen, and remove the separate Continue link.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Invite a team member section, relationship between the Save button and the Continue link (id=\"invite-member-save-btn\", id=\"invite-member-continue-link\")",
+      "severity": 3,
+      "violation": "It is unclear whether submitting the form with Save already sends the invite, and whether the separate Continue link is a required second step or a redundant one."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The section contains only an h2 heading and a p paragraph, no link or button of any kind",
+      "fix": "Add a link back to the project or workspace, for example \"Back to project settings\".",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Invite sent section (id=\"invite-sent\")",
+      "severity": 3,
+      "violation": "This screen is a dead end. After an invite is sent, there is no way to navigate anywhere else from it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\"",
+      "fix": "Add an \"Archived projects\" link or section that the user can actually reach, or remove the claim if it is out of scope for this flow.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Archive confirmation section, confirmation copy (id=\"archive-confirm-copy\")",
+      "severity": 3,
+      "violation": "The document promises an \"archived projects list\" but no such list, link, or section exists anywhere in the document, so the user has no way to act on that claim."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The last import finished with 2 rows skipped: each referenced a project that does not exist in this workspace. Rows 15 and 99 were skipped; every other row was imported.\"",
+      "fix": "Add a total imported count, for example \"48 of 50 rows imported\", and a link or button to resolve the skipped rows by creating the missing projects or remapping and retrying.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Import status section, import status message (id=\"import-status-message\")",
+      "severity": 3,
+      "violation": "The message reports which rows failed but never states the total number of rows imported successfully, and it offers no action to fix or retry the skipped rows."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<select id=\"notification-settings-digest-input\"><option>Daily</option><option>Weekly</option></select>",
+      "fix": "Add a \"None\" or \"Off\" option, and mark whichever option reflects the user's current setting as selected.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "Notifications section, digest frequency select (id=\"notification-settings-digest-input\")",
+      "severity": 3,
+      "violation": "There is no option to turn digest emails off, and no option is marked selected, so a user cannot tell what their current setting is or opt out of digests entirely."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-08-01T01:59:54Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 12,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

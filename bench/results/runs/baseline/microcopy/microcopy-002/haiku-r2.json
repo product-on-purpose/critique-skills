@@ -1,0 +1,83 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:38:26Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 45, password requirement message",
+      "evidence": "\"Choose a password of at least 8 characters, long enough that a guessing attack cannot work through every combination.\"",
+      "violation": "The message claims 8 characters is sufficient to prevent guessing attacks against every combination, which contradicts modern security standards. Eight characters is generally not considered long enough to resist brute force attacks.",
+      "fix": "Replace with accurate security guidance, such as \"Choose a password of at least 12 characters for strong protection against guessing attacks.\"",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 14, error code message",
+      "evidence": "\"Please correct the highlighted field. Error code: 502.\"",
+      "violation": "Error code 502 is a server-side \"Bad Gateway\" error, not a field validation error. This error code is inappropriate for a form validation failure.",
+      "fix": "Either use a client-side validation error code (4xx range starting with 4, not 5) appropriate to form validation, or remove the error code entirely if it does not apply to this message.",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 5, character limit message",
+      "evidence": "\"This field takes a maximum of 30 characters. Shorten the entry and save again.\"",
+      "violation": "The phrase \"save again\" is confusing because it implies the user has already saved once, when typically form validation occurs before the initial save attempt.",
+      "fix": "Change \"save again\" to \"and save\" or simply \"and try again\" to clarify this is the first attempt to submit valid data.",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 25, file size limit message",
+      "evidence": "\"This receipt is over the 10 MB limit, which keeps uploads quick on slow connections.\"",
+      "violation": "The cause-effect relationship is backwards and confusing. The 10 MB limit does not \"keep uploads quick\" - rather, it enforces smaller file sizes to enable quick uploads.",
+      "fix": "Rewrite as \"This receipt exceeds the 10 MB limit. Smaller files upload faster, especially on slow connections. Reduce the file size and upload it again.\"",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 65, data loss message",
+      "evidence": "\"The last changes were not saved and cannot be recovered. Contact support for assistance.\"",
+      "violation": "The message is absolute and pessimistic without explaining why recovery is impossible or what the user should do beyond contacting support, which may be difficult if support hours are limited.",
+      "fix": "Add context such as \"The last changes were not saved and cannot be recovered. Contact support for assistance or try resubmitting your changes.\" to provide a more actionable path forward.",
+      "confidence": "medium",
+      "id": "F-005"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

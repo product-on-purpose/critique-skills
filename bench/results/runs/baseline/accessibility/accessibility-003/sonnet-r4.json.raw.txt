@@ -1,0 +1,44 @@
+Location: Section "Weekend service" (id="s2"), first paragraph (id="s2-p1")
+Evidence: "Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person."
+Problem: This sentence is copied almost word for word from the first paragraph of the "Accessibility improvements" section above it (only "Riders" was changed to "Passengers"), and it has nothing to do with weekend service, so it reads as duplicated, misplaced content.
+Fix: Remove this paragraph from the Weekend service section, or replace it with a sentence that actually describes weekend service.
+
+Location: Section "Schedule changes" (id="s3"), first paragraph (id="s3-p1")
+Evidence: "Local residents should review the updated schedule through the mobile app. Station staff can also help with the same request in person."
+Problem: The second sentence is the same fare adjustment boilerplate used twice already in earlier sections and does not follow from this paragraph's own first sentence about reviewing the schedule.
+Fix: Rewrite the second sentence to be about reviewing the schedule, for example by pointing riders to a station kiosk or the schedule page, instead of repeating the fare adjustment sentence.
+
+Location: Section "Schedule changes" (id="s3"), status card (id="s3-statuscard")
+Evidence: "Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day."
+Problem: This text duplicates the second paragraph of the "Accessibility improvements" section (id="s1-p2") almost verbatim, so a section about schedule changes repeats unrelated real time arrival content instead of describing the actual changes.
+Fix: Replace the status card text with content specific to the schedule changes this section is about, and delete the sentence if it is not needed here.
+
+Location: Section "Schedule changes" (id="s3"), custom control (id="s3-customcontrol")
+Evidence: <div class="icon-delete" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></div>
+Problem: This element is styled and named like a delete control but is a plain div with no role, no tabindex, and no accessible name, since its image has an empty alt attribute, so it cannot be reached by keyboard or identified by assistive technology.
+Fix: Replace the div with a real button element, or add role="button", tabindex="0", keyboard event handling, and a text label such as aria-label="Delete" so the control is operable and identifiable.
+
+Location: Section "Schedule changes" (id="s3"), wizard steps (ids "s3-step1", "s3-step2", "s3-step3")
+Evidence: <div id="s3-step3" style="order:3">Confirm your order</div> appears first in the source, followed by "s3-step2" (order:2) and then "s3-step1" (order:1)
+Problem: The steps are written in the document in the reverse of their logical order and rely on the CSS order property to display correctly, so anyone using the keyboard or a screen reader, which follow document order rather than visual order, will encounter "Confirm your order" before "Choose a plan".
+Fix: Write the three step elements in the HTML in their actual logical order, Choose a plan, Enter payment details, Confirm your order, instead of relying on CSS order to fix the sequence only visually.
+
+Location: Section "Schedule changes" (id="s3"), link paragraph (id="s3-linkpara")
+Evidence: <a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>
+Problem: The link text says "read the accessibility improvements list", but the link points to /fares/history and is introduced by a sentence about "the full list of upcoming adjustments", so the visible link text does not describe where the link actually goes.
+Fix: Change the link text to match its destination and context, for example "read the list of upcoming schedule adjustments".
+
+Location: Section "Schedule changes" (id="s3"), form field label (id="s3-form-phone-label")
+Evidence: <label for="phone" id="s3-form-phone-label" style="color:#cc0000">Phone number</label>
+Problem: The phone number label is colored red, apparently to mark it as required or different from the other fields, but no text, symbol, or attribute conveys this, so the distinction is lost for anyone who cannot see or perceive the color.
+Fix: Add a visible text indicator such as "(required)" next to the label, and add the required or aria-required attribute to the input, instead of relying on color alone.
+
+Location: Section "Schedule changes" (id="s3"), promo code field (id="promo") and error text (id="s3-form-promo-error")
+Evidence: <input id="promo" type="text" aria-invalid="true"><span class="error-text" id="s3-form-promo-error">Error.</span>
+Problem: The promo code field is marked invalid, but the error message next to it is not linked to the field with aria-describedby, and the message text, "Error.", does not say what is actually wrong with the value entered.
+Fix: Add aria-describedby="s3-form-promo-error" to the input, and rewrite the error text to describe the specific problem, for example "Promo code is not valid."
+
+Location: Table in the "Weekend service" section (id="s2-table1")
+Evidence: <table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>
+Problem: The table has no caption element, so a screen reader user who tabs into it has no announced summary of what the table is about before hearing the individual cell values.
+Fix: Add a caption element as the table's first child, for example <caption>Weekend service status by zone</caption>.

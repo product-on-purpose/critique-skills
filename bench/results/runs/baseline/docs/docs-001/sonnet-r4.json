@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"A threshold is the numeric boundary that triggers an alert once a metric crosses it.\"",
+      "fix": "Move the definition to a short introduction above the steps, or remove it and link to a glossary or concepts page instead.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"Open alert settings\" section, second paragraph",
+      "severity": 3,
+      "violation": "This is a conceptual definition placed between two procedural instructions, breaking the step by step flow expected of a how-to document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"confirm the unit matches the metric in use\"",
+      "fix": "Name the specific field where the unit appears, list the valid units, and describe what to do if they do not match.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"Set the new threshold\" section, first sentence",
+      "severity": 3,
+      "violation": "The instruction does not say what units are possible, where the current unit is displayed, or what to do if the units do not match, so a reader cannot actually perform this check."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This is because the console applies the new threshold to every future evaluation of this rule.\"",
+      "fix": "Move this sentence to an introductory note at the top of the document, or cut it if it is not needed to complete the task.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Set the new threshold\" section, second paragraph",
+      "severity": 3,
+      "violation": "Like the earlier definition, this rationale sentence interrupts the procedure instead of appearing as context before the steps begin."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "none of the three sections uses a numbered list even though the document performs a single ordered procedure",
+      "fix": "Convert the instructions under each heading into a numbered list, or number the headings themselves, so the required order is unambiguous.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "section headings throughout the document (\"Open alert settings\", \"Set the new threshold\", \"Save and verify\")",
+      "severity": 3,
+      "violation": "A how-to document with sequential steps should make the order explicit, but here the steps are implied only by heading order and paragraph position."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Save the rule and open the rule list to confirm the new threshold appears there.\"",
+      "fix": "Add a note describing the expected delay before the change appears, and a troubleshooting step, such as refreshing the page or contacting support, if it still does not appear.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Save and verify\" section",
+      "severity": 3,
+      "violation": "The document gives no guidance for what to do if the new threshold does not appear in the rule list, leaving the reader without a next step if verification fails."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-001.md",
+    "artifact_sha256": "b41787144ac8cc1ae14bcce23fa2b574f6ee68f1aaa9cc432628f9f148ddd713",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:19:22Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

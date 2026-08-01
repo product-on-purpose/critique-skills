@@ -1,0 +1,24 @@
+Location: Line 44-46, custom delete control
+Evidence: <div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">
+Problem: A custom button element made from a div has tabindex="0" to make it focusable but appears to use only mouse click handlers, which means it won't respond to Enter or Space keys that keyboard users expect for buttons.
+Fix: Either use a native <button> element instead of a div, or add JavaScript event listeners for keyboard events (Enter and Space) that trigger the same action as click.
+
+Location: Line 67, Promo code input field
+Evidence: <input id="promo" type="text" aria-invalid="true">
+Problem: The input has aria-invalid="true" indicating an error, but the associated error message on line 68 is not programmatically linked to the input via aria-describedby, so assistive technology users won't know the error applies to this field.
+Fix: Add aria-describedby="s3-form-promo-error" to the input element to link it to the error message span.
+
+Location: Line 65, Phone number input
+Evidence: <label for="phone" id="s3-form-phone-label">Phone number (required)</label> <input id="phone" type="tel">
+Problem: The label indicates the field is required with text "(required)", but the input element does not have the required attribute or aria-required="true", making the requirement unclear to assistive technology.
+Fix: Add required attribute and aria-required="true" to the input element to properly mark it as required.
+
+Location: Lines 47-57, Wizard steps container
+Evidence: <div class="wizard-steps" id="s3-wizard"> with three step divs containing only text
+Problem: The wizard steps have no ARIA attributes or semantic markup indicating they represent a multi-step process, the current step, or the total number of steps. Assistive technology users have no way to understand the context or progress.
+Fix: Add role="group" or role="region" to the wizard-steps container, add aria-label describing the wizard, and for each step add aria-label or aria-current="step" to indicate the active step and step numbering.
+
+Location: Line 43, Refresh status button
+Evidence: <button type="button" class="btn-secondary" id="s3-button1">Refresh status</button>
+Problem: The button label "Refresh status" is vague about what status will be refreshed or what the user should expect to happen when clicking it.
+Fix: Change the button text to be more specific, such as "Refresh schedule status" or "Check current route status", or add an aria-label with more detail about what action will be performed.

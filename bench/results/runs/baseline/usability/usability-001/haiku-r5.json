@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div id=\"workspace-overview-promo-referral\">Invite 3 teammates this month to unlock the advanced reporting add-on.</div>",
+      "fix": "Add a clickable button or link element within or adjacent to the promo box to allow users to initiate the invite flow.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Workspace overview section, promo referral box",
+      "severity": 3,
+      "violation": "The promo message is displayed as plain text in a div with no interactive element, making it unclear if users can take action or dismiss it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\"></button>",
+      "fix": "Add descriptive text to the button, such as \"Duplicate project\" or an aria-label attribute for accessibility.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Project settings section, duplicate button",
+      "severity": 3,
+      "violation": "The button has no visible text or label, leaving users unable to understand its purpose."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 3 projects, synced last week.\" followed by a list containing only \"Data Warehouse Cutover\" and \"Mobile App Revamp\"",
+      "fix": "Either show all 3 projects or update the text to accurately reflect the number shown, e.g., \"This workspace holds 3 projects; here are your 2 most recent.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Workspace overview section, project list",
+      "severity": 3,
+      "violation": "The text states there are 3 projects but only 2 are displayed in the recent projects list, creating confusion about the third project."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"synced last week\"",
+      "fix": "Replace \"last week\" with a specific date and time, e.g., \"synced on July 28 at 2:30 PM\" or show a relative time like \"synced 2 hours ago\".",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Workspace overview section, last sync time",
+      "severity": 3,
+      "violation": "The timestamp is vague and does not provide the exact date or time of the last sync, making it difficult for users to know how current the data is."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An invite was sent to the address entered above. It expires in 5 days if not accepted.\"",
+      "fix": "Add a \"Resend invite\" button or link below the message to allow users to send a new invitation if needed.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Invite sent section, expiration message",
+      "severity": 3,
+      "violation": "The message informs users of the expiration but offers no way to resend the invite or check its status if the recipient does not respond."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The last import finished with 2 rows skipped: each referenced a project that does not exist in this workspace. Rows 15 and 99 were skipped; every other row was imported.\"",
+      "fix": "Add the total row count to the message, e.g., \"The last import processed 150 rows; 2 were skipped (rows 15 and 99).\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Import status section, skip report",
+      "severity": 3,
+      "violation": "The message specifies which rows were skipped but does not state the total number of rows processed, making it hard to assess the scale of the import."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "run": {
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "393fe58fac52d6953cd372944cd352ef9181df5c42ae778bd6d17214acb080c7",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T20:39:11Z",
+    "rubrics": ["WCAG"]
+  },
+  "findings": [
+    {
+      "id": "F-1",
+      "criterion": "WCAG-2.4.5",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Page level: the header nav (id nav) and footer (id footer) are the only navigation mechanisms present anywhere in the document.",
+      "evidence": "<nav id=\"nav\"><a href=\"/plan\" id=\"nav-link1\">Plan a trip</a><a href=\"/accessibility\" id=\"nav-link2\">Accessibility</a></nav> and <footer id=\"footer\"><a href=\"/privacy\" id=\"footer-link1\">Privacy policy</a><a href=\"/terms\" id=\"footer-link2\">Terms of service</a></footer>; no search form, sitemap link, or breadcrumb trail appears anywhere else in the document.",
+      "violation": "The page provides exactly one navigation mechanism, the primary nav menu with 2 links; no site search, sitemap link, or breadcrumb trail exists anywhere in the document, and nothing in the page marks it as one step in a linear process, so the two independent mechanism minimum is not met.",
+      "fix": "Add a second independent way to reach this page, such as a site search form, a sitemap link, or a breadcrumb trail reflecting the page's place in the site, distinct from the primary nav menu.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-2",
+      "criterion": "WCAG-3.3.1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Fare adjustments section, form, the promo input (id promo) and its adjacent error text (id s3-form-promo-error).",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> is immediately followed by <span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span>; the input carries no aria-describedby, aria-labelledby, or any other attribute referencing the error span's id.",
+      "violation": "The promo input is marked aria-invalid=\"true\" but has no aria-describedby or other programmatic reference pointing at the adjacent error text span, so the error description is not programmatically associated with the field it describes; a screen reader user tabbing to the field is told it is invalid but not told why without additional exploration.",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the promo input so assistive technology announces the error text when the field receives focus.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 1,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

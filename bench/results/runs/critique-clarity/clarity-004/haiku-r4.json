@@ -1,0 +1,113 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:35:00Z",
+    "rubrics": ["PLAIN", "WILLIAMS"]
+  },
+  "findings": [
+    {
+      "id": "F-1",
+      "criterion": "PLAIN-AUDIENCE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Throughout the document, particularly 'Program Overview' (lines 3-9), 'How to Apply' (lines 17-23), 'Approval Timeline' (lines 25-29), 'Program Coordination' (lines 63-65), 'Review Responsibility' (lines 67-69)",
+      "evidence": "Document interleaves employee tasks ('Employees start a stipend request in the benefits portal', line 19) with internal processes ('The benefits team coordinates every stipend request from intake to payout', line 64; 'The finance office reviews every stipend request over 200 dollars before it pays out', line 69) without separating audiences.",
+      "violation": "The document addresses multiple distinct audiences (employees, managers, finance team, IT team) within the same sections without clear separation, making it unclear which instructions and processes apply to which reader.",
+      "fix": "Reorganize into separate employee-facing sections and internal-process sections, or add clear audience labels (e.g., '[For employees]', '[Internal process]') to help readers identify relevant content quickly.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-2",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Sections 'Terminology Notes' (lines 49-53), 'Request Steps' (lines 55-57), 'Special Cases' (lines 59-61), 'Program Coordination' (lines 63-65), 'Review Responsibility' (lines 67-69), 'Questions and Updates' (lines 71-73)",
+      "evidence": "The document includes sections describing internal workflows and administrative details that interrupt the employee task sequence. For example, 'Terminology Notes' appears after 'Reimbursement Amounts' and describes how Finance and Payroll process requests, rather than defining terms. 'Program Coordination' and 'Review Responsibility' describe backend processes, not employee steps.",
+      "violation": "The document includes multiple sections covering internal processes and administrative metadata that do not follow the employee's actual workflow (determine eligibility -> apply -> submit documentation -> track status -> receive reimbursement).",
+      "fix": "Move internal-process sections ('Terminology Notes', 'Program Coordination', 'Review Responsibility', 'Questions and Updates') to a separate appendix labeled 'For the Benefits Team' or 'Internal Processes'. Alternatively, reorganize the main document to follow the employee workflow strictly, with administrative details removed or in a reference appendix.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-3",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Lines 39, 47, 6, 9, 29, 33, 41",
+      "evidence": "Line 39: 'The stipend pays up to 500 dollars per benefit year.' (stipend as agent). Line 47: 'the policy applies to one device per category per employee.' (policy as agent). Line 6, 9: 'A copy of each update goes to the shared benefits folder the same day.' (copy as agent). Line 29: 'an incomplete request pauses the timeline until the missing item arrives.' (request as agent). Line 33: 'A photo of the receipt is enough for most requests.' (photo as subject). Line 41: 'unused stipend amounts do not roll over to the next benefit year.' (amounts as agent).",
+      "violation": "Multiple sentences use abstract nouns or objects as grammatical subjects instead of actual human or organizational actors, making it unclear who performs the described actions.",
+      "fix": "Rewrite to name actual actors: 'The program provides up to 500 dollars' (not 'stipend pays'), 'Each employee can request' (not 'policy applies'), 'the IT asset group sends copies' (not 'copies go'), 'an incomplete request halts approval' (not 'pauses the timeline').",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "Line 6",
+          "evidence": "A copy of each update goes to the shared benefits folder the same day."
+        },
+        {
+          "location": "Line 9",
+          "evidence": "A copy of each update goes to the shared benefits folder the same day."
+        },
+        {
+          "location": "Line 29",
+          "evidence": "an incomplete request pauses the timeline until the missing item arrives."
+        },
+        {
+          "location": "Line 33",
+          "evidence": "A photo of the receipt is enough for most requests."
+        },
+        {
+          "location": "Line 41",
+          "evidence": "unused stipend amounts do not roll over to the next benefit year."
+        }
+      ]
+    },
+    {
+      "id": "F-4",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Lines 49-53 ('Terminology Notes' section) and subsequent usage throughout the document",
+      "evidence": "The 'Terminology Notes' section introduces the term 'stipend item' (line 51: 'You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review.') but provides no definition or explicit signal of how 'stipend item' relates to 'request', 'equipment', or 'equipment category'.",
+      "violation": "The term 'stipend item' is used repeatedly without a clear definition, leaving readers to infer whether it names the equipment category, the specific purchase, the request, or the reimbursement amount.",
+      "fix": "Add an explicit definition in the 'Terminology Notes' section or a new 'Definitions' section at the beginning: 'Stipend item: the specific piece of equipment or category of equipment you are requesting. Request: your submitted claim for reimbursement.' Use these terms consistently throughout.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-5",
+      "criterion": "WILLIAMS-COHESION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Lines 5-9 ('Program Overview'), lines 49-53 ('Terminology Notes')",
+      "evidence": "Program Overview alternates subjects: 'The IT asset group updates...' (line 5), 'A copy of each update goes...' (line 6), 'Similarly, the IT asset group tracks...' (line 8), 'A copy of each update goes...' (line 9). Terminology Notes shifts subjects: 'You record...' (line 51), 'Finance reconciles...' (line 51), 'Payroll releases...' (line 51), 'Also, you submit...' (line 53), 'You track...' (line 53).",
+      "violation": "Successive sentences shift subjects (IT asset group -> copy -> IT asset group -> copy; you -> Finance -> Payroll -> you) without connecting them back to a running topic, forcing the reader to re-orient at each sentence boundary.",
+      "fix": "Rewrite Program Overview to keep IT asset group as consistent subject: 'The IT asset group updates the reimbursement log at fiscal year start and copies it to the shared benefits folder the same day. Similarly, the group tracks the equipment catalog on the first business day of each month and distributes it.' For Terminology Notes, maintain 'you' as subject or clarify the topic shift: 'You submit the request in the portal and track its status there until payment clears. Behind the scenes, the benefits team routes it to the correct approver, Finance reconciles the amount, and Payroll releases the payment.'",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "Line 49-53 ('Terminology Notes')",
+          "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal. You track its status there until the payment clears."
+        },
+        {
+          "location": "Line 25-29 ('Approval Timeline')",
+          "evidence": "The manager reviews the request within two business days. The manager confirms the equipment category matches the approved list. However, an incomplete request pauses the timeline until the missing item arrives. The requester gets an automatic reminder after three days."
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 1,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

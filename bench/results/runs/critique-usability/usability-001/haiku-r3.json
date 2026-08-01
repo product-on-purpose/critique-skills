@@ -1,0 +1,105 @@
+{
+  "run": {
+    "artifact": "bench/results/staging/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-08-01T02:00:24Z"
+  },
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-DEADEND",
+      "evidence": "the \"invite-sent\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+      "fix": "Add a control inside the \"invite-sent\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "the \"invite-sent\" section",
+      "severity": 3,
+      "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-LABELED",
+      "evidence": "<button> with no text content and no accessible-name attribute",
+      "fix": "Add visible text to this control, or an aria-label attribute naming what it does.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "This control has neither visible text nor an accessible-name attribute, so nothing on screen names what the control does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "In project-settings, a Save button in the form has no specified target or action, and the artifact shows no feedback state or success screen. In invite-member, a Save button similarly has no target, with a separate Continue link following it. In notification-settings, a Save button has no target or feedback state specified.",
+      "fix": "For each form's Save button, specify a feedback state: either inline success confirmation text, a loading indicator while processing, or a target screen the user is directed to upon success.",
+      "id": "F-003",
+      "instances": [
+        {
+          "location": "the \"project-settings\" section, the Save button in the project name form"
+        },
+        {
+          "location": "the \"invite-member\" section, the Save button in the email form"
+        },
+        {
+          "location": "the \"notification-settings\" section, the Save button in the settings form"
+        }
+      ],
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the Save button in the project name form",
+      "severity": 2,
+      "violation": "Save actions that change state do not specify what the user sees while saving or after it completes, leaving the user uncertain whether the action succeeded."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-EXIT",
+      "evidence": "invite-member section has a Cancel link returning to project-settings, but the artifact never specifies whether the email address entered in the form is discarded or preserved.",
+      "fix": "Add text to the artifact stating the result of cancellation, for example: \"Unsaved changes will be discarded.\" or \"Your draft invitation will be saved.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"invite-member\" section, the Cancel link",
+      "severity": 2,
+      "violation": "The exit control does not specify what becomes of the work already entered (the email address), leaving the user uncertain about the cost of exiting."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H8",
+      "evidence": "workspace-overview section contains \"Invite 3 teammates this month to unlock the advanced reporting add-on\" in a promo-referral div, appearing among the primary content elements (recent projects list and control links).",
+      "fix": "Move the promotional content below the projects list, or visually separate it with reduced prominence so the primary action (viewing projects) is not delayed by secondary messaging.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"workspace-overview\" section, the promotional banner",
+      "severity": 2,
+      "violation": "Secondary promotional content is placed with equal weight to the primary task (viewing projects), competing for the user's attention and delaying access to the main function."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H10-FINDABLE",
+      "evidence": "notification-settings section uses \"Digest frequency\" as a label for a select control, but provides no tooltip, hint, or explanatory text. The term is not defined anywhere in the artifact.",
+      "fix": "Add a tooltip, help icon, or hint text next to the Digest frequency control explaining what it means, for example: \"How often you receive email summaries of notifications.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the \"notification-settings\" section, Digest frequency control",
+      "severity": 2,
+      "violation": "A control whose label uses terminology not defined elsewhere in the artifact offers no in-place explanation, leaving the user without guidance at the point where they need it."
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

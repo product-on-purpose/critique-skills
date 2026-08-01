@@ -1,0 +1,49 @@
+Location: Project settings form, line 25-29
+Evidence: "<form> <label for="project-settings-name-input">Project name</label> <input id="project-settings-name-input" type="text" value="Customer Migration"> <button id="project-settings-save-btn" type="submit">Save</button> </form>"
+Problem: The form lacks method and action attributes, making it unclear how the form data will be submitted or validated.
+Fix: Add method="post" and action="/api/project/update" (or appropriate endpoint) to the form element.
+
+Location: Project settings duplicate button, line 30
+Evidence: '<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>'
+Problem: The button has no visible label text and only aria-label for screen readers, making it unclear to sighted users what the button does.
+Fix: Add visible text like "Duplicate" inside the button or add an icon with a title attribute.
+
+Location: Archive confirm section, line 53
+Evidence: 'Archiving "Customer Migration" will remove it from the active projects list for everyone on the team.'
+Problem: The project name is hardcoded in the confirmation message rather than dynamically populated, so if the user changes the project name in the settings form above, this message will show the old name.
+Fix: Use a templating approach or JavaScript to populate the project name dynamically from the form input.
+
+Location: Invite member form, line 38-42
+Evidence: "<form> <label for="invite-member-email-input">Email address</label> <input id="invite-member-email-input" type="email"> <button id="invite-member-save-btn" type="submit">Save</button> </form>"
+Problem: The email input field has no name attribute, so form submission will not include the email value.
+Fix: Add name="email" to the email input element.
+
+Location: Invite sent section, line 48
+Evidence: '<p>An invite was sent to the address entered above. It expires in 5 days if not accepted.</p>'
+Problem: The expiration time is hardcoded rather than calculated from when the invite was actually sent, so users cannot determine the actual deadline.
+Fix: Calculate and display the actual expiration date dynamically based on the current date.
+
+Location: Workspace overview section, line 11
+Evidence: '<p>This workspace holds 5 projects, synced last week.</p>'
+Problem: The sync status is hardcoded and will become stale immediately, providing inaccurate information to users.
+Fix: Display the actual last sync timestamp dynamically, e.g. "synced 2 hours ago" or "synced 2026-07-31 at 14:30 UTC".
+
+Location: Duplicate project button, line 30
+Evidence: '<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>'
+Problem: The button contains no content and will have no visible size or interactive affordance in the UI.
+Fix: Add a visible icon or text label, such as <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project">Duplicate</button>.
+
+Location: Notification settings form, line 69-77
+Evidence: '<form> <label for="notification-settings-digest-input">Digest frequency</label> <select id="notification-settings-digest-input"> ... </select> <button id="notification-settings-save-btn" type="submit">Submit</button> </form>'
+Problem: The form lacks a method attribute and the select input lacks a name attribute, making form submission unclear.
+Fix: Add method="post" to the form and name="digest_frequency" to the select element.
+
+Location: Workspace overview, line 12-19
+Evidence: '<div id="workspace-overview-recent"> <ul> <li>Support Backlog Triage</li> <li>Beta Launch Plan</li> <li>Partner Integration Pilot</li> <li>Mobile App Revamp</li> </ul> </div>'
+Problem: The list shows only 4 projects when the paragraph above says the workspace holds 5 projects, creating a discrepancy.
+Fix: Either add a 5th project to the list or update the text to say "4 projects" instead of "5 projects".
+
+Location: Project archived section, line 59
+Evidence: '"Customer Migration" has been moved to archived projects. It no longer appears in the active projects list for anyone on the team.'
+Problem: Like the archive confirm section, the project name is hardcoded, so if the name changes in settings, this message becomes outdated.
+Fix: Use dynamic template variables to insert the current project name into the message.

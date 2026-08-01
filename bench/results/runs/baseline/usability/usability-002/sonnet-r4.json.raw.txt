@@ -1,0 +1,29 @@
+Location: "Your projects" section (#workspace-overview), the summary paragraph and the list beneath it
+Evidence: "This workspace holds 5 projects, synced last week." is followed by a list of only 4 items (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)
+Problem: The stated project count does not match the number of items actually listed, and nothing in the visible copy explains that the list is partial, so a user has no way to tell where the fifth project went.
+Fix: Either add a fifth project to the list, change the count to "4 projects," or add a visible label such as "4 most recent of 5" so the discrepancy is explained.
+
+Location: "Open project settings" link (#workspace-overview-projects-link) and the project it opens in #project-settings
+Evidence: The link text is generic ("Open project settings," not tied to any listed project), but it opens a form pre-filled with "Customer Migration," a name that does not appear anywhere in the "Your projects" list (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)
+Problem: A user cannot tell which project "Open project settings" will open, and the project it actually opens is not one they can see anywhere else on the page, breaking the connection between the overview and the settings screen.
+Fix: Either make each listed project name a link to its own settings page, or rename the generic link to name the specific project it opens (for example "Open settings for Customer Migration") and add that project to the visible list.
+
+Location: "Duplicate project" button (#project-settings-duplicate-btn) in the Project settings section
+Evidence: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button> has no text content between its tags
+Problem: The button has no visible text or icon, only an aria-label, so it renders as an empty, effectively invisible control that sighted users cannot identify or find.
+Fix: Add visible button text such as "Duplicate," or an icon plus a visible label, while keeping the aria-label for screen readers.
+
+Location: "Archive project" link (#project-settings-archive-link) in Project settings, compared to the "Archive this project?" confirmation section (#archive-confirm)
+Evidence: <a id="project-settings-archive-link" href="#project-archived">Archive project</a> targets #project-archived directly, while #archive-confirm is never linked to from anywhere in the document
+Problem: The confirmation step that was clearly built for this destructive, hard to reverse action is never actually reached, because the real "Archive project" link bypasses it and jumps straight to the completed archived state.
+Fix: Change project-settings-archive-link's target from #project-archived to #archive-confirm so the confirmation screen sits in the actual flow before the archive completes.
+
+Location: "Invite a team member" section (#invite-member)
+Evidence: The form has its own submit control ("Save," id invite-member-save-btn, type submit) and a separate link right below the form ("Continue," id invite-member-continue-link, href #invite-sent)
+Problem: Two different controls appear to perform the same job of sending the invite, with no visible distinction of what "Save" does versus "Continue," so a user cannot tell which one actually sends the invitation.
+Fix: Remove one of the two controls, or clearly differentiate them, for example "Save" stores a draft and "Send invite" submits it, and make the surviving control the one that leads to #invite-sent.
+
+Location: "Notifications" form submit button (#notification-settings-save-btn)
+Evidence: This button reads "Submit," while the equivalent save buttons in Project settings (#project-settings-save-btn) and Invite a team member (#invite-member-save-btn) both read "Save"
+Problem: The same kind of action, saving a form, is labeled inconsistently across screens, which makes the interface feel less predictable.
+Fix: Change the Notifications button's label from "Submit" to "Save" to match the other two forms.

@@ -1,0 +1,34 @@
+Location: Section "Station updates" (id s1), first and second paragraphs (ids s1-p1, s1-p2)
+Evidence: "Station staff can also help with the same request in person." appears verbatim at the end of both paragraphs, and the same sentence appears again at the end of the first paragraph in "Schedule changes" (id s2-p1).
+Problem: The identical sentence is repeated three times across two sections with no variation, which reads as leftover template filler rather than guidance specific to each paragraph.
+Fix: Remove the repeated sentence from the second and third occurrences, or replace all three with a single consolidated note about in person help placed once, at the section or page level.
+
+Location: "Fare adjustments" section, the div with id s3-customcontrol (class icon-delete)
+Evidence: <div class="icon-delete" role="button" tabindex="0" aria-label="Delete item"><img src="/img/trash-icon.svg" alt=""></div>
+Problem: This interactive control is built from a div instead of a native button. The markup shows no keyboard event handling, so there is nothing establishing that it responds to Enter or Space the way a real button does automatically, and no surrounding content indicates what item it deletes.
+Fix: Replace the div with a native <button type="button"> so keyboard activation and focus handling come for free, and either connect it visibly to the item it acts on or remove it if it is not tied to any content.
+
+Location: "Fare adjustments" section, the wizard steps block (id s3-wizard) with three step divs
+Evidence: <div class="step">Choose a plan</div>, <div class="step">Enter payment details</div>, <div class="step">Confirm your order</div>
+Problem: The three steps are plain divs with no list markup, no numbering, and nothing marking which step is current, so a screen reader user gets no indication this is a sequence or where they are in it.
+Fix: Mark the steps up as an ordered list, or a nav element with an accessible name like "Checkout steps," and add aria-current="step" to whichever step is active.
+
+Location: "Fare adjustments" section, paragraph id s3-linkpara
+Evidence: "For the full list of upcoming adjustments, read the accessibility improvements list." The link text is "read the accessibility improvements list" and it points to /fares/history.
+Problem: The link text describes an "accessibility improvements list," but the surrounding sentence and the destination URL are both about fare adjustments, not accessibility improvements. A user scanning links out of context, such as through a screen reader's links list, would be misled about the destination.
+Fix: Change the link text to match its actual destination and topic, for example "view the full fare adjustment history."
+
+Location: Form in "Fare adjustments" section, the phone number field (id phone)
+Evidence: <label for="phone">Phone number (required)</label> followed by <input id="phone" type="tel">
+Problem: The label text states the field is required, but the input itself carries no required or aria-required="true" attribute, so the requirement is never exposed programmatically. Assistive technology and native browser validation cannot detect or announce that this field must be filled in.
+Fix: Add required (or at minimum aria-required="true") to the phone input so its programmatic state matches what the label says.
+
+Location: Form in "Fare adjustments" section, the promo code field (id promo) and its error text (id s3-form-promo-error)
+Evidence: <input id="promo" type="text" aria-invalid="true"> followed by <span class="error-text" id="s3-form-promo-error">Enter a 6 character code using letters and numbers only.</span>
+Problem: The input is marked aria-invalid="true" but nothing links it to the adjacent error message. A screen reader user focused on the field will hear that it is invalid but will not automatically hear why.
+Fix: Add aria-describedby="s3-form-promo-error" to the promo input so the error text is announced together with the field.
+
+Location: "Schedule changes" section, table id s2-table1
+Evidence: <table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>...
+Problem: The table has no caption or other accessible name describing what it shows, and the header row is not wrapped in a thead. A user who reaches the table out of context, for example by jumping between tables on the page, has no way to know what "Zone" and "Status" refer to.
+Fix: Add a caption such as "Zone status," and wrap the header row in thead and the data rows in tbody.

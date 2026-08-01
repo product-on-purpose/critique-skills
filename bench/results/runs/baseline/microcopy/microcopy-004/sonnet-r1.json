@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"and this one has 5\"",
+      "fix": "Mark the digit count as a variable, for example \"this one has {count},\" or state explicitly that this exact text is fixed and used only for the five-digit case.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code screen, first message block (\"Verification codes are 6 digits long, and this one has 5.\")",
+      "severity": 3,
+      "violation": "The digit count \"5\" is written as a fixed number rather than as a placeholder, so the spec does not say whether the message updates to reflect the actual number of digits the user entered or always reads \"5\" regardless of input length."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"which stops an intercepted code from being reused later\"",
+      "fix": "Shorten the message to the expiration fact and the required action, for example \"This verification code has expired. Request a new one.\" and move the rationale out of the inline error if it needs to be documented at all.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code screen, second message block (\"This verification code expired 10 minutes after it was sent, which stops an intercepted code from being reused later.\")",
+      "severity": 3,
+      "violation": "This message explains the security rationale for the expiration policy inside the user-facing error text, making it noticeably longer and more explanatory than every other message in the document, which just states the problem and the action to take."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"ended on 30 June\"",
+      "fix": "Add the year, for example \"This promo code ended on 30 June 2026,\" or replace the specific date with a relative phrase such as \"This promo code has expired.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Billing, promo code screen, first message block (\"This promo code ended on 30 June.\")",
+      "severity": 3,
+      "violation": "The date has no year, so it is impossible to tell from the message whether the code expired earlier this year or in a previous year, which matters for a message a user could see at any point in the future."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: no\"",
+      "fix": "Either explain why an expired code is not considered a predictable mistake, or change this field to \"yes\" to match the classification used for the similar promo code case below it.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Billing, promo code screen, first message block, \"Predictable mistake\" field",
+      "severity": 3,
+      "violation": "Entering an expired promo code is at least as common a user error as the plan mismatch case in the message directly below it, which is marked \"Predictable mistake: yes,\" and the document gives no reason for treating the two cases differently."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"selectable, offers a resend code button in place of the message\"",
+      "fix": "Split the suggestion into two explicit statements, for example \"make the code entry field selectable so the user can correct a single digit\" and \"replace the message text with a Resend code button in the same inline placement.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code screen, second message block, \"Suggested fix\" field",
+      "severity": 3,
+      "violation": "The suggested fix bundles two separate changes into one comma separated phrase without saying what becomes selectable or how a resend button would replace the message while keeping the same placement, container, and signal described above it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-004.md",
+    "artifact_sha256": "c8f58456a4deb36595b0ac00fe364b68e80445e939d7293d2db8d8f1a42ac91b",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:51:41Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,19 @@
+Location: Section "retry_policy", line 6
+Evidence: "retry_policy field accepts one of none, linear, or exponential"
+Problem: The enumerated values are presented as plain text rather than formatted as code, making it ambiguous whether these are literal string values or descriptive names.
+Fix: Format the policy values as `none`, `linear`, and `exponential` using backtick code formatting.
+
+Location: Section "endpoint_url", line 2
+Evidence: "The endpoint_url field accepts an HTTPS URL"
+Problem: The documentation restricts URLs to HTTPS but does not explain why HTTP is not supported or what happens if an HTTP URL is provided.
+Fix: Add a clarification stating whether HTTP URLs are rejected entirely, or describe the specific requirement for HTTPS (e.g., "Must be HTTPS for security; HTTP URLs will be rejected").
+
+Location: Section "signing_secret", line 1
+Evidence: "The signing_secret field accepts a string used to verify the payload signature on receipt."
+Problem: The documentation provides no constraints on the signing secret format, length, or character requirements, leaving implementers uncertain about how to generate or validate it.
+Fix: Add requirements for the signing secret, such as minimum/maximum length, character set restrictions, encoding format, and any guidelines on generating secure values.
+
+Location: Section "retry_policy", line 3
+Evidence: "the default value is exponential"
+Problem: The default value is buried in the middle of a sentence at the end of the field description and may be overlooked by readers scanning the documentation.
+Fix: Add a separate line within the retry_policy section, such as "Default: exponential", to make the default more discoverable.

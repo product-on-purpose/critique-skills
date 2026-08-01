@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert.\"",
+      "fix": "Add the payload content type (for example application/json) and either the full payload schema or a link to it.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "## endpoint_url section",
+      "severity": 3,
+      "violation": "The section never states the payload's format, content type, or schema, so a reader configuring endpoint_url has no way to know what their endpoint will actually receive."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"accepts an HTTPS URL\"",
+      "fix": "State whether endpoint_url is required, its maximum length, and the timeout and failure behavior for an unreachable endpoint.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "## endpoint_url section",
+      "severity": 3,
+      "violation": "The document does not say whether the field is required, whether there is a maximum length, or how the system behaves if the URL is unreachable or times out."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The signing_secret field accepts a string used to verify the payload signature on receipt.\"",
+      "fix": "Name the signing algorithm (for example HMAC-SHA256), the header that carries the signature, and include a worked example.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "## signing_secret section",
+      "severity": 3,
+      "violation": "The signing algorithm and the location of the signature, for example a specific HTTP header name, are never specified, so a reader cannot actually implement signature verification from this reference."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The signing_secret field accepts a string used to verify the payload signature on receipt.\"",
+      "fix": "State whether signing_secret is required, and if optional, describe whether the payload is sent unsigned or verification is skipped entirely.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "## signing_secret section",
+      "severity": 3,
+      "violation": "There is no statement of whether signing_secret is required or optional, and no description of what happens to signature verification if it is left unset."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential.\"",
+      "fix": "For each of none, linear, and exponential, specify the retry count, the interval or backoff formula, and the maximum total retry duration.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "## retry_policy section",
+      "severity": 3,
+      "violation": "None of the three values is given a concrete definition. The number of retry attempts, the interval or backoff formula, and the maximum delay are all missing, so exponential and linear cannot be distinguished by a reader beyond their names."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"one of none, linear, or exponential\"",
+      "fix": "Add a definition of delivery failure, listing which response codes and timeout conditions trigger a retry under the configured policy.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "## retry_policy section",
+      "severity": 3,
+      "violation": "The document does not define what counts as a delivery failure that triggers a retry, for example which HTTP response codes or timeout conditions are treated as failures."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"# Webhook delivery reference\" followed only by three field definitions",
+      "fix": "Add a short overview section describing the delivery request itself (method, timeout, success criteria), or rename the document to reflect that it only covers configuration fields.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "whole document, under the heading \"Webhook delivery reference\"",
+      "severity": 3,
+      "violation": "The title promises a reference for webhook delivery, but the document only documents three configuration fields and never describes the delivery process itself, such as request method, timeout, or how failures are surfaced to the user."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-004.md",
+    "artifact_sha256": "7f41536ab3c3f7bc93a3dde86b8e81cee5dab0339f2b1d472e9222a20b42d7ae",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:33:07Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

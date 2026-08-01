@@ -1,0 +1,137 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T21:18:18Z",
+    "rubrics": ["PLAIN", "WILLIAMS"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Approval Timeline, paragraph 2",
+      "evidence": "The requester gets an automatic reminder after three days.",
+      "violation": "The requester names the same person the document elsewhere calls the employee (Eligibility, paragraph 1; How to Apply, paragraph 1), you (Restrictions and Exceptions, paragraph 1), and staff (Questions and Updates, paragraph 2), with no defined term section or stated equivalence signaling that the four labels name one person.",
+      "fix": "Pick one label for the person requesting the stipend, for example the employee, and use it in every section instead of switching among requester, you, and staff.",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "Restrictions and Exceptions, paragraph 1",
+          "evidence": "You must keep your equipment in good working condition and we may ask for a brief photo check once a year."
+        },
+        {
+          "location": "Questions and Updates, paragraph 2",
+          "evidence": "Staff can request a printed copy from the benefits team at any time."
+        }
+      ]
+    },
+    {
+      "id": "F-002",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Required Documentation, paragraph 1",
+      "evidence": "Employees keep proof of purchase for every stipend item.",
+      "violation": "Stipend item names the same physical purchase the document elsewhere calls equipment (Eligibility, paragraph 1: are eligible for the home office equipment stipend) and device (Restrictions and Exceptions, paragraph 2: one device per category per employee), with no signal that the three words name one thing, so a reader cannot tell whether equipment, device, and stipend item are the same purchase or three different categories.",
+      "fix": "Pick one term, for example equipment, and use it in every section instead of switching among equipment, device, and stipend item.",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "Eligibility, paragraph 1",
+          "evidence": "are eligible for the home-office equipment stipend"
+        },
+        {
+          "location": "Restrictions and Exceptions, paragraph 2",
+          "evidence": "Similarly, the policy applies to one device per category per employee."
+        }
+      ]
+    },
+    {
+      "id": "F-003",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Program Overview, paragraph 1",
+      "evidence": "The IT asset group updates the reimbursement log at the start of the fiscal year.",
+      "violation": "The document's opening section, the first place a reader looks to learn what the benefit is, states the IT asset group's internal log-update cadence instead of the reader's actual first questions: what the stipend covers, who qualifies, and how much it pays. The following paragraph continues the same pattern (Similarly, the IT asset group tracks the equipment catalog on the first business day of the month), so the whole section tracks an internal workflow the reader never touches instead of the reader's own task sequence.",
+      "fix": "Replace Program Overview with a short statement of what the stipend covers, the dollar amount, and who qualifies, and move the IT asset group's internal update schedule out of the reader-facing document.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "PLAIN-AUDIENCE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Program Overview, paragraph 1",
+      "evidence": "The IT asset group updates the reimbursement log at the start of the fiscal year. A copy of each update goes to the shared benefits folder the same day.",
+      "violation": "The section is written for internal IT, finance, and benefits staff describing their own recordkeeping steps, not for the employee reader the surrounding sections address, and nothing marks it as background the employee reader can skip.",
+      "fix": "Move Program Overview, Special Cases, Program Coordination, and Review Responsibility into a separate internal-process document, or add a note marking them as background for staff, not steps the employee needs to take.",
+      "confidence": "medium",
+      "instances": [
+        {
+          "location": "Special Cases, paragraph 1",
+          "evidence": "The finance liaison publishes the equipment catalog at the start of the fiscal year."
+        },
+        {
+          "location": "Program Coordination, paragraph 1",
+          "evidence": "The benefits team coordinates every stipend request from intake to payout."
+        },
+        {
+          "location": "Review Responsibility, paragraph 1",
+          "evidence": "The finance office reviews every stipend request over 200 dollars before it pays out."
+        }
+      ]
+    },
+    {
+      "id": "F-005",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Eligibility, paragraph 1",
+      "evidence": "The stipend covers one claim per employee per benefit year.",
+      "violation": "Claim names the same action the rest of the document calls a request (How to Apply, paragraph 1: start a stipend request), with no signal that the two words mean the same submission.",
+      "fix": "Replace claim with request so the document uses one word throughout for asking for the stipend.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Request Steps, paragraph 1",
+      "evidence": "Completing the request begins with confirming eligibility, and uploading the receipt.",
+      "violation": "The sentence's subject, completing the request, is an abstraction standing in for the employee, who actually confirms eligibility and uploads the receipt. The sentence never names who performs the steps.",
+      "fix": "Restate the sentence with the employee as the subject, for example: the employee confirms eligibility and uploads the receipt to complete the request.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "WILLIAMS-COHESION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Terminology Notes, paragraph 1",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review.",
+      "violation": "Each of the paragraph's three sentences opens with a new subject, you, then Finance, then Payroll, with no connecting word signaling how the new subject relates to the one before it, so the reader has to re-orient at every sentence boundary.",
+      "fix": "Add a connecting word before the second and third sentences, for example then Finance reconciles and finally payroll releases, so each sentence signals its relationship to the one before it.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 3,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

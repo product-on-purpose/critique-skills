@@ -1,0 +1,92 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T21:17:38Z",
+    "rubrics": ["PLAIN", "WILLIAMS"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Program Overview, second paragraph; Special Cases; Questions and Updates",
+      "evidence": "\"the IT asset group tracks the equipment catalog on the first business day of the month\" (Program Overview); \"The finance liaison publishes the equipment catalog at the start of the fiscal year\" (Special Cases); \"The benefits team reviews the equipment catalog at the start of the fiscal year\" (Questions and Updates)",
+      "violation": "The document's structure follows three separate internal teams handling the equipment catalog, rather than the reader's actual question of when and how the catalog updates, scattering the same topic across three non-adjacent sections with three different named owners and two different cadences, monthly versus start of fiscal year. A reader assembling one account of the catalog's maintenance has to cross-reference sections that appear to describe the same recurring event three separate, inconsistent ways. This breaches PLAIN-ORGANIZE's requirement that section order track the reader's task sequence rather than an internal workflow the reader never sees.",
+      "fix": "Consolidate the equipment catalog's ownership and update cadence into one place, for example a single \"Equipment Catalog\" subsection stating one owner and one cadence, and cut the Special Cases and Questions and Updates restatements or point them back to that one section.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-002",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "How to Apply; Request Steps",
+      "evidence": "\"Employees start a stipend request in the benefits portal... Then, the employee reviews the confirmation summary before submitting the final request.\" (How to Apply) versus \"Completing the request begins with confirming eligibility, and uploading the receipt.\" (Request Steps)",
+      "violation": "The step-by-step process for filing a request is split into two non-adjacent sections that list different, non-overlapping steps: starting the request, autosave, reviewing a confirmation summary, and submitting in How to Apply, versus confirming eligibility and uploading a receipt in Request Steps. A reader following how to apply cannot tell whether Request Steps restates the same process, describes an earlier stage of it, or adds a separate set of steps. This breaches PLAIN-ORGANIZE's requirement that related task content stay ordered by the reader's actual task sequence rather than scattered by internal drafting boundaries.",
+      "fix": "Merge Request Steps into How to Apply as one ordered list covering every step from confirming eligibility through uploading the receipt, reviewing the confirmation summary, and submitting, in the order the employee actually performs them.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-003",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Program Overview; Approval Timeline; Special Cases; Questions and Updates",
+      "evidence": "\"the equipment catalog\" (Program Overview, Special Cases, Questions and Updates) versus \"the equipment category matches the approved list\" (Approval Timeline)",
+      "violation": "The document never states whether the equipment catalog, the approved list, and equipment category name the same reference material or three different things. A reader cannot tell whether the list the manager checks the request against in Approval Timeline is the same catalog described and updated elsewhere in the document. This breaches PLAIN-CONSISTENT-TERMS's requirement that one term be used consistently for one concept rather than substituting a synonym the reader has to reconcile alone.",
+      "fix": "Pick one name, for example \"the equipment catalog\", and use it in every section, including Approval Timeline's reference to what the manager checks the request against.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-004",
+      "criterion": "PLAIN-AUDIENCE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Restrictions and Exceptions; Terminology Notes",
+      "evidence": "\"You must keep your equipment in good working condition and we may ask for a brief photo check once a year.\" (Restrictions and Exceptions); \"You record the stipend item on the request form... Also, you submit the request in the portal.\" (Terminology Notes)",
+      "violation": "Every other section narrates the employee and the organization in the third person, for example \"Employees start a stipend request\" and \"The finance office deposits the amount\", but these two sections switch to direct second-person \"you\" paired with first-person \"we\" with no signal marking the change. A reader cannot tell whether \"we\" names the same finance office and benefits team described elsewhere or a different party. This breaches PLAIN-AUDIENCE's requirement that a document write to one, consistently addressed reader.",
+      "fix": "Rewrite the Restrictions and Exceptions and Terminology Notes sections in the same third-person voice the rest of the document uses, for example \"Employees must keep their equipment in good working condition\" and \"The employee records the stipend item on the request form\".",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-005",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Request Steps",
+      "evidence": "\"Completing the request begins with confirming eligibility, and uploading the receipt.\"",
+      "violation": "The sentence's grammatical subject is the abstract gerund phrase \"completing the request\" rather than the employee who actually confirms eligibility and uploads the receipt, so the sentence names no one performing the action. This breaches WILLIAMS-CHARACTER-ACTION's requirement that a sentence's subject name the real actor even when the sentence is already grammatically active.",
+      "fix": "Rewrite with the employee as subject: \"The employee completes the request by confirming eligibility and uploading the receipt.\"",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "WILLIAMS-COHESION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Terminology Notes, first three sentences",
+      "evidence": "\"You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review.\"",
+      "violation": "Three consecutive sentences open with three different subjects, you, Finance, then Payroll, with no signal connecting each new subject back to the one before it, so the reader has to re-identify who is acting at every sentence boundary. This breaches WILLIAMS-COHESION's requirement that consecutive sentences' subjects track a running topic rather than jump between unrelated ones.",
+      "fix": "Keep one subject across the passage, for example: \"The employee records the stipend item on the request form, and finance reconciles it against the request log each month before payroll releases the amount.\"",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 3,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

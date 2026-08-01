@@ -1,0 +1,39 @@
+Location: Line 11, workspace overview section
+Evidence: "This workspace holds 5 projects" but the list on lines 14-17 shows only 4 items listed
+Problem: The stated count does not match the visible list of projects
+Fix: Update the message to either say "4 projects" or add the missing fifth project to the list
+
+Location: Line 30, project settings section
+Evidence: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button> contains no text
+Problem: Users see an unlabeled button icon with no visible indication of what action it performs
+Fix: Add visible button text, such as "Duplicate" or an icon with a clear tooltip
+
+Location: Line 53, archive confirmation section
+Evidence: <p id="archive-confirm-copy">Archiving "Customer Migration" will remove it... but line 27 shows the name in editable input <input id="project-settings-name-input" type="text" value="Customer Migration">
+Problem: The confirmation message hardcodes the project name, so if a user changes the name then navigates to archive, the message will not reflect the new name
+Fix: Make the confirmation message dynamically reference the current project name instead of hardcoding it
+
+Location: Line 40, invite member section
+Evidence: <input id="invite-member-email-input" type="email"> has no required attribute or validation indicators
+Problem: Users could click Save without entering an email address, creating an invalid invitation
+Fix: Add the required attribute to the email input and display validation feedback before allowing form submission
+
+Location: Lines 38-42, invite member form section
+Evidence: A form with Save button followed by separate Continue link on line 43 that navigates to the next section
+Problem: The relationship between the form submission and the Continue link is unclear; users do not know if they must do both actions or if one replaces the other
+Fix: Either integrate Continue into the form submission flow so Save advances automatically, or remove the separate Continue link and have the form naturally flow to the confirmation
+
+Location: Line 33, project settings section
+Evidence: The archive link on line 33 href="#project-archived" skips directly to section at line 57, but an archive-confirm section exists at line 51
+Problem: Users never see the destructive action confirmation dialog before the project is archived
+Fix: Change the archive link to href="#archive-confirm" so users see and must acknowledge the warning before archiving
+
+Location: Line 11, workspace overview
+Evidence: "synced last week"
+Problem: The sync timestamp is relative and imprecise; it becomes immediately stale and users cannot determine the actual last sync time
+Fix: Display the exact sync timestamp, such as "synced Jul 30, 2026 at 3:15 PM" or a dynamic relative time that updates
+
+Location: Lines 70-75, notification settings section
+Evidence: <select id="notification-settings-digest-input"> with options but no selected attribute on any option
+Problem: Users cannot tell which notification frequency is currently active by looking at the form
+Fix: Add selected="selected" to the option element that represents the current setting

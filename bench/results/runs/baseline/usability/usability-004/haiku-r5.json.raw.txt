@@ -1,0 +1,34 @@
+Location: Line 29, project-settings-duplicate-btn
+Evidence: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>
+Problem: The button has no visible text, only an aria-label, making it unclear to sighted users what this button does.
+Fix: Add visible text inside the button: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project">Duplicate</button>
+
+Location: Line 40, invite-member-save-btn
+Evidence: <button id="invite-member-save-btn" type="submit">Save</button>
+Problem: The button label says "Save" but this form invites a team member, not saves settings, causing users to misunderstand the action.
+Fix: Change the button text to "Send invite" or "Invite member": <button id="invite-member-save-btn" type="submit">Send invite</button>
+
+Location: Line 70-73, notification-settings-digest-input
+Evidence: <select id="notification-settings-digest-input"> with no selected attribute on any option
+Problem: The select dropdown does not indicate which frequency is currently active, leaving users uncertain of their current setting.
+Fix: Add selected attribute to the current frequency option, e.g., <option selected>Daily</option>
+
+Location: Lines 14-17, workspace-overview-recent
+Evidence: The list shows "This workspace holds 4 projects" but only lists 3 projects: "Holiday Campaign Assets", "Support Backlog Triage", "Mobile App Revamp"
+Problem: A mismatch between stated project count and displayed count causes users to wonder if a project is missing or needs to scroll.
+Fix: Either show all 4 projects in the list or clarify that only recent projects are displayed: "Your 3 most recent projects" instead of showing workspace total.
+
+Location: Line 39, invite-member-email-input
+Evidence: <input id="invite-member-email-input" type="email">
+Problem: The email input lacks a required attribute, allowing users to submit the form without entering an email address.
+Fix: Add the required attribute: <input id="invite-member-email-input" type="email" required>
+
+Location: Line 63, import-status-message
+Evidence: "The last import finished with 4 rows skipped: each referenced a project that does not exist in this workspace. Rows 35, 71, 78, and 83 were skipped; every other row was imported."
+Problem: Critical error information about skipped import rows is presented as plain text without visual emphasis or indication of severity.
+Fix: Wrap the error message in an alert role with appropriate styling: <p id="import-status-message" role="alert" style="color: red;">The last import finished with 4 rows skipped...</p>
+
+Location: Line 26, project-settings-name-input
+Evidence: <input id="project-settings-name-input" type="text" value="Q3 Roadmap">
+Problem: The input has a value but no placeholder attribute, providing no guidance about the field purpose or expected format.
+Fix: Add a placeholder: <input id="project-settings-name-input" type="text" value="Q3 Roadmap" placeholder="Enter project name">

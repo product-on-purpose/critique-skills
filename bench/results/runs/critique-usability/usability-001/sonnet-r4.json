@@ -1,0 +1,103 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T02:07:58Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-H3-DEADEND",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "the \"invite-sent\" section",
+      "evidence": "the \"invite-sent\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+      "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact.",
+      "fix": "Add a control inside the \"invite-sent\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"archive-confirm\" section, the \"archive-confirm-copy\" paragraph",
+      "evidence": "Archiving \"Design System Refresh\" will remove it from the active projects list for everyone on the team. You can restore it at any time from the archived projects list.",
+      "violation": "The copy names the archived projects list as where the project can be restored, but the artifact defines no such state and no link or control anywhere targets one; the stated reversal path does not exist in the artifact as specified.",
+      "fix": "Either add an archived projects list state with a restore control that this link resolves to, or remove the restore claim from the archive-confirm copy if no reversal path is being specified.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-H6-LABELED",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "evidence": "<button> with no text content and no accessible-name attribute",
+      "violation": "This control has neither visible text nor an accessible-name attribute, so nothing on screen names what the control does.",
+      "fix": "Add visible text to this control, or an aria-label attribute naming what it does.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "evidence": "the \"project-settings\" section's form has one button, id \"project-settings-save-btn\", type \"submit\", text \"Save\"; the section defines no success message, no confirmation text, and no state transition following this button.",
+      "violation": "This action changes stored state, the project's name, but the artifact specifies no in-progress or result feedback beyond the field's own retained value: no confirmation message, no changed control state, and no defined next state after the button is activated.",
+      "fix": "Add a confirmation message or a visibly changed control state after \"Save\" is activated, for example \"Saved\" text near the button or a timestamp update.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button",
+      "evidence": "the \"invite-member\" section's form has a \"Save\" button, type \"submit\", with no defined action or next state; the section separately offers the \"invite-member-continue-link\" link, text \"Continue\", targeting \"#invite-sent\", outside the form.",
+      "violation": "The form's \"Save\" button, the control that would plausibly commit the entered email, defines no result: no confirmation, no next state, and no stated relation to the separate \"Continue\" link, which is the only control in the artifact whose target reaches the \"invite-sent\" confirmation state. A user has no way to tell from the artifact whether activating \"Save\" sends the invite, or whether \"Continue\" must also be activated.",
+      "fix": "State explicitly what \"Save\" does, for example remove it if \"Continue\" alone commits and sends the invite, and add a confirmation or changed control state after whichever control actually sends the invite.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-H6-RECALL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-sent\" section",
+      "evidence": "An invite was sent to the address entered above. It expires in 5 days if not accepted.",
+      "violation": "This state refers to \"the address entered above\" but the \"invite-sent\" section is its own defined state with no email address displayed anywhere in it; a user cannot verify which address received the invite without navigating back to the \"invite-member\" section.",
+      "fix": "Display the invited email address on the \"invite-sent\" state itself, for example \"An invite was sent to name@example.com.\"",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-007",
+      "criterion": "NNG-H9-RECOVER",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"import-status\" section, the \"import-status-message\" paragraph",
+      "evidence": "The last import finished with 2 rows skipped: each referenced a project that does not exist in this workspace. Rows 15 and 99 were skipped; every other row was imported.",
+      "violation": "This message names what went wrong, rows 15 and 99 referenced a nonexistent project, but the section's only control is \"Back to your projects\"; no control lets the user retry the import, review the source file, or resolve the two skipped rows from this state.",
+      "fix": "Add a control on the \"import-status\" state that lets the user retry the import or view and fix the two skipped rows, for example a \"Retry import\" or \"View skipped rows\" control.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 7,
+      "3": 2,
+      "4": 0
+    },
+    "suppressed_count": 2,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

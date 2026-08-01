@@ -1,0 +1,29 @@
+Location: Line 11, workspace-overview-recent list
+Evidence: Text states "This workspace holds 4 projects" but the list shows only 3 items
+Problem: The stated project count does not match the displayed count, creating confusion about the workspace state
+Fix: Either add a fourth project to the list or change the count to 3
+
+Location: Line 29, project-settings-duplicate-btn button
+Evidence: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>
+Problem: The button has no visible text content, only an aria-label, making it unclear to non-assistive-technology users what the button does
+Fix: Add visible text inside the button (e.g., "Duplicate" or an icon with fallback text) in addition to the aria-label
+
+Location: Line 47, invite-sent section
+Evidence: <p>An invite was sent to the address entered above. It expires in 5 days if not accepted.</p>
+Problem: The message refers to "the address entered above" but does not display or confirm which email address the invite was actually sent to
+Fix: Display the email address that received the invite (e.g., "An invite was sent to john@example.com. It expires in 5 days if not accepted.")
+
+Location: Line 11, workspace-overview description
+Evidence: <p>This workspace holds 4 projects, synced this morning.</p>
+Problem: The timestamp "this morning" is imprecise and becomes outdated; it does not persist accurately across time zones or viewing times
+Fix: Replace with a precise timestamp in a standard format (e.g., "Last synced: 2026-07-31 09:30 AM EDT") or a relative time that updates (e.g., "Last synced: 2 hours ago")
+
+Location: Line 25, project-settings-name-input
+Evidence: <input id="project-settings-name-input" type="text" value="Vendor Onboarding">
+Problem: The project name is hardcoded in the HTML mockup; if this form is actually used, submitted changes will not be saved because there is no backend or submission handler
+Fix: Add a form submission handler or clarify in documentation that this is a static mockup
+
+Location: Line 39, invite-member-email-input
+Evidence: <input id="invite-member-email-input" type="email">
+Problem: The input has no required attribute, allowing users to attempt to send an invite with no email address entered
+Fix: Add required attribute to the input field

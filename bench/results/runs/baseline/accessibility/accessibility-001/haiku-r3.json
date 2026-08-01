@@ -1,0 +1,127 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/accessibility/accessibility-001.html",
+    "artifact_sha256": "f620e43c2035d9380934dbe1b09dba438bb38bc1fb7f1feeb58010af44eaf176",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T20:17:45.479188Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 2, html element lang attribute",
+      "evidence": "lang=\"translanguage\"",
+      "violation": "\"translanguage\" is not a valid language tag. Valid language codes follow BCP 47 format (e.g., \"en\", \"es\", \"fr\").",
+      "fix": "Change lang=\"translanguage\" to a valid language code, such as lang=\"en\" for English.",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 6, title element",
+      "evidence": "<title id=\"head-title\"></title>",
+      "violation": "The page title is empty, which is required for accessibility and SEO. Screen reader users and search engines have no context for the page.",
+      "fix": "Add meaningful page title text, such as <title>Rider Service Updates</title>.",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 21, first img element in section s1",
+      "evidence": "<img src=\"/img/platform-update.jpg\" id=\"s1-img1\">",
+      "violation": "The image has no alt text, making it inaccessible to screen reader users who cannot understand its purpose or content.",
+      "fix": "Add a descriptive alt attribute, such as alt=\"Platform update diagram\" or alt=\"New platform layout\".",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 24, h4 element in section s2",
+      "evidence": "<h4 id=\"s2-h\">Accessibility improvements</h4>",
+      "violation": "The heading hierarchy skips from h1 (line 16) directly to h4, breaking the logical document structure that assistive technology users rely on.",
+      "fix": "Change the h4 to h2 to maintain proper heading hierarchy: <h2 id=\"s2-h\">Accessibility improvements</h2>.",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 43, div with role=\"button\"",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">",
+      "violation": "The custom button control has tabindex but no keyboard event handlers, making it inaccessible to keyboard users who cannot activate the button.",
+      "fix": "Add JavaScript event listeners for keyboard interaction (e.g., handle Enter and Space keys) or use a native <button> element instead.",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 44, img element inside custom button",
+      "evidence": "<img src=\"/img/trash-icon.svg\" alt=\"\">",
+      "violation": "The icon has an empty alt text but serves a functional purpose (delete button). Screen reader users cannot understand what action this icon performs.",
+      "fix": "Either add descriptive alt text to the image (alt=\"Delete\") or rely on the parent's aria-label and use alt=\"\" only if the image is purely decorative within a labeled control.",
+      "confidence": "medium",
+      "id": "F-006"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 57, hyperlink text",
+      "evidence": "<a href=\"/fares/history\" id=\"s3-link1\">click here</a>",
+      "violation": "The link text \"click here\" is generic and not descriptive. Screen reader users navigating by links cannot understand the destination without surrounding context.",
+      "fix": "Use descriptive link text that indicates the destination, such as <a href=\"/fares/history\" id=\"s3-link1\">view fare adjustment history</a>.",
+      "confidence": "medium",
+      "id": "F-007"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 64, tel input element",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\">Phone number (required)</label> and <input id=\"phone\" type=\"tel\">",
+      "violation": "The label text says the field is required, but the input element lacks the required attribute, creating a mismatch between label text and input semantics.",
+      "fix": "Add the required attribute to the input: <input id=\"phone\" type=\"tel\" required>.",
+      "confidence": "medium",
+      "id": "F-008"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 66, text input with aria-invalid",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> and <span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span>",
+      "violation": "The input has aria-invalid=\"true\" but lacks aria-describedby linking to the error message, leaving screen reader users unaware of the error explanation.",
+      "fix": "Link the input to the error message using aria-describedby: <input id=\"promo\" type=\"text\" aria-invalid=\"true\" aria-describedby=\"s3-form-promo-error\">.",
+      "confidence": "medium",
+      "id": "F-009"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

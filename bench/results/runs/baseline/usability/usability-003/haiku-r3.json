@@ -1,0 +1,105 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-08-01T02:10:51Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Project settings section, duplicate button",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>",
+      "violation": "The button has no visible label, only an aria-label attribute. Users cannot tell what this button does without developer tools or extensive exploration.",
+      "fix": "Add visible text to the button, either as content or as a labeled icon, so users understand its function without hovering or inspecting.",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Invite a team member section, form and actions",
+      "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button> followed by <a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>",
+      "violation": "The form has a Save button inside the form element, but the user flow also presents a Continue link outside the form. It is unclear whether users should click Save or Continue to proceed.",
+      "fix": "Remove the Continue link and let the form's Save button trigger the navigation to the invite-sent section, or clarify the purpose of each action with descriptive labels.",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Invite a team member section, email input field",
+      "evidence": "<input id=\"invite-member-email-input\" type=\"email\">",
+      "violation": "The email input field has no placeholder text or helper text to guide users on what format or information is expected.",
+      "fix": "Add a placeholder attribute (e.g., placeholder=\"name@company.com\") or accompanying helper text to show users the expected input format.",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Workspace overview section, project count and list",
+      "evidence": "<p>This workspace holds 4 projects, synced this morning.</p> but the list shows only 3 items",
+      "violation": "The text states the workspace has 4 projects, but only 3 are listed in the recent projects section. This creates confusion about whether the list is complete or truncated.",
+      "fix": "Either list all 4 projects or clarify that this is a filtered or recent list (e.g., \"Recently accessed projects: 3 of 4\").",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Archive project confirmation section",
+      "evidence": "<p id=\"archive-confirm-copy\">Archiving \"Vendor Onboarding\" will remove it from the active projects list for everyone on the team.</p>",
+      "violation": "The archive action is destructive but the confirmation section relies only on text and navigation links. There is no additional safety mechanism like a confirmation checkbox or warning icon.",
+      "fix": "Add a confirmation checkbox with text like \"I understand this will archive the project for my entire team\" or display a warning icon to emphasize the destructive nature of this action.",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Import status section",
+      "evidence": "<p id=\"import-status-message\">Import failed. Error code IMP-500. Contact support if this continues.</p>",
+      "violation": "The error message offers only \"Contact support\" as a next step, with no troubleshooting options, retry button, or documentation link for error code IMP-500.",
+      "fix": "Add a \"Retry\" button to attempt the import again, or provide a link to documentation for error code IMP-500 before asking users to contact support.",
+      "confidence": "medium",
+      "id": "F-006"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Navigation and section structure",
+      "evidence": "Multiple sections with fragment anchors (#workspace-overview, #project-settings, #invite-member, etc.) but no breadcrumb or \"Back\" link in all sections",
+      "violation": "Users navigating through multi-step workflows (e.g., project settings to invite member to invite confirmation) lack clear context of where they are in the process and how to return to the main workspace view.",
+      "fix": "Add a breadcrumb trail or consistent \"Back to workspace\" link in all sections to help users maintain orientation.",
+      "confidence": "medium",
+      "id": "F-007"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

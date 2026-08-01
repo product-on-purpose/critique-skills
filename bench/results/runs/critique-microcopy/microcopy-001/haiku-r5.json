@@ -1,0 +1,125 @@
+{
+  "run": {
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/microcopy/microcopy-001.md",
+    "artifact_sha256": "0580399008ca4517da0a1b1f620180b68a4cfb24e596be279a5f782cde325fc7",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:34:19Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-EM-NEUTRAL-TONE",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "Profile settings, phone number, message 1",
+      "evidence": "You keep entering the wrong value. Re-enter it to continue.",
+      "violation": "The message frames the problem as something the reader personally did wrong or should have known better than to do, using a second-person accusatory construction.",
+      "fix": "Rewrite the sentence to state the problem neutrally, without blaming the reader.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-EM-CONSTRUCTIVE",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Signup form, email field, message 1",
+      "evidence": "The connection dropped before this finished.",
+      "violation": "The message states that a problem exists with no imperative instruction or named next step anywhere in the text.",
+      "fix": "Add a concrete next step: name the action the reader should take to resolve this.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-EM-NOT-COLOR-ONLY",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Signup form, email field, message 2, Signal field",
+      "evidence": "Signal: one step bolder and larger than the field label, none",
+      "violation": "The Signal field's non-color-cue token is none, so color or highlight is the message's only stated cue.",
+      "fix": "Add a non-color cue: an icon, a text label, a shape change, or bold or underline styling.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-EM-PRESERVE-INPUT",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Profile settings, phone number, message 2, Input on resubmission field",
+      "evidence": "Input on resubmission: cleared",
+      "violation": "A failed submission clears what the reader already entered instead of preserving it so they can correct the specific problem in place.",
+      "fix": "Preserve the reader's entered input across the failed submission.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-EM-TIMING",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Checkout form, payment method, message 2, Fires field",
+      "evidence": "Fires: mid-keystroke",
+      "violation": "The message can appear before the reader has had a fair chance to finish entering the relevant input.",
+      "fix": "Delay the message until the field loses focus or the form is submitted, not while the reader is still typing or before they have entered anything.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-EM-EXPLAIN",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Checkout form, payment method, message 1",
+      "evidence": "Something went wrong. Contact support if this continues.",
+      "violation": "The message states a problem with no explanation of why the system behaves this way, leaving a reader who did nothing unusual with no way to understand whether to retry or if the card was actually declined.",
+      "fix": "Briefly explain what went wrong: card declined, payment gateway unavailable, invalid card number, or another specific reason, so the reader can determine the appropriate next step.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "NNG-EM-EXPLAIN",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Profile settings, phone number, message 1",
+      "evidence": "You keep entering the wrong value. Re-enter it to continue.",
+      "violation": "The message reports a validation rule with no explanation of why the system is rejecting the value, leaving a reader who is told repeatedly that they are wrong with no indication of what the rule is.",
+      "fix": "State what validation rule the reader's input violates: must be 10 digits, must start with +1, must be internationally formatted, or the specific constraint that applies.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-008",
+      "criterion": "NNG-EM-SPECIFIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Checkout form, payment method, message 1",
+      "evidence": "Something went wrong. Contact support if this continues.",
+      "violation": "The message states a problem with no specific indication of what went wrong, using generic phrasing that could describe any payment failure: declined card, invalid card number, expired card, or payment gateway error.",
+      "fix": "Name the specific cause: card declined, card number is invalid, expiry date is invalid, payment gateway is unavailable, or the actual reason checkout failed.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-009",
+      "criterion": "NNG-EM-SPECIFIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Profile settings, phone number, message 1",
+      "evidence": "You keep entering the wrong value. Re-enter it to continue.",
+      "violation": "The message reports a problem with no specific indication of what is wrong with the value the reader entered, offering only generic blame instead of naming the field, the rule, or the constraint.",
+      "fix": "Name the specific constraint the value violates: must be exactly 10 digits, must start with a plus sign, must be unique across accounts, or the actual rule that is failing.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 5,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

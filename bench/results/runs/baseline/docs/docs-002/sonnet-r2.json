@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The document moves directly from the H1 title to \"## Open the test console\" with no introductory sentence.",
+      "fix": "Add a short paragraph after the title stating the goal of the tutorial and any prerequisites, such as an account with a sample alert rule already provisioned.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Between the title \"# Send your first test alert\" and the first heading \"## Open the test console\"",
+      "severity": 3,
+      "violation": "There is no introduction stating what the reader will accomplish, why sending a test alert matters, or what prerequisites are needed before starting."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Each heading introduces a single instruction with no step numbers, for example \"## Open the test console\" followed directly by prose.",
+      "fix": "Number the three main sections, for example \"1. Open the test console,\" \"2. Trigger the sample alert,\" \"3. Check the delivery log.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "The three step headings \"## Open the test console,\" \"## Trigger the sample alert,\" and \"## Check the delivery log\"",
+      "severity": 3,
+      "violation": "A tutorial meant to be followed in sequence does not number its steps, making it harder for a reader to track progress or refer back to a specific step."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Open the test console from the developer menu and select the sample alert rule provided for new accounts.\"",
+      "fix": "Name the exact location of the developer menu, for example \"in the left navigation, click Developer, then Test console,\" and add a note for what to do if the sample rule is missing.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Open the test console\" section, first sentence",
+      "severity": 3,
+      "violation": "The instruction does not say where the developer menu is located in the interface or what to do if no sample alert rule is visible."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"#### Check the sidebar updated\" follows \"## Open the test console,\" which is an H2.",
+      "fix": "Change the heading to H3, \"### Check the sidebar updated,\" or remove it as a heading and fold it into a sentence under \"Open the test console.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"#### Check the sidebar updated\" heading",
+      "severity": 3,
+      "violation": "The heading level skips from H2 to H4 without an intervening H3, breaking the document's heading hierarchy and any generated table of contents."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Look at the sidebar and confirm the rule count now includes the sample rule.\"",
+      "fix": "Add a sentence such as \"If the count did not increase, refresh the page and confirm you selected the sample rule in the previous step.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Check the sidebar updated\" section",
+      "severity": 3,
+      "violation": "The step describes what to check but gives no guidance for what to do if the count did not update, leaving the reader stuck if the expected result does not appear."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Click Trigger sample alert and wait for the status indicator to change to Sent.\"",
+      "fix": "Format UI element names and exact status values consistently, for example \"Click Trigger sample alert (bold) and wait for the status indicator to change to Sent (bold).\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "\"Trigger the sample alert\" section, first sentence",
+      "severity": 3,
+      "violation": "The button label \"Trigger sample alert\" and the target status \"Sent\" are written as plain prose rather than being visually distinguished, making it hard to tell where the exact UI text starts and stops."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The status indicator takes a few seconds to update while the delivery pipeline processes the event in the background.\"",
+      "fix": "State an approximate maximum wait time, for example \"within 30 seconds,\" and add a step describing what to do if the status does not change after that time.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "\"Trigger the sample alert\" section, second sentence",
+      "severity": 3,
+      "violation": "\"A few seconds\" is not a bounded expectation, and there is no guidance for what to do if the indicator never changes to Sent."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The document ends with \"Open the delivery log and check that the test alert shows a Sent status with a timestamp.\"",
+      "fix": "Add a closing sentence confirming the tutorial is complete and linking to a next step, such as configuring a real alert rule.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "End of the document, \"Check the delivery log\" section",
+      "severity": 3,
+      "violation": "The tutorial ends without confirming that the reader has succeeded or pointing to a next step, leaving the reader without closure."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-002.md",
+    "artifact_sha256": "25c4dd0ebb76ed338a3330329de0387044967be4fa65c3db44b1e3042d579c91",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:23:13Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

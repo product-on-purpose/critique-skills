@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>",
+      "fix": "Add visible text content to the button, such as \"Duplicate\" or add an icon with appropriate alt text.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Line 29, project-settings-duplicate-btn button",
+      "severity": 3,
+      "violation": "The duplicate project button contains no visible text, only an aria-label. Sighted users cannot see what the button does without text or an icon."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced last week.\" followed by a ul containing only 3 projects: Holiday Campaign Assets, Support Backlog Triage, and Mobile App Revamp",
+      "fix": "Either display all 4 projects in the list or update the text to say \"This workspace holds 3 projects\" to match what is shown.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Lines 11-12 and 13-17, workspace overview section",
+      "severity": 3,
+      "violation": "The heading text states there are 4 projects but only 3 are listed, creating confusion about whether data is missing or if the count is incorrect."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"invite-member-email-input\" type=\"email\">",
+      "fix": "Add the required attribute to the input element or provide clear visual indication and label text that specifies whether the field is required.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Line 39, invite-member-email-input",
+      "severity": 3,
+      "violation": "The email input field has no required attribute, making it unclear to users whether this is a mandatory field or optional."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "All sections are placed in a single HTML body with navigation using fragment identifiers (href=\"#project-settings\", href=\"#invite-member\", etc.)",
+      "fix": "Add visual indicators such as a breadcrumb trail, active state styling on sections, or a clear heading that shows the current page name and navigation path.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Lines 9-79, entire page structure",
+      "severity": 3,
+      "violation": "The page uses hash-based navigation suggesting all sections are on one scrollable page, but the UX treats them as separate screens. Users cannot see their current location in the interface hierarchy without visual indicators."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"It expires in 5 days if not accepted.\"",
+      "fix": "Include an absolute date in addition to the relative time, such as \"It expires in 5 days (by July 31, 2026) if not accepted.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Line 47, invite-sent section",
+      "severity": 3,
+      "violation": "The message uses a relative time reference (5 days) which becomes meaningless if the user revisits the page later, creating confusion about the actual deadline."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<form> <label for=\"project-settings-name-input\">Project name</label> <input id=\"project-settings-name-input\" type=\"text\" value=\"Q3 Roadmap\"> <button id=\"project-settings-save-btn\" type=\"submit\">Save</button> </form>",
+      "fix": "Add a name attribute to the form, use a fieldset with legend to group related fields, or add a descriptive heading that clearly identifies the form's purpose.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Lines 24-27, project-settings form",
+      "severity": 3,
+      "violation": "The form lacks a name attribute and has no fieldset grouping, making it unclear what the form's purpose is or how it relates to other elements in the section."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Three links without form context: \"Go to notification settings\", \"Invite a team member\", \"Archive project\"",
+      "fix": "Use buttons (type=\"button\") instead of links for actions that modify state, and use links only for navigation to other pages or sections.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Lines 30-32, project-settings section action links",
+      "severity": 3,
+      "violation": "These are action links that modify application state, but links semantically indicate navigation. Using links for state-changing operations is confusing and violates user expectations."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Rows 35, 71, 78, and 83 were skipped; every other row was imported.\"",
+      "fix": "Provide more context such as \"Rows 35, 71, 78, and 83 were skipped. Download a report of skipped rows to review the issues.\"",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Line 63, import-status message",
+      "severity": 3,
+      "violation": "The message lists row numbers without context about what those numbers mean or how to identify the problematic rows in the original data source."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<select id=\"notification-settings-digest-input\"> <option>Daily</option> <option>Weekly</option> <option>Monthly</option> </select>",
+      "fix": "Add value attributes to each option and set a selected attribute on the current default option to show the current preference.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Lines 70-74, notification-settings form select",
+      "severity": 3,
+      "violation": "The select dropdown has no default selected option and no value attributes, making it unclear what the current setting is or what each option represents."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Multiple sections, each with a heading and \"Back\" or exit links, all on one page with no visual separation",
+      "fix": "Add CSS styling to visually separate sections, use distinct background colors or borders, or implement actual page navigation instead of hash-based section switching.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Lines 9-79, overall page layout",
+      "severity": 3,
+      "violation": "The page lacks visual hierarchy and clear sectioning. Without distinct styling or layout for each section, users cannot easily distinguish between different functional areas."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

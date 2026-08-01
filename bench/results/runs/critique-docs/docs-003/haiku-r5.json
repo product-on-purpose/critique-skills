@@ -1,0 +1,48 @@
+{
+  "run": {
+    "skill": "critique-docs",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:26:00Z",
+    "rubrics": ["DIATAXIS"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "DIATAXIS-NAV-LENGTH",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Related pages section, lines 21-31",
+      "evidence": "9 flat items, no sub-headings or nested items breaking them into groups.",
+      "violation": "This listing holds 9 items, more than 7 a reader can scan in one glance, with no subgrouping to break it up.",
+      "fix": "Split this listing into named subgroups, either nested sub-lists or sub-headings, each holding a smaller set of related items.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "DIATAXIS-REFERENCE-NEUTRAL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "timeout field section, line 11",
+      "evidence": "Leaving this field at its default is the right choice for most teams, and raising it is worth doing only when a specific integration needs the extra room.",
+      "violation": "The timeout field description includes a recommendation about when to leave the default, rather than remaining purely descriptive of what the field accepts and its constraints.",
+      "fix": "Remove the recommendation and retain only the descriptive parts: 'The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000.' Reserve design guidance for a companion how-to or explanation page.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 0,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "pass",
+    "severity_3_threshold": 0
+  }
+}

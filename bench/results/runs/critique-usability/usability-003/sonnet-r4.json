@@ -1,0 +1,106 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T02:20:37Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-1",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"project-archived\" section (\"Project archived\")",
+      "evidence": "The \"project-archived\" section reads: \"'Vendor Onboarding' has been moved to archived projects. It no longer appears in the active projects list for anyone on the team.\" Its only control is a link back to workspace-overview. No restore, unarchive, or undo control appears anywhere in the artifact's eight states.",
+      "violation": "The archive action is treated as committed with no reversible path anywhere in the artifact. Archiving is reasonably reversible in the product this spec describes, but neither the project-archived state nor any other state defines a restore or unarchive control, breaching NNG-H3-UNDO's requirement that a reasonably reversible action offer a stated way back.",
+      "fix": "Add a restore or unarchive control reachable from the project-archived state, or from an archived-projects list linked from workspace-overview, and give the user a defined path to it.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-2",
+      "criterion": "NNG-H9-IDENTIFY",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"import-status\" section (\"Import status\"), the import status message",
+      "evidence": "The import status message reads: \"Import failed. Error code IMP-500. Contact support if this continues.\"",
+      "violation": "The message surfaces a raw error code and reports only that the import failed, with no plain-language statement of what specifically went wrong (which file, field, size, or format). The user cannot tell which of their own actions or inputs caused the failure, breaching NNG-H9-IDENTIFY's requirement that error text name what went wrong specifically enough to attribute it to a cause.",
+      "fix": "Replace the raw code with plain language naming the specific cause of the failure, for example the file that failed and the limit or format it violated, keeping the code only as optional supporting detail.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-3",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" section (\"Project settings\"), the \"Save\" button",
+      "evidence": "The \"project-settings-save-btn\" button is a form submit control with no action attribute and no next state defined anywhere in the artifact; nothing specifies a success message, error message, or visible change following its use.",
+      "violation": "This control triggers a state-changing action, saving the project name, with the trigger specified but no in-progress or result feedback named anywhere, breaching NNG-H1's requirement that a state-changing action's outcome be visible to the user.",
+      "fix": "Specify what the user sees after Save: a confirmation message in place, a changed control state, or a defined next screen.",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "the \"project-settings\" section (\"Project settings\"), the \"Duplicate project\" button",
+          "evidence": "The \"project-settings-duplicate-btn\" button has no href, form action, or next state defined; the artifact specifies nothing that happens after it is used."
+        },
+        {
+          "location": "the \"invite-member\" section (\"Invite a team member\"), the \"Save\" button",
+          "evidence": "The \"invite-member-save-btn\" button is a form submit control with no action attribute and no next state defined; the artifact specifies no feedback following its use."
+        },
+        {
+          "location": "the \"notification-settings\" section (\"Notifications\"), the \"Save\" button",
+          "evidence": "The \"notification-settings-save-btn\" button is a form submit control with no action attribute and no next state defined; the artifact specifies no feedback following its use."
+        }
+      ]
+    },
+    {
+      "id": "F-4",
+      "criterion": "NNG-H4-INTERNAL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-member\" section (\"Invite a team member\"), the \"Save\" button and the \"Continue\" link",
+      "evidence": "The \"invite-member\" section defines both a \"Save\" submit button with no defined target and a separate \"Continue\" link to invite-sent. No text in the section states what either control does or how they relate.",
+      "violation": "Two different interaction patterns on one screen, a form-submit button labeled Save and a navigation link labeled Continue, both read as the commit action for this flow with no stated relationship between them, breaching NNG-H4-INTERNAL's requirement that one thing be named the same way everywhere it appears, or be distinguished where it differs.",
+      "fix": "Remove one of the two controls, or state explicitly what each does, for example labeling the button \"Save draft\" and the link \"Send invite\".",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-5",
+      "criterion": "NNG-H6-RECALL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-sent\" section (\"Invite sent\")",
+      "evidence": "The \"invite-sent\" section reads: \"An invite was sent to the address entered above. It expires in 5 days if not accepted.\" No email address appears anywhere on this section, and the email input in the invite-member section carries no value attribute, so returning to it shows an empty field.",
+      "violation": "This confirmation step refers to an address entered above that is not present on this state, and the prior state does not retain the entered value either, so the user has no way to verify which address was invited, breaching NNG-H6-RECALL's requirement that information needed at a step be present at that step rather than held over from an earlier screen.",
+      "fix": "Repeat the entered email address directly in the invite-sent confirmation copy, for example: An invite was sent to jane@example.com.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-6",
+      "criterion": "NNG-H9-RECOVER",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"import-status\" section (\"Import status\")",
+      "evidence": "The import status message reads: \"Import failed. Error code IMP-500. Contact support if this continues.\" No retry control is defined, and \"Contact support\" carries no link, address, or route to a support destination. The section's only control is a link back to workspace-overview.",
+      "violation": "The suggested recovery step, contacting support, names no reachable control or destination, and no retry action is offered either, breaching NNG-H9-RECOVER's requirement that error text point to a next step the user can actually take from where the message appears.",
+      "fix": "Add a retry control that re-attempts the import, or turn Contact support into a link or button that opens a support channel from this state.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 2,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

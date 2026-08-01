@@ -1,0 +1,48 @@
+{
+  "run": {
+    "skill": "critique-argument",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/argument/argument-003.md",
+    "artifact_sha256": "3735fd3a135fcd3f730e35c6af56fb064083676684399e5b0486c140ff7894de",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T20:46:17Z",
+    "rubrics": ["TOULMIN"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "TOULMIN-QUALIFIER",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Recommendation section, line 17",
+      "evidence": "\"the stronger choice is a systemwide end to overdue fines across all ten consortium branches, effective at the start of the next fiscal year\" (line 17); grounds are limited to \"a 16-month pilot at 5 branches\" (line 9)",
+      "violation": "The central recommendation is asserted with full confidence as \"the stronger choice\" on the strength of a pilot covering only 5 of 10 branches, where the grounds do not establish that the result would generalize systemwide without qualification.",
+      "fix": "Qualify the recommendation to acknowledge the limited scope of the pilot evidence, for example: \"based on the pilot results, the stronger choice appears to be\" or \"the pilot data supports ending fines at these 5 branches; extending this systemwide warrants careful consideration\".",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "TOULMIN-REBUTTAL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Recommendation and \"Why the Pilot Result Applies Systemwide\" sections, lines 15-27",
+      "evidence": "The argument raises the revenue concern (line 29-34) and addresses it with data from the four pilot branches (line 33). The argument does not raise whether results from 5 pilot branches will generalize to the other 5 branches in the consortium.",
+      "violation": "The argument answers the financial objection but does not raise or address the generalizability question that its own scope leaves open: whether the return-rate and patron-avoidance improvements observed at 5 specific branches will hold at the other 5 consortium branches, which the pilot never tested.",
+      "fix": "Either conduct or cite data from the non-pilot branches to test generalizability, or explicitly address the scope limitation: for example, \"while the pilot tested only 5 branches, the Tri-County research found similar results across 14 systems, suggesting the pattern holds broadly\" (which the artifact already does, but buries in the warrant section rather than addressing it as an objection).",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 0,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "pass",
+    "severity_3_threshold": 0
+  }
+}

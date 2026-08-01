@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This request timed out before it could finish.\"",
+      "fix": "Move this message into its own heading, for example \"Search results, request failed,\" and reserve \"no matches\" for the zero-results case.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "The first message entry under the \"Search results, no matches\" heading, its Message line.",
+      "severity": 3,
+      "violation": "The heading promises messaging for a search that returns zero matches, but this message describes a request that failed to complete, a different failure mode that calls for different handling, such as a retry option, than a genuine empty result set."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: none\"",
+      "fix": "Add a retry action, such as a \"Try again\" button, and update the Suggested fix field to describe it.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "The first message entry under \"Search results, no matches\", its Suggested fix line.",
+      "severity": 3,
+      "violation": "The user is left with no way to recover from a failed request. Both other messages in the document end with an explicit next step for the user to take, so the absence of one here breaks that pattern for what is arguably the most actionable failure of the three."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"No orders fall inside the selected date range. Change the date range, or clear the filters to see every order.\"",
+      "fix": "Name the search scope in the heading, for example \"Order search results, no matches,\" so the subject is established before the message uses it.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "The second message entry under \"Search results, no matches\", its Message line.",
+      "severity": 3,
+      "violation": "Nothing in the heading or elsewhere in the document establishes that this screen concerns orders, so \"orders\" appears without any context for a reader who does not already know what is being searched."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action, text-label\"",
+      "fix": "Give this message a distinct visual treatment, such as an inline action button or a different banner style, so it reads as actionable rather than informational.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "The second message entry under \"Search results, no matches\", its Signal line.",
+      "severity": 3,
+      "violation": "The message asks the user to take an action, changing the date range or clearing filters, but the signal describes it as visually indistinguishable from passive informational banners, so nothing in the interface marks it as actionable."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Select resume to sync now.\"",
+      "fix": "Distinguish the control name from the instruction, for example: Select \"Resume\" to sync now.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "The message entry under \"Notification center, sync status\", its Message line.",
+      "severity": 3,
+      "violation": "\"resume\" is not set apart from the surrounding sentence in any way, so a reader cannot tell whether it names an actual control label or is just an instruction to resume syncing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"bold heading text where the first result would sit, text-label\" versus \"bold text at the top of the notification list, icon\"",
+      "fix": "Give the timeout message a visual signal at least as strong as the sync-paused notification, such as adding an icon.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "The Signal line of the first message entry under \"Search results, no matches\", compared with the Signal line of the message entry under \"Notification center, sync status\".",
+      "severity": 3,
+      "violation": "The message reporting a total search failure has a weaker visual signal, no icon, than the message reporting a merely paused sync, which does get an icon, so the more severe condition is signaled less strongly than the less severe one."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-focus\"",
+      "fix": "Trigger the message when the sync state changes to paused, not on focus of the row, so the user is informed proactively rather than needing to find it first.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "The message entry under \"Notification center, sync status\", its Fires line.",
+      "severity": 3,
+      "violation": "A notification meant to alert the user that syncing is paused only appears once the user focuses the sync status row, meaning the user would already need to know to look at that row before the message meant to inform them would ever show."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: no\" and \"Input on resubmission: not-applicable\" and \"Container: inline\" appear identically in every entry.",
+      "fix": "Review each field for each message individually and record message-specific reasoning, or remove fields that do not vary meaningfully across the document.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "The Predictable mistake, Input on resubmission, and Container lines across all three message entries in the document.",
+      "severity": 3,
+      "violation": "Three structured fields carry the exact same value for every message with no variation across three different scenarios, which suggests these fields were not evaluated on a per-message basis rather than that all three genuinely share the same answer."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:48:17Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

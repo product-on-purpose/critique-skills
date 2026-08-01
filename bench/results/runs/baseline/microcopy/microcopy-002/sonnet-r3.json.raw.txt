@@ -1,0 +1,29 @@
+Location: Checkout form, shipping address section, second message ("Please correct the highlighted field. Error code: 502.")
+Evidence: "Please correct the highlighted field. Error code: 502."
+Problem: The message never says which field is wrong or what is wrong with it, and it surfaces a raw technical error code (502 normally signals a server gateway failure, not a field validation problem) to the reader with no explanation of what the code means or what to do with it.
+Fix: Name the specific field and the specific problem, for example "The shipping address line cannot be blank," and remove the error code from the reader-facing text or move it to a separate support-reference area.
+
+Location: Password reset, new password section, first message ("Choose a password of at least 8 characters, long enough that a guessing attack cannot work through every combination.")
+Evidence: Placement is described as "at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page"
+Problem: The message is separated from the field it describes by a scroll, so a reader typing in the password field will not see the requirement without leaving the place they are working.
+Fix: Move the message inline, directly below or beside the password field, so it appears in the same viewport as the input it describes.
+
+Location: Password reset, new password section, second message ("This reset link expired an hour after it was sent...")
+Evidence: Container is listed as "toast" while Placement is described as "in a dialog centered on the password reset step, over the new password field it blocks"
+Problem: A toast is normally a small, transient, non-blocking notification, but the placement and behavior described here is a centered, blocking dialog. The container label and the placement description contradict each other.
+Fix: Make the two fields agree. If the message truly blocks the field and requires dismissal or action, label the container "modal," not "toast."
+
+Location: Account settings, username section, only message ("The last changes were not saved and cannot be recovered. Contact support for assistance.")
+Evidence: "The last changes were not saved and cannot be recovered. Contact support for assistance." with Suggested fix listed as "none"
+Problem: The message tells the reader their data is permanently lost and sends them to contact support, but offers no retry action even though a failed save is often a transient, retryable condition, leaving the reader no path forward except leaving the product.
+Fix: Offer a retry action such as "Try saving again" as the primary suggested fix, and reserve the "contact support" instruction for cases where a retry has already failed.
+
+Location: Whole document, the Signal field repeated across all eight messages
+Evidence: Every message's Signal value reads some variant of "bold text ... larger than / above / below ..., icon," used identically for the 30-character field limit and for the unrecoverable-data-loss message alike
+Problem: All eight messages use the same visual weight, bold text plus icon, regardless of severity, so a minor validation notice looks exactly as urgent as an unrecoverable data loss notice, giving the reader no visual cue for which messages need immediate action.
+Fix: Vary the signal treatment by severity, reserving the bold-text-plus-icon treatment for high-severity or blocking messages and using a lighter treatment for minor validation notices.
+
+Location: File upload, receipts section, first message ("This receipt is over the 10 MB limit...")
+Evidence: Suggested fix is described as "described, names the one available alternative but requires the reader to enter it by hand"
+Problem: The message tells the reader to reduce the file size, but the interface offers no in-product control to do so, forcing the reader to leave the product to complete a task the message implies is simple, unlike the sibling message in the same section which offers a selectable convert-and-retry action.
+Fix: Add an in-product action, such as a "compress and retry" control, matching the pattern already used for the file-format message in the same section.

@@ -1,0 +1,44 @@
+Location: Frontmatter, line 2 ("mode: tutorial")
+Evidence: mode: tutorial
+Problem: The frontmatter declares a "mode" field but nothing in the document explains what values it can take or what effect "tutorial" has, so a reader editing this file has no way to know what the field controls or whether "tutorial" is the correct value.
+Fix: Either document what "mode" controls and its valid values somewhere the author can find them, or remove the field if it is unused.
+
+Location: "Open the test console" section, first sentence
+Evidence: Open the test console from the developer menu and select the sample alert rule provided for new accounts.
+Problem: The instruction assumes the reader already knows where the developer menu is (top bar, settings panel, keyboard shortcut, etc.) but never says, so a first time reader cannot complete the very first step of the tutorial.
+Fix: State where the developer menu is, for example "Open the test console from the developer menu (the gear icon in the top right)."
+
+Location: "Open the test console" section, first sentence
+Evidence: select the sample alert rule provided for new accounts
+Problem: The step assumes every reader's account has this sample rule and gives no guidance for what to do if it is missing, for example on an account that is not newly created.
+Fix: Add a fallback instruction, such as what to do or who to contact if no sample rule is visible.
+
+Location: Heading "#### Check the sidebar updated"
+Evidence: #### Check the sidebar updated
+Problem: This heading jumps from an H2 ("## Open the test console") straight to an H4, skipping H3. This breaks the document's heading hierarchy and will produce an inconsistent outline in any tool that builds a table of contents from heading levels.
+Fix: Change the heading level to H3 ("### Check the sidebar updated") so it nests correctly under the preceding H2.
+
+Location: Heading "#### Check the sidebar updated"
+Evidence: Check the sidebar updated
+Problem: The heading text is not a grammatical phrase; "Check the sidebar updated" is missing a word and reads as broken English.
+Fix: Reword to "Check that the sidebar updated" or "Confirm the sidebar update."
+
+Location: Document structure as a whole
+Evidence: The three top-level steps are marked only with "## Open the test console", "## Trigger the sample alert", and "## Check the delivery log", with no ordinal numbering anywhere.
+Problem: A tutorial that walks through sequential steps never numbers them, so a reader cannot tell how many steps remain or easily refer back to "step 2" versus "step 3."
+Fix: Number the three sections explicitly, for example "Step 1: Open the test console", "Step 2: Trigger the sample alert", "Step 3: Check the delivery log."
+
+Location: "Trigger the sample alert" section, second sentence
+Evidence: The status indicator takes a few seconds to update while the delivery pipeline processes the event in the background.
+Problem: "a few seconds" is not a measurable wait time, and the document gives no guidance for what the reader should do if the indicator never changes to Sent, leaving no recovery path for a stuck or failed test.
+Fix: Give an approximate maximum wait time, for example "up to 30 seconds," and add a line describing what to do if the status does not update after that.
+
+Location: "Check the delivery log" section
+Evidence: Open the delivery log and check that the test alert shows a Sent status with a timestamp.
+Problem: Unlike the test console step, this step does not say where the delivery log is located or how to navigate to it, so the level of detail is inconsistent across the tutorial's steps.
+Fix: State where the delivery log is found, for example whether it is also under the developer menu or somewhere else.
+
+Location: End of document, after the last step in "Check the delivery log"
+Evidence: Open the delivery log and check that the test alert shows a Sent status with a timestamp.
+Problem: The tutorial ends immediately after the verification step with no confirmation that the reader has succeeded and no pointer to what to do next, leaving the tutorial without a closing.
+Fix: Add a short closing line confirming success and linking to a logical next step, for example configuring a custom alert rule.

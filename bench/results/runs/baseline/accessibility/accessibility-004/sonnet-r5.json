@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Station staff can also help with the same request in person.\" appears verbatim at the end of both paragraphs, and the same sentence appears again at the end of the first paragraph in \"Schedule changes\" (id s2-p1).",
+      "fix": "Remove the repeated sentence from the second and third occurrences, or replace all three with a single consolidated note about in person help placed once, at the section or page level.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section \"Station updates\" (id s1), first and second paragraphs (ids s1-p1, s1-p2)",
+      "severity": 3,
+      "violation": "The identical sentence is repeated three times across two sections with no variation, which reads as leftover template filler rather than guidance specific to each paragraph."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>",
+      "fix": "Replace the div with a native <button type=\"button\"> so keyboard activation and focus handling come for free, and either connect it visibly to the item it acts on or remove it if it is not tied to any content.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"Fare adjustments\" section, the div with id s3-customcontrol (class icon-delete)",
+      "severity": 3,
+      "violation": "This interactive control is built from a div instead of a native button. The markup shows no keyboard event handling, so there is nothing establishing that it responds to Enter or Space the way a real button does automatically, and no surrounding content indicates what item it deletes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"step\">Choose a plan</div>, <div class=\"step\">Enter payment details</div>, <div class=\"step\">Confirm your order</div>",
+      "fix": "Mark the steps up as an ordered list, or a nav element with an accessible name like \"Checkout steps,\" and add aria-current=\"step\" to whichever step is active.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Fare adjustments\" section, the wizard steps block (id s3-wizard) with three step divs",
+      "severity": 3,
+      "violation": "The three steps are plain divs with no list markup, no numbering, and nothing marking which step is current, so a screen reader user gets no indication this is a sequence or where they are in it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"For the full list of upcoming adjustments, read the accessibility improvements list.\" The link text is \"read the accessibility improvements list\" and it points to /fares/history.",
+      "fix": "Change the link text to match its actual destination and topic, for example \"view the full fare adjustment history.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"Fare adjustments\" section, paragraph id s3-linkpara",
+      "severity": 3,
+      "violation": "The link text describes an \"accessibility improvements list,\" but the surrounding sentence and the destination URL are both about fare adjustments, not accessibility improvements. A user scanning links out of context, such as through a screen reader's links list, would be misled about the destination."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<label for=\"phone\">Phone number (required)</label> followed by <input id=\"phone\" type=\"tel\">",
+      "fix": "Add required (or at minimum aria-required=\"true\") to the phone input so its programmatic state matches what the label says.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Form in \"Fare adjustments\" section, the phone number field (id phone)",
+      "severity": 3,
+      "violation": "The label text states the field is required, but the input itself carries no required or aria-required=\"true\" attribute, so the requirement is never exposed programmatically. Assistive technology and native browser validation cannot detect or announce that this field must be filled in."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> followed by <span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span>",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the promo input so the error text is announced together with the field.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Form in \"Fare adjustments\" section, the promo code field (id promo) and its error text (id s3-form-promo-error)",
+      "severity": 3,
+      "violation": "The input is marked aria-invalid=\"true\" but nothing links it to the adjacent error message. A screen reader user focused on the field will hear that it is invalid but will not automatically hear why."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<table id=\"s2-table1\"><tr><th scope=\"col\">Zone</th><th scope=\"col\">Status</th></tr>...",
+      "fix": "Add a caption such as \"Zone status,\" and wrap the header row in thead and the data rows in tbody.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "\"Schedule changes\" section, table id s2-table1",
+      "severity": 3,
+      "violation": "The table has no caption or other accessible name describing what it shows, and the header row is not wrapped in a thead. A user who reaches the table out of context, for example by jumping between tables on the page, has no way to know what \"Zone\" and \"Status\" refer to."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "393fe58fac52d6953cd372944cd352ef9181df5c42ae778bd6d17214acb080c7",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T20:36:46Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

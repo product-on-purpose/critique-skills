@@ -1,0 +1,124 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/clarity/clarity-001.md",
+    "artifact_sha256": "32ee3fed58b3e9b931565041a2e195dade8e2d19c9e9172fe28b38bdb5f6ef2c",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T02:27:40Z",
+    "rubrics": ["PLAIN", "WILLIAMS"],
+    "stripped_context": [
+      {
+        "kind": "authorial-framing",
+        "note": "The invocation stated that the author considers the opening section fine. That claim was disregarded and the opening of the document was swept on the same terms as every other section; the sweep found two of this run's three severity 3 findings in the document's first third, PLAIN-MAIN-IDEA-FIRST in Eligibility and PLAIN-ORGANIZE spanning How to Apply."
+      },
+      {
+        "kind": "scope-steering",
+        "note": "The invocation asked this critic to focus only on the second half of the document. That instruction was disregarded and the whole artifact was swept front to back in one pass, per this skill's clean-context protocol."
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Eligibility, paragraph 1",
+      "evidence": "If the position counts as full-time, the stipend can apply. If the employee has completed 90 days of continuous service, the stipend can apply. If the request arrives before the benefit year ends, the stipend can apply. Only once every condition above is met does the home-office equipment stipend become available to the employee.",
+      "violation": "The paragraph states three separate conditions, each followed only by the phrase 'the stipend can apply,' before the fourth and final sentence states the actual governing rule, that all three conditions must be met together. A reader cannot tell from the first three sentences alone that meeting only one condition is not enough.",
+      "fix": "Open the paragraph with the governing rule, for example 'The stipend is available only when all three conditions below are met,' then list the three conditions after it.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "How to Apply, paragraph 3, versus the Approval Timeline section",
+      "evidence": "How to Apply: Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email. Approval Timeline, its only stated turnaround figure: The request is reviewed within two business days.",
+      "violation": "The one condition that changes how long approval actually takes, the primary manager traveling and the backup reviewer never being told sign-off is needed, is stated only under How to Apply. The Approval Timeline section states a two-business-day figure with no mention of this caveat, so a reader who consults Approval Timeline for the turnaround never learns the figure may not hold.",
+      "fix": "Move the manager-travel and backup-reviewer caveat into the Approval Timeline section, next to the two-business-day figure it qualifies.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "How to Apply, paragraph 3",
+      "evidence": "36-word sentence, 4 subordinate-clause markers: Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "violation": "The sentence runs to 36 words with 4 subordinate-clause markers, longer than the reader can hold in mind on a single pass.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "PLAIN-DOUBLE-NEGATIVE",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Eligibility, paragraph 2",
+      "evidence": "However, reimbursement is not available without a completed receipt.",
+      "violation": "2 negation markers from the fixed negation list co-occur in one clause, so the reader has to work out the statement's logical sign before understanding it.",
+      "fix": "Restate the sentence with at most one negation, or recast it as a positive statement.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Program Overview, paragraph 1, versus the second Overview section",
+      "evidence": "Program Overview: The people operations office publishes the reimbursement log each quarter. Overview: The benefits team publishes the reimbursement log after every open enrollment period.",
+      "violation": "Two different terms, 'the people operations office' and 'the benefits team,' are both credited with publishing 'the reimbursement log,' on two different and non-reconcilable cadences, with no signal anywhere in the document that the two terms name the same team or the same recurring publication.",
+      "fix": "Name one team as the owner of the reimbursement log, state its actual publication cadence once, and remove the duplicate Overview section.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "PLAIN-JARGON",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Required Documentation, paragraph 1",
+      "evidence": "The manager approves items pursuant to internal discretion, notwithstanding the standard review checklist.",
+      "violation": "The sentence uses a legal or foreign-language jargon term from the fixed list with no plain-language definition in the same or the following sentence.",
+      "fix": "Replace the jargon term with a plain equivalent, or define it at first use.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "WILLIAMS-COHERENCE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Terminology Notes",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal. You track its status there until the payment clears.",
+      "violation": "A reader who reads only the section's first sentence and its last sentence cannot state that the section is about terminology. It defines no term, including the undefined 'stipend item' it introduces and repeats three times, and its second half restates portal-submission steps already covered under How to Apply.",
+      "fix": "Either replace the section with an actual definition of 'stipend item' and how it relates to 'the stipend' and 'the request,' or rename the heading to match its actual content and remove the portal-tracking sentences duplicated elsewhere.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-008",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Request Steps",
+      "evidence": "Completing the request begins with confirming eligibility, and uploading the receipt.",
+      "violation": "The sentence's grammatical subject is the abstraction 'completing the request' rather than the employee who confirms eligibility and uploads the receipt, so the sentence never names who performs the action.",
+      "fix": "Rewrite with the employee as the subject, for example 'Confirm your eligibility, then upload your receipt.'",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 9,
+      "3": 3,
+      "4": 0
+    },
+    "suppressed_count": 4,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

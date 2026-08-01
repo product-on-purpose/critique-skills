@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This request timed out before it could finish.\" paired with \"Suggested fix: none\"",
+      "fix": "Add a retry action, for example a \"Try again\" button, and set Suggested fix to describe it, matching the pattern used by the second message.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Search results, no matches, first Message block (the timed out entry)",
+      "severity": 3,
+      "violation": "The message reports a timeout but offers the user no way to recover, while the second message in the same section offers a clear filters action. A timeout is exactly the kind of failure a user can retry, so leaving Suggested fix as none is an inconsistent and unhelpful gap."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "heading reads \"no matches\" while the first message reads \"This request timed out before it could finish.\"",
+      "fix": "Split the section into two headings, for example \"Search results, timed out\" and \"Search results, no matches,\" or rename the shared heading to cover both cases, such as \"Search results, empty and failed states.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" heading, compared with its first Message block",
+      "severity": 3,
+      "violation": "A timeout is a different failure mode from a search that legitimately returned zero matches, so the section heading does not accurately describe the first entry beneath it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "first message says \"This request timed out\" with no object named, while the second says \"No orders fall inside the selected date range\"",
+      "fix": "Use the same object noun in both messages, for example \"The search for orders timed out before it could finish,\" so the section is consistent about what is being searched.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Search results section, both Message lines",
+      "severity": 3,
+      "violation": "The two messages in the same section use inconsistent terminology, one generic and one naming \"orders\" specifically, so a reader cannot tell whether this screen is a general search or an order specific search."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: selectable, offers a clear filters button beside the message\" paired with \"Input on resubmission: not-applicable\"",
+      "fix": "Describe the resubmission behavior instead of marking it not applicable, for example \"returns to the full unfiltered order list.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Search results, no matches, second Message block",
+      "severity": 3,
+      "violation": "Clicking the suggested clear filters button causes a resubmission, since the results panel re-queries with filters cleared, so marking Input on resubmission as not applicable is inconsistent with the documented fix."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: not-applicable\" alongside \"Suggested fix: selectable, offers a resume now action inside the notification\"",
+      "fix": "Replace \"not-applicable\" with a description of the post resume state, for example \"notification updates to show sync in progress.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Notification center, sync status, Message block",
+      "severity": 3,
+      "violation": "The entry documents an interactive resume now action but marks Input on resubmission as not applicable, leaving undocumented what happens to the notification and to sync state once the user selects resume."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Sync is paused while this device is on a metered connection, so syncing does not spend a data allowance.\"",
+      "fix": "Use second person throughout, for example \"Sync is paused because your connection is metered, so it will not use your data allowance.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Notification center, sync status, Message text",
+      "severity": 3,
+      "violation": "The message refers to the device in the third person, \"this device,\" while the same entry addresses the user directly in the next sentence, \"Select resume to sync now,\" producing an inconsistent voice within a single message."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

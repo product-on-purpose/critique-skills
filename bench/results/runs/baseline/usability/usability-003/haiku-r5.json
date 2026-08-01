@@ -1,0 +1,94 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-08-01T02:12:44Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 11, workspace-overview-recent list",
+      "evidence": "Text states \"This workspace holds 4 projects\" but the list shows only 3 items",
+      "violation": "The stated project count does not match the displayed count, creating confusion about the workspace state",
+      "fix": "Either add a fourth project to the list or change the count to 3",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 29, project-settings-duplicate-btn button",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>",
+      "violation": "The button has no visible text content, only an aria-label, making it unclear to non-assistive-technology users what the button does",
+      "fix": "Add visible text inside the button (e.g., \"Duplicate\" or an icon with fallback text) in addition to the aria-label",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 47, invite-sent section",
+      "evidence": "<p>An invite was sent to the address entered above. It expires in 5 days if not accepted.</p>",
+      "violation": "The message refers to \"the address entered above\" but does not display or confirm which email address the invite was actually sent to",
+      "fix": "Display the email address that received the invite (e.g., \"An invite was sent to john@example.com. It expires in 5 days if not accepted.\")",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 11, workspace-overview description",
+      "evidence": "<p>This workspace holds 4 projects, synced this morning.</p>",
+      "violation": "The timestamp \"this morning\" is imprecise and becomes outdated; it does not persist accurately across time zones or viewing times",
+      "fix": "Replace with a precise timestamp in a standard format (e.g., \"Last synced: 2026-07-31 09:30 AM EDT\") or a relative time that updates (e.g., \"Last synced: 2 hours ago\")",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 25, project-settings-name-input",
+      "evidence": "<input id=\"project-settings-name-input\" type=\"text\" value=\"Vendor Onboarding\">",
+      "violation": "The project name is hardcoded in the HTML mockup; if this form is actually used, submitted changes will not be saved because there is no backend or submission handler",
+      "fix": "Add a form submission handler or clarify in documentation that this is a static mockup",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 39, invite-member-email-input",
+      "evidence": "<input id=\"invite-member-email-input\" type=\"email\">",
+      "violation": "The input has no required attribute, allowing users to attempt to send an invite with no email address entered",
+      "fix": "Add required attribute to the input field",
+      "confidence": "medium",
+      "id": "F-006"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

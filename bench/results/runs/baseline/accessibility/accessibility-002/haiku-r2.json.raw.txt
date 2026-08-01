@@ -1,0 +1,49 @@
+Location: Paragraph under "Accessibility improvements" section
+Evidence: style="color:#999999" on element with id="s1-p1"
+Problem: Text color #999999 on a light background has insufficient contrast for readability.
+Fix: Change text color to #595959 or darker to meet WCAG AA standards (4.5:1 contrast ratio).
+
+Location: Form field for route selection, line near id="topic"
+Evidence: <label for="topic-alt"> but <select id="topic">
+Problem: The label's for attribute references "topic-alt" but the select element has id="topic", causing the label not to associate with the input.
+Fix: Change the select element id to "topic-alt" or change the label's for attribute to "topic".
+
+Location: Promo code input field
+Evidence: <input id="promo" type="text" aria-invalid="true"> followed by <span class="error-text">
+Problem: The input is marked invalid with aria-invalid but does not reference the error message with aria-describedby, breaking the connection for screen readers.
+Fix: Add aria-describedby="s3-form-promo-error" to the input element to link it to the error message.
+
+Location: Status card section
+Evidence: <div class="status-card" style="height:60px;overflow:hidden">
+Problem: Fixed height of 60px with overflow hidden truncates the content inside, making it potentially unreadable or inaccessible.
+Fix: Remove the fixed height and overflow hidden, or increase the height sufficiently to display all content without clipping.
+
+Location: Promotional banner section
+Evidence: <div class="promo-banner" style="width:960px">
+Problem: Fixed width of 960px prevents responsive behavior on smaller screens and can cause content to be cut off on mobile devices.
+Fix: Replace fixed width with max-width:960px or use percentage-based widths to allow responsive scaling.
+
+Location: Delete action control
+Evidence: <div class="icon-delete" role="button" tabindex="0" aria-label="Delete item">
+Problem: A div is repurposed as a button using role="button", but it may lack proper JavaScript event handlers for keyboard navigation and click handling.
+Fix: Replace the div with a native <button> element, or ensure comprehensive keyboard and click event handlers are implemented.
+
+Location: Wizard steps navigation
+Evidence: <div class="wizard-steps"> containing three <div class="step"> elements
+Problem: Wizard steps should use semantic ordered list structure (ol/li) but instead use div elements, reducing semantic clarity and accessibility.
+Fix: Restructure using <ol><li> or <nav><ol><li> for proper semantic meaning.
+
+Location: Link in paragraph within Weekend service section
+Evidence: <a href="/fares/history">read the accessibility improvements list</a>
+Problem: Link text "read the accessibility improvements list" is generic and does not clearly indicate what page the link leads to within its context.
+Fix: Change link text to something more descriptive like "view the complete list of accessibility improvements" or add title attribute for clarity.
+
+Location: Phone number field label in form
+Evidence: <label for="email"> and <label for="phone"> mismatch
+Problem: The labels reference form field ids that may not correctly match their associated inputs.
+Fix: Verify all label for attributes precisely match their corresponding input id attributes throughout the form.
+
+Location: Form submit button
+Evidence: <button type="submit" class="btn-primary">Submit</button>
+Problem: The submit button lacks a descriptive context about what form is being submitted (is it for fare adjustment, service issue report, etc.).
+Fix: Add aria-label or change button text to specify the action, e.g., "Submit service request" or "Request fare adjustment".

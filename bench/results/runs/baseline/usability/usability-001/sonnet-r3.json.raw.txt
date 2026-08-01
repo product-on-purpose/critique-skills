@@ -1,0 +1,44 @@
+Location: Workspace overview section, "Your projects" heading, the recent projects list under id="workspace-overview-recent"
+Evidence: "This workspace holds 3 projects, synced last week." is followed by a list containing only "Data Warehouse Cutover" and "Mobile App Revamp"
+Problem: The stated project count is 3 but only 2 projects appear anywhere in the document, so a user counting what they see cannot reconcile the number with the list.
+Fix: List all 3 projects, or relabel the list as "Recent projects" and add a link to a full project list that accounts for the third one.
+
+Location: Workspace overview section, promo banner with id="workspace-overview-promo-referral"
+Evidence: "Invite 3 teammates this month to unlock the advanced reporting add-on."
+Problem: This call to action is plain text with no link or button, so a user who wants to act on it has no way to do so from this screen.
+Fix: Make the banner a link or button that goes directly to the invite flow (id="invite-member"), or remove it if it is not meant to be actionable here.
+
+Location: Project settings section, the project name form
+Evidence: The form wrapping the name input and the Save button has no action or method attribute
+Problem: Submitting this form has no defined destination, so clicking Save will attempt to reload the current page instead of confirming the save within this document's anchor based flow.
+Fix: Give the form an explicit action or intercept the submit and show a confirmation state, consistent with how the rest of the document handles transitions.
+
+Location: Project settings section, the button with id="project-settings-duplicate-btn"
+Evidence: "<button id=\"project-settings-duplicate-btn\" type=\"button\"></button>"
+Problem: The button has no visible text and no aria-label, so neither a sighted user nor a screen reader user can tell what pressing it will do.
+Fix: Add visible label text such as "Duplicate project" (or an aria-label if an icon-only design is intentional).
+
+Location: Invite a team member section
+Evidence: The form's submit button is labeled "Save" and a separate link, id="invite-member-continue-link", labeled "Continue," both appear to lead toward completing the invite
+Problem: It is not clear whether "Save" or "Continue" is the action that actually sends the invite, or whether both are required, so a user can leave the screen unsure if the invite was sent.
+Fix: Reduce this to one clearly labeled action such as "Send invite," or explain in the interface what each control does if they are genuinely separate steps.
+
+Location: Invite sent section, id="invite-sent"
+Evidence: The section contains only a heading and the paragraph "An invite was sent to the address entered above. It expires in 5 days if not accepted." with no link or button anywhere in it
+Problem: This screen is a dead end. Every other section in the document provides at least one way to navigate onward, but this one gives the user no way back to their project or workspace.
+Fix: Add a link back to project settings or the workspace overview, matching the pattern used elsewhere in the document.
+
+Location: Archive confirmation section, paragraph with id="archive-confirm-copy"
+Evidence: "You can restore it at any time from the archived projects list."
+Problem: No "archived projects list" page or link exists anywhere in this document, so this promise cannot actually be fulfilled by the user.
+Fix: Either build an archived projects view and link to it from the workspace overview, or remove the restore claim from this copy.
+
+Location: Document head
+Evidence: The head contains only a charset meta tag and the title "Project workspace mockup," no viewport meta tag
+Problem: Without a viewport meta tag, this page will not scale correctly on mobile browser widths, which undermines usability on any device narrower than a desktop.
+Fix: Add a viewport meta tag, for example <meta name="viewport" content="width=device-width, initial-scale=1">, to the head.
+
+Location: Notification settings section, the digest frequency field with id="notification-settings-digest-input"
+Evidence: "<select id=\"notification-settings-digest-input\"><option>Daily</option><option>Weekly</option></select>" has no name attribute
+Problem: Even if this form were wired up to submit, the selected digest frequency would never actually be sent because the field has no name attribute, so a user's choice could not be saved.
+Fix: Add a name attribute, for example name="digest-frequency", to the select element.

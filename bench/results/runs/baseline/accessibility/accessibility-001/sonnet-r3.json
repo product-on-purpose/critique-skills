@@ -1,0 +1,182 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "lang=\"translanguage\"",
+      "fix": "Set lang to the actual document language, for example lang=\"en\".",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "html element, opening tag",
+      "severity": 3,
+      "violation": "The lang attribute is not a valid language code, so assistive technology cannot determine the page's language and may mispronounce content or fail to load the correct voice or braille table."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<title id=\"head-title\"></title>",
+      "fix": "Give the page a descriptive title, for example \"Rider service updates\".",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "head, title element",
+      "severity": 3,
+      "violation": "The title element is empty, so the browser tab, bookmarks, and screen reader page announcement all have no descriptive name for the page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Both paragraphs end with the sentence \"Station staff can also help with the same request in person.\"",
+      "fix": "Write a distinct, accurate closing sentence for each paragraph, or remove the redundant one.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "section s1, first two paragraphs",
+      "severity": 3,
+      "violation": "The same closing sentence is reused for two unrelated requests, fare adjustment and checking real time arrivals, which reads as a copy paste error and blurs which request station staff can actually help with in person."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<img src=\"/img/platform-update.jpg\" id=\"s1-img1\">",
+      "fix": "Add a descriptive alt attribute, or alt=\"\" if the image is purely decorative.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "section s1, image",
+      "severity": 3,
+      "violation": "The image has no alt attribute at all, so screen reader users get no information about its content, and some assistive technology announces the raw filename instead."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The document goes from an h1 to an h2 (s1-h) to an h4 (s2-h, \"Accessibility improvements\") with no h3 in between.",
+      "fix": "Change the s2 heading to h2, matching the other section headings, or insert the missing h3 level.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "section s2 heading",
+      "severity": 3,
+      "violation": "Skipping a heading level breaks the logical outline that screen reader users rely on to navigate by heading level."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<table id=\"s2-table1\"> with header row Zone, Status and no caption element.",
+      "fix": "Add a caption element, for example \"Zone status\", before the header row.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "section s2, table",
+      "severity": 3,
+      "violation": "The table has no caption or accessible name, so a screen reader user landing on it has no way to know what data it summarizes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"status-card\" id=\"s3-statuscard\"><p>Local residents can check real time arrivals through the online portal. A confirmation message follows once the request is processed.</p></div>",
+      "fix": "Add role=\"status\", or aria-live=\"polite\", to the status card container.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "section s3, status card",
+      "severity": 3,
+      "violation": "A region that reflects live status information has no role=\"status\" or aria-live attribute, so screen reader users are never notified when its content updates."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">",
+      "fix": "Replace the div with a native button element, for example button type=\"button\" aria-label=\"Delete item\", containing the icon.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "section s3, delete control",
+      "severity": 3,
+      "violation": "A clickable control is built from a div with role=\"button\" and tabindex instead of a native button element, so keyboard activation with Space and Enter, focus styling, and form semantics all have to be reimplemented by hand and are easy to get wrong or omit."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"wizard-steps\" id=\"s3-wizard\"> containing three div elements with class \"step\": \"Choose a plan\", \"Enter payment details\", \"Confirm your order\".",
+      "fix": "Mark the steps up as an ordered list of list items and add aria-current=\"step\" to the active one.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "section s3, wizard steps",
+      "severity": 3,
+      "violation": "A three step sequence is marked up as plain divs with no list semantics and no indication of which step is current, so a screen reader user cannot tell it is an ordered sequence or where they are in it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"For the full list of upcoming adjustments, click here.\"",
+      "fix": "Reword the link text to describe the destination, for example \"see the full list of upcoming adjustments\".",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "section s3, link paragraph",
+      "severity": 3,
+      "violation": "\"Click here\" is not descriptive out of context, so a screen reader user browsing by a list of links hears only \"click here\" with no idea where the link goes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<label for=\"phone\">Phone number (required)</label> next to <input id=\"phone\" type=\"tel\">",
+      "fix": "Add required, or aria-required=\"true\", to the phone input.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "section s3 form, phone field",
+      "severity": 3,
+      "violation": "The label text tells sighted users the field is required, but the input carries no required or aria-required attribute, so assistive technology never announces that requirement."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> followed by <span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span>",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the promo input.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "section s3 form, promo code field",
+      "severity": 3,
+      "violation": "The field is marked invalid but is not programmatically associated with its error message, so a screen reader user is told the field is invalid without ever hearing why."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button type=\"submit\" class=\"btn-primary\" id=\"s3-form-submit\" aria-label=\"Send form now\">Submit</button>",
+      "fix": "Remove the aria-label, or change it to include the visible word \"Submit\", so the accessible name matches the visible text.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "section s3 form, submit button",
+      "severity": 3,
+      "violation": "The visible label \"Submit\" and the accessible name \"Send form now\" do not match, so a speech input user who says \"click Submit\" may fail to activate the button."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div id=\"main-content\"> wraps the h1 and all three sections.",
+      "fix": "Change the wrapping div to a main element, or add role=\"main\" to it.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "main content wrapper",
+      "severity": 3,
+      "violation": "The primary content of the page is wrapped in a plain div instead of a landmark element, so screen reader users cannot jump directly to the main content region."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-001.html",
+    "artifact_sha256": "f620e43c2035d9380934dbe1b09dba438bb38bc1fb7f1feeb58010af44eaf176",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T20:19:21Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 14,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

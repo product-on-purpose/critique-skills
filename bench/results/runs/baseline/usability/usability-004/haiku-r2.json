@@ -1,0 +1,116 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-08-01T02:17:26.659Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "workspace-overview section, line 11",
+      "evidence": "\"This workspace holds 4 projects, synced last week.\" followed by a list containing only 3 items (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp)",
+      "violation": "The text claims 4 projects exist but only 3 are displayed in the list, creating confusion about whether the list is incomplete or the count is wrong.",
+      "fix": "Either display all 4 projects in the list, or update the text to say \"3 projects\" to match what is shown.",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "project-settings-duplicate-btn, line 29",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button> - the button contains no visible text",
+      "violation": "The duplicate button has no visible label text, only an invisible aria-label. Sighted users cannot tell what this button does without additional context.",
+      "fix": "Add visible button text inside the button element, such as \"Duplicate\" or a visible icon with descriptive text, so users can understand its purpose.",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "invite-member form, lines 37-42",
+      "evidence": "A form with an input and \"Save\" button, followed separately by a \"Continue\" link with href=\"#invite-sent\"",
+      "violation": "The form's submit button and the \"Continue\" link serve similar purposes but are separate UI elements, creating ambiguity about which action actually sends the invite.",
+      "fix": "Make the form submit button perform the continue action, or add clarifying text explaining the relationship between the save button and the continue link.",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "project-settings section, lines 22-33",
+      "evidence": "Multiple action links (notification-settings, invite-member, archive-confirm, back to overview) presented as a vertical list without visual hierarchy or grouping",
+      "violation": "All navigation options have equal visual weight, making it unclear which actions are primary workflow steps versus secondary options.",
+      "fix": "Group related actions together and use visual styling (e.g., buttons for primary actions, links for secondary actions) to create a clear hierarchy.",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "archive-confirm-copy, line 52",
+      "evidence": "\"Archiving \\\"Q3 Roadmap\\\" will remove it from the active projects list for everyone on the team.\"",
+      "violation": "The project name is hardcoded in the message rather than being dynamically inserted, which means this copy must be manually updated if the project name changes.",
+      "fix": "Replace the hardcoded project name with a dynamic placeholder or variable reference so the message updates automatically when the project changes.",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "project-archived, line 58",
+      "evidence": "\"\\\"Q3 Roadmap\\\" has been moved to archived projects. It no longer appears in the active projects list for anyone on the team.\"",
+      "violation": "The project name is hardcoded in the confirmation message, requiring manual updates if the project name changes.",
+      "fix": "Use dynamic project name injection instead of hardcoding the name in the message text.",
+      "confidence": "medium",
+      "id": "F-006"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "entire document",
+      "evidence": "All form elements (project settings input, email input, notification select) are immediately followed by submit buttons with no spacing or visual grouping",
+      "violation": "Form controls and their submit buttons lack visual separation, making the structure of each form section unclear.",
+      "fix": "Add visual grouping such as fieldset elements or consistent spacing around form groups to clarify which inputs belong together.",
+      "confidence": "medium",
+      "id": "F-007"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "workspace-overview and project-settings sections, lines 12-20 and 22-33",
+      "evidence": "Navigation links in workspace-overview (Open project settings, View last import result) followed by different navigation pattern in project-settings (links to various subsections)",
+      "violation": "Different sections use different navigation patterns (mixed link types and destinations) without consistent structure, making it harder to predict where navigation will lead.",
+      "fix": "Establish a consistent navigation pattern where similar action types use the same visual treatment and location structure.",
+      "confidence": "medium",
+      "id": "F-008"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

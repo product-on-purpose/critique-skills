@@ -1,0 +1,94 @@
+{
+  "summary": {
+    "gate": "fail",
+    "by_severity": {
+      "2": 5,
+      "4": 0,
+      "3": 1,
+      "0": 0,
+      "1": 1
+    },
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  },
+  "run": {
+    "skill": "critique-usability",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "model": "claude-haiku-4-5-20251001",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/usability/usability-001.html",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill_version": "0.1.0",
+    "timestamp": "2026-07-31T01:58:21Z"
+  },
+  "findings": [
+    {
+      "severity": 3,
+      "fix": "Add a control inside the \"invite-sent\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+      "location": "the \"invite-sent\" section",
+      "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact.",
+      "lane": "scripted",
+      "id": "F-001",
+      "evidence": "the \"invite-sent\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+      "criterion": "NNG-H3-DEADEND",
+      "confidence": "high"
+    },
+    {
+      "severity": 2,
+      "fix": "Add visible text to this control, or an aria-label attribute naming what it does.",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "violation": "This control has neither visible text nor an accessible-name attribute, so nothing on screen names what the control does.",
+      "lane": "scripted",
+      "id": "F-002",
+      "evidence": "<button> with no text content and no accessible-name attribute",
+      "criterion": "NNG-H6-LABELED",
+      "confidence": "high"
+    },
+    {
+      "severity": 2,
+      "fix": "Add a success message displayed after the user clicks Save, or show a changed control state such as the button becoming disabled briefly or the form showing a save confirmation.",
+      "location": "the \"project-settings\" section, project name form",
+      "violation": "This state-changing action (saving the project name) lacks a specified visible indication of outcome, so the user cannot tell whether the save succeeded or failed.",
+      "lane": "judged",
+      "id": "F-003",
+      "evidence": "The form contains a text input labeled \"Project name\" with current value \"Design System Refresh\" and a \"Save\" button; the artifact specifies no feedback message, loading state, or changed control appearance after clicking Save.",
+      "criterion": "NNG-H1",
+      "confidence": "high"
+    },
+    {
+      "severity": 2,
+      "fix": "Add a success message displayed after clicking Save, or show the form returning to a default state that confirms the change was saved.",
+      "location": "the \"notification-settings\" section, digest frequency form",
+      "violation": "This state-changing action (saving notification settings) lacks a specified visible indication of outcome, so the user cannot tell whether the save succeeded.",
+      "lane": "judged",
+      "id": "F-004",
+      "evidence": "The form contains a select dropdown labeled \"Digest frequency\" and a \"Save\" button; the artifact specifies no feedback message or control state change after clicking Save.",
+      "criterion": "NNG-H1",
+      "confidence": "high"
+    },
+    {
+      "severity": 2,
+      "fix": "Add a control in the invite-sent screen or a follow-up screen to revoke or cancel the sent invite, or document that sent invites cannot be recalled.",
+      "location": "the \"invite-sent\" section",
+      "violation": "Sending an invite is a committed action; the artifact provides no named reversal path or undo mechanism.",
+      "lane": "judged",
+      "id": "F-006",
+      "evidence": "After the invite is sent and the user reaches the \"Invite sent\" screen, the artifact states \"An invite was sent to the address entered above. It expires in 5 days if not accepted.\" No control or documented path to revoke, cancel, or unsend the invite appears anywhere in the artifact.",
+      "criterion": "NNG-H3-UNDO",
+      "confidence": "high"
+    },
+    {
+      "severity": 2,
+      "fix": "Mark the currently selected option with a selected attribute in the HTML, or show the current digest frequency selection before presenting the form options.",
+      "location": "the \"notification-settings\" section, digest frequency select",
+      "violation": "The user cannot see what the current digest frequency setting is when arriving at the notification-settings screen, so they lack information needed to make an informed decision about whether to change it.",
+      "lane": "judged",
+      "id": "F-007",
+      "evidence": "The select element lists \"Daily\" and \"Weekly\" options with no indication of which is currently selected; the HTML markup shows no selected attribute and no other visual indicator of the current setting.",
+      "criterion": "NNG-H6-RECALL",
+      "confidence": "high"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+Location: start of the document, before the first message block (no introduction or legend precedes "## Two-factor setup, verification code")
+Evidence: the document uses the field labels "Placement", "Container", "Signal", "Fires", "Predictable mistake", and "Input on resubmission" starting with the very first entry, with no definition given anywhere in the file
+Problem: None of these field labels are defined, so a reader encountering the document for the first time cannot tell what "Container: inline" or "Predictable mistake: yes" means or how the value was determined.
+Fix: Add a short legend or introductory paragraph before the first screen section that defines each field and its possible values.
+
+Location: Two-factor setup, verification code section, first message block
+Evidence: "Verification codes are 6 digits long, and this one has 5."
+Problem: The message hardcodes the number of digits entered as "5", so it would be false for any user who actually entered a different count, such as three, four, seven, or eight digits.
+Fix: Replace the fixed number with the actual count entered by the user, for example "Verification codes are 6 digits long, and this one has {count}."
+
+Location: Two-factor setup, verification code section, comparing the Placement, Container, and Signal fields of both message blocks against the same three fields under Billing, promo code
+Evidence: "Placement: directly below the verification code field", "Container: inline", and "Signal: bold text set larger than the field label, icon" appear word for word identical, aside from the field name, in all four message blocks
+Problem: Three of the eight fields in every block never vary, so they are repeated four times over with no indication of whether the repetition is a deliberate shared convention or an oversight, which makes it harder to see what actually differs between the four messages.
+Fix: State the shared Placement, Container, and Signal convention once, near the top of the document, and keep only the fields that vary (Message, Fires, Predictable mistake, Input on resubmission, Suggested fix) in each individual block.
+
+Location: Two-factor setup, verification code section, "Fires" field of the first message block compared with the "Fires" field of the second message block
+Evidence: "Fires: on-blur" in the first message versus "Fires: on-submit" in the second message
+Problem: The two messages that validate the same field fire at different points in the interaction, with no explanation given for why a length check happens on blur while an expiration check waits until submit, which could let a user fix the length on blur and then only discover on submit that the code has also expired.
+Fix: Explain the rationale for the different trigger points, or make the two checks fire at the same point in the flow so they cannot surface one after the other.
+
+Location: Two-factor setup, verification code section, second message block
+Evidence: "This verification code expired 10 minutes after it was sent, which stops an intercepted code from being reused later. Request a new code and enter it here."
+Problem: The message states the security rationale for the expiration policy before the instruction of what to do about it, so the user has to read through an explanation before reaching the actionable step.
+Fix: Lead with the action, for example "Request a new code. This one expired 10 minutes after it was sent to prevent an intercepted code from being reused."
+
+Location: Two-factor setup, verification code section, second message block, "Suggested fix" field
+Evidence: "selectable, offers a resend code button in place of the message"
+Problem: The phrase is a sentence fragment rather than a complete instruction; it is unclear what is meant to become selectable, and how that relates to the resend code button.
+Fix: Rewrite as a complete sentence, for example "Make the message text selectable, and replace it with a resend code button once the code has expired."
+
+Location: Billing, promo code section, first message block
+Evidence: "This promo code ended on 30 June."
+Problem: The date has no year, so the message is ambiguous for a code that expired in a year other than the current one, or near a year boundary.
+Fix: Include the year in the message, for example "This promo code ended on 30 June 2026."
+
+Location: document as a whole, all four message blocks under both headings
+Evidence: none of the four message blocks carries an identifier; the two headings, "Two-factor setup, verification code" and "Billing, promo code", each group two messages with no further labeling
+Problem: Because no message has a unique identifier, referring precisely to a specific message, for example the second message under Billing, promo code, requires counting position rather than citing a stable name.
+Fix: Give each message block a short identifier, for example TFA-01, TFA-02, PROMO-01, PROMO-02, so any message can be referenced unambiguously.
+
+Location: document as a whole, "Predictable mistake" and "Suggested fix" fields across all four message blocks
+Evidence: the two messages marked "Predictable mistake: yes" (the verification code length message and the annual plan promo code message) both carry "Suggested fix: none", while the one message with an actual suggested fix (the expired verification code message) is marked "Predictable mistake: no"
+Problem: The document proposes a fix only for the mistake it labels unpredictable and proposes no fix for either mistake it labels predictable, which is the reverse of what the labels would lead a reader to expect.
+Fix: Either add suggested fixes for the two messages marked "Predictable mistake: yes", or explain in the document why a predictable mistake does not warrant a suggested fix while an unpredictable one does.

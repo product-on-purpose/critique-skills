@@ -1,0 +1,64 @@
+Location: the html element's lang attribute
+Evidence: <html lang="translanguage" id="html">
+Problem: The lang attribute value "translanguage" is not a valid BCP 47 language code, so browsers and assistive technology cannot determine what language the page is in.
+Fix: Set lang to a valid code for the page's actual language, for example lang="en".
+
+Location: the title element in the head
+Evidence: <title id="head-title"></title>
+Problem: The page title is empty, so browser tabs, bookmarks, browser history, and screen reader page announcements all show no name for this page.
+Fix: Add descriptive title text, for example "Rider service updates".
+
+Location: the image at the end of the "Fare adjustments" section
+Evidence: <img src="/img/platform-update.jpg" id="s1-img1">
+Problem: The image has no alt attribute at all, so anyone who cannot see it gets no information about what it shows.
+Fix: Add an alt attribute describing the image's content, or alt="" if it is purely decorative.
+
+Location: second paragraph of the "Fare adjustments" section
+Evidence: "Riders can check real time arrivals at any station kiosk. Station staff can also help with the same request in person."
+Problem: The second sentence refers to "the same request," but the paragraph never describes a request, only a self-service action of checking arrivals, so the sentence reads as leftover text from a different paragraph.
+Fix: Rewrite or remove the second sentence so it actually follows from checking real time arrivals at a kiosk.
+
+Location: heading of the "Accessibility improvements" section
+Evidence: <h4 id="s2-h">Accessibility improvements</h4>
+Problem: The heading level jumps from h1 and h2 straight to h4, skipping h3, which breaks the logical heading outline of the page.
+Fix: Change this heading to h2, matching the level of the other top-level section headings.
+
+Location: first paragraph of the "Accessibility improvements" section
+Evidence: "Passengers can report a service issue by calling rider services. Updates post to the schedule page within one business day."
+Problem: The second sentence describes schedule page updates, which does not follow from reporting a service issue by phone, suggesting a sentence copied from a different paragraph.
+Fix: Replace the second sentence with text describing what happens after a service issue is reported, or remove it.
+
+Location: the zone status table in the "Accessibility improvements" section
+Evidence: <table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>
+Problem: The table has no caption, so its purpose is not announced to anyone who cannot infer it from the surrounding page context.
+Fix: Add a caption element identifying the table, for example "Zone status".
+
+Location: the status card in the "Station updates" section
+Evidence: "Local residents can check real time arrivals through the online portal. A confirmation message follows once the request is processed."
+Problem: The second sentence describes a confirmation for a processed request, but checking real time arrivals is not a request that gets processed, making the sentence a non sequitur.
+Fix: Remove the second sentence or replace it with wording relevant to checking arrivals online.
+
+Location: the wizard-steps block in the "Station updates" section
+Evidence: "Choose a plan" / "Enter payment details" / "Confirm your order"
+Problem: This three step checkout and payment sequence has no stated connection to the surrounding content about station and fare updates, and it appears with no heading or explanation of what plan or order it refers to.
+Fix: Remove this block if it belongs to a different page, or add a heading and explanatory text tying it to the surrounding content.
+
+Location: the link at the end of the "Station updates" section
+Evidence: <a href="/fares/history" id="s3-link1">click here</a>
+Problem: The link text "click here" does not describe where the link goes, so it is meaningless when read out of context, for example in a list of links or by a screen reader.
+Fix: Change the link text to something descriptive, such as "view the full list of upcoming adjustments".
+
+Location: the phone number field in the station updates form
+Evidence: <label for="phone" id="s3-form-phone-label">Phone number (required)</label> <input id="phone" type="tel">
+Problem: The label text states the field is required, but the input itself has no required attribute, so the form's actual validation does not enforce what the label claims.
+Fix: Add the required attribute to the phone input so its behavior matches the label text.
+
+Location: the promo code field in the station updates form
+Evidence: <input id="promo" type="text" aria-invalid="true"> <span class="error-text" id="s3-form-promo-error">Enter a 6 character code using letters and numbers only.</span>
+Problem: The promo field is marked aria-invalid="true" and shows an error message before the user has entered anything, and the error text is not linked to the input by aria-describedby, so the two are only related visually, not programmatically.
+Fix: Only set aria-invalid to true after a failed validation attempt, and add aria-describedby pointing at the error span's id so the error is tied to the input for assistive technology too.
+
+Location: the submit button in the station updates form
+Evidence: <button type="submit" class="btn-primary" id="s3-form-submit" aria-label="Send form now">Submit</button>
+Problem: The button's visible text reads "Submit" but its accessible name is overridden to "Send form now" by aria-label, so sighted users and screen reader users are given different names for the same control.
+Fix: Remove the aria-label so the accessible name matches the visible text, or change the visible text to match the aria-label.

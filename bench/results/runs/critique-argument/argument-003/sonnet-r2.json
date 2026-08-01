@@ -1,0 +1,48 @@
+{
+  "run": {
+    "skill": "critique-argument",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/argument/argument-003.md",
+    "artifact_sha256": "3735fd3a135fcd3f730e35c6af56fb064083676684399e5b0486c140ff7894de",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T20:52:24Z",
+    "rubrics": ["TOULMIN"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "TOULMIN-BACKING",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Why the Pilot Result Applies Systemwide section, paragraphs 1 and 2",
+      "evidence": "\"Removing the financial penalty for late returns predictably increases both on-time return rates and overall program participation\" is backed only by \"the Tri-County Library Data Cooperative's 2023 fines-elimination research brief, which reviewed return-rate data from fourteen library systems that eliminated fines between 2017 and 2022.\"",
+      "violation": "The general principle licensing the systemwide generalization asserts two effects, increased return rates and increased overall program participation, but the cited backing brief is described as reviewing only return-rate data across fourteen systems, so the participation half of the principle has no documented study, standard, or precedent behind it beyond the pilot's own single-site survey.",
+      "fix": "Either narrow the stated principle to the return-rate effect the cited brief actually documents, or name a study, precedent, or documented body of practice that supports the participation-increase half of the principle as well.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-002",
+      "criterion": "TOULMIN-REBUTTAL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Recommendation section, second paragraph",
+      "evidence": "\"replacing the current fine notices with automatic email reminders sent three, seven, and fourteen days after the due date\"",
+      "violation": "The recommendation switches the notification channel from the existing fine notices to email-only reminders, a change the pilot data never describes or measures, and the artifact never raises or answers the foreseeable risk that patrons without an email address on file receive no reminder at all under the new system.",
+      "fix": "Add a sentence addressing how patrons without an email on file will be reached, for example a fallback mail or phone reminder, or cite pilot data confirming the email channel's own reach.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 0,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "pass",
+    "severity_3_threshold": 0
+  }
+}

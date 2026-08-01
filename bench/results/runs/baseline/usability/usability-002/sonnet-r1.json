@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<head><meta charset=\"utf-8\"><title>Project workspace mockup</title></head> contains no <style> or <script> tag, and all eight <section> elements (workspace-overview, project-settings, invite-member, invite-sent, archive-confirm, project-archived, import-status, notification-settings) are plain siblings in <body> with no hidden attribute or display rule",
+      "fix": "Add a rule that shows only the section matching the current URL fragment and hides the rest, for example \"section:not(:target){display:none}\", or a small script that toggles visibility on navigation.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Document head and body, the whole file (lines 1-81); no <style> or <script> element appears anywhere",
+      "severity": 3,
+      "violation": "The document uses href=\"#section-id\" links to imply a step-by-step screen flow (overview, then settings, then invite, then a confirmation screen, and so on), but because nothing hides inactive sections, every one of the eight screens renders on the page at once, stacked top to bottom, instead of showing one screen at a time."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 5 projects, synced last week.\" is followed by a ul with exactly four li entries: Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp",
+      "fix": "Either add the fifth project to the list or change the summary text to say \"4 projects.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section \"workspace-overview,\" the summary paragraph and the \"Your projects\" list directly beneath it",
+      "severity": 3,
+      "violation": "The stated project count of 5 does not match the 4 projects actually listed, which reads as a bug or a missing row to anyone who counts the list."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>",
+      "fix": "Add a visible label or icon, for example a copy icon plus the text \"Duplicate,\" inside the button so its purpose is visible and not only announced to screen readers.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section \"project-settings,\" the button immediately after the project name form",
+      "severity": 3,
+      "violation": "The button has no visible text and no icon, only an aria-label, so a sighted user has no way to tell what the control does or even that it is meaningful; it will render as a blank, unlabeled button."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a> links directly to #project-archived, while the section with id=\"archive-confirm\" (\"Archive this project?\", with its own cancel and archive links) is never linked to from anywhere else in the document",
+      "fix": "Change project-settings-archive-link's href from #project-archived to #archive-confirm so the confirmation screen is reached before the project is archived.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section \"project-settings,\" the \"Archive project\" link, compared against the \"archive-confirm\" section later in the document",
+      "severity": 3,
+      "violation": "Archiving a project is described as removing it \"from the active projects list for everyone on the team,\" but the only reachable path skips the confirmation screen entirely and jumps straight to the archived state, so the confirmation step that was built into the document can never actually be shown to a user."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The first two buttons both read \"Save\" (<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>, <button id=\"invite-member-save-btn\" type=\"submit\">Save</button>), but the third, doing the same kind of job, reads \"Submit\" (<button id=\"notification-settings-save-btn\" type=\"submit\">Submit</button>)",
+      "fix": "Rename the notification settings button to \"Save\" so all three equivalent actions carry the same label.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "The three form submit buttons, project-settings-save-btn, invite-member-save-btn, and notification-settings-save-btn",
+      "severity": 3,
+      "violation": "Three forms that all commit a settings change use two different verbs for the same action, which makes the interface feel inconsistent and can leave a user unsure whether \"Submit\" behaves differently from \"Save.\""
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-08-01T02:07:43Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

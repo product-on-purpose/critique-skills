@@ -1,0 +1,49 @@
+Location: Workspace overview section, the intro paragraph and the "Your projects" list right below it
+Evidence: "This workspace holds 3 projects, synced last week." followed by a list containing only "Data Warehouse Cutover" and "Mobile App Revamp"
+Problem: The stated project count (3) does not match the number of projects actually shown (2), which reads as a bug or missing data.
+Fix: Either show all 3 projects, add a clearly labeled "view all" link that accounts for the gap, or correct the sentence to match the list that is shown.
+
+Location: Workspace overview section, the promo div sitting between the project list and the section's two navigation links
+Evidence: "Invite 3 teammates this month to unlock the advanced reporting add-on." appears directly between the projects list and the "Open project settings" / "View last import result" links
+Problem: Marketing content is placed in the middle of the primary task flow, ahead of the links users need to reach settings and import status, with no way to dismiss it.
+Fix: Move the promo below the navigation links (or into a separate area) and give it a dismiss control.
+
+Location: Project settings section, the unlabeled button below the Save button
+Evidence: <button id="project-settings-duplicate-btn" type="button"></button>
+Problem: The button has no visible text or accessible label, so users and assistive technology have no way to know what it does.
+Fix: Add visible text such as "Duplicate project" (and an aria-label if it is meant to be icon-only).
+
+Location: Project settings section, the project name field, compared with the "Your projects" list in the workspace overview
+Evidence: The name input shows value="Design System Refresh", but the overview list names only "Data Warehouse Cutover" and "Mobile App Revamp"
+Problem: The project reachable through "Open project settings" does not match either project named in the overview, so the settings screen appears to belong to a project the user was never shown.
+Fix: Make the project opened from "Open project settings" one of the projects actually listed in the overview, or add a project picker so the connection is explicit.
+
+Location: Invite a team member section, the Save button inside the form and the Continue link below it
+Evidence: <button id="invite-member-save-btn" type="submit">Save</button> and, separately, <a id="invite-member-continue-link" href="#invite-sent">Continue</a>
+Problem: It is unclear whether Save and Continue are the same action, sequential steps, or alternate paths, since both appear to lead toward sending the invite.
+Fix: Use a single primary action for sending the invite, and if Continue is a distinct step, label it to say what it does differently, such as "Continue without inviting."
+
+Location: Invite sent section
+Evidence: The section contains only <h2>Invite sent</h2> and a paragraph; unlike every other confirmation section in the document it has no link out
+Problem: After an invite is sent, there is no way to navigate anywhere else from this screen, unlike the archive and import confirmation screens which both provide an exit link.
+Fix: Add a link back to project settings or the workspace overview, matching the pattern used on the other confirmation screens.
+
+Location: Archive confirmation copy, compared with the rest of the document
+Evidence: "You can restore it at any time from the archived projects list." but no "archived projects list" screen or link exists anywhere in the document, including on the Project archived screen that follows
+Problem: The confirmation text promises a way to view and restore archived projects, but no such screen or link exists anywhere in the mockup.
+Fix: Add an archived-projects view (or a link to one) reachable from the workspace overview, and link to it from the archive confirmation and archived screens.
+
+Location: Import status section
+Evidence: "The last import finished with 2 rows skipped... Rows 15 and 99 were skipped" is followed only by <a id="import-status-exit-link" href="#workspace-overview">Back to your projects</a>
+Problem: Users are told two rows failed but are given no way to fix the referenced rows, retry the import, or get more detail; the only option is to leave the screen.
+Fix: Add an action for retrying the import or resolving the skipped rows, such as a link to create the missing projects or a downloadable list of the failed rows.
+
+Location: Workspace overview section, the "View last import result" link
+Evidence: <a id="workspace-overview-import-link" href="#import-status">View last import result</a>
+Problem: The last import actually had 2 skipped rows, but this link is worded the same way it would be if the import had succeeded, so nothing signals that there is a problem to look at.
+Fix: Change the link text or add a visible indicator when the last import had errors, for example "Import finished with 2 errors."
+
+Location: Project settings, Invite a team member, Notifications, and Archive confirmation sections
+Evidence: Section headings are generic ("Project settings", "Invite a team member", "Notifications") and only the project settings input value and the archive copy mention a project name at all
+Problem: Once a user moves from settings into invite, notifications, or archive, nothing on those screens confirms which project they are still acting on, which is risky in a workspace that holds multiple projects.
+Fix: Show the current project name in each section's heading or a persistent breadcrumb, for example "Notifications - Design System Refresh."

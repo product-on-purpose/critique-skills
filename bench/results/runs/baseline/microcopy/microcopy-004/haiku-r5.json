@@ -1,0 +1,105 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/microcopy/microcopy-004.md",
+    "artifact_sha256": "c8f58456a4deb36595b0ac00fe364b68e80445e939d7293d2db8d8f1a42ac91b",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:51:02.274281Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Verification code message, line 5",
+      "evidence": "\"Check the message again and enter all six.\"",
+      "violation": "The instruction to \"check the message again\" is redundant since the user is already looking at the error message containing this text. This creates confusion about what action is actually needed.",
+      "fix": "Replace with \"Enter all six digits of your verification code.\" to directly state what the user needs to do.",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Verification code error trigger, line 8",
+      "evidence": "\"Fires: on-blur\"",
+      "violation": "Validation firing on blur means it triggers when users click away from the field, potentially before they finish entering all six digits. This creates a poor experience as users may be interrupted mid-input.",
+      "fix": "Change the validation trigger to fire on input completion (after six digits entered) or on submit instead of on-blur.",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Expired code message, line 14",
+      "evidence": "\"This verification code expired 10 minutes after it was sent\"",
+      "violation": "The message includes a specific time duration (10 minutes) without context about why this duration was chosen. Users may not understand why their code expired so quickly or what they should do differently.",
+      "fix": "Simplify to \"This verification code has expired.\" and move timing details to documentation outside the error message, or add \"Please request a new code\" to clarify the next action.",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Promo code end date, line 25",
+      "evidence": "\"This promo code ended on 30 June.\"",
+      "violation": "The date reference lacks a year, which creates ambiguity after June 30th passes each year. Users in subsequent years won't know if the code ended this year or last year.",
+      "fix": "Change to \"This promo code ended on 30 June 2024.\" or use a relative time reference like \"This promo code is no longer active.\"",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Promo code alternative action, line 26",
+      "evidence": "\"or continue without one\"",
+      "violation": "This phrasing is vague about the mechanism. It's unclear whether users must click a button to skip the field, can simply leave it empty, or must dismiss the message.",
+      "fix": "Clarify with \"You can continue without a promo code by clicking Next\" or similar to explicitly state how users proceed.",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Billing plan incompatibility message, line 34-35",
+      "evidence": "\"Change the plan to annual, or remove the code.\"",
+      "violation": "The message presents two options without indicating which is the simpler solution or what users should consider when choosing. This forces users to make a decision without guidance.",
+      "fix": "Reorder to prioritize the simpler action: \"Remove this code to continue with your monthly plan, or upgrade to an annual plan to use this code.\"",
+      "confidence": "medium",
+      "id": "F-006"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Document structure",
+      "evidence": "Document contains only structured data about error messages with no introductory context or headers explaining the document's purpose.",
+      "violation": "The document lacks any introduction explaining what these screens are for, when they appear, or what the business goals of these messages are. This makes it difficult for someone unfamiliar with the product to understand the context.",
+      "fix": "Add a brief introduction explaining \"This document describes error messages and their handling for two user flows: two-factor authentication setup and billing plan selection.\"",
+      "confidence": "medium",
+      "id": "F-007"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-08-01T01:58:53Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 29, Project settings section, duplicate button",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\"></button>",
+      "violation": "The button contains no visible text or accessible label",
+      "fix": "Add descriptive text inside the button element, such as \"Duplicate project\"",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 39, Invite a team member section, email input",
+      "evidence": "<input id=\"invite-member-email-input\" type=\"email\">",
+      "violation": "The input lacks a value attribute, leaving it empty while other form inputs have placeholder or default values",
+      "fix": "Add placeholder=\"name@example.com\" or value=\"\" to match the pattern of other inputs in the document",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 69-72, Notifications section, select element",
+      "evidence": "<select id=\"notification-settings-digest-input\"><option>Daily</option><option>Weekly</option></select>",
+      "violation": "The option elements lack value attributes, so the form cannot reliably submit the selected choice",
+      "fix": "Add value=\"daily\" to the first option and value=\"weekly\" to the second option",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 47, Invite sent section",
+      "evidence": "<p>An invite was sent to the address entered above. It expires in 5 days if not accepted.</p>",
+      "violation": "The message refers to \"the address entered above\" but the form is no longer visible, creating potential user confusion",
+      "fix": "Reword to \"An invite was sent to the email address you entered. It expires in 5 days if not accepted.\"",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 18, Workspace overview section",
+      "evidence": "<div id=\"workspace-overview-promo-referral\">Invite 3 teammates this month to unlock the advanced reporting add-on.</div>",
+      "violation": "This promotional content is placed within a section showing project status, potentially confusing the primary information hierarchy",
+      "fix": "Move the promotional content to a distinct section or use a clear visual container to separate it from project information",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 51, Archive confirmation section",
+      "evidence": "<p id=\"archive-confirm-copy\">Archiving \"Design System Refresh\" will remove it from the active projects list for everyone on the team. You can restore it at any time from the archived projects list.</p>",
+      "violation": "The paragraph uses smart quotes around the project name, which may not render consistently across all browsers and devices",
+      "fix": "Replace the smart quotes with standard ASCII quotation marks or remove them entirely",
+      "confidence": "medium",
+      "id": "F-006"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

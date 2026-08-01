@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "style=\"color:#999999\"",
+      "fix": "Change the text color to #666666 or darker to achieve at least 4.5:1 contrast ratio against light backgrounds.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section 1, paragraph 1 (s1-p1)",
+      "severity": 3,
+      "violation": "Text color #999999 has insufficient contrast against the default light background, failing WCAG AA color contrast standards."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "label for=\"topic-alt\" with select id=\"topic\"",
+      "fix": "Change the label's for attribute to \"topic\" to match the select element's id.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section 3, form labels and controls (s3-form-topic-label, topic)",
+      "severity": 3,
+      "violation": "The label's for attribute references \"topic-alt\" but the select element has id=\"topic\", creating a broken association."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "aria-invalid=\"true\" on input without aria-describedby",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the promo input element.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section 3, form promo code input (s3-form-promo-error)",
+      "severity": 3,
+      "violation": "The input signals an error state but does not point to the error message element using aria-describedby."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "div class=\"icon-delete\" role=\"button\" tabindex=\"0\"",
+      "fix": "Replace this with a semantic <button> element or add complete keyboard event handlers (Enter and Space keys).",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section 3, custom button control (s3-customcontrol)",
+      "severity": 3,
+      "violation": "A custom div element with role=\"button\" requires full keyboard event handling and focus management that is not implemented."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "div class=\"wizard-steps\" containing unlabeled step divs",
+      "fix": "Add role=\"region\" and aria-label=\"Progress indicator\" to s3-wizard, and add role=\"progressbar\" or aria-current=\"step\" to the active step.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section 3, wizard steps container (s3-wizard)",
+      "severity": 3,
+      "violation": "The wizard steps container lacks semantic structure or ARIA landmarks to indicate it is a progress indicator."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "style=\"height:60px;overflow:hidden\"",
+      "fix": "Remove the overflow:hidden style or use overflow:auto to allow content to be accessible when text is enlarged.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section 3, status card (s3-statuscard)",
+      "severity": 3,
+      "violation": "The overflow:hidden style may hide important content from users who need to resize text or use zoom features."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-002.html",
+    "artifact_sha256": "b49ce74681df60732a6ef3b5309ce82264ad1b6ad48c6fa8b85989f2c712f113",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

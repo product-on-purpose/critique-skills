@@ -1,0 +1,69 @@
+Location: html element, opening tag
+Evidence: lang="translanguage"
+Problem: The lang attribute is not a valid language code, so assistive technology cannot determine the page's language and may mispronounce content or fail to load the correct voice or braille table.
+Fix: Set lang to the actual document language, for example lang="en".
+
+Location: head, title element
+Evidence: <title id="head-title"></title>
+Problem: The title element is empty, so the browser tab, bookmarks, and screen reader page announcement all have no descriptive name for the page.
+Fix: Give the page a descriptive title, for example "Rider service updates".
+
+Location: section s1, first two paragraphs
+Evidence: Both paragraphs end with the sentence "Station staff can also help with the same request in person."
+Problem: The same closing sentence is reused for two unrelated requests, fare adjustment and checking real time arrivals, which reads as a copy paste error and blurs which request station staff can actually help with in person.
+Fix: Write a distinct, accurate closing sentence for each paragraph, or remove the redundant one.
+
+Location: section s1, image
+Evidence: <img src="/img/platform-update.jpg" id="s1-img1">
+Problem: The image has no alt attribute at all, so screen reader users get no information about its content, and some assistive technology announces the raw filename instead.
+Fix: Add a descriptive alt attribute, or alt="" if the image is purely decorative.
+
+Location: section s2 heading
+Evidence: The document goes from an h1 to an h2 (s1-h) to an h4 (s2-h, "Accessibility improvements") with no h3 in between.
+Problem: Skipping a heading level breaks the logical outline that screen reader users rely on to navigate by heading level.
+Fix: Change the s2 heading to h2, matching the other section headings, or insert the missing h3 level.
+
+Location: section s2, table
+Evidence: <table id="s2-table1"> with header row Zone, Status and no caption element.
+Problem: The table has no caption or accessible name, so a screen reader user landing on it has no way to know what data it summarizes.
+Fix: Add a caption element, for example "Zone status", before the header row.
+
+Location: section s3, status card
+Evidence: <div class="status-card" id="s3-statuscard"><p>Local residents can check real time arrivals through the online portal. A confirmation message follows once the request is processed.</p></div>
+Problem: A region that reflects live status information has no role="status" or aria-live attribute, so screen reader users are never notified when its content updates.
+Fix: Add role="status", or aria-live="polite", to the status card container.
+
+Location: section s3, delete control
+Evidence: <div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">
+Problem: A clickable control is built from a div with role="button" and tabindex instead of a native button element, so keyboard activation with Space and Enter, focus styling, and form semantics all have to be reimplemented by hand and are easy to get wrong or omit.
+Fix: Replace the div with a native button element, for example button type="button" aria-label="Delete item", containing the icon.
+
+Location: section s3, wizard steps
+Evidence: <div class="wizard-steps" id="s3-wizard"> containing three div elements with class "step": "Choose a plan", "Enter payment details", "Confirm your order".
+Problem: A three step sequence is marked up as plain divs with no list semantics and no indication of which step is current, so a screen reader user cannot tell it is an ordered sequence or where they are in it.
+Fix: Mark the steps up as an ordered list of list items and add aria-current="step" to the active one.
+
+Location: section s3, link paragraph
+Evidence: "For the full list of upcoming adjustments, click here."
+Problem: "Click here" is not descriptive out of context, so a screen reader user browsing by a list of links hears only "click here" with no idea where the link goes.
+Fix: Reword the link text to describe the destination, for example "see the full list of upcoming adjustments".
+
+Location: section s3 form, phone field
+Evidence: <label for="phone">Phone number (required)</label> next to <input id="phone" type="tel">
+Problem: The label text tells sighted users the field is required, but the input carries no required or aria-required attribute, so assistive technology never announces that requirement.
+Fix: Add required, or aria-required="true", to the phone input.
+
+Location: section s3 form, promo code field
+Evidence: <input id="promo" type="text" aria-invalid="true"> followed by <span class="error-text" id="s3-form-promo-error">Enter a 6 character code using letters and numbers only.</span>
+Problem: The field is marked invalid but is not programmatically associated with its error message, so a screen reader user is told the field is invalid without ever hearing why.
+Fix: Add aria-describedby="s3-form-promo-error" to the promo input.
+
+Location: section s3 form, submit button
+Evidence: <button type="submit" class="btn-primary" id="s3-form-submit" aria-label="Send form now">Submit</button>
+Problem: The visible label "Submit" and the accessible name "Send form now" do not match, so a speech input user who says "click Submit" may fail to activate the button.
+Fix: Remove the aria-label, or change it to include the visible word "Submit", so the accessible name matches the visible text.
+
+Location: main content wrapper
+Evidence: <div id="main-content"> wraps the h1 and all three sections.
+Problem: The primary content of the page is wrapped in a plain div instead of a landmark element, so screen reader users cannot jump directly to the main content region.
+Fix: Change the wrapping div to a main element, or add role="main" to it.

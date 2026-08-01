@@ -1,0 +1,161 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/clarity/clarity-002.md",
+    "artifact_sha256": "7fd910197f585ef10416cde2ed6b94fa48de539377a1082d82e29ccee509e6df",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T20:56:55Z",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "evidence": "71-word sentence, 5 subordinate-clause markers: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "violation": "The sentence runs to 71 words with 5 subordinate-clause markers, longer than the reader can hold in mind on a single pass.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "WILLIAMS-SHAPE",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "evidence": "71-word sentence: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "violation": "At 71 words, with 0 comma-set-off clause(s) and 5 subordinate-clause marker(s), the sentence stacks interruptions between its subject and its main verb instead of holding the main clause together.",
+      "fix": "Move subordinate clauses and modifiers after the main clause, not between its subject and verb.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "PLAIN-LISTS",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "How to Apply, paragraph 1",
+      "evidence": "Employees must submit the receipt, the manager's approval form, and the original purchase order before the review begins.",
+      "violation": "The sentence embeds three or more comma- or semicolon-separated parallel items inline rather than presenting them as a formatted list.",
+      "fix": "Reformat the inline items as a numbered or bulleted list.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "PLAIN-MUST",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Required Documentation, paragraph 2",
+      "evidence": "Additionally, employees shall retain receipts for one year after the purchase date.",
+      "violation": "The sentence states a binding requirement using shall or an indirect requirement phrasing instead of must.",
+      "fix": "Restate the requirement using must.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "PLAIN-NOMINALIZATION",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Reimbursement Amounts, paragraph 1",
+      "evidence": "The finance office conducts an evaluation of every submitted receipt before it approves the amount.",
+      "violation": "The action is buried inside the noun 'evaluation', carried by a generic support verb, instead of stated as the sentence's own main verb.",
+      "fix": "Restate the nominalized noun as the sentence's main verb.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "PLAIN-PARAGRAPH",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Eligibility, paragraph 3",
+      "evidence": "165 words in one paragraph.",
+      "violation": "The paragraph exceeds the 150-word scannability threshold.",
+      "fix": "Split the paragraph so each part covers one topic.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "PLAIN-PRONOUNS",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Restrictions and Exceptions, paragraph 1",
+      "evidence": "The applicant must keep the equipment in good working condition and this office may ask for a brief photo check once a year.",
+      "violation": "The sentence routes the reader or the writer's organization through a third-person institutional substitute instead of direct address.",
+      "fix": "Address the reader as you and the writer's organization as we.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-008",
+      "criterion": "PLAIN-AUDIENCE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Eligibility, paragraph 3",
+      "evidence": "The reviewer confirms the workspace address matches the address already on file with payroll. A workspace shared with a roommate can still qualify if the desk area belongs to the employee alone. The reviewer logs every workspace confirmation in the same shared tracking sheet the benefits team maintains.",
+      "violation": "The section addresses both employees (eligibility criteria) and internal staff (reviewer procedures) within the same paragraph without separation, making it unclear which instructions are for the reader and which describe internal workflow.",
+      "fix": "Separate employee-facing eligibility criteria into one subsection and internal reviewer procedures into a separate administrative section, or use clear labels like 'You (the employee)' and 'We (the reviewer) will' to distinguish audiences.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-009",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Eligibility, paragraph 3",
+      "evidence": "The workspace must sit inside the employee's primary residence for the stipend to apply. Similarly, a workspace located in a shared coworking space does not qualify for the stipend under this section. A workspace used only occasionally for calls does not meet the bar the stipend policy sets. The reviewer confirms the workspace address matches the address already on file with payroll.",
+      "violation": "The paragraph opens with specific conditions and exceptions before stating the governing principle, requiring re-reading to extract the main rule for workspace qualification.",
+      "fix": "Open the workspace section with the main qualification rule: 'A home office workspace must meet these conditions to qualify for the stipend,' then list each condition as a separate point.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-010",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Program Overview, Special Cases, Questions and Updates sections",
+      "evidence": "Program Overview (paragraph 1): 'The benefits team tracks the stipend budget at the start of the fiscal year.' Special Cases (section 10): 'The finance liaison reviews the stipend budget at the start of the fiscal year.' Questions and Updates (section 13): 'The people operations office tracks the stipend budget at the start of the fiscal year. Every entry carries a date stamp so the record stays easy to audit.' These three sections repeat the same budget-tracking information verbatim.",
+      "violation": "The document repeats the same budget information across three separate sections, and sections 10-13 do not follow the reader's natural question sequence (Am I eligible? What do I do? What happens next?).",
+      "fix": "Remove duplicate information from Special Cases and Questions and Updates sections. Reorganize the document to follow a reader's task sequence: eligibility check, application steps, approval process, restrictions and exceptions.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-011",
+      "criterion": "WILLIAMS-COHERENCE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Eligibility, paragraph 3",
+      "evidence": "The paragraph includes sentences about workspace location requirements, coworking spaces, occasional use, reviewer address confirmation, shared workspace conditions, equipment location, workspace address changes, reviewer logging procedures, and confirmation age requirements. A reader finishing the paragraph encounters: workspace rules, reviewer duties, more workspace rules, more reviewer duties, then workspace change procedures.",
+      "violation": "The paragraph mixes employee-facing eligibility requirements with internal reviewer procedures without connecting them, so a reader cannot state what the section as a whole was about after reading it.",
+      "fix": "Split the paragraph into two coherent sections: one covering all workspace qualification requirements for employees, and a separate section or call-out explaining what the reviewer will verify.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-012",
+      "criterion": "WILLIAMS-COHESION",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Eligibility, paragraph 3",
+      "evidence": "Sentence 1 (workspace location) opens with new topic. Sentence 2 (coworking) shifts to different workspace type. Sentence 3 (occasional use) shifts again. Sentence 4 (reviewer confirms) shifts to internal procedure. Sentence 5 (roommate) returns to workspace conditions. Sentence 6 (equipment location) shifts to coverage. Sentence 7 (address change) returns to workspace conditions. Sentence 8 (reviewer logs) returns to procedures. Sentence 9 (confirmation age) returns to eligibility.",
+      "violation": "Successive sentences' subjects shift topic with no signal connecting them, forcing re-orientation at every sentence boundary.",
+      "fix": "Group related sentences together by topic (all workspace condition sentences, then all reviewer procedure sentences), or restructure sentences to establish a consistent topic thread using transitions or parallel structure.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 8,
+      "3": 7,
+      "4": 0
+    },
+    "suppressed_count": 3,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "run": {
+    "skill": "critique-argument",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/argument/argument-001.md",
+    "artifact_sha256": "1a8e240dbe5e45749ac14d0de3554b5b2829840eb5dff3dbb044ad6674f30796",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T20:44:43Z",
+    "rubrics": ["TOULMIN"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "TOULMIN-BACKING",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section 'Why the Pilot Result Applies Systemwide', second paragraph",
+      "evidence": "This is simply how patron behavior works, and no library that has tried it has ever found otherwise.",
+      "violation": "The section heading promises to explain why the five-branch pilot result generalizes to all ten branches, and the only principle offered to do that work is this sentence: a bare assertion of universal patron behavior with no study, no named library, no data, and no precedent cited. A target reader reading cold would not grant that patron behavior at five untested branches mirrors the pilot branches on sight, and the artifact offers nothing beyond restating the claim more forcefully (no library has ever found otherwise).",
+      "fix": "Cite a study, consortium record, or documented case of another library that removed fines at additional branches and saw the same return-rate and avoidance pattern, or narrow the recommendation to the five pilot branches until that backing exists.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "TOULMIN-QUALIFIER",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section 'Recommendation', first paragraph",
+      "evidence": "Thus, given the return-rate and avoidance-survey results above, the stronger choice is a systemwide end to overdue fines across all ten consortium branches, effective at the start of the next fiscal year.",
+      "violation": "The claim is stated for all ten consortium branches with no qualifying language, while the grounds it cites (an 18-month pilot at 5 branches, reported two paragraphs earlier under 'What the Pilot Showed') were collected at only half that number. Extending an unqualified claim to branches the cited data never covered is exactly the strength-versus-grounds mismatch this criterion tests, and nothing in the recommendation flags the other five branches as unproven.",
+      "fix": "Qualify the systemwide portion of the claim, for example by recommending the change at the five pilot branches now and a phased or monitored rollout at the remaining five, or state explicitly that the extension to the untested branches is a judgment call rather than a data-backed result.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "TOULMIN-REBUTTAL",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section 'Addressing the Revenue Concern', second paragraph",
+      "evidence": "Objection paragraph: \"A skeptic on the board points to overdue fines as a source of materials-replacement funding, and argues that eliminating them systemwide will leave a shortfall the consortium has not planned for.\" Very next paragraph, offered as the answer: \"The branch renovation project remains on schedule for completion next spring.\"",
+      "violation": "The artifact raises the revenue-shortfall objection, the most obvious challenge to eliminating a funding source, and then moves to an unrelated sentence about a renovation project's schedule without answering it. This is a violation raised and abandoned, not a violation never raised: the section header claims to address the concern, and the body does not.",
+      "fix": "Replace or follow the renovation sentence with a substantive answer to the funding-shortfall objection: a named replacement revenue source, a cost analysis showing offsetting savings, or an explicit statement of how much shortfall is accepted and how it will be covered.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "TOULMIN-GROUNDS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Section 'Recommendation', third paragraph",
+      "evidence": "This recommendation applies to items returned within 60 days of their due date; items still unreturned past that window remain subject to the existing replacement-cost billing process, matching the return-rate pattern the pilot data actually established.",
+      "violation": "The clause claims the 60-day cutoff matches a return-rate pattern the pilot data established, but the pilot section reports only aggregate return-rate percentages (93 percent versus 86 percent) with no breakdown by time to return. A reader has no way to check the referenced pattern because it is never presented anywhere in the artifact, so this specific provision carries an evidentiary claim without evidence attached to it.",
+      "fix": "Either report the pilot's actual return-timing breakdown that the 60-day threshold is drawn from, or drop the phrase claiming it matches an established pilot pattern and present the 60-day cutoff as a policy choice instead.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 3,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

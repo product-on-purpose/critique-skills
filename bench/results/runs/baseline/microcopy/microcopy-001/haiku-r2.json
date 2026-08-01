@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message describes connection error; suggested fix says \"selectable, offers the one available next step as a direct action\"",
+      "fix": "Replace the suggested fix with an actionable recovery: \"Offer a retry button or alternative submission method, such as re-attempting the request or submitting without confirmation.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Signup form, email field, first message (lines 5-12)",
+      "severity": 3,
+      "violation": "The suggested fix does not address the stated problem. A connection error requires recovery actions like retry or fallback, not selecting a next step."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message: \"The expiry date on this card has passed.\" Fires: mid-keystroke",
+      "fix": "Change firing trigger to \"on-blur\" or \"on-field-complete\" to validate only after the user finishes entering the full expiry date.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Line 38, Checkout form payment method expiry message",
+      "severity": 3,
+      "violation": "Mid-keystroke validation is inappropriate for expiry date fields, which typically require a complete MM/YY entry before validation. Character-by-character checking will trigger false errors."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message: \"You keep entering the wrong value. Re-enter it to continue.\"",
+      "fix": "Replace with a specific instruction: \"Enter a valid phone number. Format: (123) 456-7890 or 123-456-7890\" with an example.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Line 45, Profile settings phone number message",
+      "severity": 3,
+      "violation": "The message is vague and provides no guidance on what format or value is expected, leaving users unable to correct their input."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Fires: on-submit. Placement: in a banner directly above the payment method selector, staying on screen until another method is chosen.",
+      "fix": "Clarify the trigger: either change to fire on method selection (on-change) if it should persist during selection, or remove the \"staying on screen\" qualifier if it only appears after submit.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Line 29, Checkout form payment method error placement",
+      "severity": 3,
+      "violation": "The timing contradicts the placement. If the message fires only on-submit, it cannot stay visible while the user selects an alternative method before submitting."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Four error messages end with \"Suggested fix: none\"",
+      "fix": "For each message, specify a concrete action: retry, contact support, enter different data, use an alternative field, etc.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Lines 21 and 32 and 41 and 52",
+      "severity": 3,
+      "violation": "These are error messages in a user-facing interface; providing no suggested fix leaves users without actionable guidance to resolve the error."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "First message signal: \"icon\" (line 8). Second message signal: \"none\" (line 17).",
+      "fix": "Clarify whether both messages appear simultaneously or sequentially. If simultaneous, both should use the same signal treatment. If sequential, document the trigger for switching between them.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Signup form, email field (lines 5 and 14), signal descriptions",
+      "severity": 3,
+      "violation": "Two messages in the same field location use different signal types without explanation. This inconsistency suggests either missing icon in the second message or mislabeled first message."
+    }
+  ],
+  "run": {
+    "artifact": "bench/results/staging/microcopy/microcopy-001.md",
+    "artifact_sha256": "0580399008ca4517da0a1b1f620180b68a4cfb24e596be279a5f782cde325fc7",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

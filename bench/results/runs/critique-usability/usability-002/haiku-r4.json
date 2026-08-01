@@ -1,0 +1,91 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T23:59:59Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"project-settings\" section, form submission",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button> with no specified target or feedback state. Same pattern appears in invite-member and notification-settings sections.",
+      "violation": "Form save actions are specified without any feedback to the user about whether the submission succeeded, failed, or is in progress. The artifact provides no loading state, success message, error state, or transition to a defined next screen after these buttons are clicked.",
+      "fix": "Specify what the user sees after clicking each Save button: either a transition to a success state (with or without a confirmation message), or a loading indicator followed by success feedback, or a visible error state if submission fails.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"archive-confirm\" section, archive action",
+      "evidence": "Section archive-confirm-copy states: 'You can restore it at any time from the archived projects list.' However, the artifact defines no navigation control to access an archived projects list, and the project-archived success screen does not include a restore or return-to-active control.",
+      "violation": "The artifact commits to archive being reversible by explicitly stating 'You can restore it at any time from the archived projects list,' but provides no interface to reach that restoration path. A user who archives by accident has no control shown in the artifact to restore the project.",
+      "fix": "Either add a control in the project-archived section linking to an archived projects view, or remove the promise of restoration from the confirmation copy if restoration is not available in the designed flow.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-H2-LANGUAGE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"notification-settings\" section, form label",
+      "evidence": "<label for=\"notification-settings-digest-input\">Digest frequency</label>",
+      "violation": "The label 'Digest frequency' uses semi-technical terminology. A user managing notifications would more naturally understand 'Notification frequency', 'Email frequency', or 'Update frequency'. The term 'digest' assumes the user knows it means a summary email.",
+      "fix": "Change the label to 'Notification frequency' or 'How often do you want notifications' to match the vocabulary a user managing notification preferences would use.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-H6-RECALL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-sent\" section",
+      "evidence": "The section contains 'An invite was sent to the address entered above. It expires in 5 days if not accepted.' but does not display the actual email address that was sent to.",
+      "violation": "The confirmation screen references 'the address entered above' but does not repeat that address on screen. A user cannot verify at the confirmation step that the invitation was sent to the correct email address without returning to the previous screen.",
+      "fix": "Display the email address explicitly in the invite-sent confirmation: 'An invite was sent to example@domain.com. It expires in 5 days if not accepted.'",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-H4-CONTROL-NAMING",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "evidence": "control labeled \"Save\"",
+      "violation": "This artifact uses 2 different labels for what reads as the same commit action: \"Save\", \"Submit\". A user cannot tell from the label alone whether these controls perform the same action or different ones.",
+      "fix": "Pick one label for this commit action, for example \"Save\", and use it everywhere the action appears.",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button",
+          "evidence": "control labeled \"Save\""
+        },
+        {
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button",
+          "evidence": "control labeled \"Submit\""
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 2,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

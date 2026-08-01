@@ -1,0 +1,24 @@
+Location: Billing, promo code, first message
+Evidence: "This promo code ended on 30 June."
+Problem: The date has no year, so a reader cannot tell which year the code expired, which matters if promo codes recur on the same month and day in different years.
+Fix: Include the year, for example "This promo code ended on 30 June 2026."
+
+Location: Two-factor setup, verification code, second message (expired code)
+Evidence: "This verification code expired 10 minutes after it was sent, which stops an intercepted code from being reused later."
+Problem: The message spends its first half explaining the security rationale for the expiration policy instead of the action the user needs to take, making it noticeably longer and slower to scan than the other three messages in the document.
+Fix: Move the rationale out of the primary message, into a tooltip or help link, and lead with the action: "This code expired 10 minutes after it was sent. Request a new code and enter it here."
+
+Location: Two-factor setup, verification code, second message, Suggested fix line
+Evidence: "selectable, offers a resend code button in place of the message"
+Problem: The suggested fix packs two distinct changes into one unpunctuated phrase, and it is unclear whether "selectable" describes the error message text, the resend button, or something else.
+Fix: Split into two sentences that each name what becomes selectable and what the button replaces, for example "Make the message text selectable. Replace it with a resend code button."
+
+Location: document-wide, the Predictable mistake field on all four message entries
+Evidence: "Predictable mistake: yes" appears twice and "Predictable mistake: no" appears twice, with no definition anywhere in the document.
+Problem: "Predictable mistake" is used as a field label throughout the document but is never defined, so a reader cannot verify why two entries are marked "yes" and two are marked "no".
+Fix: Add a short definition of "predictable mistake" near the top of the document, or a one-line legend explaining the criteria for yes and no.
+
+Location: Two-factor setup, verification code, second message, Fires line
+Evidence: "Fires: on-submit", compared with "Fires: on-blur" on the other three messages
+Problem: Three of the four messages fire on-blur, but the expired-code message fires on-submit with no explanation given for why this one message uses a different trigger, leaving it unclear whether the difference is intentional.
+Fix: Add a short note explaining that expiration can only be confirmed against the server at submission, or confirm this is intentional if that is not the reason.

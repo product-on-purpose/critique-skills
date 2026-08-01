@@ -1,0 +1,61 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:23:55Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section \"logging\", second sentence",
+      "evidence": "\"the default value is info\"",
+      "violation": "Field default value specified inconsistently; \"logging\" uses prose description while \"timeout\" and \"retries\" use explicit \"defaults to\" phrasing.",
+      "fix": "Change to \"and the default value is info\" format for consistency or restructure all three field descriptions to use identical default-statement phrasing.",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "\"Related pages\" section",
+      "evidence": "List contains \"Metric catalog reference\" and other entries without link destinations or URLs",
+      "violation": "The related pages are listed as bare text without any indication of whether these are links, internal references, or external pages, making them non-navigable.",
+      "fix": "Either create actual links (markdown format: [Metric catalog reference](path)), add a note that these are placeholder references, or remove the section if the links are not yet implemented.",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Entire document structure",
+      "evidence": "The document provides only three field descriptions (timeout, retries, logging) out of the referenced \"Alert rule fields\"",
+      "violation": "The reference documentation is incomplete; it claims to be an \"Alert rule fields reference\" but documents only a subset of fields, leaving readers unable to find documentation for other fields mentioned in related pages.",
+      "fix": "Either expand the document to include all fields referenced elsewhere, or retitle it to indicate it is a partial reference (e.g., \"Alert rule fields reference - logging, timeout, and retries\").",
+      "confidence": "medium",
+      "id": "F-003"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 3,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

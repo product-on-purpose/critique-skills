@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"A threshold is the numeric boundary that triggers an alert once a metric crosses it.\"",
+      "fix": "Move this definition to an introductory sentence before the steps begin, or cut it if it is not needed to complete the task.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"Open alert settings\" section, second sentence",
+      "severity": 3,
+      "violation": "This definition is dropped into the middle of a procedure with no step of its own attached to it, so it breaks the flow of instructions and the reader cannot tell whether it is background information or something they need to act on."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"the numeric boundary that triggers an alert once a metric crosses it\"",
+      "fix": "Specify the crossing direction, for example \"once the metric rises above it,\" or state where that direction is configured.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"Open alert settings\" section, second sentence",
+      "severity": 3,
+      "violation": "\"Crosses it\" does not say whether the alert fires when the metric goes above the threshold, below it, or either, leaving the central concept of the document ambiguous."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Enter the updated threshold value in the field provided and confirm the unit matches the metric in use.\"",
+      "fix": "Split this into two numbered steps and name the actual field label, for example \"Threshold value.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Set the new threshold\" section, first sentence",
+      "severity": 3,
+      "violation": "Two distinct actions, entering a value and confirming a unit, are combined into a single unnumbered sentence, and \"the field provided\" does not name which field, so a reader cannot locate it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This is because the console applies the new threshold to every future evaluation of this rule.\"",
+      "fix": "Name what \"this\" refers to and connect the explanation directly to the unit-matching instruction, for example \"Confirm the unit, because a mismatched unit makes the threshold trigger at the wrong value.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"Set the new threshold\" section, second sentence",
+      "severity": 3,
+      "violation": "\"This\" has no clear antecedent between entering the value and confirming the unit, and the stated reason does not actually explain why the unit needs to match."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"open the rule list to confirm the new threshold appears there\"",
+      "fix": "State explicitly whether the rule list is part of the alerts panel or a separate screen, and how to reach it.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Save and verify\" section, first sentence",
+      "severity": 3,
+      "violation": "The document never establishes whether \"the rule list\" is the same screen as the \"alerts panel\" opened in the first section or a separate screen, so the reader cannot tell where to navigate."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "three headed sections, zero numbered steps; every instruction is written as a prose sentence",
+      "fix": "Convert each action into a numbered step list under its section heading.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "whole document, step structure across all three sections",
+      "severity": 3,
+      "violation": "A how-to document that gives several sequential actions without a numbered list makes it hard for a reader to track which action comes next or to resume partway through."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Configure alert thresholds\" (title) versus \"the rule you want to adjust\" (body, singular)",
+      "fix": "Change the title to singular, \"Configure an alert threshold,\" or add a sentence noting the steps apply to each rule in turn.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "title, compared with the body",
+      "severity": 3,
+      "violation": "The title uses the plural \"thresholds,\" but the body only ever describes configuring one threshold on one selected rule, a minor mismatch between the title's scope and the content's scope."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-001.md",
+    "artifact_sha256": "b41787144ac8cc1ae14bcce23fa2b574f6ee68f1aaa9cc432628f9f148ddd713",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:19:28Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

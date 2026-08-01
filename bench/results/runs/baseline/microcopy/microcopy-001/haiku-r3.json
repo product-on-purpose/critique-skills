@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The connection dropped before this finished.\"",
+      "fix": "Change to \"Your connection dropped. Try entering your email again, or wait a moment and refresh the page.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Signup form, email field, first message",
+      "severity": 3,
+      "violation": "The message does not explain what action the user should take next, leaving them uncertain whether to retry or take a different approach."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Enter an email address that includes an at sign and a domain, for example name@example.com, so the confirmation link has somewhere to go.\"",
+      "fix": "Shorten to \"Enter an email with @ and a domain, like name@example.com\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Signup form, email field, second message",
+      "severity": 3,
+      "violation": "The message is longer than necessary and buries the core instruction (enter a valid email) in explanation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Something went wrong. Contact support if this continues.\"",
+      "fix": "Change to \"Payment method unavailable. Try another card, or contact support if the problem continues.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Checkout form, payment method",
+      "severity": 3,
+      "violation": "This message tells the user to contact support without first giving them any immediate recovery step, which may frustrate users who could resolve the issue themselves."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This phone number is already on another account. Remove it there first, or contact support to move it across.\"",
+      "fix": "Change to \"This phone number is already on another account. Remove it from that account first, or contact support to transfer it.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Profile settings, phone number, second message",
+      "severity": 3,
+      "violation": "The phrase \"move it across\" is colloquial and may confuse users in non-English-speaking regions or those unfamiliar with this phrasing."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-001.md",
+    "artifact_sha256": "0580399008ca4517da0a1b1f620180b68a4cfb24e596be279a5f782cde325fc7",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T12:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

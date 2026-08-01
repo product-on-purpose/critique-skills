@@ -1,0 +1,142 @@
+{
+  "run": {
+    "artifact": "bench/results/staging/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": ["PLAIN", "WILLIAMS"],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-07-31T21:03:45Z"
+  },
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-PARAGRAPH",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout.",
+      "fix": "Rewrite the opening sentence to state the topic the rest of the paragraph covers.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "The paragraph's opening sentence shares almost no vocabulary with the rest of the paragraph, so it does not preview the paragraph's actual topic."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SUBJECT-VERB-OBJECT",
+      "evidence": "Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.",
+      "fix": "Move the interrupting clause elsewhere, or split it into its own sentence.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 2",
+      "severity": 2,
+      "violation": "3 comma-set-off clause(s) totalling 14 words intervene between the sentence's apparent subject and its verb."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-TRANSITIONS",
+      "evidence": "An incomplete request pauses the timeline until the missing item arrives. The...",
+      "fix": "Open the paragraph with a transition word that states its relationship to the prior paragraph.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 2",
+      "severity": 2,
+      "violation": "The paragraph opens with none of the fixed transition words, so the reader is not told how it relates to the paragraph before it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-PARALLELISM",
+      "evidence": "Completing the request begins with confirming eligibility, and the uploaded receipt.",
+      "fix": "Restate every item in the series with the same grammatical form.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "Request Steps, paragraph 1",
+      "severity": 2,
+      "violation": "The series' 2 items mix grammatical forms (gerund, other) at their head words instead of sharing one form."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Terminology Notes section: 'Finance reconciles the reimbursable item against the request log each month. Payroll releases the covered purchase amount after that monthly review.' This section uses second person 'you' elsewhere but here addresses Finance and Payroll staff.",
+      "fix": "Separate staff-facing content into a distinct section clearly labeled for internal use, or add explicit role labels like 'For Finance:' before staff-addressed instructions.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Terminology Notes section (line 49-53)",
+      "severity": 3,
+      "violation": "The document addresses two distinct audiences - employees and internal finance staff - within the same section without clear separation, leaving employees unclear which instructions apply to them.",
+      "confidence": "high"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Section 6 uses 'stipend item', Section 7 uses 'reimbursable item', Section 7 uses 'covered purchase amount', Section 7 uses 'equipment', Section 7 uses 'device'. No definition clarifies whether these refer to the same concept.",
+      "fix": "Define a single term for the equipment being purchased (e.g., 'eligible equipment') and use it consistently throughout. Add a definition section if internal terminology differs.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Required Documentation section through Terminology Notes",
+      "severity": 2,
+      "violation": "Multiple terms - stipend item, reimbursable item, covered purchase amount, device, equipment - are used interchangeably without clarifying whether they refer to the same thing.",
+      "confidence": "medium"
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Request Steps section (line 55-57) stating 'Completing the request begins with confirming eligibility, and the uploaded receipt' appears after Terminology Notes and other sections, not immediately after How to Apply section.",
+      "fix": "Move Request Steps section to appear immediately after How to Apply, before Approval Timeline. Move Terminology Notes to an appendix or separate staff documentation.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Section ordering: Request Steps appears at line 55-57 but should appear earlier",
+      "severity": 3,
+      "violation": "The Request Steps section, which describes the actual steps an employee needs to follow, appears much later in the document after staff-focused content, not in the sequence the reader needs to follow the process.",
+      "confidence": "high"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "The stipend covers one claim (line 11) uses 'stipend' as subject instead of naming the organization. The portal walks through each step (line 19) uses 'portal' instead of addressing the employee. The summary shows the equipment cost (line 23) uses 'summary' instead of 'we show'.",
+      "fix": "Replace abstract subjects with the real actors: We cover one claim per employee instead of The stipend covers. You work through each step in the portal instead of The portal walks through. We show you the equipment cost instead of The summary shows.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Lines 11, 19, 23, and throughout the document",
+      "severity": 2,
+      "violation": "Several sentences use abstract nouns (stipend, portal, summary) as grammatical subjects where real actors (the organization, the employee, the system) could be named.",
+      "confidence": "medium"
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "Program Coordination section: 'The benefits team coordinates every stipend request from intake to payout. A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.'",
+      "fix": "Remove sentences about travel audits, federal guidance, and office budgets. Replace them with content that actually addresses program coordination, or reorganize unrelated content into separate sections with appropriate headings.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Program Coordination section (line 63-65)",
+      "severity": 3,
+      "violation": "The Program Coordination section opens stating its topic but then discusses three completely unrelated topics (travel expenses, remote work guidance, coffee budget), so the section has no coherent theme.",
+      "confidence": "high"
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "Program Coordination section: First sentence is 'The benefits team coordinates every stipend request from intake to payout.' Second sentence is 'A separate audit last spring reviewed unrelated travel expenses.' The second sentence opens with entirely new information (audit, travel) not mentioned in the first.",
+      "fix": "Reorganize to create topic-specific sections, or integrate related information into existing sections. Remove unrelated content entirely.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Program Coordination section (line 63-65), sentence boundaries",
+      "severity": 3,
+      "violation": "Consecutive sentences in the Program Coordination section jump between unrelated topics - stipend coordination, travel audits, remote work, and coffee budgets - with no connection between them, breaking the reader's topic thread.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

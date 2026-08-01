@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The connection dropped before this finished.\"",
+      "fix": "Specify what the user should do, such as \"Try again\" or \"Check your connection and resubmit.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Signup form, email field, first error message",
+      "severity": 3,
+      "violation": "The message does not explain what action the user should take to resolve the issue."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The connection dropped before this finished.\"",
+      "fix": "Add clarity such as \"A network error occurred. Try again.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Signup form, email field, first error message",
+      "severity": 3,
+      "violation": "The error does not clearly indicate this is a temporary network problem versus a permanent account issue."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You keep entering the wrong value. Re-enter it to continue.\"",
+      "fix": "Specify the format expected, such as \"Enter a phone number in the format 555-1234 or (555) 123-4567.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Profile settings, phone number, first error message",
+      "severity": 3,
+      "violation": "The message does not specify which value is wrong or what the correct format should be."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Something went wrong. Contact support if this continues.\"",
+      "fix": "Replace with a more specific message such as \"Payment processing failed. Check your payment details and try again, or contact support if the problem continues.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Checkout form, payment method, first error message",
+      "severity": 3,
+      "violation": "The message is too generic and does not indicate whether the issue is temporary or whether the user should try a different action."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-001.md",
+    "artifact_sha256": "0580399008ca4517da0a1b1f620180b68a4cfb24e596be279a5f782cde325fc7",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-08-01T02:04:25Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Workspace overview section, project list",
+      "evidence": "\"This workspace holds 5 projects, synced last week.\" with a list of only 4 project names",
+      "violation": "The introductory text states 5 projects but only 4 are listed, creating a mismatch between stated and shown content",
+      "fix": "Either update the text to \"4 projects\" or add the missing 5th project name to the list",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Project settings section, duplicate button",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>",
+      "violation": "The button has no visible text content, only an aria-label, making its purpose unclear for sighted users",
+      "fix": "Add visible text content such as \"Duplicate\" or replace with a clear icon and text label",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Notification settings form, digest frequency select element",
+      "evidence": "<select id=\"notification-settings-digest-input\"><option>Daily</option><option>Weekly</option><option>Monthly</option></select>",
+      "violation": "The select dropdown has no default option explicitly selected, leaving the initial selection state ambiguous",
+      "fix": "Add selected=\"selected\" to one option, or prepend a placeholder option like <option value=\"\">Select frequency</option>",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Notification settings form, button label",
+      "evidence": "Button labeled \"Submit\" in the notification settings form while other forms use \"Save\"",
+      "violation": "Button labels are inconsistent across the form interface, using both \"Submit\" and \"Save\" for similar actions",
+      "fix": "Change the notification settings button to use \"Save\" to match the label convention used in other forms",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Project settings form, form element",
+      "evidence": "<form><label for=\"project-settings-name-input\">Project name</label><input id=\"project-settings-name-input\" type=\"text\" value=\"Customer Migration\"><button id=\"project-settings-save-btn\" type=\"submit\">Save</button></form>",
+      "violation": "The form element lacks a method attribute, defaulting to GET which exposes form data in the URL",
+      "fix": "Add method=\"POST\" to the form element to use the POST method for secure data submission",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Invite member form, form element",
+      "evidence": "<form><label for=\"invite-member-email-input\">Email address</label><input id=\"invite-member-email-input\" type=\"email\"><button id=\"invite-member-save-btn\" type=\"submit\">Save</button></form>",
+      "violation": "The form element lacks a method attribute, defaulting to GET which exposes email data in the URL",
+      "fix": "Add method=\"POST\" to the form element to protect sensitive email data",
+      "confidence": "medium",
+      "id": "F-006"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

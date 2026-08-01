@@ -1,0 +1,34 @@
+Location: "Your projects" section, the summary sentence and the list beneath it (workspace-overview-recent)
+Evidence: "This workspace holds 4 projects, synced this morning." followed by a list with only three items: Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot.
+Problem: The stated project count does not match the number of projects actually listed, so a reader cannot tell whether a project is missing from the list or the stated count is simply wrong.
+Fix: Either change the summary text to "3 projects" or add the fourth project to the list so the count and the list agree.
+
+Location: Project settings section, the unlabeled icon button next to the save form (project-settings-duplicate-btn)
+Evidence: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>
+Problem: The button has no visible text or icon content, only an aria-label, so a sighted user scanning the page has no way to tell what the button does or even that it does anything.
+Fix: Add visible label text or an icon glyph inside the button, or at minimum a title attribute, so its purpose is discoverable without relying on the aria-label alone.
+
+Location: Invite a team member section, the form's save button and the separate continue link (invite-member-save-btn and invite-member-continue-link)
+Evidence: The form contains a "Save" submit button, and directly below the form a separate "Continue" link pointing to #invite-sent.
+Problem: Two different controls appear to advance the same task of sending the invite, so it is unclear whether "Save" actually sends the invite or whether "Continue" is a required second step, and what happens if a user clicks "Continue" without clicking "Save" first.
+Fix: Combine these into one primary action, such as a single "Send invite" button that itself navigates to the confirmation screen, or clearly label and separate the two steps if they are genuinely distinct actions.
+
+Location: Invite sent confirmation section (invite-sent)
+Evidence: "An invite was sent to the address entered above."
+Problem: This screen does not display the email address that was entered; "above" refers to a different section the user is no longer viewing, so they cannot verify which address actually received the invite.
+Fix: Carry the entered email address into the confirmation message, for example "An invite was sent to jane@example.com."
+
+Location: Import status section, the status message (import-status-message)
+Evidence: "Import failed. Error code IMP-500. Contact support if this continues."
+Problem: The message instructs the user to contact support but provides no link, email address, or other means of doing so, leaving them at a dead end.
+Fix: Add a support contact link or button, such as a mailto link or a "Contact support" button, next to the error message.
+
+Location: Notification settings form, the digest frequency select (notification-settings-digest-input)
+Evidence: <select id="notification-settings-digest-input"><option>Daily</option><option>Weekly</option></select> with no option marked selected.
+Problem: Because no option is marked selected, the control defaults to showing "Daily" regardless of the user's actual saved preference, which could mislead the user into thinking their digest is currently set to Daily when it may not be.
+Fix: Mark whichever option matches the user's actual saved preference with the selected attribute so the control reflects real state instead of defaulting silently.
+
+Location: Project settings form, the project name input (project-settings-name-input)
+Evidence: <input id="project-settings-name-input" type="text" value="Vendor Onboarding">
+Problem: The input has no name attribute, so if this form were submitted normally its value would not be included in the submitted data.
+Fix: Add a name attribute, for example name="project-name", to the input so its value is submitted with the form.

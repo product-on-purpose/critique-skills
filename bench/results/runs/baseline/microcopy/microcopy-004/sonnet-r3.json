@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This promo code ended on 30 June.\"",
+      "fix": "Include the year, for example \"This promo code ended on 30 June 2026.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Billing, promo code, first message",
+      "severity": 3,
+      "violation": "The date has no year, so a reader cannot tell which year the code expired, which matters if promo codes recur on the same month and day in different years."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This verification code expired 10 minutes after it was sent, which stops an intercepted code from being reused later.\"",
+      "fix": "Move the rationale out of the primary message, into a tooltip or help link, and lead with the action: \"This code expired 10 minutes after it was sent. Request a new code and enter it here.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code, second message (expired code)",
+      "severity": 3,
+      "violation": "The message spends its first half explaining the security rationale for the expiration policy instead of the action the user needs to take, making it noticeably longer and slower to scan than the other three messages in the document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"selectable, offers a resend code button in place of the message\"",
+      "fix": "Split into two sentences that each name what becomes selectable and what the button replaces, for example \"Make the message text selectable. Replace it with a resend code button.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code, second message, Suggested fix line",
+      "severity": 3,
+      "violation": "The suggested fix packs two distinct changes into one unpunctuated phrase, and it is unclear whether \"selectable\" describes the error message text, the resend button, or something else."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" appears twice and \"Predictable mistake: no\" appears twice, with no definition anywhere in the document.",
+      "fix": "Add a short definition of \"predictable mistake\" near the top of the document, or a one-line legend explaining the criteria for yes and no.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "document-wide, the Predictable mistake field on all four message entries",
+      "severity": 3,
+      "violation": "\"Predictable mistake\" is used as a field label throughout the document but is never defined, so a reader cannot verify why two entries are marked \"yes\" and two are marked \"no\"."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-submit\", compared with \"Fires: on-blur\" on the other three messages",
+      "fix": "Add a short note explaining that expiration can only be confirmed against the server at submission, or confirm this is intentional if that is not the reason.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code, second message, Fires line",
+      "severity": 3,
+      "violation": "Three of the four messages fire on-blur, but the expired-code message fires on-submit with no explanation given for why this one message uses a different trigger, leaving it unclear whether the difference is intentional."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-004.md",
+    "artifact_sha256": "c8f58456a4deb36595b0ac00fe364b68e80445e939d7293d2db8d8f1a42ac91b",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:51:41Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

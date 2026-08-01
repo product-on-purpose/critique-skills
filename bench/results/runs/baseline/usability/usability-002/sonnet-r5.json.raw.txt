@@ -1,0 +1,29 @@
+Location: Project workspace overview section, opening paragraph and project list ("workspace-overview" section)
+Evidence: The paragraph reads "This workspace holds 5 projects, synced last week." but the list under it contains only 4 items (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp).
+Problem: The stated project count does not match the number of projects actually listed, so the two numbers contradict each other on the same screen.
+Fix: Either add the missing fifth project to the list or change the paragraph to say "4 projects" so the count and the list agree.
+
+Location: Project settings section, the unlabeled button next to Save ("project-settings-duplicate-btn")
+Evidence: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button> has no text content between its tags.
+Problem: The button renders with no visible label, so a sighted user sees an empty control and cannot tell what it does without inspecting the markup or hovering for a tooltip that is not defined.
+Fix: Add visible text such as "Duplicate" inside the button, or an icon plus a visible caption, instead of relying on aria-label alone.
+
+Location: Project settings section, "Archive project" link, and the "Archive this project?" confirmation section
+Evidence: The link <a id="project-settings-archive-link" href="#project-archived">Archive project</a> jumps straight to the "Project archived" section; no link anywhere in the document points to href="#archive-confirm", so the "Archive this project?" confirmation section is never reachable.
+Problem: A destructive, workspace-wide action, archiving a project for the whole team, has a confirmation screen built for it, but the actual navigation path skips that confirmation entirely, so the project is archived with no chance to cancel.
+Fix: Change the "Archive project" link's target from #project-archived to #archive-confirm so the confirmation screen is shown before the archive completes.
+
+Location: Invite a team member section
+Evidence: The form's submit button reads "Save" (id="invite-member-save-btn"), and a separate link below the form, outside the form element, reads "Continue" and points to href="#invite-sent" (id="invite-member-continue-link").
+Problem: Two different controls both look like they could complete the invite, a form Save button and a standalone Continue link, and it is not clear which one actually sends the invitation, so a user could click Save, see nothing happen, and not know whether to also click Continue.
+Fix: Keep a single primary action for this screen, for example remove the separate Continue link and have the Save button itself navigate to the invite-sent confirmation once the form submits.
+
+Location: Invite sent section
+Evidence: The confirmation text reads "An invite was sent to the address entered above." without showing the email address itself.
+Problem: The confirmation does not echo back the actual email address that was submitted, so the user has no way to verify the invite went to the correct address.
+Fix: Interpolate the submitted email address into the confirmation text, for example "An invite was sent to jane@example.com."
+
+Location: Notifications section, the form submit button ("notification-settings-save-btn")
+Evidence: This button's visible label is "Submit", while the equivalent buttons in Project settings and Invite a team member are both labeled "Save".
+Problem: The same kind of action, saving a settings form, uses two different verbs across the document, which reads as inconsistent and makes users unsure whether "Submit" behaves differently from "Save".
+Fix: Rename the notifications button to "Save" to match the label used for the same action elsewhere in the document.

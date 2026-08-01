@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "the link text \"read the accessibility improvements list\" points to href=\"/fares/history\"",
+      "fix": "Reword the link text to match its actual destination and topic, e.g. \"read the full list of fare adjustments,\" or point the href to an actual accessibility improvements page if that is what was intended.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "id=\"s3-link1\", the sentence \"For the full list of upcoming adjustments, read the accessibility improvements list.\"",
+      "severity": 3,
+      "violation": "the link text names \"accessibility improvements,\" which matches neither the surrounding sentence (about fare/schedule adjustments) nor the destination page, so a reader cannot predict where the link goes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "these three step divs sit directly inside the \"Fare adjustments\" section (id=\"s3\"), between a status card and a link about upcoming adjustments",
+      "fix": "Either remove the wizard if it is unused leftover markup, or add a heading and a sentence that explains what process it belongs to.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "id=\"s3-wizard\", the three steps \"Choose a plan\", \"Enter payment details\", \"Confirm your order\"",
+      "severity": 3,
+      "violation": "nothing on the page introduces a plan being chosen or a purchase being made, so this checkout style wizard reads as disconnected from the rest of the fare adjustment content around it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>",
+      "fix": "Add a visible text label next to the icon (for example \"Delete\") and state in context what is being deleted, or remove the control if it does not belong on this page.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "id=\"s3-customcontrol\", the div with class=\"icon-delete\"",
+      "severity": 3,
+      "violation": "the control shows only an icon with no visible text, and nothing in the surrounding content says what \"item\" it deletes, so a reader has no way to tell what it does or why it appears on this page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> paired with the text \"Enter a 6 character code using letters and numbers only.\"",
+      "fix": "Remove aria-invalid from the initial markup and only set it, together with showing the error text, after a user submits an invalid value.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "id=\"promo\" input and id=\"s3-form-promo-error\"",
+      "severity": 3,
+      "violation": "aria-invalid=\"true\" is written into the page's initial markup, so the promo field is marked invalid before a user has typed anything into it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Phone number (required)\" is the only one of the four form labels that states whether the field is required; \"Email address\" and \"Promo code\" carry no such note",
+      "fix": "Mark every field's required or optional status the same way, not just the phone number field.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "id=\"s3-form-phone-label\" compared with id=\"s3-form-email-label\" and id=\"s3-form-promo-label\"",
+      "severity": 3,
+      "violation": "a reader cannot tell whether the Route, Email, or Promo code fields are required or optional, since only the phone field states its status."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "the table starts directly with the header row \"Zone | Status\" and has no caption or preceding heading",
+      "fix": "Add a caption or a short heading before the table that states what it shows, for example \"Current zone status.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "id=\"s2-table1\"",
+      "severity": 3,
+      "violation": "nothing states what the table is reporting on (which route or which date the zone statuses apply to), so a reader arriving at the table without the surrounding page cannot tell what it means."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "the same audience is called \"Riders,\" \"Commuters,\" \"Passengers,\" and \"Local residents\" across these five sentences",
+      "fix": "Pick one term for the audience, such as \"Riders,\" and use it consistently throughout the document.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "id=\"s1-p1\" (\"Riders should review the updated schedule...\"), id=\"s1-p2\" (\"Commuters can report a service issue...\"), id=\"s2-p1\" (\"Passengers can check real time arrivals...\"), id=\"s3-p1\" (\"Riders can report a service issue...\"), id=\"s3-p2\" (\"Local residents can check real time arrivals...\")",
+      "severity": 3,
+      "violation": "the document switches between four different nouns for the same audience across nearly identical sentences, which reads as inconsistent, copied text rather than deliberate writing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "both paragraphs end with the identical sentence \"Station staff can also help with the same request in person.\"",
+      "fix": "Write a version of the closing sentence tailored to each action, for example \"staff can also help you check the schedule in person\" and \"staff can also help you report the issue in person,\" or drop the repeated sentence where it adds nothing new.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "id=\"s1-p1\" and id=\"s1-p2\"",
+      "severity": 3,
+      "violation": "the exact same closing sentence follows two unrelated first sentences, reviewing a schedule at a kiosk and reporting a service issue by phone, which reads as duplicated boilerplate rather than text written for each paragraph."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Passengers can check real time arrivals through the online portal.\" (id=\"s2-p1\") versus \"Riders can check real time arrivals at any station kiosk.\" (id=\"s3-statuscard\")",
+      "fix": "State in one place all the channels through which real time arrivals can actually be checked, or correct whichever channel is inaccurate.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "id=\"s2-p1\" compared with id=\"s3-statuscard\"",
+      "severity": 3,
+      "violation": "the same action, checking real time arrivals, is described through two different channels, an online portal in one place and a station kiosk in another, without saying whether both are actually available or one of them is a copy error."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "393fe58fac52d6953cd372944cd352ef9181df5c42ae778bd6d17214acb080c7",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T20:35:19Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

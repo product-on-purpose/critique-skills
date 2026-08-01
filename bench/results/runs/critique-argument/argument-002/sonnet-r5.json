@@ -1,0 +1,92 @@
+{
+  "run": {
+    "skill": "critique-argument",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/argument/argument-002.md",
+    "artifact_sha256": "0322bc2ebeb48318c56473186a8cb1f1e78d8667b99cfaf75ee7bb84f82fcfa2",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T20:49:35Z",
+    "rubrics": ["TOULMIN"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "TOULMIN-CLAIM",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the Recommendation section, first through third sentences",
+      "evidence": "\"the stronger choice is a systemwide end to overdue fines across all ten consortium branches, effective at the start of the next fiscal year\" / \"the recommended change is about making things better for patrons going forward, in whatever way the consortium finds workable\" / \"This recommendation removes every overdue-related charge permanently, for every item the consortium owns, without qualification.\"",
+      "violation": "The Recommendation section states three non-reconciling versions of the ask in three consecutive sentences: a specific claim (end overdue fines at all ten branches, next fiscal year), a vaguer aspiration introduced as though it were a specification of the first ('Specifically') but actually dissolving it, and a broader, absolute claim (every overdue-related charge, for every item, without qualification) whose scope is not clearly the same as fines alone. A reader finishing this section, the artifact's load-bearing statement of the ask, cannot state a single version of what they are being asked to accept.",
+      "fix": "Keep one formulation of the claim in the Recommendation section: state the ask is ending overdue fines specifically, remove the vague middle sentence, and if broader charge removal is actually intended, fold it into that same claim rather than asserting it as a separate, wider recommendation.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "TOULMIN-CLAIM-MARKER",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "evidence": "0 conclusion-marker phrases found across 401 words.",
+      "violation": "No phrase from the conclusion-marker lexicon (therefore, thus, hence, it follows that, we recommend, this paper argues, I argue that, the conclusion is, in conclusion, we should, the case for) appears anywhere in the artifact, so a reader scanning rather than reading straight through has no signpost to where the conclusion is asserted.",
+      "fix": "Add an explicit conclusion-signalling phrase at the point the artifact states its central claim, for example \"therefore\" or \"we recommend\".",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "TOULMIN-GROUNDS",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the Recommendation section, at \"the return-rate and avoidance-survey results above\"",
+      "evidence": "\"Given the return-rate and avoidance-survey results above\" / \"the pilot's return-rate and avoidance-survey results, taken together\" / \"reviewed return-rate data from fourteen library systems that eliminated fines between 2017 and 2022\"",
+      "violation": "The central claim's grounds are stated as including pilot return-rate results ('results above', 'the pilot's return-rate ... results'), but no return-rate measurement for the consortium's own pilot appears anywhere earlier in the artifact, only the avoidance-survey figures (20 percent dropping to 3 percent). The one return-rate figure the artifact does supply belongs to a different dataset entirely, the external research brief's fourteen library systems, not this consortium's pilot, so a reader who checks the pilot's own return-rate claim finds nothing to examine.",
+      "fix": "Either state the consortium pilot's own return-rate figures, for example the change in on-time return percentage during the pilot, at the point return-rate results are first invoked, or remove the return-rate references and rely on the avoidance-survey evidence that is actually presented.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "TOULMIN-HEDGE-DENSITY",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "evidence": "10 of 14 sentences (0.71) carry at least one hedging term.",
+      "violation": "More than 0.35 of the artifact's sentences carry a term from the hedging lexicon (may, might, could, possibly, perhaps, arguably, somewhat, relatively, it seems, appears to, tends to, to a degree), spread across the whole document rather than concentrated where the evidence actually underdetermines the claim.",
+      "fix": "Remove the hedge from sentences whose claim the evidence actually supports, reserving qualification for the claims that genuinely need it.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "TOULMIN-QUALIFIER",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the Recommendation section, third sentence",
+      "evidence": "\"This recommendation removes every overdue-related charge permanently, for every item the consortium owns, without qualification.\" / \"the four pilot branches absorbed the loss\" / \"across all ten consortium branches\"",
+      "violation": "The central recommendation is asserted without qualification, as permanent and covering every item the consortium owns, on the strength of a pilot that the artifact itself describes as running at four of the consortium's ten branches, and for which, per the TOULMIN-GROUNDS finding above, no return-rate effect is actually shown. The claim's stated certainty is not scaled down to reflect that six of ten branches, and any return-rate effect at all, were not measured.",
+      "fix": "Qualify the claim to match what the pilot actually established, for example by scoping the initial rollout to a review period or naming a monitoring point for the six branches not included in the pilot, rather than asserting the change is permanent and without qualification.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "TOULMIN-REBUTTAL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the Addressing the Revenue Concern section",
+      "evidence": "\"a skeptic on the board points to overdue fines as a source of materials-replacement funding, and argues that eliminating them systemwide will leave a shortfall the consortium has not planned for\" / \"consortium finance records show fine revenue covered under 2 percent of the annual materials budget over the last three fiscal years, and the four pilot branches absorbed the loss without a measurable change to their replacement-copy spending\"",
+      "violation": "The Addressing the Revenue Concern section raises and answers one foreseeable objection, revenue loss, with finance-record data. It never raises the scope objection its own grounds leave open: the pilot covered four of the consortium's ten branches, and the artifact does not address whether the pilot's results, gathered at less than half the branches, can be expected to hold at the other six before the policy is made permanent and systemwide.",
+      "fix": "Add a paragraph addressing the pilot's limited scope directly, for example by explaining why the four pilot branches are representative of the other six, or by proposing a monitoring or phased-rollout plan for the branches the pilot did not cover.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 5,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

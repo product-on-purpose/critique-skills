@@ -1,0 +1,113 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T02:26:01Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"invite-member\" section, the \"Save\" button and the \"Continue\" link",
+      "evidence": "the \"invite-member\" section defines both a \"Save\" submit button with no target state and a \"Continue\" link to \"#invite-sent\", with no text stating what either does relative to the other",
+      "violation": "The artifact defines two separate commit-like controls for one task: \"Save\" (a form submit button with no specified outcome or target state) and \"Continue\" (which leads to the invite-sent confirmation). Nothing in the artifact states what each does or how they relate, so a user cannot tell which control actually sends the invite, and could believe Save already sent it and leave without clicking Continue.",
+      "fix": "Remove the redundant \"Save\" button, or if it serves a distinct purpose such as saving a draft, state that purpose in place and make \"Continue\" the single control that sends the invite, with visible feedback on whichever control commits the send.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"archive-confirm\" section and the \"project-archived\" section",
+      "evidence": "\"You can restore it at any time from the archived projects list.\" (archive-confirm copy); no link, control, or state named an archived projects list appears anywhere in the artifact, and \"project-archived\" offers only \"Back to your projects\"",
+      "violation": "archive-confirm's own confirmation copy states the archive action is reversible from an archived projects list, but no such list, link, or restore control is defined anywhere in the artifact, so as specified the archive action has no path back despite the artifact's own claim that one exists.",
+      "fix": "Add a state for the archived projects list, reachable from project-archived or workspace-overview, with a restore control on each archived project, or remove the restore claim from archive-confirm's copy if no restore path is intended.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"Save\" button",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button> with no confirmation message, updated value, or next state defined anywhere in the artifact",
+      "violation": "This control commits a change, renaming the project, but the artifact specifies no visible indication, on this screen or any other, of what happens once Save is clicked: no confirmation message, no changed state, nothing.",
+      "fix": "Specify what the user sees after clicking Save: a confirmation message shown in place, or a defined next state.",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "the \"notification-settings\" section, the \"Save\" button",
+          "evidence": "<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button> with no confirmation message or next state defined anywhere in the artifact"
+        },
+        {
+          "location": "the \"project-settings\" section, the \"Duplicate project\" button",
+          "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button> with no confirmation message, new list entry, or next state defined anywhere in the artifact"
+        }
+      ]
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-H2-CONVENTIONS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"workspace-overview\" section, the \"Open project settings\" link",
+      "evidence": "the \"workspace-overview\" section lists \"Holiday Campaign Assets\", \"Support Backlog Triage\", and \"Mobile App Revamp\" under \"Your projects\", but its single \"Open project settings\" link leads to the \"project-settings\" section, which is pre-filled with the name \"Q3 Roadmap\", a project not shown in that list",
+      "violation": "The real-world task is choosing which project's settings to open. The artifact instead provides one undifferentiated link that lands on one specific project's settings, \"Q3 Roadmap\", without the user ever selecting which project, and that project is not even among the ones the overview shows, so the artifact skips the selection step the task actually requires.",
+      "fix": "Make each project in the \"Your projects\" list its own link to that project's own settings state, or add a project-selection step before \"Open project settings\" navigates anywhere.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-H3-EXIT",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"Back to your projects\" link",
+      "evidence": "the \"project-settings-name-input\" field is pre-filled \"Q3 Roadmap\" and editable; \"Back to your projects\" (href=\"#workspace-overview\") is the only navigation away from this form besides Save, and the artifact states nothing about what becomes of an edited, unsaved name",
+      "violation": "This link is a way out of a form holding user-entered data, but its label predicts only where it goes, not that an unsaved edit to the project name would be discarded, and the artifact states no warning or preservation of that edit.",
+      "fix": "State what happens to an unsaved name edit when \"Back to your projects\" is used, for example a confirmation prompt, or preserve the entered value if the user returns to project-settings.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-H6-RECALL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-sent\" section",
+      "evidence": "\"An invite was sent to the address entered above.\" (invite-sent copy); the value entered in \"invite-member-email-input\" on the previous screen is not repeated anywhere in the \"invite-sent\" section",
+      "violation": "This step refers to a value the user entered on the previous screen, \"the address entered above\", without restating it, so the user cannot confirm which address the invite was sent to without leaving this confirmation.",
+      "fix": "Show the entered email address directly in the invite-sent confirmation text, for example \"An invite was sent to jane@example.com\", instead of referring back to it.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "NNG-H9-RECOVER",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"import-status\" section",
+      "evidence": "\"Rows 35, 71, 78, and 83 were skipped; every other row was imported.\" (import-status copy); the only control on the state is \"Back to your projects\"",
+      "violation": "This state names exactly what failed and why, 4 rows referencing nonexistent projects, but offers no recovery action reachable from the state itself, such as retrying those rows or creating the missing projects, so a user who wants those 4 rows imported has no stated next step.",
+      "fix": "Add a control on import-status that lets the user act on the skipped rows, for example a link to create the missing projects or re-run the import for just those rows.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 2,
+      "4": 0
+    },
+    "suppressed_count": 1,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

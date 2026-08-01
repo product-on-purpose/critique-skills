@@ -1,0 +1,29 @@
+Location: Title, "Webhook delivery reference"
+Evidence: "# Webhook delivery reference"
+Problem: The title promises a reference for webhook delivery, but the body only documents three configuration fields and says nothing about delivery mechanics such as HTTP method, expected response codes, timeout, or payload format.
+Fix: Either narrow the title to match the actual scope (for example "Webhook configuration reference") or add sections that cover the delivery mechanics the title implies.
+
+Location: endpoint_url section
+Evidence: "The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert."
+Problem: The description does not say whether endpoint_url is required or optional, and it uses the term "triggered alert" without defining it or linking to where alerts are configured.
+Fix: State explicitly whether the field is required, and add a short definition of or cross reference to "triggered alert".
+
+Location: signing_secret section
+Evidence: "The signing_secret field accepts a string used to verify the payload signature on receipt."
+Problem: The document never names the signing algorithm used to compute the payload signature, nor states where the resulting signature is delivered (for example, which HTTP header carries it), so a reader cannot actually implement verification from this text alone.
+Fix: Name the signing algorithm (for example HMAC-SHA256), specify the header or field that carries the computed signature, and add a short verification example.
+
+Location: retry_policy section
+Evidence: "The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential."
+Problem: The three retry strategies are named but never defined; there is no information on maximum retry count, backoff interval or formula, or which response conditions (for example non 2xx status or timeout) trigger a retry.
+Fix: Add a definition or table for each retry_policy value covering its interval or backoff formula and maximum retry count, and state what conditions trigger a retry attempt.
+
+Location: whole document
+Evidence: three sections each consisting of a single sentence describing what a field "accepts", with no other content
+Problem: No section documents the payload format or content type delivered to endpoint_url, so a reader building a receiver has no schema or example to validate incoming requests against.
+Fix: Add a payload section describing the request body schema (or a sample payload) and the content type header used for delivery.
+
+Location: whole document
+Evidence: the document contains no code blocks, sample values, or example requests anywhere
+Problem: A configuration reference with no worked examples makes it hard to verify correct usage of any of the three fields, particularly signing_secret verification and retry_policy behavior.
+Fix: Add at least one worked example per field, or a single end to end example request and response, showing real values rather than only prose descriptions.

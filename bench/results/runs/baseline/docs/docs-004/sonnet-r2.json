@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"# Webhook delivery reference\"",
+      "fix": "Either narrow the title to match the actual scope (for example \"Webhook configuration reference\") or add sections that cover the delivery mechanics the title implies.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Title, \"Webhook delivery reference\"",
+      "severity": 3,
+      "violation": "The title promises a reference for webhook delivery, but the body only documents three configuration fields and says nothing about delivery mechanics such as HTTP method, expected response codes, timeout, or payload format."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert.\"",
+      "fix": "State explicitly whether the field is required, and add a short definition of or cross reference to \"triggered alert\".",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "endpoint_url section",
+      "severity": 3,
+      "violation": "The description does not say whether endpoint_url is required or optional, and it uses the term \"triggered alert\" without defining it or linking to where alerts are configured."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The signing_secret field accepts a string used to verify the payload signature on receipt.\"",
+      "fix": "Name the signing algorithm (for example HMAC-SHA256), specify the header or field that carries the computed signature, and add a short verification example.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "signing_secret section",
+      "severity": 3,
+      "violation": "The document never names the signing algorithm used to compute the payload signature, nor states where the resulting signature is delivered (for example, which HTTP header carries it), so a reader cannot actually implement verification from this text alone."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential.\"",
+      "fix": "Add a definition or table for each retry_policy value covering its interval or backoff formula and maximum retry count, and state what conditions trigger a retry attempt.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "retry_policy section",
+      "severity": 3,
+      "violation": "The three retry strategies are named but never defined; there is no information on maximum retry count, backoff interval or formula, or which response conditions (for example non 2xx status or timeout) trigger a retry."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "three sections each consisting of a single sentence describing what a field \"accepts\", with no other content",
+      "fix": "Add a payload section describing the request body schema (or a sample payload) and the content type header used for delivery.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "whole document",
+      "severity": 3,
+      "violation": "No section documents the payload format or content type delivered to endpoint_url, so a reader building a receiver has no schema or example to validate incoming requests against."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "the document contains no code blocks, sample values, or example requests anywhere",
+      "fix": "Add at least one worked example per field, or a single end to end example request and response, showing real values rather than only prose descriptions.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "whole document",
+      "severity": 3,
+      "violation": "A configuration reference with no worked examples makes it hard to verify correct usage of any of the three fields, particularly signing_secret verification and retry_policy behavior."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-004.md",
+    "artifact_sha256": "7f41536ab3c3f7bc93a3dde86b8e81cee5dab0339f2b1d472e9222a20b42d7ae",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:32:07Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

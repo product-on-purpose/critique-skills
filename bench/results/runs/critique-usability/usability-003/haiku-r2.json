@@ -1,0 +1,81 @@
+{
+  "run": {
+    "artifact": "bench/results/staging/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "model": "claude-haiku-4-5-20251001",
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "timestamp": "2026-07-31T23:00:00Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-1",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "project-settings section, the Save button",
+      "evidence": "Type submit button in a form with no specified target state or feedback: button id=\"project-settings-save-btn\" type=\"submit\">Save</button>.",
+      "violation": "This form-submit action changes state (save project name) but the artifact specifies no visible feedback, confirmation message, or resulting state. A user cannot tell whether the save succeeded.",
+      "fix": "Specify a feedback state for the Save action: either a success message on the same screen, a transition to a confirmation screen, or a visual state change (e.g., disabled button during submission, enabled after). The artifact should show what the user sees after clicking Save.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-2",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "notification-settings section, the Save button",
+      "evidence": "Type submit button in a form with no specified target state or feedback: button id=\"notification-settings-save-btn\" type=\"submit\">Save</button>.",
+      "violation": "This form-submit action changes state (save digest frequency) but the artifact specifies no visible feedback, confirmation message, or resulting state. A user cannot tell whether the save succeeded.",
+      "fix": "Specify a feedback state for the Save action: either a success message on the same screen, a transition to a confirmation screen, or a visual state change (e.g., disabled button during submission, enabled after). The artifact should show what the user sees after clicking Save.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-3",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-archived\" section",
+      "evidence": "The archive-confirm state leads to project-archived state with message 'Vendor Onboarding has been moved to archived projects.' No unarchive control or link is present; the only control is 'Back to your projects' linking to workspace-overview.",
+      "violation": "Archiving is a reversible action in typical product contexts, but the artifact specifies no undo, restore, or unarchive path. A user who archives a project by mistake has no specified way to reverse it within the design.",
+      "fix": "Add an unarchive or restore control to the project-archived confirmation screen, or show an Archived Projects view with an unarchive option. The artifact should make reversal discoverable.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-4",
+      "criterion": "NNG-H9-IDENTIFY",
+      "lane": "judged",
+      "severity": 2,
+      "location": "import-status section, the error message",
+      "evidence": "The message reads: 'Import failed. Error code IMP-500. Contact support if this continues.' No explanation of what caused the failure or what the user did wrong.",
+      "violation": "The error message does not specify what condition caused the import to fail (server error, bad file format, timeout, permission denied, etc.). A user sees only that it failed and an error code, but cannot tell what to do differently on a retry.",
+      "fix": "Revise the error message to name the specific failure condition: e.g., 'Import failed: file format not supported' or 'Import failed: server unavailable, try again in a few minutes'. Keep the error code for support reference, but lead with the user-facing problem.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-5",
+      "criterion": "NNG-H9-RECOVER",
+      "lane": "judged",
+      "severity": 2,
+      "location": "import-status section, the error message",
+      "evidence": "Message states 'Contact support if this continues' but the import-status screen provides no support contact link, phone number, email, or button to reach support.",
+      "violation": "The error message points to a recovery action (contact support) that is not reachable from the error screen itself. A user must leave the screen and hunt for a support contact elsewhere, or infer that support contact should exist.",
+      "fix": "Add a 'Contact support' link or button to the import-status screen, or revise the message to suggest an on-screen recovery action (e.g., 'Retry the import' if a retry button is available, or 'Return to projects and try a different file').",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 0,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "pass",
+    "severity_3_threshold": 0
+  }
+}

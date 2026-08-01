@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Riders may request a fare adjustment through the mobile app. Station staff can also help with the same request in person.\"",
+      "fix": "Replace this paragraph with content that actually describes accessibility improvements (for example elevator repairs, tactile paving, or accessible boarding), or move the paragraph to a section whose heading matches its content.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section \"Accessibility improvements\" (id s1), first paragraph (id s1-p1)",
+      "severity": 3,
+      "violation": "The section heading promises information about accessibility improvements, but this paragraph is about fare adjustments, which is unrelated to accessibility."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "s1-p2 reads \"Passengers can check real time arrivals by calling rider services. Updates post to the schedule page within one business day.\" The status card reads \"Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day.\"",
+      "fix": "Write distinct copy for each section, or if the same information genuinely belongs in both places, cross-reference it instead of repeating it verbatim.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section \"Accessibility improvements\" (id s1), second paragraph (id s1-p2), and section \"Schedule changes\" (id s3), status card (id s3-statuscard)",
+      "severity": 3,
+      "violation": "The two sentences are identical except for the subject noun, and they appear in two unrelated sections. This reads as duplicated or unedited placeholder text rather than content written for each section."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person.\"",
+      "fix": "Replace with content specific to weekend service, such as weekend schedule frequency or the zone status shown in the table, and remove the duplicated fare-adjustment sentence.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section \"Weekend service\" (id s2), paragraph (id s2-p1)",
+      "severity": 3,
+      "violation": "This is the same sentence as s1-p1 with only \"Riders\" swapped for \"Passengers,\" and it has nothing to do with weekend service, which is the heading topic for this section."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Local residents should review the updated schedule through the mobile app. Station staff can also help with the same request in person.\"",
+      "fix": "Rewrite the sentence so it only refers to reviewing the schedule, and remove or rewrite the dangling reference to \"the same request.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id s3), first paragraph (id s3-p1)",
+      "severity": 3,
+      "violation": "The second sentence, \"Station staff can also help with the same request in person,\" refers to a \"request\" that was never established in this sentence, since the first sentence is about reviewing a schedule, not making a request. The sentence is a leftover fragment from the fare-adjustment wording reused elsewhere in the document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "alt=\"Crews repainting the accessible parking spaces near the station entrance.\"",
+      "fix": "Add a sentence introducing the parking repainting work the image depicts, or replace the image with one that illustrates the fare-adjustment and real-time-arrival content that is actually in the section.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section \"Accessibility improvements\" (id s1), image (id s1-img1)",
+      "severity": 3,
+      "violation": "The image and its alt text describe parking lot repainting, but neither paragraph in the section mentions parking, accessible parking spaces, or repainting work, so the image is disconnected from the surrounding text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "link text \"read the accessibility improvements list\" with href=\"/fares/history\"",
+      "fix": "Change the link text to match its actual destination, for example \"view fare history,\" or point the href to an actual accessibility improvements list if one exists.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id s3), link (id s3-link1)",
+      "severity": 3,
+      "violation": "The link's visible text promises an \"accessibility improvements list,\" but the URL points to a fare history page, which is misleading about where the link leads."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"icon-delete\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>",
+      "fix": "Use a button element with a visible label or an aria-label describing the action (for example \"Delete\"), and keep the icon's alt text empty only because the button's own label already conveys the purpose.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id s3), custom control (id s3-customcontrol)",
+      "severity": 3,
+      "violation": "This control is built from a div, not a button or link, wrapping an image with empty alt text. It has no visible label, no accessible name, and is not natively focusable or operable, so nothing indicates what it does or how to activate it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The markup order is \"Confirm your order\" (style=\"order:3\"), then \"Enter payment details\" (style=\"order:2\"), then \"Choose a plan\" (style=\"order:1\").",
+      "fix": "Reorder the elements in the HTML source to match the intended sequence instead of relying on the CSS order property to reverse them.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id s3), wizard steps block (id s3-wizard)",
+      "severity": 3,
+      "violation": "The CSS order property reverses the visual display order relative to the order the steps appear in the source, so the steps display visually as Choose a plan, Enter payment details, Confirm your order, while anyone reading the markup source or navigating by keyboard or screen reader encounters them in the opposite sequence."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<span class=\"error-text\" id=\"s3-form-promo-error\">Error.</span>",
+      "fix": "Write a specific error message, for example \"This promo code is not valid. Check the code and try again.\"",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id s3), form error message (id s3-form-promo-error)",
+      "severity": 3,
+      "violation": "The error message says only \"Error.\" without explaining what is wrong with the promo code entered, so the user has no way to know how to fix it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label>",
+      "fix": "Remove the inline color override if there is no reason for it, or if the field is required or invalid, add visible explanatory text rather than relying on color alone to convey that.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id s3), form label for the phone field (id s3-form-phone-label)",
+      "severity": 3,
+      "violation": "Only the \"Phone number\" label has an inline red color style applied. Nothing else in the form or document explains why this one field is singled out, for example marking it required or showing it as invalid, which makes the styling confusing."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "69ff628078a107c11bd403359666e3fafdba2d4ab204fdec80881f7db5374db6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T20:29:46Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

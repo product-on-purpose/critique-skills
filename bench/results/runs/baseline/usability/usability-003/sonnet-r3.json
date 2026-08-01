@@ -1,0 +1,149 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<meta charset=\"utf-8\"> is the only meta tag present; there is no <meta name=\"viewport\"> tag",
+      "fix": "Add <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"> to <head>.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "<head>, meta tags",
+      "severity": 3,
+      "violation": "The document has no viewport meta tag, so on a mobile browser it will render at desktop width and force zooming or panning instead of scaling to the screen."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The document contains eleven <section> elements (workspace-overview through notification-settings) linked by href=\"#id\" anchors, but no CSS or JavaScript exists to show or hide them.",
+      "fix": "Add a minimal stylesheet or script that hides every section except the one whose id matches the current URL fragment, so navigation behaves like moving between screens instead of scrolling a single long page.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "whole document, <head> and <body>, no <style> or <script> element anywhere",
+      "severity": 3,
+      "violation": "Without any styling or script to toggle visibility, every section renders on the page at once, stacked vertically. Clicking a link like \"Open project settings\" only scrolls to that section rather than presenting it as a distinct screen, so the mockup cannot actually demonstrate the flow it describes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced this morning.\" is followed by a list of only three items (Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot).",
+      "fix": "Either add the fourth project to the list or correct the paragraph to say \"3 projects.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "section#workspace-overview, introductory paragraph and list",
+      "severity": 3,
+      "violation": "The stated project count, 4, does not match the number of projects actually listed, 3, which is an internal inconsistency a user would notice immediately."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<li>Beta Launch Plan</li>, <li>Holiday Campaign Assets</li>, <li>Partner Integration Pilot</li>",
+      "fix": "Wrap each project name in a link or button that navigates to that project's own settings or detail view.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "section#workspace-overview, <ul> inside #workspace-overview-recent",
+      "severity": 3,
+      "violation": "The project names are plain text with no link or button, so there is no way to open any of the listed projects from the overview screen."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a id=\"workspace-overview-projects-link\" href=\"#project-settings\">Open project settings</a> leads to a settings screen pre filled with \"Vendor Onboarding\", a project name that does not appear anywhere in the three item recent projects list.",
+      "fix": "Either link each project in the list to its own settings screen, or rename the generic link to name the specific project it opens and make sure that project is listed above.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "section#workspace-overview, \"Open project settings\" link (workspace-overview-projects-link)",
+      "severity": 3,
+      "violation": "The link does not indicate which project's settings it opens, and the project it actually opens, Vendor Onboarding, is not one of the projects the user can see on the overview screen, which reads as a wiring error."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<form><label for=\"project-settings-name-input\">Project name</label><input ... value=\"Vendor Onboarding\"><button ... type=\"submit\">Save</button></form> has no action or method attribute.",
+      "fix": "Give the form a real submit handler that shows a success state, or if this is meant to stay a static mockup, prevent default submission and add a visible \"Saved\" confirmation message so the interaction reads correctly.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "section#project-settings, name form and project-settings-save-btn",
+      "severity": 3,
+      "violation": "Because the form has no action or method and there is no script handling its submit event, clicking Save will reload the page, a GET request to the same URL, instead of saving anything, and the user gets no confirmation that a save happened."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>",
+      "fix": "Add visible text such as \"Duplicate\" inside the button, or an icon plus visually hidden text, rather than relying on aria-label alone.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "section#project-settings, project-settings-duplicate-btn",
+      "severity": 3,
+      "violation": "The button has no visible text content, only an aria-label, so a sighted user sees a blank, unlabeled button with no indication of what it does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a id=\"archive-confirm-cancel-link\" ...>Cancel</a> and <a id=\"archive-confirm-archive-link\" ...>Archive</a> are both plain, identically styled anchor tags.",
+      "fix": "Style the Archive action distinctly, for example a red or warning styled button, separate it visually from Cancel, and consider requiring an extra confirmation step before the action fires.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "section#archive-confirm, cancel and archive links",
+      "severity": 3,
+      "violation": "A destructive, team wide action, described in the same section as removing the project \"for everyone on the team\", is presented with the same visual weight and markup as the safe Cancel option, making it easy to click the wrong one."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The section has both a Save submit button on the email form and a separate <a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a> link.",
+      "fix": "Remove the separate Continue link and make the Invite sent screen reachable only by submitting the form, or disable Continue until the email field has a valid value.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "section#invite-member, invite-member-continue-link",
+      "severity": 3,
+      "violation": "Continue navigates straight to the Invite sent screen regardless of whether the email field was filled in or the form was submitted, so a user can reach a confirmation screen without ever entering an email address."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An invite was sent to the address entered above. It expires in 5 days if not accepted.\"",
+      "fix": "Pass the entered email through to this screen and display it explicitly, for example \"An invite was sent to jane@example.com,\" instead of referring to an \"above\" that is not present.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "section#invite-sent",
+      "severity": 3,
+      "violation": "This screen does not display any email address, so \"the address entered above\" refers to nothing visible on the page, and a user who navigated here directly has no way to confirm which address was used."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Import failed. Error code IMP-500. Contact support if this continues.\"",
+      "fix": "Add a mailto link or \"Contact support\" button with an actual destination, and add a \"Retry import\" action alongside the existing back link.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "section#import-status, import-status-message",
+      "severity": 3,
+      "violation": "The message tells the user to contact support but provides no link, email address, or button to do so, and offers no way to retry the import from this screen."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-08-01T02:15:45Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 11,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

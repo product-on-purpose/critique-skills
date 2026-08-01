@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Verification codes are 6 digits long, and this one has 5. Check the message again and enter all six.\"",
+      "fix": "Simplify to \"Enter all six digits\" or \"This code needs 6 digits. Please enter the complete code.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - first message",
+      "severity": 3,
+      "violation": "The message uses \"all six\" when the context already established \"6 digits\", creating redundancy without clarifying what action the user should take with the entered code."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This verification code expired 10 minutes after it was sent, which stops an intercepted code from being reused later.\"",
+      "fix": "Shorten the message to \"This verification code expired. Request a new code and enter it here.\" Keep the technical detail out of the error message.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - second message",
+      "severity": 3,
+      "violation": "The explanation of why codes expire is lengthy and technical for a user who just needs to fix their immediate problem; it may confuse users who do not care about security rationale."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This promo code ended on 30 June.\"",
+      "fix": "Include the year: \"This promo code ended on 30 June 2024\" or use relative phrasing: \"This promo code expired.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Billing, promo code - first message",
+      "severity": 3,
+      "violation": "The date is written as \"30 June\" without a year, making it unclear whether the code expired this year, last year, or in a future year from the user's perspective."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This promo code applies to annual plans, and the selected plan is monthly. Change the plan to annual, or remove the code.\"",
+      "fix": "Reorder or clarify priorities: \"This code only works with annual plans. Switch to an annual plan to use it, or enter a different code.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Billing, promo code - second message",
+      "severity": 3,
+      "violation": "The message presents two unequal options (changing plan or removing code) without clarifying which is the recommended path or the impact of each choice."
+    }
+  ],
+  "run": {
+    "artifact": "bench/results/staging/microcopy/microcopy-004.md",
+    "artifact_sha256": "c8f58456a4deb36595b0ac00fe364b68e80445e939d7293d2db8d8f1a42ac91b",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:47:54Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

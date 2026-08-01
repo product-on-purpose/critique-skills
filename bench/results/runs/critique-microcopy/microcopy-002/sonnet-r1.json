@@ -1,0 +1,103 @@
+{
+  "run": {
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T21:43:23Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-EM-GRACE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Account settings, username, message 1",
+      "evidence": "The last changes were not saved and cannot be recovered. Contact support for assistance.",
+      "violation": "This is a total, unrecoverable-in-the-moment failure: Suggested fix is none, no other message sits under this heading to offer a way forward, and the message reports a completed, irreversible loss. The wording is a bare technical notice, were not saved and cannot be recovered, with no acknowledgment of what that loss means for the reader anywhere in it.",
+      "fix": "Add a brief, sincere acknowledgment of the loss before directing the reader to support, for example: we are sorry, those changes could not be saved and cannot be recovered. Contact support and we will help sort out what happened.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-EM-SEVERITY-CONTAINER",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Password reset, new password, message 2, Container field",
+      "evidence": "Container: toast. Placement: in a dialog centered on the password reset step, over the new password field it blocks.",
+      "violation": "An expired reset link is a fully blocking failure, the reader cannot set a new password from this screen at all, yet the Container field presents it as a toast, a self-clearing container, while the message's own Placement field describes it as a blocking dialog. A reader who looks away misses the one message explaining why the flow will not proceed.",
+      "fix": "Present this message in a persistent modal or inline block that stays until the reader dismisses it or requests a new link, matching the blocking behavior the Placement field already describes, rather than a self-clearing toast.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-EM-PLAIN-LANGUAGE",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Checkout form, shipping address, message 2",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "violation": "The message text carries an internal error code, a code-style token, or an engineering-jargon term standing in for a plain-language explanation.",
+      "fix": "Replace the code or jargon term with a plain-language sentence a non-technical reader can act on.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-EM-PREVENT",
+      "lane": "judged",
+      "severity": 2,
+      "location": "File upload, receipts, message 2",
+      "evidence": "Fires: on-submit. Predictable mistake: yes. Message: Receipts upload as PDF or PNG only, the two formats the expense system can read.",
+      "violation": "The file-format restriction is a predictable mistake reported only on-submit, after the reader has already selected and attempted to upload the file, even though the file's format is checkable as soon as it is selected, before the reader commits the upload.",
+      "fix": "Check the selected file's format immediately when it is chosen and warn the reader before they submit, rather than waiting until submission to report the mismatch.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-EM-PROXIMITY",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Password reset, new password, message 1, Placement field",
+      "evidence": "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page.",
+      "violation": "The message sits at the top of a long form rather than immediately beside or below the password field it concerns, requiring the reader to scroll up to see it, even though the field itself stays visible on the page.",
+      "fix": "Move the password-requirement message to directly beside or below the password field itself, not the top of the form.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-EM-SELECTABLE-FIX",
+      "lane": "judged",
+      "severity": 2,
+      "location": "File upload, receipts, message 1, Suggested fix field",
+      "evidence": "Suggested fix: described, names the one available alternative but requires the reader to enter it by hand.",
+      "violation": "The suggested fix names a single, unambiguous alternative, reducing the file size, in prose but requires the reader to manually apply it themselves rather than offering it as a selectable action.",
+      "fix": "Offer the fix as a selectable action where possible, for example a one-click compress-and-retry option, rather than only describing it in the message.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-007",
+      "criterion": "NNG-EM-SPECIFIC",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Checkout form, shipping address, message 2",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "violation": "The message names neither which field is wrong nor what rule it violates. It substitutes a raw gateway status code for a specific cause, and 502 itself denotes a server-side failure rather than a field-validation problem, so the instruction to correct the field does not match a nameable, correctable cause.",
+      "fix": "State what is specifically wrong: if the failure is a server error, say so and offer a retry instead of instructing the reader to correct a field; if it is a field validation issue, name the field and the rule it broke.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 2,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

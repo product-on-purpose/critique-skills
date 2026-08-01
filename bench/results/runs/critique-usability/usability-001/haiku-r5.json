@@ -1,0 +1,105 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-08-01T02:00:00Z",
+    "rubrics": [
+      "NNG"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-H3-DEADEND",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "the \"invite-sent\" section",
+      "evidence": "the \"invite-sent\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+      "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact.",
+      "fix": "Add a control inside the \"invite-sent\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-H6-LABELED",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "evidence": "<button> with no text content and no accessible-name attribute",
+      "violation": "This control has neither visible text nor an accessible-name attribute, so nothing on screen names what the control does.",
+      "fix": "Add visible text to this control, or an aria-label attribute naming what it does.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "multiple form save actions across the artifact",
+      "evidence": "Each Save button (type=\"submit\") submits its form but no visible success, failure, or result feedback is specified in the artifact after submission.",
+      "violation": "User cannot see the outcome of their save action - whether it succeeded, failed, or what the result is, leaving them uncertain whether their input was actually saved.",
+      "fix": "Specify feedback for each form submission: a success message, automatic navigation to a confirmation state, visual confirmation (like a disabled state), or a changed control state.",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "the \"project-settings\" section, the project name form save button"
+        },
+        {
+          "location": "the \"notification-settings\" section, the digest frequency form save button"
+        },
+        {
+          "location": "the \"invite-member\" section, the email input form save button"
+        }
+      ]
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-H4-INTERNAL",
+      "lane": "judged",
+      "severity": 1,
+      "location": "the \"workspace-overview\" section, navigation links",
+      "evidence": "Navigation links use different verbs: \"Open project settings\", \"View last import result\", \"Go to notification settings\"",
+      "violation": "The same action type (navigating to another screen or section) is labeled with different verbs, creating inconsistency across the artifact.",
+      "fix": "Use one consistent verb for all navigation links. For example, always use \"Open\" or always \"Go to\" or always use the same preposition and verb structure.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-H4-INTERNAL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-member\" section, the interaction flow",
+      "evidence": "The form has a Save button (type=\"submit\") followed by a separate Continue link. In contrast, other forms on this artifact (project-settings, notification-settings) show only a Save button with no additional navigation step following it.",
+      "violation": "The Save button behavior is inconsistent across the artifact - in the invite-member form it requires an additional Continue step, but this two-step pattern is not used elsewhere, leaving the user uncertain whether Save completes the action or whether Continue is required.",
+      "fix": "Either remove the Continue link and make the Save button directly complete the invite action, or clarify the interaction with explicit labels explaining that Continue is required after Save (e.g., \"Save draft\" then \"Send invite\").",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-H8",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"workspace-overview\" section, the promotional div",
+      "evidence": "Promotional message reads \"Invite 3 teammates this month to unlock the advanced reporting add-on\" and is placed in the main content area alongside the primary projects list.",
+      "violation": "Secondary promotional content competes for the user's attention with the primary task of viewing the projects list, violating the minimalist design principle that each screen should carry only what its task needs.",
+      "fix": "Either remove the promotional banner or relocate it to a less prominent location (such as a footer, sidebar, or bottom section) that does not compete with the primary task of viewing projects.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 1,
+      "2": 4,
+      "3": 1,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

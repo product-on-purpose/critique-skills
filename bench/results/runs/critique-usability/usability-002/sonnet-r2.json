@@ -1,0 +1,125 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T02:14:22Z",
+    "rubrics": [
+      "NNG"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"invite-member\" section: the \"invite-member-save-btn\" button and the \"invite-member-continue-link\" link",
+      "evidence": "the form's \"Save\" button (id=\"invite-member-save-btn\", type=\"submit\") sits in a form with no action attribute and no defined target; a separate link, id=\"invite-member-continue-link\" href=\"#invite-sent\", is what actually leads to the state whose text reads \"An invite was sent to the address entered above.\"",
+      "violation": "Heuristic 1 requires the artifact to specify what the system does and what the outcome is for a state changing action. This flow defines two controls for one invite task, \"Save\" and \"Continue,\" with no stated relationship between them, so the artifact never specifies which control sends the invite or what \"Save\" alone does.",
+      "fix": "Remove the \"Save\" button, or state on screen what it does separately from sending the invite, and rename \"Continue\" to a label that names the send action, for example \"Send invite,\" so one unambiguous control commits the invite.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-H5-CONFIRM",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"project-settings\" section, the \"project-settings-archive-link\" link",
+      "evidence": "the link reads href=\"#project-archived\", targeting the \"project-archived\" state directly; no control anywhere in the artifact has href=\"#archive-confirm\", the section whose text reads \"Archiving \\\"Customer Migration\\\" will remove it from the active projects list for everyone on the team.\"",
+      "violation": "Heuristic 5 requires a costly action to be gated behind a confirmation that names the consequence before it commits. The artifact defines an \"archive-confirm\" state carrying exactly this confirmation, but the \"Archive project\" control's own path bypasses it and commits straight to \"project-archived,\" and no control in the artifact links to \"archive-confirm,\" so no user path ever reaches it.",
+      "fix": "Change the \"project-settings-archive-link\" link's target from \"#project-archived\" to \"#archive-confirm\", so the archive action always passes through its confirmation before committing.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "evidence": "button id=\"project-settings-save-btn\" type=\"submit\" labeled \"Save\", inside a form with no action attribute and no defined next state or confirmation message",
+      "violation": "Heuristic 1 requires the artifact to specify what the user sees once a state changing action finishes. Each of these controls commits a change with no confirmation message, next state, or other result feedback named anywhere in the artifact.",
+      "fix": "Add a visible confirmation, such as a brief saved message or a changed control state, at the point each of these actions commits.",
+      "confidence": "medium",
+      "instances": [
+        {
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button",
+          "evidence": "button id=\"notification-settings-save-btn\" type=\"submit\" labeled \"Submit\", inside a form with no action attribute and no defined next state or confirmation message"
+        },
+        {
+          "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+          "evidence": "button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\" with no text content, no href, and no defined next state or confirmation message"
+        }
+      ]
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-H4-CONTROL-NAMING",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "evidence": "control labeled \"Save\"",
+      "violation": "This artifact uses 2 different labels for what reads as the same commit action: \"Save\", \"Submit\". A user cannot tell from the label alone whether these controls perform the same action or different ones.",
+      "fix": "Pick one label for this commit action, for example \"Save\", and use it everywhere the action appears.",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button",
+          "evidence": "control labeled \"Save\""
+        },
+        {
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button",
+          "evidence": "control labeled \"Submit\""
+        }
+      ]
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-H5-CONFIRM",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-member\" section, the \"invite-member-continue-link\" link",
+      "evidence": "the link, href=\"#invite-sent\", leads directly from the email input to the \"invite-sent\" state's \"An invite was sent to the address entered above\" text, with no confirmation naming the recipient before the invite sends",
+      "violation": "Heuristic 5 lists sending to a recipient among the actions that need confirmation before they commit. This flow offers a cancel option before the send, but no confirmation step naming the address before the invite actually sends.",
+      "fix": "Add a confirmation step between the email input and \"invite-sent\" that names the recipient address and requires an explicit confirm before the invite sends.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-H6-RECALL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-sent\" section",
+      "evidence": "the section's text reads \"An invite was sent to the address entered above,\" without redisplaying the address; the address is entered on the separate \"invite-member\" section",
+      "violation": "Heuristic 6 requires the information a user needs at a step to be present at that step rather than held over from an earlier screen. This confirmation refers to \"the address entered above\" without showing that address, and the artifact defines no path back to the invite-member screen with the entered value preserved.",
+      "fix": "Redisplay the entered email address in the \"invite-sent\" section's confirmation text, for example \"An invite was sent to [address].\"",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "NNG-H9-RECOVER",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"import-status\" section",
+      "evidence": "the section's only control is id=\"import-status-exit-link\" href=\"#workspace-overview\" labeled \"Back to your projects\"; no control offers to retry the import or address the 3 skipped rows",
+      "violation": "Heuristic 9 requires an error state to point to a next step the user can take from where the message appears. This message names the specific skipped rows and their cause but offers no retry and no way to act on rows 63, 71, and 82 from this screen.",
+      "fix": "Add a control on the \"import-status\" section that lets the user retry the import or navigate to fix the missing project references for rows 63, 71, and 82.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 2,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

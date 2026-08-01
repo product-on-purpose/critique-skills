@@ -1,0 +1,44 @@
+Location: Section 1 "Accessibility improvements", paragraph s1-p1, compared with Section 2 "Weekend service", paragraph s2-p1
+Evidence: "Riders may request a fare adjustment through the mobile app. Station staff can also help with the same request in person." (s1-p1) versus "Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person." (s2-p1)
+Problem: These two paragraphs are nearly word for word identical, differing only in "Riders" versus "Passengers", yet they sit under two unrelated headings, "Accessibility improvements" and "Weekend service". The fare adjustment content does not fit the weekend service heading and reads as a copy paste error.
+Fix: Write content specific to each section's own heading, and remove or replace whichever copy of the paragraph does not belong.
+
+Location: Section 1, image s1-img1
+Evidence: alt="Crews repainting the accessible parking spaces near the station entrance." appears directly under the heading "Accessibility improvements", after two paragraphs about fare adjustments and real time arrivals.
+Problem: The subject of the image, crews repainting accessible parking spaces, is never mentioned anywhere in the surrounding text, so a reader has no context for why the image is there or what it illustrates.
+Fix: Add a sentence in the section introducing the parking space repainting work, or move the image next to text that actually discusses it.
+
+Location: Section 3, custom control div#s3-customcontrol
+Evidence: <div class="icon-delete" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></div>
+Problem: This element is styled and named like a delete control but is marked up as a plain div containing an image with empty alt text, not a button. It has no role, no keyboard focusability, and no accessible name, so it cannot be identified or operated as a control.
+Fix: Mark this up as a real button element, or add role="button", tabindex="0", and a keyboard handler, plus an aria-label such as "Delete".
+
+Location: Section 3, wizard-steps div (id s3-wizard), children s3-step3, s3-step2, s3-step1
+Evidence: source order is "Confirm your order" (style="order:3"), "Enter payment details" (style="order:2"), "Choose a plan" (style="order:1")
+Problem: The three wizard steps are written into the HTML in the reverse of their logical sequence and are only put into the correct visual order by CSS. Reading the markup directly, or navigating it with a screen reader or the tab key, presents the steps out of order.
+Fix: Reorder the three step elements in the HTML source to match the intended sequence, choose a plan, enter payment details, confirm your order, and drop the CSS order property once the source order is correct.
+
+Location: Section 3, link s3-link1
+Evidence: <a href="/fares/history">read the accessibility improvements list</a>, in a paragraph about "upcoming adjustments"
+Problem: The link text describes "the accessibility improvements list", but the link points to /fares/history, and the surrounding paragraph is about upcoming schedule adjustments, not accessibility improvements. The link text misdescribes its own destination.
+Fix: Change the link text to describe where the link actually goes, for example "read the fare adjustment history", or point the href at an actual accessibility improvements page.
+
+Location: Section 3 form, label s3-form-phone-label
+Evidence: <label for="phone" id="s3-form-phone-label" style="color:#cc0000">Phone number</label>
+Problem: This is the only label in the form styled in red, and nothing in the label text explains why. A distinguishing status of this field, such as being required, is being conveyed by color alone.
+Fix: State the reason in the label text itself, for example "Phone number (required)", rather than relying on color alone.
+
+Location: Section 3 form, promo code field, input#promo and span#s3-form-promo-error
+Evidence: <input id="promo" type="text" aria-invalid="true"> followed immediately by <span class="error-text" id="s3-form-promo-error">Error.</span>
+Problem: The input is marked invalid, but nothing associates the error text with the input, since there is no aria-describedby, and the error message itself, "Error.", does not say what is wrong with the value entered.
+Fix: Add aria-describedby="s3-form-promo-error" to the input, and replace "Error." with a specific message, for example "Promo code is not recognized."
+
+Location: Section 2, table s2-table1
+Evidence: <table id="s2-table1"> with a header row of Zone and Status and no caption
+Problem: The table has no caption or accessible name identifying what it is a table of, so its purpose can only be inferred from the "Weekend service" heading two elements above it.
+Fix: Add a caption element inside the table, for example "Weekend service status by zone".
+
+Location: Section 3, paragraph s3-p1, and the status card paragraph inside div#s3-statuscard compared with Section 1 paragraph s1-p2
+Evidence: "Local residents should review the updated schedule through the mobile app. Station staff can also help with the same request in person." (s3-p1); "Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day." (status card) duplicates s1-p2 verbatim aside from the subject.
+Problem: In s3-p1 the clause "Station staff can also help with the same request in person" is left over from the fare adjustment paragraph it was copied from, but reviewing a schedule is not "a request" that station staff help with in person, so the sentence no longer makes sense. Separately, the status card paragraph repeats the accessibility section's real time arrivals paragraph word for word under the unrelated "Schedule changes" heading.
+Fix: Rewrite s3-p1 without the leftover "same request in person" clause, and either remove the duplicated status card paragraph or replace it with content specific to schedule changes.

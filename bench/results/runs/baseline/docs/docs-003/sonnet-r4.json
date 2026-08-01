@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000.\"",
+      "fix": "State the default explicitly in the same sentence, for example \"and defaults to 5000.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "timeout section, first sentence",
+      "severity": 3,
+      "violation": "The default value for timeout is never stated anywhere on the page, yet the very next sentence tells readers to leave the field at its default. A reader cannot follow that advice without knowing what the default actually is."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Leaving this field at its default is the right choice for most teams, and raising it is worth doing only when a specific integration needs the extra room.\"",
+      "fix": "Remove the advisory sentence or move it to a separate guidance page, and give timeout the same single factual sentence structure (type, range, default) used for the other two fields.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "timeout section, second sentence",
+      "severity": 3,
+      "violation": "This is prescriptive guidance rather than a factual field description, and it breaks the one-sentence factual pattern used for retries and logging, so the page is inconsistent in depth and voice from field to field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000.\"",
+      "fix": "State the maximum accepted value, or note explicitly that no maximum is enforced.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "timeout section, first sentence",
+      "severity": 3,
+      "violation": "Only a lower bound is documented. The retries field documents both bounds (\"an integer from 0 to 10\"), but timeout gives no upper bound, so a reader cannot tell whether an arbitrarily large value is accepted."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"- Metric catalog reference\" and the eight other bullet items in that list",
+      "fix": "Turn each bullet into a markdown link to its target page, for example \"- [Metric catalog reference](../metric-catalog.md)\".",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Related pages section",
+      "severity": 3,
+      "violation": "None of the nine related pages are hyperlinked. The list gives page titles with no URLs or link syntax, so a reader cannot navigate to any of them directly from this document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The retries field takes an integer from 0 to 10, and it defaults to 3.\" and the equivalent sentences for timeout and logging",
+      "fix": "Add an explicit \"required\" or \"optional\" designation to each field's description.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "timeout, retries, and logging sections",
+      "severity": 3,
+      "violation": "None of the three field descriptions states whether the field is required or may be omitted from a rule definition. That is standard information for a fields reference page and affects how a reader writes their configuration."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The logging field accepts one of debug, info, warn, or error, and the default value is info.\"",
+      "fix": "State the expected casing, for example \"accepts one of the lowercase values debug, info, warn, or error.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "logging section",
+      "severity": 3,
+      "violation": "The page does not say whether these values are case sensitive, so a reader cannot tell if \"Info\" or \"INFO\" would be accepted."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:27:55Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T02:25:57Z",
+    "rubrics": [
+      "NNG"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-H2-CONVENTIONS",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"workspace-overview\" section, the Your projects list and Open project settings link",
+      "evidence": "The \"workspace-overview\" section states \"This workspace holds 4 projects, synced last week\" and lists 3 projects as plain text with no links (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp); its only project-related control is the single link \"Open project settings\" (href=\"#project-settings\"), whose target section pre-fills value=\"Q3 Roadmap\", a project name absent from the visible list.",
+      "violation": "NNG-H2-CONVENTIONS asks whether the artifact's grouping matches the real-world task of picking a project and then managing it. Here the Your projects list offers no per-project control, and the one project-settings entry point targets a project not present in that list, so nothing in the artifact lets a user open settings, archive, duplicate, or invite for any of the 3 projects actually shown.",
+      "fix": "Make each entry in the Your projects list its own control that opens that project's settings, or add a per-item settings action, and reconcile the mismatch between the listed projects and the Q3 Roadmap project the current settings, archive, duplicate, and invite controls all target.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"archive-confirm\" section",
+      "evidence": "The \"archive-confirm\" section reads: Archiving \"Q3 Roadmap\" will remove it from the active projects list for everyone on the team. You can restore it at any time from the archived projects list. No section, heading, or link named or functioning as an archived projects list appears anywhere in the artifact; the following \"project-archived\" state links only back to workspace-overview.",
+      "violation": "NNG-H3-UNDO requires a stated reversal path to actually be reachable in the artifact. The archive-confirm copy promises restoration from the archived projects list, but no state or control by that name or effect is defined anywhere, including on project-archived, so the promised undo path does not exist in the design as specified.",
+      "fix": "Add an archived-projects-list state, reachable from project-archived or workspace-overview, with a restore control per archived project, so the reversal path the confirm copy promises actually exists.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the Save button",
+      "evidence": "project-settings-save-btn (<button type=\"submit\">Save</button>) commits a name change with no confirmation text, status indicator, or defined next state anywhere in the artifact.",
+      "violation": "NNG-H1 requires a state-changing action to specify what the user sees while it runs and once it finishes. This control, and two others noted as instances, each commit a change, a name edit, a new duplicate project, and a notification setting, with no success message, status indicator, or next state named anywhere in the artifact, so a user cannot tell any of the three actions succeeded.",
+      "fix": "Specify a visible confirmation for each action, such as a brief success message or a changed control state shown on the same screen after Save or Duplicate is used.",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "the \"project-settings\" section, the Duplicate project button",
+          "evidence": "project-settings-duplicate-btn (<button type=\"button\" aria-label=\"Duplicate project\">, no text content) commits a new duplicate project with no confirmation, status indicator, or defined next state."
+        },
+        {
+          "location": "the \"notification-settings\" section, the Save button",
+          "evidence": "notification-settings-save-btn (<button type=\"submit\">Save</button>) commits a digest-frequency change with no confirmation, status indicator, or defined next state."
+        }
+      ]
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-H4-INTERNAL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-member\" section, the Save button and Continue link",
+      "evidence": "invite-member-save-btn (<button type=\"submit\">Save</button>) has no defined target; a separate control, invite-member-continue-link (<a href=\"#invite-sent\">Continue</a>), is the only control that transitions to invite-sent. In project-settings and notification-settings, Save is each form's sole commit control and completes that screen's task.",
+      "violation": "NNG-H4-INTERNAL requires one label to carry one meaning throughout the artifact. Save completes the task alone in project-settings and notification-settings, but in invite-member Save has no defined outcome and a separate Continue link is required to reach invite-sent, so Save no longer means task complete here, with nothing in the artifact signalling the difference.",
+      "fix": "Either give the invite-member Save button the same complete-and-done behavior as elsewhere (submitting sends the invite and transitions to invite-sent), or remove the separate Save control and keep only Continue.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-H6-RECALL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-sent\" section",
+      "evidence": "The \"invite-sent\" section reads: An invite was sent to the address entered above. It expires in 5 days if not accepted. The actual email address is not restated on this screen.",
+      "violation": "NNG-H6-RECALL requires the information a user needs at a step to be present at that step. The invite-sent confirmation refers to the address entered above rather than restating the email address just entered on invite-member, so the user must recall it or navigate back to verify which address received the invite.",
+      "fix": "Restate the actual email address on the invite-sent screen, for example: \"An invite was sent to {email}.\"",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-H9-RECOVER",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"import-status\" section",
+      "evidence": "The \"import-status\" section reads: The last import finished with 4 rows skipped: each referenced a project that does not exist in this workspace. Rows 35, 71, 78, and 83 were skipped; every other row was imported. Its only control is a link back to workspace-overview.",
+      "violation": "NNG-H9-RECOVER requires an error state to point to a next step reachable from where the message appears. This message names exactly what went wrong for the 4 skipped rows but offers no recovery action, such as creating the missing projects or retrying just those rows; the only control on the screen is a generic Back to your projects link.",
+      "fix": "Add a recovery control to the import-status screen, such as a link to view or retry the 4 skipped rows once the missing referenced projects exist.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 2,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

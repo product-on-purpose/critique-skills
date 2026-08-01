@@ -1,0 +1,29 @@
+Location: Line 44-46, the custom button control
+Evidence: <div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">
+Problem: A div with role="button" is missing keyboard event handlers. Custom buttons must handle Enter and Space key presses to be fully keyboard accessible.
+Fix: Add JavaScript event listeners to handle keydown events for Enter (key 13) and Space (key 32) keys, or replace the div with a native button element.
+
+Location: Line 67, the promo code input field
+Evidence: <input id="promo" type="text" aria-invalid="true">
+Problem: The input has aria-invalid="true" but does not use aria-describedby to link to the error message below it, preventing screen reader users from associating the error with the field.
+Fix: Add aria-describedby="s3-form-promo-error" to the input element to link it to the error message span on line 68.
+
+Location: Line 61, the route selection dropdown
+Evidence: <select id="topic"><option>Northbound</option><option>Southbound</option></select>
+Problem: The select element has an id attribute but is missing the required name attribute, which will cause this field to not be included in form submission data.
+Fix: Add name="topic" to the select element.
+
+Location: Lines 47-57, the wizard steps container
+Evidence: <div class="wizard-steps" id="s3-wizard"> <div class="step" id="s3-step1">Choose a plan</div> <div class="step" id="s3-step2">Enter payment details</div> <div class="step" id="s3-step3">Confirm your order</div> </div>
+Problem: The wizard steps have no indication of the current step, total number of steps, or their position in the sequence, making the progress unclear to all users and inaccessible to screen readers.
+Fix: Add aria-current="step" to the current step, and add aria-label attributes to each step with numbering (e.g., aria-label="Step 1 of 3: Choose a plan") to clarify the sequence and progress.
+
+Location: Line 58, the fare history link
+Evidence: <a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>
+Problem: The link text says "accessibility improvements list" but the href="/fares/history" points to fare history, creating a mismatch between the visible text and the link destination.
+Fix: Either change the link text to match the destination (e.g., "read the fare history") or change the href to the correct page containing accessibility improvements.
+
+Location: Line 59-70, the contact form
+Evidence: <form id="s3-form"> <label for="topic" id="s3-form-topic-label">Route</label> <select id="topic">...
+Problem: The form lacks a fieldset and legend structure to group and describe related inputs, making it harder for users to understand the form's organization and purpose.
+Fix: Wrap related inputs in fieldset elements with legend elements that describe each group (e.g., one fieldset for trip details, another for contact information).

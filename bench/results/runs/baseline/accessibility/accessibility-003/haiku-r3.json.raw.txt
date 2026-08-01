@@ -1,0 +1,29 @@
+Location: Lines 44-46, div with class "icon-delete"
+Evidence: <div class="icon-delete" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></div>
+Problem: A div is being used as an interactive delete button, but it's not a button element and cannot be accessed via keyboard. Screen reader users won't recognize it as an interactive element.
+Fix: Replace the div with a <button> element and move the image inside, or add role="button", tabindex="0", and proper event handlers to the div.
+
+Location: Line 67, promo input with aria-invalid
+Evidence: <input id="promo" type="text" aria-invalid="true"><span class="error-text" id="s3-form-promo-error">Error.</span>
+Problem: The input has aria-invalid="true" but the error message is not associated with it. Screen reader users won't know which error corresponds to which field.
+Fix: Add aria-describedby="s3-form-promo-error" to the input element to link it to the error message.
+
+Location: Line 64, phone label styling
+Evidence: <label for="phone" id="s3-form-phone-label" style="color:#cc0000">Phone number</label>
+Problem: Red color alone is used to indicate a required field, but color cannot be relied upon for this information. Users who are colorblind or use screen readers won't know the field is required.
+Fix: Add aria-required="true" to the phone input element and either add text like "(required)" to the label or use a visual indicator beyond color.
+
+Location: Lines 47-57, wizard steps with CSS order
+Evidence: <div class="wizard-steps"><div class="step" style="order:3">Confirm</div><div class="step" style="order:2">Enter</div><div class="step" style="order:1">Choose</div></div>
+Problem: CSS order property visually reorders the steps (1, 2, 3) but screen reader users hear them in DOM order (3, 2, 1), creating a disconnect between visual and accessible order.
+Fix: Reorder the HTML elements in the correct sequence in the DOM instead of using CSS order, or add aria-label or aria-current to communicate the correct order to screen readers.
+
+Location: Line 45, trash icon alt text
+Evidence: <img src="/img/trash-icon.svg" alt="">
+Problem: The trash icon image has empty alt text. If this is a functional delete button (not decorative), the empty alt means screen reader users won't know what the button does.
+Fix: Add descriptive alt text like alt="Delete" to describe the icon's purpose, or if decorative, verify it's not part of an interactive control.
+
+Location: Line 43, Refresh status button
+Evidence: <button type="button" class="btn-secondary" id="s3-button1">Refresh status</button>
+Problem: It's unclear what "Refresh status" refreshes. The button lacks context about which element or data it updates.
+Fix: Add more specific text like "Refresh service status" or add aria-label="Refresh service status for current route" to clarify the button's purpose.

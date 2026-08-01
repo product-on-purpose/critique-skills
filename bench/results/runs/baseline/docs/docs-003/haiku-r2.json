@@ -1,0 +1,105 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:24:15.6353198Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "timeout section",
+      "evidence": "\"The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000.\"",
+      "violation": "The default timeout value is not specified, only the minimum constraint is mentioned.",
+      "fix": "Add a sentence stating what the default timeout value is.",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "timeout section",
+      "evidence": "\"Leaving this field at its default is the right choice for most teams\"",
+      "violation": "The statement recommends the default but never states what the default value actually is.",
+      "fix": "Specify the numeric default timeout value in milliseconds.",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "retries section vs timeout section",
+      "evidence": "retries specifies \"from 0 to 10\" with default 3; timeout only states minimum 1000 without maximum",
+      "violation": "Timeout field documentation lacks a stated maximum value constraint, unlike the retries field.",
+      "fix": "Add the maximum timeout value or explicitly note if no maximum exists.",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Related pages section",
+      "evidence": "\"- Metric catalog reference\" through \"- Rate limit reference\"",
+      "violation": "The related pages are listed as bare links without any description of their content or relevance.",
+      "fix": "Add brief descriptions next to each link explaining what that reference covers.",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Document structure",
+      "evidence": "Sections for timeout, retries, logging followed by Related pages with no introduction",
+      "violation": "The document lacks an introductory explanation of what these fields control or when they are used.",
+      "fix": "Add an introductory paragraph explaining the purpose of alert rule fields and when to modify them.",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "logging section",
+      "evidence": "\"The logging field accepts one of debug, info, warn, or error, and the default value is info.\"",
+      "violation": "No explanation is provided for what each logging level means or when to use each level.",
+      "fix": "Add descriptions of what each logging level does and typical use cases for each.",
+      "confidence": "medium",
+      "id": "F-006"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "entire document",
+      "evidence": "No configuration examples are shown",
+      "violation": "A reference document for configuring alert rules provides no example configurations showing how fields work together.",
+      "fix": "Add a section with one or two complete example alert rule configurations demonstrating field usage.",
+      "confidence": "medium",
+      "id": "F-007"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "393fe58fac52d6953cd372944cd352ef9181df5c42ae778bd6d17214acb080c7",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T20:31:48.269820Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 65, phone number input",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\">Phone number (required)</label> followed by <input id=\"phone\" type=\"tel\">",
+      "violation": "The label indicates the phone number field is required, but the input element lacks a required attribute, which breaks HTML form validation and prevents assistive technology from announcing the field as required.",
+      "fix": "Add required attribute to the input element: <input id=\"phone\" type=\"tel\" required>",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Lines 67-68, promo code input and error message",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> followed by <span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span>",
+      "violation": "The input has aria-invalid=\"true\" but the error message is not linked to the field via aria-describedby, so screen reader users cannot programmatically associate the error with the field.",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the input element.",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 58, link in fare adjustments section",
+      "evidence": "<a href=\"/fares/history\" id=\"s3-link1\">read the accessibility improvements list</a>",
+      "violation": "The link text says \"read the accessibility improvements list\" but the URL points to \"/fares/history\", creating a mismatch between what the link text promises and where it actually goes.",
+      "fix": "Change the link text to match the destination: <a href=\"/fares/history\" id=\"s3-link1\">read the fare history</a>",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Lines 35-36, first two paragraphs of fare adjustments section",
+      "evidence": "Paragraph 1: \"Riders can report a service issue by calling rider services.\" Paragraph 2: \"Local residents can check real time arrivals through the online portal.\"",
+      "violation": "These paragraphs about reporting service issues and checking real-time arrivals do not relate to fare adjustments and appear in the wrong section.",
+      "fix": "Move these paragraphs to the appropriate section (Station Updates or Schedule Changes) or remove them if they are not needed.",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 21, second paragraph of station updates section",
+      "evidence": "\"Commuters can report a service issue by calling rider services. Station staff can also help with the same request in person.\"",
+      "violation": "If commuters report an issue by calling rider services, it is unclear what \"the same request\" means when offered as an alternative by station staff in person.",
+      "fix": "Clarify or replace the text to explain how station staff can assist with service issues differently than the phone line.",
+      "confidence": "medium",
+      "id": "F-005"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

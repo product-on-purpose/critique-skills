@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Please correct the highlighted field. Error code: 502.\"",
+      "fix": "Detect the 502 case separately from field-validation errors and show a message that says the request failed on the server, with a retry action, instead of asking the reader to correct a field.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Checkout form, shipping address, second message (Error code: 502)",
+      "severity": 3,
+      "violation": "The copy tells the reader to correct a field, but error code 502 is a server gateway failure, not something caused by anything the reader entered. Asking someone to fix a field for a server-side error is misleading and gives no action that will actually solve the problem."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: directly below the shipping address block\" against \"Signal: bold text set above the address block at a larger size than its labels, icon\"",
+      "fix": "Make Placement and Signal agree on where the message sits relative to the address block, and correct whichever field is wrong.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Checkout form, shipping address, second message (Error code: 502)",
+      "severity": 3,
+      "violation": "Placement and Signal contradict each other for the same message. Placement puts the message below the shipping address block, while Signal describes the bold text as sitting above the address block."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page\"",
+      "fix": "Move this message to sit directly next to the password field, matching the placement pattern used for every other message in this document.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Password reset, new password, first message (choose password)",
+      "severity": 3,
+      "violation": "The password requirement is placed at the top of a long form, away from the password field it describes, so the reader has to scroll up and lose sight of the field to read the requirement, even though the field itself never leaves the page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Container: toast\" against \"Placement: in a dialog centered on the password reset step, over the new password field it blocks\"",
+      "fix": "Change Container to \"dialog\" to match the described behavior, or change the placement and signal so the message actually behaves like a toast.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Password reset, new password, second message (expired link)",
+      "severity": 3,
+      "violation": "The message is labeled a toast, but its Placement and Signal describe a centered, blocking modal dialog with a heading. A toast is a transient, non-blocking notification, so the stated container type contradicts the described behavior."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-focus\" against \"over the new password field it blocks\"",
+      "fix": "Fire the message on page load or as soon as the expired link is validated, rather than on focusing a field the dialog is already blocking.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Password reset, new password, second message (expired link)",
+      "severity": 3,
+      "violation": "The message is set to fire when the reader focuses the new password field, but the same entry says the dialog already blocks that field. If the dialog is already covering the field, the reader cannot focus it to trigger the message, so the described trigger can never actually occur."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The last changes were not saved and cannot be recovered. Contact support for assistance.\" against \"Input on resubmission: preserved\"",
+      "fix": "If the input is preserved, change the message to ask the reader to try saving again instead of telling them the change is unrecoverable and to contact support.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Account settings, username, message",
+      "severity": 3,
+      "violation": "The message says the change cannot be recovered and tells the reader to contact support, but the entry also says the input is preserved on resubmission, meaning the reader's entry is still sitting in the field ready to resave. Telling someone to contact support when their own input is still available to resubmit is contradictory and adds friction the situation does not need."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:43:22Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,39 @@
+Location: Head section, title element
+Evidence: <title id="head-title"></title>
+Problem: The page title is empty, which means screen readers will have no meaningful title to announce to users.
+Fix: Provide a descriptive page title, for example: <title>Rider Service Updates - Transportation</title>
+
+Location: Root html element, lang attribute
+Evidence: <html lang="translanguage" id="html">
+Problem: The lang attribute contains "translanguage" which is not a valid language code, making it impossible for assistive technologies to correctly determine the document language.
+Fix: Replace lang="translanguage" with a valid language code such as lang="en" for English.
+
+Location: Section 1, image element at line 21
+Evidence: <img src="/img/platform-update.jpg" id="s1-img1">
+Problem: The image has no alt attribute, so screen reader users will not know what the image depicts.
+Fix: Add a descriptive alt attribute: <img src="/img/platform-update.jpg" id="s1-img1" alt="Platform update announcement">
+
+Location: Section 2, heading element
+Evidence: <h4 id="s2-h">Accessibility improvements</h4>
+Problem: The heading hierarchy skips from h2 to h4, violating the proper nesting structure that assistive technology relies on to understand document structure.
+Fix: Change the h4 to h3: <h3 id="s2-h">Accessibility improvements</h3>
+
+Location: Section 3, custom delete control element
+Evidence: <div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">
+Problem: This div with role="button" is keyboard accessible via tabindex but has no click handler or keyboard event listener, so keyboard users cannot actually activate it.
+Fix: Add JavaScript event handlers for click and keydown events: document.getElementById('s3-customcontrol').addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { /* delete action */ } });
+
+Location: Section 3, form promo code input
+Evidence: <input id="promo" type="text" aria-invalid="true">
+Problem: The input has aria-invalid="true" but does not use aria-describedby to link to the error message, so screen readers cannot associate the error with the field.
+Fix: Add aria-describedby attribute: <input id="promo" type="text" aria-invalid="true" aria-describedby="s3-form-promo-error">
+
+Location: Section 3, wizard steps element
+Evidence: <div class="wizard-steps" id="s3-wizard"> <div class="step" id="s3-step1">Choose a plan</div>
+Problem: The wizard steps have no ARIA roles or semantic structure to indicate they are steps in a process, leaving assistive technology unable to convey their purpose.
+Fix: Add ARIA roles and attributes: <div class="wizard-steps" id="s3-wizard" role="group" aria-label="Steps"> <div class="step" id="s3-step1" aria-current="step">Choose a plan</div>
+
+Location: Section 3, form image element
+Evidence: <img src="/img/trash-icon.svg" alt="">
+Problem: The image has an empty alt attribute which may be intentional for decorative images, but this element is inside a button with aria-label="Delete item", creating potential redundancy or confusion.
+Fix: If the image is decorative, keep alt="" but ensure the button itself has sufficient accessible name; if the image conveys meaning, provide descriptive alt text.

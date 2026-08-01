@@ -1,0 +1,91 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:15:00Z",
+    "rubrics": ["PLAIN", "WILLIAMS"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "WILLIAMS-COHESION",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Terminology Notes section, lines 50-53",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal.",
+      "violation": "Four consecutive sentences jump subjects between employee actions and internal process descriptions without maintaining a topic thread. Reader must reorient between 'You record' (employee), 'Finance reconciles' (internal), 'Payroll releases' (internal), and back to 'you submit' (employee) at every sentence boundary.",
+      "fix": "Reorganize the section to group all employee-facing actions together, then describe internal process separately, or rewrite to maintain consistent subject focus within the paragraph.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "PLAIN-AUDIENCE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Terminology Notes section, lines 49-53",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal. You track its status there until the payment clears.",
+      "violation": "Section addresses employee reader with 'You record' and 'You submit' but immediately transitions to internal process descriptions ('Finance reconciles', 'Payroll releases') without signaling whether those internal actions are information the employee needs or just background explanation.",
+      "fix": "Clearly separate employee actions from internal process descriptions in this section, either by explicit labeling ('For employees: You record...', 'Internal process: Finance reconciles...') or by moving internal process details to a separate section.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Multiple sections (lines 11, 41, 60, 73)",
+      "evidence": "Line 11: 'one claim per employee per benefit year'. Line 60: 'The finance liaison publishes the equipment catalog at the start of the fiscal year.'",
+      "violation": "Document uses both 'benefit year' and 'fiscal year' for what may be the same or different time periods without clarifying their relationship. Reader cannot determine if a fiscal-year update affects their benefit-year eligibility or if these are distinct periods.",
+      "fix": "Use one consistent term throughout the document, or add a clarifying sentence defining the relationship between 'benefit year' (when employees are eligible to claim) and 'fiscal year' (when internal processes update).",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Section ordering: How to Apply (lines 17-23) before Required Documentation (lines 31-35)",
+      "evidence": "Section 3 'How to Apply' describes application steps starting at line 19. Section 5 'Required Documentation' describes proof-of-purchase and retention rules starting at line 31.",
+      "violation": "Required Documentation comes after How to Apply, but the employee needs to know documentation requirements before or during application, not after receiving application instructions. Current ordering forces an employee to read application steps first, then discover required documentation afterward.",
+      "fix": "Move the 'Required Documentation' section to appear immediately after 'How to Apply' or integrate it into the application instructions as a prerequisite step.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Multiple locations (lines 16, 39, 47)",
+      "evidence": "Line 39: 'The stipend pays up to 500 dollars per benefit year.'",
+      "violation": "Abstract concept 'stipend' is the grammatical subject instead of the real actor (the company or finance department). Similar constructions appear at lines 16 ('eligibility applies') and 47 ('the policy applies'), where abstract ideas are subjects instead of identifiable actors.",
+      "fix": "Replace abstract subjects with real actors. Line 39 example: 'The company reimburses up to 500 dollars per benefit year' or 'Finance reimburses up to 500 dollars per benefit year.'",
+      "confidence": "medium",
+      "instances": [
+        {
+          "location": "Line 16",
+          "evidence": "eligibility applies only to a dedicated home workspace"
+        },
+        {
+          "location": "Line 47",
+          "evidence": "the policy applies to one device per category per employee"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 1,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

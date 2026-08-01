@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced last week.\" followed by a list containing only three items (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp)",
+      "fix": "either display all 4 projects, or if this list is only a recent subset, label it \"Recent projects\" and add a \"View all projects\" link.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "workspace-overview section, the summary paragraph and the project list beneath it",
+      "severity": 3,
+      "violation": "the stated project count does not match the number of items actually shown, and there is no control to view the missing fourth project or the full list."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>",
+      "fix": "add visible label text or an icon inside the button (for example \"Duplicate\") that matches the aria-label.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "project-settings section, button id=\"project-settings-duplicate-btn\"",
+      "severity": 3,
+      "violation": "the button has no visible text or icon inside it, only an aria-label, so a sighted user has no way to see that the control exists or what it does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "both are type=\"submit\" buttons with no linked confirmation screen, unlike the invite-member and archive-confirm flows, which each navigate to a dedicated confirmation section after saving.",
+      "fix": "add a confirmation state or inline success message after these two save actions, matching the pattern already used for invite-member and archive-confirm.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "project-settings section, Save button (id=\"project-settings-save-btn\") and notification-settings section, Save button (id=\"notification-settings-save-btn\")",
+      "severity": 3,
+      "violation": "saving a project name or a notification preference gives the user no feedback that the change succeeded, which is inconsistent with the confirmation pattern used elsewhere in the same workspace."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "the form's \"Save\" submit button (id=\"invite-member-save-btn\") sits alongside a separate \"Continue\" link (id=\"invite-member-continue-link\") that points to #invite-sent",
+      "fix": "combine these into one action, for example making \"Save\" itself submit and advance to the confirmation screen, or relabel the second control to make clear it is a distinct step.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "invite-member section",
+      "severity": 3,
+      "violation": "it is unclear whether \"Save\" sends the invite or \"Continue\" does; having two separate controls for what appears to be a single action is confusing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An invite was sent to the address entered above. It expires in 5 days if not accepted.\"",
+      "fix": "show the actual email address on the confirmation screen, for example \"An invite was sent to jane@example.com,\" instead of referring to \"above.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "invite-sent section, confirmation paragraph",
+      "severity": 3,
+      "violation": "this confirmation screen does not display the email address, and \"above\" is misleading because the address was entered on a previous screen that is no longer visible."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\"",
+      "fix": "add an archived-projects view (or a link to one) so users can actually restore an archived project, or remove the claim if that destination does not exist.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "archive-confirm section, paragraph id=\"archive-confirm-copy\"",
+      "severity": 3,
+      "violation": "no \"archived projects list\" exists anywhere in this document; there is no link or section a user can reach to view or restore an archived project."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Rows 35, 71, 78, and 83 were skipped; every other row was imported.\"",
+      "fix": "add a link or control to view or download the skipped rows, or to re-run the import after fixing them, instead of only stating the row numbers.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "import-status section, paragraph id=\"import-status-message\"",
+      "severity": 3,
+      "violation": "the message cites specific row numbers but gives the user no way to view, export, or fix the skipped rows, leaving this screen a dead end with no actionable next step."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-08-01T02:20:44Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

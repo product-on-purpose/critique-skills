@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.\"",
+      "fix": "Restructure to: \"After the manager signs the stipend request and finance confirms the budget line, the request moves to final processing.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section \"How to Apply\", line 21",
+      "severity": 3,
+      "violation": "The sentence has confusing nested clauses that make the approval sequence unclear. The placement of \"once\" and \"after\" conditions obscures the logical order of steps."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Then, the employee reviews the confirmation summary before submitting the final request.\"",
+      "fix": "Clarify: \"The employee reviews the confirmation summary after submitting the final request and before the payment is processed.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section \"How to Apply\", line 23",
+      "severity": 3,
+      "violation": "The sequence is contradictory - saying the employee reviews the summary \"before submitting the final request\" implies they have not yet submitted, but the summary is described as a confirmation, which should come after submission."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The manager reviews the request within two business days. The manager confirms the equipment category matches the approved list.\"",
+      "fix": "Combine into one sentence: \"The manager reviews the request within two business days to confirm the equipment category matches the approved list.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section \"Approval Timeline\", line 27",
+      "severity": 3,
+      "violation": "\"The manager\" is repeated at the start of consecutive sentences, creating a choppy rhythm that could be combined more smoothly."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An incomplete request pauses the timeline until the missing item arrives.\"",
+      "fix": "Replace \"missing item\" with a specific reference, such as: \"An incomplete request pauses the timeline until the missing documentation arrives.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section \"Approval Timeline\", line 29",
+      "severity": 3,
+      "violation": "\"Missing item\" is ambiguous - it is unclear whether this refers to missing documentation, a missing receipt, or a missing piece of information in the request itself."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You must keep your equipment in good working condition and we may ask for a brief photo check once a year.\"",
+      "fix": "Rewrite to maintain consistent perspective: \"Employees must keep their equipment in good working condition, and management may request photographic verification once annually.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section \"Restrictions and Exceptions\", line 45",
+      "severity": 3,
+      "violation": "The sentence shifts perspective abruptly from \"you\" (the employee) to \"we\" (the company), creating inconsistent tone and clarity."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You record the stipend item on the request form. Finance reconciles the reimbursable item against the request log each month. Payroll releases the covered purchase amount after that monthly review. Also, you submit the request in the portal. Countersign the employee request within two business days.\"",
+      "fix": "Clarify roles and perspectives: \"The employee submits the request in the portal. The manager countersigns the request within two business days. Finance reconciles the item against the request log and payroll releases payment after review.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section \"Terminology Notes\", line 51-53",
+      "severity": 3,
+      "violation": "The section shifts perspective between \"you,\" \"finance,\" and \"payroll,\" and includes an orphaned phrase \"Countersign the employee request\" with no stated subject, making it unclear who performs this action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The benefits team coordinates every stipend request from intake to payout. A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.\"",
+      "fix": "Remove unrelated sentences and keep only: \"The benefits team coordinates every stipend request from intake to payout.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Section \"Program Coordination\", line 65",
+      "severity": 3,
+      "violation": "The section mixes unrelated statements about travel expenses, federal guidance, and coffee budgets alongside the main stipend coordination topic, creating confusion about scope and relevance."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The finance liaison publishes the vendor list on the first business day of the month. The most recent version supersedes the one that came before it.\"",
+      "fix": "Either consolidate into a single general statement in the opening section or provide specific distinctions for vendor list publication versus catalog/reimbursement log publication.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Section \"Questions and Updates\", line 73",
+      "severity": 3,
+      "violation": "This statement is nearly identical to the opening section (lines 7-8), repeating the same pattern about publication and version supersession. The repetition does not add clarity and suggests the document was not properly reviewed for redundancy."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,39 @@
+Location: Workspace overview section, project list (lines 13-17)
+Evidence: "This workspace holds 4 projects, synced this morning." but only 3 projects listed: "Beta Launch Plan", "Holiday Campaign Assets", "Partner Integration Pilot"
+Problem: The text states there are 4 projects but only 3 are shown in the list, creating a discrepancy that confuses users about what projects are available.
+Fix: Either update the text to say "3 projects" or add the missing 4th project name to the list.
+
+Location: Project settings section, duplicate button (line 29)
+Evidence: "<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>"
+Problem: The button has no visible text label, only an aria-label attribute, making it unclear to sighted users what the button does.
+Fix: Add visible text content to the button such as "Duplicate" or an icon with appropriate text alternative.
+
+Location: Invite member form (line 39)
+Evidence: "<input id="invite-member-email-input" type="email">"
+Problem: The email input lacks any validation feedback or error message display, so users won't know if they entered an invalid email address.
+Fix: Add a placeholder attribute or validation message element that indicates what format is expected and displays errors.
+
+Location: Archive confirm section (lines 50-55)
+Evidence: "<h2>Archive this project?</h2><p id="archive-confirm-copy">Archiving "Vendor Onboarding" will remove it from the active projects list for everyone on the team.</p>"
+Problem: The section shows the project name in confirmation text but provides no way to verify you are archiving the correct project, which is risky for a destructive action.
+Fix: Display additional project details (like creation date, team members, or project key) so users can confirm they have the right project before archiving.
+
+Location: Import status section (line 63)
+Evidence: "Import failed. Error code IMP-500. Contact support if this continues."
+Problem: The error message shows only a cryptic error code with no explanation of what went wrong or what the user should do to resolve it.
+Fix: Replace the generic error code with a human-readable explanation, for example "Import failed: unable to connect to the data source. Try again in a few moments or contact support."
+
+Location: Project settings form (lines 24-28)
+Evidence: "<form><label for="project-settings-name-input">Project name</label><input id="project-settings-name-input" type="text" value="Vendor Onboarding"><button id="project-settings-save-btn" type="submit">Save</button></form>"
+Problem: After clicking Save, users see no feedback indicating whether the change was successful, leading to uncertainty about whether their action was completed.
+Fix: Add a success message or confirmation state that appears briefly after the form is submitted and validated successfully.
+
+Location: Notification settings form (lines 68-75)
+Evidence: "<form><label for="notification-settings-digest-input">Digest frequency</label><select id="notification-settings-digest-input"><option>Daily</option><option>Weekly</option></select><button id="notification-settings-save-btn" type="submit">Save</button></form>"
+Problem: The select dropdown has no indication of what the current setting is or whether a new choice differs from what is saved.
+Fix: Add a selected attribute to the option that matches the current user preference, or display the current setting separately from the form control.
+
+Location: Navigation links throughout document
+Evidence: Multiple anchor tags use fragment identifiers: "#project-settings", "#import-status", "#notification-settings", etc.
+Problem: Fragment links assume the page uses a single-page navigation pattern, but there is no visible indication these are clickable or what they do, leaving users uncertain how to navigate.
+Fix: Add visual styling or icons to distinguish links from plain text, or replace fragment links with actual page navigation if this is a multi-page application.

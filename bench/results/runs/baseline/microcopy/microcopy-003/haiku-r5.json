@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This request timed out before it could finish.\"",
+      "fix": "Specify what operation timed out and suggest concrete recovery steps, such as \"Your search timed out. Try refining your search terms or check your internet connection.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Search results, no matches, timeout message",
+      "severity": 3,
+      "violation": "The message is vague about what request timed out and does not advise the user on recovery or next steps, leaving them uncertain about the cause and unable to take action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Placement: in the results panel, directly under the filter bar it concerns; Signal: styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action",
+      "fix": "Apply distinct styling such as a warning banner color or icon that signals this message requires a response, separate from passive informational banners.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Search results message, \"No orders fall inside the selected date range\"",
+      "severity": 3,
+      "violation": "The message conveys that user action is required, but the styling does not distinguish it from passive informational content, risking that users overlook the actionable guidance."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Select resume to sync now.\"",
+      "fix": "Rewrite to \"Tap Resume\" or \"Click Resume to continue syncing\" to match the name of the actual control the user interacts with.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Notification center, sync status message",
+      "severity": 3,
+      "violation": "The phrase \"Select resume\" is awkward and unclear about what action to take, using resume as a noun when it should direct the user to a specific button or control."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:44:22Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

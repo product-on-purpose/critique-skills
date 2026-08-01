@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person.\"",
+      "fix": "Remove this paragraph from the Weekend service section, or replace it with a sentence that actually describes weekend service.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section \"Weekend service\" (id=\"s2\"), first paragraph (id=\"s2-p1\")",
+      "severity": 3,
+      "violation": "This sentence is copied almost word for word from the first paragraph of the \"Accessibility improvements\" section above it (only \"Riders\" was changed to \"Passengers\"), and it has nothing to do with weekend service, so it reads as duplicated, misplaced content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Local residents should review the updated schedule through the mobile app. Station staff can also help with the same request in person.\"",
+      "fix": "Rewrite the second sentence to be about reviewing the schedule, for example by pointing riders to a station kiosk or the schedule page, instead of repeating the fare adjustment sentence.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id=\"s3\"), first paragraph (id=\"s3-p1\")",
+      "severity": 3,
+      "violation": "The second sentence is the same fare adjustment boilerplate used twice already in earlier sections and does not follow from this paragraph's own first sentence about reviewing the schedule."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day.\"",
+      "fix": "Replace the status card text with content specific to the schedule changes this section is about, and delete the sentence if it is not needed here.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id=\"s3\"), status card (id=\"s3-statuscard\")",
+      "severity": 3,
+      "violation": "This text duplicates the second paragraph of the \"Accessibility improvements\" section (id=\"s1-p2\") almost verbatim, so a section about schedule changes repeats unrelated real time arrival content instead of describing the actual changes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"icon-delete\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>",
+      "fix": "Replace the div with a real button element, or add role=\"button\", tabindex=\"0\", keyboard event handling, and a text label such as aria-label=\"Delete\" so the control is operable and identifiable.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id=\"s3\"), custom control (id=\"s3-customcontrol\")",
+      "severity": 3,
+      "violation": "This element is styled and named like a delete control but is a plain div with no role, no tabindex, and no accessible name, since its image has an empty alt attribute, so it cannot be reached by keyboard or identified by assistive technology."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div id=\"s3-step3\" style=\"order:3\">Confirm your order</div> appears first in the source, followed by \"s3-step2\" (order:2) and then \"s3-step1\" (order:1)",
+      "fix": "Write the three step elements in the HTML in their actual logical order, Choose a plan, Enter payment details, Confirm your order, instead of relying on CSS order to fix the sequence only visually.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id=\"s3\"), wizard steps (ids \"s3-step1\", \"s3-step2\", \"s3-step3\")",
+      "severity": 3,
+      "violation": "The steps are written in the document in the reverse of their logical order and rely on the CSS order property to display correctly, so anyone using the keyboard or a screen reader, which follow document order rather than visual order, will encounter \"Confirm your order\" before \"Choose a plan\"."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a href=\"/fares/history\" id=\"s3-link1\">read the accessibility improvements list</a>",
+      "fix": "Change the link text to match its destination and context, for example \"read the list of upcoming schedule adjustments\".",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id=\"s3\"), link paragraph (id=\"s3-linkpara\")",
+      "severity": 3,
+      "violation": "The link text says \"read the accessibility improvements list\", but the link points to /fares/history and is introduced by a sentence about \"the full list of upcoming adjustments\", so the visible link text does not describe where the link actually goes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label>",
+      "fix": "Add a visible text indicator such as \"(required)\" next to the label, and add the required or aria-required attribute to the input, instead of relying on color alone.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id=\"s3\"), form field label (id=\"s3-form-phone-label\")",
+      "severity": 3,
+      "violation": "The phone number label is colored red, apparently to mark it as required or different from the other fields, but no text, symbol, or attribute conveys this, so the distinction is lost for anyone who cannot see or perceive the color."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"><span class=\"error-text\" id=\"s3-form-promo-error\">Error.</span>",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the input, and rewrite the error text to describe the specific problem, for example \"Promo code is not valid.\"",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id=\"s3\"), promo code field (id=\"promo\") and error text (id=\"s3-form-promo-error\")",
+      "severity": 3,
+      "violation": "The promo code field is marked invalid, but the error message next to it is not linked to the field with aria-describedby, and the message text, \"Error.\", does not say what is actually wrong with the value entered."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<table id=\"s2-table1\"><tr><th scope=\"col\">Zone</th><th scope=\"col\">Status</th></tr>",
+      "fix": "Add a caption element as the table's first child, for example <caption>Weekend service status by zone</caption>.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Table in the \"Weekend service\" section (id=\"s2-table1\")",
+      "severity": 3,
+      "violation": "The table has no caption element, so a screen reader user who tabs into it has no announced summary of what the table is about before hearing the individual cell values."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "69ff628078a107c11bd403359666e3fafdba2d4ab204fdec80881f7db5374db6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T20:30:34Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

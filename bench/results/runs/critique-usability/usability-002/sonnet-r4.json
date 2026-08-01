@@ -1,0 +1,123 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T02:13:35Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"project-settings\" section, the \"project-settings-archive-link\" link",
+      "evidence": "the \"archive-confirm\" state's own text reads: 'Archiving \"Customer Migration\" will remove it from the active projects list for everyone on the team. You can restore it at any time from the archived projects list.' The artifact defines no archived-projects-list screen and no restore or unarchive control anywhere.",
+      "violation": "NNG-H3-UNDO requires a reasonably reversible committed action to name a stated way back. The archive action is reversible per the artifact's own stated copy, but no reversal path, such as restore or unarchive, exists anywhere in the artifact.",
+      "fix": "Add a restore or unarchive control, for example on an archived-projects-list screen that the \"project-archived\" state links to, and name that path in the artifact.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"invite-sent\" section",
+      "evidence": "the \"invite-sent\" state reads: 'An invite was sent to the address entered above. It expires in 5 days if not accepted.' No cancel-invite, revoke-invite, or pending-invites control is defined anywhere in the artifact.",
+      "violation": "NNG-H3-UNDO requires a reasonably reversible committed action to name a stated way back. Sending an invite is reasonably reversible in a workspace product, since a mistaken or premature invite is normally revocable before it is accepted, but the artifact names no revoke path anywhere.",
+      "fix": "Add a revoke-invite control, for example a Cancel invite link on the \"invite-sent\" state or a pending-invites list reachable from \"project-settings\".",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-H5-CONFIRM",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"project-settings\" section, the \"project-settings-archive-link\" link",
+      "evidence": "the archive link in \"project-settings\" is: <a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a>, targeting the \"project-archived\" state directly. No element anywhere in the artifact has an href of \"#archive-confirm\", so the \"archive-confirm\" state, which reads 'Archiving \"Customer Migration\" will remove it from the active projects list for everyone on the team,' is unreachable.",
+      "violation": "NNG-H5-CONFIRM requires the path an actual control takes to reach a confirmation naming the object and the consequence before the action commits. The \"archive-confirm\" state the artifact defines does not count because the \"project-settings-archive-link\" control's own path bypasses it entirely, so the archive commits on a single click with no confirmation reachable from that control.",
+      "fix": "Change the \"project-settings-archive-link\" link's target from \"#project-archived\" to \"#archive-confirm\", so the archive action routes through the existing confirmation state before it commits.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button> is the form's only commit control; the artifact defines no confirmation message, changed control state, or next state reached after it is clicked.",
+      "violation": "NNG-H1 requires a visible indication of what the system is doing and what the outcome was for a state-changing action. This commit control's trigger is specified but the artifact names no in-progress or result feedback and no next state it leads to.",
+      "fix": "Specify what the user sees after Save is clicked: a brief success message in place, a changed control state, or a defined next state.",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button",
+          "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button> defines no confirmation message and no next state, distinct from the separate Continue link on the same state."
+        },
+        {
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button",
+          "evidence": "<button id=\"notification-settings-save-btn\" type=\"submit\">Submit</button> is the form's only commit control; the artifact defines no confirmation message and no next state reached after it is clicked."
+        }
+      ]
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-H4-CONTROL-NAMING",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "evidence": "control labeled \"Save\"",
+      "violation": "This artifact uses 2 different labels for what reads as the same commit action: \"Save\", \"Submit\". A user cannot tell from the label alone whether these controls perform the same action or different ones.",
+      "fix": "Pick one label for this commit action, for example \"Save\", and use it everywhere the action appears.",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button",
+          "evidence": "control labeled \"Save\""
+        },
+        {
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button",
+          "evidence": "control labeled \"Submit\""
+        }
+      ]
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-H6-RECALL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-sent\" section",
+      "evidence": "the \"invite-sent\" state's only reference to the address is: 'An invite was sent to the address entered above.' The actual email value entered on \"invite-member\" is not shown or repeated on this state, and this state's own exit link targets \"project-settings\" rather than back to \"invite-member\".",
+      "violation": "NNG-H6-RECALL requires the information a user needs at a step to be present at that step. Confirming which address received the invite needs the actual address value, which this state does not show or repeat, only a back-reference to an earlier screen the state's own exit does not return to.",
+      "fix": "Show the entered email address on the \"invite-sent\" state, for example 'An invite was sent to {email}.'",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-007",
+      "criterion": "NNG-H9-RECOVER",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"import-status\" section",
+      "evidence": "the \"import-status\" state reads: 'The last import finished with 3 rows skipped: each referenced a project that does not exist in this workspace. Rows 63, 71, and 82 were skipped; every other row was imported.' Its only control is \"Back to your projects\", with no link to view, fix, or re-import the skipped rows.",
+      "violation": "NNG-H9-RECOVER requires an error or failure state to point to a next step reachable from where the message appears. This state names the exact problem but offers no recovery action for it, only unrelated navigation back to the overview.",
+      "fix": "Add a control on the \"import-status\" state that lets the user address the skipped rows directly, for example a link to create the missing projects or to re-run the import for rows 63, 71, and 82.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 3,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

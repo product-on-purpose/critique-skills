@@ -1,0 +1,29 @@
+Location: Two-factor setup, verification code, first message
+Evidence: "Check the message again and enter all six."
+Problem: The message instructs the user to check again without explicitly stating that the verification code is incomplete.
+Fix: Rewrite as "Your verification code must be exactly 6 digits."
+
+Location: Two-factor setup, verification code, first message
+Evidence: Verification codes are 6 digits long, and this one has 5. Check the message again and enter all six.
+Problem: The message leads with technical explanation (digit count comparison) before the actionable error, delaying comprehension.
+Fix: Prioritize action first: "Enter a 6-digit code."
+
+Location: Two-factor setup, verification code, second message
+Evidence: "This verification code expired 10 minutes after it was sent, which stops an intercepted code from being reused later."
+Problem: The message specifies the expiration window but provides no reference point for the current time, making it impossible for users to evaluate urgency.
+Fix: Add the time sent or absolute expiration time: "This code expired 10 minutes after it was sent at 2:45 PM."
+
+Location: Billing, promo code, second message
+Evidence: "This promo code applies to annual plans, and the selected plan is monthly."
+Problem: The passive phrasing "the selected plan is monthly" does not clearly name which specific plan or tier the user has selected.
+Fix: Change to "This promo code works with annual plans only. You selected a monthly plan."
+
+Location: Signal specification
+Evidence: "Signal: bold text set larger than the field label, icon" (appears in all four message blocks)
+Problem: All four messages use identical visual treatment despite representing different error types and urgencies, reducing visual hierarchy.
+Fix: Differentiate signals by severity: use larger bold text and warning icon for time-sensitive errors, standard bold for configuration errors.
+
+Location: Fires row
+Evidence: "Fires: on-blur" appears for first and third messages; "Fires: on-submit" appears for second and fourth messages
+Problem: The timing pattern is inconsistent, appearing arbitrary without explanation of why validation timing differs.
+Fix: Document the rationale or standardize to a consistent trigger point.

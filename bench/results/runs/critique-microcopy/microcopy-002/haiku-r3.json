@@ -1,0 +1,127 @@
+{
+  "run": {
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:45:00Z",
+    "rubrics": [
+      "NNG"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-EM-PLAIN-LANGUAGE",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Checkout form, shipping address, message 2",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "violation": "The message text carries an internal error code, a code-style token, or an engineering-jargon term standing in for a plain-language explanation.",
+      "fix": "Replace 'Error code: 502' with a plain-language description of what went wrong, for example 'The system could not save your address. Please check it and try again.'",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-EM-PROXIMITY",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Password reset, new password, message 1",
+      "evidence": "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page",
+      "violation": "The message appears at the top of a long form instead of directly beside the password field, requiring the reader to scroll up to find it, separating the message from the control it concerns.",
+      "fix": "Place the message directly below the password field, not at the top of the form, so the reader sees the requirement beside the field without scrolling.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-EM-PREVENT",
+      "lane": "judged",
+      "severity": 2,
+      "location": "File upload, receipts, message 2",
+      "evidence": "Fires: on-submit. Predictable mistake: yes. Message checks file format only when the reader submits the entire form.",
+      "violation": "The message reports the file format error only when the reader submits, even though the product can check the file type when the file is selected, catching this common mistake before the reader invests effort in completing the upload flow.",
+      "fix": "Validate file type when the file is selected or dropped into the upload area, not only on form submission, so the reader knows immediately whether the file is acceptable.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-EM-SELECTABLE-FIX",
+      "lane": "judged",
+      "severity": 2,
+      "location": "File upload, receipts, message 1",
+      "evidence": "This receipt is over the 10 MB limit, which keeps uploads quick on slow connections. Reduce the file size and upload it again. Suggested fix: described, names the one available alternative but requires the reader to enter it by hand",
+      "violation": "The message describes reducing the file size as the fix but does not offer a selectable action to compress or resize the file within the product; the reader must complete the conversion manually outside the app and re-upload.",
+      "fix": "Offer a one-click 'Compress and retry' or 'Convert and retry' button in place of the message so the reader can resize the file without leaving the form.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-EM-SEVERITY-CONTAINER",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Password reset, new password, message 2",
+      "evidence": "Container: toast. Message reports an expired reset link: This reset link expired an hour after it was sent, so nobody can reuse it from an old message. Fires: on-focus. This blocks the reader from proceeding with password reset.",
+      "violation": "A fully blocking failure, an expired reset link that prevents password reset, is shown in a self-clearing toast container, so a reader who looks away or whose browser delays rendering misses the one message explaining why the form is blocked.",
+      "fix": "Show the message in a modal dialog or persistent inline container that remains on screen until the reader interacts with it, not a self-clearing toast, so the reader cannot miss the explanation for why the form is blocked.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-EM-GRACE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Account settings, username, message 1",
+      "evidence": "The last changes were not saved and cannot be recovered. Contact support for assistance. Suggested fix: none. No other message under this screen heading offers a way forward.",
+      "violation": "An unrecoverable data loss (changes not saved, cannot be recovered) is reported as a bare technical notice with no acknowledgment of the impact (lost work), no human touch, and only a generic 'contact support' instruction, leaving a reader with no goodwill in this moment of highest stakes.",
+      "fix": "Acknowledge the reader's situation and the impact: 'Your recent changes could not be saved and unfortunately cannot be recovered. We know this is frustrating. Our support team can review whether any older versions are available. Contact support with your account details and the time you made the changes.'",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "NNG-EM-SPECIFIC",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Checkout form, shipping address, message 2",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "violation": "The message does not name which field needs correction (even though the context is shipping address, the message does not say this) or what the actual problem is. 'Correct the highlighted field' is generic guidance that could describe any validation failure.",
+      "fix": "Name the specific field and the actual problem. Example: 'Address: The state abbreviation is not recognized. Check the postal code or city name.'",
+      "confidence": "high"
+    },
+    {
+      "id": "F-008",
+      "criterion": "NNG-EM-SPECIFIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Account settings, username, message 1",
+      "evidence": "The last changes were not saved and cannot be recovered.",
+      "violation": "The message does not name the actual cause of the failure (sync failure, network disconnection, server error, or other cause), leaving a reader facing unrecoverable loss with no understanding of what triggered it.",
+      "fix": "Name the cause when it is available to the system: 'Your changes could not be synced to the server. Your internet connection was interrupted' or 'The server rejected the update,' so the reader understands what happened and can take corrective steps or plan for recovery.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-009",
+      "criterion": "NNG-EM-EXPLAIN",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Account settings, username, message 1",
+      "evidence": "The last changes were not saved and cannot be recovered. Contact support for assistance.",
+      "violation": "An unrecoverable failure (permanent data loss) is reported with no explanation of why it happened. The reader did nothing unusual and has no way to understand what triggered the failure or to avoid it in the future.",
+      "fix": "Explain why the changes were not saved: 'Your connection was lost before the changes synced to the server' or 'The server rejected the update. Check your internet connection and try again. If the problem persists, contact support.'",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 4,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

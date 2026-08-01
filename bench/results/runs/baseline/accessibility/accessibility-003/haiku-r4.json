@@ -1,0 +1,72 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/accessibility/accessibility-003.html",
+    "artifact_sha256": "69ff628078a107c11bd403359666e3fafdba2d4ab204fdec80881f7db5374db6",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T20:27:35.971222Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Lines 44-46, the icon-delete div containing a trash icon",
+      "evidence": "<div class=\"icon-delete\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>",
+      "violation": "This custom interactive control has no role attribute, no accessible name, and no indication of its purpose for screen reader users. The image has an empty alt attribute and the parent div has no aria-label or other labeling mechanism.",
+      "fix": "Add role=\"button\" to the div, an aria-label=\"Delete\" to describe the action, and ensure keyboard accessibility with tabindex=\"0\" and JavaScript to handle Enter/Space key activation. Alternatively, use a semantic <button> element instead of a custom div.",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Lines 67-68, the Promo code input field and its error message",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> followed by <span class=\"error-text\" id=\"s3-form-promo-error\">Error.</span>",
+      "violation": "The input has aria-invalid=\"true\" but is not associated with the error message via aria-describedby. Screen reader users will know the field is invalid but won't understand why or what error occurred.",
+      "fix": "Change the input to <input id=\"promo\" type=\"text\" aria-invalid=\"true\" aria-describedby=\"s3-form-promo-error\"> to connect the error message to the field.",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 64, the label for the Phone number field",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label>",
+      "violation": "The red text color (color:#cc0000) is the only indication that this field is required. Color alone is not a sufficient indicator for users with color blindness or low vision.",
+      "fix": "Add the word \"required\" or an asterisk followed by a text explanation to the label text, and use aria-required=\"true\" on the input element. For example: <label for=\"phone\" id=\"s3-form-phone-label\">Phone number <span aria-label=\"required\">*</span></label> with corresponding aria-required=\"true\" on the input.",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Lines 47-57, the wizard-steps section with three step divs",
+      "evidence": "The DOM contains: <div id=\"s3-step3\" style=\"order:3\">Confirm your order</div>, <div id=\"s3-step2\" style=\"order:2\">Enter payment details</div>, <div id=\"s3-step1\" style=\"order:1\">Choose a plan</div>",
+      "violation": "The CSS order property visually reorders the steps as 1-2-3, but the DOM order is 3-2-1 (reversed). Screen reader users and keyboard navigators will encounter the steps in reverse logical order compared to what sighted users see visually, creating confusion about the sequence.",
+      "fix": "Reorder the DOM elements so they appear in the correct sequence: step1 first, then step2, then step3. Remove the style=\"order:N\" attributes or use flexbox direction instead of reordering individual items.",
+      "confidence": "medium",
+      "id": "F-004"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

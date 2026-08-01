@@ -1,0 +1,105 @@
+{
+  "run": {
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:38:05Z",
+    "rubrics": [
+      "NNG"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-EM-PLAIN-LANGUAGE",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Checkout form, shipping address, message 2",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "violation": "The message text carries an internal error code, a code-style token, or an engineering-jargon term standing in for a plain-language explanation.",
+      "fix": "Replace the code or jargon term with a plain-language sentence a non-technical reader can act on.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-EM-SPECIFIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Checkout form, shipping address, message 2",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "violation": "The message names no field, value, or rule, a bare something-went-wrong statement with nothing else added, where the screen context shows a specific, nameable cause was available.",
+      "fix": "Name the actual problem encountered: specify whether this is a server error, timeout, or validation failure, and describe what the reader should do next.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-EM-SELECTABLE-FIX",
+      "lane": "judged",
+      "severity": 2,
+      "location": "File upload, receipts, message 1",
+      "evidence": "This receipt is over the 10 MB limit, which keeps uploads quick on slow connections. Reduce the file size and upload it again.",
+      "violation": "The Suggested fix field is described, the fix is unambiguous and single (reduce file size), yet the message does not offer the fix as a selectable action the reader can perform directly within the product.",
+      "fix": "Provide a one-click compression or file-reduction tool within the message, or guide the reader to a built-in compression feature rather than requiring external tools.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-EM-PREVENT",
+      "lane": "judged",
+      "severity": 2,
+      "location": "File upload, receipts, message 2",
+      "evidence": "Receipts upload as PDF or PNG only, the two formats the expense system can read. Change this file to one of those formats and upload it again, or select a different receipt.",
+      "violation": "The message reports a predictable and foreseeable mistake (wrong file type) after submission, and the system could plausibly have prevented it by restricting the file picker to only allow PDF or PNG before the reader submitted.",
+      "fix": "Restrict the file picker dialog to show only PDF and PNG files, or clearly filter and disable non-compliant file types before the reader attempts to submit.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-EM-PROXIMITY",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Password reset, new password, message 1",
+      "evidence": "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page",
+      "violation": "The message sits at a page location requiring scrolling away from the control it concerns, rather than immediately beside or below that control.",
+      "fix": "Move the password-requirement message directly below the password field, so the reader can see both the requirement and the field in a single view without scrolling.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-008",
+      "criterion": "NNG-EM-SPECIFIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Account settings, username, message 1",
+      "evidence": "The last changes were not saved and cannot be recovered. Contact support for assistance.",
+      "violation": "The message names no field, value, or rule, a bare something-went-wrong statement with nothing else added, where the screen context shows a specific, nameable cause was available (network error, server error, permissions issue, etc.).",
+      "fix": "Name the specific cause of the failure: specify whether this was a network error, server outage, permission issue, or other root cause, so the reader can understand whether retrying will help or what to tell support.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-009",
+      "criterion": "NNG-EM-SELECTABLE-FIX",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Account settings, username, message 1",
+      "evidence": "The last changes were not saved and cannot be recovered. Contact support for assistance.",
+      "violation": "The message names an unambiguous, single fix (contact support), yet the Suggested fix field is none and the message does not offer it as a selectable action the reader can perform directly.",
+      "fix": "Provide a clickable contact-support button or link in place of the text instruction, so the reader can reach support without manually searching for contact information.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 2,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

@@ -1,0 +1,39 @@
+Location: Between the title "# Send your first test alert" and the first heading "## Open the test console"
+Evidence: The document moves directly from the H1 title to "## Open the test console" with no introductory sentence.
+Problem: There is no introduction stating what the reader will accomplish, why sending a test alert matters, or what prerequisites are needed before starting.
+Fix: Add a short paragraph after the title stating the goal of the tutorial and any prerequisites, such as an account with a sample alert rule already provisioned.
+
+Location: The three step headings "## Open the test console," "## Trigger the sample alert," and "## Check the delivery log"
+Evidence: Each heading introduces a single instruction with no step numbers, for example "## Open the test console" followed directly by prose.
+Problem: A tutorial meant to be followed in sequence does not number its steps, making it harder for a reader to track progress or refer back to a specific step.
+Fix: Number the three main sections, for example "1. Open the test console," "2. Trigger the sample alert," "3. Check the delivery log."
+
+Location: "Open the test console" section, first sentence
+Evidence: "Open the test console from the developer menu and select the sample alert rule provided for new accounts."
+Problem: The instruction does not say where the developer menu is located in the interface or what to do if no sample alert rule is visible.
+Fix: Name the exact location of the developer menu, for example "in the left navigation, click Developer, then Test console," and add a note for what to do if the sample rule is missing.
+
+Location: "#### Check the sidebar updated" heading
+Evidence: "#### Check the sidebar updated" follows "## Open the test console," which is an H2.
+Problem: The heading level skips from H2 to H4 without an intervening H3, breaking the document's heading hierarchy and any generated table of contents.
+Fix: Change the heading to H3, "### Check the sidebar updated," or remove it as a heading and fold it into a sentence under "Open the test console."
+
+Location: "Check the sidebar updated" section
+Evidence: "Look at the sidebar and confirm the rule count now includes the sample rule."
+Problem: The step describes what to check but gives no guidance for what to do if the count did not update, leaving the reader stuck if the expected result does not appear.
+Fix: Add a sentence such as "If the count did not increase, refresh the page and confirm you selected the sample rule in the previous step."
+
+Location: "Trigger the sample alert" section, first sentence
+Evidence: "Click Trigger sample alert and wait for the status indicator to change to Sent."
+Problem: The button label "Trigger sample alert" and the target status "Sent" are written as plain prose rather than being visually distinguished, making it hard to tell where the exact UI text starts and stops.
+Fix: Format UI element names and exact status values consistently, for example "Click Trigger sample alert (bold) and wait for the status indicator to change to Sent (bold)."
+
+Location: "Trigger the sample alert" section, second sentence
+Evidence: "The status indicator takes a few seconds to update while the delivery pipeline processes the event in the background."
+Problem: "A few seconds" is not a bounded expectation, and there is no guidance for what to do if the indicator never changes to Sent.
+Fix: State an approximate maximum wait time, for example "within 30 seconds," and add a step describing what to do if the status does not change after that time.
+
+Location: End of the document, "Check the delivery log" section
+Evidence: The document ends with "Open the delivery log and check that the test alert shows a Sent status with a timestamp."
+Problem: The tutorial ends without confirming that the reader has succeeded or pointing to a next step, leaving the reader without closure.
+Fix: Add a closing sentence confirming the tutorial is complete and linking to a next step, such as configuring a real alert rule.

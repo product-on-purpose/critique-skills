@@ -1,0 +1,49 @@
+Location: Line 29, project-settings-duplicate-btn button
+Evidence: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>
+Problem: The duplicate project button contains no visible text, only an aria-label. Sighted users cannot see what the button does without text or an icon.
+Fix: Add visible text content to the button, such as "Duplicate" or add an icon with appropriate alt text.
+
+Location: Lines 11-12 and 13-17, workspace overview section
+Evidence: "This workspace holds 4 projects, synced last week." followed by a ul containing only 3 projects: Holiday Campaign Assets, Support Backlog Triage, and Mobile App Revamp
+Problem: The heading text states there are 4 projects but only 3 are listed, creating confusion about whether data is missing or if the count is incorrect.
+Fix: Either display all 4 projects in the list or update the text to say "This workspace holds 3 projects" to match what is shown.
+
+Location: Line 39, invite-member-email-input
+Evidence: <input id="invite-member-email-input" type="email">
+Problem: The email input field has no required attribute, making it unclear to users whether this is a mandatory field or optional.
+Fix: Add the required attribute to the input element or provide clear visual indication and label text that specifies whether the field is required.
+
+Location: Lines 9-79, entire page structure
+Evidence: All sections are placed in a single HTML body with navigation using fragment identifiers (href="#project-settings", href="#invite-member", etc.)
+Problem: The page uses hash-based navigation suggesting all sections are on one scrollable page, but the UX treats them as separate screens. Users cannot see their current location in the interface hierarchy without visual indicators.
+Fix: Add visual indicators such as a breadcrumb trail, active state styling on sections, or a clear heading that shows the current page name and navigation path.
+
+Location: Line 47, invite-sent section
+Evidence: "It expires in 5 days if not accepted."
+Problem: The message uses a relative time reference (5 days) which becomes meaningless if the user revisits the page later, creating confusion about the actual deadline.
+Fix: Include an absolute date in addition to the relative time, such as "It expires in 5 days (by July 31, 2026) if not accepted."
+
+Location: Lines 24-27, project-settings form
+Evidence: <form> <label for="project-settings-name-input">Project name</label> <input id="project-settings-name-input" type="text" value="Q3 Roadmap"> <button id="project-settings-save-btn" type="submit">Save</button> </form>
+Problem: The form lacks a name attribute and has no fieldset grouping, making it unclear what the form's purpose is or how it relates to other elements in the section.
+Fix: Add a name attribute to the form, use a fieldset with legend to group related fields, or add a descriptive heading that clearly identifies the form's purpose.
+
+Location: Lines 30-32, project-settings section action links
+Evidence: Three links without form context: "Go to notification settings", "Invite a team member", "Archive project"
+Problem: These are action links that modify application state, but links semantically indicate navigation. Using links for state-changing operations is confusing and violates user expectations.
+Fix: Use buttons (type="button") instead of links for actions that modify state, and use links only for navigation to other pages or sections.
+
+Location: Line 63, import-status message
+Evidence: "Rows 35, 71, 78, and 83 were skipped; every other row was imported."
+Problem: The message lists row numbers without context about what those numbers mean or how to identify the problematic rows in the original data source.
+Fix: Provide more context such as "Rows 35, 71, 78, and 83 were skipped. Download a report of skipped rows to review the issues."
+
+Location: Lines 70-74, notification-settings form select
+Evidence: <select id="notification-settings-digest-input"> <option>Daily</option> <option>Weekly</option> <option>Monthly</option> </select>
+Problem: The select dropdown has no default selected option and no value attributes, making it unclear what the current setting is or what each option represents.
+Fix: Add value attributes to each option and set a selected attribute on the current default option to show the current preference.
+
+Location: Lines 9-79, overall page layout
+Evidence: Multiple sections, each with a heading and "Back" or exit links, all on one page with no visual separation
+Problem: The page lacks visual hierarchy and clear sectioning. Without distinct styling or layout for each section, users cannot easily distinguish between different functional areas.
+Fix: Add CSS styling to visually separate sections, use distinct background colors or borders, or implement actual page navigation instead of hash-based section switching.

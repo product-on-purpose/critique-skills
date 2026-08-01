@@ -1,0 +1,106 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "evidence": "36-word sentence, 4 subordinate-clause markers: Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 3",
+      "severity": 3,
+      "violation": "The sentence runs to 36 words with 4 subordinate-clause markers, longer than the reader can hold in mind on a single pass."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-JARGON",
+      "evidence": "The manager approves items pursuant to internal discretion, notwithstanding the standard review checklist.",
+      "fix": "Replace the jargon term with a plain equivalent, or define it at first use.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "Required Documentation, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence uses a legal or foreign-language jargon term from the fixed list with no plain-language definition in the same or the following sentence."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Required Documentation section begins: 'The manager approves items...' (addresses manager, not employee). Program Coordination section: 'The benefits team coordinates every stipend request from intake to payout' (internal process description).",
+      "fix": "Clearly separate employee-facing sections from internal-process documentation, or add explicit headers marking which sections are for which audience.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Multiple sections (Required Documentation line 33, Program Coordination lines 65-66)",
+      "severity": 2,
+      "violation": "The document addresses employees in some sections (Eligibility, How to Apply) and internal staff or process descriptions in others (Program Coordination, Review Responsibility) without clear separation, so an employee reader cannot consistently tell which sections apply to their task."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Reimbursement log: 'The people operations office publishes the reimbursement log each quarter' (line 5) vs. 'The benefits team publishes the reimbursement log after every open enrollment period' (line 61). Request terminology: 'request form' (line 51) vs. 'request log' (line 51) vs. 'request' (lines 19, 53) - relationships unclear.",
+      "fix": "Define and use consistent terminology throughout. Clarify whether people ops and benefits team publish the same reimbursement log, at what frequency, and explain the relationship between request, request form, and request log.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Program Overview (line 5), Overview section (line 61), Terminology Notes (lines 51-53)",
+      "severity": 2,
+      "violation": "The document uses the same terms (reimbursement log, request) to refer to concepts in different contexts without clarifying whether they mean the same thing, forcing the reader to check whether two uses of a term name the same thing or something different."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "evidence": "If the position counts as full-time, the stipend can apply. If the employee has completed 90 days of continuous service, the stipend can apply. If the request arrives before the benefit year ends, the stipend can apply. Only once every condition above is met does the home-office equipment stipend become available to the employee.",
+      "fix": "State the governing rule first: 'You are eligible for the home-office equipment stipend when three conditions are met: [then list conditions]'",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Eligibility section, opening paragraph (line 11)",
+      "severity": 3,
+      "violation": "The paragraph opens with three conditions before stating the governing rule. Reader must reach the fourth sentence before understanding what the opening sentences mean."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Overview section appears at line 3 and again at line 59, repeating the same content. Request Steps section (line 57) contains only one sentence. After Request Steps, the document pivots to internal-process descriptions (Program Coordination, Review Responsibility) with no transition.",
+      "fix": "Remove the duplicate Overview section. Provide actual numbered or bulleted steps in Request Steps section. Add clear headers or sections separating employee instructions from internal-process documentation.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Document structure (Overview headings at lines 3, 59; Request Steps at line 57)",
+      "severity": 2,
+      "violation": "The document repeats an Overview section and leaves a Request Steps section incomplete, then pivots to internal processes. The structure does not follow the reader's actual question sequence: after asking 'how do I apply?' and 'what are the steps?', the reader encounters only one sentence for steps, then sections describing what staff do internally without context."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-STRESS",
+      "evidence": "Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "fix": "Restructure to emphasize the critical issue: 'The backup reviewer who handles manager absences was not informed that sign-off is required, which delays release of the confirmation email.'",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "How to Apply section, last sentence (line 23)",
+      "severity": 2,
+      "violation": "The newest and most important information (backup reviewer was not informed of the sign-off requirement) lands in the middle of the sentence. The sentence ends on a procedural detail (portal releases confirmation email), so the reader's attention lands on information less critical than the core problem."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-001.md",
+    "artifact_sha256": "32ee3fed58b3e9b931565041a2e195dade8e2d19c9e9172fe28b38bdb5f6ef2c",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-07-31T20:49:54Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 12,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 7
+  }
+}

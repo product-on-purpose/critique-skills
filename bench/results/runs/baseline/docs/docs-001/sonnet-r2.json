@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"mode: how-to\"",
+      "fix": "Move the explanatory and definitional sentences to a separate concept or reference document and link to it from this how-to, leaving only actionable steps here.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Frontmatter, \"mode: how-to\"",
+      "severity": 3,
+      "violation": "The document is declared as a how-to but two sentences in the body are conceptual definitions and explanations rather than procedural steps, so the content does not match the declared mode."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"select the rule you want to adjust\"",
+      "fix": "Add a sentence explaining how rules are named or filtered in the list, or note what to do if the rule the reader needs does not exist yet.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"Open alert settings\" section, first sentence",
+      "severity": 3,
+      "violation": "The step assumes the reader already knows which rule to select and gives no guidance for identifying or locating the correct rule among possibly several."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"A threshold is the numeric boundary that triggers an alert once a metric crosses it.\"",
+      "fix": "Remove this sentence from the step sequence and either omit it or place it in a linked concept page.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Open alert settings\" section, last sentence",
+      "severity": 3,
+      "violation": "This definitional sentence is inserted between two procedural instructions, interrupting the step by step flow a how-to is supposed to provide."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"confirm the unit matches the metric in use\"",
+      "fix": "Add a follow up instruction describing how to change the unit or where to find the metric's expected unit if they differ.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"Set the new threshold\" section, first sentence",
+      "severity": 3,
+      "violation": "The instruction tells the reader to confirm a match but gives no guidance for what to do if the unit does not match, leaving a gap in the procedure."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This is because the console applies the new threshold to every future evaluation of this rule.\"",
+      "fix": "Remove or relocate this sentence to an explanation document, or rewrite it so it clearly explains the step it is attached to.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Set the new threshold\" section, last sentence",
+      "severity": 3,
+      "violation": "This explanatory sentence breaks the procedure again, and its \"because\" does not clearly justify the step it immediately follows, confirming the unit, so the causal link is unclear."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Save the rule and open the rule list to confirm the new threshold appears there.\"",
+      "fix": "Split this into two explicit steps and state what to check for, for example that the displayed threshold matches the value just entered.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "\"Save and verify\" section",
+      "severity": 3,
+      "violation": "Two distinct actions, saving and verifying in the rule list, are combined into one sentence with no separate steps, and no criterion is given for what a correct entry in the list looks like."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "no prerequisites or permissions statement precedes the first step",
+      "fix": "Add a brief prerequisites line before the first step naming the required role or permission.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "whole document, before \"Open alert settings\"",
+      "severity": 3,
+      "violation": "The document never states what access, role, or permissions are required to open alert settings, so a reader without access has no warning before starting the procedure."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-001.md",
+    "artifact_sha256": "b41787144ac8cc1ae14bcce23fa2b574f6ee68f1aaa9cc432628f9f148ddd713",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:18:42Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

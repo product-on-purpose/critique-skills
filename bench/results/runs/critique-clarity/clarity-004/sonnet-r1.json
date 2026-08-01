@@ -1,0 +1,127 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T21:19:52Z",
+    "rubrics": ["PLAIN", "WILLIAMS"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Program Overview, paragraph 2",
+      "evidence": "the IT asset group tracks the equipment catalog on the first business day of the month",
+      "violation": "Three different named actors, each performing an update action on the same equipment catalog at two conflicting cadences, are used interchangeably for what should be one consistently described process: this paragraph credits the IT asset group with tracking the catalog on the first business day of the month, Special Cases credits the finance liaison with publishing it at the start of the fiscal year, and Questions and Updates credits the benefits team with reviewing it at the start of the fiscal year. Nothing signals whether these are one process under three names or three genuinely different activities, and the monthly versus annual cadence claims cannot both be true of the same catalog.",
+      "fix": "Name one owning team for the equipment catalog, state its update cadence once, and remove or reconcile the other two conflicting mentions.",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "Special Cases, paragraph 1",
+          "evidence": "The finance liaison publishes the equipment catalog at the start of the fiscal year."
+        },
+        {
+          "location": "Questions and Updates, paragraph 1",
+          "evidence": "The benefits team reviews the equipment catalog at the start of the fiscal year."
+        }
+      ]
+    },
+    {
+      "id": "F-002",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Review Responsibility, paragraph 1",
+      "evidence": "The finance office reviews every stipend request over 200 dollars before it pays out.",
+      "violation": "This review gate applies to most requests given the 500-dollar cap, yet it is stated only in the document's second-to-last section, after Program Coordination has already narrated the process as finished (\"Once approved, the team schedules the reimbursement for the next pay cycle\"). A reader who follows the sections in the order they are written forms a complete, and wrong, picture of the timeline before learning that a further review step exists for most claims.",
+      "fix": "Move the 200-dollar review threshold and the repeat-request flag into or immediately after Approval Timeline, where the reader first learns what happens between submitting a request and getting paid.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-003",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Reimbursement Amounts, paragraph 1",
+      "evidence": "The finance office deposits the amount within one pay cycle.",
+      "violation": "The document names what appears to be one money-handling function four different ways across separate sections: the finance office here and again in Review Responsibility, Finance and Payroll in Terminology Notes, and the finance liaison in Special Cases. Nothing states whether these are the same office under different names or genuinely distinct roles with different authority over the funds.",
+      "fix": "Use one name for the office that handles stipend funds throughout the document, or, if Finance, Payroll, and the finance liaison are genuinely distinct roles, state what each one does.",
+      "confidence": "medium",
+      "instances": [
+        {
+          "location": "Terminology Notes, paragraph 1",
+          "evidence": "Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review."
+        },
+        {
+          "location": "Special Cases, paragraph 1",
+          "evidence": "The finance liaison publishes the equipment catalog at the start of the fiscal year."
+        },
+        {
+          "location": "Review Responsibility, paragraph 1",
+          "evidence": "The finance office reviews every stipend request over 200 dollars before it pays out."
+        }
+      ]
+    },
+    {
+      "id": "F-004",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Required Documentation, paragraph 1",
+      "evidence": "Employees keep proof of purchase for every stipend item.",
+      "violation": "Stipend item is used here and three more times in Terminology Notes (\"You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review.\") to name the physical purchase, while How to Apply and Restrictions and Exceptions call the same physical purchase the equipment. Nothing states that the two terms name the same thing, so a reader cannot be sure a stipend item and a piece of equipment are the same referent.",
+      "fix": "Pick one term, either stipend item or equipment, and use it everywhere the document refers to the physical purchase.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-005",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Request Steps, paragraph 1",
+      "evidence": "Completing the request begins with confirming eligibility, and uploading the receipt.",
+      "violation": "This section restates, in a single thinner sentence, the same request process How to Apply already covers in full near the top of the document (starting the request in the portal, saving a draft automatically, reviewing the confirmation summary, and submitting), placed instead near the end of the document with no cross-reference between the two.",
+      "fix": "Remove this section and fold confirming eligibility and uploading the receipt into How to Apply's own step sequence, or cross-reference How to Apply directly instead of restating it.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Request Steps, paragraph 1",
+      "evidence": "Completing the request begins with confirming eligibility, and uploading the receipt.",
+      "violation": "The sentence's grammatical subject is the abstraction completing the request rather than the employee who actually confirms eligibility and uploads the receipt, so the sentence never names who performs the action even though the actor is the reader.",
+      "fix": "Restate as You complete the request by confirming eligibility and uploading the receipt, naming the reader as the actor.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "WILLIAMS-COHESION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "evidence": "Similarly, the policy applies to one device per category per employee.",
+      "violation": "The sentence opens with Similarly, signaling a parallel to the prior sentence's equipment-condition and photo-check rule, but the one-device-per-category limit it introduces is a quantity restriction the prior sentence gives the reader no basis for, so the signaled relationship is not the actual one.",
+      "fix": "Replace Similarly with a transition that states the sentence's actual relationship to the rest of the section, such as In addition, or state the device limit under its own heading.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 2,
+      "4": 0
+    },
+    "suppressed_count": 1,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

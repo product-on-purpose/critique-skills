@@ -1,0 +1,19 @@
+Location: timeout section, first paragraph
+Evidence: "The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000."
+Problem: The default value for timeout is never stated, even though the next paragraph refers to "its default" and the retries and logging sections both state their defaults explicitly (3 and info respectively). A reader has no way to know what value applies if the field is left unset.
+Fix: State the default value for timeout, in milliseconds, in this paragraph, following the same pattern used for retries and logging.
+
+Location: timeout section, second paragraph
+Evidence: "Leaving this field at its default is the right choice for most teams, and raising it is worth doing only when a specific integration needs the extra room."
+Problem: This sentence advises leaving the field "at its default" without the document ever stating what that default value is, so the advice cannot actually be followed.
+Fix: State the default value for timeout before or within this sentence, or remove the guidance until the default is documented.
+
+Location: timeout section, first paragraph
+Evidence: "The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000."
+Problem: No maximum value is documented for timeout, while the retries field documents both a minimum and a maximum ("an integer from 0 to 10"). It is unclear whether timeout has an upper bound or whether this is simply an omission.
+Fix: State whether timeout has a maximum accepted value, or explicitly note that there is no upper bound.
+
+Location: Related pages section
+Evidence: "- Metric catalog reference" and the eight list items that follow it
+Problem: The related pages are listed as plain text titles rather than as links, so a reader cannot navigate to any of them directly from this document.
+Fix: Convert each list item into a link to its corresponding page.

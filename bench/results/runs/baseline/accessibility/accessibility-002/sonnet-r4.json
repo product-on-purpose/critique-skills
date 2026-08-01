@@ -1,0 +1,215 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\" id=\"head-viewport\">",
+      "fix": "Remove user-scalable=no (and any maximum-scale restriction) from the viewport meta tag so users can zoom.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "head, the viewport meta tag",
+      "severity": 3,
+      "violation": "The viewport tag disables user-scalable, which prevents pinch to zoom, making the page unusable for anyone who needs to zoom in to read the content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<p id=\"s1-p1\" style=\"color:#999999\">Passengers should review the updated schedule at any station kiosk...",
+      "fix": "Change the text color to a darker shade, or remove the inline color override, so it meets a normal reading contrast ratio against its background.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"Accessibility improvements\" section, first paragraph, id s1-p1",
+      "severity": 3,
+      "violation": "The paragraph text is styled in a light gray (#999999) that will have very low contrast against a white or light background, making it hard to read."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The heading reads \"Accessibility improvements\" but the paragraphs discuss reviewing the updated schedule at a station kiosk and requesting a fare adjustment through the mobile app, and the image shows a transit operator inspecting platform screen doors.",
+      "fix": "Either rewrite the section content to describe an actual accessibility improvement, or rename the heading to match the schedule and fare content it currently contains.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "section id s1, under the heading \"Accessibility improvements\"",
+      "severity": 3,
+      "violation": "None of the content under this heading actually describes an accessibility improvement, so the heading does not match what follows it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Both paragraphs end with the identical sentence \"Updates post to the schedule page within one business day,\" even though the first paragraph is about station kiosks and the second is about fare adjustments.",
+      "fix": "Remove the redundant sentence from one paragraph, or rewrite each paragraph's closing sentence so it is specific to that paragraph's own subject.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "section id s1, paragraphs id s1-p1 and s1-p2",
+      "severity": 3,
+      "violation": "The repeated sentence reads as templated boilerplate rather than content specific to each paragraph, and the same sentence reappears again later in a status card further down the page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<table id=\"s2-table1\"><tr><th scope=\"col\">Zone</th><th scope=\"col\">Status</th></tr>...",
+      "fix": "Add a caption element inside the table, for example \"Current zone status.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Schedule changes\" section, the zone status table, id s2-table1",
+      "severity": 3,
+      "violation": "The table has no caption explaining what it shows beyond the surrounding paragraph, so a reader who reaches the table directly, or who scans the page structure, has no way to tell what it is."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The paragraphs under this heading discuss requesting a fare adjustment through the mobile app and reporting a service issue by calling rider services, not weekend service specifics.",
+      "fix": "Retitle the section to reflect the fare adjustment and issue reporting content, or move that content elsewhere and add genuine weekend service content here.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "section id s3, under the heading \"Weekend service\"",
+      "severity": 3,
+      "violation": "As with the \"Accessibility improvements\" heading earlier on the page, this section's title does not describe the content that follows it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"promo-banner\" id=\"s3-banner\" style=\"width:960px\">",
+      "fix": "Replace the fixed pixel width with a fluid width, for example max-width:960px and width:100%, so the banner scales down on narrow viewports.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "\"Weekend service\" section, promo banner div, id s3-banner",
+      "severity": 3,
+      "violation": "The banner is locked to a fixed 960px width, which will overflow or force horizontal scrolling on any viewport narrower than that, and combined with the page's disabled zoom leaves no way to see the full banner on a phone sized screen."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"status-card\" id=\"s3-statuscard\" style=\"height:60px;overflow:hidden\">",
+      "fix": "Remove the fixed height and overflow hidden, or replace them with a min-height so the card grows to fit its content.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "\"Weekend service\" section, status card div, id s3-statuscard",
+      "severity": 3,
+      "violation": "The card has a fixed 60px height with overflow hidden, so if the enclosed message is taller than 60px, at a larger font size, on a narrow viewport, or after translation, the text will be silently cut off with no way to reveal the rest."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button type=\"button\" class=\"btn-secondary\" id=\"s3-button1\" style=\"border:1px solid #9d9d9d\">Refresh status</button>",
+      "fix": "Make the label specific, for example \"Refresh weekend service status,\" or move the button immediately next to the status card it updates.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "\"Weekend service\" section, secondary button, id s3-button1",
+      "severity": 3,
+      "violation": "\"Refresh status\" does not say what status it refreshes or what will change on the page afterward, which is ambiguous given the section contains a status card, a table earlier on the page, and other content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>",
+      "fix": "Remove this control if it was left over from another page, or, if it belongs here, add surrounding text and context that clarifies what it deletes.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "\"Weekend service\" section, custom control div, id s3-customcontrol",
+      "severity": 3,
+      "violation": "A \"Delete item\" control has no apparent connection to weekend service, fares, or schedule announcements, and nothing on the page indicates what item it would delete."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" ...> wraps an img element instead of using a button element.",
+      "fix": "Replace the div with a native button element containing the icon and the same accessible label.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "\"Weekend service\" section, custom control div, id s3-customcontrol",
+      "severity": 3,
+      "violation": "This is a div manually given role=\"button\" and tabindex=\"0\" to act like a button, which takes on the burden of implementing keyboard activation and state itself instead of getting it for free from a native element."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"wizard-steps\" id=\"s3-wizard\"><div class=\"step\" id=\"s3-step1\">Choose a plan</div><div class=\"step\" id=\"s3-step2\">Enter payment details</div><div class=\"step\" id=\"s3-step3\">Confirm your order</div></div>",
+      "fix": "Mark the steps up as an ordered list, or a group with aria-current on the active step, so the sequence and current position are conveyed in the markup, not just visually.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "\"Weekend service\" section, wizard steps div, id s3-wizard",
+      "severity": 3,
+      "violation": "The three steps are plain, unordered divs with no numbering, no list markup, and nothing indicating which step is current or completed, so the sequence and progress are only conveyed by layout, if at all."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The steps read \"Choose a plan,\" \"Enter payment details,\" \"Confirm your order.\"",
+      "fix": "Remove this component from the page, or, if it is intentional, add a heading and introductory text explaining what plan or purchase it refers to.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "\"Weekend service\" section, wizard steps div, id s3-wizard",
+      "severity": 3,
+      "violation": "This checkout style flow does not match anything else on a transit service announcements page and appears to belong to an unrelated purchase flow."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "For the full list of upcoming adjustments, <a href=\"/fares/history\" id=\"s3-link1\">read the accessibility improvements list</a>.",
+      "fix": "Change the link text to match its destination and the sentence, for example \"read the full list of upcoming adjustments.\"",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "\"Weekend service\" section, link paragraph, id s3-linkpara",
+      "severity": 3,
+      "violation": "The link text says \"read the accessibility improvements list,\" but the surrounding sentence is about the full list of upcoming adjustments and the link actually points to /fares/history, so the link's wording does not describe where it goes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<label for=\"topic-alt\" id=\"s3-form-topic-label\">Route</label><select id=\"topic\">...",
+      "fix": "Change the label's for attribute to \"topic,\" or change the select's id to \"topic-alt,\" so they match.",
+      "id": "F-015",
+      "lane": "judged",
+      "location": "form, Route field, label id s3-form-topic-label and select id topic",
+      "severity": 3,
+      "violation": "The label's for attribute references \"topic-alt,\" but the select element's id is \"topic,\" so the label is not actually associated with the control it labels."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\">Phone number (required)</label><input id=\"phone\" type=\"tel\">",
+      "fix": "Add required, and aria-required=\"true\", to the phone input so its required state matches the label.",
+      "id": "F-016",
+      "lane": "judged",
+      "location": "form, Phone number field, label id s3-form-phone-label and input id phone",
+      "severity": 3,
+      "violation": "The label states the phone number is required, but the input has no required attribute and no aria-required, so nothing in the form actually enforces or communicates that requirement beyond the visible text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"><span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span>",
+      "fix": "Remove aria-invalid=\"true\" until the field actually fails validation, and add aria-describedby=\"s3-form-promo-error\" to the input so the error text is programmatically associated with it.",
+      "id": "F-017",
+      "lane": "judged",
+      "location": "form, Promo code field, input id promo and error text id s3-form-promo-error",
+      "severity": 3,
+      "violation": "The promo input is marked aria-invalid=\"true\" before the user has done anything, and the adjacent error text is never linked to the input, so nothing ties the error message to the field it describes."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-002.html",
+    "artifact_sha256": "b49ce74681df60732a6ef3b5309ce82264ad1b6ad48c6fa8b85989f2c712f113",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T20:26:16Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 17,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

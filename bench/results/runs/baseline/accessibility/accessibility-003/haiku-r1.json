@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"wizard-steps\" id=\"s3-wizard\"><div class=\"step\" id=\"s3-step3\" style=\"order:3\">Confirm your order</div><div class=\"step\" id=\"s3-step2\" style=\"order:2\">Enter payment details</div><div class=\"step\" id=\"s3-step1\" style=\"order:1\">Choose a plan</div></div>",
+      "fix": "Reorder the step divs in the HTML to match the visual order (step1, step2, step3) and remove the order style properties.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Lines 47-57, wizard-steps container",
+      "severity": 3,
+      "violation": "Visual order via CSS order property does not match DOM order, creating a disconnect between what screen reader users hear and what sighted users see."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"icon-delete\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>",
+      "fix": "Change to a proper button element with accessible text: <button type=\"button\" class=\"icon-delete\" id=\"s3-customcontrol\" aria-label=\"Delete\"><img src=\"/img/trash-icon.svg\" alt=\"\"></button>",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Lines 44-46, delete icon control",
+      "severity": 3,
+      "violation": "This div appears to be an interactive control but has no role, no accessible name, and no button semantics. Screen reader users cannot identify or activate it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label>",
+      "fix": "Add a text indicator of required status: <label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number <span aria-label=\"required\">*</span></label> and add required attribute to the input.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Line 64, phone number label",
+      "severity": 3,
+      "violation": "The red color is used as the only visual indicator that this field is required, but assistive technology users cannot perceive color. There is no text indicator like an asterisk or required attribute."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"><span class=\"error-text\" id=\"s3-form-promo-error\">Error.</span>",
+      "fix": "Connect the error message to the input: <input id=\"promo\" type=\"text\" aria-invalid=\"true\" aria-describedby=\"s3-form-promo-error\"> and improve the error message text from \"Error.\" to something descriptive.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Lines 67-68, promo code field with error",
+      "severity": 3,
+      "violation": "The input has aria-invalid=\"true\" but the error message is not associated via aria-describedby, so screen reader users cannot connect the error to the field."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "69ff628078a107c11bd403359666e3fafdba2d4ab204fdec80881f7db5374db6",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T14:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

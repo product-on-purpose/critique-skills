@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 3 projects, synced last week.\" followed by a list containing only \"Data Warehouse Cutover\" and \"Mobile App Revamp\"",
+      "fix": "Either show all 3 projects, add a clearly labeled \"view all\" link that accounts for the gap, or correct the sentence to match the list that is shown.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Workspace overview section, the intro paragraph and the \"Your projects\" list right below it",
+      "severity": 3,
+      "violation": "The stated project count (3) does not match the number of projects actually shown (2), which reads as a bug or missing data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Invite 3 teammates this month to unlock the advanced reporting add-on.\" appears directly between the projects list and the \"Open project settings\" / \"View last import result\" links",
+      "fix": "Move the promo below the navigation links (or into a separate area) and give it a dismiss control.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Workspace overview section, the promo div sitting between the project list and the section's two navigation links",
+      "severity": 3,
+      "violation": "Marketing content is placed in the middle of the primary task flow, ahead of the links users need to reach settings and import status, with no way to dismiss it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\"></button>",
+      "fix": "Add visible text such as \"Duplicate project\" (and an aria-label if it is meant to be icon-only).",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Project settings section, the unlabeled button below the Save button",
+      "severity": 3,
+      "violation": "The button has no visible text or accessible label, so users and assistive technology have no way to know what it does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The name input shows value=\"Design System Refresh\", but the overview list names only \"Data Warehouse Cutover\" and \"Mobile App Revamp\"",
+      "fix": "Make the project opened from \"Open project settings\" one of the projects actually listed in the overview, or add a project picker so the connection is explicit.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Project settings section, the project name field, compared with the \"Your projects\" list in the workspace overview",
+      "severity": 3,
+      "violation": "The project reachable through \"Open project settings\" does not match either project named in the overview, so the settings screen appears to belong to a project the user was never shown."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button> and, separately, <a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>",
+      "fix": "Use a single primary action for sending the invite, and if Continue is a distinct step, label it to say what it does differently, such as \"Continue without inviting.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Invite a team member section, the Save button inside the form and the Continue link below it",
+      "severity": 3,
+      "violation": "It is unclear whether Save and Continue are the same action, sequential steps, or alternate paths, since both appear to lead toward sending the invite."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The section contains only <h2>Invite sent</h2> and a paragraph; unlike every other confirmation section in the document it has no link out",
+      "fix": "Add a link back to project settings or the workspace overview, matching the pattern used on the other confirmation screens.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Invite sent section",
+      "severity": 3,
+      "violation": "After an invite is sent, there is no way to navigate anywhere else from this screen, unlike the archive and import confirmation screens which both provide an exit link."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\" but no \"archived projects list\" screen or link exists anywhere in the document, including on the Project archived screen that follows",
+      "fix": "Add an archived-projects view (or a link to one) reachable from the workspace overview, and link to it from the archive confirmation and archived screens.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Archive confirmation copy, compared with the rest of the document",
+      "severity": 3,
+      "violation": "The confirmation text promises a way to view and restore archived projects, but no such screen or link exists anywhere in the mockup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The last import finished with 2 rows skipped... Rows 15 and 99 were skipped\" is followed only by <a id=\"import-status-exit-link\" href=\"#workspace-overview\">Back to your projects</a>",
+      "fix": "Add an action for retrying the import or resolving the skipped rows, such as a link to create the missing projects or a downloadable list of the failed rows.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Import status section",
+      "severity": 3,
+      "violation": "Users are told two rows failed but are given no way to fix the referenced rows, retry the import, or get more detail; the only option is to leave the screen."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a id=\"workspace-overview-import-link\" href=\"#import-status\">View last import result</a>",
+      "fix": "Change the link text or add a visible indicator when the last import had errors, for example \"Import finished with 2 errors.\"",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Workspace overview section, the \"View last import result\" link",
+      "severity": 3,
+      "violation": "The last import actually had 2 skipped rows, but this link is worded the same way it would be if the import had succeeded, so nothing signals that there is a problem to look at."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Section headings are generic (\"Project settings\", \"Invite a team member\", \"Notifications\") and only the project settings input value and the archive copy mention a project name at all",
+      "fix": "Show the current project name in each section's heading or a persistent breadcrumb, for example \"Notifications - Design System Refresh.\"",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Project settings, Invite a team member, Notifications, and Archive confirmation sections",
+      "severity": 3,
+      "violation": "Once a user moves from settings into invite, notifications, or archive, nothing on those screens confirms which project they are still acting on, which is risky in a workspace that holds multiple projects."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-08-01T02:02:04Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.\"",
+      "fix": "Restructure to \"After the manager signs the request and finance confirms the budget line, the request moves to final processing.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section \"How to Apply\", line 21",
+      "severity": 3,
+      "violation": "Tangled word order makes the sequence of approvals unclear. The reader cannot easily follow which action happens when."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Then, the employee reviews the confirmation summary before submitting the final request. The summary shows the equipment cost and the requested delivery date.\"",
+      "fix": "Replace with \"Before submitting the request, the employee reviews the confirmation summary, which shows the equipment cost and requested delivery date.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section \"How to Apply\", line 23",
+      "severity": 3,
+      "violation": "The sequence is backwards. The summary should be reviewed before submission, but the phrasing suggests the employee reviews it only after everything is approved."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The benefits team publishes the equipment catalog on the first business day of the month...Also, the benefits team reviews the reimbursement log on the first business day of the month.\"",
+      "fix": "Clarify which action depends on the other, or separate them into distinct paragraphs with clearer explanations of when each review happens and why.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section \"Program Overview\", lines 5-7",
+      "severity": 3,
+      "violation": "These two sentences both describe monthly tasks and both mention the same date, creating unclear relationship between the catalog and reimbursement log review."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You must keep your equipment in good working condition and we may ask for a brief photo check once a year.\"",
+      "fix": "Use consistent perspective: either \"Employees must keep equipment in good working condition, and the company may request a brief photo check once yearly\" or \"You must keep your equipment in good working condition, and we may request a photo check once yearly.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section \"Restrictions and Exceptions\", line 45",
+      "severity": 3,
+      "violation": "The sentence switches from \"you\" (employee) to \"we\" (presumably employer), creating inconsistent perspective."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You record the stipend item on the request form. Finance reconciles the reimbursable item against the request log each month. Payroll releases the covered purchase amount after that monthly review. Also, you submit the request in the portal. Countersign the employee request within two business days. You track its status there until the payment clears.\"",
+      "fix": "Use consistent perspective throughout. Rewrite using either all third-person descriptions of each role, or all imperative instructions to a single role, but not mixed.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section \"Terminology Notes\", lines 51-53",
+      "severity": 3,
+      "violation": "The passage mixes first-person \"you\" with third-person perspective and includes imperative verbs without clear subject. This creates confusion about who does what."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Completing the request begins with confirming eligibility, and the uploaded receipt.\"",
+      "fix": "Complete the thought: \"Completing the request begins with confirming eligibility and uploading the receipt.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section \"Request Steps\", line 57",
+      "severity": 3,
+      "violation": "The sentence fragment \"and the uploaded receipt\" is incomplete. It is unclear what role the receipt plays in this step."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The benefits team coordinates every stipend request from intake to payout. A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.\"",
+      "fix": "Keep only the first sentence in this section. Move the travel audit mention to a relevant section or remove if not pertinent. Place federal guidance and coffee budget information in their appropriate sections, if needed.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Section \"Program Coordination\", line 65",
+      "severity": 3,
+      "violation": "This paragraph contains four unrelated sentences about different topics (stipend coordination, past audit, federal guidance, and coffee budget). They belong in different sections or should be removed."
+    }
+  ],
+  "run": {
+    "artifact": "bench/results/staging/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

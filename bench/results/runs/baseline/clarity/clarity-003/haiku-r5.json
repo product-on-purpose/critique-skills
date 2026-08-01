@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing\"",
+      "fix": "Rewrite as \"The request goes to final processing after the manager signs it and finance confirms the budget line.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section \"How to Apply\", line 21",
+      "severity": 3,
+      "violation": "The sentence structure is confusing with unclear sequence of steps (once, after, moves) making it hard to understand the order."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Both sections contain \"Every entry carries a date stamp so the record stays easy to audit\"",
+      "fix": "Remove the duplicate sentence from one of the sections, preferably from \"Special Cases\" since it's already covered in \"Program Overview\".",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Sections \"Program Overview\" (line 5) and \"Special Cases\" (line 61)",
+      "severity": 3,
+      "violation": "The same sentence appears twice in different sections, creating redundancy."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Then, the employee reviews the confirmation summary before submitting the final request.\"",
+      "fix": "Replace \"Then\" with \"After receiving the confirmation email,\" or reorder this step earlier in the process.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section \"How to Apply\", line 23",
+      "severity": 3,
+      "violation": "The word \"Then\" suggests a step that happens after processing, but the sentence describes something that should happen before processing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.\"",
+      "fix": "Remove these sentences as they distract from the equipment stipend policy subject matter.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section \"Program Coordination\", line 65",
+      "severity": 3,
+      "violation": "These sentences are unrelated to home-office equipment stipends and belong in a different policy document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You track its status there until the payment clears\" appears after inconsistent use of \"you\" and \"the employee\"",
+      "fix": "Separate terminology by role: define \"Employee responsibilities\" and \"Manager/Finance responsibilities\" with consistent pronouns.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section \"Terminology Notes\", lines 53-54",
+      "severity": 3,
+      "violation": "The terminology section mixes singular employee perspective (\"You submit\") with descriptions of manager/finance actions, creating unclear role definitions."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

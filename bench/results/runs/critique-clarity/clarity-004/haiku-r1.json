@@ -1,0 +1,136 @@
+{
+  "findings": [
+    {
+      "id": "F-1",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Program Overview, paragraph 1",
+      "evidence": "A copy of each update goes to the shared benefits folder the same day.",
+      "violation": "The sentence uses an abstract concept (the copy) as its subject instead of naming the real actor who performs the action (the IT asset group sends the copy).",
+      "fix": "Rewrite to name the actor: 'The IT asset group sends a copy of each update to the shared benefits folder the same day.'",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "Program Overview, paragraph 2",
+          "evidence": "A copy of each update goes to the shared benefits folder the same day."
+        },
+        {
+          "location": "How to Apply, paragraph 1",
+          "evidence": "The portal walks through each step in order."
+        },
+        {
+          "location": "How to Apply, paragraph 2",
+          "evidence": "Also, the portal saves a draft automatically every few minutes."
+        },
+        {
+          "location": "Approval Timeline, paragraph 2",
+          "evidence": "However, an incomplete request pauses the timeline until the missing item arrives."
+        },
+        {
+          "location": "Approval Timeline, paragraph 2",
+          "evidence": "The requester gets an automatic reminder after three days."
+        },
+        {
+          "location": "Reimbursement Amounts, paragraph 1",
+          "evidence": "The stipend pays up to 500 dollars per benefit year."
+        },
+        {
+          "location": "Request Steps, paragraph 1",
+          "evidence": "Completing the request begins with confirming eligibility, and uploading the receipt."
+        }
+      ]
+    },
+    {
+      "id": "F-2",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Terminology Notes, paragraph 8",
+      "evidence": "Terminology Notes appears before Request Steps, explaining terms before the reader is told what steps they actually need to take.",
+      "violation": "The section on terminology (defining terms like stipend item, request, etc.) appears before the Request Steps section, which is the actual first step the reader needs to follow. This reverses the reader's natural task sequence: they need to know what to do before they need to understand jargon.",
+      "fix": "Move Terminology Notes to an appendix, or integrate term definitions into the sections where terms are first used, so task-oriented sections (Eligibility through Restrictions) form a cohesive sequence.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-3",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Eligibility, paragraph 1",
+      "evidence": "Full-time employees who have completed 90 days of continuous service are eligible for the home-office equipment stipend. The stipend covers one claim per employee per benefit year.",
+      "violation": "The document uses 'equipment' and 'stipend item' interchangeably without explanation ('equipment category', 'equipment cost' vs. 'stipend item', 'claim'), and 'request' is also used for the same concept. Readers must infer these terms mean the same thing.",
+      "fix": "Choose one primary term (e.g., 'equipment' or 'item') and use it consistently throughout. If other terms are introduced, define them explicitly (e.g., 'We also call this a claim' or 'Each item is one claim').",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "Eligibility, paragraph 1",
+          "evidence": "The stipend covers one claim per employee per benefit year."
+        },
+        {
+          "location": "Required Documentation, paragraph 1",
+          "evidence": "Employees keep proof of purchase for every stipend item."
+        },
+        {
+          "location": "Terminology Notes, paragraph 2",
+          "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review."
+        }
+      ]
+    },
+    {
+      "id": "F-4",
+      "criterion": "WILLIAMS-COHERENCE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Program Coordination, paragraph 11",
+      "evidence": "The section describes internal processes (the benefits team logs requests, routes to approvers, schedules reimbursement) mixed with employee-facing guidance.",
+      "violation": "The document interleaves internal administration themes (Program Overview, Program Coordination, Review Responsibility, Special Cases) with employee-facing themes (Eligibility, How to Apply, Documentation, Restrictions). A reader cannot identify a single coherent topic without parsing out the administrative asides.",
+      "fix": "Reorganize to separate employee-facing content from internal administration. For example, move all internal sections to an Appendix or separate 'Administration' section at the end, so the main narrative stays focused on the employee experience.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-5",
+      "criterion": "WILLIAMS-COHESION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Eligibility, paragraph 2",
+      "evidence": "However, employees on an approved leave of absence remain eligible once they return to active status. The stipend clock resumes on their first day back.",
+      "violation": "The sentence 'The stipend clock resumes...' opens with new information ('stipend clock') that the prior sentences never introduced, breaking cohesion. Readers must pause to understand what a stipend clock is and why it matters.",
+      "fix": "Introduce the stipend clock before using it: 'The stipend clock (which tracks your eligibility period) also resumes on your first day back.' Or restructure to make the topic thread continuous: 'Your eligibility resumes, and the clock tracking your eligibility period also restarts from that day.'",
+      "confidence": "high"
+    },
+    {
+      "id": "F-6",
+      "criterion": "PLAIN-AUDIENCE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Terminology Notes, paragraph 1",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal. You track its status there until the payment clears.",
+      "violation": "The paragraph addresses the reader as 'you' (recording items, submitting requests, tracking status) but then switches to describing what Finance and Payroll do, without signaling whether these are actions the employee must take or internal processes that happen automatically. The audience target becomes unclear.",
+      "fix": "Clarify which statements address the employee and which describe internal processes: 'You record the stipend item on the request form and submit the request in the portal. You can track its status there until payment clears. Behind the scenes, Finance reconciles items against the request log, and Payroll releases amounts after monthly review.'",
+      "confidence": "high"
+    }
+  ],
+  "run": {
+    "artifact": "bench/results/staging/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": ["PLAIN", "WILLIAMS"],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-07-31T21:07:44Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

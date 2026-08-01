@@ -1,0 +1,94 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/accessibility/accessibility-004.html",
+    "artifact_sha256": "393fe58fac52d6953cd372944cd352ef9181df5c42ae778bd6d17214acb080c7",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T20:30:40.762616Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 44-46, the custom button control",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">",
+      "violation": "A div with role=\"button\" is missing keyboard event handlers. Custom buttons must handle Enter and Space key presses to be fully keyboard accessible.",
+      "fix": "Add JavaScript event listeners to handle keydown events for Enter (key 13) and Space (key 32) keys, or replace the div with a native button element.",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 67, the promo code input field",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\">",
+      "violation": "The input has aria-invalid=\"true\" but does not use aria-describedby to link to the error message below it, preventing screen reader users from associating the error with the field.",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the input element to link it to the error message span on line 68.",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 61, the route selection dropdown",
+      "evidence": "<select id=\"topic\"><option>Northbound</option><option>Southbound</option></select>",
+      "violation": "The select element has an id attribute but is missing the required name attribute, which will cause this field to not be included in form submission data.",
+      "fix": "Add name=\"topic\" to the select element.",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Lines 47-57, the wizard steps container",
+      "evidence": "<div class=\"wizard-steps\" id=\"s3-wizard\"> <div class=\"step\" id=\"s3-step1\">Choose a plan</div> <div class=\"step\" id=\"s3-step2\">Enter payment details</div> <div class=\"step\" id=\"s3-step3\">Confirm your order</div> </div>",
+      "violation": "The wizard steps have no indication of the current step, total number of steps, or their position in the sequence, making the progress unclear to all users and inaccessible to screen readers.",
+      "fix": "Add aria-current=\"step\" to the current step, and add aria-label attributes to each step with numbering (e.g., aria-label=\"Step 1 of 3: Choose a plan\") to clarify the sequence and progress.",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 58, the fare history link",
+      "evidence": "<a href=\"/fares/history\" id=\"s3-link1\">read the accessibility improvements list</a>",
+      "violation": "The link text says \"accessibility improvements list\" but the href=\"/fares/history\" points to fare history, creating a mismatch between the visible text and the link destination.",
+      "fix": "Either change the link text to match the destination (e.g., \"read the fare history\") or change the href to the correct page containing accessibility improvements.",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 59-70, the contact form",
+      "evidence": "<form id=\"s3-form\"> <label for=\"topic\" id=\"s3-form-topic-label\">Route</label> <select id=\"topic\">...",
+      "violation": "The form lacks a fieldset and legend structure to group and describe related inputs, making it harder for users to understand the form's organization and purpose.",
+      "fix": "Wrap related inputs in fieldset elements with legend elements that describe each group (e.g., one fieldset for trip details, another for contact information).",
+      "confidence": "medium",
+      "id": "F-006"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

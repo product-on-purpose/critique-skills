@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert.\"",
+      "fix": "State whether the field is required or optional and add an example value, such as https://example.com/webhooks/alerts.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "## endpoint_url section",
+      "severity": 3,
+      "violation": "The description never states whether endpoint_url is required, and gives no example value, so a reader cannot tell what a valid entry looks like or whether omitting it is allowed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The signing_secret field accepts a string used to verify the payload signature on receipt.\"",
+      "fix": "Name the algorithm (for example HMAC-SHA256), the header that carries the resulting signature, and any minimum length or character requirements for the secret.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "## signing_secret section",
+      "severity": 3,
+      "violation": "The section never names the signing algorithm, the header or field that carries the computed signature, or any length or character constraints on the secret, so a reader cannot actually implement verification from this text alone."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential.\"",
+      "fix": "For each of none, linear, and exponential, state the concrete interval or backoff formula and the maximum retry count or total duration before giving up.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "## retry_policy section",
+      "severity": 3,
+      "violation": "The three retry strategies are named but never defined: there is no stated retry interval, maximum number of attempts, or total time window before delivery is treated as failed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "only the retry_policy section states \"the default value is exponential\"; the endpoint_url and signing_secret sections contain no equivalent required-or-default statement",
+      "fix": "Add a required or optional statement and a stated default, or explicitly \"no default,\" for endpoint_url and signing_secret, matching the pattern already used for retry_policy.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "document as a whole, comparing the endpoint_url, signing_secret, and retry_policy sections",
+      "severity": 3,
+      "violation": "Required and default status is given for one of the three fields but omitted for the other two, so the document does not apply a consistent pattern to fields it presents as a set."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "the document ends after three isolated field descriptions with no combined example",
+      "fix": "Add one example configuration block, in the format the system actually accepts, showing endpoint_url, signing_secret, and retry_policy set together.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "document as a whole, after the retry_policy section",
+      "severity": 3,
+      "violation": "A reference describing three related configuration fields never shows them combined into one example configuration object, leaving the container structure and field-name casing to be guessed."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-004.md",
+    "artifact_sha256": "7f41536ab3c3f7bc93a3dde86b8e81cee5dab0339f2b1d472e9222a20b42d7ae",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

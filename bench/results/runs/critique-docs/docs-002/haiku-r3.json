@@ -1,0 +1,59 @@
+{
+  "run": {
+    "skill": "critique-docs",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/docs/docs-002.md",
+    "artifact_sha256": "25c4dd0ebb76ed338a3330329de0387044967be4fa65c3db44b1e3042d579c91",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:22:45Z",
+    "rubrics": ["DIATAXIS"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "DIATAXIS-HEADING-DEPTH",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "the Check the sidebar updated heading",
+      "evidence": "Heading level jumped from 2 (Open the test console) to 4 (Check the sidebar updated) with no intermediate level between them.",
+      "violation": "This heading is nested more than one level deeper than the heading immediately before it, so a reader or a tool relying on heading level cannot reconstruct which section this one belongs under.",
+      "fix": "Insert a level 3 heading between Open the test console and Check the sidebar updated, or promote Check the sidebar updated to level 3.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "DIATAXIS-ORPHAN",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the entire page",
+      "evidence": "No other page in the tree contains a link to this tutorial. Checked all pages in bench/results/staging/docs/: docs-001.md (how-to on configuring thresholds), docs-003.md (reference on alert fields), and docs-004.md (reference on webhook delivery).",
+      "violation": "This tutorial page, which documents the critical first-time task of sending a test alert, receives zero inbound links from any other page in the tree. A reader following the tree's own navigation has no path to discover or reach this page.",
+      "fix": "Add an inbound link from a related page that readers would encounter first, such as a table of contents page, a getting-started guide, or the how-to page on configuring thresholds.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "DIATAXIS-CROSSLINK",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the main content, after the final step",
+      "evidence": "The tutorial completes without linking to any reference page. The tree contains docs-003.md (Alert rule fields reference), which documents the alert fields a reader has just learned to use.",
+      "violation": "This tutorial walks a learner through sending a test alert but does not link to the reference documentation for alert rules and fields. A reader who finishes the tutorial and wants to understand the configuration details or look up field definitions has no link from this page to the reference material.",
+      "fix": "Add a link to the Alert rule fields reference page (or other relevant reference pages) in a 'Learn more' or 'Next steps' section at the end of the tutorial.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 1,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"#### Check the sidebar updated\"",
+      "fix": "Change the heading level to match the other step headings (H2), or if it truly is a sub-step, use H3 instead of H4 so the hierarchy has no gap.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Heading \"#### Check the sidebar updated\"",
+      "severity": 3,
+      "violation": "This heading jumps from an H2 (\"## Open the test console\") straight to H4, skipping H3, so the heading level no longer matches the other steps in the document and the step reads as a minor sub-point rather than part of the main sequence."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Open the test console from the developer menu\"",
+      "fix": "Name where the developer menu is, for example \"from the developer menu in the top navigation bar,\" so the step can be followed without prior knowledge of the layout.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"Open the test console\" section, first sentence",
+      "severity": 3,
+      "violation": "The location of the developer menu within the interface is never described, so a reader unfamiliar with the product cannot find it from this instruction alone."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"select the sample alert rule provided for new accounts\"",
+      "fix": "State the exact name or label the sample alert rule uses in the UI.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Open the test console\" section, second sentence",
+      "severity": 3,
+      "violation": "The sample alert rule is described but not named, so if the rule list contains more than one entry a reader has no way to identify which one is the sample rule."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Click Trigger sample alert and wait for the status indicator to change to Sent.\"",
+      "fix": "Format the control name distinctly from surrounding prose, for example \"Click **Trigger sample alert**.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"Trigger the sample alert\" section, first sentence",
+      "severity": 3,
+      "violation": "\"Trigger sample alert\" is not set off with bold or code formatting, so it is ambiguous whether this is the literal text of a button the reader should click or a paraphrase of the action to take."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The status indicator takes a few seconds to update while the delivery pipeline processes the event in the background.\"",
+      "fix": "Add a short line describing what to check or do if the status does not update after a reasonable wait.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Trigger the sample alert\" section, second paragraph",
+      "severity": 3,
+      "violation": "No guidance is given for what to do if the status indicator does not change to Sent after waiting, so a reader who hits that case has no next step."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Open the delivery log and check that the test alert shows a Sent status with a timestamp.\"",
+      "fix": "Add navigation detail for the delivery log, for example which menu or page it lives under.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "\"Check the delivery log\" section",
+      "severity": 3,
+      "violation": "Unlike the earlier steps, this step does not say where the delivery log is located or how to navigate to it, leaving a gap in the instructions at the final step."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Send your first test alert\" versus \"Trigger the sample alert\"",
+      "fix": "Use one consistent verb across the title and step headings, either \"send\" or \"trigger,\" throughout the document.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "document title compared with the second step heading",
+      "severity": 3,
+      "violation": "The title uses \"send\" while the second step heading uses \"trigger\" for what the document treats as the same action, and this inconsistent terminology can make a reader unsure whether sending and triggering are the same step."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-002.md",
+    "artifact_sha256": "25c4dd0ebb76ed338a3330329de0387044967be4fa65c3db44b1e3042d579c91",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:24:35Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

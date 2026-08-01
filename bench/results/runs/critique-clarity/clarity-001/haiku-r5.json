@@ -1,0 +1,150 @@
+{
+  "summary": {
+    "severity_3_threshold": 0,
+    "by_severity": {
+      "0": 0,
+      "4": 0,
+      "1": 0,
+      "2": 8,
+      "3": 6
+    },
+    "suppressed_count": 3,
+    "gate": "fail"
+  },
+  "findings": [
+    {
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "severity": 3,
+      "id": "F-001",
+      "lane": "scripted",
+      "evidence": "36-word sentence, 4 subordinate-clause markers: Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "location": "How to Apply, paragraph 3",
+      "violation": "The sentence runs to 36 words with 4 subordinate-clause markers, longer than the reader can hold in mind on a single pass.",
+      "confidence": "high"
+    },
+    {
+      "fix": "Rewrite the sentence in active voice, naming the actor that performs the action.",
+      "severity": 2,
+      "id": "F-002",
+      "lane": "scripted",
+      "evidence": "The request is reviewed within two business days.",
+      "criterion": "PLAIN-ACTIVE",
+      "location": "Approval Timeline, paragraph 1",
+      "violation": "The sentence uses a be-verb plus past-participle passive construction in a context where the actor is recoverable and worth naming directly.",
+      "confidence": "high"
+    },
+    {
+      "fix": "Restate the sentence with at most one negation, or recast it as a positive statement.",
+      "severity": 2,
+      "id": "F-004",
+      "lane": "scripted",
+      "evidence": "However, reimbursement is not available without a completed receipt.",
+      "criterion": "PLAIN-DOUBLE-NEGATIVE",
+      "location": "Eligibility, paragraph 2",
+      "violation": "2 negation markers from the fixed negation list co-occur in one clause, so the reader has to work out the statement's logical sign before understanding it.",
+      "confidence": "high"
+    },
+    {
+      "fix": "Replace the heading with text specific enough to be found by scanning.",
+      "severity": 2,
+      "id": "F-005",
+      "lane": "scripted",
+      "evidence": "heading: Overview",
+      "criterion": "PLAIN-HEADINGS",
+      "location": "the Overview heading",
+      "violation": "The heading text matches the fixed list of non-specific heading labels, so a reader scanning headings cannot tell whether the section applies to them.",
+      "confidence": "high"
+    },
+    {
+      "fix": "Replace the jargon term with a plain equivalent, or define it at first use.",
+      "severity": 2,
+      "id": "F-006",
+      "lane": "scripted",
+      "evidence": "The manager approves items pursuant to internal discretion, notwithstanding the standard review checklist.",
+      "criterion": "PLAIN-JARGON",
+      "location": "Required Documentation, paragraph 1",
+      "violation": "The sentence uses a legal or foreign-language jargon term from the fixed list with no plain-language definition in the same or the following sentence.",
+      "confidence": "high"
+    },
+    {
+      "fix": "Reorganize the document into clear audience sections: first the employee's full workflow (eligibility through submission), then a separate section for managers explaining their role, then a separate section for finance/payroll describing their process, then a separate section for the benefits team if needed.",
+      "severity": 3,
+      "id": "F-007",
+      "lane": "judged",
+      "evidence": "Multiple audiences are interleaved throughout the document: 'If the employee has completed 90 days of continuous service, the stipend can apply' (for employees); 'The manager approves items pursuant to internal discretion' (for managers); 'The finance office reviews every stipend request over 200 dollars' (for finance team); 'The benefits team coordinates every stipend request from intake to payout' (for the benefits team).",
+      "criterion": "PLAIN-AUDIENCE",
+      "location": "Eligibility, How to Apply, Required Documentation, and multiple other sections",
+      "violation": "The document addresses employees, managers, finance reviewers, and the benefits team, with their distinct content interleaved throughout rather than separated into dedicated sections, so an employee reader cannot easily extract the instructions that apply to them.",
+      "confidence": "high"
+    },
+    {
+      "fix": "Choose one term to use consistently throughout the document. Update all instances to use either 'stipend' or 'reimbursement' (not both) for the same concept.",
+      "severity": 3,
+      "id": "F-008",
+      "lane": "judged",
+      "evidence": "The document uses both 'stipend' and 'reimbursement' for the same concept: 'The people operations office publishes the reimbursement log' but 'the stipend can apply', 'The stipend pays up to 500 dollars' but 'Finance reconciles the stipend item', 'The benefits team publishes the reimbursement log' in one section and 'the benefits team coordinates every stipend request' in another.",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "location": "Program Overview, Eligibility, Reimbursement Amounts, Terminology Notes, and Program Coordination sections",
+      "violation": "Two terms that refer to the identical concept are used interchangeably across the document with no signal that they mean the same thing, forcing the reader to check whether the terms name one benefit or two distinct programs.",
+      "confidence": "high"
+    },
+    {
+      "fix": "State the main rule first: 'The home-office equipment stipend is available to employees who meet all three conditions: (1) full-time position, (2) 90+ days of continuous service, and (3) request submitted before benefit year end.' Then explain each condition in detail if needed.",
+      "severity": 3,
+      "id": "F-009",
+      "lane": "judged",
+      "evidence": "If the position counts as full-time, the stipend can apply. If the employee has completed 90 days of continuous service, the stipend can apply. If the request arrives before the benefit year ends, the stipend can apply. Only once every condition above is met does the home-office equipment stipend become available to the employee.",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "location": "Eligibility section",
+      "violation": "The eligibility rule opens with three sentences of conditions before the fourth sentence finally states what the benefit actually is, so a reader must reach the end before understanding the opening sentences.",
+      "confidence": "high"
+    },
+    {
+      "fix": "Reorganize into the employee's actual task sequence: (1) eligibility criteria, (2) reimbursement amounts and restrictions, (3) application steps and required documentation together, (4) approval timeline and next steps. Move all internal-process descriptions (Program Coordination, Review Responsibility) to a separate section at the end titled 'For Administrators' or remove them entirely if not needed for employees.",
+      "severity": 3,
+      "id": "F-010",
+      "lane": "judged",
+      "evidence": "Sections in current order: Program Overview, Eligibility, How to Apply, Approval Timeline, Required Documentation, Reimbursement Amounts, Restrictions and Exceptions, Terminology Notes, Request Steps, Overview (repeated), Program Coordination, Review Responsibility, Questions and Updates. Required Documentation and Request Steps appear after Approval Timeline, and internal process descriptions (Program Coordination, Review Responsibility) follow the employee-facing sections.",
+      "criterion": "PLAIN-ORGANIZE",
+      "location": "Document structure from sections 1 through 13",
+      "violation": "The document's section order reflects an internal organizational structure rather than the sequence an employee reader works through, with eligibility and process steps scattered across multiple sections and internal-process sections mixed into employee-facing content.",
+      "confidence": "high"
+    },
+    {
+      "fix": "Rewrite to name the real actor: 'The portal guides you through each step in order' (making the employee the implied actor) or 'The system walks through each step in order' (more direct than 'portal'), or restructure to avoid the abstraction entirely.",
+      "severity": 2,
+      "id": "F-011",
+      "lane": "judged",
+      "evidence": "The portal walks through each step in order. Also, the portal saves a draft automatically every few minutes.",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "location": "How to Apply section, paragraph 1-2",
+      "violation": "The portal is the grammatical subject performing the actions, but 'the portal' is an abstraction. The real actors are the software system or its developers, who should be named directly or the sentence should identify the employee as the actor.",
+      "confidence": "medium"
+    },
+    {
+      "fix": "Establish one clear theme for the main document: 'How employees request and receive home-office equipment reimbursement.' Separate other content (internal processes, administrator roles) into clearly labeled secondary sections so a reader knows which parts apply to them and which are reference material for others.",
+      "severity": 3,
+      "id": "F-012",
+      "lane": "judged",
+      "evidence": "Document section sequence: Program Overview (publications and tracking), Eligibility (conditions), How to Apply (portal process), Approval Timeline (review timing), Required Documentation (manager approval), Reimbursement Amounts (payment), Restrictions (equipment maintenance), Terminology Notes (definitions), Request Steps (two steps), Overview (repeated), Program Coordination (benefits team workflow), Review Responsibility (finance workflow), Questions and Updates (vendor list).",
+      "criterion": "WILLIAMS-COHERENCE",
+      "location": "Entire document structure",
+      "violation": "The document pursues multiple unrelated themes - employee eligibility and process, manager approval roles, finance review procedures, benefits team coordination, vendor information - without a unifying thread, so a reader finishing the document cannot state what the document as a whole was actually about or which information was meant for them.",
+      "confidence": "high"
+    }
+  ],
+  "run": {
+    "artifact": "bench/results/staging/clarity/clarity-001.md",
+    "artifact_sha256": "32ee3fed58b3e9b931565041a2e195dade8e2d19c9e9172fe28b38bdb5f6ef2c",
+    "timestamp": "2026-07-31T20:53:47Z",
+    "model": "claude-haiku-4-5-20251001",
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "contract_version": "1.0.0"
+  }
+}

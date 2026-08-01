@@ -1,0 +1,116 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T02:08:02Z",
+    "rubrics": [
+      "NNG"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"invite-member\" section, the Save button and Continue link",
+      "evidence": "The Save button (<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>) has no href and no defined next state. The Continue link (<a href=\"#invite-sent\">Continue</a>) is the only control in the section leading to another state, and the invite-sent section reads \"An invite was sent to the address entered above.\"",
+      "violation": "NNG-H1 requires that a state-changing action name what the user sees while it runs and once it finishes. Save is presented as the form-commit action but the artifact never says what happens when it is clicked, and it never says how Save relates to Continue, so a reader cannot tell whether clicking Save alone sends the invite, whether Continue is required afterward, or whether Save does nothing observable at all.",
+      "fix": "Either remove the separate Save button and make Continue the single action that submits the email and sends the invite, or specify what Save does, for example disable Continue until Save succeeds, and show a visible result after each click.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-H3-DEADEND",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "the \"invite-sent\" section",
+      "evidence": "the \"invite-sent\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+      "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact.",
+      "fix": "Add a control inside the \"invite-sent\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"project-archived\" section",
+      "evidence": "The \"archive-confirm\" section states: Archiving \"Design System Refresh\" will remove it from the active projects list for everyone on the team. You can restore it at any time from the archived projects list. The artifact defines no state or control named or linked as an archived projects list anywhere; the project-archived section offers only one link, \"Back to your projects,\" targeting workspace-overview.",
+      "violation": "NNG-H3-UNDO requires that an action the artifact treats as reversible offer a stated way back. The archive-confirm copy tells the user the project can be restored from an archived projects list, but no such state exists in the artifact and no control anywhere links to one, so the promised reversal has no path in the design as specified.",
+      "fix": "Add an \"archived projects list\" state to the artifact, with a restore control on each archived project, and link to it from the project-archived section and from workspace-overview, so the reversal the confirmation copy promises actually exists in the spec.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the Save button",
+      "evidence": "The Save button (<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>) commits the form. Nothing in the section, and nothing elsewhere in the artifact, specifies a confirmation message, a changed control state, or any other visible result of clicking it.",
+      "violation": "NNG-H1 requires visible feedback for a state-changing action. The project name field keeps showing its prior value after Save with no acknowledgement that the change was stored, so a user has no way to confirm the save succeeded.",
+      "fix": "Specify a visible confirmation after Save, for example a brief saved message near the button or a timestamp showing when the settings were last saved.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-H6-LABELED",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "evidence": "<button> with no text content and no accessible-name attribute",
+      "violation": "This control has neither visible text nor an accessible-name attribute, so nothing on screen names what the control does.",
+      "fix": "Add visible text to this control, or an aria-label attribute naming what it does.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-H6-RECALL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-sent\" section",
+      "evidence": "The section reads: \"An invite was sent to the address entered above. It expires in 5 days if not accepted.\" No email address appears anywhere in this section; the address was entered on the prior \"invite-member\" screen.",
+      "violation": "NNG-H6-RECALL requires that information the user needs at a step be present at that step. This confirmation refers to \"the address entered above,\" but \"above\" is a different, already-left screen, so the user cannot see which address the invite actually went to without navigating back.",
+      "fix": "Repeat the entered email address in the invite-sent confirmation text, for example \"An invite was sent to jane@example.com.\"",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "NNG-H8",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"workspace-overview\" section",
+      "evidence": "Reading order in the section is: the projects heading and count, the two-item project list, then <div id=\"workspace-overview-promo-referral\">Invite 3 teammates this month to unlock the advanced reporting add-on.</div>, then the \"Open project settings\" and \"View last import result\" links.",
+      "violation": "NNG-H8 asks that a screen carry only what its primary task needs. The primary task of this landing screen is viewing and acting on projects, but a promotional message about an unrelated reporting add-on sits between the project list and the two controls that let the user act on projects, ahead of them in reading order.",
+      "fix": "Move the promotional message below the two navigation links, or remove it from this screen, so the controls the primary task needs come first.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-008",
+      "criterion": "NNG-H9-RECOVER",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"import-status\" section",
+      "evidence": "The section reads: \"The last import finished with 2 rows skipped: each referenced a project that does not exist in this workspace. Rows 15 and 99 were skipped; every other row was imported.\" The section's only control is \"Back to your projects,\" targeting workspace-overview.",
+      "violation": "NNG-H9-RECOVER requires an error message to point to a next step the user can take. This message names exactly which rows failed and why, but offers no control to fix the referenced project, retry the skipped rows, or reach an import feature at all; the artifact defines no import-trigger control anywhere for the user to act on this information.",
+      "fix": "Add a control on this screen that lets the user retry the two skipped rows or navigate to where the missing project can be created or corrected.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 3,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

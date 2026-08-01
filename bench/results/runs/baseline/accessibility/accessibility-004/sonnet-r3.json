@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Station staff can also help with the same request in person.\" appears verbatim, word for word, at the end of both paragraphs.",
+      "fix": "Remove the repeated sentence from one paragraph, or rewrite the second occurrence so it adds information specific to that paragraph's topic.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"Station updates\" section, the two paragraphs with id=\"s1-p1\" and id=\"s1-p2\"",
+      "severity": 3,
+      "violation": "The exact same sentence is repeated in two consecutive paragraphs, adding no new information and reading as duplicated filler rather than distinct guidance."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "alt=\"Crews repainting the accessible parking spaces near the station entrance.\" on an image file named \"platform-update.jpg\", under a heading about schedules and kiosks.",
+      "fix": "Confirm which image belongs on this page and rewrite the alt text to accurately describe that image's actual content in context.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "image inside the \"Station updates\" section, id=\"s1-img1\"",
+      "severity": 3,
+      "violation": "The alt text describes parking lot repainting, which is unrelated to the schedule and kiosk content surrounding it and does not match what the \"platform-update\" filename suggests the image should show, indicating the wrong image or alt text was used."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The table markup opens directly with the header row, \"<table id=\"s2-table1\"><tr><th scope=\"col\">Zone</th><th scope=\"col\">Status</th></tr>...\", with no caption element.",
+      "fix": "Add a caption element inside the table, for example \"Zone status\", immediately before the header row.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Schedule changes\" table, id=\"s2-table1\"",
+      "severity": 3,
+      "violation": "The table has no caption, so a screen reader user who lands on it has no programmatic statement of what the table represents beyond the two column headers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">\" wrapping an image with an empty alt attribute, with no visible item or label nearby indicating what it deletes.",
+      "fix": "Replace the div with a native \"button type=\"button\"\" element, and add visible context for what item it acts on, or remove the control if nothing on the page corresponds to it.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"Delete item\" control in the Fare adjustments section, id=\"s3-customcontrol\"",
+      "severity": 3,
+      "violation": "A native button element provides keyboard activation, focus handling, and role semantics automatically; reimplementing this with a div and role=\"button\" is easy to get wrong, and there is no surrounding content indicating what item this control would delete."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"<div class=\"step\" id=\"s3-step1\">Choose a plan</div>\" repeated three times with plain text and no shared list or state markup.",
+      "fix": "Mark the steps up as an ordered list, and add aria-current=\"step\" to whichever step div is the active one.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "step indicator, id=\"s3-wizard\" and its three child divs (id=\"s3-step1\", id=\"s3-step2\", id=\"s3-step3\")",
+      "severity": 3,
+      "violation": "A three step sequence is built from generic divs with no list structure, no ordering semantics, and no indication of which step is current, so assistive technology cannot convey that this is a sequence or which step the user is on."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The sentence \"For the full list of upcoming adjustments, read the accessibility improvements list.\" links to href=\"/fares/history\".",
+      "fix": "Change the link text to describe the actual destination, for example \"read the full list of fare adjustments.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "link at the end of the \"For the full list of upcoming adjustments\" paragraph, id=\"s3-link1\"",
+      "severity": 3,
+      "violation": "The link text says \"accessibility improvements list\" but both the surrounding sentence and the destination URL are about fare adjustment history, not accessibility improvements, so the link text misleads the reader about where it goes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Label text reads \"Phone number (required)\" on \"<input id=\"phone\" type=\"tel\">\", which carries no required or aria-required attribute.",
+      "fix": "Add a required attribute (or aria-required=\"true\") to the \"input id=\"phone\"\" element.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "phone number field in the form, label id=\"s3-form-phone-label\" and input id=\"phone\"",
+      "severity": 3,
+      "violation": "The field is marked required only in the visible label text; the input itself has no programmatic required state, so browser form validation and assistive technology have no way to know the field is mandatory."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"<input id=\"promo\" type=\"text\" aria-invalid=\"true\">\" is followed by \"<span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span>\" with no attribute linking the two.",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the \"input id=\"promo\"\" element.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "promo code field and its error text, id=\"promo\" and id=\"s3-form-promo-error\"",
+      "severity": 3,
+      "violation": "The input is marked aria-invalid=\"true\" but has no aria-describedby pointing at the error span, so a screen reader user focused on the field is never told why it is invalid or what the error text says."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"<input id=\"promo\" type=\"text\" aria-invalid=\"true\">\" carries aria-invalid=\"true\" in the page's initial markup, before any value has been entered or the form submitted.",
+      "fix": "Remove aria-invalid=\"true\" from the initial markup and set it only after validation runs against what the user actually enters.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "promo code field, id=\"promo\"",
+      "severity": 3,
+      "violation": "The field is presented as invalid on first load, before the user has typed anything, which will confuse both sighted users seeing error styling on an empty field and screen reader users told the field is invalid before they have done anything."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "393fe58fac52d6953cd372944cd352ef9181df5c42ae778bd6d17214acb080c7",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T20:35:52Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

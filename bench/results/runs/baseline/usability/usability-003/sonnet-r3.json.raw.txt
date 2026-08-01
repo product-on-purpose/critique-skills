@@ -1,0 +1,54 @@
+Location: <head>, meta tags
+Evidence: <meta charset="utf-8"> is the only meta tag present; there is no <meta name="viewport"> tag
+Problem: The document has no viewport meta tag, so on a mobile browser it will render at desktop width and force zooming or panning instead of scaling to the screen.
+Fix: Add <meta name="viewport" content="width=device-width, initial-scale=1"> to <head>.
+
+Location: whole document, <head> and <body>, no <style> or <script> element anywhere
+Evidence: The document contains eleven <section> elements (workspace-overview through notification-settings) linked by href="#id" anchors, but no CSS or JavaScript exists to show or hide them.
+Problem: Without any styling or script to toggle visibility, every section renders on the page at once, stacked vertically. Clicking a link like "Open project settings" only scrolls to that section rather than presenting it as a distinct screen, so the mockup cannot actually demonstrate the flow it describes.
+Fix: Add a minimal stylesheet or script that hides every section except the one whose id matches the current URL fragment, so navigation behaves like moving between screens instead of scrolling a single long page.
+
+Location: section#workspace-overview, introductory paragraph and list
+Evidence: "This workspace holds 4 projects, synced this morning." is followed by a list of only three items (Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot).
+Problem: The stated project count, 4, does not match the number of projects actually listed, 3, which is an internal inconsistency a user would notice immediately.
+Fix: Either add the fourth project to the list or correct the paragraph to say "3 projects."
+
+Location: section#workspace-overview, <ul> inside #workspace-overview-recent
+Evidence: <li>Beta Launch Plan</li>, <li>Holiday Campaign Assets</li>, <li>Partner Integration Pilot</li>
+Problem: The project names are plain text with no link or button, so there is no way to open any of the listed projects from the overview screen.
+Fix: Wrap each project name in a link or button that navigates to that project's own settings or detail view.
+
+Location: section#workspace-overview, "Open project settings" link (workspace-overview-projects-link)
+Evidence: <a id="workspace-overview-projects-link" href="#project-settings">Open project settings</a> leads to a settings screen pre filled with "Vendor Onboarding", a project name that does not appear anywhere in the three item recent projects list.
+Problem: The link does not indicate which project's settings it opens, and the project it actually opens, Vendor Onboarding, is not one of the projects the user can see on the overview screen, which reads as a wiring error.
+Fix: Either link each project in the list to its own settings screen, or rename the generic link to name the specific project it opens and make sure that project is listed above.
+
+Location: section#project-settings, name form and project-settings-save-btn
+Evidence: <form><label for="project-settings-name-input">Project name</label><input ... value="Vendor Onboarding"><button ... type="submit">Save</button></form> has no action or method attribute.
+Problem: Because the form has no action or method and there is no script handling its submit event, clicking Save will reload the page, a GET request to the same URL, instead of saving anything, and the user gets no confirmation that a save happened.
+Fix: Give the form a real submit handler that shows a success state, or if this is meant to stay a static mockup, prevent default submission and add a visible "Saved" confirmation message so the interaction reads correctly.
+
+Location: section#project-settings, project-settings-duplicate-btn
+Evidence: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>
+Problem: The button has no visible text content, only an aria-label, so a sighted user sees a blank, unlabeled button with no indication of what it does.
+Fix: Add visible text such as "Duplicate" inside the button, or an icon plus visually hidden text, rather than relying on aria-label alone.
+
+Location: section#archive-confirm, cancel and archive links
+Evidence: <a id="archive-confirm-cancel-link" ...>Cancel</a> and <a id="archive-confirm-archive-link" ...>Archive</a> are both plain, identically styled anchor tags.
+Problem: A destructive, team wide action, described in the same section as removing the project "for everyone on the team", is presented with the same visual weight and markup as the safe Cancel option, making it easy to click the wrong one.
+Fix: Style the Archive action distinctly, for example a red or warning styled button, separate it visually from Cancel, and consider requiring an extra confirmation step before the action fires.
+
+Location: section#invite-member, invite-member-continue-link
+Evidence: The section has both a Save submit button on the email form and a separate <a id="invite-member-continue-link" href="#invite-sent">Continue</a> link.
+Problem: Continue navigates straight to the Invite sent screen regardless of whether the email field was filled in or the form was submitted, so a user can reach a confirmation screen without ever entering an email address.
+Fix: Remove the separate Continue link and make the Invite sent screen reachable only by submitting the form, or disable Continue until the email field has a valid value.
+
+Location: section#invite-sent
+Evidence: "An invite was sent to the address entered above. It expires in 5 days if not accepted."
+Problem: This screen does not display any email address, so "the address entered above" refers to nothing visible on the page, and a user who navigated here directly has no way to confirm which address was used.
+Fix: Pass the entered email through to this screen and display it explicitly, for example "An invite was sent to jane@example.com," instead of referring to an "above" that is not present.
+
+Location: section#import-status, import-status-message
+Evidence: "Import failed. Error code IMP-500. Contact support if this continues."
+Problem: The message tells the user to contact support but provides no link, email address, or button to do so, and offers no way to retry the import from this screen.
+Fix: Add a mailto link or "Contact support" button with an actual destination, and add a "Retry import" action alongside the existing back link.

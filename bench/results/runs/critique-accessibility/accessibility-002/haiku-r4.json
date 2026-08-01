@@ -1,0 +1,92 @@
+{
+  "run": {
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/accessibility/accessibility-002.html",
+    "artifact_sha256": "b49ce74681df60732a6ef3b5309ce82264ad1b6ad48c6fa8b85989f2c712f113",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T20:20:54Z",
+    "rubrics": ["WCAG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "WCAG-1.4.10",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "line 37, <div> element",
+      "evidence": "declared width: 960px",
+      "violation": "A fixed width of 960px forces horizontal scrolling once the viewport narrows to 320px, with no responsive override.",
+      "fix": "Cap the element's width with a relative max-width (a percentage or viewport unit), or add a media query that shrinks it below 320px.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "WCAG-1.4.3",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "line 20, <p> element, text 'Passengers should review the updated schedule at any station kiosk. Updates p...'",
+      "evidence": "text color #999999 on background #ffffff, contrast ratio 2.85:1",
+      "violation": "Contrast ratio 2.85:1 is below the 4.5:1 AA minimum for normal text.",
+      "fix": "Darken the text or lighten the background until the ratio reaches at least 4.5:1.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "WCAG-1.4.4",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "line 5, meta name=\"viewport\" element",
+      "evidence": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\" id=\"head-viewport\">",
+      "violation": "The viewport meta tag sets user-scalable=no, disabling browser zoom entirely.",
+      "fix": "Remove user-scalable=no so readers can zoom the page.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "WCAG-1.4.11",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "line 43, <button> element boundary",
+      "evidence": "boundary color #9d9d9d against adjacent background #ffffff, contrast ratio 2.71:1",
+      "violation": "Component boundary contrast ratio 2.71:1 is below the 3:1 AA minimum.",
+      "fix": "Darken the border or outline color, or change the adjacent background, until the ratio reaches at least 3:1.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "WCAG-1.4.12",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "line 40, <div> element",
+      "evidence": "height: 60px; overflow: hidden",
+      "violation": "A fixed height combined with clipped overflow truncates this element's text once a reader applies wider line, paragraph, letter, or word spacing.",
+      "fix": "Remove the fixed height so the element grows with its content, or replace the clipped overflow with visible or auto.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "WCAG-3.3.2",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "line 61, <select> control",
+      "evidence": "<select id=\"topic\">",
+      "violation": "No label, aria-label, aria-labelledby, or title identifies what this control expects.",
+      "fix": "Add a <label for> pointing at this control's id, wrap the control in a <label>, or set aria-label.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 3,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

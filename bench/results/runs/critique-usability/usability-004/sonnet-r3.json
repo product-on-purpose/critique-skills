@@ -1,0 +1,95 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T02:23:57Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-1",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"archive-confirm\" section, the archive-confirm-copy paragraph",
+      "evidence": "The archive-confirm-copy paragraph reads: \"Archiving \\\"Q3 Roadmap\\\" will remove it from the active projects list for everyone on the team. You can restore it at any time from the archived projects list.\" No state, section, or link in this artifact is named or targets an archived projects list; the 8 defined states are workspace-overview, project-settings, invite-member, invite-sent, archive-confirm, project-archived, import-status, and notification-settings, and project-archived links only to workspace-overview.",
+      "violation": "NNG-H3-UNDO requires that a reversible action name a stated way back and where the user finds it. Archiving is stated as reversible through the archived projects list, but no state, screen, or link with that name or purpose exists anywhere in the artifact, so the only stated reversal path is not reachable in the design as specified.",
+      "fix": "Define an archived projects list state, or link the restore promise to one that already exists under another name, and add a control to it from project-archived or workspace-overview, so a user who archives a project can actually reach the restore path the confirm screen promises.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-2",
+      "criterion": "NNG-H5-PREVENT",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"invite-member\" section, the \"Continue\" link",
+      "evidence": "The Continue link (<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>) sits outside the <form> that wraps the Email address input, and that input carries no required attribute. Nothing in the markup ties reaching #invite-sent to the field holding a value.",
+      "violation": "NNG-H5-PREVENT asks whether the design constrains an input so a likely wrong entry cannot proceed. The likely wrong entry here, an empty or unvalidated email field, is not constrained: the path to the invite sent confirmation does not depend on the field at all, since Continue is a plain link outside the form rather than a gated submit.",
+      "fix": "Make Continue submit the form, or otherwise gate it, so the invite-sent confirmation is only reachable once the email field holds a valid value.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-3",
+      "criterion": "NNG-H6-RECALL",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"invite-sent\" section",
+      "evidence": "The section's entire message is: \"An invite was sent to the address entered above. It expires in 5 days if not accepted.\" The email value entered on the invite-member screen is not repeated anywhere in this section, and the section's only link, Back to project settings, goes to project-settings, not back to invite-member.",
+      "violation": "NNG-H6-RECALL requires that information the user needs at a step be present at that step rather than held over from an earlier screen. The recipient address is exactly what this confirmation needs to state, and instead of showing it the message refers to the address entered above, with no reachable state showing what that address was.",
+      "fix": "State the actual email address in the confirmation, for example \"An invite was sent to {email}.\", instead of referring back to the address entered above.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-4",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"Save\" button",
+      "evidence": "The project-settings-save-btn (<button type=\"submit\">Save</button>) sits in a <form> with no action attribute, and no state or message the artifact defines describes what happens once it is pressed.",
+      "violation": "NNG-H1 requires that every state-changing action the artifact specifies also specify a visible indication of what the system is doing and what the outcome was. These four commit-style controls each fire with no defined confirmation, error, or changed-state message anywhere in the artifact.",
+      "fix": "Add a defined visible outcome for each of these four controls: a success or error message on completion, or a link to a state that shows the change took effect.",
+      "confidence": "medium",
+      "instances": [
+        {
+          "location": "the \"invite-member\" section, the \"Save\" button",
+          "evidence": "The invite-member-save-btn (<button type=\"submit\">Save</button>) sits in a <form> with no action attribute, and no defined result distinguishes it from the separate Continue control on the same screen."
+        },
+        {
+          "location": "the \"notification-settings\" section, the \"Save\" button",
+          "evidence": "The notification-settings-save-btn (<button type=\"submit\">Save</button>) sits in a <form> with no action attribute, and no state or message the artifact defines describes what happens once it is pressed."
+        },
+        {
+          "location": "the \"project-settings\" section, the \"Duplicate project\" button",
+          "evidence": "The project-settings-duplicate-btn (<button type=\"button\" aria-label=\"Duplicate project\">) has no href, no enclosing <form>, and no state or message the artifact defines describes what happens once it is pressed."
+        }
+      ]
+    },
+    {
+      "id": "F-5",
+      "criterion": "NNG-H9-RECOVER",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"import-status\" section",
+      "evidence": "The import-status-message paragraph reads: \"The last import finished with 4 rows skipped: each referenced a project that does not exist in this workspace. Rows 35, 71, 78, and 83 were skipped; every other row was imported.\" The section's only control is the Back to your projects link; no control addresses the 4 skipped rows.",
+      "violation": "NNG-H9-RECOVER requires that error text point to a next step the user can take from where the message appears. This message names exactly which rows failed and why, but the artifact defines no recovery control on this screen: no retry, no link to create the missing referenced projects, and no way to view or re-import the 4 skipped rows.",
+      "fix": "Add a recovery control to the import-status section, for example a link to view or re-import the 4 skipped rows, or a link to create the missing referenced projects.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 3,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

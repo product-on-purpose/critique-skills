@@ -1,0 +1,138 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/accessibility/accessibility-002.html",
+    "artifact_sha256": "b49ce74681df60732a6ef3b5309ce82264ad1b6ad48c6fa8b85989f2c712f113",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T20:21:20Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Paragraph under \"Accessibility improvements\" section",
+      "evidence": "style=\"color:#999999\" on element with id=\"s1-p1\"",
+      "violation": "Text color #999999 on a light background has insufficient contrast for readability.",
+      "fix": "Change text color to #595959 or darker to meet WCAG AA standards (4.5:1 contrast ratio).",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Form field for route selection, line near id=\"topic\"",
+      "evidence": "<label for=\"topic-alt\"> but <select id=\"topic\">",
+      "violation": "The label's for attribute references \"topic-alt\" but the select element has id=\"topic\", causing the label not to associate with the input.",
+      "fix": "Change the select element id to \"topic-alt\" or change the label's for attribute to \"topic\".",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Promo code input field",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> followed by <span class=\"error-text\">",
+      "violation": "The input is marked invalid with aria-invalid but does not reference the error message with aria-describedby, breaking the connection for screen readers.",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the input element to link it to the error message.",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Status card section",
+      "evidence": "<div class=\"status-card\" style=\"height:60px;overflow:hidden\">",
+      "violation": "Fixed height of 60px with overflow hidden truncates the content inside, making it potentially unreadable or inaccessible.",
+      "fix": "Remove the fixed height and overflow hidden, or increase the height sufficiently to display all content without clipping.",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Promotional banner section",
+      "evidence": "<div class=\"promo-banner\" style=\"width:960px\">",
+      "violation": "Fixed width of 960px prevents responsive behavior on smaller screens and can cause content to be cut off on mobile devices.",
+      "fix": "Replace fixed width with max-width:960px or use percentage-based widths to allow responsive scaling.",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Delete action control",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\">",
+      "violation": "A div is repurposed as a button using role=\"button\", but it may lack proper JavaScript event handlers for keyboard navigation and click handling.",
+      "fix": "Replace the div with a native <button> element, or ensure comprehensive keyboard and click event handlers are implemented.",
+      "confidence": "medium",
+      "id": "F-006"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Wizard steps navigation",
+      "evidence": "<div class=\"wizard-steps\"> containing three <div class=\"step\"> elements",
+      "violation": "Wizard steps should use semantic ordered list structure (ol/li) but instead use div elements, reducing semantic clarity and accessibility.",
+      "fix": "Restructure using <ol><li> or <nav><ol><li> for proper semantic meaning.",
+      "confidence": "medium",
+      "id": "F-007"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Link in paragraph within Weekend service section",
+      "evidence": "<a href=\"/fares/history\">read the accessibility improvements list</a>",
+      "violation": "Link text \"read the accessibility improvements list\" is generic and does not clearly indicate what page the link leads to within its context.",
+      "fix": "Change link text to something more descriptive like \"view the complete list of accessibility improvements\" or add title attribute for clarity.",
+      "confidence": "medium",
+      "id": "F-008"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Phone number field label in form",
+      "evidence": "<label for=\"email\"> and <label for=\"phone\"> mismatch",
+      "violation": "The labels reference form field ids that may not correctly match their associated inputs.",
+      "fix": "Verify all label for attributes precisely match their corresponding input id attributes throughout the form.",
+      "confidence": "medium",
+      "id": "F-009"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Form submit button",
+      "evidence": "<button type=\"submit\" class=\"btn-primary\">Submit</button>",
+      "violation": "The submit button lacks a descriptive context about what form is being submitted (is it for fare adjustment, service issue report, etc.).",
+      "fix": "Add aria-label or change button text to specify the action, e.g., \"Submit service request\" or \"Request fare adjustment\".",
+      "confidence": "medium",
+      "id": "F-010"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

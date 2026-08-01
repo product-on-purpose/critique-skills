@@ -1,0 +1,91 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-08-01T02:17:23Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-1",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 3,
+      "location": "project-settings section, Save button",
+      "evidence": "Save button with no specified feedback; when clicked, artifact specifies neither success message, form state change, nor navigation outcome",
+      "violation": "Form submission actions (Save in project-settings, invite-member, and notification-settings) commit the user's input but the artifact specifies no visible feedback about the outcome, leaving the user uncertain whether the action succeeded",
+      "fix": "Specify what the user sees after clicking each Save button, such as a success message, confirmation state, or navigation to the next step",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "invite-member section, Save button",
+          "evidence": "Save button with no specified feedback; when clicked, artifact specifies neither success message nor outcome"
+        },
+        {
+          "location": "notification-settings section, Save button",
+          "evidence": "Save button with no specified feedback; when clicked, artifact specifies neither success message nor outcome"
+        }
+      ]
+    },
+    {
+      "id": "F-2",
+      "criterion": "NNG-H2-CONVENTIONS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "invite-member section",
+      "evidence": "Form with email input and Save button (inside form), then separate Continue link (outside form): form structure and link are not integrated into one submission action",
+      "violation": "The real-world task is 'enter email address and submit invitation,' but the artifact splits this into two actions: Save (inside form) followed by Continue (outside form as a link). This inverts the expected form submission convention where one button both validates and advances.",
+      "fix": "Integrate Save and Continue into a single form submission, or clarify in place what each step does (e.g., label Save as 'Save as draft' and Continue as 'Send invite') so the flow is recognizable",
+      "confidence": "high"
+    },
+    {
+      "id": "F-3",
+      "criterion": "NNG-H5-PREVENT",
+      "lane": "judged",
+      "severity": 2,
+      "location": "invite-member section, email input field",
+      "evidence": "<input id=\"invite-member-email-input\" type=\"email\"> carries type=\"email\" for format validation but shows no required attribute",
+      "violation": "The email input accepts empty values (no required attribute shown), so a user can click Save with no email entered, and the submission fails at the system boundary rather than at entry",
+      "fix": "Add required attribute to the email input, or add inline validation text explaining that email address is required, so the constraint is enforced before submission",
+      "confidence": "high"
+    },
+    {
+      "id": "F-4",
+      "criterion": "NNG-H6-RECALL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "invite-sent section",
+      "evidence": "Confirmation text reads: 'An invite was sent to the address entered above. It expires in 5 days if not accepted.' The email address itself is not repeated.",
+      "violation": "The confirmation step references 'the address entered above' but does not repeat the email address on screen, so the user cannot verify they sent the invitation to the correct person without navigating back to the previous step",
+      "fix": "Repeat the email address in the confirmation message, for example: 'An invite was sent to [email@example.com]. It expires in 5 days if not accepted.'",
+      "confidence": "high"
+    },
+    {
+      "id": "F-5",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 2,
+      "location": "invite-sent section",
+      "evidence": "After sending an invitation, the artifact states 'It expires in 5 days if not accepted' but names no cancel, recall, revoke, or unsend control anywhere in the design",
+      "violation": "The invite action is treated as committed (sent), and while the artifact implies reversal via expiration (5 days), it names no explicit way for the user to recall or cancel the invite if sent to the wrong person",
+      "fix": "Add a stated way to cancel or recall the invite (e.g., 'Cancel this invitation' link in the invite-sent state), or clarify in the confirmation that expiration is the only reversal and when it occurs",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 1,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

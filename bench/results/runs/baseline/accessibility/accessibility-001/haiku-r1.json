@@ -1,0 +1,105 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/accessibility/accessibility-001.html",
+    "artifact_sha256": "f620e43c2035d9380934dbe1b09dba438bb38bc1fb7f1feeb58010af44eaf176",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T00:00:00Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "html element, lang attribute",
+      "evidence": "lang=\"translanguage\"",
+      "violation": "The lang attribute value \"translanguage\" is not a valid language code. Valid values should be a BCP 47 language tag like \"en\" or \"en-US\".",
+      "fix": "Change lang=\"translanguage\" to lang=\"en\"",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "head element, title element",
+      "evidence": "<title id=\"head-title\"></title>",
+      "violation": "The page title is empty, which provides no meaningful information to users or search engines about the page content.",
+      "fix": "Add descriptive text inside the title element, such as <title>Rider Service Updates</title>",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "section s2, heading element",
+      "evidence": "<h4 id=\"s2-h\">Accessibility improvements</h4> following <h1 id=\"main-h1\">Rider service updates</h1>",
+      "violation": "The heading hierarchy is broken, jumping from h1 directly to h4, which violates proper semantic structure and confuses screen reader users.",
+      "fix": "Change the h4 element to h2: <h2 id=\"s2-h\">Accessibility improvements</h2>",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "section s1, image element",
+      "evidence": "<img src=\"/img/platform-update.jpg\" id=\"s1-img1\">",
+      "violation": "The image has no alt attribute, which means screen reader users cannot understand what the image depicts.",
+      "fix": "Add an alt attribute with a meaningful description: <img src=\"/img/platform-update.jpg\" id=\"s1-img1\" alt=\"Platform update diagram\">",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "section s3, custom control button",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>",
+      "violation": "The custom button control uses role=\"button\" but lacks aria-pressed or aria-expanded, so users cannot determine its current state when it is interactive.",
+      "fix": "Add state management: <div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" aria-pressed=\"false\" id=\"s3-customcontrol\">",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "section s3, form field, promo code input",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\">",
+      "violation": "The field is marked invalid but there is no associated error message with aria-describedby pointing to the error span, breaking the connection between the invalid state and the reason.",
+      "fix": "Add aria-describedby to link the input to the error message: <input id=\"promo\" type=\"text\" aria-invalid=\"true\" aria-describedby=\"s3-form-promo-error\">",
+      "confidence": "medium",
+      "id": "F-006"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "section s3, form element",
+      "evidence": "The form contains multiple input fields, including a required phone field with a label.",
+      "violation": "The email field has no required attribute, but the context suggests all fields should be validated before submission, and there is no clear indication which fields are optional.",
+      "fix": "Add aria-required=\"false\" to optional fields or clarify in the label: <label for=\"email\" id=\"s3-form-email-label\">Email address (optional)</label>",
+      "confidence": "medium",
+      "id": "F-007"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

@@ -1,0 +1,29 @@
+Location: Checkout form, shipping address section, second message ("Please correct the highlighted field. Error code: 502.")
+Evidence: "Please correct the highlighted field. Error code: 502."
+Problem: The message names no specific field, only "the highlighted field," and exposes a raw HTTP status code (502, a server gateway error) to the reader, giving them a technical code instead of a concrete instruction.
+Fix: Name the specific field in the sentence itself, for example "Please correct the shipping address," and remove the error code from the user-facing text or move it to a diagnostic log.
+
+Location: Password reset, new password section, first message (password requirements)
+Evidence: "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page"
+Problem: The password requirements are placed away from the password field itself, so the reader has to scroll up and away from the field they are typing into to read what is required of it.
+Fix: Move the message to directly below or beside the password field, matching how the other messages in this document are placed relative to their own fields.
+
+Location: Password reset, new password section, second message ("This reset link expired an hour after it was sent...")
+Evidence: "Container: toast" alongside "Placement: in a dialog centered on the password reset step, over the new password field it blocks"
+Problem: The container is labeled "toast," but the placement and signal describe a centered, blocking dialog, not a toast. A toast is a small, transient, non-blocking notification, so the two fields describe two different kinds of interface elements for the same message.
+Fix: Make the container and placement agree, either relabel the container as "modal" or "dialog" to match the blocking, centered placement, or change the placement to a non-blocking position consistent with a toast.
+
+Location: Password reset, new password section, second message ("This reset link expired an hour after it was sent...")
+Evidence: "Fires: on-focus"
+Problem: A reset link is already expired before the reader ever reaches the page, but this message only fires when the reader focuses the new password field, so the reader can start filling out a form they should never have been able to open before learning the link is dead.
+Fix: Fire this message as soon as the expired-link state is known, such as on page load, rather than waiting for the reader to focus a field on that page.
+
+Location: Account settings, username section, the only message ("The last changes were not saved and cannot be recovered. Contact support for assistance.")
+Evidence: "Fires: on-blur"
+Problem: A message reporting that a save failed and the data cannot be recovered is triggered by leaving the field, which happens any time the reader clicks away, not only after an actual save attempt, so the reader can see an unrecoverable-data-loss message without ever having tried to save.
+Fix: Trigger this message from an actual save attempt failing, such as on-submit or a save-response event, not from the field losing focus.
+
+Location: Account settings, username section, the only message ("The last changes were not saved and cannot be recovered. Contact support for assistance.")
+Evidence: "cannot be recovered. Contact support for assistance."
+Problem: The message states the change cannot be recovered, then tells the reader to contact support for assistance, without saying what support can do about data that has already been described as unrecoverable.
+Fix: State what contacting support will accomplish, for example confirming what was lost or preventing it from happening again, or remove the instruction if support cannot help.

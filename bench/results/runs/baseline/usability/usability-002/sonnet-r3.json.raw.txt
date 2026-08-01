@@ -1,0 +1,29 @@
+Location: Workspace overview section (id="workspace-overview"), the "Your projects" summary and list
+Evidence: "This workspace holds 5 projects, synced last week." is followed by a list of only 4 items: Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp.
+Problem: The stated project count does not match the number of projects actually listed, so a reader cannot tell whether a project is missing from the list or the count itself is wrong.
+Fix: Either add the fifth project to the list or correct the summary text to say 4 projects.
+
+Location: Project settings section (id="project-settings"), duplicate button (id="project-settings-duplicate-btn")
+Evidence: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button> has no text content between its tags.
+Problem: The button has no visible label or icon, only an aria-label, so a sighted user has no way to tell what the control does, or even that it is a meaningful button rather than a stray empty element.
+Fix: Add visible label text such as "Duplicate" or an icon, and keep the aria-label as a supplement rather than the only label.
+
+Location: Project settings section (id="project-settings"), "Archive project" link (id="project-settings-archive-link")
+Evidence: The link is <a id="project-settings-archive-link" href="#project-archived">Archive project</a>, which points straight to the "Project archived" section. The "Archive this project?" confirmation section (id="archive-confirm") exists later in the document, but no link anywhere in the document points to it.
+Problem: Archiving is described as removing the project from the active list for everyone on the team, yet the only reachable path lets a user trigger that destructive, team-wide action with a single click and no confirmation step. The confirmation screen that was built for this appears to be unreachable dead content.
+Fix: Change the archive link's target from #project-archived to #archive-confirm so the confirmation step sits between the request and the action.
+
+Location: Invite sent section (id="invite-sent")
+Evidence: "An invite was sent to the address entered above. It expires in 5 days if not accepted."
+Problem: The confirmation message refers back to "the address entered above" instead of showing the actual email address that was submitted, so once the user has left the invite form they have no way to verify which address the invite went to.
+Fix: Display the submitted email address directly in the confirmation text, for example "An invite was sent to jane@example.com."
+
+Location: Import status section (id="import-status")
+Evidence: "The last import finished with 3 rows skipped: each referenced a project that does not exist in this workspace. Rows 63, 71, and 82 were skipped; every other row was imported."
+Problem: The page reports which rows failed but gives no way to act on that information. It does not name the missing project each row referenced, and the only available control is "Back to your projects," so a user cannot fix or re-run the skipped rows from this screen.
+Fix: Name the missing project for each skipped row and provide a way to create it or remap the row, instead of only an exit link.
+
+Location: Notifications section (id="notification-settings"), form button (id="notification-settings-save-btn")
+Evidence: The button reads "Submit," while the equivalent save action is labeled "Save" in both the project settings form and the invite member form.
+Problem: The same kind of action, saving a form, is labeled inconsistently across the document: "Save" in two places and "Submit" here.
+Fix: Rename the button to "Save" to match the rest of the document.

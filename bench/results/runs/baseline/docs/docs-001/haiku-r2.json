@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Open the alerts panel from the console sidebar and select the rule you want to adjust.\"",
+      "fix": "Add directional language such as \"Click the Alerts icon in the left sidebar, or navigate to Administration > Alerts to open the alerts panel.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section \"Open alert settings\", first instruction",
+      "severity": 3,
+      "violation": "The instruction assumes users can locate the alerts panel without guidance on where to find it or what it looks like."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"confirm the unit matches the metric in use\"",
+      "fix": "Replace with \"confirm that the unit of measurement (such as milliseconds, bytes, or percentage) matches the metric being configured.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section \"Set the new threshold\", second sentence",
+      "severity": 3,
+      "violation": "The phrase \"unit\" is undefined and the reader does not know what units are relevant or how to check them."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This is because the console applies the new threshold to every future evaluation of this rule.\"",
+      "fix": "Delete this sentence or reword to explain consequences, such as \"Mismatched units will cause the threshold to trigger at unexpected values.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section \"Set the new threshold\", last sentence",
+      "severity": 3,
+      "violation": "This sentence repeats the obvious function of the threshold rather than explaining why unit confirmation matters."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Save the rule and open the rule list to confirm the new threshold appears there.\"",
+      "fix": "Replace with \"Click Save. Navigate to the Alerts page and verify that your rule displays the updated threshold value in the list.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section \"Save and verify\"",
+      "severity": 3,
+      "violation": "\"Rule list\" is undefined and the reader does not know what to look for when they open it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The document uses three H2 headings (Open alert settings, Set the new threshold, Save and verify) with no introduction explaining the overall process.",
+      "fix": "Add an introductory paragraph after the H1 heading explaining that this guide covers three steps to update an alert threshold.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Document structure",
+      "severity": 3,
+      "violation": "Readers do not see a summary of the workflow before diving into individual steps."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-001.md",
+    "artifact_sha256": "b41787144ac8cc1ae14bcce23fa2b574f6ee68f1aaa9cc432628f9f148ddd713",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

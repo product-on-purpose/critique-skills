@@ -1,0 +1,34 @@
+Location: Signup form, email field section, first message block ("The connection dropped before this finished.")
+Evidence: "Message: The connection dropped before this finished." paired with "Predictable mistake: yes"
+Problem: A dropped connection is a system or network failure, not something the user did, so marking it a predictable mistake misclassifies the error and could push its copy and tone toward blaming the user for something outside their control.
+Fix: Change "Predictable mistake" to "no" for this entry, or split system failures into their own category separate from user input mistakes.
+
+Location: Signup form, email field section, comparing the Signal line of both message blocks
+Evidence: first block's "Signal: one step bolder and larger than the field label, icon" versus second block's "Signal: one step bolder and larger than the field label, none"
+Problem: The two error states for the same field disagree on whether an icon is shown, so the same email field will look different depending on which error fires, with no stated reason for the difference, while every other field in the document keeps its icon usage consistent across its own error states.
+Fix: Make icon presence consistent between the two email field messages, or state explicitly why the connection drop error gets an icon and the format error does not.
+
+Location: Checkout form, payment method section, first message block ("Something went wrong. Contact support if this continues.")
+Evidence: "Message: Something went wrong. Contact support if this continues." paired with "Suggested fix: none"
+Problem: The message tells the user to contact support but the entry records no corresponding action ("Suggested fix: none"), so the instruction in the text has nothing for the user to actually click or select.
+Fix: Add a support contact action, such as a link or button, to match the instruction in the message text, or reword the message so it does not promise an action that is not present.
+
+Location: Checkout form, payment method section, second message block ("The expiry date on this card has passed...")
+Evidence: "Fires: mid-keystroke"
+Problem: Whether a card's expiry date has passed cannot be known until the full date has been typed, so firing this check mid-keystroke will flag a date the user has not finished entering as already expired.
+Fix: Change the trigger to on-blur, or to fire only once the expiry field holds a complete date, so the check runs after entry is finished.
+
+Location: Profile settings, phone number section, first message block ("You keep entering the wrong value...")
+Evidence: "Message: You keep entering the wrong value. Re-enter it to continue."
+Problem: The message does not say what is wrong with the value, such as its format, length, or missing digits, and "you keep entering the wrong value" reads as blaming the user rather than explaining what to change, so the user has no way to know what a correct entry looks like.
+Fix: Replace the message with one that states the specific requirement, for example the expected phone number format together with a worked example.
+
+Location: Profile settings, phone number section, second message block ("This phone number is already on another account...")
+Evidence: "Input on resubmission: cleared", which differs from every other message block in the document, all of which read "Input on resubmission: preserved"
+Problem: The phone number in this case is not malformed, it is only already registered elsewhere, so clearing it forces the user to retype a number that was valid, unlike every other error in the document, which preserves the input the user already typed.
+Fix: Change "Input on resubmission" to "preserved" for this entry to match the rest of the document.
+
+Location: The Signal field, across all six message blocks in the document
+Evidence: "one step bolder and larger than the field label" (signup, both blocks) versus "bold text set larger than the surrounding form labels" (checkout, first block) versus "bold text set larger than the field label" (checkout second block, profile both blocks)
+Problem: Three different phrasings are used to describe what appears to be the same text weight and size signal, and one entry switches from singular "field label" to plural "surrounding form labels" without explanation, making it unclear whether these are the same specification or deliberately different treatments.
+Fix: Standardize on a single phrase for this signal and use it identically in every entry that means the same thing, reserving different wording only where the treatment is genuinely different.

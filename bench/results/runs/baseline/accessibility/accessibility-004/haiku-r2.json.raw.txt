@@ -1,0 +1,24 @@
+Location: Line 65, phone number input
+Evidence: <label for="phone" id="s3-form-phone-label">Phone number (required)</label> followed by <input id="phone" type="tel">
+Problem: The label indicates the phone number field is required, but the input element lacks a required attribute, which breaks HTML form validation and prevents assistive technology from announcing the field as required.
+Fix: Add required attribute to the input element: <input id="phone" type="tel" required>
+
+Location: Lines 67-68, promo code input and error message
+Evidence: <input id="promo" type="text" aria-invalid="true"> followed by <span class="error-text" id="s3-form-promo-error">Enter a 6 character code using letters and numbers only.</span>
+Problem: The input has aria-invalid="true" but the error message is not linked to the field via aria-describedby, so screen reader users cannot programmatically associate the error with the field.
+Fix: Add aria-describedby="s3-form-promo-error" to the input element.
+
+Location: Line 58, link in fare adjustments section
+Evidence: <a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>
+Problem: The link text says "read the accessibility improvements list" but the URL points to "/fares/history", creating a mismatch between what the link text promises and where it actually goes.
+Fix: Change the link text to match the destination: <a href="/fares/history" id="s3-link1">read the fare history</a>
+
+Location: Lines 35-36, first two paragraphs of fare adjustments section
+Evidence: Paragraph 1: "Riders can report a service issue by calling rider services." Paragraph 2: "Local residents can check real time arrivals through the online portal."
+Problem: These paragraphs about reporting service issues and checking real-time arrivals do not relate to fare adjustments and appear in the wrong section.
+Fix: Move these paragraphs to the appropriate section (Station Updates or Schedule Changes) or remove them if they are not needed.
+
+Location: Line 21, second paragraph of station updates section
+Evidence: "Commuters can report a service issue by calling rider services. Station staff can also help with the same request in person."
+Problem: If commuters report an issue by calling rider services, it is unclear what "the same request" means when offered as an alternative by station staff in person.
+Fix: Clarify or replace the text to explain how station staff can assist with service issues differently than the phone line.

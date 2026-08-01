@@ -1,0 +1,29 @@
+Location: Signup form, email field, first message (lines 5-12)
+Evidence: Message describes connection error; suggested fix says "selectable, offers the one available next step as a direct action"
+Problem: The suggested fix does not address the stated problem. A connection error requires recovery actions like retry or fallback, not selecting a next step.
+Fix: Replace the suggested fix with an actionable recovery: "Offer a retry button or alternative submission method, such as re-attempting the request or submitting without confirmation."
+
+Location: Line 38, Checkout form payment method expiry message
+Evidence: Message: "The expiry date on this card has passed." Fires: mid-keystroke
+Problem: Mid-keystroke validation is inappropriate for expiry date fields, which typically require a complete MM/YY entry before validation. Character-by-character checking will trigger false errors.
+Fix: Change firing trigger to "on-blur" or "on-field-complete" to validate only after the user finishes entering the full expiry date.
+
+Location: Line 45, Profile settings phone number message
+Evidence: Message: "You keep entering the wrong value. Re-enter it to continue."
+Problem: The message is vague and provides no guidance on what format or value is expected, leaving users unable to correct their input.
+Fix: Replace with a specific instruction: "Enter a valid phone number. Format: (123) 456-7890 or 123-456-7890" with an example.
+
+Location: Line 29, Checkout form payment method error placement
+Evidence: Fires: on-submit. Placement: in a banner directly above the payment method selector, staying on screen until another method is chosen.
+Problem: The timing contradicts the placement. If the message fires only on-submit, it cannot stay visible while the user selects an alternative method before submitting.
+Fix: Clarify the trigger: either change to fire on method selection (on-change) if it should persist during selection, or remove the "staying on screen" qualifier if it only appears after submit.
+
+Location: Lines 21 and 32 and 41 and 52
+Evidence: Four error messages end with "Suggested fix: none"
+Problem: These are error messages in a user-facing interface; providing no suggested fix leaves users without actionable guidance to resolve the error.
+Fix: For each message, specify a concrete action: retry, contact support, enter different data, use an alternative field, etc.
+
+Location: Signup form, email field (lines 5 and 14), signal descriptions
+Evidence: First message signal: "icon" (line 8). Second message signal: "none" (line 17).
+Problem: Two messages in the same field location use different signal types without explanation. This inconsistency suggests either missing icon in the second message or mislabeled first message.
+Fix: Clarify whether both messages appear simultaneously or sequentially. If simultaneous, both should use the same signal treatment. If sequential, document the trigger for switching between them.

@@ -1,0 +1,94 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:25:43.412565Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "timeout field description",
+      "evidence": "The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000.",
+      "violation": "The description does not state what the actual default value is, only that leaving it at the default is the right choice for most teams.",
+      "fix": "Add a sentence stating the default timeout value in milliseconds.",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "timeout field description",
+      "evidence": "raising it is worth doing only when a specific integration needs the extra room",
+      "violation": "The phrase \"extra room\" is vague and doesn't explain what problem a higher timeout solves.",
+      "fix": "Replace \"extra room\" with a specific explanation, such as \"when an integration requires more time to process or deliver requests\".",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "retries field description",
+      "evidence": "The retries field takes an integer from 0 to 10, and it defaults to 3.",
+      "violation": "The description does not explain what a retry is, what triggers a retry, or what the impact of different retry values is on system behavior.",
+      "fix": "Add one or two sentences explaining that retries are automatic re-attempts on failure and describing the consequence of higher values (e.g., longer delivery time, higher chance of eventual delivery).",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "logging field description",
+      "evidence": "The logging field accepts one of debug, info, warn, or error, and the default value is info.",
+      "violation": "The description does not explain what each logging level logs or when a user should choose each level.",
+      "fix": "Add brief explanations for each level, for example \"debug: detailed diagnostic information; info: general operational events; warn: unexpected but recoverable issues; error: serious problems requiring attention\".",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Related pages section",
+      "evidence": "- Metric catalog reference - Notification channel reference - Webhook delivery reference - Escalation policy reference - Time window reference - Retry backoff reference - Alert rule schema - Rate limit reference - Delivery status codes",
+      "violation": "The section lists page names without explaining what each page covers or why it is related to alert rule fields, making it unclear how to navigate to the most relevant reference.",
+      "fix": "Replace each item with a brief one-sentence description of its purpose, for example \"- Retry backoff reference: how failed alerts are retried and with what timing\".",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Document structure",
+      "evidence": "The document is titled \"Alert rule fields reference\" but describes only three fields (timeout, retries, logging) and does not mention other fields that are likely part of the alert rule schema.",
+      "violation": "The reference is incomplete and does not provide a comprehensive list of all alert rule fields, leaving the reader uncertain whether there are other fields not documented here.",
+      "fix": "Either document all alert rule fields in this reference, or add an introductory sentence stating \"This reference covers the most commonly configured fields; see Alert rule schema for the complete list\".",
+      "confidence": "medium",
+      "id": "F-006"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "the \"project-archived\" section reads: \"Vendor Onboarding has been moved to archived projects. It no longer appears in the active projects list for anyone on the team.\" with its only control <a id=\"project-archived-exit-link\" href=\"#workspace-overview\">Back to your projects</a>; no restore, unarchive, or archived-projects list control appears anywhere in the artifact.",
+      "fix": "Add a restore or unarchive control reachable from the project-archived state or from an archived-projects list, for example a \"Restore project\" link that returns the project to the active projects list.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"project-archived\" section",
+      "severity": 3,
+      "violation": "Archiving is a reasonably reversible action in this product, a project is described as moved out of the active list rather than destroyed, but the artifact names no restore or unarchive path anywhere, so an archived project has no stated way back."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H4-INTERNAL",
+      "evidence": "the section holds a form whose submit control is <button id=\"invite-member-save-btn\" type=\"submit\">Save</button>, and, outside that form, a separate control <a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a> that leads to the \"invite-sent\" confirmation.",
+      "fix": "Remove the ambiguity by keeping one commit control on this screen, for example dropping the \"Save\" button and renaming \"Continue\" to \"Send invite\", so exactly one control commits the form.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"invite-member\" section",
+      "severity": 3,
+      "violation": "The artifact gives no cue whether \"Save\" and \"Continue\" commit the same action or two different ones: nothing states what \"Save\" does, so a user cannot tell whether it already sends the invite, whether \"Continue\" is required afterward, or whether \"Save\" does nothing at all."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-IDENTIFY",
+      "evidence": "the section reads: \"Import failed. Error code IMP-500. Contact support if this continues.\"",
+      "fix": "Replace the message with plain language identifying the specific cause, for example naming the file and the reason it was rejected, and move the raw error code to secondary text rather than the primary sentence.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"import-status\" section",
+      "severity": 3,
+      "violation": "The message reports only that the import failed and surfaces a raw error code, IMP-500, instead of plain language naming what about the import failed, such as which file or which condition, so the user cannot tell what caused it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "the section reads: \"Import failed. Error code IMP-500. Contact support if this continues.\" and its only control is <a id=\"import-status-exit-link\" href=\"#workspace-overview\">Back to your projects</a>.",
+      "fix": "Add a working support contact, such as a mailto link or a support link, and a retry control that lets the user re-attempt the import from this screen.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"import-status\" section",
+      "severity": 3,
+      "violation": "The message names \"contact support\" as the recovery step but the artifact gives no reachable means to do so, no link, address, or form, and offers no retry control for the import itself, so the only action available from this state is leaving it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button> has no visible text, and the artifact names no state change, message, or navigation that follows a click.",
+      "fix": "Add a visible confirmation after duplicating, such as a message naming the new project or an updated projects list the user can see the duplicate appear in.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"Duplicate project\" button",
+      "severity": 2,
+      "violation": "This action changes state, it creates a duplicate project, but the artifact specifies no indication of what happened after it runs: no confirmation message, no updated list, no navigation."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button> commits the \"Project name\" field with no confirmation message or other indication specified beyond the field itself.",
+      "fix": "Add a brief confirmation after each save, such as a \"Saved\" message or timestamp, so the user has a signal beyond the field's own value.",
+      "id": "F-006",
+      "instances": [
+        {
+          "evidence": "<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button> commits the \"Digest frequency\" field with no confirmation message specified.",
+          "location": "the \"notification-settings\" section, the \"Save\" button"
+        },
+        {
+          "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button> has no stated outcome, and the section separately defines a \"Continue\" control whose target is the \"invite-sent\" confirmation.",
+          "location": "the \"invite-member\" section, the \"Save\" button"
+        }
+      ],
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"Save\" button",
+      "severity": 2,
+      "violation": "This control commits a field value immediately but the artifact specifies no confirmation of the save beyond the field's own unchanged on-screen value, leaving the user to infer success."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "the section reads: \"An invite was sent to the address entered above. It expires in 5 days if not accepted.\" with its only control <a id=\"invite-sent-exit-link\" href=\"#project-settings\">Back to project settings</a>; no cancel-invite or revoke control appears anywhere in the artifact.",
+      "fix": "Add a revoke or cancel-invite control, for example on a pending-invites list reachable from project-settings, so a user who sent an invite by mistake can retract it before it is accepted.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "the \"invite-sent\" section",
+      "severity": 2,
+      "violation": "Sending an invite is a state-changing action with no user-initiated reversal path named anywhere in the artifact; the only mitigation stated is a passive five-day expiry, not a way for the user to revoke the invite themselves."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "the section reads: \"An invite was sent to the address entered above.\" without repeating the email value itself; the email address is only ever entered in the separate \"invite-member\" section's <input id=\"invite-member-email-input\" type=\"email\">.",
+      "fix": "Repeat the entered email address in the confirmation text itself, for example \"An invite was sent to [email]\", rather than referring to it as \"above\".",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "the \"invite-sent\" section",
+      "severity": 2,
+      "violation": "This state refers to \"the address entered above\" but the artifact defines each section as its own state, so nothing from the \"invite-member\" state is actually shown or retrievable in the \"invite-sent\" state, leaving the user unable to verify which address the invite went to."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-08-01T02:19:33Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

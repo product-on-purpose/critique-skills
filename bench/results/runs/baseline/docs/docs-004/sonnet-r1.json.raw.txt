@@ -1,0 +1,29 @@
+Location: "## endpoint_url" section
+Evidence: "The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert."
+Problem: The field description gives no format or length constraints on the URL (query strings, ports, path length) and does not say what happens if the endpoint is unreachable, times out, or returns a non-2xx status.
+Fix: Add the URL length limit and any character restrictions, and document the delivery behavior when the endpoint fails to respond successfully.
+
+Location: "## signing_secret" section
+Evidence: "The signing_secret field accepts a string used to verify the payload signature on receipt."
+Problem: The description names no signing algorithm, no header where the computed signature is sent, and no constraints on the secret's length or allowed characters, so a reader cannot actually implement verification from this text.
+Fix: State the signing algorithm (for example HMAC-SHA256), the exact HTTP header name carrying the signature, and the secret's minimum and maximum length.
+
+Location: "## retry_policy" section
+Evidence: "The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential."
+Problem: The three retry modes are named but never defined: there is no retry interval, no backoff multiplier, and no maximum attempt count or total retry window for linear or exponential.
+Fix: Specify the concrete schedule for each mode, including initial interval, backoff step or multiplier, and the maximum number of retries or total retry duration.
+
+Location: document overall, all three field sections
+Evidence: only retry_policy states "the default value is exponential"; endpoint_url and signing_secret have no required or default statement at all
+Problem: None of the three fields is marked required or optional, and only one of the three states a default value, so a reader cannot tell whether endpoint_url and signing_secret must be supplied.
+Fix: Add an explicit required or optional label and a default value (or "no default") line to every field, not only retry_policy.
+
+Location: "# Webhook delivery reference" title versus document body
+Evidence: the document contains only three sections, endpoint_url, signing_secret, and retry_policy
+Problem: A "delivery reference" implies coverage of the delivery request itself, such as HTTP method, headers, content type, and timeout, but the document only documents three configuration fields and says nothing about the delivery mechanism.
+Fix: Either add sections describing the actual delivery request (method, headers, payload schema, timeout) or narrow the title to something like "Webhook configuration fields reference" to match the actual scope.
+
+Location: document overall formatting
+Evidence: each field is presented as an "## " heading followed by a single prose sentence, for example "## endpoint_url\n\nThe endpoint_url field accepts an HTTPS URL..."
+Problem: Presenting three parallel, same-shaped fields as separate prose paragraphs under headings makes it harder to scan type, required status, and default value at a glance, which works against the stated reference purpose of the document.
+Fix: Convert the three fields into a single table with columns for field name, type, required, default, and description.

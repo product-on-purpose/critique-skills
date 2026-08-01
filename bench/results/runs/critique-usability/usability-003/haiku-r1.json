@@ -1,0 +1,93 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T14:00:00Z",
+    "rubrics": [
+      "NNG"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the Save button",
+      "evidence": "Form element <button type=\"submit\"> with no form action attribute, and no feedback state (success message, loading indicator, navigation, or control state change) specified in the artifact",
+      "violation": "The save action is defined (Save button exists) but the artifact does not specify what the user sees after clicking save: no feedback, confirmation message, navigation, or state change is shown",
+      "fix": "For each save action, specify the feedback the user receives after clicking Save: show a success message on the same screen, navigate to a confirmation state, or display a visual change (e.g., disabled input, grayed control) indicating the save succeeded",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "the \"invite-member\" section, the Save button",
+          "evidence": "Form element <button type=\"submit\"> with no form action attribute, and no feedback state specified"
+        },
+        {
+          "location": "the \"notification-settings\" section, the Save button",
+          "evidence": "Form element <button type=\"submit\"> with no form action attribute, and no feedback state specified"
+        }
+      ]
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-H2-LANGUAGE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"import-status\" section, the error message paragraph",
+      "evidence": "Error message text: 'Import failed. Error code IMP-500. Contact support if this continues.'",
+      "violation": "The error message uses internal system jargon (error code) instead of user task vocabulary that explains what went wrong in comprehensible terms",
+      "fix": "Rewrite the error message to explain the failure in plain language a user understands, such as 'Import failed. The file format is not recognized. Try using a different file type.' or 'Import failed. The connection timed out. Please try again.' Replace the error code with a specific, actionable explanation of what went wrong",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"project-archived\" section",
+      "evidence": "Archive action (link 'Archive project' in project-settings section, target #archive-confirm) navigates to archive-confirm, then to project-archived section with text 'Vendor Onboarding has been moved to archived projects'. Only a 'Back to your projects' link is provided. No unarchive, restore, or undo control is defined anywhere in the artifact",
+      "violation": "The archive action commits to removing the project from the active list with no reversal path shown in the design, making accidental archives unrecoverable within the artifact",
+      "fix": "Add an unarchive or restore control in the project-archived section (or in a separate archived-projects view the user can navigate to), labeled 'Restore project' or 'Unarchive', that returns the project to active status. Or provide an undo link immediately following the archive action that remains available for a limited time",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-H6-RECALL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-sent\" section, the confirmation paragraph",
+      "evidence": "Confirmation text: 'An invite was sent to the address entered above. It expires in 5 days if not accepted.' The actual email address is not displayed on this section",
+      "violation": "The confirmation step refers to data from a previous screen ('the address entered above') but does not repeat that data, so a user who navigates directly to this section or returns to it later cannot verify what email address was invited",
+      "fix": "Display the email address on the invite-sent confirmation screen, for example: 'An invite was sent to user@example.com. It expires in 5 days if not accepted.' or add a separate line: 'Invited email: [user-provided-email]'",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-H9-RECOVER",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"import-status\" section, the error message",
+      "evidence": "Error message text: 'Import failed. Error code IMP-500. Contact support if this continues.' The only interactive control on the import-status section is 'Back to your projects' link. No direct control (link, button, form, or email) is provided to contact support",
+      "violation": "The error message suggests a recovery action (contact support) but provides no direct, clickable control in this section that the user can use to take that action, requiring them to navigate elsewhere to find support contact information",
+      "fix": "Add a direct control to contact support on the import-status section, such as a 'Contact support' link (email or help page) or a 'Get help' button, and reference it in the error message: 'Import failed. Error code IMP-500. Click [Contact support link] or try again.'",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 1,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "run": {
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "69ff628078a107c11bd403359666e3fafdba2d4ab204fdec80881f7db5374db6",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T20:33:07Z",
+    "rubrics": ["WCAG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "WCAG-1.3.2",
+      "lane": "judged",
+      "severity": 3,
+      "location": "line 47, div.wizard-steps in section 'Schedule changes'",
+      "evidence": "Step divs in DOM order: id=s3-step3 style=\"order:3\" text 'Confirm your order'; id=s3-step2 style=\"order:2\" text 'Enter payment details'; id=s3-step1 style=\"order:1\" text 'Choose a plan'. The order values imply a visual sequence of 'Choose a plan', 'Enter payment details', 'Confirm your order', the reverse of the DOM sequence.",
+      "violation": "DOM order presents the steps as Confirm your order, Enter payment details, Choose a plan, while the declared order values imply the opposite visual sequence; a reader encountering the DOM order alone (as a screen reader linearizes it) hears the confirm-and-pay step before the plan-selection step it depends on, reversing the actual decision sequence.",
+      "fix": "Reorder the three step div elements in the DOM itself to match the intended sequence (Choose a plan, Enter payment details, Confirm your order), rather than relying on the CSS order property alone to fix the visual sequence.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "WCAG-2.4.5",
+      "lane": "judged",
+      "severity": 3,
+      "location": "header nav, lines 11 to 14, the page's only navigation mechanism",
+      "evidence": "The page's only navigation mechanisms are the header nav (two links: 'Plan a trip', 'Service alerts') and a footer with two links ('Privacy policy', 'Terms of service'); no search form, sitemap link, or breadcrumb trail appears anywhere in the document.",
+      "violation": "Fewer than two independent mechanisms for locating this page within the site are present: no site search, no sitemap, and no breadcrumb trail, leaving the primary navigation menu as the sole way to reach this or any related page, and this page's content does not mark it as one step in a linear process that would exempt it.",
+      "fix": "Add a second independent navigation mechanism, such as a site search form or a breadcrumb trail identifying this page's place in the site.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-003",
+      "criterion": "WCAG-2.4.6",
+      "lane": "judged",
+      "severity": 3,
+      "location": "line 19, h2 'Accessibility improvements', section s1",
+      "evidence": "The h2 'Accessibility improvements' introduces two paragraphs about requesting a fare adjustment through the mobile app or station staff, and checking real time arrivals by phone; neither paragraph describes an accessibility related feature.",
+      "violation": "The heading 'Accessibility improvements' misdescribes its section: the content covers fare adjustment requests and real time arrival information, not any accessibility improvement, so a reader scanning headings cannot predict this section's actual content, and the same mismatch recurs at every other h2 on the page (see instances).",
+      "fix": "Rename the heading to describe its actual content, for example 'Fares and real time arrivals', or replace the section's content with the accessibility improvements the heading promises.",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "line 25, h2 'Weekend service', section s2",
+          "evidence": "The h2 'Weekend service' introduces a fare adjustment paragraph that duplicates section s1's wording, followed by a zone status table; the fare adjustment paragraph does not describe weekend service."
+        },
+        {
+          "location": "line 34, h2 'Schedule changes', section s3",
+          "evidence": "The h2 'Schedule changes' introduces schedule related paragraphs but also an unrelated three step plan selection and payment wizard (Choose a plan, Enter payment details, Confirm your order) with no sub heading of its own."
+        }
+      ]
+    },
+    {
+      "id": "F-004",
+      "criterion": "WCAG-4.1.2",
+      "lane": "judged",
+      "severity": 3,
+      "location": "line 44, div.icon-delete custom control, section 'Schedule changes'",
+      "evidence": "<div class=\"icon-delete\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div> carries no role attribute, no accessible name, and no tabindex or keyboard handler attribute.",
+      "violation": "The custom delete control is built from a div wrapping a decorative-marked icon and carries no role, no programmatically determinable name, and no exposed keyboard interaction, so assistive technology cannot detect that a control exists here at all, let alone what activating it does.",
+      "fix": "Use a native button element, or add role=\"button\", a tabindex, a keyboard handler, and an aria-label such as \"Delete\" describing the control's purpose.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-005",
+      "criterion": "WCAG-1.4.1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "line 64, label for=\"phone\", section 'Schedule changes' form",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label> is the only one of the form's four labels (Route, Email address, Phone number, Promo code) carrying color styling; the other three have none.",
+      "violation": "The Phone number label is distinguished from the form's other labels by color alone, with no accompanying text, icon, or other non-color signal indicating what the red color means.",
+      "fix": "Add a non-color signal alongside the styling, such as an asterisk plus a visible 'required' note explaining the distinction, or remove the color styling if it carries no meaning.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "WCAG-3.3.1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "lines 67 to 68, input id=\"promo\" and its error span, section 'Schedule changes' form",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> is followed by <span class=\"error-text\" id=\"s3-form-promo-error\">Error.</span>; the input carries no aria-describedby referencing the error span's id.",
+      "violation": "The error text 'Error.' is generic and does not state what is wrong with the promo code value, and the input has no aria-describedby association with the error span, so a screen reader user is told the field is invalid without reliably being told why.",
+      "fix": "Replace 'Error.' with text naming the specific problem, for example 'Promo code not recognized', and add aria-describedby on the input referencing the error span's id.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": { "0": 0, "1": 0, "2": 2, "3": 4, "4": 0 },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

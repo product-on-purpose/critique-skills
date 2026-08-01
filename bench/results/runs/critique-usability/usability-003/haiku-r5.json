@@ -1,0 +1,92 @@
+{
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the Save button",
+      "evidence": "The Save button has no specified target or transition; the artifact does not name any feedback the user sees after clicking Save",
+      "violation": "This save action trigger is specified but no in-progress or result feedback is named, so the user cannot tell whether the save succeeded or failed",
+      "fix": "Add a target state or control that shows the result of the save, such as a success message or confirmation screen",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"notification-settings\" section, the Save button",
+      "evidence": "The Save button has no specified target or transition; the artifact does not name any feedback the user sees after clicking Save",
+      "violation": "This save action trigger is specified but no in-progress or result feedback is named, so the user cannot tell whether the save succeeded or failed",
+      "fix": "Add a target state or control that shows the result of the save, such as a success message or confirmation screen",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"project-archived\" section",
+      "evidence": "The \"project-archived\" section appears after archive confirmation but defines no link or control to unarchive the project; the artifact names no path for reversing the archive action",
+      "violation": "This archive action is reasonably reversible in a project management system, but the artifact names no reversal path, so an accidental archive has no path back in the design as specified",
+      "fix": "Add a control or link in the archived state or project settings that unarchives the project, or document the unarchive process",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-H6-RECALL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"import-status\" section, the error message",
+      "evidence": "The import-status message reads \"Import failed. Error code IMP-500. Contact support if this continues.\" without repeating what was being imported",
+      "violation": "The user must know the import context from an earlier screen, but the artifact does not repeat it at this step, so the user must remember or navigate back to know what failed",
+      "fix": "Repeat the import context in the error message, for example: Import of vendor data failed. Error code IMP-500.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-H9-IDENTIFY",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"import-status\" section, the error message",
+      "evidence": "The error message reads \"Import failed. Error code IMP-500. Contact support if this continues.\" - it does not explain what went wrong, only that it failed with a code",
+      "violation": "The error message names the action (import) and the condition (failed) but not the cause, so the user cannot tell whether the file format, permissions, network, or system was at fault",
+      "fix": "Provide a more specific error explanation, for example: Import failed: the file format is not supported. Error code IMP-500.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-H9-RECOVER",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"import-status\" section, the error message",
+      "evidence": "The error message reads \"Contact support if this continues\" but the artifact defines no support link, email, or contact control where this message appears",
+      "violation": "The message suggests contacting support as a recovery path but does not make that path available where the message appears, so the user must navigate elsewhere to find support",
+      "fix": "Add a support link or contact control in the import-status section, or replace the suggestion with a specific next step available on this screen",
+      "confidence": "high"
+    }
+  ],
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-08-01T02:15:00Z",
+    "rubrics": ["NNG"]
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 3,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

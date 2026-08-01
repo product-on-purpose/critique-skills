@@ -1,0 +1,24 @@
+Location: timeout section, first paragraph
+Evidence: "the validator rejects any value below 1000"
+Problem: Only a minimum is stated for the timeout field. No maximum or upper bound is given anywhere in the section, so a reader cannot tell whether an arbitrarily large value is accepted.
+Fix: State the maximum accepted timeout value, or explicitly say there is no upper bound.
+
+Location: timeout section, second paragraph
+Evidence: "Leaving this field at its default is the right choice for most teams"
+Problem: This sentence refers to "its default" but the section never states what the default timeout value actually is, unlike the retries and logging sections, which each give an explicit default.
+Fix: Add the default timeout value to the field description, for example "and defaults to 5000 ms."
+
+Location: retries and logging sections
+Evidence: "it defaults to 3" and "the default value is info"
+Problem: Neither the retries nor the logging section says what happens if an out of range integer or an unrecognized logging level is supplied, even though the timeout section explicitly documents validator behavior for bad input ("the validator rejects any value below 1000"). The three field entries are inconsistent in how much validation behavior they document.
+Fix: Add a sentence to the retries and logging sections describing what the validator does with an invalid value, matching the level of detail given for timeout.
+
+Location: Related pages section
+Evidence: "- Metric catalog reference"
+Problem: None of the nine items under Related pages is a hyperlink. They are plain text page titles with no markdown link syntax or URL, so the list cannot actually be used to navigate to those pages.
+Fix: Convert each bullet to a markdown link pointing at the corresponding page, for example "[Metric catalog reference](../metric-catalog.md)".
+
+Location: document title versus the "Alert rule schema" entry in Related pages
+Evidence: "Alert rule schema" listed as a related page, separate from this document
+Problem: The title "Alert rule fields reference" implies this page documents the alert rule fields, but a separate "Alert rule schema" page is listed as merely related rather than referenced as authoritative. It is unclear whether the three fields shown here (timeout, retries, logging) are the complete set of alert rule fields or a partial one.
+Fix: State explicitly whether this list is exhaustive, for example "These are all of the alert rule fields" or "For the full field list, see Alert rule schema."

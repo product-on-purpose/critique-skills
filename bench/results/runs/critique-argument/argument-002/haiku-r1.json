@@ -1,0 +1,105 @@
+{
+  "run": {
+    "skill": "critique-argument",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/argument/argument-002.md",
+    "artifact_sha256": "0322bc2ebeb48318c56473186a8cb1f1e78d8667b99cfaf75ee7bb84f82fcfa2",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T20:40:27Z",
+    "rubrics": [
+      "TOULMIN"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "TOULMIN-CLAIM-MARKER",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "evidence": "0 conclusion-marker phrases found across 401 words.",
+      "violation": "No phrase from the conclusion-marker lexicon (therefore, thus, hence, it follows that, we recommend, this paper argues, I argue that, the conclusion is, in conclusion, we should, the case for) appears anywhere in the artifact, so a reader scanning rather than reading straight through has no signpost to where the conclusion is asserted.",
+      "fix": "Add an explicit conclusion-signalling phrase at the point the artifact states its central claim, for example \"therefore\" or \"we recommend\".",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "TOULMIN-GROUNDS",
+      "lane": "judged",
+      "severity": 3,
+      "location": "What the Pilot Showed and Why the Pilot Result Applies Systemwide sections",
+      "evidence": "The artifact states: \"the pilot's return-rate and avoidance-survey results, taken together, support ending fines for the whole consortium.\" The avoidance-survey result is specified (20 percent before the pilot to 3 percent after), but the return-rate result is never quantified anywhere in the document.",
+      "violation": "The central claim's primary evidence is the return-rate improvement from the pilot, but no specific return-rate data is provided. A reader cannot verify or evaluate this crucial piece of evidence, making the case incomplete.",
+      "fix": "Specify the actual return-rate improvement, for example: \"On-time return rates improved from 85 percent to 92 percent, a 7-percentage-point gain.\"",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-003",
+      "criterion": "TOULMIN-HEDGE-DENSITY",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "evidence": "10 of 14 sentences (0.71) carry at least one hedging term.",
+      "violation": "More than 0.35 of the artifact's sentences carry a term from the hedging lexicon (may, might, could, possibly, perhaps, arguably, somewhat, relatively, it seems, appears to, tends to, to a degree), spread across the whole document rather than concentrated where the evidence actually underdetermines the claim.",
+      "fix": "Remove the hedge from sentences whose claim the evidence actually supports, reserving qualification for the claims that genuinely need it.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "TOULMIN-REBUTTAL",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Addressing the Revenue Concern section",
+      "evidence": "The argument raises and answers one objection: \"fine revenue covered under 2 percent of the annual materials budget over the last three fiscal years, and the four pilot branches absorbed the loss without a measurable change to their replacement-copy spending, so the shortfall the objection anticipates has not materialized where the policy has already been tried.\" However, no passage addresses whether results from four specific pilot branches generalize to the six non-pilot branches.",
+      "violation": "The argument answers the revenue objection but does not address the generalization objection, a condition its own scope leaves open: the evidence comes from four specific pilot branches over twelve months, and the argument never explains why this evidence predicts success across all ten consortium branches with potentially different demographics or patterns.",
+      "fix": "Address generalization explicitly, for example: \"The four pilot branches represent a geographic and demographic cross-section of the consortium, serving both urban and suburban patrons, making their results predictive of the six non-pilot branches' experience.\"",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-005",
+      "criterion": "TOULMIN-WARRANT",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Why the Pilot Result Applies Systemwide section",
+      "evidence": "The artifact states: \"removing the financial penalty for late returns predictably increases both on-time return rates and overall program participation, which is the reason the pilot's return-rate and avoidance-survey results, taken together, support ending fines for the whole consortium rather than only the pilot branches.\" The principle that would license moving from pilot evidence to systemwide implementation is asserted but not stated as an explicit warrant.",
+      "violation": "The warrant connecting pilot evidence to systemwide recommendation is not made explicit. A reader cannot reconstruct the general principle that would make it reasonable to move from four pilot branches' twelve-month results to a permanent systemwide change.",
+      "fix": "State the warrant explicitly, for example: \"Pilot results at consortium branches generalize to the full consortium when the pilot branches represent the consortium's geographic and operational diversity and the intervention addresses a universal patron behavior.\"",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "TOULMIN-BACKING",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Why the Pilot Result Applies Systemwide section",
+      "evidence": "The argument cites: \"the Tri-County Library Data Cooperative's 2023 fines-elimination research brief, which reviewed return-rate data from fourteen library systems that eliminated fines between 2017 and 2022.\" No specific findings, percentages, or conclusions from that brief are quoted or described.",
+      "violation": "The argument cites research evidence to support the principle that eliminating fines increases participation, but provides no specific findings, data points, or conclusions from the cited brief, leaving a reader unable to assess the supporting evidence.",
+      "fix": "Quote a specific finding from the research brief, for example: \"The Tri-County research found that fourteen systems that eliminated fines saw return-rate improvements averaging 6 percentage points within the first year.\"",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-007",
+      "criterion": "TOULMIN-QUALIFIER",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Why the Pilot Result Applies Systemwide section",
+      "evidence": "The artifact asserts: \"removing the financial penalty for late returns predictably increases both on-time return rates and overall program participation,\" based on evidence comprising one twelve-month pilot at four branches and a cited research brief with no detailed findings shared.",
+      "violation": "The claim uses \"predictably,\" suggesting high certainty, to describe an effect supported only by a single pilot location and an undetailed research citation, slightly overstating the certainty the available evidence supports.",
+      "fix": "Soften the modal force: \"The pilot results and available research suggest that removing fines increases both return rates and participation\" or \"Fines elimination likely increases participation, as evidenced by...\"",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

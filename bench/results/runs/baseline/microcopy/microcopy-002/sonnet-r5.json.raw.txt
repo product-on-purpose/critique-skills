@@ -1,0 +1,29 @@
+Location: Checkout form, shipping address, second message (Error code: 502)
+Evidence: "Please correct the highlighted field. Error code: 502."
+Problem: The copy tells the reader to correct a field, but error code 502 is a server gateway failure, not something caused by anything the reader entered. Asking someone to fix a field for a server-side error is misleading and gives no action that will actually solve the problem.
+Fix: Detect the 502 case separately from field-validation errors and show a message that says the request failed on the server, with a retry action, instead of asking the reader to correct a field.
+
+Location: Checkout form, shipping address, second message (Error code: 502)
+Evidence: "Placement: directly below the shipping address block" against "Signal: bold text set above the address block at a larger size than its labels, icon"
+Problem: Placement and Signal contradict each other for the same message. Placement puts the message below the shipping address block, while Signal describes the bold text as sitting above the address block.
+Fix: Make Placement and Signal agree on where the message sits relative to the address block, and correct whichever field is wrong.
+
+Location: Password reset, new password, first message (choose password)
+Evidence: "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page"
+Problem: The password requirement is placed at the top of a long form, away from the password field it describes, so the reader has to scroll up and lose sight of the field to read the requirement, even though the field itself never leaves the page.
+Fix: Move this message to sit directly next to the password field, matching the placement pattern used for every other message in this document.
+
+Location: Password reset, new password, second message (expired link)
+Evidence: "Container: toast" against "Placement: in a dialog centered on the password reset step, over the new password field it blocks"
+Problem: The message is labeled a toast, but its Placement and Signal describe a centered, blocking modal dialog with a heading. A toast is a transient, non-blocking notification, so the stated container type contradicts the described behavior.
+Fix: Change Container to "dialog" to match the described behavior, or change the placement and signal so the message actually behaves like a toast.
+
+Location: Password reset, new password, second message (expired link)
+Evidence: "Fires: on-focus" against "over the new password field it blocks"
+Problem: The message is set to fire when the reader focuses the new password field, but the same entry says the dialog already blocks that field. If the dialog is already covering the field, the reader cannot focus it to trigger the message, so the described trigger can never actually occur.
+Fix: Fire the message on page load or as soon as the expired link is validated, rather than on focusing a field the dialog is already blocking.
+
+Location: Account settings, username, message
+Evidence: "The last changes were not saved and cannot be recovered. Contact support for assistance." against "Input on resubmission: preserved"
+Problem: The message says the change cannot be recovered and tells the reader to contact support, but the entry also says the input is preserved on resubmission, meaning the reader's entry is still sitting in the field ready to resave. Telling someone to contact support when their own input is still available to resubmit is contradictory and adds friction the situation does not need.
+Fix: If the input is preserved, change the message to ask the reader to try saving again instead of telling them the change is unrecoverable and to contact support.

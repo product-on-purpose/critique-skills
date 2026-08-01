@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Open the alerts panel from the console sidebar and select the rule you want to adjust.\"",
+      "fix": "Split into two separate steps: one for opening the alerts panel, and a second for selecting the rule to adjust.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Open alert settings section, first sentence",
+      "severity": 3,
+      "violation": "The step combines two distinct actions, opening the panel and selecting a rule, into a single sentence, which makes it harder to follow and to verify that each action was completed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"the console sidebar\"",
+      "fix": "Name the specific console or product on first use, or add a lead-in sentence before the first heading stating what is being configured and in which product.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Open alert settings section, first sentence",
+      "severity": 3,
+      "violation": "\"The console\" is used without ever being introduced or named, so a reader arriving at this document without other context cannot be sure which product or console is meant."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"A threshold is the numeric boundary that triggers an alert once a metric crosses it.\"",
+      "fix": "Move this definition to an introductory or concepts section before the numbered steps, or remove it if the term is already defined elsewhere.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Open alert settings section, second sentence",
+      "severity": 3,
+      "violation": "This is a conceptual definition rather than an instructional step, and its placement inside a how-to procedure interrupts the sequence of actions the document's own frontmatter promises."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"confirm the unit matches the metric in use\"",
+      "fix": "Add a sentence explaining how to change the unit, or where to find the correct unit, when it does not match.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Set the new threshold section, first sentence",
+      "severity": 3,
+      "violation": "The instruction does not say what to do if the unit does not match, leaving the reader with no next action in that case."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This is because the console applies the new threshold to every future evaluation of this rule.\"",
+      "fix": "Remove the explanation from the step sequence, or move it into a clearly separated note so the actionable steps read continuously.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Set the new threshold section, second sentence",
+      "severity": 3,
+      "violation": "This is an explanatory aside placed between instructional steps, interrupting the procedure with rationale instead of the next action to take."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Save the rule and open the rule list to confirm the new threshold appears there.\"",
+      "fix": "Split into a save step and a separate verification step, and add what to do if verification fails, such as retrying or checking for an error message.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Save and verify section",
+      "severity": 3,
+      "violation": "This step combines saving and verifying into a single sentence and gives no guidance for what to do if the new threshold does not appear in the list."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Configure alert thresholds\"",
+      "fix": "Retitle to reflect the single-rule scope, for example \"Configure an alert threshold,\" or expand the body to cover multiple rules.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "document title",
+      "severity": 3,
+      "violation": "The plural title suggests configuring thresholds across multiple alerts or rules, but the body only ever walks through adjusting a single rule's threshold."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "the document goes directly from the title \"# Configure alert thresholds\" to the first heading \"## Open alert settings\" with no lead-in text",
+      "fix": "Add one or two introductory sentences after the title stating what the procedure accomplishes and any prerequisites needed before starting.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "beginning of the document, immediately after the title",
+      "severity": 3,
+      "violation": "There is no introductory sentence stating the goal, outcome, or prerequisites of the procedure before the steps begin, so a reader starts step one without knowing what they will accomplish."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-001.md",
+    "artifact_sha256": "b41787144ac8cc1ae14bcce23fa2b574f6ee68f1aaa9cc432628f9f148ddd713",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:16:56Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,19 @@
+Location: Line 44, custom control element
+Evidence: <div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></div>
+Problem: A div with role="button" lacks keyboard event handlers. While tabindex makes it focusable, a div cannot natively respond to Enter and Space keys like a native button does, making it inaccessible to keyboard users.
+Fix: Replace the div with a native <button> element, or add onkeypress handlers to respond to Enter and Space keys.
+
+Location: Line 67, promo code input field
+Evidence: <input id="promo" type="text" aria-invalid="true">
+Problem: The input has aria-invalid="true" but lacks aria-describedby to link to the associated error message, violating WCAG 3.3.4 (error identification).
+Fix: Add aria-describedby="s3-form-promo-error" to the input element.
+
+Location: Lines 47-57, wizard steps section
+Evidence: <div class="wizard-steps" id="s3-wizard"><div class="step" id="s3-step1">Choose a plan</div><div class="step" id="s3-step2">Enter payment details</div><div class="step" id="s3-step3">Confirm your order</div></div>
+Problem: The wizard steps lack semantic structure and ARIA attributes. There is no indication of which step is current, how many total steps exist, or the user's progress through the wizard, violating WCAG 1.3.1 (info and relationships).
+Fix: Add role="list" to the wizard container, convert steps to list items, add aria-current="step" to the current step, and include progress information via aria-label like "Step 1 of 3".
+
+Location: Line 65, phone number input field
+Evidence: <label for="phone" id="s3-form-phone-label">Phone number (required)</label><input id="phone" type="tel">
+Problem: The label indicates the field is required, but the input element lacks the required attribute or aria-required="true", which screen readers and validation scripts rely on.
+Fix: Add the required attribute to the input element: <input id="phone" type="tel" required>

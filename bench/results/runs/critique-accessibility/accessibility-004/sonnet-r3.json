@@ -1,0 +1,39 @@
+{
+  "run": {
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "393fe58fac52d6953cd372944cd352ef9181df5c42ae778bd6d17214acb080c7",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T20:38:08Z",
+    "rubrics": [
+      "WCAG"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "WCAG-2.4.5",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the nav element in the page header, id \"nav\"",
+      "evidence": "The page header carries <nav id=\"nav\"><a href=\"/plan\">Plan a trip</a><a href=\"/accessibility\">Accessibility</a></nav> as its only navigation mechanism; no search form, sitemap link, or breadcrumb trail appears anywhere else in the document, and the footer carries only Privacy policy and Terms of service links.",
+      "violation": "The page offers only one mechanism for a reader to locate it, the primary navigation menu, with no site search, sitemap, or breadcrumb trail providing an independent second path, and the page is an informational rider update page, not one step in a linear process that would exempt it.",
+      "fix": "Add a second, independent way to reach this page, such as a site search form, a sitemap link, or a breadcrumb trail reflecting the page's place in the site's structure.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 1,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

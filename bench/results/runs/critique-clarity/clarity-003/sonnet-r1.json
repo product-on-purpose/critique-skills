@@ -1,0 +1,136 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T21:12:19Z",
+    "rubrics": ["PLAIN", "WILLIAMS"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "PLAIN-AUDIENCE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Terminology Notes, paragraph 2",
+      "evidence": "Also, you submit the request in the portal. Countersign the employee request within two business days.",
+      "violation": "The paragraph addresses the reader directly as you in the surrounding sentences, then inserts an imperative, countersign the employee request, that names the employee in the third person within the same breath, so a reader cannot tell whether countersigning is their own action or a description of what an approver does.",
+      "fix": "Split the countersigning instruction into its own sentence that names who performs it, for example the manager countersigns the employee's request within two business days, separate from the sentences addressing the employee directly.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-002",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Terminology Notes, paragraph 1",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the reimbursable item against the request log each month. Payroll releases the covered purchase amount after that monthly review.",
+      "violation": "Three consecutive sentences describing one continuous process use three different terms, stipend item, reimbursable item, and covered purchase amount, for what appears to be the same underlying purchase, with no defined-terms section or stated equivalence, so a reader cannot tell whether the three terms name one thing or three different things.",
+      "fix": "Pick one term, for example stipend item, and use it in all three sentences.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the Request Steps heading",
+      "evidence": "Completing the request begins with confirming eligibility, and the uploaded receipt.",
+      "violation": "The Request Steps section, which states what completing a request actually requires, appears ninth of thirteen sections, after How to Apply, Approval Timeline, Required Documentation, Reimbursement Amounts, Restrictions and Exceptions, and Terminology Notes have already described the application and approval process in detail, so the section order tracks the document's internal grouping rather than the sequence a reader applying for the stipend actually needs.",
+      "fix": "Move Request Steps immediately after Eligibility and before How to Apply, or merge its content into How to Apply.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "PLAIN-PARAGRAPH",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "Program Coordination, paragraph 1",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout.",
+      "violation": "The paragraph's opening sentence shares almost no vocabulary with the rest of the paragraph, so it does not preview the paragraph's actual topic.",
+      "fix": "Rewrite the opening sentence to state the topic the rest of the paragraph covers.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "WILLIAMS-COHERENCE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Program Coordination, paragraph 1",
+      "evidence": "A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.",
+      "violation": "After its opening sentence on stipend request coordination, the section's remaining three sentences move through a past travel expense audit, evolving federal remote work guidance, and the office coffee budget, three unrelated themes with nothing connecting them to the section's own topic or to each other, so a reader finishing the section could not state what it was actually about.",
+      "fix": "Remove the three unrelated sentences, or replace them with content that actually describes stipend request coordination.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "WILLIAMS-COHESION",
+      "lane": "judged",
+      "severity": 3,
+      "location": "How to Apply, paragraph 3",
+      "evidence": "Then, the employee reviews the confirmation summary before submitting the final request.",
+      "violation": "The sentence opens on a confirmation summary the prior paragraph never mentioned, introducing it only after that paragraph already described the request moving through manager sign-off, finance confirmation, final processing, and a confirmation email, and it places reviewing that summary before submitting the final request, contradicting the sequence the prior paragraph just established, so the reader cannot reconstruct the actual order of steps.",
+      "fix": "Reorder the paragraph so the review-and-submit step precedes the sign-off, budget confirmation, and processing steps described in the paragraph before it, and use one consistent name for the document the employee reviews.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-007",
+      "criterion": "PLAIN-SUBJECT-VERB-OBJECT",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "How to Apply, paragraph 2",
+      "evidence": "Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.",
+      "violation": "3 comma-set-off clause(s) totalling 14 words intervene between the sentence's apparent subject and its verb.",
+      "fix": "Move the interrupting clause elsewhere, or split it into its own sentence.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-008",
+      "criterion": "PLAIN-TRANSITIONS",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Approval Timeline, paragraph 2",
+      "evidence": "An incomplete request pauses the timeline until the missing item arrives. The...",
+      "violation": "The paragraph opens with none of the fixed transition words, so the reader is not told how it relates to the paragraph before it.",
+      "fix": "Open the paragraph with a transition word that states its relationship to the prior paragraph.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-009",
+      "criterion": "WILLIAMS-COHESION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Terminology Notes, paragraph 2",
+      "evidence": "Also, you submit the request in the portal.",
+      "violation": "The sentence opens the second paragraph by describing the reader submitting the request, a step that logically precedes recording, reconciling, and releasing, all of which the first paragraph already described as done, so the reader has to backtrack to place this sentence in the process instead of the paragraph continuing forward from where the first paragraph left off.",
+      "fix": "Move the submission sentence to the start of the first paragraph, before recording, reconciling, and releasing are described.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-010",
+      "criterion": "WILLIAMS-PARALLELISM",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Request Steps, paragraph 1",
+      "evidence": "Completing the request begins with confirming eligibility, and the uploaded receipt.",
+      "violation": "The series' 2 items mix grammatical forms (gerund, other) at their head words instead of sharing one form.",
+      "fix": "Restate every item in the series with the same grammatical form.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 6,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

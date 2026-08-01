@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 3 projects, synced last week.\" is followed by a list containing only \"Data Warehouse Cutover\" and \"Mobile App Revamp\"",
+      "fix": "Either show all 3 projects in the list or correct the sentence to say 2, so the stated total always matches the number of items rendered.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Workspace overview section, the \"Your projects\" summary and list (id=\"workspace-overview-recent\")",
+      "severity": 3,
+      "violation": "The text states there are 3 projects but only 2 are shown in the list, so the stated count does not match what the user can actually see and count."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\"></button>",
+      "fix": "Add a visible label such as \"Duplicate project\" (and matching accessible name) to the button.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Project settings section, the button with id=\"project-settings-duplicate-btn\"",
+      "severity": 3,
+      "violation": "The button has no visible text and no accessible label, so a sighted user cannot tell what it does and a screen reader announces it as an unlabeled button."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "No section anywhere in the document confirms that the project name save succeeded, unlike the parallel \"Invite\" flow (which reaches invite-sent) and \"Archive\" flow (which reaches project-archived)",
+      "fix": "Add a confirmation state for the Save action on this form, following the same pattern used by invite-sent and project-archived.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Project settings section, the form containing id=\"project-settings-save-btn\"",
+      "severity": 3,
+      "violation": "Saving the project name has no confirmation or success state, so unlike every other primary action in this document the user gets no feedback that the save worked."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"invite-member-email-input\" type=\"email\">",
+      "fix": "Add a placeholder such as \"name@company.com\", mark the field as required, and define an inline error state for invalid or empty input.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Invite a team member section, id=\"invite-member-email-input\"",
+      "severity": 3,
+      "violation": "The field has no placeholder, required-field indicator, or example format, and there is no defined error state for an invalid or empty address before the user reaches \"Continue\"."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a id=\"archive-confirm-archive-link\" href=\"#project-archived\">Archive</a>",
+      "fix": "Change \"Archive\" to a <button type=\"submit\"> wired to the archive action instead of an anchor tag.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Archive this project? section, the \"Archive\" control (id=\"archive-confirm-archive-link\")",
+      "severity": 3,
+      "violation": "A destructive, state-changing action is implemented as a hyperlink rather than a button. Assistive technology announces it as navigation rather than an action, and it can be triggered accidentally through middle-click, right-click-open-in-new-tab, or link prefetching."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The archive-confirm section promises \"You can restore it at any time from the archived projects list,\" but project-archived offers only one link, \"Back to your projects\" (id=\"project-archived-exit-link\")",
+      "fix": "Add a link from the \"Project archived\" screen to the archived projects list, or provide a direct \"Undo\" action, instead of routing only back to the active list.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Project archived section (id=\"project-archived\")",
+      "severity": 3,
+      "violation": "After archiving, the user has no way to reach the archived projects list that was just promised, so there is no way to verify or undo the action from the screen they land on."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The last import finished with 2 rows skipped: each referenced a project that does not exist in this workspace. Rows 15 and 99 were skipped; every other row was imported.\"",
+      "fix": "Add an action next to the message, such as \"Download skipped rows\" or \"Fix and re-import\", so the user can resolve the error rather than only reading about it.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Import status section, id=\"import-status-message\"",
+      "severity": 3,
+      "violation": "The message reports the failure but gives no way to identify, correct, or re-import the two skipped rows, and no link to the source file."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<select id=\"notification-settings-digest-input\"><option>Daily</option><option>Weekly</option></select>",
+      "fix": "Mark the option matching the currently saved preference with the selected attribute so the control reflects real state when the page loads.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Notifications section, id=\"notification-settings-digest-input\"",
+      "severity": 3,
+      "violation": "Neither option is marked selected, so the control cannot represent the team's actual saved digest preference and will always display \"Daily\" on load regardless of the current setting."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-08-01T02:02:37Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

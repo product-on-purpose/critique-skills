@@ -1,0 +1,94 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/accessibility/accessibility-003.html",
+    "artifact_sha256": "69ff628078a107c11bd403359666e3fafdba2d4ab204fdec80881f7db5374db6",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T00:00:00Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section 3 (Schedule changes), custom delete control (line 44-46)",
+      "evidence": "<div class=\"icon-delete\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>",
+      "violation": "The delete control is a generic div containing an image with empty alt text. It has no button role, no accessible name, and is not properly exposed to assistive technology.",
+      "fix": "Convert to a proper button element with an accessible name: <button aria-label=\"Delete item\" class=\"icon-delete\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\" aria-hidden=\"true\"></button>",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section 3 (Schedule changes), wizard steps (lines 47-57)",
+      "evidence": "Steps displayed as Confirm, Enter payment, Choose plan in visual order (order: 3, 2, 1) but appear in source order as 3, 2, 1 in reverse",
+      "violation": "CSS order property creates visual order that differs from DOM source order. Screen readers announce steps backwards from visual presentation, confusing users navigating with assistive technology.",
+      "fix": "Reorder the HTML source so source order matches visual order, removing the CSS order property: place step 1, then step 2, then step 3.",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section 3 (Schedule changes), form field label (line 64)",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label>",
+      "violation": "The label uses only color (red) to mark it as potentially required, but color alone is not a reliable indicator for users with color vision deficiency.",
+      "fix": "Add a text indicator of requirement, such as \" (required)\" in the label text or use an asterisk with a note elsewhere explaining what the asterisk means.",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section 3 (Schedule changes), promo code field error (lines 67-68)",
+      "evidence": "<input id=\"promo\" type=\"tel\" aria-invalid=\"true\"><span class=\"error-text\" id=\"s3-form-promo-error\">Error.</span>",
+      "violation": "The input has aria-invalid=\"true\" but no aria-describedby linking to the error message. The error message has no aria-live attribute, so screen reader users may not be notified of the error.",
+      "fix": "Connect the input to the error message with aria-describedby and add aria-live=\"polite\" to the error message: <input id=\"promo\" type=\"text\" aria-invalid=\"true\" aria-describedby=\"s3-form-promo-error\"><span class=\"error-text\" id=\"s3-form-promo-error\" aria-live=\"polite\">Error.</span>",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section 3 (Schedule changes), status card (lines 40-42)",
+      "evidence": "<div class=\"status-card\" id=\"s3-statuscard\"><p>Local residents can check real time arrivals by calling rider services.</p></div>",
+      "violation": "The status card is a generic div with no semantic role or landmark. Users with assistive technology cannot distinguish it from ordinary content flow.",
+      "fix": "Add a role to clarify its purpose: <div class=\"status-card\" id=\"s3-statuscard\" role=\"complementary\" aria-label=\"Status information\"><p>Local residents can check real time arrivals by calling rider services.</p></div>",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section 2 (Weekend service), table element (lines 27-31)",
+      "evidence": "<table id=\"s2-table1\"><tr><th scope=\"col\">Zone</th><th scope=\"col\">Status</th></tr>...",
+      "violation": "The table lacks a caption or accessible name to describe its purpose to screen reader users.",
+      "fix": "Add a caption to the table: <table id=\"s2-table1\"><caption>Weekend service zone status</caption>...",
+      "confidence": "medium",
+      "id": "F-006"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

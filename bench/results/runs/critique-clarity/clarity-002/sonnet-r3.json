@@ -1,0 +1,146 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/clarity/clarity-002.md",
+    "artifact_sha256": "7fd910197f585ef10416cde2ed6b94fa48de539377a1082d82e29ccee509e6df",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T21:06:33Z",
+    "rubrics": ["PLAIN", "WILLIAMS"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Request Steps, paragraph 1",
+      "evidence": "Request Steps reads: Completing the request begins with confirming eligibility, and uploading the receipt. How to Apply, paragraph 1 reads: Employees must submit the receipt, the manager's approval form, and the original purchase order before the review begins.",
+      "violation": "Request Steps restates the application process nine sections after How to Apply already stated it in full, and the restatement drops two of the three required items, the manager's approval form and the original purchase order, so the ordering tracks how the document was assembled rather than the one place a reader looks for the steps to apply, and the belated restatement conflicts with the earlier, complete instructions.",
+      "fix": "Delete Request Steps and let How to Apply stand as the single statement of application steps, or move Request Steps next to How to Apply and make its step list match exactly.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Program Overview, paragraph 1",
+      "evidence": "Program Overview reads: The benefits team tracks the stipend budget at the start of the fiscal year.",
+      "violation": "Three different offices are credited with tracking or reviewing the stipend budget at the start of the fiscal year, in near-identical sentences, with no statement anywhere that the benefits team, the finance liaison, and the people operations office are the same office, so a reader cannot tell whether one office does this or three.",
+      "fix": "Pick one name for the office that tracks the stipend budget and use it in Program Overview, Special Cases, and Questions and Updates, or add one sentence stating that the three names refer to the same office.",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "Special Cases, paragraph 1",
+          "evidence": "The finance liaison reviews the stipend budget at the start of the fiscal year."
+        },
+        {
+          "location": "Questions and Updates, paragraph 1",
+          "evidence": "The people operations office tracks the stipend budget at the start of the fiscal year."
+        }
+      ]
+    },
+    {
+      "id": "F-003",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Review Responsibility, paragraph 1",
+      "evidence": "The determination of stipend eligibility happens before any payment goes out. The escalation of repeat requests happens automatically within the same quarter.",
+      "violation": "Both sentences in the section run their action through an abstract noun, the determination and the escalation, as the grammatical subject instead of naming who determines eligibility or who escalates repeat requests, so a reader cannot tell which office or role is actually responsible for either action.",
+      "fix": "Name the actor as the subject: for example, the benefits team determines stipend eligibility before any payment goes out, and the benefits team escalates repeat requests automatically within the same quarter.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "evidence": "71-word sentence, 5 subordinate-clause markers: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "violation": "The sentence runs to 71 words with 5 subordinate-clause markers, longer than the reader can hold in mind on a single pass.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "WILLIAMS-SHAPE",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "evidence": "71-word sentence: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "violation": "At 71 words, with 0 comma-set-off clause(s) and 5 subordinate-clause marker(s), the sentence stacks interruptions between its subject and its main verb instead of holding the main clause together.",
+      "fix": "Move subordinate clauses and modifiers after the main clause, not between its subject and verb.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "PLAIN-PARAGRAPH",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Eligibility, paragraph 3",
+      "evidence": "165 words in one paragraph.",
+      "violation": "The paragraph exceeds the 150-word scannability threshold.",
+      "fix": "Split the paragraph so each part covers one topic.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "PLAIN-LISTS",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "How to Apply, paragraph 1",
+      "evidence": "Employees must submit the receipt, the manager's approval form, and the original purchase order before the review begins.",
+      "violation": "The sentence embeds three or more comma- or semicolon-separated parallel items inline rather than presenting them as a formatted list.",
+      "fix": "Reformat the inline items as a numbered or bulleted list.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-008",
+      "criterion": "PLAIN-MUST",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Required Documentation, paragraph 2",
+      "evidence": "Additionally, employees shall retain receipts for one year after the purchase date.",
+      "violation": "The sentence states a binding requirement using shall or an indirect requirement phrasing instead of must.",
+      "fix": "Restate the requirement using must.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-009",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Eligibility, paragraph 3",
+      "evidence": "Eligibility, paragraph 1 reads: eligible for the home-office equipment stipend. Eligibility, paragraph 3 reads: eligibility for the workspace stipend depends on several details the reviewer checks one at a time.",
+      "violation": "The benefit named the home-office equipment stipend in paragraph 1 is called the workspace stipend in paragraph 3, with no statement that the two names refer to the same benefit, so a reader has to infer they are not two separate stipends.",
+      "fix": "Use home-office equipment stipend consistently, or state once that workspace stipend is another name for the same benefit.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-010",
+      "criterion": "PLAIN-PRONOUNS",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Restrictions and Exceptions, paragraph 1",
+      "evidence": "The applicant must keep the equipment in good working condition and this office may ask for a brief photo check once a year.",
+      "violation": "The sentence routes the reader or the writer's organization through a third-person institutional substitute instead of direct address.",
+      "fix": "Address the reader as you and the writer's organization as we.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 8,
+      "3": 5,
+      "4": 0
+    },
+    "suppressed_count": 3,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

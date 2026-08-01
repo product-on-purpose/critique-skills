@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>",
+      "fix": "Add visible text inside the button element, such as <button id=\"project-settings-duplicate-btn\" type=\"button\">Duplicate</button>, or add an icon with alt text.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Line 29, project settings section, duplicate button",
+      "severity": 3,
+      "violation": "The duplicate button contains no visible text, only an aria-label. Users relying on visual cues cannot understand the button's purpose without assistive technology."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Archiving \\\"Vendor Onboarding\\\"\" and \"\\\"Vendor Onboarding\\\" has been moved to archived projects\"",
+      "fix": "Display the project name dynamically from the form input field rather than hardcoding it, or show a preview of the current name that updates when the input changes.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Lines 52 and 58, archive confirmation and archived confirmation sections",
+      "severity": 3,
+      "violation": "The project name is hardcoded in the confirmation dialogs, but line 26 shows the name can be edited in the input field. If a user changes the project name and then archives, the dialogs will still display the old name, creating confusion about which project is being archived."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Form contains only <input type=\"email\"> and <button type=\"submit\">Save</button> with no status indicators",
+      "fix": "Add a success message or visual indicator (such as a green checkmark or \"Saved\" text) that appears after the Save button is clicked and before Continue is available.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Lines 37-41, invite a team member form",
+      "severity": 3,
+      "violation": "After clicking Save, there is no visual feedback indicating whether the form was successfully submitted before the user must click Continue. Users cannot confirm their action succeeded."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<select id=\"notification-settings-digest-input\"> with no selected attribute or default value shown",
+      "fix": "Add a selected attribute to one of the options to show the current setting, and optionally display a label indicating the current frequency value.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Line 70, notification settings select dropdown",
+      "severity": 3,
+      "violation": "The select dropdown does not visually indicate which frequency option is currently selected. Users cannot see their current notification setting before making a change."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Import failed. Error code IMP-500. Contact support if this continues.",
+      "fix": "Provide a more descriptive error message such as \"The import failed because [specific reason]. Try [suggested action] or contact support.\" Include a support link or suggested troubleshooting steps.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Line 63, import status message",
+      "severity": 3,
+      "violation": "The error message provides only an error code with minimal context. Users do not know what caused the import to fail or what steps they can take to resolve it besides contacting support."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Multiple navigation links that perform different actions (notification settings, invite member, archive, back) without clear grouping",
+      "fix": "Group related actions visually, such as placing all configuration options together, all team-related options in another group, and destructive actions separately with visual warning styling.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Lines 22-33, project settings section navigation",
+      "severity": 3,
+      "violation": "The navigation options are presented as a flat list of links without visual hierarchy or grouping. Users cannot easily distinguish between configuration tasks, team actions, and destructive actions like archiving."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<ul> containing three hardcoded project names: Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot",
+      "fix": "Either show all 4 projects in the list with pagination if space is constrained, or clarify that only the 3 most recent projects are displayed and provide a link to view all projects.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Lines 13-17, recent projects list",
+      "severity": 3,
+      "violation": "The list header states \"This workspace holds 4 projects\", but only 3 are shown in the recent list. Users cannot see or access all 4 projects without additional navigation."
+    }
+  ],
+  "run": {
+    "artifact": "bench/results/staging/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T12:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,29 @@
+Location: Document structure, all eight <section> elements (workspace-overview through notification-settings)
+Evidence: The <head> contains no <style> or <link> tags and there is no <script> anywhere in the document, so every <section> renders in normal document flow at once.
+Problem: Although the sections and their links (Open project settings, Continue, Cancel, Back to your projects, and so on) imply separate app screens, nothing hides or shows a section based on the current hash, so opening the file shows all eight screens stacked in one long scroll rather than one screen at a time.
+Fix: Add CSS or a small script that shows only the section matching the current URL hash (or the first section by default) and hides the rest, so the mockup actually behaves like the multi-screen flow its links imply.
+
+Location: Your projects section (id="workspace-overview"), intro paragraph and project list
+Evidence: "This workspace holds 4 projects, synced last week." followed by a three-item list: Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp
+Problem: The stated project count is 4 but only 3 projects are listed, and nothing in the heading or nearby copy explains that this is a partial or recent-only list, so a reader cannot tell whether a project is missing or the count is simply wrong.
+Fix: Either list all 4 projects, or relabel the list to make the partial count explicit (for example "3 most recently updated projects") and add a link to view the rest.
+
+Location: Project settings section (id="project-settings"), Duplicate project button
+Evidence: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>
+Problem: The button has no visible text content, only an aria-label, so a sighted user sees an empty, unlabeled control with no visual indication of what it does.
+Fix: Add visible button text such as "Duplicate" (or an icon plus a visible label), keeping the aria-label only if extra detail beyond the visible text is still needed.
+
+Location: Project settings and Notification settings sections, Save buttons
+Evidence: <button id="project-settings-save-btn" type="submit">Save</button> and <button id="notification-settings-save-btn" type="submit">Save</button>, each inside a <form> with no action, method, or accompanying script anywhere in the document
+Problem: Clicking either Save button submits the form with no destination or handler and nothing on the page changes, so the user gets no confirmation the save happened, unlike the invite and archive flows, which each lead to an explicit confirmation section.
+Fix: Give both Save actions a confirmation state, such as a "Settings saved" section or inline message, matching the pattern already used for invite-sent and project-archived.
+
+Location: Archive this project section (id="archive-confirm"), confirmation copy
+Evidence: id="archive-confirm-copy": "You can restore it at any time from the archived projects list."
+Problem: The document never provides an archived projects list section or link anywhere, so a user who archives a project has no way to find or restore it as the copy promises.
+Fix: Add an archived projects section, reachable from the workspace overview, or remove the restore promise from the copy if that surface does not exist in this mockup.
+
+Location: Invite sent section (id="invite-sent")
+Evidence: "An invite was sent to the address entered above."
+Problem: The confirmation text refers to "the address entered above" instead of showing the address itself, so a user who scrolled or navigated away cannot verify which address received the invite from this screen alone.
+Fix: Display the submitted email address directly in the confirmation text, for example "An invite was sent to name@example.com."

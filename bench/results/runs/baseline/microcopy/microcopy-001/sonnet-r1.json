@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\"",
+      "fix": "Change \"Predictable mistake\" to \"no\" for this message to match the analogous entry in the checkout section, or document the criteria that make one system failure predictable and the other not.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Signup form, email field section, first message block, the \"Predictable mistake\" field for the message \"The connection dropped before this finished.\"",
+      "severity": 3,
+      "violation": "A dropped connection is a system or network failure, not a user mistake, yet it is marked as a predictable mistake. The structurally similar system failure in the checkout section, \"Something went wrong. Contact support if this continues.\", is correctly marked \"Predictable mistake: no\", so the two entries classify the same kind of failure inconsistently."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: selectable, offers the one available next step as a direct action\"",
+      "fix": "Rewrite the Message text to include the action described in Suggested fix, for example \"The connection dropped before this finished. Try again.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Signup form, email field section, first message block, the \"Suggested fix\" field for the message \"The connection dropped before this finished.\"",
+      "severity": 3,
+      "violation": "The Suggested fix field describes a selectable action offered directly in the message, but the Message text itself contains no action of any kind, so the two fields describe a message that does not match what is written."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The connection dropped before this finished.\"",
+      "fix": "Name the action explicitly, for example \"The connection dropped before your signup finished.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Signup form, email field section, first message",
+      "severity": 3,
+      "violation": "The pronoun \"this\" has no clear antecedent in the sentence, so a reader cannot tell what failed to finish, whether it was the page load, the form submission, or something else."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: none\"",
+      "fix": "Add a specific action to the message, for example \"Something went wrong charging this card. Try again or choose a different payment method.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Checkout form, payment method section, first message, the \"Suggested fix\" field for the message \"Something went wrong. Contact support if this continues.\"",
+      "severity": 3,
+      "violation": "The message does not say what went wrong or offer any action beyond waiting to see if the problem recurs, and no suggested fix is provided, despite this being a payment flow where users need a concrete next step."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: in a banner directly above the payment method selector\" next to \"Container: inline\"",
+      "fix": "Change Container to \"banner\" for this message, or state explicitly what \"inline\" is meant to cover so it does not conflict with a banner placement.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Checkout form, payment method section, first message, the \"Container\" and \"Placement\" fields for the message \"Something went wrong. Contact support if this continues.\"",
+      "severity": 3,
+      "violation": "The message is placed in a banner above the selector rather than attached to a single field, but the Container field labels it \"inline\" the same way every field-attached message in the document is labeled, contradicting the document's own use of that term."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: mid-keystroke\"",
+      "fix": "Change Fires to on-blur or on-submit so the message only appears once the full date has been entered.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Checkout form, payment method section, second message, the \"Fires\" field for the message \"The expiry date on this card has passed.\"",
+      "severity": 3,
+      "violation": "Validating the expiry date while the user is still typing will produce false positives, since a partially typed date can look expired before the full date has been entered."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You keep entering the wrong value. Re-enter it to continue.\"",
+      "fix": "State the specific problem, for example \"That doesn't look like a valid phone number. Enter it in the format (555) 555-5555.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Profile settings, phone number section, first message",
+      "severity": 3,
+      "violation": "The message does not say what is wrong with the value, so the user has no way to know what to change before re-entering it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: cleared\"",
+      "fix": "Change Input on resubmission to preserved to match the rest of the document, unless there is a reason specific to this case, in which case document that reason.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Profile settings, phone number section, second message, the \"Input on resubmission\" field for the message \"This phone number is already on another account.\"",
+      "severity": 3,
+      "violation": "This is the only message in the document where the field is cleared on resubmission; every other message preserves the input. The number entered was valid, just already in use elsewhere, so clearing it forces the user to retype a value that was correct, and no reason is given for the inconsistency."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"one step bolder and larger than the field label\" versus \"bold text set larger than the surrounding form labels\" and \"bold text set larger than the field label\"",
+      "fix": "Standardize the wording used for the Signal field throughout the document, or state explicitly where the treatment differs and why.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Signal field across the document, comparing the signup section entries to the checkout and profile section entries",
+      "severity": 3,
+      "violation": "The same visual treatment, text weight and size relative to labels, is described with different wording in different sections, making it unclear whether the specified treatment is identical across screens or deliberately different."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-001.md",
+    "artifact_sha256": "0580399008ca4517da0a1b1f620180b68a4cfb24e596be279a5f782cde325fc7",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:36:26Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

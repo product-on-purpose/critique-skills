@@ -1,0 +1,114 @@
+{
+  "run": {
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T21:44:15Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-EM-SPECIFIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Checkout form, shipping address, message 2",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "violation": "The message names no field, value, or rule. Placement and Signal describe the whole shipping address block as highlighted rather than one field, so \"the highlighted field\" could mean any of several fields, and the message could describe any failure in the same spot.",
+      "fix": "Name the actual field and the rule broken, for example \"City is required\", instead of a generic highlighted-field statement.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-EM-SEVERITY-CONTAINER",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Password reset, new password, message 2, Container field",
+      "evidence": "Placement: in a dialog centered on the password reset step, over the new password field it blocks; Container: toast",
+      "violation": "The reset link's expiry fully blocks the reader from proceeding on this field until they request a new link, yet the message is presented in a self-clearing toast, so a reader who looks away misses the one message explaining the block. The Placement and Signal fields describe a modal-style blocking dialog, which contradicts the Container field's toast value.",
+      "fix": "Change Container to modal to match the blocking dialog behavior already described in Placement and Signal, so the message does not clear itself before the reader can act on it.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-EM-GRACE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Account settings, username, message 1",
+      "evidence": "The last changes were not saved and cannot be recovered. Contact support for assistance.",
+      "violation": "The failure is total and unrecoverable, the block's Suggested fix field is none, and no other message sits under this screen heading, yet the message is a bare technical notice with no acknowledgment of what the loss means for the reader.",
+      "fix": "Add a brief acknowledgment of the loss, for example a short apology or a note on what support can do to help, before directing the reader to contact support.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-EM-EXPLAIN",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Checkout form, shipping address, message 1",
+      "evidence": "This field takes a maximum of 30 characters. Shorten the entry and save again.",
+      "violation": "The message states a limit the product itself sets with no reason attached, so the reader has no way to know why the limit exists or whether the same limit applies elsewhere.",
+      "fix": "Add a short reason for the 30-character limit if one exists, for example what the field maps to, so the reader understands why it applies.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-EM-PLAIN-LANGUAGE",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Checkout form, shipping address, message 2",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "violation": "The message text carries an internal error code, a code-style token, or an engineering-jargon term standing in for a plain-language explanation.",
+      "fix": "Replace the code or jargon term with a plain-language sentence a non-technical reader can act on.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-EM-SELECTABLE-FIX",
+      "lane": "judged",
+      "severity": 2,
+      "location": "File upload, receipts, message 1, Suggested fix field",
+      "evidence": "Suggested fix: described, names the one available alternative but requires the reader to enter it by hand",
+      "violation": "The fix is unambiguous, reduce the file below the 10 MB limit, but is only described in prose rather than offered as something the reader can select or trigger directly.",
+      "fix": "Offer a selectable action, for example an automatic compress-and-retry option, instead of only describing the fix in text.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "NNG-EM-PREVENT",
+      "lane": "judged",
+      "severity": 2,
+      "location": "File upload, receipts, message 2",
+      "evidence": "Fires: on-submit; Predictable mistake: yes",
+      "violation": "The mistake is predictable and the file format is checkable the moment a file is selected, the same way the sibling size check on this screen fires after-field-complete, yet this check waits until on-submit and reports the mistake only after the reader has finished the rest of the form.",
+      "fix": "Move the format check to fire after-field-complete, immediately after the file is selected, matching the timing already used for the size check on this screen.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-008",
+      "criterion": "NNG-EM-PROXIMITY",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Password reset, new password, message 1, Placement field",
+      "evidence": "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page",
+      "violation": "The message sits at the top of the form rather than immediately beside or below the password field it concerns, requiring the reader to scroll to find it even though the field itself stays in view.",
+      "fix": "Move the message to appear directly below the password field, in line with the other inline messages on this screen.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 3,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

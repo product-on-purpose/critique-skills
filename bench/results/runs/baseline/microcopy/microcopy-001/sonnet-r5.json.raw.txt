@@ -1,0 +1,29 @@
+Location: Signup form, email field, first message block ("The connection dropped before this finished.")
+Evidence: "Predictable mistake: yes"
+Problem: A dropped connection is a network failure, not something the user did, so marking it a predictable user mistake does not match the nature of the error and could lead the message itself to be written as if the user caused it.
+Fix: Change "Predictable mistake" to "no" for this message, or add a note explaining what user action makes a dropped connection predictable.
+
+Location: Checkout form, payment method, first message block ("Something went wrong. Contact support if this continues.")
+Evidence: "Something went wrong. Contact support if this continues."
+Problem: This message gives the user no information about what failed or what they could try before contacting support, unlike every other message in the document, each of which names the specific issue (invalid email format, expired card, duplicate phone number).
+Fix: Name the actual failure category (for example, payment declined, network timeout, or method not supported) so the user has a next step short of contacting support immediately.
+
+Location: Checkout form, payment method, second message block ("The expiry date on this card has passed...")
+Evidence: "Fires: mid-keystroke"
+Problem: Validating and displaying an expiry-date error while the user is still typing the date will flag the field as wrong before the date is even complete, which is inconsistent with every other message in the document, all of which fire on-blur or on-submit.
+Fix: Change the fire trigger to on-blur so the error appears only once the user has finished entering the date.
+
+Location: Profile settings, phone number, first message block ("You keep entering the wrong value. Re-enter it to continue.")
+Evidence: "You keep entering the wrong value. Re-enter it to continue."
+Problem: The message tells the user they are repeatedly wrong without stating what is wrong with the value, so the user has no way to know what to change before re-entering it.
+Fix: Replace with a message that names the specific validation failure, for example digit count or missing area code, the way the email and expiry date messages do.
+
+Location: Signal field, compare the signup section to the checkout and profile sections
+Evidence: "one step bolder and larger than the field label" (signup form, both messages) versus "bold text set larger than the field label" (checkout and profile messages) and "bold text set larger than the surrounding form labels" (checkout, first message)
+Problem: The same apparent visual treatment is described with at least three different phrasings across the document, so a reader cannot tell whether the signup screen actually uses a different signal weight than checkout and profile, or whether the wording is simply inconsistent.
+Fix: Standardize on one phrase for this signal description across all six messages, or add a note explaining the difference if one is intended.
+
+Location: Profile settings, phone number, second message block ("This phone number is already on another account...")
+Evidence: "Input on resubmission: cleared"
+Problem: Every other message in the document preserves the user's input on resubmission; this is the only message that clears it, with no explanation for why a duplicate-phone-number error should discard what the user typed.
+Fix: Change this to "preserved" to match the rest of the document, or add a line explaining why this specific case clears input.

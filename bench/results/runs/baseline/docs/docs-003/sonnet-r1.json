@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"the validator rejects any value below 1000\"",
+      "fix": "State the maximum accepted timeout value, or explicitly say there is no upper bound.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "timeout section, first paragraph",
+      "severity": 3,
+      "violation": "Only a minimum is stated for the timeout field. No maximum or upper bound is given anywhere in the section, so a reader cannot tell whether an arbitrarily large value is accepted."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Leaving this field at its default is the right choice for most teams\"",
+      "fix": "Add the default timeout value to the field description, for example \"and defaults to 5000 ms.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "timeout section, second paragraph",
+      "severity": 3,
+      "violation": "This sentence refers to \"its default\" but the section never states what the default timeout value actually is, unlike the retries and logging sections, which each give an explicit default."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"it defaults to 3\" and \"the default value is info\"",
+      "fix": "Add a sentence to the retries and logging sections describing what the validator does with an invalid value, matching the level of detail given for timeout.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "retries and logging sections",
+      "severity": 3,
+      "violation": "Neither the retries nor the logging section says what happens if an out of range integer or an unrecognized logging level is supplied, even though the timeout section explicitly documents validator behavior for bad input (\"the validator rejects any value below 1000\"). The three field entries are inconsistent in how much validation behavior they document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"- Metric catalog reference\"",
+      "fix": "Convert each bullet to a markdown link pointing at the corresponding page, for example \"[Metric catalog reference](../metric-catalog.md)\".",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Related pages section",
+      "severity": 3,
+      "violation": "None of the nine items under Related pages is a hyperlink. They are plain text page titles with no markdown link syntax or URL, so the list cannot actually be used to navigate to those pages."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Alert rule schema\" listed as a related page, separate from this document",
+      "fix": "State explicitly whether this list is exhaustive, for example \"These are all of the alert rule fields\" or \"For the full field list, see Alert rule schema.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "document title versus the \"Alert rule schema\" entry in Related pages",
+      "severity": 3,
+      "violation": "The title \"Alert rule fields reference\" implies this page documents the alert rule fields, but a separate \"Alert rule schema\" page is listed as merely related rather than referenced as authoritative. It is unclear whether the three fields shown here (timeout, retries, logging) are the complete set of alert rule fields or a partial one."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:28:06Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

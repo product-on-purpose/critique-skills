@@ -1,0 +1,34 @@
+Location: ## endpoint_url section
+Evidence: "The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert."
+Problem: The section never states the payload's format, content type, or schema, so a reader configuring endpoint_url has no way to know what their endpoint will actually receive.
+Fix: Add the payload content type (for example application/json) and either the full payload schema or a link to it.
+
+Location: ## endpoint_url section
+Evidence: "accepts an HTTPS URL"
+Problem: The document does not say whether the field is required, whether there is a maximum length, or how the system behaves if the URL is unreachable or times out.
+Fix: State whether endpoint_url is required, its maximum length, and the timeout and failure behavior for an unreachable endpoint.
+
+Location: ## signing_secret section
+Evidence: "The signing_secret field accepts a string used to verify the payload signature on receipt."
+Problem: The signing algorithm and the location of the signature, for example a specific HTTP header name, are never specified, so a reader cannot actually implement signature verification from this reference.
+Fix: Name the signing algorithm (for example HMAC-SHA256), the header that carries the signature, and include a worked example.
+
+Location: ## signing_secret section
+Evidence: "The signing_secret field accepts a string used to verify the payload signature on receipt."
+Problem: There is no statement of whether signing_secret is required or optional, and no description of what happens to signature verification if it is left unset.
+Fix: State whether signing_secret is required, and if optional, describe whether the payload is sent unsigned or verification is skipped entirely.
+
+Location: ## retry_policy section
+Evidence: "The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential."
+Problem: None of the three values is given a concrete definition. The number of retry attempts, the interval or backoff formula, and the maximum delay are all missing, so exponential and linear cannot be distinguished by a reader beyond their names.
+Fix: For each of none, linear, and exponential, specify the retry count, the interval or backoff formula, and the maximum total retry duration.
+
+Location: ## retry_policy section
+Evidence: "one of none, linear, or exponential"
+Problem: The document does not define what counts as a delivery failure that triggers a retry, for example which HTTP response codes or timeout conditions are treated as failures.
+Fix: Add a definition of delivery failure, listing which response codes and timeout conditions trigger a retry under the configured policy.
+
+Location: whole document, under the heading "Webhook delivery reference"
+Evidence: "# Webhook delivery reference" followed only by three field definitions
+Problem: The title promises a reference for webhook delivery, but the document only documents three configuration fields and never describes the delivery process itself, such as request method, timeout, or how failures are surfaced to the user.
+Fix: Add a short overview section describing the delivery request itself (method, timeout, success criteria), or rename the document to reflect that it only covers configuration fields.

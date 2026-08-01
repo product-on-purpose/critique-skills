@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 5 projects, synced last week.\" is followed by a list of only 4 items: Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp.",
+      "fix": "Either add the fifth project to the list or correct the summary text to say 4 projects.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Workspace overview section (id=\"workspace-overview\"), the \"Your projects\" summary and list",
+      "severity": 3,
+      "violation": "The stated project count does not match the number of projects actually listed, so a reader cannot tell whether a project is missing from the list or the count itself is wrong."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button> has no text content between its tags.",
+      "fix": "Add visible label text such as \"Duplicate\" or an icon, and keep the aria-label as a supplement rather than the only label.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Project settings section (id=\"project-settings\"), duplicate button (id=\"project-settings-duplicate-btn\")",
+      "severity": 3,
+      "violation": "The button has no visible label or icon, only an aria-label, so a sighted user has no way to tell what the control does, or even that it is a meaningful button rather than a stray empty element."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The link is <a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a>, which points straight to the \"Project archived\" section. The \"Archive this project?\" confirmation section (id=\"archive-confirm\") exists later in the document, but no link anywhere in the document points to it.",
+      "fix": "Change the archive link's target from #project-archived to #archive-confirm so the confirmation step sits between the request and the action.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Project settings section (id=\"project-settings\"), \"Archive project\" link (id=\"project-settings-archive-link\")",
+      "severity": 3,
+      "violation": "Archiving is described as removing the project from the active list for everyone on the team, yet the only reachable path lets a user trigger that destructive, team-wide action with a single click and no confirmation step. The confirmation screen that was built for this appears to be unreachable dead content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An invite was sent to the address entered above. It expires in 5 days if not accepted.\"",
+      "fix": "Display the submitted email address directly in the confirmation text, for example \"An invite was sent to jane@example.com.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Invite sent section (id=\"invite-sent\")",
+      "severity": 3,
+      "violation": "The confirmation message refers back to \"the address entered above\" instead of showing the actual email address that was submitted, so once the user has left the invite form they have no way to verify which address the invite went to."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The last import finished with 3 rows skipped: each referenced a project that does not exist in this workspace. Rows 63, 71, and 82 were skipped; every other row was imported.\"",
+      "fix": "Name the missing project for each skipped row and provide a way to create it or remap the row, instead of only an exit link.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Import status section (id=\"import-status\")",
+      "severity": 3,
+      "violation": "The page reports which rows failed but gives no way to act on that information. It does not name the missing project each row referenced, and the only available control is \"Back to your projects,\" so a user cannot fix or re-run the skipped rows from this screen."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The button reads \"Submit,\" while the equivalent save action is labeled \"Save\" in both the project settings form and the invite member form.",
+      "fix": "Rename the button to \"Save\" to match the rest of the document.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Notifications section (id=\"notification-settings\"), form button (id=\"notification-settings-save-btn\")",
+      "severity": 3,
+      "violation": "The same kind of action, saving a form, is labeled inconsistently across the document: \"Save\" in two places and \"Submit\" here."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

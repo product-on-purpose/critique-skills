@@ -1,0 +1,116 @@
+{
+  "summary": {
+    "gate": "fail",
+    "suppressed_count": 0,
+    "severity_3_threshold": 0,
+    "by_severity": {
+      "1": 0,
+      "3": 4,
+      "2": 4,
+      "4": 0,
+      "0": 0
+    }
+  },
+  "run": {
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-microcopy",
+    "artifact": "bench/results/staging/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "timestamp": "2026-07-31T21:40:09Z",
+    "model": "claude-haiku-4-5-20251001"
+  },
+  "findings": [
+    {
+      "severity": 2,
+      "confidence": "high",
+      "fix": "Replace the code or jargon term with a plain-language sentence a non-technical reader can act on.",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "id": "F-001",
+      "violation": "The message text carries an internal error code, a code-style token, or an engineering-jargon term standing in for a plain-language explanation.",
+      "criterion": "NNG-EM-PLAIN-LANGUAGE",
+      "location": "Checkout form, shipping address, message 2",
+      "lane": "scripted"
+    },
+    {
+      "severity": 3,
+      "confidence": "high",
+      "fix": "Add an acknowledgment: briefly restate what happened in plain terms and what the reader can do next (retry, contact support).",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "id": "F-002",
+      "violation": "A total failure (error 502, reader cannot proceed) is reported as a bare technical notice with no acknowledgment of what this means to the reader.",
+      "criterion": "NNG-EM-GRACE",
+      "location": "Checkout form, shipping address, message 2",
+      "lane": "judged"
+    },
+    {
+      "severity": 3,
+      "confidence": "high",
+      "fix": "Add acknowledgment and tone: 'We're sorry - your recent changes couldn't be saved. We've contacted our team to investigate. In the meantime, contact support for help.'",
+      "evidence": "The last changes were not saved and cannot be recovered. Contact support for assistance.",
+      "id": "F-003",
+      "violation": "A total failure (unrecoverable data loss) is reported as a bare technical notice with no acknowledgment of what data loss means to the reader or sincere tone.",
+      "criterion": "NNG-EM-GRACE",
+      "location": "Account settings, username, message 1",
+      "lane": "judged"
+    },
+    {
+      "severity": 2,
+      "confidence": "high",
+      "fix": "Add file-type validation at file-picker time: show a warning or restrict selectable file types to PDF and PNG before submission.",
+      "evidence": "Receipts upload as PDF or PNG only, the two formats the expense system can read. Change this file to one of those formats and upload it again, or select a different receipt.",
+      "id": "F-004",
+      "violation": "A foreseeable format restriction (Predictable mistake=yes) is reported only after form submission (Fires=on-submit), though the product could have warned during file selection.",
+      "criterion": "NNG-EM-PREVENT",
+      "location": "File upload, receipts, message 2",
+      "lane": "judged"
+    },
+    {
+      "severity": 2,
+      "confidence": "high",
+      "fix": "Place this message directly above or inline with the password field, not at the top of the form.",
+      "evidence": "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page",
+      "id": "F-005",
+      "violation": "The message sits at the top of a form while the field it concerns is lower down, requiring scrolling away from the field to read the message.",
+      "criterion": "NNG-EM-PROXIMITY",
+      "location": "Password reset, new password, message 1",
+      "lane": "judged"
+    },
+    {
+      "severity": 3,
+      "confidence": "high",
+      "fix": "Use a modal dialog container instead of a toast, or keep a persistent inline message until the reader dismisses it explicitly.",
+      "evidence": "Container: toast; Placement: 'in a dialog centered on the password reset step, over the new password field it blocks'",
+      "id": "F-006",
+      "violation": "A blocking failure (reset link expired, reader cannot proceed with password reset) is shown in a toast that clears itself, so a reader who looks away misses the only message explaining why the field is blocked.",
+      "criterion": "NNG-EM-SEVERITY-CONTAINER",
+      "location": "Password reset, new password, message 2",
+      "lane": "judged"
+    },
+    {
+      "severity": 2,
+      "confidence": "high",
+      "fix": "Offer a one-click 'Compress and retry' action instead of only describing manual compression steps.",
+      "evidence": "Suggested fix: described, names the one available alternative but requires the reader to enter it by hand",
+      "id": "F-007",
+      "violation": "The fix (reduce file size) is unambiguous and single but only described in prose, requiring the reader to manually perform the compression outside the product.",
+      "criterion": "NNG-EM-SELECTABLE-FIX",
+      "location": "File upload, receipts, message 1",
+      "lane": "judged"
+    },
+    {
+      "severity": 3,
+      "confidence": "high",
+      "fix": "Specify which changes failed to save and why: 'Your username change couldn't be saved due to a connection error. Your email address was updated successfully.'",
+      "evidence": "The last changes were not saved and cannot be recovered.",
+      "id": "F-008",
+      "violation": "The message reports 'changes' without naming which fields were changed or why the save failed, leaving the reader with no understanding of what was lost.",
+      "criterion": "NNG-EM-SPECIFIC",
+      "location": "Account settings, username, message 1",
+      "lane": "judged"
+    }
+  ]
+}

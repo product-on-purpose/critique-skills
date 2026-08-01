@@ -1,0 +1,29 @@
+Location: The "Schedule changes" section, table with id "s2-table1".
+Evidence: <table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>
+Problem: The table has no caption or accessible name, so a screen reader user browsing by table gets no description of what the Zone and Status data represents.
+Fix: Add a caption element inside the table (for example "Zone status"), or associate the table with the "Schedule changes" heading using aria-labelledby="s2-h".
+
+Location: The "Fare adjustments" section, div with id "s3-customcontrol".
+Evidence: <div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></div>
+Problem: A div recreates button semantics with role="button" and tabindex="0" instead of using a native button element, and the markup shows no keydown handling, so keyboard users cannot be assumed to be able to activate it the way they could a real button.
+Fix: Replace the div with a native button element that wraps the icon and keeps aria-label="Delete item", or, if the div must stay, add explicit keydown handling for both the Enter and Space keys.
+
+Location: The "Fare adjustments" section, div with id "s3-wizard" and its three step children (s3-step1 through s3-step3).
+Evidence: <div class="wizard-steps" id="s3-wizard"><div class="step" id="s3-step1">Choose a plan</div><div class="step" id="s3-step2">Enter payment details</div><div class="step" id="s3-step3">Confirm your order</div></div>
+Problem: The three steps are plain divs with no list markup and no indication of which step is current, so a non-visual user cannot tell this is an ordered sequence or where they are in it.
+Fix: Mark the steps up as an ordered list, and add aria-current="step" to whichever step is the active one.
+
+Location: The "Fare adjustments" section, paragraph id "s3-linkpara", link id "s3-link1".
+Evidence: For the full list of upcoming adjustments, <a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>.
+Problem: The link text says "read the accessibility improvements list" but the surrounding sentence is about fare adjustments and the href points to /fares/history, so the link text does not describe its actual destination or purpose.
+Fix: Change the link text to match its target, for example "read the full list of fare adjustments."
+
+Location: The form in the "Fare adjustments" section, label id "s3-form-phone-label" and input id "phone".
+Evidence: <label for="phone" id="s3-form-phone-label">Phone number (required)</label><input id="phone" type="tel">
+Problem: The label text states the field is required, but the input has neither a required attribute nor aria-required="true", so the requirement is not programmatically exposed and will not be enforced by native form validation.
+Fix: Add the required attribute (or aria-required="true") to the "phone" input.
+
+Location: The form in the "Fare adjustments" section, input id "promo" and error text span id "s3-form-promo-error".
+Evidence: <input id="promo" type="text" aria-invalid="true"><span class="error-text" id="s3-form-promo-error">Enter a 6 character code using letters and numbers only.</span>
+Problem: The input is marked aria-invalid="true" but is not associated with the error message through aria-describedby, so a screen reader user who tabs to the field hears that it is invalid without hearing why.
+Fix: Add aria-describedby="s3-form-promo-error" to the "promo" input.

@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\"",
+      "fix": "Remove user-scalable=no from the viewport meta tag to allow user zooming.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Line 5, viewport meta tag",
+      "severity": 3,
+      "violation": "The user-scalable=no attribute disables pinch-zoom, which prevents users from enlarging content for better readability."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "style=\"color:#999999\"",
+      "fix": "Change the color to a darker shade such as #333333 or #404040 to meet minimum contrast ratios.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Line 20, s1-p1 paragraph",
+      "severity": 3,
+      "violation": "The text color is #999999 (light gray) on a white background, which fails WCAG AA contrast requirements."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "style=\"width:960px\"",
+      "fix": "Use max-width: 960px and width: 100% instead of a fixed width to maintain responsiveness.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Line 37, s3-banner div",
+      "severity": 3,
+      "violation": "The fixed width of 960px is not responsive and may cause horizontal scrolling on smaller screens."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "style=\"height:60px;overflow:hidden\"",
+      "fix": "Either increase the height to accommodate all content or use overflow:auto to allow scrolling.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Line 40, s3-statuscard div",
+      "severity": 3,
+      "violation": "Content is hidden with overflow:hidden, which may cut off important information and prevent users from accessing it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "style=\"border:1px solid #9d9d9d\"",
+      "fix": "Use a darker color such as #666666 or #333333 for the border to improve visibility.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Line 43, s3-button1 button",
+      "severity": 3,
+      "violation": "The border color #9d9d9d (light gray) has insufficient contrast against the background and may be difficult to see."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\"",
+      "fix": "Either convert this to a proper button element or add JavaScript to handle keyboard events for Enter and Space.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Line 44-45, s3-customcontrol div",
+      "severity": 3,
+      "violation": "A div with role=\"button\" should respond to Enter and Space keys, but no keyboard handling is shown in the code."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "label for=\"topic-alt\" and select id=\"topic\"",
+      "fix": "Change the label's for attribute to match the select's id: for=\"topic\" instead of for=\"topic-alt\".",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Line 61, select element for Route field",
+      "severity": 3,
+      "violation": "The label's for attribute references \"topic-alt\" but the select element has id=\"topic\", so they are not associated."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "input id=\"promo\" type=\"text\" aria-invalid=\"true\"",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the input element to explicitly link the error message.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Line 67, promo input field",
+      "severity": 3,
+      "violation": "The aria-invalid attribute is set to true but the associated error text uses a generic class rather than aria-describedby, which screen readers may not automatically connect."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-002.html",
+    "artifact_sha256": "b49ce74681df60732a6ef3b5309ce82264ad1b6ad48c6fa8b85989f2c712f113",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

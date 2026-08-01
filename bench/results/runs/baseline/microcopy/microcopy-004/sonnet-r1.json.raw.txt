@@ -1,0 +1,24 @@
+Location: Two-factor setup, verification code screen, first message block ("Verification codes are 6 digits long, and this one has 5.")
+Evidence: "and this one has 5"
+Problem: The digit count "5" is written as a fixed number rather than as a placeholder, so the spec does not say whether the message updates to reflect the actual number of digits the user entered or always reads "5" regardless of input length.
+Fix: Mark the digit count as a variable, for example "this one has {count}," or state explicitly that this exact text is fixed and used only for the five-digit case.
+
+Location: Two-factor setup, verification code screen, second message block ("This verification code expired 10 minutes after it was sent, which stops an intercepted code from being reused later.")
+Evidence: "which stops an intercepted code from being reused later"
+Problem: This message explains the security rationale for the expiration policy inside the user-facing error text, making it noticeably longer and more explanatory than every other message in the document, which just states the problem and the action to take.
+Fix: Shorten the message to the expiration fact and the required action, for example "This verification code has expired. Request a new one." and move the rationale out of the inline error if it needs to be documented at all.
+
+Location: Billing, promo code screen, first message block ("This promo code ended on 30 June.")
+Evidence: "ended on 30 June"
+Problem: The date has no year, so it is impossible to tell from the message whether the code expired earlier this year or in a previous year, which matters for a message a user could see at any point in the future.
+Fix: Add the year, for example "This promo code ended on 30 June 2026," or replace the specific date with a relative phrase such as "This promo code has expired."
+
+Location: Billing, promo code screen, first message block, "Predictable mistake" field
+Evidence: "Predictable mistake: no"
+Problem: Entering an expired promo code is at least as common a user error as the plan mismatch case in the message directly below it, which is marked "Predictable mistake: yes," and the document gives no reason for treating the two cases differently.
+Fix: Either explain why an expired code is not considered a predictable mistake, or change this field to "yes" to match the classification used for the similar promo code case below it.
+
+Location: Two-factor setup, verification code screen, second message block, "Suggested fix" field
+Evidence: "selectable, offers a resend code button in place of the message"
+Problem: The suggested fix bundles two separate changes into one comma separated phrase without saying what becomes selectable or how a resend button would replace the message while keeping the same placement, container, and signal described above it.
+Fix: Split the suggestion into two explicit statements, for example "make the code entry field selectable so the user can correct a single digit" and "replace the message text with a Resend code button in the same inline placement."

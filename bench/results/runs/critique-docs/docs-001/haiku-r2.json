@@ -1,0 +1,61 @@
+{
+  "summary": {
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0,
+    "by_severity": {
+      "0": 0,
+      "4": 0,
+      "3": 0,
+      "2": 3,
+      "1": 0
+    }
+  },
+  "findings": [
+    {
+      "violation": "This paragraph shifts from imperative action into reason-giving discourse, interrupting the step sequence a how-to reader expects to follow straight through.",
+      "lane": "judged",
+      "fix": "Either remove the reason-giving clause and keep the action instructions, or move this explanation to a separate explanation-mode page on why thresholds persist across evaluations.",
+      "id": "F-001",
+      "severity": 2,
+      "evidence": "This is because the console applies the new threshold to every future evaluation of this rule.",
+      "confidence": "high",
+      "criterion": "DIATAXIS-EXPLANATION-CONTEXT",
+      "location": "Set the new threshold, paragraph 2"
+    },
+    {
+      "violation": "This paragraph defines a concept that a reader with working competence in alert systems would already understand, adding background explanation a how-to reader is assumed to have.",
+      "lane": "judged",
+      "fix": "Remove this definition, or move it to an explanation-mode page on alert system concepts. Assume the reader already knows what a threshold is.",
+      "id": "F-002",
+      "severity": 2,
+      "evidence": "A threshold is the numeric boundary that triggers an alert once a metric crosses it.",
+      "confidence": "high",
+      "criterion": "DIATAXIS-HOWTO-GOAL",
+      "location": "Open alert settings, paragraph 2"
+    },
+    {
+      "violation": "This sentence opens with 'This is because', a lexical marker belonging to explanation-mode register, not the how-to mode this page declares.",
+      "lane": "scripted",
+      "fix": "Rewrite the sentence in the page's own declared mode's register, or move this content to a page in the mode it actually belongs to.",
+      "id": "F-003",
+      "severity": 2,
+      "evidence": "This is because the console applies the new threshold to every future evaluation of this rule.",
+      "confidence": "high",
+      "criterion": "DIATAXIS-MODE",
+      "location": "Set the new threshold, paragraph 2"
+    }
+  ],
+  "run": {
+    "skill_version": "0.1.0",
+    "skill": "critique-docs",
+    "artifact": "bench/corpus/docs/docs-001.md",
+    "timestamp": "2026-07-31T21:13:59Z",
+    "rubrics": [
+      "DIATAXIS"
+    ],
+    "artifact_sha256": "b41787144ac8cc1ae14bcce23fa2b574f6ee68f1aaa9cc432628f9f148ddd713",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001"
+  }
+}

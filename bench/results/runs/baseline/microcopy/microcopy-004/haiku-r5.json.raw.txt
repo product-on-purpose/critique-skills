@@ -1,0 +1,34 @@
+Location: Verification code message, line 5
+Evidence: "Check the message again and enter all six."
+Problem: The instruction to "check the message again" is redundant since the user is already looking at the error message containing this text. This creates confusion about what action is actually needed.
+Fix: Replace with "Enter all six digits of your verification code." to directly state what the user needs to do.
+
+Location: Verification code error trigger, line 8
+Evidence: "Fires: on-blur"
+Problem: Validation firing on blur means it triggers when users click away from the field, potentially before they finish entering all six digits. This creates a poor experience as users may be interrupted mid-input.
+Fix: Change the validation trigger to fire on input completion (after six digits entered) or on submit instead of on-blur.
+
+Location: Expired code message, line 14
+Evidence: "This verification code expired 10 minutes after it was sent"
+Problem: The message includes a specific time duration (10 minutes) without context about why this duration was chosen. Users may not understand why their code expired so quickly or what they should do differently.
+Fix: Simplify to "This verification code has expired." and move timing details to documentation outside the error message, or add "Please request a new code" to clarify the next action.
+
+Location: Promo code end date, line 25
+Evidence: "This promo code ended on 30 June."
+Problem: The date reference lacks a year, which creates ambiguity after June 30th passes each year. Users in subsequent years won't know if the code ended this year or last year.
+Fix: Change to "This promo code ended on 30 June 2024." or use a relative time reference like "This promo code is no longer active."
+
+Location: Promo code alternative action, line 26
+Evidence: "or continue without one"
+Problem: This phrasing is vague about the mechanism. It's unclear whether users must click a button to skip the field, can simply leave it empty, or must dismiss the message.
+Fix: Clarify with "You can continue without a promo code by clicking Next" or similar to explicitly state how users proceed.
+
+Location: Billing plan incompatibility message, line 34-35
+Evidence: "Change the plan to annual, or remove the code."
+Problem: The message presents two options without indicating which is the simpler solution or what users should consider when choosing. This forces users to make a decision without guidance.
+Fix: Reorder to prioritize the simpler action: "Remove this code to continue with your monthly plan, or upgrade to an annual plan to use this code."
+
+Location: Document structure
+Evidence: Document contains only structured data about error messages with no introductory context or headers explaining the document's purpose.
+Problem: The document lacks any introduction explaining what these screens are for, when they appear, or what the business goals of these messages are. This makes it difficult for someone unfamiliar with the product to understand the context.
+Fix: Add a brief introduction explaining "This document describes error messages and their handling for two user flows: two-factor authentication setup and billing plan selection."

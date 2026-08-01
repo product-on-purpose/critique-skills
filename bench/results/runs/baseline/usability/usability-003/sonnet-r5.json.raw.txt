@@ -1,0 +1,44 @@
+Location: Section "Your projects" (#workspace-overview), the summary line above the project list
+Evidence: "This workspace holds 4 projects, synced this morning." is followed by a list of only three items: "Beta Launch Plan", "Holiday Campaign Assets", "Partner Integration Pilot".
+Problem: The stated project count does not match the number of projects actually listed, and there is no link or control to see the missing fourth project.
+Fix: Either list all 4 projects or add a "View all projects" link so the user can find the project the summary claims exists.
+
+Location: Section "Your projects" (#workspace-overview), the <ul> inside #workspace-overview-recent
+Evidence: The three project names ("Beta Launch Plan", "Holiday Campaign Assets", "Partner Integration Pilot") are plain list text with no link or button.
+Problem: None of the listed projects can be clicked, so a user cannot open a specific project from the overview; the only entry point is a single generic "Open project settings" link that does not say which project it opens.
+Fix: Make each project name a link or button that opens that specific project, and remove or relabel the single ambiguous "Open project settings" link.
+
+Location: "Open project settings" link (#workspace-overview-projects-link) leading to the Project settings section (#project-settings)
+Evidence: The overview lists "Beta Launch Plan", "Holiday Campaign Assets", and "Partner Integration Pilot", but the project settings page it opens shows the name "Vendor Onboarding" in the project name field.
+Problem: The project opened by "Open project settings" does not match any project name shown on the overview, so the user has no way to know which project they are editing.
+Fix: Either add "Vendor Onboarding" to the overview list or point the link at a project the user actually selected, so the settings page name matches what the user saw.
+
+Location: Project settings section (#project-settings), the empty button next to the Save button
+Evidence: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button> has no visible text or icon, only an aria-label.
+Problem: A sighted user has no way to tell what this button does, or even that it is a meaningful control, since it renders with no visible label.
+Fix: Add visible text or an icon, such as "Duplicate", so the button's purpose is visible and not only exposed through the aria-label.
+
+Location: Archive confirmation section (#archive-confirm), the "Archive" link
+Evidence: "Archiving \"Vendor Onboarding\" will remove it from the active projects list for everyone on the team." is followed by a single-click "Archive" link with no further confirmation step.
+Problem: A destructive action described as affecting the whole team is committed with one click on a plain link, styled the same as any other navigation link, which makes it easy to trigger by accident.
+Fix: Render "Archive" as a clearly styled destructive button and require an extra confirmation step, such as retyping the project name, before the archive is applied.
+
+Location: Import status section (#import-status), the error message
+Evidence: "Import failed. Error code IMP-500. Contact support if this continues." gives no way to act on that instruction.
+Problem: The message tells the user to contact support but provides no link, address, or button to do so, and offers no way to retry the import from this screen.
+Fix: Add a "Retry import" action and a working "Contact support" link next to the error message.
+
+Location: "View last import result" link (#workspace-overview-import-link) on the overview
+Evidence: The link text gives no hint of the outcome, but clicking it leads straight to "Import failed. Error code IMP-500."
+Problem: The overview gives no indication that the last import failed until the user clicks through, so a failed import can go unnoticed.
+Fix: Show the import status directly on the overview, for example a "Last import failed" note next to the link, instead of only revealing it after navigation.
+
+Location: Notifications section (#notification-settings), the "Digest frequency" select
+Evidence: The select offers only two options: "Daily" and "Weekly".
+Problem: A user who wants no digest emails has no option to choose, since only "Daily" and "Weekly" are listed.
+Fix: Add a "None" or "Off" option to the digest frequency select.
+
+Location: Project settings and Invite a team member forms (#project-settings-name-input, #invite-member-email-input)
+Evidence: <input id="project-settings-name-input" type="text" value="Vendor Onboarding"> and <input id="invite-member-email-input" type="email"> neither carries a required attribute.
+Problem: Nothing stops a user from clearing the project name or leaving the email field blank and still submitting, since neither input is marked required.
+Fix: Mark both inputs required, and validate the email format before allowing submission.

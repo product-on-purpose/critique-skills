@@ -1,0 +1,171 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "title reads \"Cascadia Regional Transit: Route Updates\" while the page's own h1 reads \"Rider service updates\"",
+      "fix": "Make the title match the h1, for example \"Cascadia Regional Transit: Rider Service Updates\".",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "head, title element",
+      "severity": 3,
+      "violation": "The browser tab title and the visible page heading use two different names for what is supposed to be the same page, which is confusing when comparing tabs to page content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Riders may request a fare adjustment through the mobile app. Station staff can also help with the same request in person.\" followed by \"Passengers can check real time arrivals by calling rider services.\"",
+      "fix": "Replace the two paragraphs with text that actually describes the accessibility improvements referenced by the heading and the image.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section \"Accessibility improvements\" (id s1), the two paragraphs above the image",
+      "severity": 3,
+      "violation": "Neither paragraph says anything about accessibility improvements even though that is the section heading; the only content that matches the heading is the image beneath the text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person.\"",
+      "fix": "Remove the reused fare-adjustment paragraph and write a sentence that introduces the weekend service table.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section \"Weekend service\" (id s2), first paragraph",
+      "severity": 3,
+      "violation": "This is the same fare-adjustment sentence used in section s1 with only \"Riders\" swapped for \"Passengers,\" and it has nothing to do with weekend service; the table that follows has no introductory text of its own."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"<table id=\"s2-table1\"><tr><th scope=\"col\">Zone</th><th scope=\"col\">Status</th></tr><tr><td>North</td><td>On time</td></tr><tr><td>South</td><td>On time</td></tr></table>\"",
+      "fix": "Add a caption such as \"Weekend service status by zone.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section \"Weekend service\" (id s2), table",
+      "severity": 3,
+      "violation": "The table has no caption or title identifying what it reports, so a reader who reaches the table without reading the surrounding page cannot tell what \"Zone\" and \"Status\" refer to."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Local residents should review the updated schedule through the mobile app. Station staff can also help with the same request in person.\"",
+      "fix": "Rewrite the paragraph so both sentences are actually about reviewing the schedule, or delete the second sentence.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id s3), first paragraph",
+      "severity": 3,
+      "violation": "The second sentence refers to \"the same request,\" but the first sentence never describes a request, only an instruction to review the schedule; the sentence is a leftover fragment from the fare-adjustment boilerplate reused elsewhere on the page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Route adjustments take effect on the posted effective date.\"",
+      "fix": "State the actual date, or link the banner text to the page where the date is posted.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id s3), promo banner",
+      "severity": 3,
+      "violation": "\"the posted effective date\" does not say what that date is or where it is posted, so a banner meant to be prominent gives no usable information."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day.\"",
+      "fix": "Replace this text with content specific to this status card, and remove the duplicate from the other section.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id s3), status card",
+      "severity": 3,
+      "violation": "This sentence is a near duplicate of the paragraph in section s1 (\"Passengers can check real time arrivals...\"), reused word for word inside a card that is visually styled as a status card, so it reads like leftover placeholder text rather than real status information."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"<div class=\\\"icon-delete\\\" id=\\\"s3-customcontrol\\\"><img src=\\\"/img/trash-icon.svg\\\" alt=\\\"\\\"></div>\"",
+      "fix": "Remove this element if it is stray markup, or wrap it in a proper button with visible text stating what it does.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id s3), div with class \"icon-delete\"",
+      "severity": 3,
+      "violation": "A trash/delete icon sits in the middle of the schedule-changes content with no label, no button element, and no surrounding text explaining what it deletes; its purpose cannot be determined from the page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"<div class=\\\"step\\\" id=\\\"s3-step3\\\" style=\\\"order:3\\\">Confirm your order</div><div class=\\\"step\\\" id=\\\"s3-step2\\\" style=\\\"order:2\\\">Enter payment details</div><div class=\\\"step\\\" id=\\\"s3-step1\\\" style=\\\"order:1\\\">Choose a plan</div>\"",
+      "fix": "Remove this component if it does not belong on the page; if it does belong, rewrite it to match the page's actual content and put the three step elements in the markup in their real order instead of relying on CSS to reorder them.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id s3), div with class \"wizard-steps\"",
+      "severity": 3,
+      "violation": "A three-step \"Confirm your order / Enter payment details / Choose a plan\" checkout sequence has nothing to do with transit schedule changes and looks like an e-commerce component left on the page by mistake. The steps are also written in the markup in the reverse of their intended order and only reordered visually with a CSS order value, so anyone reading the underlying markup order sees \"Confirm your order\" first when \"Choose a plan\" is meant to come first."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"For the full list of upcoming adjustments, <a href=\\\"/fares/history\\\">read the accessibility improvements list</a>.\"",
+      "fix": "Change the link text to match its destination, for example \"read the fare adjustment history,\" or point the href at an actual accessibility improvements page.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id s3), link text \"read the accessibility improvements list\"",
+      "severity": 3,
+      "violation": "The link text promises an \"accessibility improvements list,\" but the link points to /fares/history and the surrounding sentence is about \"upcoming adjustments,\" not accessibility. The link text does not describe where it actually goes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"<label for=\\\"phone\\\" id=\\\"s3-form-phone-label\\\" style=\\\"color:#cc0000\\\">Phone number</label>\"",
+      "fix": "Remove the inline red color unless the field is genuinely in an error or required state, and if it needs to signal something, say so in visible text rather than color alone.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id s3), \"Phone number\" form label",
+      "severity": 3,
+      "violation": "The phone number label is colored red while every other label on the form is unstyled, but nothing on the page explains why: there is no error state, no required-field note, and no error text near this field. The styling looks like an unintentional leftover rather than a deliberate signal."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"<input id=\\\"promo\\\" type=\\\"text\\\" aria-invalid=\\\"true\\\"><span class=\\\"error-text\\\" id=\\\"s3-form-promo-error\\\">Error.</span>\"",
+      "fix": "Remove aria-invalid and the error text from the default markup so the error only appears after a real validation failure, and replace \"Error.\" with a specific message such as \"Enter a valid promo code.\"",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id s3), \"Promo code\" field and its error text",
+      "severity": 3,
+      "violation": "The promo code field is marked invalid and shows an error message in the page's initial markup, before any user has typed anything or submitted the form, so a first-time visitor sees an error for a form they have not touched yet. The message itself, \"Error.\", also does not say what is wrong."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"<input id=\\\"promo\\\" type=\\\"text\\\" aria-invalid=\\\"true\\\"><span class=\\\"error-text\\\" id=\\\"s3-form-promo-error\\\">Error.</span>\"",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the #promo input.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id s3), promo code error span",
+      "severity": 3,
+      "violation": "Nothing in the markup connects the promo input to its error span; the input has no aria-describedby pointing at the span's id, so the relationship between the field and its error message is conveyed only by their visual proximity."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "69ff628078a107c11bd403359666e3fafdba2d4ab204fdec80881f7db5374db6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T20:29:22Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 13,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

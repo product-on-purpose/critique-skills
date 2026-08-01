@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"A threshold is the numeric boundary that triggers an alert once a metric crosses it.\"",
+      "fix": "Move the threshold definition to an introduction paragraph before \"Open alert settings\" section.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Line 9, \"A threshold is the numeric boundary...\" sentence",
+      "severity": 3,
+      "violation": "The definition of threshold interrupts the step instructions; it belongs in an introduction section before the procedural steps begin."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Enter the updated threshold value in the field provided and confirm the unit matches the metric in use.\"",
+      "fix": "Clarify by changing to \"verify that the new value's unit matches the metric type (e.g., MB, seconds)\" or similar.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Line 15, \"and confirm the unit matches the metric in use\"",
+      "severity": 3,
+      "violation": "It is unclear what the user should do to confirm the unit; the instruction sounds passive but reads like an action is required."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This is because the console applies the new threshold to every future evaluation of this rule.\"",
+      "fix": "Rewrite to \"The unit must match the metric type, or the console cannot evaluate the threshold correctly against future metrics.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Line 16-17, \"This is because the console applies...\" explanation",
+      "severity": 3,
+      "violation": "The explanation of WHY to confirm units is vague and does not clearly connect unit confirmation to future rule evaluation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Save the rule and open the rule list to confirm the new threshold appears there.\"",
+      "fix": "Change to \"Save the rule. Verify the change by opening the rule list and confirming the new threshold value appears there.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Line 21, final step",
+      "severity": 3,
+      "violation": "It is unclear why the user must open the rule list; is this a verification step or a navigation requirement?"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-001.md",
+    "artifact_sha256": "b41787144ac8cc1ae14bcce23fa2b574f6ee68f1aaa9cc432628f9f148ddd713",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-08-01T02:15:00Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 3,
+      "location": "project-settings section, Duplicate project button",
+      "evidence": "The button with aria-label 'Duplicate project' has no specified state or feedback after clicking; the artifact does not show where the duplicate appears or provide confirmation of success",
+      "violation": "The duplicate project action's trigger is specified but the artifact provides no feedback state, result confirmation, or indication of where to find the duplicate, so the user cannot verify whether duplication succeeded",
+      "fix": "Add a confirmation or success state showing the duplicate was created, or specify where the duplicate appears in the projects list",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 3,
+      "location": "archive-confirm section and project-archived section",
+      "evidence": "The archive-confirm section prompts to archive the project, and project-archived confirms 'has been moved to archived projects. It no longer appears in the active projects list'. No unarchive, restore, or reversal path is named anywhere in the artifact",
+      "violation": "Archive is a reasonably reversible action in most project management products, but the artifact specifies no reversal path such as unarchive or restore, leaving the user with no way back if they archive by mistake",
+      "fix": "Add an unarchive or restore control in the archived projects view, or document a reversal path such as 'To restore: go to archived projects and select restore'",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-H9-IDENTIFY",
+      "lane": "judged",
+      "severity": 3,
+      "location": "import-status section, error message",
+      "evidence": "Error message states 'Import failed. Error code IMP-500. Contact support if this continues.' with no detail about what specifically failed",
+      "violation": "The error message reports failure and displays an error code but does not specify what went wrong (file format unsupported, file size exceeded, network error, permissions issue, etc.), so the user cannot determine whether to retry, check their file, wait, or contact support",
+      "fix": "Expand the error message to name what specifically failed, such as 'Import failed: file format not recognized' or 'Import failed: file size exceeds 10MB limit'",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-H9-RECOVER",
+      "lane": "judged",
+      "severity": 3,
+      "location": "import-status section",
+      "evidence": "Error message suggests 'Contact support if this continues', but the artifact provides only a 'Back to your projects' link with no support contact link, email, contact form, or retry button anywhere",
+      "violation": "The error message points to a recovery action (contacting support) but provides no control or route to take that action, leaving the user unable to follow the suggested recovery path",
+      "fix": "Add a 'Contact support' link or button with support contact information, or add a 'Retry import' button to allow re-attempting the import",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "project-settings section, Save button",
+      "evidence": "The project name form has a 'Save' button but the artifact specifies no state or feedback shown after the user clicks it (no success message, no loading state, no changed button state)",
+      "violation": "The save action's trigger is specified but the artifact names no feedback state for after the save, so the user lacks reassurance that the action completed",
+      "fix": "Specify a feedback state after save, such as a success message, a confirmation toast, a changed button state, or a transition to the next screen",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "notification-settings section, Save button",
+      "evidence": "The notification settings form has a 'Save' button but the artifact specifies no state or feedback shown after clicking it",
+      "violation": "The save action's trigger is specified but the artifact names no feedback state, so the user lacks reassurance that their setting was saved",
+      "fix": "Specify a feedback state after save, such as a success message or a confirmation indication",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "NNG-H5-PREVENT",
+      "lane": "judged",
+      "severity": 2,
+      "location": "invite-member section",
+      "evidence": "The section contains a form with 'Save' button inside it, but also has a separate 'Continue' link outside the form that points directly to invite-sent. A user can click Continue without clicking Save, bypassing form submission",
+      "violation": "The design allows a likely error (skipping email entry confirmation) because the Continue link is always available and provides a path past the form without requiring Save first",
+      "fix": "Make the Continue link unavailable or inaccessible until the form is successfully submitted, or replace the separate link with a button that submits the form",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 4,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

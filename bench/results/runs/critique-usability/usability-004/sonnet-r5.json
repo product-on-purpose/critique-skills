@@ -1,0 +1,75 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T02:25:56Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-1",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"Save\" button",
+      "evidence": "The section's save controls are: <input id=\"project-settings-name-input\" type=\"text\" value=\"Q3 Roadmap\"> followed by <button id=\"project-settings-save-btn\" type=\"submit\">Save</button>. No message, timestamp, or other changed element is specified anywhere in the section for after Save is clicked.",
+      "violation": "NNG-H1 requires a visible indication of what happened once a state-changing action finishes. This section names the Save trigger but specifies no in-progress or result feedback for it.",
+      "fix": "Add a confirmation message next to the Save button, for example a \"Saved\" note or a last-saved timestamp, that appears once the save completes.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-2",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"notification-settings\" section, the \"Save\" button",
+      "evidence": "The section's save controls are: <select id=\"notification-settings-digest-input\"> with options Daily, Weekly, Monthly, followed by <button id=\"notification-settings-save-btn\" type=\"submit\">Save</button>. No message or other changed element is specified anywhere in the section for after Save is clicked.",
+      "violation": "NNG-H1 requires a visible indication of what happened once a state-changing action finishes. This section names the Save trigger but specifies no in-progress or result feedback for it.",
+      "fix": "Add a confirmation message next to the Save button that appears once the save completes.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-3",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"invite-member\" section, the \"Save\" button and the \"Continue\" link",
+      "evidence": "The section's form ends in <button id=\"invite-member-save-btn\" type=\"submit\">Save</button>. Separately, outside the form, is <a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>. Only Continue names a transition, to \"invite-sent,\" whose own text reads \"An invite was sent to the address entered above.\" Save names no transition, message, or other effect anywhere in the artifact.",
+      "violation": "NNG-H1 requires that a state-changing action's trigger and its outcome both be specified. Two separate controls exist here for what reads as one action, sending the invite, and the artifact never states what Save does or how it relates to Continue, so a user cannot tell whether Save has any effect, or whether Continue alone is what sends the invite.",
+      "fix": "Either remove the Save button and let Continue submit the form directly, or name what each control does and in what order, for example \"Save draft\" and \"Send invite.\"",
+      "confidence": "high"
+    },
+    {
+      "id": "F-4",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"archive-confirm\" section, the confirmation copy",
+      "evidence": "The confirmation copy reads: \"Archiving 'Q3 Roadmap' will remove it from the active projects list for everyone on the team. You can restore it at any time from the archived projects list.\" No state or control named \"archived projects list\" is defined anywhere in the artifact, and nothing links to one.",
+      "violation": "NNG-H3-UNDO requires that a reasonably reversible action name a reversal path the user can actually reach. This artifact names one in copy, the archived projects list, but defines no such state and no control that reaches it, so the promised reversal has no path in the artifact as specified.",
+      "fix": "Define the archived projects list state referenced in the copy and add a reachable link to it, for example from the \"workspace-overview\" section, or add an unarchive control directly on the \"project-archived\" section.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-5",
+      "criterion": "NNG-H9-RECOVER",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"import-status\" section",
+      "evidence": "The section reads: \"The last import finished with 4 rows skipped: each referenced a project that does not exist in this workspace. Rows 35, 71, 78, and 83 were skipped; every other row was imported.\" The only control in the section is <a id=\"import-status-exit-link\" href=\"#workspace-overview\">Back to your projects</a>.",
+      "violation": "NNG-H9-RECOVER requires a reachable next step for a reported failure. This section names the exact rows and cause but offers no control to retry those rows, create the missing referenced projects, or view them individually, only a link back to the projects list.",
+      "fix": "Add a control on this section that lets the user act on the 4 skipped rows directly, for example a link to create the missing referenced projects or to retry just those rows, rather than only a link back to the projects list.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": { "0": 0, "1": 0, "2": 3, "3": 2, "4": 0 },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"the validator rejects any value below 1000\" followed by \"Leaving this field at its default is the right choice for most teams\"",
+      "fix": "State the timeout field's actual default value, for example \"defaults to 5000 milliseconds.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"## timeout\" section, first two paragraphs",
+      "severity": 3,
+      "violation": "The section refers to \"its default\" but never states what the default value actually is, unlike the retries and logging sections, which both give an explicit default."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"the validator rejects any value below 1000\"",
+      "fix": "Document the maximum accepted value, or explicitly state that the field has no upper bound.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"## timeout\" section, first paragraph",
+      "severity": 3,
+      "violation": "Only a lower bound is documented for timeout; there is no statement of whether an upper bound exists, so the field's valid range is incomplete."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Leaving this field at its default is the right choice for most teams, and raising it is worth doing only when a specific integration needs the extra room.\"",
+      "fix": "Remove the recommendation or move it into a separate guide document, leaving only factual field constraints in this reference page.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"## timeout\" section, second paragraph",
+      "severity": 3,
+      "violation": "This sentence gives subjective usage advice rather than a factual field description, which is inconsistent with the \"mode: reference\" declared in the frontmatter and with the plain factual style used in the retries and logging sections."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"the validator rejects any value below 1000\"",
+      "fix": "Add a sentence describing the concrete effect of validator rejection.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"## timeout\" section, first paragraph",
+      "severity": 3,
+      "violation": "The document does not explain what \"rejects\" means in practice, for example whether it throws an error, blocks a deploy, or falls back silently to the default."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"- Metric catalog reference\" and the eight other bullet items that follow it",
+      "fix": "Turn each bullet into a markdown link pointing at its target page.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"## Related pages\" section",
+      "severity": 3,
+      "violation": "None of the nine related-page entries include a link or path, so a reader cannot navigate to any of them from this document."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:28:46Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

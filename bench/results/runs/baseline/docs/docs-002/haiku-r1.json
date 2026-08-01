@@ -1,0 +1,83 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/docs/docs-002.md",
+    "artifact_sha256": "25c4dd0ebb76ed338a3330329de0387044967be4fa65c3db44b1e3042d579c91",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:21:15.737900Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Main sections and subsections",
+      "evidence": "Section headings use both ## for \"Open the test console\" and #### for \"Check the sidebar updated\", then jump back to ## for \"Trigger the sample alert\"",
+      "violation": "The heading hierarchy is inconsistent. The #### subsection appears to be part of the preceding ## section but there is no ## intermediate level, making the document structure unclear.",
+      "fix": "Change \"#### Check the sidebar updated\" to \"### Check the sidebar updated\" to create proper heading hierarchy (##, ###, etc.)",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "\"Trigger the sample alert\" section",
+      "evidence": "\"wait for the status indicator to change to Sent. The status indicator takes a few seconds to update\"",
+      "violation": "\"A few seconds\" is vague and lacks specificity. Users don't know if they should wait 5 seconds, 10 seconds, or longer before deciding something is wrong.",
+      "fix": "Replace \"a few seconds\" with a specific timeframe such as \"up to 30 seconds\"",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Entire document",
+      "evidence": "Document ends with \"check that the test alert shows a Sent status with a timestamp\" with no further guidance",
+      "violation": "The tutorial is incomplete. It doesn't explain what the user should do after confirming the alert was sent or what constitutes successful completion of the task.",
+      "fix": "Add a concluding section explaining that the alert has been successfully sent and what the user should do next in the workflow.",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "\"Open the test console\" section",
+      "evidence": "\"Open the test console from the developer menu\"",
+      "violation": "The document assumes users know where to find and how to access the developer menu, which may not be obvious to new users unfamiliar with the application.",
+      "fix": "Add a brief explanation or link for where the developer menu is located in the interface (e.g., \"Open the developer menu from the top-left navigation\")",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "\"Open the test console\" section",
+      "evidence": "\"select the sample alert rule provided for new accounts\"",
+      "violation": "The phrasing implies this rule only appears for new accounts. Users on established accounts may not see this rule and will be confused about why they cannot find it.",
+      "fix": "Replace \"provided for new accounts\" with language that is account-agnostic or add a note about where existing account users can find similar sample rules.",
+      "confidence": "medium",
+      "id": "F-005"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

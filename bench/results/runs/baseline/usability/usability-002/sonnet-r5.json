@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The paragraph reads \"This workspace holds 5 projects, synced last week.\" but the list under it contains only 4 items (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp).",
+      "fix": "Either add the missing fifth project to the list or change the paragraph to say \"4 projects\" so the count and the list agree.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Project workspace overview section, opening paragraph and project list (\"workspace-overview\" section)",
+      "severity": 3,
+      "violation": "The stated project count does not match the number of projects actually listed, so the two numbers contradict each other on the same screen."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button> has no text content between its tags.",
+      "fix": "Add visible text such as \"Duplicate\" inside the button, or an icon plus a visible caption, instead of relying on aria-label alone.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Project settings section, the unlabeled button next to Save (\"project-settings-duplicate-btn\")",
+      "severity": 3,
+      "violation": "The button renders with no visible label, so a sighted user sees an empty control and cannot tell what it does without inspecting the markup or hovering for a tooltip that is not defined."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The link <a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a> jumps straight to the \"Project archived\" section; no link anywhere in the document points to href=\"#archive-confirm\", so the \"Archive this project?\" confirmation section is never reachable.",
+      "fix": "Change the \"Archive project\" link's target from #project-archived to #archive-confirm so the confirmation screen is shown before the archive completes.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Project settings section, \"Archive project\" link, and the \"Archive this project?\" confirmation section",
+      "severity": 3,
+      "violation": "A destructive, workspace-wide action, archiving a project for the whole team, has a confirmation screen built for it, but the actual navigation path skips that confirmation entirely, so the project is archived with no chance to cancel."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The form's submit button reads \"Save\" (id=\"invite-member-save-btn\"), and a separate link below the form, outside the form element, reads \"Continue\" and points to href=\"#invite-sent\" (id=\"invite-member-continue-link\").",
+      "fix": "Keep a single primary action for this screen, for example remove the separate Continue link and have the Save button itself navigate to the invite-sent confirmation once the form submits.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Invite a team member section",
+      "severity": 3,
+      "violation": "Two different controls both look like they could complete the invite, a form Save button and a standalone Continue link, and it is not clear which one actually sends the invitation, so a user could click Save, see nothing happen, and not know whether to also click Continue."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The confirmation text reads \"An invite was sent to the address entered above.\" without showing the email address itself.",
+      "fix": "Interpolate the submitted email address into the confirmation text, for example \"An invite was sent to jane@example.com.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Invite sent section",
+      "severity": 3,
+      "violation": "The confirmation does not echo back the actual email address that was submitted, so the user has no way to verify the invite went to the correct address."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "This button's visible label is \"Submit\", while the equivalent buttons in Project settings and Invite a team member are both labeled \"Save\".",
+      "fix": "Rename the notifications button to \"Save\" to match the label used for the same action elsewhere in the document.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Notifications section, the form submit button (\"notification-settings-save-btn\")",
+      "severity": 3,
+      "violation": "The same kind of action, saving a settings form, uses two different verbs across the document, which reads as inconsistent and makes users unsure whether \"Submit\" behaves differently from \"Save\"."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-08-01T02:10:14Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

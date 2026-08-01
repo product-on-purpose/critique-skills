@@ -1,0 +1,19 @@
+Location: Related pages section, line 23-29
+Evidence: "- Metric catalog reference", "- Notification channel reference", "- Webhook delivery reference", "- Escalation policy reference", "- Time window reference", "- Retry backoff reference", "- Alert rule schema", "- Rate limit reference", "- Delivery status codes"
+Problem: The related pages are listed as bare text without actual hyperlinks, making them not functional as references that readers can navigate to
+Fix: Convert each line to a proper markdown link with format "[Link text](path/to/document)" or URL, or remove the section if the links are not yet available
+
+Location: timeout field section, line 10
+Evidence: "The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000."
+Problem: No guidance on when to actually change the timeout from the default, leaving users without clear decision criteria for this configuration
+Fix: Add guidance stating when raising the timeout is appropriate, such as "Raise this value only when a specific integration needs the extra room" (or provide concrete examples)
+
+Location: retries field section, line 13-15
+Evidence: "The retries field takes an integer from 0 to 10, and it defaults to 3."
+Problem: No explanation of the tradeoff between retries and behavior (e.g., what happens at 0 retries vs 10 retries, or total time implications)
+Fix: Add a sentence explaining the practical impact of retry counts, such as "Higher retry counts increase robustness but may delay alert delivery"
+
+Location: logging field section, line 18-19
+Evidence: "The logging field accepts one of debug, info, warn, or error, and the default value is info."
+Problem: No context provided about where these logs are sent or how verbose each level is, making it unclear how to choose an appropriate level
+Fix: Add clarification such as "Logs are sent to [location]. Debug includes full request/response bodies, info shows summary data, warn alerts to potential issues, error shows failures only"

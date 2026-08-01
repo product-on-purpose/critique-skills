@@ -1,0 +1,70 @@
+{
+  "run": {
+    "skill": "critique-argument",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/argument/argument-001.md",
+    "artifact_sha256": "1a8e240dbe5e45749ac14d0de3554b5b2829840eb5dff3dbb044ad6674f30796",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T20:43:37Z",
+    "rubrics": ["TOULMIN"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "TOULMIN-BACKING",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"Why the Pilot Result Applies Systemwide\" section",
+      "evidence": "\"The systems team plans to update the online catalog's fine-display field during the same rollout window. This is simply how patron behavior works, and no library that has tried it has ever found otherwise.\"",
+      "violation": "The section's own heading commits to establishing why a pattern observed at 5 of the consortium's 10 branches applies to all ten. Its two sentences instead offer one fact unrelated to the pilot (a catalog display update) and one forceful assertion of universal applicability, with no study, precedent, or documented practice named. The target reader has nothing to test the systemwide generalization against.",
+      "fix": "Name a source for the generalization, for example prior data from a peer consortium or a second pilot cohort showing the effect holds across branches with different demographics or policies, or narrow the recommendation to the 5 tested branches until such data exists.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "TOULMIN-QUALIFIER",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"Recommendation\" section, opening sentence",
+      "evidence": "\"Thus, given the return-rate and avoidance-survey results above, the stronger choice is a systemwide end to overdue fines across all ten consortium branches, effective at the start of the next fiscal year.\"",
+      "violation": "The claim is stated as an unqualified certainty covering all ten consortium branches, but the cited grounds, the 93 percent versus 86 percent return-rate comparison and the 22 percent to 5 percent avoidance-survey result, were measured only at the 5 pilot branches over an 18-month window. Nothing in the claim's wording signals to the reader that 5 of the 10 branches were never part of the tested comparison.",
+      "fix": "Qualify the claim for the branches the pilot did not cover, for example recommending the change at the 5 tested branches now with the remaining 5 following after a confirmation period, or state plainly that extending to all ten branches is an extrapolation beyond the pilot's own scope.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "TOULMIN-REBUTTAL",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"Addressing the Revenue Concern\" section, second paragraph",
+      "evidence": "\"A skeptic on the board points to overdue fines as a source of materials-replacement funding, and argues that eliminating them systemwide will leave a shortfall the consortium has not planned for. The branch renovation project remains on schedule for completion next spring.\"",
+      "violation": "The section raises the revenue-shortfall objection by name, then in the very next sentence moves to an unrelated topic, a renovation schedule, without answering it. A reader trying to assess whether the funding gap is covered is left with the objection exactly where it was raised.",
+      "fix": "Follow the stated objection with an actual answer: the size of the fine revenue being replaced and how the consortium will offset or absorb it, for example a specific reallocation, a grant, or evidence from the pilot branches that the revenue loss was smaller than projected.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "TOULMIN-GROUNDS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"Recommendation\" section, third paragraph",
+      "evidence": "\"This recommendation applies to items returned within 60 days of their due date; items still unreturned past that window remain subject to the existing replacement-cost billing process, matching the return-rate pattern the pilot data actually established.\" The pilot description under \"What the Pilot Showed\" reports only a 93 percent on-time-or-eventual return rate, with no return-window figure stated anywhere in the artifact.",
+      "violation": "The claim that the 60-day cutoff matches the return-rate pattern the pilot data established asserts a specific correspondence to the pilot's findings, but the pilot description never states a return-window figure, a distribution of return times, or any other data point the 60-day threshold could be checked against, so a reader cannot verify the match.",
+      "fix": "State the pilot's own return-time data the 60-day figure is drawn from, for example the share of eventual returns that occurred within 60 days versus later, or drop the claim of a match and justify the 60-day cutoff on its own terms.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 3,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

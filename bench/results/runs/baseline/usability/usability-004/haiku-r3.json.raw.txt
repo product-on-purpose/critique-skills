@@ -1,0 +1,29 @@
+Location: Workspace overview section
+Evidence: "This workspace holds 4 projects, synced last week" but the list below shows only 3 projects (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp)
+Problem: The interface states the workspace contains 4 projects but the recent projects list displays only 3 items, creating confusion about whether a project is missing or the count is incorrect.
+Fix: Either update the count statement to say "3 projects shown" or add the 4th project to the recent list with a note about why only 3 are displayed, or restructure to clarify that this is a recent subset and not the complete count.
+
+Location: Invite a team member section
+Evidence: The form includes a submit button labeled "Save" inside the form element, but the section also includes a separate anchor link labeled "Continue" outside the form.
+Problem: The flow for completing an invite is ambiguous - users may not understand whether they should click Save first or Continue, or if both actions are needed.
+Fix: Either move the Continue link into the form as a button or primary CTA, or change the workflow so Save directly navigates to the next step and removes the separate Continue link.
+
+Location: Project settings form and Invite member form
+Evidence: Both forms contain submit buttons ("Save") but there is no success message, validation error display, or loading state shown in the markup.
+Problem: Users cannot see whether their form submission succeeded or failed, leading to uncertainty about whether their changes were saved.
+Fix: Add clear success confirmation messaging or error display patterns to each form so users understand the submission result.
+
+Location: Archive project action in project settings
+Evidence: "Archive project" is implemented as an anchor link (id="project-settings-archive-link") rather than a button element or element with role="button".
+Problem: Destructive actions should be presented with clear button styling and semantics to indicate they are interactive controls, not navigation links. Screen readers and users may not recognize this as an action.
+Fix: Replace the archive anchor with a button element or add role="button" and tabindex="0" to the link, and consider adding confirmation or warning styling to indicate the action is destructive.
+
+Location: Notification settings section
+Evidence: The select control (id="notification-settings-digest-input") has three options (Daily, Weekly, Monthly) but contains no selected attribute and no indication of the current setting.
+Problem: Users cannot tell which notification frequency is currently active before they open the dropdown, making it difficult to determine if a change is needed.
+Fix: Add a selected attribute to one option to show the current setting, or display the current value in text above or below the select control.
+
+Location: Invite member email input
+Evidence: The input field (id="invite-member-email-input") has type="email" but no placeholder attribute, no associated description, and no visible guidance about the expected email format.
+Problem: Users receive no guidance on what to enter or how the email address will be used, potentially leading to abandoned form submissions.
+Fix: Add a placeholder attribute such as placeholder="colleague@company.com" or add descriptive text above the input explaining that the email must match an existing team member account or invitation will be sent to create one.

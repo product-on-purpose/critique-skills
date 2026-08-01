@@ -1,0 +1,83 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "393fe58fac52d6953cd372944cd352ef9181df5c42ae778bd6d17214acb080c7",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T20:32:16Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 44-46, custom button control with id \"s3-customcontrol\"",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>",
+      "violation": "This div has role=\"button\" and tabindex=\"0\" to make it focusable and announce as a button, but there is no onclick event handler or keyboard event listener. Users who navigate with keyboard and press Enter or Space will not activate the button's function.",
+      "fix": "Add an onclick event handler and a keyboard event listener (or use a native <button> element instead of a div).",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 67, promo input field",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\">",
+      "violation": "The input has aria-invalid=\"true\" indicating an error state, but there is no aria-errormessage or aria-describedby attribute connecting it to the error message on line 68. Screen readers will announce the invalid state but not the explanation of what is wrong.",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the input element to link it to the error message.",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 64-65, phone number field label and input",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\">Phone number (required)</label><input id=\"phone\" type=\"tel\">",
+      "violation": "The label text includes \"(required)\" indicating this is a required field, but the input element itself lacks the required attribute. This creates an inconsistency where the visual label and the HTML semantics do not match.",
+      "fix": "Add the required attribute to the <input> element, or remove \"(required)\" from the label text and rely on the required attribute alone.",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 47-57, wizard-steps section",
+      "evidence": "<div class=\"wizard-steps\" id=\"s3-wizard\"><div class=\"step\" id=\"s3-step1\">Choose a plan</div><div class=\"step\" id=\"s3-step2\">Enter payment details</div><div class=\"step\" id=\"s3-step3\">Confirm your order</div></div>",
+      "violation": "The wizard-steps container and individual step divs lack semantic structure or ARIA attributes to convey that this is a step indicator. Screen reader users cannot understand the purpose of this component or which step is currently active.",
+      "fix": "Add role=\"list\" to the wizard-steps div and role=\"listitem\" to each step div, or use <ol> and <li>. Add aria-current=\"step\" to the active step and use aria-label to indicate the step number and total (e.g., \"Step 1 of 3\").",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Line 22, station update image",
+      "evidence": "<img src=\"/img/platform-update.jpg\" alt=\"Crews repainting the accessible parking spaces near the station entrance.\" id=\"s1-img1\">",
+      "violation": "The alt text mentions \"parking spaces\" but the image filename is \"platform-update.jpg\", suggesting the image shows a platform, not parking spaces. The mismatch between filename and alt text content indicates the alt text may not accurately describe the image.",
+      "fix": "Verify what the image actually shows and update the alt text to accurately describe the image content.",
+      "confidence": "medium",
+      "id": "F-005"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

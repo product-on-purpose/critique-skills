@@ -1,0 +1,59 @@
+Location: <html> opening tag, lang attribute, line 2
+Evidence: lang="translanguage"
+Problem: The lang attribute is set to an invalid value that is not a real BCP 47 language code, so screen readers and browsers cannot determine the page's language and may mispronounce content or fail to offer correct translation.
+Fix: Set lang to the actual language of the page content, for example lang="en".
+
+Location: <title> element in the document head, line 6
+Evidence: <title id="head-title"></title>
+Problem: The page title is empty, so the browser tab, bookmarks, and screen reader announcements have no descriptive name for this page.
+Fix: Add a descriptive title such as "Rider service updates".
+
+Location: content wrapper, line 15
+Evidence: <div id="main-content">
+Problem: The primary page content is wrapped in a generic div instead of a main element, so assistive technology users lose the main landmark that lets them skip directly to page content.
+Fix: Replace the div with a main element, keeping the id if needed for styling.
+
+Location: first image in the "Fare adjustments" section, line 21
+Evidence: <img src="/img/platform-update.jpg" id="s1-img1">
+Problem: The image has no alt attribute at all, so screen reader users receive no information about its content or purpose.
+Fix: Add an alt attribute describing the image's content, or alt="" if it is purely decorative.
+
+Location: "Accessibility improvements" heading, line 24
+Evidence: <h4 id="s2-h">Accessibility improvements</h4> follows an h2 in the previous section
+Problem: The heading level jumps from h2 directly to h4, skipping h3, which breaks the logical outline screen reader users rely on to navigate by heading level.
+Fix: Change this heading to h2 or h3 so heading levels descend by one at a time.
+
+Location: status table, line 26
+Evidence: <table id="s2-table1"> has no caption element
+Problem: The table has no caption, so screen reader users are not told what the table represents before they encounter its data.
+Fix: Add a caption such as "Zone status" as the first child of the table.
+
+Location: delete icon control, line 43
+Evidence: <div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">
+Problem: This interactive control is a div with role="button" instead of a native button, and the markup shows no keyboard event handling, so there is no evidence it responds to Enter or Space the way a real button would.
+Fix: Replace the div with a native button element, which gets click and keyboard activation for free.
+
+Location: wizard steps list, lines 46 to 56
+Evidence: <div class="wizard-steps" id="s3-wizard"> contains three <div class="step"> elements with no list markup
+Problem: The three steps are plain divs with no semantic list structure and no indication of which step is current, so screen reader users cannot tell this is a sequence or where they are in it.
+Fix: Mark the steps up as an ordered list with li elements and add aria-current="step" to the active step.
+
+Location: link at the end of the "Station updates" section, line 57
+Evidence: click here
+Problem: The link text "click here" does not describe its destination, so a screen reader user browsing by links out of context cannot tell where it leads.
+Fix: Change the link text to something descriptive, such as "See the full list of upcoming adjustments."
+
+Location: phone number field, line 63
+Evidence: <label for="phone" id="s3-form-phone-label">Phone number (required)</label><input id="phone" type="tel">
+Problem: The label text says the field is required, but the input carries no required or aria-required attribute, so assistive technology cannot programmatically report the field as required.
+Fix: Add the required attribute, or aria-required="true", to the phone input.
+
+Location: promo code field, lines 66 to 67
+Evidence: <input id="promo" type="text" aria-invalid="true"> and <span class="error-text" id="s3-form-promo-error">Enter a 6 character code using letters and numbers only.</span>
+Problem: The input is marked aria-invalid="true" but has no aria-describedby pointing at the error text, so screen reader users are told the field is invalid without hearing why.
+Fix: Add aria-describedby="s3-form-promo-error" to the promo input.
+
+Location: form submit button, line 68
+Evidence: <button type="submit" class="btn-primary" id="s3-form-submit" aria-label="Send form now">Submit</button>
+Problem: The visible button text is "Submit" but its accessible name is overridden to "Send form now", so voice control users who say "click Submit" will not match the button, and the two labels disagree.
+Fix: Remove the aria-label so the visible text "Submit" serves as the accessible name, or change the aria-label to include the visible text.

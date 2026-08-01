@@ -1,0 +1,48 @@
+{
+  "run": {
+    "skill": "critique-argument",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/argument/argument-003.md",
+    "artifact_sha256": "3735fd3a135fcd3f730e35c6af56fb064083676684399e5b0486c140ff7894de",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T20:52:56Z",
+    "rubrics": ["TOULMIN"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "TOULMIN-GROUNDS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Recommendation section, third paragraph, the 60-day return-window sentence",
+      "evidence": "\"items still unreturned past that window remain subject to the existing replacement-cost billing process, matching the return-rate pattern the pilot data actually established.\"",
+      "violation": "The sentence claims the 60-day cutoff matches a return-rate pattern the pilot established, but no passage in the What the Pilot Showed section reports any day-based breakdown of when eventual returns occurred, only the overall 94 percent versus 87 percent figures. The artifact offers an assertion of grounding rather than the grounding itself, so a reader cannot check what pattern the 60-day boundary is claimed to match.",
+      "fix": "State the specific pilot measurement the 60-day figure is drawn from, for example the share of eventual returns completed within 60 days, or remove the claim that the boundary matches an established pilot pattern.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-002",
+      "criterion": "TOULMIN-REBUTTAL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Why the Pilot Result Applies Systemwide section, first paragraph",
+      "evidence": "\"which is the reason the pilot's return-rate and avoidance-survey results, taken together, support ending fines for the whole consortium rather than only the pilot branches\"",
+      "violation": "The artifact answers the revenue objection at length in the Addressing the Revenue Concern section, but it never raises or answers the foreseeable objection that the pilot covered only 5 of the consortium's 10 branches, leaving open whether the remaining branches would show the same return-rate and avoidance-survey effects. That scope condition, which the pilot's own grounds leave open, is never named anywhere in the document.",
+      "fix": "Add a sentence naming and answering the branch-representativeness objection directly, for example describing what makes the pilot branches comparable to the remaining branches, or citing the fourteen-system research brief specifically as evidence the effect holds beyond the pilot's own five branches.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 0,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "pass",
+    "severity_3_threshold": 0
+  }
+}

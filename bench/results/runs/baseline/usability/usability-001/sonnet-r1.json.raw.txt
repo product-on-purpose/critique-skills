@@ -1,0 +1,59 @@
+Location: Workspace overview section, "Your projects" paragraph and the recent-projects list below it (id="workspace-overview-recent")
+Evidence: "This workspace holds 3 projects, synced last week." is followed by a list containing only "Data Warehouse Cutover" and "Mobile App Revamp"
+Problem: The stated project count (3) does not match the number of projects actually listed (2), and nothing marks the list as a partial or "recent" subset, so a user cannot tell whether a project is missing or the count is simply wrong.
+Fix: Either list all 3 projects, or label the list "Recent projects" and add a "View all 3 projects" link so the stated count and the visible list agree.
+
+Location: Workspace overview section, promo banner (id="workspace-overview-promo-referral")
+Evidence: "Invite 3 teammates this month to unlock the advanced reporting add-on."
+Problem: This promotional upsell sits ahead of the primary navigation links ("Open project settings", "View last import result") with no visual separation and no way to dismiss it, competing with the user's actual task on the page.
+Fix: Move the promo below the primary navigation, or into a separate dismissible panel, and give it a close control.
+
+Location: Workspace overview section, "Open project settings" link (id="workspace-overview-projects-link")
+Evidence: <a id="workspace-overview-projects-link" href="#project-settings">Open project settings</a>
+Problem: The workspace holds multiple projects, but this single link is not tied to any particular project, so it is unclear whose settings will open.
+Fix: Make the settings link per-project (e.g. next to each entry in the project list) or add a project picker before opening settings.
+
+Location: Project settings section, project name field (id="project-settings-name-input")
+Evidence: input value="Design System Refresh"
+Problem: "Design System Refresh" is the project shown in Project Settings, but that name never appears in the "Your projects" list on the workspace overview, so a user arriving from the overview cannot confirm they are editing the intended project.
+Fix: Show "Design System Refresh" in the workspace overview's project list, or display the current project's name prominently at the top of the Project Settings page.
+
+Location: Project settings section, duplicate button (id="project-settings-duplicate-btn")
+Evidence: <button id="project-settings-duplicate-btn" type="button"></button>
+Problem: This button has no visible text or label, so a user cannot tell what it does before clicking it.
+Fix: Add visible button text, for example "Duplicate project".
+
+Location: Project settings section, Save button (id="project-settings-save-btn")
+Evidence: <button id="project-settings-save-btn" type="submit">Save</button> with no linked confirmation state
+Problem: Nothing in the document shows what happens after Save is clicked, no success message and no redirect target, unlike the Archive action, which has a dedicated confirmation screen.
+Fix: Add a save-confirmation state, such as an inline success message or a redirect to a confirmation section, consistent with how Archive confirms its result.
+
+Location: Invite a team member section, Save button (id="invite-member-save-btn")
+Evidence: <button id="invite-member-save-btn" type="submit">Save</button>
+Problem: "Save" implies storing a draft, but this action actually sends an email invitation to another person, which is a stronger and less reversible action than the label suggests.
+Fix: Relabel the button "Send invite".
+
+Location: Invite a team member section, relationship between the Save button and the Continue link (id="invite-member-save-btn", id="invite-member-continue-link")
+Evidence: <button id="invite-member-save-btn" type="submit">Save</button> followed by <a id="invite-member-continue-link" href="#invite-sent">Continue</a>
+Problem: It is unclear whether submitting the form with Save already sends the invite, and whether the separate Continue link is a required second step or a redundant one.
+Fix: Combine these into a single action, such as "Send invite", that both submits the form and advances to the confirmation screen, and remove the separate Continue link.
+
+Location: Invite sent section (id="invite-sent")
+Evidence: The section contains only an h2 heading and a p paragraph, no link or button of any kind
+Problem: This screen is a dead end. After an invite is sent, there is no way to navigate anywhere else from it.
+Fix: Add a link back to the project or workspace, for example "Back to project settings".
+
+Location: Archive confirmation section, confirmation copy (id="archive-confirm-copy")
+Evidence: "You can restore it at any time from the archived projects list."
+Problem: The document promises an "archived projects list" but no such list, link, or section exists anywhere in the document, so the user has no way to act on that claim.
+Fix: Add an "Archived projects" link or section that the user can actually reach, or remove the claim if it is out of scope for this flow.
+
+Location: Import status section, import status message (id="import-status-message")
+Evidence: "The last import finished with 2 rows skipped: each referenced a project that does not exist in this workspace. Rows 15 and 99 were skipped; every other row was imported."
+Problem: The message reports which rows failed but never states the total number of rows imported successfully, and it offers no action to fix or retry the skipped rows.
+Fix: Add a total imported count, for example "48 of 50 rows imported", and a link or button to resolve the skipped rows by creating the missing projects or remapping and retrying.
+
+Location: Notifications section, digest frequency select (id="notification-settings-digest-input")
+Evidence: <select id="notification-settings-digest-input"><option>Daily</option><option>Weekly</option></select>
+Problem: There is no option to turn digest emails off, and no option is marked selected, so a user cannot tell what their current setting is or opt out of digests entirely.
+Fix: Add a "None" or "Off" option, and mark whichever option reflects the user's current setting as selected.

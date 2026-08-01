@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced last week.\" is followed by a list containing only three items: Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp.",
+      "fix": "Either add the fourth project to the list or change the summary text to say 3 projects.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "workspace-overview section, \"Your projects\" summary text and list",
+      "severity": 3,
+      "violation": "The stated project count of 4 does not match the 3 projects actually listed, which reads as a data error and would make a user think a project is missing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "project-settings-save-btn and notification-settings-save-btn are both type=\"submit\" inside a form that has no action attribute.",
+      "fix": "Give each form an action or submit handler and show a visible confirmation, such as a message or a navigation to a confirmation section, after saving.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "project-settings section, Save button and form; notification-settings section, Save button and form",
+      "severity": 3,
+      "violation": "Neither Save button has a defined destination or success state, so clicking Save gives the user no feedback about whether their change was saved."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>",
+      "fix": "Add a visible label or icon, for example the word \"Duplicate\" or a copy icon, while keeping the aria-label for assistive technology.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "project-settings section, duplicate button",
+      "severity": 3,
+      "violation": "The button has no visible text or icon, only an aria-label, so a sighted user has no way to tell what the button does or even notice it as more than an empty box."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "invite-member-save-btn is a form submit button with no defined action, while a separate link, invite-member-continue-link (\"Continue\", href=\"#invite-sent\"), is what actually advances to the next screen and is not tied to the email field at all.",
+      "fix": "Make a single control both validate the email field and advance to the confirmation screen, and remove or repurpose the redundant Save button.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "invite-member section, Save button and Continue link",
+      "severity": 3,
+      "violation": "Two controls appear to complete the same invite action, but only the unrelated Continue link works, and it can be clicked without the email address being filled in or validated."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An invite was sent to the address entered above.\"",
+      "fix": "Require the email field to be filled in and valid before this screen can be reached, and display the actual address that was entered.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "invite-sent section",
+      "severity": 3,
+      "violation": "Because the Continue link can be reached without an email address ever being entered, this message can claim an invite was sent to an address that does not exist."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\" and \"It no longer appears in the active projects list for anyone on the team.\"",
+      "fix": "Add an archived projects section with a restore action, or remove the claim about restoring from a list.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "archive-confirm section and project-archived section",
+      "severity": 3,
+      "violation": "Both messages promise or reference an archived projects list, but the document contains no such view or link to one anywhere, so the restore path described does not exist."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-08-01T02:20:52Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

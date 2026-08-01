@@ -1,0 +1,112 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T02:15:20Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-H5-CONFIRM",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"project-settings\" section, the \"project-settings-archive-link\" link",
+      "evidence": "href=\"#project-archived\" on the \"Archive project\" link; no link or control anywhere in the document targets \"#archive-confirm\", the section headed \"Archive this project?\" that the artifact separately defines with its own Cancel and Archive controls.",
+      "violation": "NNG-H5-CONFIRM requires the path a costly action's own control takes to reach a confirmation before it commits. This control's target is project-archived, not archive-confirm; the confirmation state the artifact defines for this exact action is bypassed, and nothing in the document links to it, so a user taking this control never sees a confirmation before the project is removed from the active list for the whole team.",
+      "fix": "Change the project-settings-archive-link target from #project-archived to #archive-confirm, so the control's own path reaches the confirmation state before archiving commits.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-H5-PREVENT",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"invite-member\" section, the \"invite-member-continue-link\" link",
+      "evidence": "the invite-member-continue-link anchor sits outside the enclosing form and carries no attribute tying it to invite-member-email-input's value or validity; the form's own submit control is a separate button, invite-member-save-btn.",
+      "violation": "NNG-H5-PREVENT requires the design to admit the likely wrong entry, here a blank or invalid email, before an action that depends on it. Continue is a plain link unconnected to the email field, so a user can reach invite-sent, whose copy states an invite was sent to the address entered above, without ever entering an address.",
+      "fix": "Disable or hide the continue link until invite-member-email-input holds a valid email address, or remove the separate link and advance to invite-sent only from the form's own submit, so the type=email validation applies first.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button> sits inside a <form> with no action attribute; the artifact defines no next state and no message for this control.",
+      "violation": "NNG-H1 requires a visible indication of what the system is doing and what the outcome was for a state-changing action. This save control, and the equivalent save controls in the invite-member and notification-settings sections, submit a form with no action target and no in-place success or failure message defined anywhere in the artifact, so a user who saves has no way to tell whether the change was stored.",
+      "fix": "Define a visible confirmation for each save, for example an in-place success message or a changed control state, rather than leaving the outcome unspecified.",
+      "confidence": "medium",
+      "instances": [
+        {
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button",
+          "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button> sits inside a <form> with no action attribute; the artifact defines no next state and no message for this control."
+        },
+        {
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button",
+          "evidence": "<button id=\"notification-settings-save-btn\" type=\"submit\">Submit</button> sits inside a <form> with no action attribute; the artifact defines no next state and no message for this control."
+        }
+      ]
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-H4-CONTROL-NAMING",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "evidence": "control labeled \"Save\"",
+      "violation": "This artifact uses 2 different labels for what reads as the same commit action: \"Save\", \"Submit\". A user cannot tell from the label alone whether these controls perform the same action or different ones.",
+      "fix": "Pick one label for this commit action, for example \"Save\", and use it everywhere the action appears.",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button",
+          "evidence": "control labeled \"Save\""
+        },
+        {
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button",
+          "evidence": "control labeled \"Submit\""
+        }
+      ]
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-H6-RECALL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-sent\" section",
+      "evidence": "<p>An invite was sent to the address entered above. It expires in 5 days if not accepted.</p>; the section's only control is invite-sent-exit-link, which targets project-settings, not invite-member.",
+      "violation": "NNG-H6-RECALL requires the information a user needs at a step to be present at that step. This confirmation names no actual email address, referring to it only as the address entered above, and its one exit returns to project-settings rather than to invite-member, so the user cannot recheck which address the invite went to without re-entering the invite flow from the start.",
+      "fix": "Redisplay the entered email address on the invite-sent state, for example \"An invite was sent to {email}.\"",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-H9-RECOVER",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"import-status\" section",
+      "evidence": "<p id=\"import-status-message\">The last import finished with 3 rows skipped: each referenced a project that does not exist in this workspace. Rows 63, 71, and 82 were skipped; every other row was imported.</p>; the section's only control is import-status-exit-link, which targets workspace-overview.",
+      "violation": "NNG-H9-RECOVER requires an error or failure state to point to a next step the user can take, reachable from where the message appears. This state names exactly which rows failed and why but offers no control to fix, re-import, or export the 3 skipped rows, only a link back to the projects list, so recovering those rows has no path defined from this state.",
+      "fix": "Add a control on the import-status state that lets the user retry or download the 3 skipped rows for correction, reachable from this state.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 2,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-08-01T02:45:00Z",
+    "rubrics": [
+      "NNG"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-1",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Project settings section, project name input and Save button",
+      "evidence": "The project-settings form specifies a text input (value='Q3 Roadmap') and a Save button, but the artifact defines no next state or feedback message after submission",
+      "violation": "The save action changes stored state but the artifact specifies no visible indication of success or confirmation, leaving the user uncertain whether the action succeeded",
+      "fix": "Define a success state after save, such as a confirmation message ('Project name saved') or navigation to a confirmation screen that confirms the new name",
+      "confidence": "high",
+      "rubric_source": "bundled"
+    },
+    {
+      "id": "F-2",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Notification settings section, digest frequency dropdown and Save button",
+      "evidence": "The notification-settings form specifies a select control with options (Daily, Weekly, Monthly) and a Save button, but the artifact defines no next state or feedback message after submission",
+      "violation": "The save action changes stored notification settings but the artifact specifies no visible indication of success or confirmation, leaving the user uncertain whether preferences were saved",
+      "fix": "Define a success state after save, such as a confirmation message ('Notification settings updated') or return to a screen confirming the change persisted",
+      "confidence": "high",
+      "rubric_source": "bundled"
+    },
+    {
+      "id": "F-3",
+      "criterion": "NNG-H10-FINDABLE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Project settings section, Duplicate project button",
+      "evidence": "Button element with id='project-settings-duplicate-btn', type='button', aria-label='Duplicate project', but no visible text content, no icon, no title attribute, and no adjacent help text",
+      "violation": "The control requires explanation (what duplication creates and what state follows) but offers this explanation only in an aria-label attribute that is not visible on screen to sighted users",
+      "fix": "Add visible button text (e.g., 'Duplicate') or an icon with a title attribute, and specify what state or outcome follows the duplication action",
+      "confidence": "high",
+      "rubric_source": "bundled"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 1,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

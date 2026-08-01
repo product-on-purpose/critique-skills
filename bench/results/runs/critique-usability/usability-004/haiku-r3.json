@@ -1,0 +1,48 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T00:00:00Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-1",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the project-settings section, the Save button",
+      "evidence": "button id project-settings-save-btn type submit. The form contains an input for project name and a Save button, but the artifact defines no state change or feedback when saved. The form has no action attribute and no link to another defined section, leaving the outcome of save unspecified.",
+      "violation": "This state-changing action (saving a project name) specifies no visible feedback. The artifact does not name what the user sees when save completes, leaving the user uncertain whether the save succeeded.",
+      "fix": "Specify the outcome of the save action. Either show the user remains on project-settings with a success message, or define a link target to another state that indicates completion.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-2",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the notification-settings section, the Save button",
+      "evidence": "button id notification-settings-save-btn type submit. The form contains a select for digest frequency and a Save button, but the artifact defines no state change or feedback when saved. The form has no action attribute and no link to another defined section, leaving the outcome of save unspecified.",
+      "violation": "This state-changing action (saving notification settings) specifies no visible feedback. The artifact does not name what the user sees when save completes, leaving the user uncertain whether the save succeeded.",
+      "fix": "Specify the outcome of the save action. Either show the user remains on notification-settings with a success message, or define a link target to another state that indicates completion.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 0,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "pass",
+    "severity_3_threshold": 0
+  }
+}

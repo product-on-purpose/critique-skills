@@ -1,0 +1,24 @@
+Location: Line 20, first paragraph under "Accessibility improvements"
+Evidence: <p id="s1-p1" style="color:#999999">Passengers should review the updated schedule at any station kiosk.
+Problem: Text colored #999999 gray may have insufficient contrast against a light background, potentially failing WCAG AA standards.
+Fix: Use a darker text color such as #595959 or verify the contrast ratio meets 4.5:1 minimum against the actual background.
+
+Location: Line 60-61, form field section
+Evidence: <label for="topic-alt" id="s3-form-topic-label">Route</label> <select id="topic">
+Problem: The label's for attribute references "topic-alt" but the select element has id="topic", creating a mismatch that breaks the label association.
+Fix: Change the label's for attribute from "topic-alt" to "topic" to properly associate the label with the select element.
+
+Location: Line 67-68, form error field
+Evidence: <input id="promo" type="text" aria-invalid="true"> <span class="error-text" id="s3-form-promo-error">Enter a 6 character code...
+Problem: The input with aria-invalid="true" is not programmatically linked to its error message via aria-describedby.
+Fix: Add aria-describedby="s3-form-promo-error" to the input element to associate it with the error text.
+
+Location: Line 58, link to accessibility improvements
+Evidence: <a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>
+Problem: The link text says "accessibility improvements list" but the href points to "/fares/history", which appears to be a fares page not an accessibility page, creating a mismatch.
+Fix: Update the href to point to an actual accessibility improvements page, such as "/accessibility/improvements", or change the link text to match the destination.
+
+Location: Line 44-46, custom button control
+Evidence: <div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol"> <img src="/img/trash-icon.svg" alt="">
+Problem: The div with role="button" is keyboard accessible but lacks keyboard event handlers and visual feedback for interaction, making it unclear how users should interact with it.
+Fix: Implement proper click and keyboard (Enter/Space) handlers using JavaScript, add visual focus and active states with CSS, or replace with a native <button> element.

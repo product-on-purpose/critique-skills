@@ -1,0 +1,34 @@
+Location: Line 29, project settings section, duplicate button
+Evidence: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>
+Problem: The duplicate button contains no visible text, only an aria-label. Users relying on visual cues cannot understand the button's purpose without assistive technology.
+Fix: Add visible text inside the button element, such as <button id="project-settings-duplicate-btn" type="button">Duplicate</button>, or add an icon with alt text.
+
+Location: Lines 52 and 58, archive confirmation and archived confirmation sections
+Evidence: "Archiving \"Vendor Onboarding\"" and "\"Vendor Onboarding\" has been moved to archived projects"
+Problem: The project name is hardcoded in the confirmation dialogs, but line 26 shows the name can be edited in the input field. If a user changes the project name and then archives, the dialogs will still display the old name, creating confusion about which project is being archived.
+Fix: Display the project name dynamically from the form input field rather than hardcoding it, or show a preview of the current name that updates when the input changes.
+
+Location: Lines 37-41, invite a team member form
+Evidence: Form contains only <input type="email"> and <button type="submit">Save</button> with no status indicators
+Problem: After clicking Save, there is no visual feedback indicating whether the form was successfully submitted before the user must click Continue. Users cannot confirm their action succeeded.
+Fix: Add a success message or visual indicator (such as a green checkmark or "Saved" text) that appears after the Save button is clicked and before Continue is available.
+
+Location: Line 70, notification settings select dropdown
+Evidence: <select id="notification-settings-digest-input"> with no selected attribute or default value shown
+Problem: The select dropdown does not visually indicate which frequency option is currently selected. Users cannot see their current notification setting before making a change.
+Fix: Add a selected attribute to one of the options to show the current setting, and optionally display a label indicating the current frequency value.
+
+Location: Line 63, import status message
+Evidence: Import failed. Error code IMP-500. Contact support if this continues.
+Problem: The error message provides only an error code with minimal context. Users do not know what caused the import to fail or what steps they can take to resolve it besides contacting support.
+Fix: Provide a more descriptive error message such as "The import failed because [specific reason]. Try [suggested action] or contact support." Include a support link or suggested troubleshooting steps.
+
+Location: Lines 22-33, project settings section navigation
+Evidence: Multiple navigation links that perform different actions (notification settings, invite member, archive, back) without clear grouping
+Problem: The navigation options are presented as a flat list of links without visual hierarchy or grouping. Users cannot easily distinguish between configuration tasks, team actions, and destructive actions like archiving.
+Fix: Group related actions visually, such as placing all configuration options together, all team-related options in another group, and destructive actions separately with visual warning styling.
+
+Location: Lines 13-17, recent projects list
+Evidence: <ul> containing three hardcoded project names: Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot
+Problem: The list header states "This workspace holds 4 projects", but only 3 are shown in the recent list. Users cannot see or access all 4 projects without additional navigation.
+Fix: Either show all 4 projects in the list with pagination if space is constrained, or clarify that only the 3 most recent projects are displayed and provide a link to view all projects.

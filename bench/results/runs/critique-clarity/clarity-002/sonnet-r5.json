@@ -1,0 +1,124 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/clarity/clarity-002.md",
+    "artifact_sha256": "7fd910197f585ef10416cde2ed6b94fa48de539377a1082d82e29ccee509e6df",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T21:05:59Z",
+    "rubrics": ["PLAIN", "WILLIAMS"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "evidence": "Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "violation": "The sentence runs to 71 words with 5 subordinate-clause markers, longer than the reader can hold in mind on a single pass.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "WILLIAMS-SHAPE",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "evidence": "Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "violation": "At 71 words, with 0 comma-set-off clause(s) and 5 subordinate-clause marker(s), the sentence stacks interruptions between its subject and its main verb instead of holding the main clause together.",
+      "fix": "Move subordinate clauses and modifiers after the main clause, not between its subject and verb.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-008",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Review Responsibility, paragraph 1",
+      "evidence": "The determination of stipend eligibility happens before any payment goes out. The escalation of repeat requests happens automatically within the same quarter.",
+      "violation": "Both sentences' grammatical subjects are abstractions, the determination of stipend eligibility and the escalation of repeat requests, standing in for whoever actually determines eligibility and whoever escalates repeat requests, so the section names no actor at all.",
+      "fix": "Name the actor as the subject: state who determines eligibility, for example the benefits team, and what triggers or performs the escalation.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "PLAIN-PARAGRAPH",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Eligibility, paragraph 3",
+      "evidence": "165 words in one paragraph.",
+      "violation": "The paragraph exceeds the 150-word scannability threshold.",
+      "fix": "Split the paragraph so each part covers one topic.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-009",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Program Overview, paragraph 1",
+      "evidence": "The benefits team tracks the stipend budget at the start of the fiscal year.",
+      "violation": "Three sections state the identical stipend-budget-tracking action under three different names for the responsible office, benefits team, finance liaison, and people operations office, with no signal whether these are the same office, different offices sharing the duty, or a drafting error, so a reader cannot tell who actually owns the budget.",
+      "fix": "Pick one name for the office that tracks the stipend budget and use it in all three sections, or state explicitly how the three offices' roles differ.",
+      "confidence": "medium",
+      "instances": [
+        {
+          "location": "Special Cases, paragraph 1",
+          "evidence": "The finance liaison reviews the stipend budget at the start of the fiscal year."
+        },
+        {
+          "location": "Questions and Updates, paragraph 1",
+          "evidence": "The people operations office tracks the stipend budget at the start of the fiscal year."
+        }
+      ]
+    },
+    {
+      "id": "F-010",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Request Steps, paragraph 1",
+      "evidence": "Completing the request begins with confirming eligibility, and uploading the receipt.",
+      "violation": "This getting-started summary appears as the document's ninth section, after Approval Timeline, Required Documentation, Reimbursement Amounts, and Restrictions and Exceptions, sections that only matter once a request already exists, instead of sitting near How to Apply where the reader first needs it.",
+      "fix": "Move this sentence into or immediately after the How to Apply section, or delete it as redundant with that section.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-004",
+      "criterion": "PLAIN-MUST",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Required Documentation, paragraph 2",
+      "evidence": "Additionally, employees shall retain receipts for one year after the purchase date.",
+      "violation": "The sentence states a binding requirement using shall or an indirect requirement phrasing instead of must.",
+      "fix": "Restate the requirement using must.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "PLAIN-PRONOUNS",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Restrictions and Exceptions, paragraph 1",
+      "evidence": "The applicant must keep the equipment in good working condition and this office may ask for a brief photo check once a year.",
+      "violation": "The sentence routes the reader or the writer's organization through a third-person institutional substitute instead of direct address.",
+      "fix": "Address the reader as you and the writer's organization as we.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 8,
+      "3": 3,
+      "4": 0
+    },
+    "suppressed_count": 3,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

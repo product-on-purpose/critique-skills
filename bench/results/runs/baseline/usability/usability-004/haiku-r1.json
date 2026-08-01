@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced last week.\" but the list shows only 3 items (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp)",
+      "fix": "Either add the fourth project to the list or change \"4 projects\" to \"3 projects\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Line 11, workspace overview section",
+      "severity": 3,
+      "violation": "The text claims 4 projects but only 3 are displayed in the project list."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The form contains an email input with a submit button labeled \"Save\", followed by a separate anchor link with id=\"invite-member-continue-link\" that says \"Continue\"",
+      "fix": "Remove either the form's submit button or the Continue link to clarify the workflow, and ensure the remaining element handles the invitation submission clearly.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Lines 37-41, invite-member form section",
+      "severity": 3,
+      "violation": "The form has both a submit button and a separate navigation link, making the user interaction unclear - it is ambiguous whether clicking Save submits the form or if the user must click Continue afterward."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The select element for digest frequency contains options for \"Daily\", \"Weekly\", and \"Monthly\", but no option has a \"selected\" attribute",
+      "fix": "Add selected=\"selected\" or the selected attribute to one of the option elements to indicate the current default setting.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Lines 70-74, notification-settings section",
+      "severity": 3,
+      "violation": "The default selected value is not specified, so users cannot determine what the current notification frequency setting is before making changes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The text contains curly quotation marks around \"Q3 Roadmap\": \"Archiving \"Q3 Roadmap\"...\" and \"\"Q3 Roadmap\" has been moved...\"",
+      "fix": "Replace the curly quotation marks with straight ASCII quotation marks: \"Q3 Roadmap\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Lines 52 and 58, archive confirmation section",
+      "severity": 3,
+      "violation": "Smart quotes (curly quotes) may not render correctly across all systems and browsers, or may be inconsistent with the rest of the interface which does not use smart quotes."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

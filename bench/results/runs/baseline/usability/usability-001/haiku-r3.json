@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 3 projects, synced last week.\" but only 2 projects listed below",
+      "fix": "Either update the text to say \"2 projects\" or add the missing third project to the list.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Workspace overview section (line 11)",
+      "severity": 3,
+      "violation": "The introductory text claims 3 projects exist, but the displayed list only shows 2 projects."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\"></button>`",
+      "fix": "Add descriptive button text like \"Duplicate project\" or add aria-label=\"Duplicate project\" to the button element.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Project settings section, line 29",
+      "severity": 3,
+      "violation": "The button has no visible text label or aria-label attribute, making it impossible to understand what clicking it does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form>`",
+      "fix": "Add an action attribute specifying where the form should be submitted, such as action=\"/api/save-project-name\".",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Project settings form (line 24)",
+      "severity": 3,
+      "violation": "The form element has no action attribute, so submitting it has no defined target."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form>`",
+      "fix": "Add an action attribute to the form and add required to the email input element.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Invite member form (line 37)",
+      "severity": 3,
+      "violation": "The email input form has no action attribute and the email input lacks a required attribute."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"notification-settings-digest-input\">` with no option marked as selected",
+      "fix": "Add selected=\"selected\" to one of the options to show the current notification preference.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Notification settings select (line 69)",
+      "severity": 3,
+      "violation": "The select dropdown does not have a pre-selected option, so on initial page load the field appears empty."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Section contains only heading and confirmation text with no navigation",
+      "fix": "Add navigation links such as \"Back to project settings\" or \"Send another invite\" to allow users to proceed.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Invite sent section (lines 45-48)",
+      "severity": 3,
+      "violation": "After sending an invite, users have no way to return to previous steps or continue to the next action."
+    }
+  ],
+  "run": {
+    "artifact": "bench/results/staging/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

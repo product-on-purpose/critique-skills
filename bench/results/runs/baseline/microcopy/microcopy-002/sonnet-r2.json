@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: directly below the shipping address block\" and \"Signal: bold text set above the address block at a larger size than its labels, icon\"",
+      "fix": "Correct one of the two fields so placement and signal describe the same position relative to the address block.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Checkout form, shipping address section, second message block (\"Please correct the highlighted field. Error code: 502.\"), the Placement and Signal lines",
+      "severity": 3,
+      "violation": "The placement and signal for this message contradict each other. Placement puts the message below the shipping address block, while signal describes it as positioned above the block, so the document does not agree with itself on where this message sits."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" attached to a message that surfaces \"Error code: 502\"",
+      "fix": "Set Predictable mistake to no, remove the instruction to correct a field, and rewrite the message to describe a save failure on the server rather than an invalid field.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Checkout form, shipping address section, second message block (\"Please correct the highlighted field. Error code: 502.\"), the Predictable mistake line",
+      "severity": 3,
+      "violation": "A 502 is a server side gateway error, not something caused by what the user typed, so it is not a predictable user mistake, and the message wrongly tells the reader to correct the highlighted field as if the fault were theirs."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" attached to a message describing unrecoverable data loss",
+      "fix": "Set Predictable mistake to no, or state the user action that caused the loss if one actually exists.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Account settings, username section, the single message block (\"The last changes were not saved and cannot be recovered. Contact support for assistance.\"), the Predictable mistake line",
+      "severity": 3,
+      "violation": "An unrecoverable loss of saved changes that requires contacting support describes a system failure, not a foreseeable user error, so labeling it a predictable mistake contradicts what the message itself says happened."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Container: toast\" next to \"Placement: in a dialog centered on the password reset step, over the new password field it blocks\"",
+      "fix": "Change Container to dialog to match the described placement and signal, or rewrite placement and signal to describe an actual non blocking toast.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Password reset, new password section, second message block (\"This reset link expired an hour after it was sent...\"), the Container line",
+      "severity": 3,
+      "violation": "The container is labeled toast, but the placement and signal describe a centered, blocking dialog with a heading, which is a modal pattern rather than a toast, so the two fields describe different kinds of surfaces for the same message."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"long enough that a guessing attack cannot work through every combination\"",
+      "fix": "Reword to something accurate, such as long enough to make guessing every combination impractical, or drop the justification clause entirely.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Password reset, new password section, first message block (\"Choose a password of at least 8 characters...\"), the message text",
+      "severity": 3,
+      "violation": "This claims an 8 character minimum makes brute force guessing impossible, but it only makes guessing slower, so the message overstates the security benefit and could leave a reader with false confidence in a weak password."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page\"",
+      "fix": "Move this message inline, directly below the new password field, matching the placement pattern used elsewhere in the document.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Password reset, new password section, first message block (\"Choose a password of at least 8 characters...\"), the Placement line",
+      "severity": 3,
+      "violation": "The rule governing the new password field sits away from that field, so the reader must scroll off the visible field to read the requirement that applies to it, unlike every other message in the document, which sits directly next to the field it concerns."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:41:18Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

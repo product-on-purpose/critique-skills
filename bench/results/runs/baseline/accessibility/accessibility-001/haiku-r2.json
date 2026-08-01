@@ -1,0 +1,116 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/accessibility/accessibility-001.html",
+    "artifact_sha256": "f620e43c2035d9380934dbe1b09dba438bb38bc1fb7f1feeb58010af44eaf176",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T20:17:49.273860Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Head section, title element",
+      "evidence": "<title id=\"head-title\"></title>",
+      "violation": "The page title is empty, which means screen readers will have no meaningful title to announce to users.",
+      "fix": "Provide a descriptive page title, for example: <title>Rider Service Updates - Transportation</title>",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Root html element, lang attribute",
+      "evidence": "<html lang=\"translanguage\" id=\"html\">",
+      "violation": "The lang attribute contains \"translanguage\" which is not a valid language code, making it impossible for assistive technologies to correctly determine the document language.",
+      "fix": "Replace lang=\"translanguage\" with a valid language code such as lang=\"en\" for English.",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section 1, image element at line 21",
+      "evidence": "<img src=\"/img/platform-update.jpg\" id=\"s1-img1\">",
+      "violation": "The image has no alt attribute, so screen reader users will not know what the image depicts.",
+      "fix": "Add a descriptive alt attribute: <img src=\"/img/platform-update.jpg\" id=\"s1-img1\" alt=\"Platform update announcement\">",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section 2, heading element",
+      "evidence": "<h4 id=\"s2-h\">Accessibility improvements</h4>",
+      "violation": "The heading hierarchy skips from h2 to h4, violating the proper nesting structure that assistive technology relies on to understand document structure.",
+      "fix": "Change the h4 to h3: <h3 id=\"s2-h\">Accessibility improvements</h3>",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section 3, custom delete control element",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">",
+      "violation": "This div with role=\"button\" is keyboard accessible via tabindex but has no click handler or keyboard event listener, so keyboard users cannot actually activate it.",
+      "fix": "Add JavaScript event handlers for click and keydown events: document.getElementById('s3-customcontrol').addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { /* delete action */ } });",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section 3, form promo code input",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\">",
+      "violation": "The input has aria-invalid=\"true\" but does not use aria-describedby to link to the error message, so screen readers cannot associate the error with the field.",
+      "fix": "Add aria-describedby attribute: <input id=\"promo\" type=\"text\" aria-invalid=\"true\" aria-describedby=\"s3-form-promo-error\">",
+      "confidence": "medium",
+      "id": "F-006"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section 3, wizard steps element",
+      "evidence": "<div class=\"wizard-steps\" id=\"s3-wizard\"> <div class=\"step\" id=\"s3-step1\">Choose a plan</div>",
+      "violation": "The wizard steps have no ARIA roles or semantic structure to indicate they are steps in a process, leaving assistive technology unable to convey their purpose.",
+      "fix": "Add ARIA roles and attributes: <div class=\"wizard-steps\" id=\"s3-wizard\" role=\"group\" aria-label=\"Steps\"> <div class=\"step\" id=\"s3-step1\" aria-current=\"step\">Choose a plan</div>",
+      "confidence": "medium",
+      "id": "F-007"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section 3, form image element",
+      "evidence": "<img src=\"/img/trash-icon.svg\" alt=\"\">",
+      "violation": "The image has an empty alt attribute which may be intentional for decorative images, but this element is inside a button with aria-label=\"Delete item\", creating potential redundancy or confusion.",
+      "fix": "If the image is decorative, keep alt=\"\" but ensure the button itself has sufficient accessible name; if the image conveys meaning, provide descriptive alt text.",
+      "confidence": "medium",
+      "id": "F-008"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

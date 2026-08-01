@@ -1,0 +1,29 @@
+Location: Search results, no matches section, first message block ("This request timed out before it could finish.")
+Evidence: heading reads "Search results, no matches" but the message text is "This request timed out before it could finish."
+Problem: The section heading promises copy for the no-matches state, but this entry describes a request timeout, a different failure state entirely. A reader looking under this heading for no-matches copy will find timeout copy instead, with nothing distinguishing the two.
+Fix: Split the entry into its own subsection, for example "Search results, request timeout", or broaden the heading to something like "Search results, errors and empty states" that actually covers both cases it lists.
+
+Location: Search results, no matches section, first message block, Suggested fix field
+Evidence: Suggested fix: none
+Problem: A request timeout is normally recoverable by retrying, yet this entry offers no retry action, while the other two entries in the document each supply a specific actionable fix (a clear filters button, a resume now action).
+Fix: Add a suggested fix that offers a retry action, for example "selectable, offers a try again button beside the message."
+
+Location: Search results, no matches section, second message block ("No orders fall inside the selected date range...")
+Evidence: Message: No orders fall inside the selected date range. Change the date range, or clear the filters to see every order.
+Problem: The section is titled "Search results" but this message and its wording are about an order list filtered by a date range, not a search query. The mismatch makes it unclear whether the heading or the message is describing the actual feature.
+Fix: Either rename the section heading to match the feature it documents, for example "Order list, no matches", or rewrite the message to use search terminology consistent with the heading.
+
+Location: Search results, no matches section, second message block, Signal field
+Evidence: Signal: styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action, text-label
+Problem: Every other Signal field in the document is a plain description of the visual treatment used, for example "bold heading text where the first result would sit, text-label" and "bold text at the top of the notification list, icon". This Signal field instead states a design judgment about a missing visual cue, breaking the field's consistent purpose across entries.
+Fix: Rewrite the Signal field to state only the actual visual treatment, for example "styled as an informational banner, text-label", and record the missing-visual-cue concern in a separate notes field if it needs to be tracked.
+
+Location: Notification center, sync status section, Fires field
+Evidence: Fires: on-focus
+Problem: "on-focus" does not say what element receives focus, so a reader cannot tell what user action actually triggers this message to appear, unlike the other two entries where "on-submit" is unambiguous given the surrounding filter and search context.
+Fix: Name the specific element or event that triggers the message, for example "Fires: on-open, when the notification center is opened."
+
+Location: Notification center, sync status section, Placement field
+Evidence: Placement: in the notification list, directly under the sync status row
+Problem: The message itself is the sync status text ("Sync is paused..."), yet the placement field describes it as sitting below a separate "sync status row," leaving it unclear whether this message is that row or a distinct item duplicating it.
+Fix: Clarify the placement field, for example "Placement: is the sync status row itself, at the top of the notification list," or rename the referenced row if it is genuinely a separate element.

@@ -1,0 +1,39 @@
+Location: Section "timeout"
+Evidence: "Leaving this field at its default is the right choice for most teams"
+Problem: The document does not specify what the default timeout value is.
+Fix: Add a sentence stating the default timeout value in milliseconds.
+
+Location: Section "timeout" and "retries"
+Evidence: These sections discuss related functionality but do not reference each other
+Problem: The timeout and retries fields work together but are documented in isolation with no cross-references.
+Fix: Add a sentence to each section noting its relationship to the other field.
+
+Location: Section "retries"
+Evidence: "The retries field takes an integer from 0 to 10, and it defaults to 3."
+Problem: The section does not explain what happens on each retry attempt or whether there is a backoff strategy.
+Fix: Add a sentence explaining the retry strategy and whether there is exponential backoff, linear intervals, or immediate retries.
+
+Location: Section "logging"
+Evidence: "The logging field accepts one of debug, info, warn, or error, and the default value is info."
+Problem: The document does not explain what information is logged at each level.
+Fix: Add a brief description of what each logging level logs (e.g., "debug logs all internal state changes").
+
+Location: Section "Related pages"
+Evidence: "- Metric catalog reference\n- Notification channel reference\n- Webhook delivery reference"
+Problem: These related pages are listed as plain text without links, making them unhelpful for navigation.
+Fix: Convert the plain text items to markdown links pointing to the actual reference pages.
+
+Location: Section "timeout"
+Evidence: "raising it is worth doing only when a specific integration needs the extra room"
+Problem: The guidance is vague about when timeout should actually be raised beyond "specific integration needs the extra room".
+Fix: Add concrete examples of scenarios where increasing the timeout is necessary.
+
+Location: Throughout the document
+Evidence: Each field section describes functionality but not whether the field is required or optional
+Problem: The document does not indicate which fields are required and which are optional in an alert rule configuration.
+Fix: Add a designation (Required/Optional) for each field, either as a prefix in each heading or in a table at the top.
+
+Location: Section "timeout"
+Evidence: "the validator rejects any value below 1000"
+Problem: The section does not specify what error message or behavior occurs when an invalid value is provided.
+Fix: Add a sentence describing the validator error or rejection behavior (e.g., "the validator rejects values below 1000 with an error message").

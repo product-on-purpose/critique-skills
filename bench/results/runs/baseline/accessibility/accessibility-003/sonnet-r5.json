@@ -1,0 +1,149 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Riders may request a fare adjustment through the mobile app. Station staff can also help with the same request in person.\"",
+      "fix": "Rename the heading to match the actual content, for example \"Fares and rider support,\" or replace the paragraph text with real accessibility related updates.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section \"Accessibility improvements\" (id=\"s1\"), first paragraph (id=\"s1-p1\")",
+      "severity": 3,
+      "violation": "The section heading is \"Accessibility improvements\" but neither paragraph under it mentions accessibility; the text is about fare adjustments and real time arrivals instead."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "alt=\"Crews repainting the accessible parking spaces near the station entrance.\"",
+      "fix": "Add a sentence in the section that introduces the repainting work shown in the image, or swap in an image that matches the fare adjustment and real time arrivals content that is actually there.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section \"Accessibility improvements\" (id=\"s1\"), image (id=\"s1-img1\")",
+      "severity": 3,
+      "violation": "The image's alt text describes a repainting project that is never mentioned in the surrounding paragraphs, so the image reads as unrelated to the rest of the section."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person.\"",
+      "fix": "Remove the duplicated paragraph from this section and write copy specific to weekend service, such as which routes run and how often.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section \"Weekend service\" (id=\"s2\"), first paragraph (id=\"s2-p1\")",
+      "severity": 3,
+      "violation": "This paragraph is nearly identical to the opening paragraph of the \"Accessibility improvements\" section above it, and it has nothing to do with weekend service."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "table with header row \"Zone\" and \"Status\" and no caption element anywhere in the table markup",
+      "fix": "Add a caption element as the table's first child, for example \"Weekend service status by zone.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section \"Weekend service\" (id=\"s2\"), table (id=\"s2-table1\")",
+      "severity": 3,
+      "violation": "The table has no caption identifying what it shows, so a reader who reaches it out of context has no label for what the Zone and Status columns mean."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Local residents should review the updated schedule through the mobile app. Station staff can also help with the same request in person.\"",
+      "fix": "Rewrite the second sentence to match the first, for example \"Station staff can also help riders find the updated schedule in person.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id=\"s3\"), first paragraph (id=\"s3-p1\")",
+      "severity": 3,
+      "violation": "The second sentence refers to \"the same request,\" but the first sentence describes reviewing a schedule, not making a request, so the two sentences do not logically connect."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day.\"",
+      "fix": "Write status card copy specific to schedule changes and remove the duplicate real time arrivals text from one of the two locations.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id=\"s3\"), status card (id=\"s3-statuscard\")",
+      "severity": 3,
+      "violation": "This text duplicates the second paragraph of the \"Accessibility improvements\" section (id=\"s1-p2\") almost word for word, reused here in a status card about schedule changes rather than real time arrivals."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "the steps appear in this order in the markup: \"Confirm your order\" (id=\"s3-step3\"), \"Enter payment details\" (id=\"s3-step2\"), \"Choose a plan\" (id=\"s3-step1\"), positioned only with a CSS order value",
+      "fix": "Reorder the step elements in the markup itself to choose a plan, enter payment details, confirm your order, instead of relying on CSS order to reverse them.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id=\"s3\"), wizard steps (id=\"s3-wizard\")",
+      "severity": 3,
+      "violation": "The steps are written into the page in reverse of their logical sequence and depend on CSS to display in the right order, so the underlying content order is confirm, pay, then choose, which is backwards."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "a div with class \"icon-delete\" containing only an image with alt=\"\"",
+      "fix": "Mark this up as a real button element with a visible or aria-label accessible name, for example aria-label=\"Delete,\" and keep the icon image decorative alongside that real button text.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id=\"s3\"), delete control (id=\"s3-customcontrol\")",
+      "severity": 3,
+      "violation": "This looks like an actionable delete control, but it is a plain div containing an image with empty alt text, so it has no accessible name and nothing in the markup shows it can be activated by keyboard."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"For the full list of upcoming adjustments, read the accessibility improvements list.\" where the link points to /fares/history",
+      "fix": "Change the link text to describe where it goes, for example \"view fare history\" or \"see upcoming adjustments,\" consistent with the href and the sentence around it.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id=\"s3\"), link paragraph (id=\"s3-linkpara\")",
+      "severity": 3,
+      "violation": "The link text says \"read the accessibility improvements list,\" but the href points to /fares/history and the surrounding sentence is about upcoming adjustments, so the link wording matches neither its destination nor its own sentence."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "label element for \"Phone number\" with style=\"color:#cc0000\" while every other label in the form has no inline style",
+      "fix": "Remove the one-off inline red color, or if it signals a required or error state, add visible explanatory text the way the promo code field does and apply the same treatment consistently.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id=\"s3\"), form phone label (id=\"s3-form-phone-label\")",
+      "severity": 3,
+      "violation": "Only the \"Phone number\" label is styled in red with an inline style, and there is no visible text nearby explaining why, so it is unclear if the field is required, invalid, or just inconsistently styled."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "input with aria-invalid=\"true\" on first load, followed by a span with the text \"Error.\"",
+      "fix": "Only mark the field invalid after a failed submission or after the user leaves it with bad input, and replace \"Error.\" with a specific message such as \"This promo code was not recognized.\"",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (id=\"s3\"), form promo code field (id=\"promo\")",
+      "severity": 3,
+      "violation": "The promo code field is marked invalid before the user has typed anything, and the error text simply says \"Error.\", so it does not tell the user what is wrong or how to fix it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "69ff628078a107c11bd403359666e3fafdba2d4ab204fdec80881f7db5374db6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T20:31:23Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 11,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

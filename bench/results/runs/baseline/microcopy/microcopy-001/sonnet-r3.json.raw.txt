@@ -1,0 +1,39 @@
+Location: Signup form, email field, first message block ("The connection dropped before this finished."), the Fires field
+Evidence: Message: The connection dropped before this finished. / Fires: on-blur
+Problem: A dropped connection is a network or submission failure, not something that would be detected when the user leaves the field. Triggering this message on-blur does not match when a connection attempt would actually occur or fail.
+Fix: Change Fires to the event that actually triggers the network request, such as on-submit or on-attempt, or rewrite the message to describe a blur-triggered validation failure instead.
+
+Location: Signup form, email field, first message block ("The connection dropped before this finished."), the Predictable mistake field
+Evidence: Predictable mistake: yes
+Problem: A dropped connection is a system or network failure, not a mistake the user made, so marking it as a predictable mistake mischaracterizes the cause of the error.
+Fix: Change Predictable mistake to no, or add a note explaining what user behavior is being predicted.
+
+Location: Signup form, email field, first message block ("The connection dropped before this finished."), the Suggested fix field
+Evidence: Suggested fix: selectable, offers the one available next step as a direct action
+Problem: The suggested fix describes attributes of a control, such as selectable and direct action, without naming the actual next step, so a designer or engineer cannot tell what to build.
+Fix: State the specific action, for example "Suggested fix: Retry button that resubmits the form."
+
+Location: Checkout form, payment method, first message block ("Something went wrong. Contact support if this continues."), the Message field
+Evidence: Message: Something went wrong. Contact support if this continues.
+Problem: The message gives no information about what actually failed, so the user cannot tell whether the problem is with their card, the network, or something else before contacting support.
+Fix: Name the specific failure if it is known, for example "We could not process this card. Try again or use a different payment method," and reserve the generic message for cases where no specific cause is available.
+
+Location: Checkout form, payment method, first message block ("Something went wrong. Contact support if this continues."), the Container field
+Evidence: Container: inline, next to Placement: in a banner directly above the payment method selector
+Problem: The Container field says inline while the Placement field describes a banner, which are two different presentation types for the same message.
+Fix: Change Container to banner to match the placement description, or rewrite the placement to describe an inline element.
+
+Location: Checkout form, payment method, second message block ("The expiry date on this card has passed, Update the expiry date, or choose a different card."), the Fires field
+Evidence: Fires: mid-keystroke
+Problem: Firing an expiry date error mid-keystroke means the message can appear before the user has finished typing the date, producing a false error on an incomplete value.
+Fix: Change Fires to on-blur, or trigger validation only once the expiry date field holds a complete value.
+
+Location: Profile settings, phone number, first message block ("You keep entering the wrong value. Re-enter it to continue."), the Message field
+Evidence: Message: You keep entering the wrong value. Re-enter it to continue.
+Problem: The message does not say what is wrong with the value entered, and the phrase you keep entering the wrong value reads as blaming the user rather than explaining the problem.
+Fix: State the specific validation failure and remove the accusatory phrasing, for example "Enter a valid phone number, including area code."
+
+Location: Profile settings, phone number, second message block ("This phone number is already on another account. Remove it there first, or contact support to move it across."), the Input on resubmission field
+Evidence: Input on resubmission: cleared
+Problem: Every other message in the document preserves input on resubmission, and this is the only entry that clears it, forcing the user to retype a phone number they already entered correctly.
+Fix: Change Input on resubmission to preserved to match the rest of the document, unless there is a stated reason to clear it.

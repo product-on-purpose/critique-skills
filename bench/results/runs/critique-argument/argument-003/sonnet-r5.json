@@ -1,0 +1,42 @@
+{
+  "run": {
+    "skill": "critique-argument",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/argument/argument-003.md",
+    "artifact_sha256": "3735fd3a135fcd3f730e35c6af56fb064083676684399e5b0486c140ff7894de",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T20:54:22Z",
+    "rubrics": ["TOULMIN"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "TOULMIN-GROUNDS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"Recommendation\" section, third paragraph (the 60-day return window sentence)",
+      "evidence": "The \"Recommendation\" section's third paragraph states, \"This recommendation applies to items returned within 60 days of their due date; items still unreturned past that window remain subject to the existing replacement-cost billing process, matching the return-rate pattern the pilot data actually established.\" The \"What the Pilot Showed\" section reports only \"the on-time-or-eventual return rate for borrowed items held at 94 percent, compared with 87 percent at the branches that kept fines in place,\" with no breakdown of how many days late an eventual return took.",
+      "violation": "The recommendation section asserts the 60-day cutoff is \"matching the return-rate pattern the pilot data actually established,\" a claim that a specific number corresponds to the pilot's data, but the pilot section never reports any day-count breakdown of returns, so a reader has nothing in the artifact to check that correspondence against.",
+      "fix": "State the day-count distribution the pilot actually measured under \"What the Pilot Showed\" (for example, what share of eventual returns came back within 60 days), or drop the phrase \"matching the return-rate pattern the pilot data actually established\" if no such breakdown was recorded.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-002",
+      "criterion": "TOULMIN-REBUTTAL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "evidence": "The pilot compares only two conditions: fines eliminated, \"the on-time-or-eventual return rate for borrowed items held at 94 percent,\" against fines kept in place, \"87 percent at the branches that kept fines in place.\" The \"Addressing the Revenue Concern\" section answers only the full-elimination-versus-status-quo revenue question; no paragraph anywhere in the document raises a reduced-fine or partial-fee alternative.",
+      "violation": "The grounds test only full elimination against keeping fines as they are, so they do not rule out a reduced-fine alternative, such as a lower flat fee or a longer grace period, as achieving a similar return-rate gain at less revenue cost; the artifact never raises or answers this alternative anywhere.",
+      "fix": "Add a paragraph addressing why a reduced-fine or partial approach was not recommended instead of full elimination, for example by citing pilot or brief data showing a partial reduction underperforms full elimination, or by stating explicitly that no such alternative was tested.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {"0": 0, "1": 0, "2": 2, "3": 0, "4": 0},
+    "suppressed_count": 0,
+    "gate": "pass",
+    "severity_3_threshold": 0
+  }
+}

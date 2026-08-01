@@ -1,0 +1,94 @@
+{
+  "run": {
+    "artifact": "bench/corpus/argument/argument-002.md",
+    "artifact_sha256": "0322bc2ebeb48318c56473186a8cb1f1e78d8667b99cfaf75ee7bb84f82fcfa2",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "TOULMIN"
+    ],
+    "skill": "critique-argument",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-07-31T21:42:15Z"
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "TOULMIN-CLAIM-MARKER",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "evidence": "0 conclusion-marker phrases found across 401 words.",
+      "violation": "No phrase from the conclusion-marker lexicon (therefore, thus, hence, it follows that, we recommend, this paper argues, I argue that, the conclusion is, in conclusion, we should, the case for) appears anywhere in the artifact, so a reader scanning rather than reading straight through has no signpost to where the conclusion is asserted.",
+      "fix": "Add an explicit conclusion-signalling phrase at the point the artifact states its central claim, for example \"therefore\" or \"we recommend\".",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "TOULMIN-HEDGE-DENSITY",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "evidence": "10 of 14 sentences (0.71) carry at least one hedging term.",
+      "violation": "More than 0.35 of the artifact's sentences carry a term from the hedging lexicon (may, might, could, possibly, perhaps, arguably, somewhat, relatively, it seems, appears to, tends to, to a degree), spread across the whole document rather than concentrated where the evidence actually underdetermines the claim.",
+      "fix": "Remove the hedge from sentences whose claim the evidence actually supports, reserving qualification for the claims that genuinely need it.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "TOULMIN-REBUTTAL",
+      "lane": "judged",
+      "severity": 3,
+      "location": "sections \"What the Pilot Showed\" through \"Why the Pilot Result Applies Systemwide\"",
+      "evidence": "The artifact names one objection (revenue impact) and addresses it with data. The major objection implicit in the grounds - whether pilot-scale results (4 branches) actually generalize to systemwide policy (10 branches) - is never raised as an objection or answered, though it is the load-bearing step of the entire argument.",
+      "violation": "The artifact's central claim rests on generalizing from a pilot to a full consortium implementation. The grounds establish that the pilot worked and that peer systems saw similar results, but the specific objection about whether this generalization holds for this consortium is never raised and addressed. A skeptical reader's first question - why should we assume a 4-branch pilot predicts 10-branch success? - is left unaddressed.",
+      "fix": "Raise and answer the generalization objection explicitly. For example: acknowledge that pilots do not always scale as predicted, then explain why these results are expected to generalize (similar patron populations, library sizes, technology infrastructure, or other relevant factors that make this consortium comparable to the Tri-County systems where the research was conducted).",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "TOULMIN-BACKING",
+      "lane": "judged",
+      "severity": 2,
+      "location": "section \"Why the Pilot Result Applies Systemwide\"",
+      "evidence": "The artifact supports the general principle that eliminating fines increases return rates and participation with a citation to the Tri-County Library Data Cooperative's 2023 research brief reviewing 14 systems. No backing is provided for why this consortium's context matches those 14 systems, which is a separate general principle the argument relies on.",
+      "violation": "The principle that 'evidence from peer library systems applies to our context' is advanced but not backed. The Tri-County research is cited, but the artifact never explains why this consortium resembles those 14 systems in ways that matter (patron demographics, collection size, technology baseline, geographic area, or other contextual factors that would establish relevance).",
+      "fix": "Add a backing statement explaining why this consortium's circumstances match the studied systems. This could be a statement about the consortium being in a similar region or serving similar-sized communities, or a reference to earlier data showing alignment with the peer systems studied.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-005",
+      "criterion": "TOULMIN-QUALIFIER",
+      "lane": "judged",
+      "severity": 2,
+      "location": "sections \"What the Pilot Showed\" and \"Recommendation\"",
+      "evidence": "The claim is first stated in Section 2 as 'plainly the better path' (unqualified). It is then restated in the Recommendation section as 'the stronger choice' (unqualified). But the recommendation itself includes 'in whatever way the consortium finds workable' (heavily qualified and vague about what exactly is recommended).",
+      "violation": "The strength of the claim about eliminating fines is asserted differently across the artifact. The opening treats it as plainly obvious (on pilot evidence only), but the recommendation itself hedges to an undefined 'workable' approach, leaving a reader who reads the ending unsure whether the artifact is recommending full elimination or some modified approach.",
+      "fix": "Decide whether the evidence supports a full, unqualified recommendation for systemwide elimination or a more cautious qualified recommendation, then state that version consistently throughout. If the evidence warrants the unqualified form, remove 'in whatever way the consortium finds workable'; if the evidence warrants caution, state that reservation upfront alongside the recommendation.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "TOULMIN-WARRANT",
+      "lane": "judged",
+      "severity": 2,
+      "location": "section \"Why the Pilot Result Applies Systemwide\", first paragraph",
+      "evidence": "The artifact states: 'removing the financial penalty for late returns predictably increases both on-time return rates and overall program participation, which is the reason the pilot's return-rate and avoidance-survey results, taken together, support ending fines for the whole consortium rather than only the pilot branches.' This makes the warrant of the effect explicit but assumes without stating the warrant for generalization.",
+      "violation": "The warrant connecting 'evidence from other libraries' to 'we should act on it for our consortium' is left implicit. The artifact does not state the principle that would have to hold (e.g., 'library systems in similar regional or demographic contexts experience similar effects,' or 'peer-reviewed evidence from comparable systems generalizes without modification'). A reader cannot see why the Tri-County evidence bears on this consortium's decision.",
+      "fix": "Add an explicit statement of the warrant connecting peer evidence to this consortium's context. For example: 'Because this consortium's patron demographics and branch network structure are similar to the systems in the Tri-County study, their results provide direct evidence for what we can expect from a similar policy change here.'",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

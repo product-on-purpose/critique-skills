@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<p id=\"s1-p1\" style=\"color:#999999\">Passengers should review the updated schedule at any station kiosk.",
+      "fix": "Use a darker text color such as #595959 or verify the contrast ratio meets 4.5:1 minimum against the actual background.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Line 20, first paragraph under \"Accessibility improvements\"",
+      "severity": 3,
+      "violation": "Text colored #999999 gray may have insufficient contrast against a light background, potentially failing WCAG AA standards."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<label for=\"topic-alt\" id=\"s3-form-topic-label\">Route</label> <select id=\"topic\">",
+      "fix": "Change the label's for attribute from \"topic-alt\" to \"topic\" to properly associate the label with the select element.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Line 60-61, form field section",
+      "severity": 3,
+      "violation": "The label's for attribute references \"topic-alt\" but the select element has id=\"topic\", creating a mismatch that breaks the label association."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> <span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code...",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the input element to associate it with the error text.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Line 67-68, form error field",
+      "severity": 3,
+      "violation": "The input with aria-invalid=\"true\" is not programmatically linked to its error message via aria-describedby."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a href=\"/fares/history\" id=\"s3-link1\">read the accessibility improvements list</a>",
+      "fix": "Update the href to point to an actual accessibility improvements page, such as \"/accessibility/improvements\", or change the link text to match the destination.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Line 58, link to accessibility improvements",
+      "severity": 3,
+      "violation": "The link text says \"accessibility improvements list\" but the href points to \"/fares/history\", which appears to be a fares page not an accessibility page, creating a mismatch."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\"> <img src=\"/img/trash-icon.svg\" alt=\"\">",
+      "fix": "Implement proper click and keyboard (Enter/Space) handlers using JavaScript, add visual focus and active states with CSS, or replace with a native <button> element.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Line 44-46, custom button control",
+      "severity": 3,
+      "violation": "The div with role=\"button\" is keyboard accessible but lacks keyboard event handlers and visual feedback for interaction, making it unclear how users should interact with it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/results/staging/accessibility/accessibility-002.html",
+    "artifact_sha256": "b49ce74681df60732a6ef3b5309ce82264ad1b6ad48c6fa8b85989f2c712f113",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T12:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

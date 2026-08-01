@@ -1,0 +1,86 @@
+{
+  "run": {
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T21:45:34Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-EM-SEVERITY-CONTAINER",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Password reset, new password, message 2, Container field",
+      "evidence": "Container: toast. Placement: in a dialog centered on the password reset step, over the new password field it blocks.",
+      "violation": "The Container field is toast, a self-clearing presentation, but the Placement field describes this message as a centered dialog that blocks the new password field it sits over, a fully blocking failure state. A self-clearing toast can vanish before the reader acts on the one avenue offered, the send-a-new-link button.",
+      "fix": "Change Container to modal so the message and its send-a-new-link action stay on screen until the reader dismisses it, instead of clearing itself automatically.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-EM-GRACE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Account settings, username, message 1",
+      "evidence": "The last changes were not saved and cannot be recovered. Contact support for assistance.",
+      "violation": "This is the only message on the screen, Suggested fix is none, and the message reports a total, unrecoverable loss with a bare instruction and no acknowledgment anywhere in it of what that loss means for the reader.",
+      "fix": "Add a brief acknowledgment of the loss before the instruction, for example a short apology, so the message is not only a bare technical notice.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-EM-PLAIN-LANGUAGE",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Checkout form, shipping address, message 2",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "violation": "The message text carries an internal error code, a code-style token, or an engineering-jargon term standing in for a plain-language explanation.",
+      "fix": "Replace the code or jargon term with a plain-language sentence a non-technical reader can act on.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-EM-PREVENT",
+      "lane": "judged",
+      "severity": 2,
+      "location": "File upload, receipts, message 2, Fires field",
+      "evidence": "Fires: on-submit. Predictable mistake: yes.",
+      "violation": "The accepted formats, PDF or PNG, are a fixed limit the product already knows, so this is a foreseeable mistake, yet nothing warns the reader until after they submit; no earlier message on this screen checks the format at selection time.",
+      "fix": "Validate the file's format as soon as it is selected, before the reader submits, instead of waiting until on-submit to report it.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-EM-PROXIMITY",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Password reset, new password, message 1, Placement field",
+      "evidence": "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page",
+      "violation": "The message sits at the top of a long form rather than beside the field it concerns, requiring the reader to scroll up to find it, even though the field itself stays on screen.",
+      "fix": "Move the message to sit directly beside or below the password field it concerns, instead of at the top of the form.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-EM-SELECTABLE-FIX",
+      "lane": "judged",
+      "severity": 2,
+      "location": "File upload, receipts, message 1, Suggested fix field",
+      "evidence": "Suggested fix: described, names the one available alternative but requires the reader to enter it by hand",
+      "violation": "The suggested fix names a single, unambiguous option, reducing the file below the 10 MB limit, but only describes it in words, leaving the reader to act on it by hand instead of offering it as something they can pick directly.",
+      "fix": "Offer the fix as a selectable action, for example a button that opens a resize or compression step, instead of only describing it in the message.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {"0": 0, "1": 0, "2": 6, "3": 1, "4": 0},
+    "suppressed_count": 1,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

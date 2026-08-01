@@ -1,0 +1,127 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T02:20:49Z",
+    "rubrics": [
+      "NNG"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-1",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"project-archived\" section",
+      "evidence": "The project-archived section reads: \"Vendor Onboarding\" has been moved to archived projects. It no longer appears in the active projects list for anyone on the team. Its only control is the \"project-archived-exit-link\" link, text \"Back to your projects\", targeting #workspace-overview.",
+      "violation": "Archiving is the kind of state change a product ordinarily treats as reversible, distinct from delete, but the artifact defines no unarchive or restore control anywhere, including on the project-archived state itself, so an archived project has no path back to the active list within the artifact.",
+      "fix": "Add a restore or unarchive control, for example on the \"project-archived\" state or an archived-projects list, that returns \"Vendor Onboarding\" to the active projects list, and define the state it leads to.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-2",
+      "criterion": "NNG-H4-INTERNAL",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"invite-member\" section",
+      "evidence": "The \"invite-member\" section defines a form with a \"Save\" submit button (id \"invite-member-save-btn\") and, outside that form, a separate \"Continue\" link (id \"invite-member-continue-link\") targeting #invite-sent. The \"invite-sent\" section then reads: \"An invite was sent to the address entered above.\"",
+      "violation": "On project-settings and notification-settings, Save is the screen's only commit control, and clicking it ends the task. In invite-member, Save is followed by a second, separate control, Continue, and the artifact never states whether Save sends the invite, whether Continue does, or whether both are required. The meaning Save carries everywhere else in the artifact, a final commit, does not hold here without any cue that it differs, and the invite-sent confirmation is reachable without ever activating Save.",
+      "fix": "Remove the separate Save control from this flow and let Continue submit the email and send the invite in one step, or state in place what Save commits and confirm that the invite is not sent until Continue is used.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-3",
+      "criterion": "NNG-H9-IDENTIFY",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"import-status\" section",
+      "evidence": "The \"import-status\" section reads: \"Import failed. Error code IMP-500. Contact support if this continues.\"",
+      "violation": "The message reports only that the import failed and surfaces a raw error code, IMP-500, instead of naming which file, record, or step caused the failure, so the user cannot tell what to change before trying again.",
+      "fix": "Replace or supplement the message with a plain-language cause naming the specific file, record, or step that failed, keeping the error code only as a secondary reference for support.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-4",
+      "criterion": "NNG-H9-RECOVER",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"import-status\" section",
+      "evidence": "The import-status section's only control is the \"import-status-exit-link\" link, text \"Back to your projects\", targeting #workspace-overview. The message text \"Contact support if this continues\" carries no link, address, or control.",
+      "violation": "The message's only suggested recovery step, contacting support, names no reachable control, link, or address, and the artifact defines no retry control either. The section's one control exits to the workspace overview, so the only action the artifact actually offers after this failure is leaving the task.",
+      "fix": "Add a retry control that re-attempts the import, and make contact support an actual reachable path, a link, an address, or a linked support flow, from this state.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-5",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"Save\" button",
+      "evidence": "The \"project-settings\" section defines: <button id=\"project-settings-save-btn\" type=\"submit\">Save</button>, submitting a text input holding the project name. No confirmation, message, or updated state is named anywhere in the artifact after this control is used.",
+      "violation": "This action changes stored state, the project's name, but the artifact names no visible indication anywhere of what the system did or whether it succeeded once Save is used.",
+      "fix": "Specify a confirmation shown after this Save commits, for example an inline \"saved\" message or a status change near the button.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-6",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"Duplicate project\" button",
+      "evidence": "The \"project-settings\" section defines: <button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>. No target state, message, or updated project list is named anywhere in the artifact after this control is used.",
+      "violation": "Duplicating a project creates a new stored object, but the artifact names no visible indication anywhere, no confirmation, no new list entry, no next state, of whether the duplicate was created or where to find it.",
+      "fix": "Specify what the user sees after Duplicate project is used, for example a confirmation message naming the new project, or a defined state showing it in the projects list.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-7",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"notification-settings\" section, the \"Save\" button",
+      "evidence": "The \"notification-settings\" section defines: <button id=\"notification-settings-save-btn\" type=\"submit\">Save</button>, submitting a digest-frequency selection. No confirmation, message, or updated state is named anywhere in the artifact after this control is used.",
+      "violation": "This action changes a stored preference, but the artifact names no visible indication anywhere of what the system did or whether it succeeded once Save is used.",
+      "fix": "Specify a confirmation shown after this Save commits, for example an inline \"saved\" message or a status change near the button.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-8",
+      "criterion": "NNG-H3-EXIT",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-member\" section, the \"Cancel\" link",
+      "evidence": "The \"invite-member\" section holds an email input (id \"invite-member-email-input\") and a \"Cancel\" link (id \"invite-member-cancel-link\") targeting #project-settings. Nothing in the artifact states what becomes of the entered email address when Cancel is used.",
+      "violation": "The exit is visible and its label predicts a return to project settings, but the artifact never says whether the email address already entered survives the cancel or is discarded.",
+      "fix": "State in place what happens to the entered email address on cancel, for example that it is discarded, or preserve and restate it if the invite flow is reopened.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-9",
+      "criterion": "NNG-H6-RECALL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-sent\" section",
+      "evidence": "The \"invite-sent\" section reads: \"An invite was sent to the address entered above.\" No email address is restated on this section, and its only control, \"invite-sent-exit-link\", targets #project-settings, not back to \"invite-member\".",
+      "violation": "The confirmation refers to \"the address entered above\" as though it were still visible, but this is a separate defined state from the entry screen, nothing is above it, and no control in the artifact returns to invite-member to verify which address was used.",
+      "fix": "State the actual email address on the invite-sent confirmation, for example \"An invite was sent to {email}.\"",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 4,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

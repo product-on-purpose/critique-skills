@@ -1,0 +1,72 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T00:00:00Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "First message under Search results, no matches",
+      "evidence": "Suggested fix: none",
+      "violation": "A timeout error requires a recovery action, but this message suggests none. Users need guidance on what to do next.",
+      "fix": "Change \"Suggested fix: none\" to a concrete action such as \"Suggested fix: offer a retry button or suggest checking network connection\"",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Second message under Search results, no matches",
+      "evidence": "Signal: styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action",
+      "violation": "The message has no visual distinction to indicate it requires user action, which may cause users to overlook it or confuse it with passive information.",
+      "fix": "Add a visual indicator such as a warning color, icon, or distinctive styling to signal that this message demands action (e.g., a red or orange background instead of neutral styling)",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "First message under Notification center, sync status",
+      "evidence": "Suggested fix: selectable, offers a resume now action inside the notification",
+      "violation": "The message places the actionable element inside the notification, but users may not discover it if they do not explore the notification content, especially since the message itself does not clearly indicate interactivity.",
+      "fix": "Make the interaction more discoverable by adding visual indicators (underline, color, icon) to signal that the message or specific text within it is interactive",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Overall document structure",
+      "evidence": "The document lists six metadata fields per message (Message, Placement, Container, Signal, Fires, Predictable mistake, Input on resubmission, Suggested fix)",
+      "violation": "The document mixes descriptive metadata with design problems, making it unclear what the actual issues are and which fields represent findings versus context.",
+      "fix": "Reorganize the document to separate context fields (Placement, Container, Fires) from problem statements, and make the Problem field more prominent",
+      "confidence": "medium",
+      "id": "F-004"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

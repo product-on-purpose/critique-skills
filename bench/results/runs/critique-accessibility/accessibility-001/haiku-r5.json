@@ -1,0 +1,116 @@
+{
+  "run": {
+    "artifact": "bench/results/staging/accessibility/accessibility-001.html",
+    "rubrics": [
+      "WCAG"
+    ],
+    "model": "claude-haiku-4-5-20251001",
+    "skill": "critique-accessibility",
+    "artifact_sha256": "f620e43c2035d9380934dbe1b09dba438bb38bc1fb7f1feeb58010af44eaf176",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "timestamp": "2026-07-31T20:17:41Z"
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "lane": "scripted",
+      "fix": "Add a <main> element wrapping the primary content, or a skip link as the first focusable element linking to it.",
+      "violation": "The page provides neither a main landmark (a <main> element or role=\"main\") nor a leading same-page skip link.",
+      "severity": 3,
+      "location": "line 8, <body> opening tag",
+      "evidence": "<body id=\"body\">; 2 focusable element(s) precede the first heading",
+      "criterion": "WCAG-2.4.1",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "lane": "scripted",
+      "fix": "Give the page a specific <title> describing its topic or purpose.",
+      "violation": "The page has no usable title: the title element is missing or empty.",
+      "severity": 3,
+      "location": "line 6, <title> element",
+      "evidence": "<title></title>",
+      "criterion": "WCAG-2.4.2",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "lane": "scripted",
+      "fix": "Set lang to a well-formed BCP 47 tag identifying the page's default language, for example lang=\"en\".",
+      "violation": "The <html> element's lang attribute 'translanguage' is not a well-formed BCP 47 language tag.",
+      "severity": 3,
+      "location": "line 2, <html> element",
+      "evidence": "<html lang=\"translanguage\" id=\"html\">",
+      "criterion": "WCAG-3.1.1",
+      "confidence": "high"
+    },
+    {
+      "id": "F-008",
+      "lane": "judged",
+      "fix": "Add a second independent navigation mechanism such as a site search form, a sitemap link, or a breadcrumb trail that independently reaches other pages.",
+      "violation": "The page provides only one navigation mechanism, and the page is not a single step in a linear process, leaving a reader who lands on the page directly from a search engine with only one way to find any related page.",
+      "severity": 3,
+      "location": "page navigation and structure",
+      "evidence": "Page offers only a primary navigation menu with two links; no site search, sitemap link, or breadcrumb trail present.",
+      "criterion": "WCAG-2.4.5",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "lane": "scripted",
+      "fix": "Add an alt attribute (or aria-label) describing the image, or mark it decorative with alt=\"\".",
+      "violation": "No text alternative is present and the element is not marked decorative.",
+      "severity": 2,
+      "location": "line 21, <img> element",
+      "evidence": "<img src=\"/img/platform-update.jpg\" id=\"s1-img1\">",
+      "criterion": "WCAG-1.1.1",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "lane": "scripted",
+      "fix": "Change this heading to <h5>, or add the missing intervening heading level.",
+      "violation": "Heading level skips from <h2> to <h4> with no intervening level.",
+      "severity": 2,
+      "location": "line 24, <h4> heading, 'Accessibility improvements'",
+      "evidence": "<h4 id=\"s2-h\">",
+      "criterion": "WCAG-1.3.1",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "lane": "scripted",
+      "fix": "Rewrite the link text to describe its destination or purpose, or add an aria-label.",
+      "violation": "The link's accessible name is a generic phrase that gives no clue to its destination out of context.",
+      "severity": 2,
+      "location": "line 57, <a> link, text 'click here'",
+      "evidence": "<a href=\"/fares/history\" id=\"s3-link1\">click here</a>",
+      "criterion": "WCAG-2.4.4",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "lane": "scripted",
+      "fix": "Include the visible label text at the start of the aria-label value, or remove the aria-label and rely on the visible text.",
+      "violation": "The control's visible text does not appear within its accessible name, so a voice-control user naming the visible label cannot activate it.",
+      "severity": 2,
+      "location": "line 68, <button> control, visible label 'Submit'",
+      "evidence": "visible text 'Submit', accessible name 'Send form now'",
+      "criterion": "WCAG-2.5.3",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "4": 0,
+      "2": 4,
+      "3": 4
+    },
+    "suppressed_count": 0
+  }
+}

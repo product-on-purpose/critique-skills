@@ -1,0 +1,105 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T00:00:00Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Checkout form, shipping address, first message",
+      "evidence": "\"\"This field takes a maximum of 30 characters. Shorten the entry and save again.\"\"",
+      "violation": "The message does not identify which field is too long, forcing the user to guess.",
+      "fix": "Start with the field name: \"\"The postal code field takes a maximum of 30 characters. Shorten it and save again.\"\"",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Checkout form, shipping address, second message",
+      "evidence": "\"\"Please correct the highlighted field. Error code: 502.\"\"",
+      "violation": "\"\"The highlighted field\"\" is too vague and assumes the user can see visual highlighting. The error code 502 is a server error, not user actionable.",
+      "fix": "Identify the specific field: \"\"The street address is missing or invalid. Please enter a complete address and try again.\"\"",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "File upload, receipts, first message",
+      "evidence": "\"\"This receipt is over the 10 MB limit, which keeps uploads quick on slow connections. Reduce the file size and upload it again.\"\"",
+      "violation": "The message does not explain how to reduce file size, leaving the user without a concrete action.",
+      "fix": "Add a concrete method: \"\"This receipt is over the 10 MB limit. Compress it with your device's built-in tools or take a new photo at lower resolution, then upload again.\"\"",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Password reset, new password, first message",
+      "evidence": "\"\"Choose a password of at least 8 characters, long enough that a guessing attack cannot work through every combination.\"\"",
+      "violation": "The security explanation is unnecessarily technical and long, and the connection between 8 characters and immunity to guessing attacks is unclear.",
+      "fix": "Simplify to \"\"Your password must be at least 8 characters long.\"\"",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Password reset, new password, first message",
+      "evidence": "Placement: \"\"at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page\"\"",
+      "violation": "The error message is placed far from the input field it describes, requiring users to scroll to find it.",
+      "fix": "Place the message directly below the password input field so it appears in context with the field it applies to.",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Password reset, new password, second message",
+      "evidence": "\"\"This reset link expired an hour after it was sent, so nobody can reuse it from an old message. Request a new link and check the inbox again.\"\"",
+      "violation": "\"\"Nobody can reuse it from an old message\"\" is wordy and unclear. The instruction to \"\"Request a new link\"\" does not say how or where to do so.",
+      "fix": "Simplify to \"\"Your password reset link expired. Tap Request a New Link below to get started again.\"\"",
+      "confidence": "medium",
+      "id": "F-006"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Account settings, username, message",
+      "evidence": "\"\"The last changes were not saved and cannot be recovered. Contact support for assistance.\"\"",
+      "violation": "\"\"Cannot be recovered\"\" is alarming language without context. \"\"Contact support\"\" gives no indication of how to contact them.",
+      "fix": "\"\"Your changes did not save. Try again, or visit support.example.com if the problem continues.\"\"",
+      "confidence": "medium",
+      "id": "F-007"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

@@ -1,0 +1,44 @@
+Location: workspace-overview section, "Your projects" list beneath the summary paragraph
+Evidence: "This workspace holds 4 projects, synced this morning." followed by a list containing only "Beta Launch Plan", "Holiday Campaign Assets", and "Partner Integration Pilot" (3 items)
+Problem: The stated project count (4) does not match the number of projects actually listed (3), which reads as a data bug to anyone reviewing the mockup.
+Fix: Either add the fourth project to the list or change the summary text to say "3 projects."
+
+Location: project-settings section, "Duplicate project" button (id project-settings-duplicate-btn)
+Evidence: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>
+Problem: The button has no visible text or icon content, only an aria-label, so sighted users see an empty, unlabeled control and have no way to know what it does or that it is even present.
+Fix: Add visible label text such as "Duplicate" inside the button, or an icon plus adjacent text, in addition to the aria-label.
+
+Location: archive-confirm section, the "Cancel" and "Archive" links
+Evidence: <a id="archive-confirm-cancel-link" href="#project-settings">Cancel</a> and <a id="archive-confirm-archive-link" href="#project-archived">Archive</a>
+Problem: The destructive, team-wide "Archive" action is marked up identically to the safe "Cancel" action, with no visual or semantic distinction, making it easy to trigger by mistake.
+Fix: Style the destructive action distinctly, for example a warning color or button treatment, and make Cancel the visually primary choice.
+
+Location: invite-sent section
+Evidence: "An invite was sent to the address entered above. It expires in 5 days if not accepted."
+Problem: The confirmation message refers to "the address entered above," but this screen does not display or carry forward the email address that was entered on the previous screen, so the reference has nothing for the reader to look at.
+Fix: Display the actual email address that was invited in the confirmation message, for example "An invite was sent to {email}."
+
+Location: import-status section
+Evidence: "Import failed. Error code IMP-500. Contact support if this continues."
+Problem: The error message surfaces a raw internal error code to the end user and tells them to "contact support" without providing any way to do so, and gives no option to retry the import.
+Fix: Add a retry action and a way to contact support such as a link or button, and consider hiding the raw error code behind a details disclosure rather than showing it by default.
+
+Location: notification-settings section, "Digest frequency" select
+Evidence: <select id="notification-settings-digest-input"><option>Daily</option><option>Weekly</option></select>
+Problem: Neither option is marked as selected, so a user arriving at this screen cannot tell what their current digest setting is before changing it.
+Fix: Mark the user's current setting as the selected option by default by adding the selected attribute to the appropriate option.
+
+Location: workspace-overview section, "View last import result" link
+Evidence: <a id="workspace-overview-import-link" href="#import-status">View last import result</a>
+Problem: This is the only entry point to the import-status screen, but its label gives no indication that the last import failed, so a user has no reason to click it and may never learn about the failure.
+Fix: Change the link text or add a status indicator to signal the failed state, for example "Import failed, view details."
+
+Location: archive-confirm section
+Evidence: "Archiving \"Vendor Onboarding\" will remove it from the active projects list for everyone on the team."
+Problem: A single click on "Archive" immediately performs a team wide, irreversible sounding action with no secondary confirmation such as typing the project name, which is inconsistent with the stated impact.
+Fix: Require a stronger confirmation step, such as typing the project name or a checkbox acknowledgment, before the archive action becomes available.
+
+Location: whole document, the head element
+Evidence: <head> contains only <meta charset="utf-8"> and <title>; no <style> or <link rel="stylesheet"> element appears anywhere in the file
+Problem: With no styling at all, every link and button renders as plain default browser text, so there is no visual hierarchy distinguishing primary actions, destructive actions, or navigation from body text, undermining the document's stated purpose as a mockup.
+Fix: Add at minimum basic styling to differentiate buttons, primary actions, and destructive actions from plain links and body text.

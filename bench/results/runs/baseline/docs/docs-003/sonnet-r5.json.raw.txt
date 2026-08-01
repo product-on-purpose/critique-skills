@@ -1,0 +1,24 @@
+Location: "## timeout" section, first two paragraphs
+Evidence: "the validator rejects any value below 1000" followed by "Leaving this field at its default is the right choice for most teams"
+Problem: The section refers to "its default" but never states what the default value actually is, unlike the retries and logging sections, which both give an explicit default.
+Fix: State the timeout field's actual default value, for example "defaults to 5000 milliseconds."
+
+Location: "## timeout" section, first paragraph
+Evidence: "the validator rejects any value below 1000"
+Problem: Only a lower bound is documented for timeout; there is no statement of whether an upper bound exists, so the field's valid range is incomplete.
+Fix: Document the maximum accepted value, or explicitly state that the field has no upper bound.
+
+Location: "## timeout" section, second paragraph
+Evidence: "Leaving this field at its default is the right choice for most teams, and raising it is worth doing only when a specific integration needs the extra room."
+Problem: This sentence gives subjective usage advice rather than a factual field description, which is inconsistent with the "mode: reference" declared in the frontmatter and with the plain factual style used in the retries and logging sections.
+Fix: Remove the recommendation or move it into a separate guide document, leaving only factual field constraints in this reference page.
+
+Location: "## timeout" section, first paragraph
+Evidence: "the validator rejects any value below 1000"
+Problem: The document does not explain what "rejects" means in practice, for example whether it throws an error, blocks a deploy, or falls back silently to the default.
+Fix: Add a sentence describing the concrete effect of validator rejection.
+
+Location: "## Related pages" section
+Evidence: "- Metric catalog reference" and the eight other bullet items that follow it
+Problem: None of the nine related-page entries include a link or path, so a reader cannot navigate to any of them from this document.
+Fix: Turn each bullet into a markdown link pointing at its target page.

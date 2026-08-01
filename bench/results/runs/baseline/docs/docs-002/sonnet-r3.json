@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The document goes directly from the title to \"## Open the test console\" with no introductory sentence.",
+      "fix": "Add one or two sentences under the H1 stating the tutorial's purpose and expected end state, for example \"This tutorial sends a sample alert through your delivery pipeline so you can confirm alerts are being delivered correctly.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Document opening, between the H1 title \"Send your first test alert\" and the first section heading \"## Open the test console\"",
+      "severity": 3,
+      "violation": "There is no context explaining what a test alert is or what the reader will have accomplished by the end, so a first-time reader begins the steps without knowing the goal."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Open the test console from the developer menu and select the sample alert rule provided for new accounts.\"",
+      "fix": "Name the specific UI location, for example \"Open the developer menu (gear icon, top right) and select Test console.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"Open the test console\" section, first sentence",
+      "severity": 3,
+      "violation": "\"the developer menu\" is never located in the interface, so a reader with no prior familiarity with the product cannot find it from this instruction alone."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"#### Check the sidebar updated\"",
+      "fix": "Change the heading level to H2 to match the other step headings, or remove the heading and fold the sentence into the paragraph above, and reword it to \"Check that the sidebar updated.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"#### Check the sidebar updated\" heading, nested under \"Open the test console\"",
+      "severity": 3,
+      "violation": "This heading jumps from H2 to H4, skipping H3, and is the only step in the document demoted to a sub-heading rather than a plain paragraph or a matching H2, which breaks the document's heading hierarchy; the phrase itself is also grammatically incomplete, reading like a dangling participle rather than an instruction."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The status indicator takes a few seconds to update while the delivery pipeline processes the event in the background.\"",
+      "fix": "State an approximate maximum wait time, for example \"typically within 10 seconds, and no more than a minute.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"Trigger the sample alert\" section, second paragraph",
+      "severity": 3,
+      "violation": "\"a few seconds\" has no stated upper bound, so a reader has no way to tell normal delay from a stuck delivery pipeline."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Open the delivery log and check that the test alert shows a Sent status with a timestamp.\"",
+      "fix": "Add a short troubleshooting note, for example what a Failed or Pending status means and where to look next, or a link to a troubleshooting document.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Check the delivery log\" section, the document's final paragraph",
+      "severity": 3,
+      "violation": "The tutorial ends without any guidance for what to do if the status is not Sent, leaving a reader whose test fails with no troubleshooting path or next step."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-002.md",
+    "artifact_sha256": "25c4dd0ebb76ed338a3330329de0387044967be4fa65c3db44b1e3042d579c91",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:23:51Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

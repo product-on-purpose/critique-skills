@@ -1,0 +1,116 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-08-01T02:11:39.858242Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Workspace overview section, project list (lines 13-17)",
+      "evidence": "\"This workspace holds 4 projects, synced this morning.\" but only 3 projects listed: \"Beta Launch Plan\", \"Holiday Campaign Assets\", \"Partner Integration Pilot\"",
+      "violation": "The text states there are 4 projects but only 3 are shown in the list, creating a discrepancy that confuses users about what projects are available.",
+      "fix": "Either update the text to say \"3 projects\" or add the missing 4th project name to the list.",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Project settings section, duplicate button (line 29)",
+      "evidence": "\"<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>\"",
+      "violation": "The button has no visible text label, only an aria-label attribute, making it unclear to sighted users what the button does.",
+      "fix": "Add visible text content to the button such as \"Duplicate\" or an icon with appropriate text alternative.",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Invite member form (line 39)",
+      "evidence": "\"<input id=\"invite-member-email-input\" type=\"email\">\"",
+      "violation": "The email input lacks any validation feedback or error message display, so users won't know if they entered an invalid email address.",
+      "fix": "Add a placeholder attribute or validation message element that indicates what format is expected and displays errors.",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Archive confirm section (lines 50-55)",
+      "evidence": "\"<h2>Archive this project?</h2><p id=\"archive-confirm-copy\">Archiving \"Vendor Onboarding\" will remove it from the active projects list for everyone on the team.</p>\"",
+      "violation": "The section shows the project name in confirmation text but provides no way to verify you are archiving the correct project, which is risky for a destructive action.",
+      "fix": "Display additional project details (like creation date, team members, or project key) so users can confirm they have the right project before archiving.",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Import status section (line 63)",
+      "evidence": "\"Import failed. Error code IMP-500. Contact support if this continues.\"",
+      "violation": "The error message shows only a cryptic error code with no explanation of what went wrong or what the user should do to resolve it.",
+      "fix": "Replace the generic error code with a human-readable explanation, for example \"Import failed: unable to connect to the data source. Try again in a few moments or contact support.\"",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Project settings form (lines 24-28)",
+      "evidence": "\"<form><label for=\"project-settings-name-input\">Project name</label><input id=\"project-settings-name-input\" type=\"text\" value=\"Vendor Onboarding\"><button id=\"project-settings-save-btn\" type=\"submit\">Save</button></form>\"",
+      "violation": "After clicking Save, users see no feedback indicating whether the change was successful, leading to uncertainty about whether their action was completed.",
+      "fix": "Add a success message or confirmation state that appears briefly after the form is submitted and validated successfully.",
+      "confidence": "medium",
+      "id": "F-006"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Notification settings form (lines 68-75)",
+      "evidence": "\"<form><label for=\"notification-settings-digest-input\">Digest frequency</label><select id=\"notification-settings-digest-input\"><option>Daily</option><option>Weekly</option></select><button id=\"notification-settings-save-btn\" type=\"submit\">Save</button></form>\"",
+      "violation": "The select dropdown has no indication of what the current setting is or whether a new choice differs from what is saved.",
+      "fix": "Add a selected attribute to the option that matches the current user preference, or display the current setting separately from the form control.",
+      "confidence": "medium",
+      "id": "F-007"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Navigation links throughout document",
+      "evidence": "Multiple anchor tags use fragment identifiers: \"#project-settings\", \"#import-status\", \"#notification-settings\", etc.",
+      "violation": "Fragment links assume the page uses a single-page navigation pattern, but there is no visible indication these are clickable or what they do, leaving users uncertain how to navigate.",
+      "fix": "Add visual styling or icons to distinguish links from plain text, or replace fragment links with actual page navigation if this is a multi-page application.",
+      "confidence": "medium",
+      "id": "F-008"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

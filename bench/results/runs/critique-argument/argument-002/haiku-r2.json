@@ -1,0 +1,103 @@
+{
+  "run": {
+    "skill": "critique-argument",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/argument/argument-002.md",
+    "artifact_sha256": "0322bc2ebeb48318c56473186a8cb1f1e78d8667b99cfaf75ee7bb84f82fcfa2",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T20:40:29Z",
+    "rubrics": ["TOULMIN"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "TOULMIN-CLAIM-MARKER",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "evidence": "0 conclusion-marker phrases found across 401 words.",
+      "violation": "No phrase from the conclusion-marker lexicon (therefore, thus, hence, it follows that, we recommend, this paper argues, I argue that, the conclusion is, in conclusion, we should, the case for) appears anywhere in the artifact, so a reader scanning rather than reading straight through has no signpost to where the conclusion is asserted.",
+      "fix": "Add an explicit conclusion-signalling phrase at the point the artifact states its central claim, for example \"therefore\" or \"we recommend\".",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "TOULMIN-GROUNDS",
+      "lane": "judged",
+      "severity": 3,
+      "location": "section \"What the Pilot Showed\", and section \"Why the Pilot Result Applies Systemwide\"",
+      "evidence": "The artifact states \"Given the return-rate and avoidance-survey results above\" and references \"the pilot's return-rate... results, taken together\" but never specifies what the return-rate results are. Only the avoidance survey result is given: \"self-reported avoidance of the library due to fear of fines dropped from 20 percent of respondents before the pilot to 3 percent after it.\"",
+      "violation": "The central claim (systemwide end to overdue fines) rests on \"return-rate and avoidance-survey results\" but the return-rate result is never stated. A reader cannot check evidence that the artifact does not provide.",
+      "fix": "Specify the return-rate result in the \"What the Pilot Showed\" section, for example: \"on-time return rates increased from X percent to Y percent\" with the concrete numbers.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "TOULMIN-HEDGE-DENSITY",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "evidence": "10 of 14 sentences (0.71) carry at least one hedging term.",
+      "violation": "More than 0.35 of the artifact's sentences carry a term from the hedging lexicon (may, might, could, possibly, perhaps, arguably, somewhat, relatively, it seems, appears to, tends to, to a degree), spread across the whole document rather than concentrated where the evidence actually underdetermines the claim.",
+      "fix": "Remove the hedge from sentences whose claim the evidence actually supports, reserving qualification for the claims that genuinely need it.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "TOULMIN-QUALIFIER",
+      "lane": "judged",
+      "severity": 3,
+      "location": "section \"Recommendation\"",
+      "evidence": "The central claim is stated as \"the stronger choice is a systemwide end to overdue fines across all ten consortium branches, effective at the start of the next fiscal year\" and \"This recommendation removes every overdue-related charge permanently, for every item the consortium owns, without qualification.\" Meanwhile, the grounds are heavily qualified: \"Arguably\", \"It seems\", \"In a somewhat qualified way\", \"It might be that\".",
+      "violation": "The central claim is asserted as settled and non-negotiable, but the grounds supporting it are heavily qualified and include a pilot result that covers only 4 of 10 branches for only 12 months. A reader has no signal that the recommendation might not generalize or persist.",
+      "fix": "Restate the recommendation with language matching the strength of the evidence, for example: \"the pilot results suggest that a systemwide end to overdue fines would likely improve outcomes, though longer-term and broader evidence would strengthen this recommendation.\"",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "TOULMIN-CLAIM",
+      "lane": "judged",
+      "severity": 2,
+      "location": "section \"Recommendation\", middle portion",
+      "evidence": "The artifact first states \"the stronger choice is a systemwide end to overdue fines across all ten consortium branches, effective at the start of the next fiscal year\" (specific), then immediately says \"Specifically, the recommended change is about making things better for patrons going forward, in whatever way the consortium finds workable\" (vague), then restates \"This recommendation removes every overdue-related charge permanently, for every item the consortium owns, without qualification\" (specific again).",
+      "violation": "The artifact states its conclusion in multiple forms, with one dissolved into a vague aspiration in between crisp statements. The middle statement uses \"Specifically\" to introduce what should be a specification, but instead makes the claim vaguer (\"in whatever way the consortium finds workable\").",
+      "fix": "Either remove the middle vague restatement or rewrite it to match the specificity of the surrounding statements. For example: \"Specifically, this means removing every overdue-related charge permanently, beginning at the next fiscal year.\"",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "TOULMIN-REBUTTAL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "section \"Addressing the Revenue Concern\"",
+      "evidence": "The artifact addresses the revenue objection: \"fine revenue covered under 2 percent of the annual materials budget over the last three fiscal years, and the four pilot branches absorbed the loss without a measurable change to their replacement-copy spending.\" However, it does not address whether results from 4 pilot branches will generalize to all 10 branches, or whether a 12-month pilot result will persist long-term.",
+      "violation": "The artifact's own grounds leave open two foreseeable conditions: generalization from 4 branches to 10, and persistence beyond 12 months. One objection (revenue) is raised and answered, but the more fundamental questions about pilot generalization and persistence are not addressed.",
+      "fix": "Add a section addressing generalization and persistence, such as: \"While the pilot involved four specific branches, these branches reflect the consortium's geographic and demographic range, and follow-up data at the 18-month mark showed sustained results.\"",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-007",
+      "criterion": "TOULMIN-WARRANT",
+      "lane": "judged",
+      "severity": 2,
+      "location": "section \"Why the Pilot Result Applies Systemwide\"",
+      "evidence": "The artifact states the general principle: \"removing the financial penalty for late returns predictably increases both on-time return rates and overall program participation, which is the reason the pilot's return-rate and avoidance-survey results, taken together, support ending fines for the whole consortium rather than only the pilot branches.\" But it does not state the principle connecting a 4-branch 12-month pilot to a 10-branch permanent policy.",
+      "violation": "The artifact states why removing fines works in general, but not the specific principle that would warrant moving from pilot results to systemwide policy. A skeptical reader cannot reconstruct why success in 4 branches for 12 months licenses a permanent systemwide change across 10 branches.",
+      "fix": "State the warrant explicitly, for example: \"Because the pilot branches represent the consortium's range of community sizes and demographics, and the pilot period was long enough to rule out short-term effects, these results support systemwide adoption.\"",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 4,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

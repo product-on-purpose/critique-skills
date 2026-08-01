@@ -1,0 +1,24 @@
+Location: ## endpoint_url section
+Evidence: "The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert."
+Problem: The description never states whether endpoint_url is required, and gives no example value, so a reader cannot tell what a valid entry looks like or whether omitting it is allowed.
+Fix: State whether the field is required or optional and add an example value, such as https://example.com/webhooks/alerts.
+
+Location: ## signing_secret section
+Evidence: "The signing_secret field accepts a string used to verify the payload signature on receipt."
+Problem: The section never names the signing algorithm, the header or field that carries the computed signature, or any length or character constraints on the secret, so a reader cannot actually implement verification from this text alone.
+Fix: Name the algorithm (for example HMAC-SHA256), the header that carries the resulting signature, and any minimum length or character requirements for the secret.
+
+Location: ## retry_policy section
+Evidence: "The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential."
+Problem: The three retry strategies are named but never defined: there is no stated retry interval, maximum number of attempts, or total time window before delivery is treated as failed.
+Fix: For each of none, linear, and exponential, state the concrete interval or backoff formula and the maximum retry count or total duration before giving up.
+
+Location: document as a whole, comparing the endpoint_url, signing_secret, and retry_policy sections
+Evidence: only the retry_policy section states "the default value is exponential"; the endpoint_url and signing_secret sections contain no equivalent required-or-default statement
+Problem: Required and default status is given for one of the three fields but omitted for the other two, so the document does not apply a consistent pattern to fields it presents as a set.
+Fix: Add a required or optional statement and a stated default, or explicitly "no default," for endpoint_url and signing_secret, matching the pattern already used for retry_policy.
+
+Location: document as a whole, after the retry_policy section
+Evidence: the document ends after three isolated field descriptions with no combined example
+Problem: A reference describing three related configuration fields never shows them combined into one example configuration object, leaving the container structure and field-name casing to be guessed.
+Fix: Add one example configuration block, in the format the system actually accepts, showing endpoint_url, signing_secret, and retry_policy set together.

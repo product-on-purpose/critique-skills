@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<html lang=\"translanguage\" id=\"html\">",
+      "fix": "Change lang=\"translanguage\" to a valid language code, such as lang=\"en\" for English.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "html element, lang attribute",
+      "severity": 3,
+      "violation": "The language attribute uses \"translanguage\" which is not a valid BCP 47 language code."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<title id=\"head-title\"></title>",
+      "fix": "Add descriptive content to the title element, such as <title>Rider Service Updates</title>.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "head element, title tag",
+      "severity": 3,
+      "violation": "The page has an empty title element, which means the page has no meaningful title for screen readers or browser tabs."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<img src=\"/img/platform-update.jpg\" id=\"s1-img1\">",
+      "fix": "Add an alt attribute with descriptive text, such as alt=\"Updated platform infrastructure diagram\".",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section s1, img element",
+      "severity": 3,
+      "violation": "The image lacks an alt attribute, making it inaccessible to users relying on screen readers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<h2 id=\"s1-h\">Fare adjustments</h2> followed by <h4 id=\"s2-h\">Accessibility improvements</h4>",
+      "fix": "Change the h4 to an h3 to maintain proper heading hierarchy.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section s2, heading hierarchy",
+      "severity": 3,
+      "violation": "The heading hierarchy skips from h2 to h4, creating an improper nesting structure that confuses screen reader users about document structure."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">",
+      "fix": "Replace the div with an actual button element: <button type=\"button\" class=\"icon-delete\" aria-label=\"Delete item\" id=\"s3-customcontrol\">.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section s3, custom delete control",
+      "severity": 3,
+      "violation": "A div element is being used as a button with only role=\"button\" and tabindex, but actual button functionality and keyboard handling are not properly implemented."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\">",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the input element to associate it with the error message.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section s3, form label for promo code input",
+      "severity": 3,
+      "violation": "The promo code input has aria-invalid=\"true\" set, but there is no corresponding aria-describedby attribute pointing to the error message for users who need context."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\">Phone number (required)</label> <input id=\"phone\" type=\"tel\">",
+      "fix": "Add the required attribute to the input: <input id=\"phone\" type=\"tel\" required>.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Section s3, phone number input",
+      "severity": 3,
+      "violation": "The label indicates the phone field is required, but the input element does not have the required attribute, creating confusion for form validation and screen reader announcements."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"wizard-steps\" id=\"s3-wizard\"> <div class=\"step\" id=\"s3-step1\">Choose a plan</div> ...",
+      "fix": "Add role=\"group\" and aria-label=\"Steps for completing your order\" to the outer wizard-steps div, and add aria-current=\"step\" to the currently active step.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Section s3, wizard steps",
+      "severity": 3,
+      "violation": "The wizard steps are marked up as plain divs with no semantic structure or ARIA attributes to indicate their purpose as a multi-step wizard."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a href=\"/accessibility\" id=\"nav-link2\">Accessibility</a>",
+      "fix": "Wrap the navigation links in a proper list structure with role=\"navigation\" or verify they are semantically within a nav element that groups them as a navigation region.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Page header, navigation links",
+      "severity": 3,
+      "violation": "The navigation links in the header are not wrapped in a nav element or list structure that would be announced as navigation landmarks to screen reader users."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-001.html",
+    "artifact_sha256": "f620e43c2035d9380934dbe1b09dba438bb38bc1fb7f1feeb58010af44eaf176",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

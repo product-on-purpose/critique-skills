@@ -1,0 +1,29 @@
+Location: Search results, no matches, first Message block (the timed out entry)
+Evidence: "This request timed out before it could finish." paired with "Suggested fix: none"
+Problem: The message reports a timeout but offers the user no way to recover, while the second message in the same section offers a clear filters action. A timeout is exactly the kind of failure a user can retry, so leaving Suggested fix as none is an inconsistent and unhelpful gap.
+Fix: Add a retry action, for example a "Try again" button, and set Suggested fix to describe it, matching the pattern used by the second message.
+
+Location: "Search results, no matches" heading, compared with its first Message block
+Evidence: heading reads "no matches" while the first message reads "This request timed out before it could finish."
+Problem: A timeout is a different failure mode from a search that legitimately returned zero matches, so the section heading does not accurately describe the first entry beneath it.
+Fix: Split the section into two headings, for example "Search results, timed out" and "Search results, no matches," or rename the shared heading to cover both cases, such as "Search results, empty and failed states."
+
+Location: Search results section, both Message lines
+Evidence: first message says "This request timed out" with no object named, while the second says "No orders fall inside the selected date range"
+Problem: The two messages in the same section use inconsistent terminology, one generic and one naming "orders" specifically, so a reader cannot tell whether this screen is a general search or an order specific search.
+Fix: Use the same object noun in both messages, for example "The search for orders timed out before it could finish," so the section is consistent about what is being searched.
+
+Location: Search results, no matches, second Message block
+Evidence: "Suggested fix: selectable, offers a clear filters button beside the message" paired with "Input on resubmission: not-applicable"
+Problem: Clicking the suggested clear filters button causes a resubmission, since the results panel re-queries with filters cleared, so marking Input on resubmission as not applicable is inconsistent with the documented fix.
+Fix: Describe the resubmission behavior instead of marking it not applicable, for example "returns to the full unfiltered order list."
+
+Location: Notification center, sync status, Message block
+Evidence: "Input on resubmission: not-applicable" alongside "Suggested fix: selectable, offers a resume now action inside the notification"
+Problem: The entry documents an interactive resume now action but marks Input on resubmission as not applicable, leaving undocumented what happens to the notification and to sync state once the user selects resume.
+Fix: Replace "not-applicable" with a description of the post resume state, for example "notification updates to show sync in progress."
+
+Location: Notification center, sync status, Message text
+Evidence: "Sync is paused while this device is on a metered connection, so syncing does not spend a data allowance."
+Problem: The message refers to the device in the third person, "this device," while the same entry addresses the user directly in the next sentence, "Select resume to sync now," producing an inconsistent voice within a single message.
+Fix: Use second person throughout, for example "Sync is paused because your connection is metered, so it will not use your data allowance."

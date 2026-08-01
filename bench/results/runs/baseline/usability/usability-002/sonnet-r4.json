@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 5 projects, synced last week.\" is followed by a list of only 4 items (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)",
+      "fix": "Either add a fifth project to the list, change the count to \"4 projects,\" or add a visible label such as \"4 most recent of 5\" so the discrepancy is explained.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"Your projects\" section (#workspace-overview), the summary paragraph and the list beneath it",
+      "severity": 3,
+      "violation": "The stated project count does not match the number of items actually listed, and nothing in the visible copy explains that the list is partial, so a user has no way to tell where the fifth project went."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The link text is generic (\"Open project settings,\" not tied to any listed project), but it opens a form pre-filled with \"Customer Migration,\" a name that does not appear anywhere in the \"Your projects\" list (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)",
+      "fix": "Either make each listed project name a link to its own settings page, or rename the generic link to name the specific project it opens (for example \"Open settings for Customer Migration\") and add that project to the visible list.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"Open project settings\" link (#workspace-overview-projects-link) and the project it opens in #project-settings",
+      "severity": 3,
+      "violation": "A user cannot tell which project \"Open project settings\" will open, and the project it actually opens is not one they can see anywhere else on the page, breaking the connection between the overview and the settings screen."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button> has no text content between its tags",
+      "fix": "Add visible button text such as \"Duplicate,\" or an icon plus a visible label, while keeping the aria-label for screen readers.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Duplicate project\" button (#project-settings-duplicate-btn) in the Project settings section",
+      "severity": 3,
+      "violation": "The button has no visible text or icon, only an aria-label, so it renders as an empty, effectively invisible control that sighted users cannot identify or find."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a> targets #project-archived directly, while #archive-confirm is never linked to from anywhere in the document",
+      "fix": "Change project-settings-archive-link's target from #project-archived to #archive-confirm so the confirmation screen sits in the actual flow before the archive completes.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"Archive project\" link (#project-settings-archive-link) in Project settings, compared to the \"Archive this project?\" confirmation section (#archive-confirm)",
+      "severity": 3,
+      "violation": "The confirmation step that was clearly built for this destructive, hard to reverse action is never actually reached, because the real \"Archive project\" link bypasses it and jumps straight to the completed archived state."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The form has its own submit control (\"Save,\" id invite-member-save-btn, type submit) and a separate link right below the form (\"Continue,\" id invite-member-continue-link, href #invite-sent)",
+      "fix": "Remove one of the two controls, or clearly differentiate them, for example \"Save\" stores a draft and \"Send invite\" submits it, and make the surviving control the one that leads to #invite-sent.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Invite a team member\" section (#invite-member)",
+      "severity": 3,
+      "violation": "Two different controls appear to perform the same job of sending the invite, with no visible distinction of what \"Save\" does versus \"Continue,\" so a user cannot tell which one actually sends the invitation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "This button reads \"Submit,\" while the equivalent save buttons in Project settings (#project-settings-save-btn) and Invite a team member (#invite-member-save-btn) both read \"Save\"",
+      "fix": "Change the Notifications button's label from \"Submit\" to \"Save\" to match the other two forms.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "\"Notifications\" form submit button (#notification-settings-save-btn)",
+      "severity": 3,
+      "violation": "The same kind of action, saving a form, is labeled inconsistently across screens, which makes the interface feel less predictable."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-08-01T02:10:21Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

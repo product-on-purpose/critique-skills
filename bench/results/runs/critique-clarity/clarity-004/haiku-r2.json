@@ -1,0 +1,81 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:08:27Z",
+    "rubrics": ["PLAIN", "WILLIAMS"]
+  },
+  "findings": [
+    {
+      "id": "F-1",
+      "criterion": "PLAIN-AUDIENCE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Throughout document, especially Approval Timeline, Required Documentation, and Review Responsibility sections",
+      "evidence": "Approval Timeline addresses managers: 'The manager reviews the request within two business days.' Terminology Notes addresses staff: 'You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month.'",
+      "violation": "The document addresses multiple distinct readers (employees applying, managers reviewing, finance staff processing) without separating their content by reader. An employee cannot easily distinguish which instructions are theirs to follow versus which describe what other parties will do.",
+      "fix": "Clearly label sections by reader: Add 'Employees:' or 'Managers:' or 'Finance staff:' headers before sections addressing each role, or reorganize into separate sections for each audience, ensuring content meant for non-employees is clearly marked.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-2",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Terminology Notes section, lines 50-52",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review.",
+      "violation": "The term 'stipend item' is used three times in close succession in the Terminology Notes section without a definition. It remains unclear whether 'stipend item' refers to the equipment itself, the reimbursement request, or the dollar amount. The introduction of 'stipend item amount' compounds the confusion by suggesting the term has multiple meanings.",
+      "fix": "Add a definitions section at the top of the policy: 'Definitions: stipend item - the equipment or service the employee requests reimbursement for. stipend amount - the dollar value approved for reimbursement.' Then use 'stipend item' consistently to refer to equipment/service and 'stipend amount' to refer to dollars throughout the document.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-3",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Section placement: Request Steps (line 55-57) appears after Restrictions, Terminology, and Special Cases",
+      "evidence": "The Request Steps section states 'Completing the request begins with confirming eligibility, and uploading the receipt' but appears near the end of the document, after internal policy sections. Meanwhile, Terminology Notes and Program Coordination sections address staff processes, not reader tasks.",
+      "violation": "The document's section order does not follow the reader's actual workflow. The Request Steps section - the core procedural guidance an employee needs - is buried. Non-reader-facing sections (Terminology Notes, Program Coordination, Review Responsibility) appear before the essential task steps.",
+      "fix": "Reorganize the document: (1) Program Overview, (2) Eligibility, (3) How to Apply, (4) Request Steps (moved up), (5) Approval Timeline, (6) Reimbursement Amounts, (7) Required Documentation, (8) Restrictions and Exceptions, (9) Questions and Updates. Move Terminology Notes, Special Cases, Program Coordination, and Review Responsibility into an appendix labeled 'Internal Reference' or remove them entirely if they are not essential for employee readers.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-4",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Program Overview (lines 7, 10), Approval Timeline (line 29), Restrictions (line 47)",
+      "evidence": "A copy of each update goes to the shared benefits folder. An incomplete request pauses the timeline until the missing item arrives. The policy applies to one device per category per employee.",
+      "violation": "Multiple sentences use abstract subjects instead of naming the real actor. 'A copy goes' does not say who copies. 'A request pauses' does not say who pauses it (the manager). 'The policy applies' does not say the organization applies it.",
+      "fix": "Name the actors: 'The IT asset group copies each update to the shared benefits folder.' 'The manager pauses the timeline if the request is incomplete.' 'You are limited to one device per category per benefit year.' Replace passive constructions with active ones that name who performs the action.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-5",
+      "criterion": "WILLIAMS-STRESS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Reimbursement Amounts section, lines 38-40",
+      "evidence": "The stipend pays up to 500 dollars per benefit year. The finance office deposits the amount within one pay cycle.",
+      "violation": "The deposit timeline - the newest and most important information for someone waiting for reimbursement - is buried in the middle of the sentence and the section. A reader's attention lands on 'cycle' (procedural detail) rather than the key deadline.",
+      "fix": "Rewrite to place the timeline at the end where emphasis falls: 'Up to 500 dollars per benefit year will be reimbursed to you within one pay cycle after your request is approved.' Or break it into two sentences: 'The stipend covers up to 500 dollars per benefit year. You will receive your reimbursement within one pay cycle.'",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 2,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

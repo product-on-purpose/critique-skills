@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 5 projects\" but the list on lines 14-17 shows only 4 items listed",
+      "fix": "Update the message to either say \"4 projects\" or add the missing fifth project to the list",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Line 11, workspace overview section",
+      "severity": 3,
+      "violation": "The stated count does not match the visible list of projects"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button> contains no text",
+      "fix": "Add visible button text, such as \"Duplicate\" or an icon with a clear tooltip",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Line 30, project settings section",
+      "severity": 3,
+      "violation": "Users see an unlabeled button icon with no visible indication of what action it performs"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<p id=\"archive-confirm-copy\">Archiving \"Customer Migration\" will remove it... but line 27 shows the name in editable input <input id=\"project-settings-name-input\" type=\"text\" value=\"Customer Migration\">",
+      "fix": "Make the confirmation message dynamically reference the current project name instead of hardcoding it",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Line 53, archive confirmation section",
+      "severity": 3,
+      "violation": "The confirmation message hardcodes the project name, so if a user changes the name then navigates to archive, the message will not reflect the new name"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"invite-member-email-input\" type=\"email\"> has no required attribute or validation indicators",
+      "fix": "Add the required attribute to the email input and display validation feedback before allowing form submission",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Line 40, invite member section",
+      "severity": 3,
+      "violation": "Users could click Save without entering an email address, creating an invalid invitation"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "A form with Save button followed by separate Continue link on line 43 that navigates to the next section",
+      "fix": "Either integrate Continue into the form submission flow so Save advances automatically, or remove the separate Continue link and have the form naturally flow to the confirmation",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Lines 38-42, invite member form section",
+      "severity": 3,
+      "violation": "The relationship between the form submission and the Continue link is unclear; users do not know if they must do both actions or if one replaces the other"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The archive link on line 33 href=\"#project-archived\" skips directly to section at line 57, but an archive-confirm section exists at line 51",
+      "fix": "Change the archive link to href=\"#archive-confirm\" so users see and must acknowledge the warning before archiving",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Line 33, project settings section",
+      "severity": 3,
+      "violation": "Users never see the destructive action confirmation dialog before the project is archived"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"synced last week\"",
+      "fix": "Display the exact sync timestamp, such as \"synced Jul 30, 2026 at 3:15 PM\" or a dynamic relative time that updates",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Line 11, workspace overview",
+      "severity": 3,
+      "violation": "The sync timestamp is relative and imprecise; it becomes immediately stale and users cannot determine the actual last sync time"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<select id=\"notification-settings-digest-input\"> with options but no selected attribute on any option",
+      "fix": "Add selected=\"selected\" to the option element that represents the current setting",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Lines 70-75, notification settings section",
+      "severity": 3,
+      "violation": "Users cannot tell which notification frequency is currently active by looking at the form"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-08-01T02:05:32Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

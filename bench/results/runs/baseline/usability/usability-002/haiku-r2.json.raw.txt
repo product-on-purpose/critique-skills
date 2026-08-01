@@ -1,0 +1,29 @@
+Location: Workspace overview section, project list
+Evidence: "This workspace holds 5 projects, synced last week." with a list of only 4 project names
+Problem: The introductory text states 5 projects but only 4 are listed, creating a mismatch between stated and shown content
+Fix: Either update the text to "4 projects" or add the missing 5th project name to the list
+
+Location: Project settings section, duplicate button
+Evidence: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>
+Problem: The button has no visible text content, only an aria-label, making its purpose unclear for sighted users
+Fix: Add visible text content such as "Duplicate" or replace with a clear icon and text label
+
+Location: Notification settings form, digest frequency select element
+Evidence: <select id="notification-settings-digest-input"><option>Daily</option><option>Weekly</option><option>Monthly</option></select>
+Problem: The select dropdown has no default option explicitly selected, leaving the initial selection state ambiguous
+Fix: Add selected="selected" to one option, or prepend a placeholder option like <option value="">Select frequency</option>
+
+Location: Notification settings form, button label
+Evidence: Button labeled "Submit" in the notification settings form while other forms use "Save"
+Problem: Button labels are inconsistent across the form interface, using both "Submit" and "Save" for similar actions
+Fix: Change the notification settings button to use "Save" to match the label convention used in other forms
+
+Location: Project settings form, form element
+Evidence: <form><label for="project-settings-name-input">Project name</label><input id="project-settings-name-input" type="text" value="Customer Migration"><button id="project-settings-save-btn" type="submit">Save</button></form>
+Problem: The form element lacks a method attribute, defaulting to GET which exposes form data in the URL
+Fix: Add method="POST" to the form element to use the POST method for secure data submission
+
+Location: Invite member form, form element
+Evidence: <form><label for="invite-member-email-input">Email address</label><input id="invite-member-email-input" type="email"><button id="invite-member-save-btn" type="submit">Save</button></form>
+Problem: The form element lacks a method attribute, defaulting to GET which exposes email data in the URL
+Fix: Add method="POST" to the form element to protect sensitive email data

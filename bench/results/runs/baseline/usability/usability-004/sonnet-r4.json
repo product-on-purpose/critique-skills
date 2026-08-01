@@ -1,0 +1,105 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T02:20:23Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "workspace-overview section, \"Your projects\" summary paragraph, immediately above the project list",
+      "evidence": "\"This workspace holds 4 projects, synced last week.\" followed by a list containing only three items (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp)",
+      "violation": "The stated project count of 4 does not match the number of projects actually listed, so the summary text contradicts the content directly beneath it.",
+      "fix": "Either correct the count to \"3 projects\" or add the missing fourth project to the list so the stated number and the visible list agree.",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Project settings section, project name text input",
+      "evidence": "<input id=\"project-settings-name-input\" type=\"text\" value=\"Q3 Roadmap\">",
+      "violation": "The input has no name attribute, so if the surrounding form were submitted the project name value would not be included in the submitted data.",
+      "fix": "Add a name attribute, for example name=\"project-name\", to the input so its value is submitted with the form.",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Project settings section, the icon-only control next to the Save button",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>",
+      "violation": "The button has no visible text and no icon, only an aria-label, so a sighted user has no way to tell what the control does or even that it is a functioning button rather than a rendering gap.",
+      "fix": "Add visible label text such as \"Duplicate\" or an icon, while keeping the aria-label for screen reader users.",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Invite a team member section, email address input",
+      "evidence": "<input id=\"invite-member-email-input\" type=\"email\">",
+      "violation": "The input has no name attribute and is not marked required, so a submitted form would not carry the email value and nothing on the page indicates that an email must be entered before proceeding.",
+      "fix": "Add name=\"email\" and a required attribute to the input.",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Invite a team member section, between the form and the section's closing links",
+      "evidence": "a form containing <button id=\"invite-member-save-btn\" type=\"submit\">Save</button> alongside a separate <a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>",
+      "violation": "Two different controls could plausibly be the one that sends the invite, a form Save button and a Continue link, and the markup does not make clear which one actually triggers the invitation described on the next screen.",
+      "fix": "Collapse this to a single action, or clearly differentiate the two, for example by having Save perform the send and removing or relabeling Continue so its role is unambiguous.",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Archive confirmation section and the project archived section",
+      "evidence": "the archive confirmation copy reads 'Archiving \"Q3 Roadmap\" will remove it from the active projects list for everyone on the team.' and the archived section reads '\"Q3 Roadmap\" has been moved to archived projects.'",
+      "violation": "Both messages hardcode the project name \"Q3 Roadmap\" instead of reflecting the current value of the editable project name field, so the confirmation text would go stale if the name were ever changed.",
+      "fix": "Reference the current project name value dynamically in both messages instead of hardcoding \"Q3 Roadmap\".",
+      "confidence": "medium",
+      "id": "F-006"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Notifications section, digest frequency dropdown",
+      "evidence": "<select id=\"notification-settings-digest-input\"> containing <option>Daily</option>, <option>Weekly</option>, and <option>Monthly</option> with no value attributes and no name attribute on the select",
+      "violation": "Without a name attribute on the select and value attributes on its options, the chosen digest frequency cannot be identified or submitted with the form.",
+      "fix": "Add a name attribute to the select and explicit value attributes to each option.",
+      "confidence": "medium",
+      "id": "F-007"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

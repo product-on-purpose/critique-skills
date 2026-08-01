@@ -1,0 +1,94 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/docs/docs-004.md",
+    "artifact_sha256": "7f41536ab3c3f7bc93a3dde86b8e81cee5dab0339f2b1d472e9222a20b42d7ae",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T00:00:00Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "endpoint_url section",
+      "evidence": "\"The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert.\"",
+      "violation": "No validation constraints are documented for the URL format, such as maximum length, required path structure, or port requirements.",
+      "fix": "Add validation details: \"The endpoint_url field accepts an HTTPS URL (maximum 2048 characters, path required) that receives the webhook payload for each triggered alert.\"",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "signing_secret section",
+      "evidence": "\"The signing_secret field accepts a string used to verify the payload signature on receipt.\"",
+      "violation": "The section does not explain which signature algorithm is used (HMAC-SHA256, etc.) or how the secret is applied to verify the payload.",
+      "fix": "Specify the algorithm and verification method: \"The signing_secret field accepts a string used to verify the payload signature using HMAC-SHA256 on receipt.\"",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "retry_policy section",
+      "evidence": "\"The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential.\"",
+      "violation": "The three retry options are listed but not explained; a reader does not know what behavior each option provides.",
+      "fix": "Define each option: \"The retry_policy field accepts one of none (no retries), linear (retry with fixed delay between attempts), or exponential (retry with exponentially increasing delay), and the default value is exponential.\"",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Document header",
+      "evidence": "\"---\\nmode: reference\\n---\"",
+      "violation": "The frontmatter field 'mode' is not documented anywhere, making it unclear if this is a required field or what its purpose is.",
+      "fix": "Remove unexplained frontmatter or document its purpose in an introduction section.",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Field name formatting",
+      "evidence": "Section headers use \"endpoint_url\", \"signing_secret\", \"retry_policy\" without code formatting.",
+      "violation": "Field names are not distinguished from regular prose, which makes them harder to identify as exact field identifiers.",
+      "fix": "Format field names as code using backticks: `endpoint_url`, `signing_secret`, `retry_policy`.",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Document structure",
+      "evidence": "No sections explain whether the three fields are all required or if any are optional.",
+      "violation": "Readers cannot determine the obligation level for each field when constructing a webhook configuration.",
+      "fix": "Add a required/optional column or indicator for each field: \"endpoint_url (required)\", \"signing_secret (required)\", \"retry_policy (optional, defaults to exponential)\".",
+      "confidence": "medium",
+      "id": "F-006"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

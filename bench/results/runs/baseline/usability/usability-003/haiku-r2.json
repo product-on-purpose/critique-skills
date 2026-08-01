@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced this morning.\" but the list shows only 3 projects",
+      "fix": "Either update the text to say \"This workspace holds 3 projects\" or add the missing fourth project name to the list.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section \"Your projects\", line 11",
+      "severity": 3,
+      "violation": "The text states there are 4 projects but only 3 are listed below, creating a mismatch between the count and the actual content displayed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>",
+      "fix": "Add visible text to the button such as \"Duplicate\" or add an icon with a text fallback.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Project settings section, line 29",
+      "severity": 3,
+      "violation": "The button contains only an aria-label with no visible text. Users cannot understand its purpose without assistive technology or an icon."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Import failed. Error code IMP-500. Contact support if this continues.\"",
+      "fix": "Replace the generic error code with a descriptive message such as \"The import failed because the file format is not supported\" and suggest specific recovery steps.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Import status message, line 63",
+      "severity": 3,
+      "violation": "The error message only provides a cryptic error code without explaining what went wrong or what the user can do to resolve it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"project-settings-name-input\" type=\"text\" value=\"Vendor Onboarding\">",
+      "fix": "Either add explanatory text such as \"Current project name:\" before the input, or use a placeholder attribute instead of the value attribute to show an example without confusion.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Project name input field, lines 25-27",
+      "severity": 3,
+      "violation": "The input field is pre-filled with \"Vendor Onboarding\" but it is unclear whether this is an example, the current project name, or a suggestion. No label explains the current state."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-08-01T02:10:10Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

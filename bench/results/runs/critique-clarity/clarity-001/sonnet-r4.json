@@ -1,0 +1,135 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/clarity/clarity-001.md",
+    "artifact_sha256": "32ee3fed58b3e9b931565041a2e195dade8e2d19c9e9172fe28b38bdb5f6ef2c",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T21:03:12Z",
+    "rubrics": ["PLAIN", "WILLIAMS"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Eligibility, paragraph 1",
+      "evidence": "If the position counts as full-time, the stipend can apply. If the employee has completed 90 days of continuous service, the stipend can apply. If the request arrives before the benefit year ends, the stipend can apply. Only once every condition above is met does the home-office equipment stipend become available to the employee.",
+      "violation": "Three consecutive conditional sentences each state that the stipend can apply on that single condition, and only the fourth sentence reveals that all three conditions must be met together, so the first three sentences misstate the rule until the reader reaches the fourth.",
+      "fix": "Open the paragraph with the governing rule, that all three conditions must be met together, then list the three conditions, instead of stating each condition as if sufficient on its own before correcting that impression.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the Request Steps heading",
+      "evidence": "Request Steps is the ninth of thirteen headings in the document; How to Apply, the section a reader would expect to state the steps, is the third heading. Five sections intervene between them: Approval Timeline, Required Documentation, Reimbursement Amounts, Restrictions and Exceptions, and Terminology Notes. Request Steps' full text: Completing the request begins with confirming eligibility, and uploading the receipt.",
+      "violation": "The section stating the request's actual steps is separated from How to Apply by five intervening sections the reader does not need before knowing the steps, so the heading order tracks how the document was assembled rather than the sequence the reader actually needs.",
+      "fix": "Move the Request Steps content into or immediately after How to Apply, where a reader looking for the actual steps would look first.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-003",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "How to Apply, paragraph 3",
+      "evidence": "36-word sentence, 4 subordinate-clause markers: Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "violation": "The sentence runs to 36 words with 4 subordinate-clause markers, longer than the reader can hold in mind on a single pass.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "WILLIAMS-STRESS",
+      "lane": "judged",
+      "severity": 3,
+      "location": "How to Apply, paragraph 3",
+      "evidence": "Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email. Named newest element: the backup reviewer was never told the request needs their sign-off.",
+      "violation": "The sentence's newest and most important fact, that the backup reviewer was never told the request needs sign-off, sits in the middle of the sentence, and the sentence instead ends on the portal's routine confirmation-email step, a detail the reader already expects from the section's earlier paragraphs.",
+      "fix": "End the sentence on the backup reviewer never being told sign-off was needed, and move the routine confirmation-email detail earlier or into its own sentence.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-005",
+      "criterion": "PLAIN-ACTIVE",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Approval Timeline, paragraph 1",
+      "evidence": "The request is reviewed within two business days.",
+      "violation": "The sentence uses a be-verb plus past-participle passive construction in a context where the actor is recoverable and worth naming directly.",
+      "fix": "Rewrite the sentence in active voice, naming the actor that performs the action.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "PLAIN-CONCISE",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Reimbursement Amounts, paragraph 2",
+      "evidence": "Also, the deposit happens in order to offset costs the employee already paid at this point in time.",
+      "violation": "The sentence uses a wordy construction from the fixed wordy-phrase list that a shorter equivalent would carry with no loss of meaning.",
+      "fix": "Replace the wordy phrase with its plain equivalent (for example, because for due to the fact that).",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Eligibility, paragraph 2",
+      "evidence": "However, reimbursement is not available without a completed receipt.",
+      "violation": "Reimbursement here names the same 500-dollar payment the rest of the document calls the stipend, with no definition or stated equivalence anywhere connecting the two terms.",
+      "fix": "Use stipend consistently for the payment itself, reserving reimbursement, if kept at all, for a clearly distinct concept, or state explicitly that the two terms mean the same thing.",
+      "confidence": "medium",
+      "instances": [
+        {
+          "location": "the Reimbursement Amounts heading",
+          "evidence": "Reimbursement Amounts (heading); the paragraph beneath it never uses the word reimbursement, only stipend and deposit."
+        },
+        {
+          "location": "Program Coordination, paragraph 1",
+          "evidence": "Once approved, the team schedules the reimbursement for the next pay cycle."
+        }
+      ]
+    },
+    {
+      "id": "F-008",
+      "criterion": "PLAIN-DOUBLE-NEGATIVE",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Eligibility, paragraph 2",
+      "evidence": "However, reimbursement is not available without a completed receipt.",
+      "violation": "2 negation markers from the fixed negation list co-occur in one clause, so the reader has to work out the statement's logical sign before understanding it.",
+      "fix": "Restate the sentence with at most one negation, or recast it as a positive statement.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-009",
+      "criterion": "PLAIN-HEADINGS",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "the Overview heading",
+      "evidence": "heading: Overview",
+      "violation": "The heading text matches the fixed list of non-specific heading labels, so a reader scanning headings cannot tell whether the section applies to them.",
+      "fix": "Replace the heading with text specific enough to be found by scanning.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 10,
+      "3": 4,
+      "4": 0
+    },
+    "suppressed_count": 5,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

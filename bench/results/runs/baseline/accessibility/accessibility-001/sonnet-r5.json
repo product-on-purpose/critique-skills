@@ -1,0 +1,160 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<html lang=\"translanguage\" id=\"html\">",
+      "fix": "Set lang to the correct language code for the page's content, for example lang=\"en\".",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "<html> opening tag, near the top of the document (id=\"html\")",
+      "severity": 3,
+      "violation": "The lang attribute value \"translanguage\" is not a valid BCP 47 language code, so browsers and assistive technology cannot determine the page's actual language."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<title id=\"head-title\"></title>",
+      "fix": "Add a concise, descriptive title, for example \"Rider Service Updates\".",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "<title> element in the <head> (id=\"head-title\")",
+      "severity": 3,
+      "violation": "The page title is empty, so the browser tab, bookmarks, and screen reader announcements have no descriptive name for the page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Riders can check real time arrivals at any station kiosk. Station staff can also help with the same request in person.\"",
+      "fix": "Write a sentence specific to real time arrivals, or remove the mismatched closing sentence.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "First two paragraphs of the \"Fare adjustments\" section (id=\"s1-p1\", id=\"s1-p2\")",
+      "severity": 3,
+      "violation": "The closing sentence is copied verbatim from the preceding paragraph about fare adjustment requests, even though checking real time arrivals is not the same kind of request; the text reads as templated copy-paste content rather than something written for this paragraph."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<img src=\"/img/platform-update.jpg\" id=\"s1-img1\">",
+      "fix": "Add an alt attribute describing the image's content or purpose, for example alt=\"Updated platform layout diagram\", or alt=\"\" if it is purely decorative.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Image in the \"Fare adjustments\" section (id=\"s1-img1\")",
+      "severity": 3,
+      "violation": "The image has no alt attribute at all, so screen readers will typically announce the filename instead of a meaningful description."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<h4 id=\"s2-h\">Accessibility improvements</h4> follows an h2, then <h2 id=\"s3-h\">Station updates</h2> follows that h4.",
+      "fix": "Use sequential heading levels, for example h2 for every top-level section, or h3 if \"Accessibility improvements\" is meant to be a subsection of the section before it.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Heading levels across \"Accessibility improvements\" (id=\"s2-h\") and \"Station updates\" (id=\"s3-h\")",
+      "severity": 3,
+      "violation": "The heading hierarchy skips from h2 to h4 and then drops back to h2, so it does not reflect a consistent document outline and can confuse anyone navigating by heading level, particularly screen reader users."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<table id=\"s2-table1\"><tr><th scope=\"col\">Zone</th><th scope=\"col\">Status</th></tr>",
+      "fix": "Add a caption element, for example \"Zone status\", describing what the table contains.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Zone status table in the \"Accessibility improvements\" section (id=\"s2-table1\")",
+      "severity": 3,
+      "violation": "The table has no caption, so its purpose is not announced to screen reader users before they enter the table."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>",
+      "fix": "Remove the control if it is leftover from another template, or place it next to the specific item it acts on with a label that names that item.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Custom control in the \"Station updates\" section (id=\"s3-customcontrol\")",
+      "severity": 3,
+      "violation": "A \"Delete item\" control appears with no associated list of items and no explanation of what it deletes, so its purpose is unclear to anyone who encounters it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"wizard-steps\" id=\"s3-wizard\"> containing three step divs: \"Choose a plan\", \"Enter payment details\", \"Confirm your order\"",
+      "fix": "Remove the wizard if it does not belong on this page, or, if it does, mark it up as an ordered list with the current step indicated, for example with aria-current=\"step\", and explain its relevance to the page.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Wizard steps block in the \"Station updates\" section (id=\"s3-wizard\")",
+      "severity": 3,
+      "violation": "A payment plan wizard with no semantic list structure and no indication of the current step appears in a page about fare and station updates, with no visible connection to the surrounding content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a href=\"/fares/history\" id=\"s3-link1\">click here</a>",
+      "fix": "Use descriptive link text, for example \"view the full list of upcoming adjustments\".",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Link at the end of the \"Station updates\" intro paragraph (id=\"s3-link1\")",
+      "severity": 3,
+      "violation": "\"Click here\" does not describe the link's destination, so it is meaningless when read out of context, for example in a screen reader's list of links on the page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\">Phone number (required)</label> <input id=\"phone\" type=\"tel\">",
+      "fix": "Add the required attribute, or aria-required=\"true\", to the phone input so the requirement is exposed programmatically and not only visually.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Phone number field in the form (id=\"s3-form-phone-label\", input id=\"phone\")",
+      "severity": 3,
+      "violation": "The label text states the field is required, but the input has no required or aria-required attribute, so assistive technology has no programmatic way to convey that requirement."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> followed by <span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span>",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the promo input so the error text is announced together with the field.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Promo code field in the form (input id=\"promo\", error text id=\"s3-form-promo-error\")",
+      "severity": 3,
+      "violation": "The input is marked invalid with aria-invalid=\"true\", but it has no aria-describedby pointing to the error message, so a screen reader user focused on the field will not hear why it is invalid."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button type=\"submit\" class=\"btn-primary\" id=\"s3-form-submit\" aria-label=\"Send form now\">Submit</button>",
+      "fix": "Remove the aria-label, or change it to include the visible text, for example aria-label=\"Submit form\", so the accessible name matches or contains the visible label.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "Form submit button (id=\"s3-form-submit\")",
+      "severity": 3,
+      "violation": "The aria-label \"Send form now\" replaces the visible text \"Submit\" as the button's accessible name, so voice control users who say \"click Submit\" will not match the button, and screen reader users hear a different label than what is displayed."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-001.html",
+    "artifact_sha256": "f620e43c2035d9380934dbe1b09dba438bb38bc1fb7f1feeb58010af44eaf176",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T20:20:39Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 12,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

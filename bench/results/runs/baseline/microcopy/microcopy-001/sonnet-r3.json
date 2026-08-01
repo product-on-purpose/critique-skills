@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message: The connection dropped before this finished. / Fires: on-blur",
+      "fix": "Change Fires to the event that actually triggers the network request, such as on-submit or on-attempt, or rewrite the message to describe a blur-triggered validation failure instead.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Signup form, email field, first message block (\"The connection dropped before this finished.\"), the Fires field",
+      "severity": 3,
+      "violation": "A dropped connection is a network or submission failure, not something that would be detected when the user leaves the field. Triggering this message on-blur does not match when a connection attempt would actually occur or fail."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Predictable mistake: yes",
+      "fix": "Change Predictable mistake to no, or add a note explaining what user behavior is being predicted.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Signup form, email field, first message block (\"The connection dropped before this finished.\"), the Predictable mistake field",
+      "severity": 3,
+      "violation": "A dropped connection is a system or network failure, not a mistake the user made, so marking it as a predictable mistake mischaracterizes the cause of the error."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Suggested fix: selectable, offers the one available next step as a direct action",
+      "fix": "State the specific action, for example \"Suggested fix: Retry button that resubmits the form.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Signup form, email field, first message block (\"The connection dropped before this finished.\"), the Suggested fix field",
+      "severity": 3,
+      "violation": "The suggested fix describes attributes of a control, such as selectable and direct action, without naming the actual next step, so a designer or engineer cannot tell what to build."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message: Something went wrong. Contact support if this continues.",
+      "fix": "Name the specific failure if it is known, for example \"We could not process this card. Try again or use a different payment method,\" and reserve the generic message for cases where no specific cause is available.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Checkout form, payment method, first message block (\"Something went wrong. Contact support if this continues.\"), the Message field",
+      "severity": 3,
+      "violation": "The message gives no information about what actually failed, so the user cannot tell whether the problem is with their card, the network, or something else before contacting support."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Container: inline, next to Placement: in a banner directly above the payment method selector",
+      "fix": "Change Container to banner to match the placement description, or rewrite the placement to describe an inline element.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Checkout form, payment method, first message block (\"Something went wrong. Contact support if this continues.\"), the Container field",
+      "severity": 3,
+      "violation": "The Container field says inline while the Placement field describes a banner, which are two different presentation types for the same message."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Fires: mid-keystroke",
+      "fix": "Change Fires to on-blur, or trigger validation only once the expiry date field holds a complete value.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Checkout form, payment method, second message block (\"The expiry date on this card has passed, Update the expiry date, or choose a different card.\"), the Fires field",
+      "severity": 3,
+      "violation": "Firing an expiry date error mid-keystroke means the message can appear before the user has finished typing the date, producing a false error on an incomplete value."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message: You keep entering the wrong value. Re-enter it to continue.",
+      "fix": "State the specific validation failure and remove the accusatory phrasing, for example \"Enter a valid phone number, including area code.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Profile settings, phone number, first message block (\"You keep entering the wrong value. Re-enter it to continue.\"), the Message field",
+      "severity": 3,
+      "violation": "The message does not say what is wrong with the value entered, and the phrase you keep entering the wrong value reads as blaming the user rather than explaining the problem."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Input on resubmission: cleared",
+      "fix": "Change Input on resubmission to preserved to match the rest of the document, unless there is a stated reason to clear it.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Profile settings, phone number, second message block (\"This phone number is already on another account. Remove it there first, or contact support to move it across.\"), the Input on resubmission field",
+      "severity": 3,
+      "violation": "Every other message in the document preserves input on resubmission, and this is the only entry that clears it, forcing the user to retype a phone number they already entered correctly."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-001.md",
+    "artifact_sha256": "0580399008ca4517da0a1b1f620180b68a4cfb24e596be279a5f782cde325fc7",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:36:47Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

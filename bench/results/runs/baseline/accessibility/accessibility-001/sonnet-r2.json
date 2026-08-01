@@ -1,0 +1,160 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "lang=\"translanguage\"",
+      "fix": "Set lang to the actual language of the page content, for example lang=\"en\".",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "<html> opening tag, lang attribute, line 2",
+      "severity": 3,
+      "violation": "The lang attribute is set to an invalid value that is not a real BCP 47 language code, so screen readers and browsers cannot determine the page's language and may mispronounce content or fail to offer correct translation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<title id=\"head-title\"></title>",
+      "fix": "Add a descriptive title such as \"Rider service updates\".",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "<title> element in the document head, line 6",
+      "severity": 3,
+      "violation": "The page title is empty, so the browser tab, bookmarks, and screen reader announcements have no descriptive name for this page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div id=\"main-content\">",
+      "fix": "Replace the div with a main element, keeping the id if needed for styling.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "content wrapper, line 15",
+      "severity": 3,
+      "violation": "The primary page content is wrapped in a generic div instead of a main element, so assistive technology users lose the main landmark that lets them skip directly to page content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<img src=\"/img/platform-update.jpg\" id=\"s1-img1\">",
+      "fix": "Add an alt attribute describing the image's content, or alt=\"\" if it is purely decorative.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "first image in the \"Fare adjustments\" section, line 21",
+      "severity": 3,
+      "violation": "The image has no alt attribute at all, so screen reader users receive no information about its content or purpose."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<h4 id=\"s2-h\">Accessibility improvements</h4> follows an h2 in the previous section",
+      "fix": "Change this heading to h2 or h3 so heading levels descend by one at a time.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Accessibility improvements\" heading, line 24",
+      "severity": 3,
+      "violation": "The heading level jumps from h2 directly to h4, skipping h3, which breaks the logical outline screen reader users rely on to navigate by heading level."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<table id=\"s2-table1\"> has no caption element",
+      "fix": "Add a caption such as \"Zone status\" as the first child of the table.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "status table, line 26",
+      "severity": 3,
+      "violation": "The table has no caption, so screen reader users are not told what the table represents before they encounter its data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">",
+      "fix": "Replace the div with a native button element, which gets click and keyboard activation for free.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "delete icon control, line 43",
+      "severity": 3,
+      "violation": "This interactive control is a div with role=\"button\" instead of a native button, and the markup shows no keyboard event handling, so there is no evidence it responds to Enter or Space the way a real button would."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"wizard-steps\" id=\"s3-wizard\"> contains three <div class=\"step\"> elements with no list markup",
+      "fix": "Mark the steps up as an ordered list with li elements and add aria-current=\"step\" to the active step.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "wizard steps list, lines 46 to 56",
+      "severity": 3,
+      "violation": "The three steps are plain divs with no semantic list structure and no indication of which step is current, so screen reader users cannot tell this is a sequence or where they are in it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "click here",
+      "fix": "Change the link text to something descriptive, such as \"See the full list of upcoming adjustments.\"",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "link at the end of the \"Station updates\" section, line 57",
+      "severity": 3,
+      "violation": "The link text \"click here\" does not describe its destination, so a screen reader user browsing by links out of context cannot tell where it leads."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\">Phone number (required)</label><input id=\"phone\" type=\"tel\">",
+      "fix": "Add the required attribute, or aria-required=\"true\", to the phone input.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "phone number field, line 63",
+      "severity": 3,
+      "violation": "The label text says the field is required, but the input carries no required or aria-required attribute, so assistive technology cannot programmatically report the field as required."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> and <span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span>",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the promo input.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "promo code field, lines 66 to 67",
+      "severity": 3,
+      "violation": "The input is marked aria-invalid=\"true\" but has no aria-describedby pointing at the error text, so screen reader users are told the field is invalid without hearing why."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button type=\"submit\" class=\"btn-primary\" id=\"s3-form-submit\" aria-label=\"Send form now\">Submit</button>",
+      "fix": "Remove the aria-label so the visible text \"Submit\" serves as the accessible name, or change the aria-label to include the visible text.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "form submit button, line 68",
+      "severity": 3,
+      "violation": "The visible button text is \"Submit\" but its accessible name is overridden to \"Send form now\", so voice control users who say \"click Submit\" will not match the button, and the two labels disagree."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-001.html",
+    "artifact_sha256": "f620e43c2035d9380934dbe1b09dba438bb38bc1fb7f1feeb58010af44eaf176",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T20:19:24Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 12,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

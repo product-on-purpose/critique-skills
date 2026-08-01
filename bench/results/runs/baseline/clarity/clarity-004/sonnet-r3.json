@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"the IT asset group tracks the equipment catalog on the first business day of the month\"",
+      "fix": "Pick one owner and one cadence for the equipment catalog and state it consistently in all three sections, or, if these are actually three different activities, rename each so the distinction is clear, for example \"catalog data entry,\" \"catalog publication,\" and \"catalog review.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Program Overview, second paragraph",
+      "severity": 3,
+      "violation": "This conflicts with two later sections. Special Cases states \"The finance liaison publishes the equipment catalog at the start of the fiscal year,\" and Questions and Updates states \"The benefits team reviews the equipment catalog at the start of the fiscal year.\" The document gives three different owners (IT asset group, finance liaison, benefits team) and two different cadences (monthly versus start of fiscal year) for what reads as the same equipment catalog."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"one claim per employee per benefit year\"",
+      "fix": "Add a definition of \"benefit year\" the first time the term is used, stating its start date and length.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Eligibility section, first paragraph",
+      "severity": 3,
+      "violation": "\"Benefit year\" is used repeatedly throughout the document, in Eligibility and Reimbursement Amounts, but is never defined. A reader cannot tell whether it means the calendar year, the fiscal year mentioned elsewhere, or a year measured from the employee's hire or eligibility date."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You must keep your equipment in good working condition and we may ask for a brief photo check once a year.\"",
+      "fix": "Rewrite in the same third-person voice as the rest of the policy, for example: \"Employees must keep their equipment in good working condition. The benefits team may request a brief photo check once a year.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Restrictions and Exceptions section, first sentence",
+      "severity": 3,
+      "violation": "This sentence switches to second person, \"you\" and \"we,\" while the rest of the document consistently refers to \"employees,\" \"the manager,\" \"the finance office,\" and similar third-person terms. The inconsistent voice reads as if it was pasted in from a different document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "heading \"Terminology Notes\" followed by \"You record the stipend item on the request form.\"",
+      "fix": "Either rename the section to describe what it actually contains, such as \"Reconciliation Process,\" or replace the content with actual term definitions if \"Terminology Notes\" is the intended heading.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Terminology Notes section, heading and first sentence",
+      "severity": 3,
+      "violation": "The heading promises definitions of terms, but the section describes a process, recording, reconciling, and releasing a stipend item, and does not define \"stipend item\" or any other term."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Also, you submit the request in the portal. You track its status there until the payment clears.\"",
+      "fix": "Rewrite as third person, for example: \"Employees submit the request in the portal and track its status there until the payment clears.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Terminology Notes section, second sentence",
+      "severity": 3,
+      "violation": "This is a second instance of the second-person voice shift noted in Restrictions and Exceptions, again breaking with the third-person voice used everywhere else in the document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Completing the request begins with confirming eligibility, and uploading the receipt.\"",
+      "fix": "Merge Request Steps into How to Apply as a single ordered list, or delete it, so there is one authoritative description of the steps.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Request Steps section",
+      "severity": 3,
+      "violation": "This section duplicates the topic already covered in How to Apply, but describes only two steps, confirming eligibility and uploading a receipt, and omits steps that section already described, such as starting the request in the portal, the automatic draft saving, and reviewing the confirmation summary before submitting."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The finance office reviews every stipend request over 200 dollars before it pays out\" versus \"The manager reviews the request within two business days\"",
+      "fix": "State explicitly where the finance office's review for requests over 200 dollars falls in the timeline, for example how many additional business days it adds after the manager's review.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Review Responsibility section, first sentence, compared with Approval Timeline",
+      "severity": 3,
+      "violation": "The document does not say how the finance office's review for requests over 200 dollars fits into the timeline already described. It is unclear whether it happens within the manager's two-business-day review, within the one-pay-cycle deposit window mentioned in Reimbursement Amounts, or as an additional step that extends the timeline further."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"However,\" \"Also,\" \"In addition,\" \"Similarly,\" \"Additionally,\" \"Then,\" each opening a new paragraph",
+      "fix": "Remove or vary the transition words, and combine or reorder sentences so each paragraph's logical relationship to the one before it is clear from the content, not just from a connector word.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "throughout the document, for example the opening sentences of paragraphs in Eligibility, How to Apply, Approval Timeline, Required Documentation, Reimbursement Amounts, and Restrictions and Exceptions",
+      "severity": 3,
+      "violation": "Nearly every paragraph after the first in each section opens with the same small set of transition words, used interchangeably rather than to signal a real logical relationship such as contrast, addition, or sequence. This makes the sections read as disconnected lists of facts rather than a coherent explanation."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:14:23Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

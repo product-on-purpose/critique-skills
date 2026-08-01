@@ -1,0 +1,34 @@
+Location: Line 29, project settings section
+Evidence: <button id="project-settings-duplicate-btn" type="button"></button>
+Problem: A button element has no text content or accessible label, making it impossible for users to know what it does.
+Fix: Add descriptive button text, such as <button id="project-settings-duplicate-btn" type="button">Duplicate project</button>, or add an aria-label attribute.
+
+Location: Workspace overview section, project list
+Evidence: The heading says "This workspace holds 3 projects" but the list shows only 2 items: "Data Warehouse Cutover" and "Mobile App Revamp"
+Problem: The count stated in the text does not match the number of items displayed in the list, creating confusion about how many projects actually exist.
+Fix: Update the text to "This workspace holds 2 projects" or add the third project to the list.
+
+Location: Line 24-28, project settings form
+Evidence: <form> tag with no action attribute
+Problem: The form element has no action attribute specified, so it is unclear where the form submission will be sent or what happens when the user clicks Save.
+Fix: Add an action attribute to the form, such as <form action="/api/project-settings"> or use JavaScript to handle the submit event.
+
+Location: Lines 38-41, invite member form and section
+Evidence: The section has both a form with a "Save" button and a separate "Continue" link pointing to #invite-sent
+Problem: The interaction flow is unclear; there are two different submit mechanisms (form button and Continue link) that seem to do the same thing, making it ambiguous which one users should use.
+Fix: Remove the "Continue" link and use the form's submit button as the only path forward, or clarify the purpose of each button with different labels.
+
+Location: Line 18, promotional referral message
+Evidence: <div id="workspace-overview-promo-referral">Invite 3 teammates this month to unlock the advanced reporting add-on.</div>
+Problem: The promotional message has no visual hierarchy or emphasis; it blends into the surrounding text and may be missed by users.
+Fix: Wrap the promotional content in a more prominent container such as an aside or use CSS to style it distinctly, or add a heading to make its purpose clear.
+
+Location: Line 39, invite member email input
+Evidence: <input id="invite-member-email-input" type="email">
+Problem: The email input field has no placeholder text or visible instruction, so users may not immediately understand what format is expected or see an example.
+Fix: Add a placeholder attribute, such as placeholder="user@example.com", or provide additional helper text near the input.
+
+Location: Navigation throughout document
+Evidence: Links like <a href="#workspace-overview"> are used for navigation within the page, but some actions like opening project settings or archiving use link elements with href="#project-settings" instead of buttons with click handlers
+Problem: Using links with href="#..." for application actions violates semantic HTML principles; links should navigate to documents, while actions should use buttons or form controls.
+Fix: Convert action links such as "Open project settings", "Archive project", and "View last import result" to buttons or use proper ARIA roles and button semantics.

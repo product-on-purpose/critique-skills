@@ -1,0 +1,29 @@
+Location: workspace-overview section, "Your projects" summary text and list
+Evidence: "This workspace holds 4 projects, synced last week." is followed by a list containing only three items: Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp.
+Problem: The stated project count of 4 does not match the 3 projects actually listed, which reads as a data error and would make a user think a project is missing.
+Fix: Either add the fourth project to the list or change the summary text to say 3 projects.
+
+Location: project-settings section, Save button and form; notification-settings section, Save button and form
+Evidence: project-settings-save-btn and notification-settings-save-btn are both type="submit" inside a form that has no action attribute.
+Problem: Neither Save button has a defined destination or success state, so clicking Save gives the user no feedback about whether their change was saved.
+Fix: Give each form an action or submit handler and show a visible confirmation, such as a message or a navigation to a confirmation section, after saving.
+
+Location: project-settings section, duplicate button
+Evidence: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>
+Problem: The button has no visible text or icon, only an aria-label, so a sighted user has no way to tell what the button does or even notice it as more than an empty box.
+Fix: Add a visible label or icon, for example the word "Duplicate" or a copy icon, while keeping the aria-label for assistive technology.
+
+Location: invite-member section, Save button and Continue link
+Evidence: invite-member-save-btn is a form submit button with no defined action, while a separate link, invite-member-continue-link ("Continue", href="#invite-sent"), is what actually advances to the next screen and is not tied to the email field at all.
+Problem: Two controls appear to complete the same invite action, but only the unrelated Continue link works, and it can be clicked without the email address being filled in or validated.
+Fix: Make a single control both validate the email field and advance to the confirmation screen, and remove or repurpose the redundant Save button.
+
+Location: invite-sent section
+Evidence: "An invite was sent to the address entered above."
+Problem: Because the Continue link can be reached without an email address ever being entered, this message can claim an invite was sent to an address that does not exist.
+Fix: Require the email field to be filled in and valid before this screen can be reached, and display the actual address that was entered.
+
+Location: archive-confirm section and project-archived section
+Evidence: "You can restore it at any time from the archived projects list." and "It no longer appears in the active projects list for anyone on the team."
+Problem: Both messages promise or reference an archived projects list, but the document contains no such view or link to one anywhere, so the restore path described does not exist.
+Fix: Add an archived projects section with a restore action, or remove the claim about restoring from a list.

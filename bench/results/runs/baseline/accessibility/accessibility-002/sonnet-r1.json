@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\" id=\"head-viewport\">",
+      "fix": "Remove user-scalable=no (and any maximum-scale restriction) from the viewport meta tag so users can zoom.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "head, viewport meta tag",
+      "severity": 3,
+      "violation": "user-scalable=no disables pinch to zoom, which prevents low vision users from magnifying the page and violates the expectation that users can resize text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<p id=\"s1-p1\" style=\"color:#999999\">Passengers should review the updated schedule at any station kiosk...",
+      "fix": "Change the inline color to #767676 or darker, or remove the color override so the default text color applies.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "section \"Accessibility improvements\", first paragraph (id s1-p1)",
+      "severity": 3,
+      "violation": "The text color #999999 against the page's default white background gives a contrast ratio of about 2.85 to 1, well under the 4.5 to 1 minimum for normal body text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<table id=\"s2-table1\"><tr><th scope=\"col\">Zone</th><th scope=\"col\">Status</th></tr>",
+      "fix": "Add a caption element as the table's first child, for example \"Zone status\".",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "section \"Schedule changes\", table (id s2-table1)",
+      "severity": 3,
+      "violation": "The table has no caption element, so a screen reader user who jumps directly to the table gets no description of what the Zone and Status columns represent."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"promo-banner\" id=\"s3-banner\" style=\"width:960px\">",
+      "fix": "Replace the fixed width with a responsive rule such as max-width:960px; width:100%.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "section \"Weekend service\", promo banner (id s3-banner)",
+      "severity": 3,
+      "violation": "A fixed 960px width does not adapt to the mobile viewport the page itself declares (width=device-width), which forces horizontal scrolling on narrow screens."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"status-card\" id=\"s3-statuscard\" style=\"height:60px;overflow:hidden\">",
+      "fix": "Remove the fixed height and overflow:hidden, or replace height with min-height so the box can grow with its content.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "section \"Weekend service\", status card (id s3-statuscard)",
+      "severity": 3,
+      "violation": "The fixed 60px height combined with overflow:hidden will clip the paragraph text inside it whenever the user increases text size or zooms, hiding part of the message."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button type=\"button\" class=\"btn-secondary\" id=\"s3-button1\" style=\"border:1px solid #9d9d9d\">Refresh status</button>",
+      "fix": "Darken the border color to at least #767676 so it reaches 3 to 1 contrast against the background.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "section \"Weekend service\", \"Refresh status\" button (id s3-button1)",
+      "severity": 3,
+      "violation": "The #9d9d9d border against the page's white background gives a contrast ratio of about 2.7 to 1, below the 3 to 1 minimum needed for a visible UI component boundary."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"wizard-steps\" id=\"s3-wizard\"><div class=\"step\" id=\"s3-step1\">Choose a plan</div>",
+      "fix": "Mark the steps up as an ordered list with li elements, and add aria-current=\"step\" to the active step.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "section \"Weekend service\", wizard steps (id s3-wizard)",
+      "severity": 3,
+      "violation": "The three sequential steps are plain divs with no list markup and no indication of which step is current, so a screen reader user cannot tell this is an ordered sequence or where they are in it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a href=\"/fares/history\" id=\"s3-link1\">read the accessibility improvements list</a>",
+      "fix": "Reword the link text to describe where it actually goes, for example \"read the list of upcoming fare adjustments\".",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "section \"Weekend service\", link in the paragraph after the wizard (id s3-link1)",
+      "severity": 3,
+      "violation": "The link text says \"read the accessibility improvements list\" but the href points to /fares/history, so the visible label does not match the destination, which misleads anyone scanning link text or a screen reader's links list."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<label for=\"topic-alt\" id=\"s3-form-topic-label\">Route</label> paired with <select id=\"topic\">",
+      "fix": "Change the label's for attribute to \"topic\" so it matches the select element's id.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "section \"Weekend service\", form Route field (label id s3-form-topic-label and select id topic)",
+      "severity": 3,
+      "violation": "The label's for attribute references \"topic-alt\", which does not match any element id on the page, so the label is not programmatically associated with the select and a screen reader will not announce \"Route\" when the field receives focus."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"><span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span>",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the #promo input.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "section \"Weekend service\", form promo code field (input id promo and error span id s3-form-promo-error)",
+      "severity": 3,
+      "violation": "The input is marked aria-invalid=\"true\" but has no aria-describedby pointing at the adjacent error message, so a screen reader announces that the field is invalid without ever reading why."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-002.html",
+    "artifact_sha256": "b49ce74681df60732a6ef3b5309ce82264ad1b6ad48c6fa8b85989f2c712f113",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T20:23:49Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

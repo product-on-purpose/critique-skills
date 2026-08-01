@@ -1,0 +1,24 @@
+Location: retry_policy section
+Evidence: "The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential."
+Problem: The document lists three retry policy options but does not explain what each option means or how they differ functionally.
+Fix: Add brief descriptions for each option, for example: "none: do not retry failed deliveries, linear: retry with fixed interval between attempts, exponential: retry with increasing delay between attempts."
+
+Location: signing_secret section
+Evidence: "The signing_secret field accepts a string used to verify the payload signature on receipt."
+Problem: The document does not explain how to verify the payload signature or what algorithm is used, making implementation impossible for users.
+Fix: Add a paragraph explaining the signature algorithm (e.g., HMAC-SHA256), the format of the signature header, and how to validate it.
+
+Location: endpoint_url section
+Evidence: "The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert."
+Problem: The document does not specify what HTTP status codes indicate successful delivery, whether there is a timeout, or what happens when the endpoint fails to respond.
+Fix: Add requirements such as: "The endpoint must respond with an HTTP 2xx status code within 30 seconds. Responses with other status codes or timeouts are considered failures."
+
+Location: retry_policy section
+Evidence: "accepts one of none, linear, or exponential"
+Problem: The document does not specify the timing or frequency of retries under the linear or exponential policies.
+Fix: Add timing details, for example: "linear retries every 5 minutes up to 10 times; exponential starts at 1 minute and doubles each attempt, up to 24 hours."
+
+Location: signing_secret section
+Evidence: "The signing_secret field accepts a string"
+Problem: No minimum length, character restrictions, or format requirements are specified for the signing secret string.
+Fix: Add requirements such as: "The signing_secret must be between 32 and 256 characters and may contain alphanumeric characters and hyphens."

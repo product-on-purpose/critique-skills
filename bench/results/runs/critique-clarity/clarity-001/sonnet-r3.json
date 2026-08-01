@@ -1,0 +1,128 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Program Overview: \"The people operations office publishes the reimbursement log each quarter.\" Overview: \"The benefits team publishes the reimbursement log after every open enrollment period.\"",
+      "fix": "Merge the two overview sections into one, name the reimbursement log's publisher once, and state one publication schedule.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Program Overview, paragraph 1",
+      "severity": 3,
+      "violation": "Two sections name different offices as the publisher of the same reimbursement log and state two different publication schedules for it, each quarter versus after every open enrollment period, with no signal that one supersedes the other or that the two offices are in fact the same one."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "evidence": "If the position counts as full-time, the stipend can apply. If the employee has completed 90 days of continuous service, the stipend can apply. If the request arrives before the benefit year ends, the stipend can apply. Only once every condition above is met does the home-office equipment stipend become available to the employee.",
+      "fix": "Open the paragraph with the governing rule, that the stipend requires all of the following conditions, then list the three conditions under it.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Eligibility, paragraph 1",
+      "severity": 3,
+      "violation": "The paragraph states three separate conditions, each phrased as though it alone makes the stipend can apply, and only the fourth sentence reveals that all three conditions must be met together, so a reader who stops after any one condition is left with the wrong impression of eligibility."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Completing the request begins with confirming eligibility, and uploading the receipt.",
+      "fix": "Move this section's content into How to Apply, near the top of the document, and remove the duplicate section.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Request Steps, paragraph 1",
+      "severity": 3,
+      "violation": "The document's most direct statement of the steps a reader actually takes to apply appears in this section, near the end of the document, after Required Documentation, Reimbursement Amounts, Restrictions and Exceptions, and Terminology Notes, none of which the reader needs before starting, and it duplicates the fuller How to Apply section that already covers the same ground much earlier."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "evidence": "36-word sentence, 4 subordinate-clause markers: Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 3",
+      "severity": 3,
+      "violation": "The sentence runs to 36 words with 4 subordinate-clause markers, longer than the reader can hold in mind on a single pass."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-JARGON",
+      "evidence": "The manager approves items pursuant to internal discretion, notwithstanding the standard review checklist.",
+      "fix": "Replace the jargon term with a plain equivalent, or define it at first use.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "Required Documentation, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence uses a legal or foreign-language jargon term from the fixed list with no plain-language definition in the same or the following sentence."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "The manager approves items pursuant to internal discretion, notwithstanding the standard review checklist. Additionally, employees must retain receipts for one year after the purchase date.",
+      "fix": "Open the section with the documentation requirement itself, which receipts to keep and for how long, and move the approval-discretion sentence to Approval Timeline.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Required Documentation, paragraphs 1-2",
+      "severity": 2,
+      "violation": "A reader who reads only this section's first and last sentences cannot state that the section is about required documentation: the opening sentence describes the manager's discretion to override the review checklist, an approval-process fact rather than a documentation requirement, and only the closing sentence states an actual documentation rule."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review.",
+      "fix": "Replace the stipend item with the equipment, or whichever term the rest of the document uses, throughout this section.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Terminology Notes, paragraph 1",
+      "severity": 2,
+      "violation": "The stipend item is introduced here for what appears to be the reimbursed equipment, a concept the rest of the document calls the equipment or the equipment category, with no statement that the two terms name the same thing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "The manager confirms the equipment category matches the approved list.",
+      "fix": "Name or link to the approved equipment list the first time it is mentioned, or state where the reader can find it.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Approval Timeline, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence refers to the approved list with a definite article as though the reader already knows what it is, but no earlier passage introduces or names this list."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-STRESS",
+      "evidence": "Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "fix": "End the sentence on the backup reviewer not being told about the sign-off requirement, and move the confirmation-email detail earlier or into its own sentence.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "How to Apply, paragraph 3",
+      "severity": 2,
+      "violation": "The sentence's newest and most consequential fact, that the backup reviewer was never told the request needs sign-off, sits in the middle of the sentence, while the final position is occupied by a portal-confirmation detail the document never returns to."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-001.md",
+    "artifact_sha256": "32ee3fed58b3e9b931565041a2e195dade8e2d19c9e9172fe28b38bdb5f6ef2c",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-07-31T21:02:44Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 10,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 5
+  }
+}

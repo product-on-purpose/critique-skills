@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced this morning.\" is followed by a list with only three items: Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot",
+      "fix": "Change the summary text to match the list (\"3 projects\"), or add the fourth project to the list so the count and the list agree.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#workspace-overview, the paragraph under \"Your projects\"",
+      "severity": 3,
+      "violation": "The stated project count does not match the number of projects actually shown, so the user cannot tell whether a project is missing from the list or the count is simply wrong."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a id=\"workspace-overview-import-link\" href=\"#import-status\">View last import result</a> carries no visual indication of the outcome it links to",
+      "fix": "Add a status indicator (for example a \"Failed\" badge or icon) next to the link whenever the last import did not succeed.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#workspace-overview, the \"View last import result\" link",
+      "severity": 3,
+      "violation": "The linked import status screen reports \"Import failed,\" but nothing on the overview screen signals a failure before the user clicks through, so a failed import can go unnoticed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>",
+      "fix": "Give the button visible text (for example \"Duplicate\") or an icon plus a visible label, rather than relying on aria-label alone.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#project-settings, the button following the project name form",
+      "severity": 3,
+      "violation": "The button has no visible text content, only an aria-label, so a sighted user sees a blank, unlabeled control with no indication of what it does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button> has no adjacent success message, status text, or confirmation state",
+      "fix": "Add a visible confirmation, such as an inline \"Saved\" message, that appears once the save completes.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#project-settings, the project name form's Save button",
+      "severity": 3,
+      "violation": "After clicking Save, nothing in the document shows the user that the save succeeded, leaving the outcome of the action uncertain."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"invite-member-email-input\" type=\"email\"> has no required attribute, placeholder, or helper text",
+      "fix": "Add a required attribute and a placeholder or helper text showing the expected format, for example \"name@company.com\".",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#invite-member, the email address field",
+      "severity": 3,
+      "violation": "Nothing tells the user the field is required or what format is expected before they submit, so an empty or malformed submission is easy to make."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An invite was sent to the address entered above. It expires in 5 days if not accepted.\"",
+      "fix": "Display the actual email address that was invited directly in the confirmation text instead of referring back to a field the user can no longer see.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#invite-sent, confirmation paragraph",
+      "severity": 3,
+      "violation": "This screen refers to \"the address entered above,\" but the email address from the previous screen is not shown anywhere on this confirmation screen, so the user cannot verify which address actually received the invite."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a id=\"archive-confirm-cancel-link\" href=\"#project-settings\">Cancel</a> and <a id=\"archive-confirm-archive-link\" href=\"#project-archived\">Archive</a> are both plain, identically styled links",
+      "fix": "Style the Archive control distinctly as a warning or destructive action, such as a colored button, and keep Cancel as the visually default choice.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "#archive-confirm, the Cancel and Archive links",
+      "severity": 3,
+      "violation": "The destructive action, which the copy above states affects everyone on the team, has no visual distinction from the safe Cancel action, making it easy to select by mistake."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Import failed. Error code IMP-500. Contact support if this continues.\"",
+      "fix": "Add a direct contact method, such as a \"Contact support\" link or mailto address, next to the error message.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "#import-status, status message",
+      "severity": 3,
+      "violation": "The message instructs the user to contact support but provides no link, email address, or button to actually do so, leaving the user to find that contact information elsewhere."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<select id=\"notification-settings-digest-input\"> contains <option>Daily</option> and <option>Weekly</option> with neither marked selected",
+      "fix": "Mark the option that matches the user's actual current setting as selected by default.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "#notification-settings, digest frequency field",
+      "severity": 3,
+      "violation": "Neither option is pre-selected to reflect the user's current setting, so the user has no way to tell what their notification frequency currently is before making a change."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-08-01T02:14:07Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

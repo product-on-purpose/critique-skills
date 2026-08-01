@@ -1,0 +1,124 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T02:20:16Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"project-archived\" state",
+      "evidence": "the \"project-archived\" state defines exactly one control, the \"Back to your projects\" link to \"workspace-overview\"; no control anywhere in the artifact is labeled restore, unarchive, or similar, and no state other than \"archive-confirm\" links into \"project-archived\".",
+      "violation": "NNG-H3-UNDO requires a stated way back for an action that is reasonably reversible in this product. Archiving hides a project from the active list rather than deleting it, which is reasonably reversible, but the artifact commits to no restore or unarchive path anywhere.",
+      "fix": "Add a restore or unarchive control reachable from the \"project-archived\" state, or from an archived-projects list this artifact would need to define, naming the path back to active status for \"Vendor Onboarding\".",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-H9-IDENTIFY",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"import-status\" state, the \"import-status-message\" paragraph",
+      "evidence": "Import failed. Error code IMP-500. Contact support if this continues.",
+      "violation": "The message reports only that the import failed and surfaces the raw code IMP-500, without naming the file, field, or condition that caused the failure, so the user cannot tell what to change before retrying.",
+      "fix": "Replace or supplement the raw code with plain language naming the specific cause of the failure, for example the file that failed and why: unsupported format, size limit exceeded, or similar.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-H9-RECOVER",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"import-status\" state",
+      "evidence": "the \"import-status\" state defines exactly one control, the \"Back to your projects\" link to \"workspace-overview\"; no control or link anywhere in the artifact is labeled contact support, retry import, or similar, and \"workspace-overview\" itself defines no control that starts a new import.",
+      "violation": "The message tells the user to contact support if the problem continues but names no reachable way to do so, and offers no retry control either, so the only next step available in the artifact is leaving the failed import behind.",
+      "fix": "Add a support contact control or link to the \"import-status\" state, or a retry-import control that starts a new import, reachable from the error state itself.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" state, the \"Save\" button",
+      "evidence": "the \"project-settings\" state's form commits through a \"Save\" submit button with no defined target state or inline confirmation; once it fires, the project name input's own retained value is the only thing still on screen.",
+      "violation": "NNG-H1 requires a visible indication of what the system is doing and the outcome once a state-changing action completes. This Save action defines no confirmation message, no changed control state beyond the retained value, and no next state, so the user has no way to tell the save succeeded.",
+      "fix": "Add a visible confirmation, an inline success message or a changed control state, that appears once Save completes, naming what was saved.",
+      "confidence": "high",
+      "instances": [
+        {
+          "location": "the \"invite-member\" state, the \"Save\" button",
+          "evidence": "the \"invite-member\" state's form commits through a \"Save\" submit button with no defined target state or inline confirmation, separate from the \"Continue\" link that leads to \"invite-sent\"."
+        },
+        {
+          "location": "the \"notification-settings\" state, the \"Save\" button",
+          "evidence": "the \"notification-settings\" state's form commits through a \"Save\" submit button with no defined target state or inline confirmation."
+        }
+      ]
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" state, the icon-only button labeled \"Duplicate project\"",
+      "evidence": "the button carrying aria-label \"Duplicate project\" defines no target state, no visible text, and no confirmation; nothing elsewhere in the artifact, including the \"workspace-overview\" project list, reflects the result of clicking it.",
+      "violation": "NNG-H1 requires visible indication of what the system is doing and what the outcome was for a state-changing action. This control triggers a state-changing action, duplicating a project, with no specified in-progress or result feedback anywhere in the artifact.",
+      "fix": "Define what happens after Duplicate project is clicked: a visible confirmation, a new state showing the duplicate, or an updated project list reflecting it.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-H4-INTERNAL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-member\" state, the \"Save\" button and the \"Continue\" link",
+      "evidence": "the \"invite-member\" state defines a \"Save\" submit button inside its form and, outside that form, a separate \"Continue\" link to \"invite-sent\", whose own text reads: An invite was sent to the address entered above.",
+      "violation": "Two controls in the same state, Save and Continue, both read as candidates for committing the invite, and the artifact gives no cue whether they perform the same action, sequential actions, or unrelated ones.",
+      "fix": "Remove the Save button from this state if Continue is the only commit action, or state explicitly what each control does, for example by labeling the form control Save draft if it is distinct from sending.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-007",
+      "criterion": "NNG-H5-CONFIRM",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-member\" state, the \"Continue\" link",
+      "evidence": "the \"Continue\" link in the \"invite-member\" state targets \"invite-sent\" directly, whose own text states: An invite was sent to the address entered above. No state or control between them asks the user to confirm the recipient before the invite is sent.",
+      "violation": "NNG-H5-CONFIRM requires an action that sends something to a recipient to be gated behind a confirmation naming the object and consequence before it commits. Here the invite sends on this single click with no confirmation step.",
+      "fix": "Add a confirmation step between Continue and invite-sent that names the recipient address and states that an invite will be sent, before the action commits.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-008",
+      "criterion": "NNG-H6-RECALL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"notification-settings\" state, the \"Digest frequency\" select",
+      "evidence": "the digest frequency select lists two options, Daily and Weekly, and marks neither as selected, so the artifact does not specify which frequency reflects the user's current setting.",
+      "violation": "NNG-H6-RECALL requires the information a user needs at a step to be present at that step rather than remembered. The user's current digest frequency is needed to safely view and leave this screen, and the artifact does not show it, so the user must recall or guess their existing setting.",
+      "fix": "Mark the option matching the user's actual current digest frequency as selected, so the control reflects the stored setting rather than an arbitrary default.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 3,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The document goes directly from \"# Webhook delivery reference\" to \"## endpoint_url\" with no introductory text in between",
+      "fix": "Add a short introductory paragraph after the title stating what the webhook delivery feature does and how endpoint_url, signing_secret, and retry_policy relate to each other.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Immediately after the \"# Webhook delivery reference\" title, before the \"## endpoint_url\" heading",
+      "severity": 3,
+      "violation": "There is no overview explaining what webhook delivery configuration is, when a reader needs it, or how the three fields below relate to each other (for example, whether they are all part of one configuration object)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert.\"",
+      "fix": "Reword to something like \"accepts an HTTPS URL identifying the endpoint that receives the webhook payload for each triggered alert.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"## endpoint_url\" section",
+      "severity": 3,
+      "violation": "The sentence says the URL itself \"receives\" the payload, but a URL is only an address; it is the server or service at that address that receives the payload, so the phrasing is imprecise about what is actually being described."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The endpoint_url field accepts an HTTPS URL...\" and \"The signing_secret field accepts a string used to verify the payload signature on receipt.\"",
+      "fix": "Add an explicit required-or-optional statement to each field, and describe what happens when an optional field is omitted.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"## endpoint_url\", \"## signing_secret\", and \"## retry_policy\" sections",
+      "severity": 3,
+      "violation": "Only the retry_policy field states a default value; neither endpoint_url nor signing_secret says whether it is required or optional, or what happens if it is left unset."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The signing_secret field accepts a string used to verify the payload signature on receipt.\"",
+      "fix": "State the signing algorithm (for example HMAC-SHA256), the header name the signature is delivered in, and any length or format constraints on signing_secret.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"## signing_secret\" section",
+      "severity": 3,
+      "violation": "The document never states which algorithm computes the signature, which HTTP header carries it, or any length or character constraints on the secret, so a reader cannot implement signature verification from this reference alone."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential.\"",
+      "fix": "For each of none, linear, and exponential, document the number of retry attempts and the interval or backoff formula, or link to where those parameters are configured.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"## retry_policy\" section",
+      "severity": 3,
+      "violation": "The three retry strategies are named but never defined: there is no retry count, interval, or backoff formula for linear or exponential, so a reader cannot predict actual retry behavior from this text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert.\"",
+      "fix": "Add a sentence describing the expected response criteria for a successful delivery and cross-reference the retry_policy section for what happens on failure.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "\"## endpoint_url\" section",
+      "severity": 3,
+      "violation": "The document does not describe what response is expected from the endpoint (status code range, timeout) or how a failed delivery interacts with retry_policy, leaving the relationship between the two fields unspecified."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "None of the three sections contains an example value or sample payload",
+      "fix": "Add a short example under each field, such as a sample HTTPS URL, a sample signature header, and a sample retry_policy value.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "All three field sections (\"## endpoint_url\", \"## signing_secret\", \"## retry_policy\")",
+      "severity": 3,
+      "violation": "A reference document with no example values makes it harder for an implementer to confirm their configuration matches the expected format, particularly for signing_secret's expected string shape and endpoint_url's expected URL form."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-004.md",
+    "artifact_sha256": "7f41536ab3c3f7bc93a3dde86b8e81cee5dab0339f2b1d472e9222a20b42d7ae",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:32:24Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

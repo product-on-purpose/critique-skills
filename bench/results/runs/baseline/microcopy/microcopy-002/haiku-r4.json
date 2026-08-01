@@ -1,0 +1,116 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:39:31Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Checkout form, shipping address, first message (line 5)",
+      "evidence": "\"This field takes a maximum of 30 characters. Shorten the entry and save again.\" Placement says \"directly below the postal code field\"",
+      "violation": "The message uses the vague phrase \"this field\" but shipping addresses typically contain multiple fields (street, city, postal code, etc). It's unclear which field has the character limit without more specific language.",
+      "fix": "Change \"This field\" to \"The postal code\" or \"Your postal code\" to specify exactly which field is over the limit.",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Checkout form, shipping address, second message (line 14)",
+      "evidence": "\"Please correct the highlighted field. Error code: 502.\"",
+      "violation": "Error code 502 is a Bad Gateway server error, not a validation error. Mixing a server error code into a client-side validation message creates confusion about whether this is a user input error or a backend problem.",
+      "fix": "Remove the error code from the validation message, or replace it with validation-specific codes like \"VAL-001\" to distinguish client errors from server errors.",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "File upload, receipts, first message (line 25)",
+      "evidence": "\"This receipt is over the 10 MB limit, which keeps uploads quick on slow connections.\"",
+      "violation": "The explanation \"which keeps uploads quick on slow connections\" is unclear and awkwardly phrased. It does not clearly explain why the limit exists or what the user should do.",
+      "fix": "Rephrase to \"We limit files to 10 MB to ensure fast uploads on slower connections. Reduce your file size and upload it again.\"",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "File upload, receipts, second message (line 34)",
+      "evidence": "\"Receipts upload as PDF or PNG only, the two formats the expense system can read.\"",
+      "violation": "The phrase \"the two formats the expense system can read\" overstates the system's capability. It suggests the system cannot read any other formats, which may not be true system-wide.",
+      "fix": "Change to \"This upload field accepts PDF or PNG files only. Change your file to one of these formats and upload it again.\"",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Password reset, new password, first message (line 45)",
+      "evidence": "\"Choose a password of at least 8 characters, long enough that a guessing attack cannot work through every combination.\"",
+      "violation": "The claim that 8 characters is \"long enough that a guessing attack cannot work through every combination\" is mathematically false. An 8-character password can be brute-forced, making this statement either incorrect or misleading about password security.",
+      "fix": "Remove the security justification or replace it with accurate information: \"Choose a password of at least 8 characters for better security.\"",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Password reset, new password, first message (line 46-47)",
+      "evidence": "\"Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page\"",
+      "violation": "These placement details are self-contradictory. If the message requires scrolling up to see it, it cannot simultaneously stay visible on the page without scrolling. This is either an error in the description or needs clarification.",
+      "fix": "Clarify the actual placement: either \"The message appears at the top (requires scrolling up), separate from the input field\" or \"The message appears near the field and stays visible throughout.\"",
+      "confidence": "medium",
+      "id": "F-006"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Password reset, new password section (line 54-61)",
+      "evidence": "Message about \"This reset link expired an hour after it was sent\" appears under \"Password reset, new password\" but is actually about link expiration from a previous step",
+      "violation": "This message is contextually wrong. It describes a link expiration (from the email step) but appears in the section about choosing a new password. This suggests either the section organization is unclear or the message is misplaced.",
+      "fix": "Move this message to a separate \"Reset link\" section, or rename the current section to clarify it covers the entire reset flow, not just password entry.",
+      "confidence": "medium",
+      "id": "F-007"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Account settings, username (line 65)",
+      "evidence": "\"The last changes were not saved and cannot be recovered.\"",
+      "violation": "This message uses catastrophic language (\"cannot be recovered\") for what might be a transient network error. Users may still have recovery options (browser cache, previous backups, etc), making the claim misleading.",
+      "fix": "Change to \"Your changes were not saved. Check your connection and try again. Contact support if you continue to have problems.\"",
+      "confidence": "medium",
+      "id": "F-008"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

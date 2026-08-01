@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Check the message again and enter all six.\"",
+      "fix": "Replace \"Check the message again\" with \"Check your entry\" or \"You entered only five digits; please check your code and enter all six.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Line 5, first message, instruction text",
+      "severity": 3,
+      "violation": "The instruction is circular. The user is reading the error message itself, so telling them to \"check the message\" is ambiguous - it does not clarify whether they should check the error message displayed or check their original code."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This verification code expired 10 minutes after it was sent, which stops an intercepted code from being reused later.\"",
+      "fix": "Simplify to \"This verification code expired. Request a new code and enter it here.\" Reserve the security explanation for a help section or FAQ, not the in-line error message.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Line 14, second message, content",
+      "severity": 3,
+      "violation": "The message explains the technical rationale (preventing reuse of intercepted codes) rather than focusing on the user's immediate action. Users do not need to understand security implementation details; they need to know what to do."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This promo code ended on 30 June.\"",
+      "fix": "Use the date format consistent with the rest of the product interface. If using \"Month Day\" order (American English), change to \"June 30\". If using \"Day Month\" order (international English), keep \"30 June\" and ensure all dates use this format.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Line 25, first message, date specification",
+      "severity": 3,
+      "violation": "The date format mixes numeric day (30) with spelled month (June). Standard practice is to use either \"June 30\" or \"30 June\" consistently throughout a product, not both formats."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Document ends at line 42 with \"Suggested fix: none\" for the last entry, with no conclusion or summary.",
+      "fix": "Add a conclusion section or note indicating the review is complete. For example, add a line or section stating \"End of screens under review\" or summarizing how many screens or messages were examined.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "End of document, structure",
+      "severity": 3,
+      "violation": "The document lacks closure or a summary section. It ends abruptly mid-structure, making it unclear whether the review is complete or if there are additional sections to come."
+    }
+  ],
+  "run": {
+    "artifact": "bench/results/staging/microcopy/microcopy-004.md",
+    "artifact_sha256": "c8f58456a4deb36595b0ac00fe364b68e80445e939d7293d2db8d8f1a42ac91b",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:49:26Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

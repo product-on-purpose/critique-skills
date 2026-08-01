@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-DEADEND",
+      "evidence": "the \"invite-sent\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+      "fix": "Add a control inside the \"invite-sent\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "the \"invite-sent\" section",
+      "severity": 3,
+      "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H5-CONFIRM",
+      "evidence": "<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a> targets \"invite-sent\" directly, whose text reads \"An invite was sent to the address entered above.\" No section or state sits between \"invite-member\" and \"invite-sent\" in the artifact, and no control anywhere in the artifact revokes or cancels a sent invite.",
+      "fix": "Add a confirmation step between \"Continue\" and \"invite-sent\" that names the recipient's email address and states that clicking will send the invite, or add a control elsewhere in the artifact that revokes a sent invite.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"invite-member\" section, the \"invite-member-continue-link\" link",
+      "severity": 3,
+      "violation": "Sending an invite to a recipient is a costly action under this criterion's own examples of costly actions, which include sending to recipients. This control's path reaches neither a confirmation naming the recipient and consequence nor an undo, so the invite commits on one click."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button> has no href and sits in a <form> with no action attribute; the only control in this section that targets \"invite-sent\" is <a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>, whose target state reads \"An invite was sent to the address entered above.\"",
+      "fix": "Define what \"Save\" does when clicked, for example remove it if it serves no purpose distinct from \"Continue\", or rename the control that actually sends the invite to name that action, for example \"Send invite\", so the commit point is unambiguous.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button",
+      "severity": 2,
+      "violation": "This criterion requires that the artifact specify what the user sees while a state-changing action runs and once it finishes. The \"Save\" button's trigger is specified but its outcome is not: no confirmation, error, or resulting state is named for it, and its relationship to \"Continue\", the only control that reaches the state confirming the invite was sent, is undefined, so a user who clicks it cannot tell whether anything happened."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "Archiving \"Design System Refresh\" will remove it from the active projects list for everyone on the team. You can restore it at any time from the archived projects list. No section, heading, or control anywhere in the artifact is named \"archived projects list\" or links to one.",
+      "fix": "Add a state for the archived projects list and a control that reaches it, for example from \"project-archived\" or the main navigation, or remove the restore claim from this copy until that path exists in the spec.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"archive-confirm\" section, the \"archive-confirm-copy\" paragraph",
+      "severity": 2,
+      "violation": "This criterion requires that the artifact name a reversal path and where the user finds it. This copy names a reversal path, the archived projects list, but the artifact defines no such state and no control anywhere links to one, so the promised restore path is not reachable within the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-LABELED",
+      "evidence": "<button> with no text content and no accessible-name attribute",
+      "fix": "Add visible text to this control, or an aria-label attribute naming what it does.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "This control has neither visible text nor an accessible-name attribute, so nothing on screen names what the control does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "\"An invite was sent to the address entered above. It expires in 5 days if not accepted.\" The \"invite-sent\" section defines no control and no element repeating the value entered in the \"invite-member\" section's \"invite-member-email-input\" field.",
+      "fix": "Repeat the actual email address in the invite-sent confirmation copy, for example \"An invite was sent to jane@example.com.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the \"invite-sent\" section",
+      "severity": 2,
+      "violation": "This criterion requires that information the user needs at a step be present at that step rather than held over from an earlier one. This confirmation refers to an address entered above without repeating, referencing by value, or otherwise making that address retrievable on this state, and this state defines no control at all, so the user has no way back to the \"invite-member\" section to check it either."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H8",
+      "evidence": "<div id=\"workspace-overview-promo-referral\">Invite 3 teammates this month to unlock the advanced reporting add-on.</div> appears in document order before <a id=\"workspace-overview-projects-link\" href=\"#project-settings\">Open project settings</a> and <a id=\"workspace-overview-import-link\" href=\"#import-status\">View last import result</a>, the only two controls the \"workspace-overview\" section defines.",
+      "fix": "Move the promotional banner below the primary navigation links, or remove it from this section.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "the \"workspace-overview\" section, the \"workspace-overview-promo-referral\" element",
+      "severity": 2,
+      "violation": "This screen's task, reached from its own heading \"Your projects\", is accessing project settings and import status, its only two controls. The promotional banner is placed ahead of both in reading order, so a secondary, promotional element outranks the primary controls for the user's attention."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-08-01T02:07:46Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 8,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 3
+  }
+}

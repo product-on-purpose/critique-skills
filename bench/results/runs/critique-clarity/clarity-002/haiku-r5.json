@@ -1,0 +1,161 @@
+{
+  "summary": {
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 3,
+    "by_severity": {
+      "3": 7,
+      "4": 0,
+      "1": 0,
+      "2": 8,
+      "0": 0
+    }
+  },
+  "findings": [
+    {
+      "severity": 3,
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Employee instructions (Employees must submit, How to Apply sections) are interleaved with staff instructions (The manager reviews, The finance office conducts, The benefits team coordinates) in the same document with no audience separation.",
+      "location": "Throughout the document, particularly How to Apply, Approval Timeline, and internal sections",
+      "confidence": "high",
+      "id": "F-001",
+      "violation": "The document addresses two identifiably different readers - applicants and internal staff (managers, finance, payroll) - within the same sections, making it unclear which instructions are for whom.",
+      "lane": "judged",
+      "fix": "Separate employee-facing content from internal staff procedures into distinct documents or clearly marked sections."
+    },
+    {
+      "severity": 3,
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "The same reader is called 'Employees' (line 11: 'Full-time employees who have completed 90 days'), 'the applicant' (line 45: 'The applicant must keep'), and 'you' (line 51: 'You record the stipend item'), with no stated equivalence.",
+      "location": "Restrictions and Exceptions paragraph 1, Eligibility paragraph 1, Terminology Notes paragraph 1",
+      "confidence": "high",
+      "id": "F-002",
+      "violation": "Three different terms refer to the identical reader concept throughout the document with no signal they mean the same thing, forcing the reader to check whether they name one or three different roles.",
+      "lane": "judged",
+      "fix": "Choose one term for the employee reading this policy and use it consistently throughout. Use 'you' for direct address."
+    },
+    {
+      "severity": 3,
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "evidence": "In addition, eligibility for the workspace stipend depends on several details the reviewer checks one at a time. The workspace must sit inside the employee's primary residence for the stipend to apply. A workspace located in a shared coworking space does not qualify for the stipend under this section. A workspace used only occasionally for calls does not meet the bar the stipend policy sets. The reviewer confirms the workspace address matches the address already on file with payroll. A workspace shared with a roommate can still qualify if the desk area belongs to the employee alone. The stipend covers only the equipment placed inside that confirmed workspace, nothing located elsewhere in the home. A workspace that changes address during the benefit year needs a fresh confirmation before the stipend continues. The reviewer logs every workspace confirmation in the same shared tracking sheet the benefits team maintains. A workspace confirmation from more than one year ago no longer satisfies the stipend requirement on its own.",
+      "location": "Eligibility, paragraph 3",
+      "confidence": "high",
+      "id": "F-003",
+      "violation": "The paragraph opens with a qualifier (In addition, eligibility depends on several details) and lists nine conditions before reaching a clear statement of the main rule. The reader must accumulate all nine conditions to understand what actually qualifies, rather than receiving the main idea first.",
+      "lane": "judged",
+      "fix": "State the main workspace requirement first (Your workspace must be in your home and confirmed by the reviewer), then list the specific conditions that must be met."
+    },
+    {
+      "severity": 3,
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Required Documentation appears after Approval Timeline, but employees need to know what documentation is required before they submit an application. The reader's actual task sequence is: Am I eligible? (Eligibility) - What do I need? (Required Documentation) - How do I apply? (How to Apply) - What happens next? (Approval Timeline). The actual sequence breaks this at Required Documentation appearing after Approval Timeline.",
+      "location": "Document structure: How to Apply (section 3), Required Documentation (section 5)",
+      "confidence": "high",
+      "id": "F-004",
+      "violation": "The section ordering does not follow the sequence of questions or steps the reader works through when applying. Documentation requirements are needed before the approval timeline, not after it.",
+      "lane": "judged",
+      "fix": "Reorder sections to match the reader's task sequence: Eligibility, How to Apply, Required Documentation, Approval Timeline, Reimbursement Amounts, Restrictions and Exceptions. Remove or relocate internal process sections (Program Coordination, Review Responsibility) to a separate internal procedures document."
+    },
+    {
+      "severity": 3,
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "Restrictions and Exceptions contains two unrelated topics: keeping equipment in good condition (line 45) and policy for multiple devices (line 47). Terminology Notes section (lines 51-53) describes process steps, not terminology. The reader cannot name a single, consistent theme for either section.",
+      "location": "Restrictions and Exceptions section, Terminology Notes section",
+      "confidence": "medium",
+      "id": "F-005",
+      "violation": "Multiple sections do not maintain a consistent, limited set of themes. A reader who has read only the first and last sentences of Restrictions and Exceptions cannot state what the section is about.",
+      "lane": "judged",
+      "fix": "Clarify each section's single topic and stick to it. Rename Terminology Notes to match its actual content (Process Steps or similar). Break Restrictions and Exceptions into separate sections if needed."
+    },
+    {
+      "severity": 3,
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "evidence": "71-word sentence, 5 subordinate-clause markers: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "confidence": "high",
+      "id": "F-006",
+      "violation": "The sentence runs to 71 words with 5 subordinate-clause markers, longer than the reader can hold in mind on a single pass.",
+      "lane": "scripted",
+      "fix": "Split the sentence at a subordinate-clause boundary."
+    },
+    {
+      "severity": 3,
+      "criterion": "WILLIAMS-SHAPE",
+      "evidence": "71-word sentence: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "confidence": "high",
+      "id": "F-007",
+      "violation": "At 71 words, with 0 comma-set-off clause(s) and 5 subordinate-clause marker(s), the sentence stacks interruptions between its subject and its main verb instead of holding the main clause together.",
+      "lane": "scripted",
+      "fix": "Move subordinate clauses and modifiers after the main clause, not between its subject and verb."
+    },
+    {
+      "severity": 2,
+      "criterion": "PLAIN-PRONOUNS",
+      "evidence": "The applicant must keep the equipment in good working condition and this office may ask for a brief photo check once a year.",
+      "location": "Restrictions and Exceptions, paragraph 1",
+      "confidence": "high",
+      "id": "F-008",
+      "violation": "The sentence routes the reader or the writer's organization through a third-person institutional substitute instead of direct address.",
+      "lane": "scripted",
+      "fix": "Address the reader as you and the writer's organization as we."
+    },
+    {
+      "severity": 2,
+      "criterion": "PLAIN-PARAGRAPH",
+      "evidence": "165 words in one paragraph.",
+      "location": "Eligibility, paragraph 3",
+      "confidence": "high",
+      "id": "F-009",
+      "violation": "The paragraph exceeds the 150-word scannability threshold.",
+      "lane": "scripted",
+      "fix": "Split the paragraph so each part covers one topic."
+    },
+    {
+      "severity": 2,
+      "criterion": "PLAIN-NOMINALIZATION",
+      "evidence": "The finance office conducts an evaluation of every submitted receipt before it approves the amount.",
+      "location": "Reimbursement Amounts, paragraph 1",
+      "confidence": "high",
+      "id": "F-010",
+      "violation": "The action is buried inside the noun 'evaluation', carried by a generic support verb, instead of stated as the sentence's own main verb.",
+      "lane": "scripted",
+      "fix": "Restate the nominalized noun as the sentence's main verb."
+    },
+    {
+      "severity": 2,
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Eligibility depends on several details (line 15), an incomplete request pauses the timeline (line 29), the determination of stipend eligibility happens (line 69), the escalation of repeat requests happens automatically (line 69). Abstract nouns (eligibility, request, determination, escalation) serve as sentence subjects instead of the people or organizations performing the actions.",
+      "location": "Eligibility paragraph 3, Reimbursement Amounts paragraph 1, Program Coordination, Review Responsibility",
+      "confidence": "medium",
+      "id": "F-011",
+      "violation": "The document frequently uses abstract nouns as subjects instead of naming the real-world actor. This pattern occurs across multiple sections, particularly in process-focused paragraphs.",
+      "lane": "judged",
+      "fix": "Rewrite sentences to name the actual actor. Change 'an incomplete request pauses the timeline' to 'we pause processing an incomplete request' or 'the system pauses processing.'"
+    },
+    {
+      "severity": 2,
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "First sentence: 'Employees must submit the receipt, the manager's approval form, and the original purchase order before the review begins.' Second sentence: 'Also, the portal saves a draft automatically every few minutes.' These sentences are connected only by 'Also', but they shift from submission requirements to portal functionality without establishing why the portal detail matters in the context of submission.",
+      "location": "How to Apply section, paragraph 2",
+      "confidence": "medium",
+      "id": "F-012",
+      "violation": "The second sentence opens with wholly new information the prior sentence did not set up, disrupting the paragraph's flow.",
+      "lane": "judged",
+      "fix": "Either connect the sentences by explaining how draft saving relates to submission, or split them into separate paragraphs."
+    }
+  ],
+  "run": {
+    "skill_version": "0.1.0",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "model": "claude-haiku-4-5-20251001",
+    "artifact_sha256": "7fd910197f585ef10416cde2ed6b94fa48de539377a1082d82e29ccee509e6df",
+    "contract_version": "1.0.0",
+    "timestamp": "2026-07-31T20:57:36Z",
+    "artifact": "bench/corpus/clarity/clarity-002.md"
+  }
+}

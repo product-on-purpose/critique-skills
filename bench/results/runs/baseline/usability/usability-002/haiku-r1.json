@@ -1,0 +1,138 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-08-01T02:03:50.106504Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Project settings form, line 25-29",
+      "evidence": "\"<form> <label for=\"project-settings-name-input\">Project name</label> <input id=\"project-settings-name-input\" type=\"text\" value=\"Customer Migration\"> <button id=\"project-settings-save-btn\" type=\"submit\">Save</button> </form>\"",
+      "violation": "The form lacks method and action attributes, making it unclear how the form data will be submitted or validated.",
+      "fix": "Add method=\"post\" and action=\"/api/project/update\" (or appropriate endpoint) to the form element.",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Project settings duplicate button, line 30",
+      "evidence": "'<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>'",
+      "violation": "The button has no visible label text and only aria-label for screen readers, making it unclear to sighted users what the button does.",
+      "fix": "Add visible text like \"Duplicate\" inside the button or add an icon with a title attribute.",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Archive confirm section, line 53",
+      "evidence": "'Archiving \"Customer Migration\" will remove it from the active projects list for everyone on the team.'",
+      "violation": "The project name is hardcoded in the confirmation message rather than dynamically populated, so if the user changes the project name in the settings form above, this message will show the old name.",
+      "fix": "Use a templating approach or JavaScript to populate the project name dynamically from the form input.",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Invite member form, line 38-42",
+      "evidence": "\"<form> <label for=\"invite-member-email-input\">Email address</label> <input id=\"invite-member-email-input\" type=\"email\"> <button id=\"invite-member-save-btn\" type=\"submit\">Save</button> </form>\"",
+      "violation": "The email input field has no name attribute, so form submission will not include the email value.",
+      "fix": "Add name=\"email\" to the email input element.",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Invite sent section, line 48",
+      "evidence": "'<p>An invite was sent to the address entered above. It expires in 5 days if not accepted.</p>'",
+      "violation": "The expiration time is hardcoded rather than calculated from when the invite was actually sent, so users cannot determine the actual deadline.",
+      "fix": "Calculate and display the actual expiration date dynamically based on the current date.",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Workspace overview section, line 11",
+      "evidence": "'<p>This workspace holds 5 projects, synced last week.</p>'",
+      "violation": "The sync status is hardcoded and will become stale immediately, providing inaccurate information to users.",
+      "fix": "Display the actual last sync timestamp dynamically, e.g. \"synced 2 hours ago\" or \"synced 2026-07-31 at 14:30 UTC\".",
+      "confidence": "medium",
+      "id": "F-006"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Duplicate project button, line 30",
+      "evidence": "'<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>'",
+      "violation": "The button contains no content and will have no visible size or interactive affordance in the UI.",
+      "fix": "Add a visible icon or text label, such as <button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\">Duplicate</button>.",
+      "confidence": "medium",
+      "id": "F-007"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Notification settings form, line 69-77",
+      "evidence": "'<form> <label for=\"notification-settings-digest-input\">Digest frequency</label> <select id=\"notification-settings-digest-input\"> ... </select> <button id=\"notification-settings-save-btn\" type=\"submit\">Submit</button> </form>'",
+      "violation": "The form lacks a method attribute and the select input lacks a name attribute, making form submission unclear.",
+      "fix": "Add method=\"post\" to the form and name=\"digest_frequency\" to the select element.",
+      "confidence": "medium",
+      "id": "F-008"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Workspace overview, line 12-19",
+      "evidence": "'<div id=\"workspace-overview-recent\"> <ul> <li>Support Backlog Triage</li> <li>Beta Launch Plan</li> <li>Partner Integration Pilot</li> <li>Mobile App Revamp</li> </ul> </div>'",
+      "violation": "The list shows only 4 projects when the paragraph above says the workspace holds 5 projects, creating a discrepancy.",
+      "fix": "Either add a 5th project to the list or update the text to say \"4 projects\" instead of \"5 projects\".",
+      "confidence": "medium",
+      "id": "F-009"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Project archived section, line 59",
+      "evidence": "'\"Customer Migration\" has been moved to archived projects. It no longer appears in the active projects list for anyone on the team.'",
+      "violation": "Like the archive confirm section, the project name is hardcoded, so if the name changes in settings, this message becomes outdated.",
+      "fix": "Use dynamic template variables to insert the current project name into the message.",
+      "confidence": "medium",
+      "id": "F-010"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

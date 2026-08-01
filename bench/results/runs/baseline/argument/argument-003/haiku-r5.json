@@ -1,0 +1,127 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/argument/argument-003.md",
+    "artifact_sha256": "3735fd3a135fcd3f730e35c6af56fb064083676684399e5b0486c140ff7894de",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T20:48:11.604684Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section \"What the Pilot Showed\", paragraph 1",
+      "evidence": "\"During a 16-month pilot at 5 branches, the on-time-or-eventual return rate for borrowed items held at 94 percent, compared with 87 percent at the branches that kept fines in place\"",
+      "violation": "The comparison group is vaguely described as \"the branches that kept fines in place\" without identifying whether these are the other 5 consortium branches or some other set, making the comparison ambiguous.",
+      "fix": "Explicitly name which branches comprised the control group (e.g., \"the remaining five branches\" or \"five other branches in the consortium that continued charging fines\").",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section \"What the Pilot Showed\", paragraph 2",
+      "evidence": "\"A parallel patron survey found that self-reported avoidance of the library due to fear of fines dropped from 22 percent of respondents before the pilot to 5 percent after it\"",
+      "violation": "The survey contains no confidence intervals, sample sizes, or statement of statistical significance, leaving the reader unable to assess whether the 17-percentage-point drop is meaningful or subject to sampling variation.",
+      "fix": "Add sample size, confidence interval, and statistical significance (p-value or equivalent) for the reported change.",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section \"What the Pilot Showed\", paragraph 2",
+      "evidence": "\"The survey was administered at the same pilot branches immediately before and twelve months into the pilot. During a 16-month pilot...\"",
+      "violation": "The survey was administered at 12 months into a 16-month pilot, leaving 4 months of pilot data unobserved by the survey, potentially missing any effects that manifested only late in the trial.",
+      "fix": "Either extend the final survey to the full 16-month mark or explain why the 12-month cutoff captures the phenomenon of interest.",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section \"Why the Pilot Result Applies Systemwide\"",
+      "evidence": "\"Removing the financial penalty for late returns predictably increases both on-time return rates and overall program participation, which is the reason the pilot's return-rate and avoidance-survey results, taken together, support ending fines for the whole consortium rather than only the pilot branches.\"",
+      "violation": "This sentence asserts that the pilot results \"predictably\" support systemwide adoption, but the reasoning is circular: it claims the pilot outcome is predictable, then uses the pilot outcome to justify systemwide application. The actual generalizability depends on whether the 5 pilot branches are representative of the 10 branches as a whole.",
+      "fix": "Directly address representativeness: compare demographics, collection size, prior circulation patterns, and fine-revenue dependence between the pilot branches and non-pilot branches to justify why pilot results should generalize.",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section \"Why the Pilot Result Applies Systemwide\"",
+      "evidence": "\"This relationship is documented in the Tri-County Library Data Cooperative's 2023 fines-elimination research brief, which reviewed return-rate data from fourteen library systems that eliminated fines between 2017 and 2022.\"",
+      "violation": "The document cites an external research brief but does not provide enough information for verification (no URL, no publication venue, no methodology summary), and does not explain whether this external data shows effects in systems similar to this consortium.",
+      "fix": "Provide a URL or digital identifier for the brief, and summarize its key methodological soundness (e.g., sample sizes, control methods) or limitations.",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section \"Addressing the Revenue Concern\", paragraph 1",
+      "evidence": "\"Consortium finance records show fine revenue covered under 2 percent of the annual materials budget over the last three fiscal years, and the four pilot branches absorbed the loss without a measurable change to their replacement-copy spending\"",
+      "violation": "The text says \"the four pilot branches\" but earlier sections consistently refer to \"5 branches\" in the pilot, creating an inconsistency about pilot size.",
+      "fix": "Correct the pilot size reference to match the stated \"5 branches\" and clarify the source of the discrepancy if four branches were analyzed separately.",
+      "confidence": "medium",
+      "id": "F-006"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section \"Addressing the Revenue Concern\", paragraph 2",
+      "evidence": "\"the four pilot branches absorbed the loss without a measurable change to their replacement-copy spending, so the shortfall the objection anticipates has not materialized where the policy has already been tried.\"",
+      "violation": "The reasoning assumes that historical absorption of lost fine revenue at a subset of branches is predictive of systemwide absorption, but provides no analysis of whether all ten branches have sufficient revenue diversity or budget cushion to absorb the same loss.",
+      "fix": "Show that the four analyzed branches (or all five pilot branches) are representative of the full consortium in terms of budget structure, revenue sources, and materials spending patterns, or conduct a budget impact analysis for the non-pilot branches.",
+      "confidence": "medium",
+      "id": "F-007"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section \"Recommendation\", paragraph 2",
+      "evidence": "\"This recommendation applies to items returned within 60 days of their due date; items still unreturned past that window remain subject to the existing replacement-cost billing process\"",
+      "violation": "The sentence does not explain how the 60-day window will be enforced in practice or what triggers the transition from fine reminders to replacement-cost billing, leaving implementation details ambiguous.",
+      "fix": "Clarify the enforcement mechanism (e.g., \"at 60 days after due date, the system automatically transitions from reminder emails to replacement-cost billing\") and define what \"replacement-cost billing\" entails operationally.",
+      "confidence": "medium",
+      "id": "F-008"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section \"Circulation Trends\", paragraph 1",
+      "evidence": "\"The branch managers' working group audits renewal rates on the first of every month. The dashboard has tracked these figures consistently since the current system launched.\"",
+      "violation": "This section establishes the existence of circulation data infrastructure but never specifies which of these tracked metrics were used to analyze the pilot results, leaving uncertainty about whether the renewal rate data is distinct from or part of the return-rate analysis.",
+      "fix": "Explicitly state which tracked metrics (renewal rates, return rates, checkout volumes) were used as outcomes in the pilot analysis, or consolidate this section if it is merely introductory.",
+      "confidence": "medium",
+      "id": "F-009"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T21:11:39Z",
+    "rubrics": ["PLAIN", "WILLIAMS"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "PLAIN-AUDIENCE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Terminology Notes, paragraph 2",
+      "evidence": "Also, you submit the request in the portal. Countersign the employee request within two business days. You track its status there until the payment clears.",
+      "violation": "The paragraph addresses the employee directly as you in its first and third sentences, but the second sentence assigns countersigning the employee request within two business days, the same window Approval Timeline gives the manager for reviewing it, with no signal marking the shift, so a reader cannot tell whether that sentence describes their own action or the manager's.",
+      "fix": "Split the paragraph so the employee's own steps and the manager's countersigning step sit in separate sentences, each naming its actor by role: you submit the request, and the manager countersigns it within two business days.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-002",
+      "criterion": "WILLIAMS-COHERENCE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Program Coordination, paragraph 1",
+      "evidence": "A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.",
+      "violation": "Three of the section's four sentences pursue unrelated themes, a past travel-expense audit the sentence itself calls unrelated, general federal remote-work guidance, and the office coffee budget, none connected to the section's stated topic of stipend-request coordination or to one another, so a reader finishing the section could not state what the section as a whole covers.",
+      "fix": "Remove the three unrelated sentences from this section, or if any carries content the document needs, move it to a section of its own that states why it matters to stipend coordination.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "WILLIAMS-COHESION",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Program Coordination, paragraph 1",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout. A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.",
+      "violation": "Every sentence in this four-sentence paragraph opens with a new subject unconnected to the one before it, the benefits team, then an audit, then federal guidance, then a coffee budget, and no sentence picks up the topic the previous one just established, so the reader must re-orient at every sentence boundary.",
+      "fix": "Rewrite so each sentence that survives opens by referring back to the prior sentence's subject, for example restating stipend requests or the benefits team, instead of introducing an unconnected new subject cold.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "PLAIN-PARAGRAPH",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "Program Coordination, paragraph 1",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout.",
+      "violation": "The paragraph's opening sentence shares almost no vocabulary with the rest of the paragraph, so it does not preview the paragraph's actual topic.",
+      "fix": "Rewrite the opening sentence to state the topic the rest of the paragraph covers.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Terminology Notes, paragraph 1",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the reimbursable item against the request log each month.",
+      "violation": "The stipend item and the reimbursable item are used across two consecutive sentences for what appears to be the same underlying item moving through the same process, with no defined-terms signal or stated equivalence, so a careful reader has to check whether the two phrases name one thing or two.",
+      "fix": "Pick one term, for example the stipend item, and use it in both sentences instead of substituting a new term at the second step.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Request Steps",
+      "evidence": "Completing the request begins with confirming eligibility, and the uploaded receipt.",
+      "violation": "How to Apply already walks the reader through starting and completing a stipend request, but Request Steps restates the beginning of that same process seven sections later, after Restrictions and Exceptions, Terminology Notes, and other content the reader does not need before starting a request, so the section order tracks the document's own assembly rather than the reader's task sequence.",
+      "fix": "Move Request Steps immediately after How to Apply, or merge its content into that section, so the reader meets the full start-to-finish sequence in one place.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-007",
+      "criterion": "PLAIN-SUBJECT-VERB-OBJECT",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "How to Apply, paragraph 2",
+      "evidence": "Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.",
+      "violation": "3 comma-set-off clause(s) totalling 14 words intervene between the sentence's apparent subject and its verb.",
+      "fix": "Move the interrupting clause elsewhere, or split it into its own sentence.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-008",
+      "criterion": "WILLIAMS-PARALLELISM",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Request Steps, paragraph 1",
+      "evidence": "Completing the request begins with confirming eligibility, and the uploaded receipt.",
+      "violation": "The series' 2 items mix grammatical forms (gerund, other) at their head words instead of sharing one form.",
+      "fix": "Restate every item in the series with the same grammatical form.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-009",
+      "criterion": "PLAIN-TRANSITIONS",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Approval Timeline, paragraph 2",
+      "evidence": "An incomplete request pauses the timeline until the missing item arrives. The...",
+      "violation": "The paragraph opens with none of the fixed transition words, so the reader is not told how it relates to the paragraph before it.",
+      "fix": "Open the paragraph with a transition word that states its relationship to the prior paragraph.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 4,
+      "4": 0
+    },
+    "suppressed_count": 1,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

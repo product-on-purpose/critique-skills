@@ -1,0 +1,128 @@
+{
+  "run": {
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "artifact_sha256": "7fd910197f585ef10416cde2ed6b94fa48de539377a1082d82e29ccee509e6df",
+    "skill": "critique-clarity",
+    "timestamp": "2026-07-31T20:56:00Z",
+    "skill_version": "0.1.0",
+    "model": "claude-haiku-4-5-20251001",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/clarity/clarity-002.md"
+  },
+  "summary": {
+    "suppressed_count": 3,
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "by_severity": {
+      "0": 0,
+      "3": 4,
+      "1": 0,
+      "4": 0,
+      "2": 8
+    }
+  },
+  "findings": [
+    {
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "violation": "The sentence runs to 71 words with 5 subordinate-clause markers, longer than the reader can hold in mind on a single pass.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "confidence": "high",
+      "id": "F-001",
+      "evidence": "Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "severity": 3,
+      "lane": "scripted"
+    },
+    {
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "violation": "At 71 words, with 0 comma-set-off clause(s) and 5 subordinate-clause marker(s), the sentence stacks interruptions between its subject and its main verb instead of holding the main clause together.",
+      "fix": "Move subordinate clauses and modifiers after the main clause, not between its subject and verb.",
+      "criterion": "WILLIAMS-SHAPE",
+      "confidence": "high",
+      "id": "F-002",
+      "evidence": "71-word sentence: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "severity": 3,
+      "lane": "scripted"
+    },
+    {
+      "location": "Document structure",
+      "violation": "The document's structure forces readers to hunt for the core task description, which appears only at the very end in an underwhelming two-sentence section. Identical content appears three times (Program Overview, Special Cases, Questions and Updates), consuming space that could clarify the application process.",
+      "fix": "Move the Request Steps section immediately after Eligibility or as part of How to Apply. Delete or consolidate the duplicate Program Overview sections. Reorganize so the reader's actual task sequence drives the section order.",
+      "criterion": "PLAIN-ORGANIZE",
+      "confidence": "high",
+      "id": "F-010",
+      "evidence": "Request Steps section appears only at end of document after Approval Timeline, Required Documentation, Reimbursement Amounts, and Restrictions sections. Special Cases and Questions and Updates sections duplicate Program Overview verbatim.",
+      "severity": 3,
+      "lane": "judged"
+    },
+    {
+      "location": "Eligibility, paragraph 3",
+      "violation": "The ten-sentence paragraph shifts topics at every sentence: workspace constraints, reviewer actions, stipend coverage, back to workspace. Subjects alternate between three unrelated themes with no connecting signal, so the reader cannot track a coherent thread from sentence to sentence.",
+      "fix": "Rewrite the paragraph to group related topics: first all workspace requirements, then all reviewer responsibilities, then stipend coverage limits. Add transitional phrases to signal the shift between topics.",
+      "criterion": "WILLIAMS-COHESION",
+      "confidence": "high",
+      "id": "F-012",
+      "evidence": "In addition, eligibility for the workspace stipend depends on several details the reviewer checks one at a time. The workspace must sit inside the employee's primary residence for the stipend to apply. A workspace located in a shared coworking space does not qualify for the stipend under this section. A workspace used only occasionally for calls does not meet the bar the stipend policy sets. The reviewer confirms the workspace address matches the address already on file with payroll. A workspace shared with a roommate can still qualify if the desk area belongs to the employee alone. The stipend covers only the equipment placed inside that confirmed workspace, nothing located elsewhere in the home. A workspace that changes address during the benefit year needs a fresh confirmation before the stipend continues. The reviewer logs every workspace confirmation in the same shared tracking sheet the benefits team maintains. A workspace confirmation from more than one year ago no longer satisfies the stipend requirement on its own.",
+      "severity": 3,
+      "lane": "judged"
+    },
+    {
+      "location": "Eligibility, paragraph 3",
+      "violation": "The paragraph exceeds the 150-word scannability threshold.",
+      "fix": "Split the paragraph so each part covers one topic.",
+      "criterion": "PLAIN-PARAGRAPH",
+      "confidence": "high",
+      "id": "F-006",
+      "evidence": "165 words in one paragraph.",
+      "severity": 2,
+      "lane": "scripted"
+    },
+    {
+      "location": "Restrictions and Exceptions, paragraph 1",
+      "violation": "The sentence routes the reader or the writer's organization through a third-person institutional substitute instead of direct address.",
+      "fix": "Address the reader as you and the writer's organization as we.",
+      "criterion": "PLAIN-PRONOUNS",
+      "confidence": "high",
+      "id": "F-007",
+      "evidence": "The applicant must keep the equipment in good working condition and this office may ask for a brief photo check once a year.",
+      "severity": 2,
+      "lane": "scripted"
+    },
+    {
+      "location": "Eligibility, paragraph 3",
+      "violation": "The paragraph addresses two distinct audiences without clear separation: the applicant needs to know workspace requirements, while the reviewer-perspective sentences describe what the reviewer checks and logs. The interleaving makes it unclear which instructions apply to the reader.",
+      "fix": "Reorganize the paragraph to separate applicant requirements from reviewer processes, or add explicit labels such as What the applicant must provide and What the reviewer will check.",
+      "criterion": "PLAIN-AUDIENCE",
+      "confidence": "high",
+      "id": "F-008",
+      "evidence": "In addition, eligibility for the workspace stipend depends on several details the reviewer checks one at a time. The workspace must sit inside the employee's primary residence for the stipend to apply. A workspace located in a shared coworking space does not qualify for the stipend under this section.",
+      "severity": 2,
+      "lane": "judged"
+    },
+    {
+      "location": "Reimbursement Amounts, paragraph 1",
+      "violation": "The action is buried inside the noun 'evaluation', carried by a generic support verb, instead of stated as the sentence's own main verb.",
+      "fix": "Restate the nominalized noun as the sentence's main verb.",
+      "criterion": "PLAIN-NOMINALIZATION",
+      "confidence": "high",
+      "id": "F-005",
+      "evidence": "The finance office conducts an evaluation of every submitted receipt before it approves the amount.",
+      "severity": 2,
+      "lane": "scripted"
+    },
+    {
+      "location": "How to Apply, paragraph 1",
+      "violation": "The sentence embeds three or more comma- or semicolon-separated parallel items inline rather than presenting them as a formatted list.",
+      "fix": "Reformat the inline items as a numbered or bulleted list.",
+      "criterion": "PLAIN-LISTS",
+      "confidence": "high",
+      "id": "F-003",
+      "evidence": "Employees must submit the receipt, the manager's approval form, and the original purchase order before the review begins.",
+      "severity": 2,
+      "lane": "scripted"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "run": {
+    "skill": "critique-docs",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T21:29:16Z",
+    "rubrics": ["DIATAXIS"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "DIATAXIS-NAV-LENGTH",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "the Related pages listing",
+      "evidence": "9 flat items, no sub-headings or nested items breaking them into groups.",
+      "violation": "This listing holds 9 items, more than 7 a reader can scan in one glance, with no subgrouping to break it up.",
+      "fix": "Split this listing into named subgroups, either nested sub-lists or sub-headings, each holding a smaller set of related items.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "DIATAXIS-REFERENCE-NEUTRAL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "timeout section, second paragraph (line 11)",
+      "evidence": "Leaving this field at its default is the right choice for most teams, and raising it is worth doing only when a specific integration needs the extra room.",
+      "violation": "This paragraph carries a subjective recommendation about when to leave the field at default versus raise it, rather than only describing the field's behavior, breaching DIATAXIS-REFERENCE-NEUTRAL's rule against carrying a recommendation in place of description.",
+      "fix": "Remove the recommendation sentence, or replace it with a neutral statement of the field's default value and the effect of raising it, without endorsing when a reader should do so.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 0,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "pass",
+    "severity_3_threshold": 0
+  }
+}

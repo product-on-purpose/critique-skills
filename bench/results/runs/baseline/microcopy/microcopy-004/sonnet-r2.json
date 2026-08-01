@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Check the message again and enter all six.\"",
+      "fix": "Name the source explicitly, for example \"Check the text message you received and enter all six digits.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code section, first message block (\"Verification codes are 6 digits long...\")",
+      "severity": 3,
+      "violation": "\"The message\" is ambiguous. It could refer to the text message or email that contains the verification code, or to this on-screen error message itself, so the user cannot be sure what they are being asked to re-check."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This verification code expired 10 minutes after it was sent, which stops an intercepted code from being reused later.\"",
+      "fix": "Lead with the action, for example \"This code has expired. Request a new one and enter it here,\" and move or drop the security explanation.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code section, second message block (\"This verification code expired...\")",
+      "severity": 3,
+      "violation": "The message opens with an internal security rationale before telling the user what to do, making an inline error longer than necessary without helping the user complete the required action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"selectable, offers a resend code button in place of the message\"",
+      "fix": "Separate the two proposals into distinct sentences, for example \"Replace the message with a resend code button. Keep the code entry field selectable and copyable.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code section, second message block, Suggested fix field",
+      "severity": 3,
+      "violation": "The field joins two different ideas with a comma into one fragment, and it is unclear what \"selectable\" refers to (the code, the button, or the message text), unlike the plain \"none\" used in the document's other three entries."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This promo code ended on 30 June.\"",
+      "fix": "Include the year, for example \"This promo code ended on 30 June 2026.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Billing, promo code section, first message block (\"This promo code ended on 30 June...\")",
+      "severity": 3,
+      "violation": "The date gives a month and day but no year, so the message is ambiguous about which year's 30 June is meant, particularly if it is read close to a year boundary."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "the phrase \"bold text set larger than the field label, icon\" is repeated identically in all four Signal entries, and none of them names which icon is used.",
+      "fix": "Name the specific icon for each entry, for example \"error icon\" versus \"warning icon,\" or state once that a single shared icon covers every message type.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Signal field, all four message blocks (two-factor setup and billing, promo code sections)",
+      "severity": 3,
+      "violation": "Because the icon is never identified, a reader cannot tell whether the same icon is reused for an expired-code error, a format error, and two billing mismatches, or whether different icons are intended for different severities."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-004.md",
+    "artifact_sha256": "c8f58456a4deb36595b0ac00fe364b68e80445e939d7293d2db8d8f1a42ac91b",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:52:15Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

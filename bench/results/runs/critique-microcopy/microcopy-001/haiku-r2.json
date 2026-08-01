@@ -1,0 +1,105 @@
+{
+  "summary": {
+    "gate": "fail",
+    "suppressed_count": 1,
+    "by_severity": {
+      "1": 0,
+      "3": 2,
+      "0": 0,
+      "2": 6,
+      "4": 0
+    },
+    "severity_3_threshold": 0
+  },
+  "findings": [
+    {
+      "severity": 3,
+      "fix": "Rewrite the sentence to state the problem neutrally, without blaming the reader.",
+      "confidence": "high",
+      "location": "Profile settings, phone number, message 1",
+      "violation": "The message frames the problem as something the reader personally did wrong or should have known better than to do, using a second-person accusatory construction.",
+      "criterion": "NNG-EM-NEUTRAL-TONE",
+      "id": "F-001",
+      "lane": "scripted",
+      "evidence": "You keep entering the wrong value. Re-enter it to continue."
+    },
+    {
+      "severity": 3,
+      "fix": "Name the constraint: specify the expected format, length, or rule for the phone number field (country code required, area code format, digits only, etc.).",
+      "confidence": "high",
+      "location": "Profile settings, phone number, message 1",
+      "violation": "The message does not name what makes the value wrong or what value would be correct, leaving the reader with no path to resolve the failure without trial and error.",
+      "criterion": "NNG-EM-SPECIFIC",
+      "id": "F-008",
+      "lane": "judged",
+      "evidence": "You keep entering the wrong value. Re-enter it to continue."
+    },
+    {
+      "severity": 2,
+      "fix": "Add a concrete next step: name the action the reader should take to resolve this.",
+      "confidence": "high",
+      "location": "Signup form, email field, message 1",
+      "violation": "The message states that a problem exists with no imperative instruction or named next step anywhere in the text.",
+      "criterion": "NNG-EM-CONSTRUCTIVE",
+      "id": "F-002",
+      "lane": "scripted",
+      "evidence": "The connection dropped before this finished."
+    },
+    {
+      "severity": 2,
+      "fix": "Add a non-color cue: an icon, a text label, a shape change, or bold or underline styling.",
+      "confidence": "high",
+      "location": "Signup form, email field, message 2, Signal field",
+      "violation": "The Signal field's non-color-cue token is none, so color or highlight is the message's only stated cue.",
+      "criterion": "NNG-EM-NOT-COLOR-ONLY",
+      "id": "F-003",
+      "lane": "scripted",
+      "evidence": "Signal: one step bolder and larger than the field label, none"
+    },
+    {
+      "severity": 2,
+      "fix": "Preserve the reader's entered input across the failed submission.",
+      "confidence": "high",
+      "location": "Profile settings, phone number, message 2, Input on resubmission field",
+      "violation": "A failed submission clears what the reader already entered instead of preserving it so they can correct the specific problem in place.",
+      "criterion": "NNG-EM-PRESERVE-INPUT",
+      "id": "F-004",
+      "lane": "scripted",
+      "evidence": "Input on resubmission: cleared"
+    },
+    {
+      "severity": 2,
+      "fix": "Delay the message until the field loses focus or the form is submitted, not while the reader is still typing or before they have entered anything.",
+      "confidence": "high",
+      "location": "Checkout form, payment method, message 2, Fires field",
+      "violation": "The message can appear before the reader has had a fair chance to finish entering the relevant input.",
+      "criterion": "NNG-EM-TIMING",
+      "id": "F-005",
+      "lane": "scripted",
+      "evidence": "Fires: mid-keystroke"
+    },
+    {
+      "severity": 2,
+      "fix": "Name the actual problem: indicate that the payment method was declined, not accepted, not supported, or has another specific issue, so the reader knows to try a different card or payment method.",
+      "confidence": "high",
+      "location": "Checkout form, payment method, message 1",
+      "violation": "The message is a bare generic statement with no specificity of what failed, which field caused the issue, or what the reader should change to retry.",
+      "criterion": "NNG-EM-SPECIFIC",
+      "id": "F-007",
+      "lane": "judged",
+      "evidence": "Something went wrong. Contact support if this continues."
+    }
+  ],
+  "run": {
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:35:41Z",
+    "rubrics": [
+      "NNG"
+    ],
+    "artifact": "bench/corpus/microcopy/microcopy-001.md",
+    "skill": "critique-microcopy",
+    "artifact_sha256": "0580399008ca4517da0a1b1f620180b68a4cfb24e596be279a5f782cde325fc7",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0"
+  }
+}

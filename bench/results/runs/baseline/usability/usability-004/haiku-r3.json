@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced last week\" but the list below shows only 3 projects (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp)",
+      "fix": "Either update the count statement to say \"3 projects shown\" or add the 4th project to the recent list with a note about why only 3 are displayed, or restructure to clarify that this is a recent subset and not the complete count.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Workspace overview section",
+      "severity": 3,
+      "violation": "The interface states the workspace contains 4 projects but the recent projects list displays only 3 items, creating confusion about whether a project is missing or the count is incorrect."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The form includes a submit button labeled \"Save\" inside the form element, but the section also includes a separate anchor link labeled \"Continue\" outside the form.",
+      "fix": "Either move the Continue link into the form as a button or primary CTA, or change the workflow so Save directly navigates to the next step and removes the separate Continue link.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Invite a team member section",
+      "severity": 3,
+      "violation": "The flow for completing an invite is ambiguous - users may not understand whether they should click Save first or Continue, or if both actions are needed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Both forms contain submit buttons (\"Save\") but there is no success message, validation error display, or loading state shown in the markup.",
+      "fix": "Add clear success confirmation messaging or error display patterns to each form so users understand the submission result.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Project settings form and Invite member form",
+      "severity": 3,
+      "violation": "Users cannot see whether their form submission succeeded or failed, leading to uncertainty about whether their changes were saved."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Archive project\" is implemented as an anchor link (id=\"project-settings-archive-link\") rather than a button element or element with role=\"button\".",
+      "fix": "Replace the archive anchor with a button element or add role=\"button\" and tabindex=\"0\" to the link, and consider adding confirmation or warning styling to indicate the action is destructive.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Archive project action in project settings",
+      "severity": 3,
+      "violation": "Destructive actions should be presented with clear button styling and semantics to indicate they are interactive controls, not navigation links. Screen readers and users may not recognize this as an action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The select control (id=\"notification-settings-digest-input\") has three options (Daily, Weekly, Monthly) but contains no selected attribute and no indication of the current setting.",
+      "fix": "Add a selected attribute to one option to show the current setting, or display the current value in text above or below the select control.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Notification settings section",
+      "severity": 3,
+      "violation": "Users cannot tell which notification frequency is currently active before they open the dropdown, making it difficult to determine if a change is needed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The input field (id=\"invite-member-email-input\") has type=\"email\" but no placeholder attribute, no associated description, and no visible guidance about the expected email format.",
+      "fix": "Add a placeholder attribute such as placeholder=\"colleague@company.com\" or add descriptive text above the input explaining that the email must match an existing team member account or invitation will be sent to create one.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Invite member email input",
+      "severity": 3,
+      "violation": "Users receive no guidance on what to enter or how the email address will be used, potentially leading to abandoned form submissions."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T14:30:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

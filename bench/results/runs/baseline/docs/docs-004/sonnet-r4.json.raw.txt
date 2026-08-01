@@ -1,0 +1,34 @@
+Location: Immediately after the "# Webhook delivery reference" title, before the "## endpoint_url" heading
+Evidence: The document goes directly from "# Webhook delivery reference" to "## endpoint_url" with no introductory text in between
+Problem: There is no overview explaining what webhook delivery configuration is, when a reader needs it, or how the three fields below relate to each other (for example, whether they are all part of one configuration object).
+Fix: Add a short introductory paragraph after the title stating what the webhook delivery feature does and how endpoint_url, signing_secret, and retry_policy relate to each other.
+
+Location: "## endpoint_url" section
+Evidence: "The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert."
+Problem: The sentence says the URL itself "receives" the payload, but a URL is only an address; it is the server or service at that address that receives the payload, so the phrasing is imprecise about what is actually being described.
+Fix: Reword to something like "accepts an HTTPS URL identifying the endpoint that receives the webhook payload for each triggered alert."
+
+Location: "## endpoint_url", "## signing_secret", and "## retry_policy" sections
+Evidence: "The endpoint_url field accepts an HTTPS URL..." and "The signing_secret field accepts a string used to verify the payload signature on receipt."
+Problem: Only the retry_policy field states a default value; neither endpoint_url nor signing_secret says whether it is required or optional, or what happens if it is left unset.
+Fix: Add an explicit required-or-optional statement to each field, and describe what happens when an optional field is omitted.
+
+Location: "## signing_secret" section
+Evidence: "The signing_secret field accepts a string used to verify the payload signature on receipt."
+Problem: The document never states which algorithm computes the signature, which HTTP header carries it, or any length or character constraints on the secret, so a reader cannot implement signature verification from this reference alone.
+Fix: State the signing algorithm (for example HMAC-SHA256), the header name the signature is delivered in, and any length or format constraints on signing_secret.
+
+Location: "## retry_policy" section
+Evidence: "The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential."
+Problem: The three retry strategies are named but never defined: there is no retry count, interval, or backoff formula for linear or exponential, so a reader cannot predict actual retry behavior from this text.
+Fix: For each of none, linear, and exponential, document the number of retry attempts and the interval or backoff formula, or link to where those parameters are configured.
+
+Location: "## endpoint_url" section
+Evidence: "The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert."
+Problem: The document does not describe what response is expected from the endpoint (status code range, timeout) or how a failed delivery interacts with retry_policy, leaving the relationship between the two fields unspecified.
+Fix: Add a sentence describing the expected response criteria for a successful delivery and cross-reference the retry_policy section for what happens on failure.
+
+Location: All three field sections ("## endpoint_url", "## signing_secret", "## retry_policy")
+Evidence: None of the three sections contains an example value or sample payload
+Problem: A reference document with no example values makes it harder for an implementer to confirm their configuration matches the expected format, particularly for signing_secret's expected string shape and endpoint_url's expected URL form.
+Fix: Add a short example under each field, such as a sample HTTPS URL, a sample signature header, and a sample retry_policy value.

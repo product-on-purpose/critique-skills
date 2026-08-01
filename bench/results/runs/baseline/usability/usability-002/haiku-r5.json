@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 5 projects, synced last week\" but the list contains only 4 projects",
+      "fix": "Change the text to \"This workspace holds 4 projects\" or add the missing fifth project to the list.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Workspace overview section, line 11",
+      "severity": 3,
+      "violation": "The text states the workspace holds 5 projects but only 4 are listed (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>",
+      "fix": "Add visible text inside the button, such as \"Duplicate\", or include an icon or symbol that indicates its function.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Project settings, duplicate project button",
+      "severity": 3,
+      "violation": "The button has only an aria-label with no visible text or icon, making it inaccessible to sighted users who cannot see the button's purpose."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"invite-member-email-input\" type=\"email\">",
+      "fix": "Add the required attribute to the input element.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Invite a team member form, email input",
+      "severity": 3,
+      "violation": "The email input field has no required attribute, allowing users to submit the form without entering an email address."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<form> element without action or method attributes",
+      "fix": "Add an action attribute to the form element, such as <form action=\"/save-project\" method=\"POST\">.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Project settings form, line 25",
+      "severity": 3,
+      "violation": "The form has no action attribute specified, making it unclear where the form submission will be processed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<form> element without action or method attributes",
+      "fix": "Add an action attribute to specify the form submission endpoint.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Invite a team member form, line 38",
+      "severity": 3,
+      "violation": "The form lacks an action attribute, making the invitation submission target undefined."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<form> element without action or method attributes",
+      "fix": "Add an action attribute to the form element.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Notification settings form, line 69",
+      "severity": 3,
+      "violation": "The form has no action attribute specified, so it is unclear where notification preferences will be submitted."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

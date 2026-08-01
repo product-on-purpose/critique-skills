@@ -1,0 +1,160 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 5 projects, synced last week.\" is followed by a list of only four items: Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp.",
+      "fix": "Add the fifth project to the list, or correct the summary text to say \"4 projects.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Workspace overview section (id=\"workspace-overview\"), the summary paragraph above the project list.",
+      "severity": 3,
+      "violation": "The stated count of 5 projects does not match the 4 projects actually listed, so either the summary text is wrong or a project is missing from the list."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The four project names appear only as plain list items with no href or button attached, while the single link \"Open project settings\" (id=\"workspace-overview-projects-link\") is not associated with any of them.",
+      "fix": "Make each project name a link or button that opens settings for that specific project.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Workspace overview section (id=\"workspace-overview\"), the project list and the \"Open project settings\" link.",
+      "severity": 3,
+      "violation": "There is no way to open a specific project from the list, and it is unclear which project \"Open project settings\" is meant to open."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The input is id=\"project-settings-name-input\" with value=\"Customer Migration\".",
+      "fix": "Populate the settings page with the project the user actually selected, or add \"Customer Migration\" to the projects list so the two screens agree.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Project settings section (id=\"project-settings\"), the \"Project name\" input.",
+      "severity": 3,
+      "violation": "\"Customer Migration\" is not one of the four projects shown in \"Your projects,\" so a user who clicked \"Open project settings\" from the overview lands on settings for a project they cannot identify from the list they just saw."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The button is id=\"project-settings-duplicate-btn\" with aria-label=\"Duplicate project\" and no visible text between its opening and closing tags.",
+      "fix": "Add visible text or an icon to the button so its purpose is clear to sighted users, not only to screen readers.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Project settings section (id=\"project-settings\"), the duplicate button.",
+      "severity": 3,
+      "violation": "The button has an aria-label but no visible text or icon, so sighted users see an empty control and cannot tell what it does or that it is interactive."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The link id=\"project-settings-archive-link\" points to href=\"#project-archived\", and no link anywhere in the document points to the \"Archive this project?\" section, id=\"archive-confirm\".",
+      "fix": "Point \"Archive project\" at \"#archive-confirm\" instead of \"#project-archived\" so the confirmation step is actually part of the flow.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Project settings section (id=\"project-settings\"), the \"Archive project\" link.",
+      "severity": 3,
+      "violation": "A confirmation step exists in the document but is unreachable, so clicking \"Archive project\" performs the archive action immediately with no chance to confirm or cancel."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The form ends with a Save button, id=\"invite-member-save-btn\", type=\"submit\", and separately, outside the form, a Continue link, id=\"invite-member-continue-link\", href=\"#invite-sent\".",
+      "fix": "Combine them into a single action, for example by making the Save button itself lead to the invite-sent confirmation, and remove the redundant Continue link.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Invite a team member section (id=\"invite-member\"), the form's Save button and the Continue link.",
+      "severity": 3,
+      "violation": "It is unclear whether Save or Continue is what actually sends the invite, since two separate controls appear to do the same job with no stated relationship between them."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The input id=\"invite-member-email-input\" has no \"required\" attribute, and \"Continue,\" id=\"invite-member-continue-link\", links to \"#invite-sent\" independently of the form.",
+      "fix": "Make Continue the form's actual submit action and mark the email field as required, so an invite cannot be confirmed without an address.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Invite a team member section (id=\"invite-member\"), the email input and the Continue link.",
+      "severity": 3,
+      "violation": "A user can reach the \"Invite sent\" confirmation by clicking Continue even with the email field left blank, since Continue does not depend on the form being filled in or submitted."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The select has three options, Daily, Weekly, Monthly, and none of them is marked selected.",
+      "fix": "Mark the option matching the user's current digest frequency with the \"selected\" attribute.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Notification settings section (id=\"notification-settings\"), the \"Digest frequency\" select.",
+      "severity": 3,
+      "violation": "With no option marked selected, the control defaults to showing \"Daily\" regardless of the user's actual current setting, which will misrepresent their preference if it is really Weekly or Monthly."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The button id=\"project-settings-save-btn\", type=\"submit\", labeled \"Save,\" has no corresponding result or confirmation section anywhere in the document.",
+      "fix": "Add a confirmation state or inline success message after saving the project name, matching the confirmation pattern used for invites and archiving.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Project settings section (id=\"project-settings\"), the Save button for the project name.",
+      "severity": 3,
+      "violation": "Unlike the invite and archive flows, which both show an explicit confirmation screen after their action, saving the project name gives the user no feedback that the change took effect."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The button id=\"notification-settings-save-btn\", type=\"submit\", labeled \"Submit,\" has no corresponding result or confirmation section.",
+      "fix": "Add a confirmation state or inline success message after submitting notification settings.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Notification settings section (id=\"notification-settings\"), the Submit button.",
+      "severity": 3,
+      "violation": "As with the project name Save button, submitting notification preferences gives no confirmation that the change was saved, unlike the invite and archive flows."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The notification settings form uses the label \"Submit,\" while the project settings and invite member forms both use the label \"Save\" for their submit buttons.",
+      "fix": "Use \"Save\" for all three form submit buttons instead of \"Submit\" for one of them.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Notification settings section (id=\"notification-settings\"), the Submit button label.",
+      "severity": 3,
+      "violation": "Using a different label for the same kind of action, saving a form, makes the interface feel inconsistent."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The last import finished with 3 rows skipped: each referenced a project that does not exist in this workspace. Rows 63, 71, and 82 were skipped; every other row was imported.\"",
+      "fix": "State the total row count, for example \"82 of 85 rows were imported.\"",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "Import status section (id=\"import-status\"), the status message.",
+      "severity": 3,
+      "violation": "The message never states the total number of rows in the import, so \"every other row was imported\" cannot be verified or understood in context."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-08-01T02:08:22Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 12,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

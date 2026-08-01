@@ -1,0 +1,150 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/clarity/clarity-002.md",
+    "artifact_sha256": "7fd910197f585ef10416cde2ed6b94fa48de539377a1082d82e29ccee509e6df",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T20:54:38Z",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "evidence": "71-word sentence, 5 subordinate-clause markers: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "violation": "The sentence runs to 71 words with 5 subordinate-clause markers, longer than the reader can hold in mind on a single pass.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "WILLIAMS-SHAPE",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "evidence": "71-word sentence: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "violation": "At 71 words, with 0 comma-set-off clause(s) and 5 subordinate-clause marker(s), the sentence stacks interruptions between its subject and its main verb instead of holding the main clause together.",
+      "fix": "Move subordinate clauses and modifiers after the main clause, not between its subject and verb.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-008",
+      "criterion": "PLAIN-AUDIENCE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Eligibility, paragraph 3",
+      "evidence": "In addition, eligibility for the workspace stipend depends on several details the reviewer checks one at a time. The workspace must sit inside the employee's primary residence for the stipend to apply. A workspace located in a shared coworking space does not qualify for the stipend under this section. A workspace used only occasionally for calls does not meet the bar the stipend policy sets. The reviewer confirms the workspace address matches the address already on file with payroll. A workspace shared with a roommate can still qualify if the desk area belongs to the employee alone. The stipend covers only the equipment placed inside that confirmed workspace, nothing located elsewhere in the home. A workspace that changes address during the benefit year needs a fresh confirmation before the stipend continues. The reviewer logs every workspace confirmation in the same shared tracking sheet the benefits team maintains. A workspace confirmation from more than one year ago no longer satisfies the stipend requirement on its own.",
+      "violation": "The section addresses both the employee reading to determine eligibility and the reviewer checking requirements, without separating employee-facing content from descriptions of what the reviewer will do, so an employee cannot tell which information applies to them.",
+      "fix": "Separate employee requirements from descriptions of reviewer processes. Either rewrite reviewer actions as employee expectations (what will be checked) or move reviewer process descriptions to a separate section for staff.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-009",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Overall document structure",
+      "evidence": "Program Overview appears in three sections: lines 3-7 (Program Overview), lines 61-62 (Special Cases), and lines 73-74 (Questions and Updates). Request Steps (line 57) duplicates How to Apply (lines 19-23) but appears later. Administrative process sections Program Coordination (lines 65-66) and Review Responsibility (lines 69-70) describe staff processes not relevant to an employee's task sequence.",
+      "violation": "The document repeats content and interleaves administrative process descriptions with employee procedures, rather than following the sequence an employee works through: Am I eligible? - How do I apply? - What documentation? - What's the timeline? - When do I get paid? - What restrictions apply?",
+      "fix": "Reorganize to follow the employee's task sequence. Remove duplicate Program Overview sections. Either remove administrative process descriptions or move them to an appendix for staff reference only.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-010",
+      "criterion": "WILLIAMS-COHERENCE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Overall document",
+      "evidence": "Document sections cover employee procedures (Eligibility, How to Apply, Required Documentation) followed by administrative processes (Program Coordination, Review Responsibility), with Program Overview repeated in three separate sections. Opening targets employees; later sections describe staff processes. Reader cannot clearly state whether document is an employee guide or staff manual or both.",
+      "violation": "The document addresses both employee procedures and administrative processes without clear integration or separation. A reader finishing the document cannot easily state what it is about or who its primary audience is.",
+      "fix": "Establish a clear primary purpose and audience. For an employee guide, move all staff process descriptions to an appendix or separate document. For a comprehensive manual, clearly section employee content from administrative content with explicit headers.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-011",
+      "criterion": "WILLIAMS-COHESION",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Eligibility, paragraph 3",
+      "evidence": "Subjects in consecutive sentences: eligibility, workspace, workspace, workspace, reviewer, workspace, stipend, workspace, reviewer, workspace. Subjects jump between workspace conditions, reviewer actions, and stipend coverage repeatedly throughout the paragraph.",
+      "violation": "Successive sentences shift their subject between workspace conditions, reviewer actions, and stipend coverage, forcing the reader to re-orient at nearly every sentence boundary instead of building one coherent topic line.",
+      "fix": "Group related content by topic. Consolidate all workspace-location rules together, all workspace-usage rules together, and all reviewer-process descriptions together. Or restructure each sentence to begin with the running topic (workspace) before introducing variations.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-012",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Eligibility, paragraph 1 and throughout document",
+      "evidence": "Line 11: The stipend covers one claim per employee per benefit year. Lines 28, 50, 65, 69 use request: The manager reviews the request, You record the stipend item on the request form, The benefits team coordinates every stipend request, The escalation of repeat requests happens automatically.",
+      "violation": "The document uses claim once (line 11) and request multiple times (lines 28, 50, 65, 69) to refer to what appears to be the same action (an employee's submission for stipend funds), without defining or signaling that they are equivalent terms.",
+      "fix": "Choose one term (request appears more frequently) and use it consistently throughout. If claim serves a distinct purpose, define it or explicitly state the equivalence.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "PLAIN-PARAGRAPH",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Eligibility, paragraph 3",
+      "evidence": "165 words in one paragraph.",
+      "violation": "The paragraph exceeds the 150-word scannability threshold.",
+      "fix": "Split the paragraph so each part covers one topic.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-013",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Review Responsibility, line 69",
+      "evidence": "The escalation of repeat requests happens automatically within the same quarter.",
+      "violation": "The sentence's grammatical subject is escalation (an abstract noun), not an identifiable person, team, or system who performs the escalation, so the reader cannot tell who is responsible for this action.",
+      "fix": "Name the actor: We escalate repeat requests automatically within the same quarter or The system automatically escalates repeat requests within the same quarter.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-004",
+      "criterion": "PLAIN-MUST",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Required Documentation, paragraph 2",
+      "evidence": "Additionally, employees shall retain receipts for one year after the purchase date.",
+      "violation": "The sentence states a binding requirement using shall or an indirect requirement phrasing instead of must.",
+      "fix": "Restate the requirement using must.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "PLAIN-LISTS",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "How to Apply, paragraph 1",
+      "evidence": "Employees must submit the receipt, the manager's approval form, and the original purchase order before the review begins.",
+      "violation": "The sentence embeds three or more comma- or semicolon-separated parallel items inline rather than presenting them as a formatted list.",
+      "fix": "Reformat the inline items as a numbered or bulleted list.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 7,
+      "3": 6,
+      "4": 0
+    },
+    "suppressed_count": 2,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

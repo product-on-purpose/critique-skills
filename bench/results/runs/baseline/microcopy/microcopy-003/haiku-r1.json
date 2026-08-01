@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"# Screens Under Review\"",
+      "fix": "Change the heading to include the system name, such as \"Screens Under Review - [Product/System Name]\" or restructure with a subtitle.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Document heading \"Screens Under Review\"",
+      "severity": 3,
+      "violation": "The heading does not specify which product or system these screens belong to, making it impossible for a reader to know the context without additional external information."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Three section headings: \"Message: This request timed out...\", \"Message: No orders fall inside...\", \"Message: Sync is paused...\"",
+      "fix": "Differentiate the messages by type in the field label or add a \"Message type\" column, such as \"Error message:\", \"Info message:\", or \"Notification message:\".",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Label \"Message\" used identically for three different types of user-facing text",
+      "severity": 3,
+      "violation": "The same field name \"Message\" is used for error messages, informational messages, and notification messages without distinction, making it unclear whether they belong to the same category or serve different purposes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: no\" appears four times with no definition provided",
+      "fix": "Add a brief glossary or definition section that explains what \"predictable mistake\" means in this context, or remove the field if unused.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Predictable mistake\" field definition and usage",
+      "severity": 3,
+      "violation": "The field offers only a binary yes/no response but the document never defines what qualifies as a \"predictable mistake\" versus other types of mistakes, making the data unexplained."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: none\" appears twice; \"Suggested fix: selectable, offers a clear filters button beside the message\" appears once",
+      "fix": "For entries with \"none\", either provide a specific fix or clarify in the introduction why some screens have no suggested fixes.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"Suggested fix\" field across all entries",
+      "severity": 3,
+      "violation": "Two entries claim \"none\" as a suggested fix, which contradicts the stated purpose of \"Screens Under Review\" (implying review for improvement)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: not-applicable\" appears four times with no explanation",
+      "fix": "Either explain what this field means and under what circumstances it would be applicable, or remove it if it is not relevant to the current analysis.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Input on resubmission\" field",
+      "severity": 3,
+      "violation": "The field consistently says \"not-applicable\" without explaining why, or when it might become applicable, leaving readers confused about the intended meaning."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Document begins immediately with \"## Search results, no matches\" with no context or overview",
+      "fix": "Add an introductory section before the first screen describing the document's purpose, the product/system, and brief definitions of all field labels used.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Document structure and introduction",
+      "severity": 3,
+      "violation": "The document lacks any introduction explaining its purpose, the system being reviewed, the intended audience, or how to interpret the fields."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"bold heading text where the first result would sit, text-label\", \"styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action, text-label\", \"bold text at the top of the notification list, icon\"",
+      "fix": "Establish a consistent format for Signal descriptions, such as \"Visual treatment: [bold/normal], Element type: [text-label/icon/badge], Positioning: [location]\", and apply it uniformly.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "\"Signal\" field descriptions",
+      "severity": 3,
+      "violation": "Signal descriptions use inconsistent terminology and levels of detail, mixing visual attributes (bold, styled), positioning (at the top), and element types (text-label, icon) without a consistent format, making cross-screen comparison difficult."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

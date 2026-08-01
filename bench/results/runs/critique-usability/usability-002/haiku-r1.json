@@ -1,0 +1,81 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T00:00:00Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-H5-CONFIRM",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"project-settings\" section, the \"Archive project\" link",
+      "evidence": "The \"Archive project\" link in the project-settings section has href=\"#project-archived\", which points directly to the result state. The artifact also defines an archive-confirm section at id=\"archive-confirm\" with warning text and cancel/archive controls, but the project-settings link bypasses it entirely.",
+      "violation": "The archive action fires immediately on clicking the link without showing the confirmation screen that the artifact defines. A user cannot review what will be archived or cancel once they click. The specification commits to a destructive action affecting everyone on the team without a named confirmation step in the path the user takes.",
+      "fix": "Change the href of the \"Archive project\" link from \"#project-archived\" to \"#archive-confirm\" so the confirmation screen appears before the archive action completes.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"Save\" button",
+      "evidence": "The project-settings form contains a button with type=\"submit\" and text \"Save\", but the form element has no action, target, or onsubmit handler specified. The artifact does not define what state the user reaches after clicking Save or what feedback they see while the save processes.",
+      "violation": "The artifact specifies a Save action on a form but does not specify what the user sees while the action runs or once it completes: no success message, no loading indication, no next screen defined. The user cannot tell whether the save succeeded.",
+      "fix": "Specify either a success state the form navigates to after saving, or add a success confirmation message the user sees in place. If saving takes time, specify a loading state shown during the process.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"notification-settings\" section, the \"Submit\" button",
+      "evidence": "The notification-settings form contains a button with type=\"submit\" and text \"Submit\", but the form element has no action, target, or onsubmit handler specified. The artifact does not define what state the user reaches after clicking Submit or what feedback they see.",
+      "violation": "The artifact specifies a Submit action on a form but does not specify what the user sees while the action runs or once it completes: no success message, no loading indication, no next screen defined. The user cannot tell whether the submission succeeded.",
+      "fix": "Specify either a success state the form navigates to after submitting, or add a success confirmation message the user sees in place. If submitting takes time, specify a loading state shown during the process.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"archive-confirm\" section, the confirmation text",
+      "evidence": "The archive-confirm section states: \"You can restore it at any time from the archived projects list.\" This promises that archiving is reversible and tells the user where reversal can be done (the archived projects list). However, the artifact does not show this archived projects list or any restore control anywhere in its defined states.",
+      "violation": "The artifact describes archiving as reversible and names where reversal happens, but does not show the restore functionality. The path to undo the action is mentioned in text but not available in the interface the artifact specifies.",
+      "fix": "Either remove the promise of reversal from the confirmation text, or add a screen showing archived projects with a restore/unarchive control that the user can reach after archiving.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-H6-RECALL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-sent\" section, the confirmation message",
+      "evidence": "The invite-sent section shows the message \"An invite was sent to the address entered above. It expires in 5 days if not accepted.\" The message refers to \"the address entered above\" without repeating what that address actually is.",
+      "violation": "The confirmation step references the email address the user entered but does not show it. A user who entered a long or complex email address may not remember exactly what they typed after moving to the next screen and need to verify that the invite went to the correct address.",
+      "fix": "Modify the confirmation message to include the actual email address, for example: \"An invite was sent to [email address]. It expires in 5 days if not accepted.\"",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 1,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

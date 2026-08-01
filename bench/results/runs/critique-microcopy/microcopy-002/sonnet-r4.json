@@ -1,0 +1,92 @@
+{
+  "run": {
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T21:46:32Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-EM-SEVERITY-CONTAINER",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Password reset, new password, message 2",
+      "evidence": "Container: toast; Placement: in a dialog centered on the password reset step, over the new password field it blocks; Signal: bold heading text at the top of the dialog, icon",
+      "violation": "The message fully blocks progress on the password reset step, the reader cannot continue with a new password until they act on it, yet it is presented in a toast, a container that clears itself on its own, so a reader who looks away loses the only explanation of why they are stuck.",
+      "fix": "Change Container to modal, matching what Placement and Signal already describe, so the message stays on screen until the reader acts on it.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-EM-GRACE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Account settings, username, message 1",
+      "evidence": "The last changes were not saved and cannot be recovered. Contact support for assistance.",
+      "violation": "The failure is total and unrecoverable in the moment, Suggested fix is none, no other message block under this heading offers a way forward, and the message reports a completed, unrecoverable loss, yet the wording is a bare technical notice with no acknowledgment of what the loss means for the reader.",
+      "fix": "Add a brief acknowledgment of the loss, for example a short apology or a note that this is unusual, before directing the reader to contact support.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-EM-PROXIMITY",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Password reset, new password, message 1",
+      "evidence": "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page",
+      "violation": "The message sits at the top of the form rather than immediately beside or below the password field it concerns, so a reader has to scroll to find it instead of connecting message to field at a glance.",
+      "fix": "Move the message to sit directly beside or below the new password field itself.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-EM-PLAIN-LANGUAGE",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Checkout form, shipping address, message 2",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "violation": "The message text carries an internal error code, a code-style token, or an engineering-jargon term standing in for a plain-language explanation.",
+      "fix": "Replace the code or jargon term with a plain-language sentence a non-technical reader can act on.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-EM-SPECIFIC",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Checkout form, shipping address, message 2",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "violation": "The message names no specific field or rule, only the highlighted field and an opaque error code, on a screen where the placement sits below a multi-field shipping address block and a specific field or rule could have been named instead.",
+      "fix": "Name the specific field and the rule that was violated, for example: enter a valid postal code for this country.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-EM-PREVENT",
+      "lane": "judged",
+      "severity": 2,
+      "location": "File upload, receipts, message 2",
+      "evidence": "Fires: on-submit; Predictable mistake: yes",
+      "violation": "The accepted file formats, PDF or PNG, are a fact the product already knows the moment a file is chosen, but the message fires only on submit, after the reader has completed the whole upload attempt, rather than warning at selection time.",
+      "fix": "Validate the file type as soon as it is selected and warn the reader before they submit.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 7,
+      "3": 1,
+      "4": 0
+    },
+    "suppressed_count": 2,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

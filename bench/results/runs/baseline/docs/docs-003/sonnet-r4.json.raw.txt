@@ -1,0 +1,29 @@
+Location: timeout section, first sentence
+Evidence: "The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000."
+Problem: The default value for timeout is never stated anywhere on the page, yet the very next sentence tells readers to leave the field at its default. A reader cannot follow that advice without knowing what the default actually is.
+Fix: State the default explicitly in the same sentence, for example "and defaults to 5000."
+
+Location: timeout section, second sentence
+Evidence: "Leaving this field at its default is the right choice for most teams, and raising it is worth doing only when a specific integration needs the extra room."
+Problem: This is prescriptive guidance rather than a factual field description, and it breaks the one-sentence factual pattern used for retries and logging, so the page is inconsistent in depth and voice from field to field.
+Fix: Remove the advisory sentence or move it to a separate guidance page, and give timeout the same single factual sentence structure (type, range, default) used for the other two fields.
+
+Location: timeout section, first sentence
+Evidence: "The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000."
+Problem: Only a lower bound is documented. The retries field documents both bounds ("an integer from 0 to 10"), but timeout gives no upper bound, so a reader cannot tell whether an arbitrarily large value is accepted.
+Fix: State the maximum accepted value, or note explicitly that no maximum is enforced.
+
+Location: Related pages section
+Evidence: "- Metric catalog reference" and the eight other bullet items in that list
+Problem: None of the nine related pages are hyperlinked. The list gives page titles with no URLs or link syntax, so a reader cannot navigate to any of them directly from this document.
+Fix: Turn each bullet into a markdown link to its target page, for example "- [Metric catalog reference](../metric-catalog.md)".
+
+Location: timeout, retries, and logging sections
+Evidence: "The retries field takes an integer from 0 to 10, and it defaults to 3." and the equivalent sentences for timeout and logging
+Problem: None of the three field descriptions states whether the field is required or may be omitted from a rule definition. That is standard information for a fields reference page and affects how a reader writes their configuration.
+Fix: Add an explicit "required" or "optional" designation to each field's description.
+
+Location: logging section
+Evidence: "The logging field accepts one of debug, info, warn, or error, and the default value is info."
+Problem: The page does not say whether these values are case sensitive, so a reader cannot tell if "Info" or "INFO" would be accepted.
+Fix: State the expected casing, for example "accepts one of the lowercase values debug, info, warn, or error."

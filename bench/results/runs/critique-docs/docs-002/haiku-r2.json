@@ -1,0 +1,48 @@
+{
+  "run": {
+    "skill": "critique-docs",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/docs/docs-002.md",
+    "artifact_sha256": "25c4dd0ebb76ed338a3330329de0387044967be4fa65c3db44b1e3042d579c91",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:25:00Z",
+    "rubrics": ["DIATAXIS"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "DIATAXIS-HEADING-DEPTH",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "the Check the sidebar updated heading",
+      "evidence": "Heading level jumped from 2 (Open the test console) to 4 (Check the sidebar updated) with no intermediate level between them.",
+      "violation": "This heading is nested more than one level deeper than the heading immediately before it, so a reader or a tool relying on heading level cannot reconstruct which section this one belongs under.",
+      "fix": "Insert a level 3 heading between Open the test console and Check the sidebar updated, or promote Check the sidebar updated to level 3.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "DIATAXIS-TUTORIAL-ACTION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "paragraph after 'Click Trigger sample alert and wait for the status indicator to change to Sent'",
+      "evidence": "The status indicator takes a few seconds to update while the delivery pipeline processes the event in the background.",
+      "violation": "This explanatory prose interrupts the action sequence between the trigger step and the next verification step, pausing the learner's sequence for an aside about the underlying mechanism before they reach the visible result of checking the delivery log.",
+      "fix": "Move this explanation to after the tutorial's final step, or integrate it into the preceding step's sentence, or remove it and assume readers can infer that status updates take time.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 0,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "pass",
+    "severity_3_threshold": 0
+  }
+}

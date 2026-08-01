@@ -1,0 +1,92 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T01:58:17Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-H3-DEADEND",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "the \"invite-sent\" section",
+      "evidence": "the \"invite-sent\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+      "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact.",
+      "fix": "Add a control inside the \"invite-sent\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"archive-confirm\" section, the \"archive-confirm-archive-link\" link",
+      "evidence": "the archive-confirm state says \"You can restore it at any time from the archived projects list\" but does not define any restore control or show how the user finds and accesses the archived projects list.",
+      "violation": "Archive is reasonably reversible in this product category but the reversal path appears nowhere in the artifact, so a user who archives has no shown way back in the design as specified.",
+      "fix": "Add a restore control to the project-archived state or another relevant screen, or specify where the user finds the archived projects list and which control triggers restoration.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "evidence": "the project-settings form has a Submit button labeled \"Save\" and no action attribute; the artifact does not specify what state or message follows the submission.",
+      "violation": "The Save action is specified but the result feedback is not; the artifact does not name what the user sees while the save runs or once it finishes, violating the visibility principle.",
+      "fix": "Specify the next state after Save completes, for example a success message inline or a confirmation state that the artifact defines elsewhere, or a server call that returns a success response.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button",
+      "evidence": "the notification-settings form has a Submit button labeled \"Save\" and no action attribute; the artifact does not specify what state or message follows the submission.",
+      "violation": "The Save action is specified but the result feedback is not; the artifact does not name what the user sees while the save runs or once it finishes, violating the visibility principle.",
+      "fix": "Specify the next state after Save completes, for example a success message inline or a confirmation state that the artifact defines elsewhere, or a server call that returns a success response.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-H6-LABELED",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "evidence": "<button> with no text content and no accessible-name attribute",
+      "violation": "This control has neither visible text nor an accessible-name attribute, so nothing on screen names what the control does.",
+      "fix": "Add visible text to this control, or an aria-label attribute naming what it does.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-H6-RECALL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-sent\" section",
+      "evidence": "the invite-sent state text says \"An invite was sent to the address entered above\" but does not display the email address itself on screen.",
+      "violation": "The user needs the email address they entered at the earlier step to verify they invited the correct recipient, but this information is not repeated on the confirmation screen.",
+      "fix": "Display the email address on the invite-sent confirmation screen so the user can verify the address before the invitation exits the flow.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 1,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

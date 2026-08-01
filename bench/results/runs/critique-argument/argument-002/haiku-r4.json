@@ -1,0 +1,83 @@
+{
+  "summary": {
+    "severity_3_threshold": 0,
+    "by_severity": {
+      "4": 0,
+      "1": 0,
+      "3": 2,
+      "0": 0,
+      "2": 3
+    },
+    "suppressed_count": 0,
+    "gate": "fail"
+  },
+  "run": {
+    "model": "claude-haiku-4-5-20251001",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-07-31T20:41:05Z",
+    "artifact_sha256": "0322bc2ebeb48318c56473186a8cb1f1e78d8667b99cfaf75ee7bb84f82fcfa2",
+    "artifact": "bench/results/staging/argument/argument-002.md",
+    "skill": "critique-argument",
+    "contract_version": "1.0.0",
+    "rubrics": [
+      "TOULMIN"
+    ]
+  },
+  "findings": [
+    {
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "fix": "Add an explicit conclusion-signalling phrase at the point the artifact states its central claim, for example \"therefore\" or \"we recommend\".",
+      "confidence": "high",
+      "lane": "scripted",
+      "id": "F-001",
+      "criterion": "TOULMIN-CLAIM-MARKER",
+      "severity": 3,
+      "evidence": "0 conclusion-marker phrases found across 401 words.",
+      "violation": "No phrase from the conclusion-marker lexicon (therefore, thus, hence, it follows that, we recommend, this paper argues, I argue that, the conclusion is, in conclusion, we should, the case for) appears anywhere in the artifact, so a reader scanning rather than reading straight through has no signpost to where the conclusion is asserted."
+    },
+    {
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "fix": "Remove the hedge from sentences whose claim the evidence actually supports, reserving qualification for the claims that genuinely need it.",
+      "confidence": "high",
+      "lane": "scripted",
+      "id": "F-002",
+      "criterion": "TOULMIN-HEDGE-DENSITY",
+      "severity": 3,
+      "evidence": "10 of 14 sentences (0.71) carry at least one hedging term.",
+      "violation": "More than 0.35 of the artifact's sentences carry a term from the hedging lexicon (may, might, could, possibly, perhaps, arguably, somewhat, relatively, it seems, appears to, tends to, to a degree), spread across the whole document rather than concentrated where the evidence actually underdetermines the claim."
+    },
+    {
+      "location": "section \"Why the Pilot Result Applies Systemwide\", first paragraph",
+      "fix": "Either strengthen the presentation of the research backing by removing hedging language and stating what the research actually shows, or qualify the main recommendation to match the hedged confidence in its supporting evidence.",
+      "confidence": "high",
+      "lane": "judged",
+      "id": "F-003",
+      "criterion": "TOULMIN-BACKING",
+      "severity": 2,
+      "evidence": "The generalization principle is backed by the Tri-County Library Data Cooperative's 2023 fines-elimination research brief, but that backing is presented as \"in a somewhat qualified way\" and the supporting mechanism is stated using hedge terms like \"tends to\".",
+      "violation": "A general principle supporting the central claim - that results from pilot branches generalize to all ten branches - is backed by research, but that backing is itself hedged (described as somewhat qualified), weakening a key support point in otherwise checkable grounds."
+    },
+    {
+      "location": "section \"Recommendation\", third paragraph: \"This recommendation removes every overdue-related charge permanently, for every item the consortium owns, without qualification.\"",
+      "fix": "Qualify the recommendation language to match the evidence: use ending overdue fines systemwide, as evidence from a pilot and comparable systems suggests this approach reliably improves return rates and participation instead of claiming this applies without qualification.",
+      "confidence": "high",
+      "lane": "judged",
+      "id": "F-004",
+      "criterion": "TOULMIN-QUALIFIER",
+      "severity": 2,
+      "evidence": "The claim is stated as absolute (permanently, for every item, without qualification), but the grounds - pilot results from 4 branches and research from 14 other systems - are themselves presented in hedged language (somewhat qualified way, tends to).",
+      "violation": "A supporting point asserts unqualified certainty on grounds that are explicitly hedged, overstating the claim's strength relative to the evidence that supports it."
+    },
+    {
+      "location": "sections \"Recommendation\" and \"Addressing the Revenue Concern\"",
+      "fix": "Either broaden the pilot data or research citations to show the policy's effect holds across varying branch sizes and collection types, or narrow the recommendation to specify which items and branches the policy applies to and under what conditions.",
+      "confidence": "medium",
+      "lane": "judged",
+      "id": "F-005",
+      "criterion": "TOULMIN-REBUTTAL",
+      "severity": 2,
+      "evidence": "The artifact raises and answers one objection (revenue concern), but leaves unaddressed conditions its own grounds and scope suggest: whether the policy's impact is uniform across all ten branches or varies by branch revenue dependency, and whether removing penalties for every item affects different types of items (rare materials, high-demand items, reference works) consistently.",
+      "violation": "The argument raises one major counterargument (revenue impact) and addresses it, but leaves other foreseeable objections unaddressed - specifically, whether uniform policy removal of every overdue-related charge across all items responds differently across branch and collection variance."
+    }
+  ]
+}

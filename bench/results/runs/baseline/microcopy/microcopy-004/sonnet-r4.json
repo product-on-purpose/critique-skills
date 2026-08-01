@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "the document uses the field labels \"Placement\", \"Container\", \"Signal\", \"Fires\", \"Predictable mistake\", and \"Input on resubmission\" starting with the very first entry, with no definition given anywhere in the file",
+      "fix": "Add a short legend or introductory paragraph before the first screen section that defines each field and its possible values.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "start of the document, before the first message block (no introduction or legend precedes \"## Two-factor setup, verification code\")",
+      "severity": 3,
+      "violation": "None of these field labels are defined, so a reader encountering the document for the first time cannot tell what \"Container: inline\" or \"Predictable mistake: yes\" means or how the value was determined."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Verification codes are 6 digits long, and this one has 5.\"",
+      "fix": "Replace the fixed number with the actual count entered by the user, for example \"Verification codes are 6 digits long, and this one has {count}.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code section, first message block",
+      "severity": 3,
+      "violation": "The message hardcodes the number of digits entered as \"5\", so it would be false for any user who actually entered a different count, such as three, four, seven, or eight digits."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: directly below the verification code field\", \"Container: inline\", and \"Signal: bold text set larger than the field label, icon\" appear word for word identical, aside from the field name, in all four message blocks",
+      "fix": "State the shared Placement, Container, and Signal convention once, near the top of the document, and keep only the fields that vary (Message, Fires, Predictable mistake, Input on resubmission, Suggested fix) in each individual block.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code section, comparing the Placement, Container, and Signal fields of both message blocks against the same three fields under Billing, promo code",
+      "severity": 3,
+      "violation": "Three of the eight fields in every block never vary, so they are repeated four times over with no indication of whether the repetition is a deliberate shared convention or an oversight, which makes it harder to see what actually differs between the four messages."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-blur\" in the first message versus \"Fires: on-submit\" in the second message",
+      "fix": "Explain the rationale for the different trigger points, or make the two checks fire at the same point in the flow so they cannot surface one after the other.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code section, \"Fires\" field of the first message block compared with the \"Fires\" field of the second message block",
+      "severity": 3,
+      "violation": "The two messages that validate the same field fire at different points in the interaction, with no explanation given for why a length check happens on blur while an expiration check waits until submit, which could let a user fix the length on blur and then only discover on submit that the code has also expired."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This verification code expired 10 minutes after it was sent, which stops an intercepted code from being reused later. Request a new code and enter it here.\"",
+      "fix": "Lead with the action, for example \"Request a new code. This one expired 10 minutes after it was sent to prevent an intercepted code from being reused.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code section, second message block",
+      "severity": 3,
+      "violation": "The message states the security rationale for the expiration policy before the instruction of what to do about it, so the user has to read through an explanation before reaching the actionable step."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"selectable, offers a resend code button in place of the message\"",
+      "fix": "Rewrite as a complete sentence, for example \"Make the message text selectable, and replace it with a resend code button once the code has expired.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code section, second message block, \"Suggested fix\" field",
+      "severity": 3,
+      "violation": "The phrase is a sentence fragment rather than a complete instruction; it is unclear what is meant to become selectable, and how that relates to the resend code button."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This promo code ended on 30 June.\"",
+      "fix": "Include the year in the message, for example \"This promo code ended on 30 June 2026.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Billing, promo code section, first message block",
+      "severity": 3,
+      "violation": "The date has no year, so the message is ambiguous for a code that expired in a year other than the current one, or near a year boundary."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "none of the four message blocks carries an identifier; the two headings, \"Two-factor setup, verification code\" and \"Billing, promo code\", each group two messages with no further labeling",
+      "fix": "Give each message block a short identifier, for example TFA-01, TFA-02, PROMO-01, PROMO-02, so any message can be referenced unambiguously.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "document as a whole, all four message blocks under both headings",
+      "severity": 3,
+      "violation": "Because no message has a unique identifier, referring precisely to a specific message, for example the second message under Billing, promo code, requires counting position rather than citing a stable name."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "the two messages marked \"Predictable mistake: yes\" (the verification code length message and the annual plan promo code message) both carry \"Suggested fix: none\", while the one message with an actual suggested fix (the expired verification code message) is marked \"Predictable mistake: no\"",
+      "fix": "Either add suggested fixes for the two messages marked \"Predictable mistake: yes\", or explain in the document why a predictable mistake does not warrant a suggested fix while an unpredictable one does.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "document as a whole, \"Predictable mistake\" and \"Suggested fix\" fields across all four message blocks",
+      "severity": 3,
+      "violation": "The document proposes a fix only for the mistake it labels unpredictable and proposes no fix for either mistake it labels predictable, which is the reverse of what the labels would lead a reader to expect."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-004.md",
+    "artifact_sha256": "c8f58456a4deb36595b0ac00fe364b68e80445e939d7293d2db8d8f1a42ac91b",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-08-01T02:00:42Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

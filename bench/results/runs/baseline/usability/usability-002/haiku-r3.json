@@ -1,0 +1,149 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T00:00:00Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Workspace overview section, fourth line",
+      "evidence": "The section states \"This workspace holds 5 projects, synced last week.\" but the list below shows only 4 projects (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp).",
+      "violation": "The count and the displayed list do not match, creating confusion about the total number of projects.",
+      "fix": "Either add the fifth project to the visible list or change the count to match the number of displayed projects.",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Project settings form, submit button",
+      "evidence": "The button is labeled \"Save\" with id=\"project-settings-save-btn\"",
+      "violation": "The form uses \"Save\" as the button label, while the notification settings form (line 76) uses \"Submit\" for the same action type, creating inconsistent terminology.",
+      "fix": "Use consistent button labels across all forms in the interface; either standardize on \"Save\" or \"Submit\".",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Duplicate project button, line 30",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>",
+      "violation": "The button has only an aria-label with no visible text, making it inaccessible to users who do not use screen readers and making its purpose unclear from visual inspection alone.",
+      "fix": "Add visible button text or an icon with clear visual indication that this duplicates the project.",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Workspace overview section, recent projects list",
+      "evidence": "<ul><li>Support Backlog Triage</li>...<li>Mobile App Revamp</li></ul> with no heading indicating it is a \"recent\" list",
+      "violation": "The list context is unclear; users cannot distinguish whether this shows all projects, recent projects, or filtered projects, making it ambiguous what \"recent\" means.",
+      "fix": "Add a heading or label within the div with id=\"workspace-overview-recent\" to clearly identify this as a \"Recent projects\" or \"Recent activity\" list.",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Archive project confirmation dialog, line 53",
+      "evidence": "<p id=\"archive-confirm-copy\">Archiving \"Customer Migration\" will remove it from the active projects list for everyone on the team. You can restore it at any time from the archived projects list.</p>",
+      "violation": "The confirmation message assumes the user remembers which project they are about to archive, but users may have navigated away or forgotten context by the time they see this dialog.",
+      "fix": "Rephrase to be more explicit: \"Are you sure you want to archive the project Customer Migration?\"",
+      "confidence": "medium",
+      "id": "F-005"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Invite sent confirmation, line 48",
+      "evidence": "<p>An invite was sent to the address entered above. It expires in 5 days if not accepted.</p>",
+      "violation": "The message is vague about what the user should do next or whether there are further steps, and it does not confirm which email address was used.",
+      "fix": "Add clarity: \"An invite has been sent to [email address]. The recipient has 5 days to accept. You can send additional invites or monitor acceptance in project settings.\"",
+      "confidence": "medium",
+      "id": "F-006"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Import status message, line 64",
+      "evidence": "<p id=\"import-status-message\">The last import finished with 3 rows skipped: each referenced a project that does not exist in this workspace. Rows 63, 71, and 82 were skipped; every other row was imported.</p>",
+      "violation": "The message only reports skipped rows but does not explain whether the import overall succeeded, failed, or partially succeeded, leaving ambiguity about the import status.",
+      "fix": "Prefix the message with a clear status indicator: \"Import succeeded with warnings: 3 rows skipped...\"",
+      "confidence": "medium",
+      "id": "F-007"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Notification settings form, line 69-77",
+      "evidence": "<form><label for=\"notification-settings-digest-input\">Digest frequency</label><select>...</select><button id=\"notification-settings-save-btn\" type=\"submit\">Submit</button></form> with no cancel option",
+      "violation": "Users cannot cancel or revert changes after modifying the notification frequency, and there is no feedback about whether changes were saved.",
+      "fix": "Add a cancel button and a success confirmation message or indicator after submission.",
+      "confidence": "medium",
+      "id": "F-008"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Project settings section, line 23-34",
+      "evidence": "Multiple <a> links including \"Go to notification settings\", \"Invite a team member\", \"Archive project\", and \"Back to your projects\" mixed with form submission",
+      "violation": "The form and navigation links are not clearly separated visually or structurally, making it unclear which are form actions and which are navigation.",
+      "fix": "Group form actions together and separate navigation links into a distinct section or use consistent styling to differentiate them.",
+      "confidence": "medium",
+      "id": "F-009"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Import status and workspace overview timing, line 11 and line 64",
+      "evidence": "Line 11: \"synced last week\", Line 64: \"The last import finished...\"",
+      "violation": "It is unclear whether \"last week\" refers to the same import event as \"last import\", creating ambiguity about data freshness and timing.",
+      "fix": "Align the timing language: use the same timestamp reference for both sections or make it explicit that they refer to different events.",
+      "confidence": "medium",
+      "id": "F-010"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Invite member form, line 38-42",
+      "evidence": "<input id=\"invite-member-email-input\" type=\"email\"> with no validation feedback or confirmation display",
+      "violation": "The form accepts an email input but provides no visual feedback about validation, confirmation of what will be sent, or error messages if validation fails.",
+      "fix": "Add a validation message and a confirmation step showing the email address before final submission.",
+      "confidence": "medium",
+      "id": "F-011"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 11,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

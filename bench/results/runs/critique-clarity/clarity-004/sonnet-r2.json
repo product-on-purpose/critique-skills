@@ -1,0 +1,101 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T21:18:07Z",
+    "rubrics": ["PLAIN", "WILLIAMS"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "PLAIN-AUDIENCE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Program Coordination, paragraph 1",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout. The team logs each request the moment it arrives. The team then routes the request to the correct approver based on department. Once approved, the team schedules the reimbursement for the next pay cycle.",
+      "violation": "The section narrates the benefits team's internal handling of a request entirely from the team's own perspective, with no signal to the employee reader about what, if anything, is theirs to do or expect, so a reader cannot tell whether this describes their own next action or internal process that does not concern them; the document addresses this internal-reviewer perspective in the same undivided flow as the employee-facing instructions elsewhere.",
+      "fix": "Either remove the internal-process narration from the employee-facing policy, or rewrite it from the reader's perspective, stating what the reader should expect or do at each stage, for example an expected timeline, and separate any remaining internal-process documentation into its own clearly labeled section.",
+      "confidence": "medium",
+      "instances": [
+        {
+          "location": "Review Responsibility, paragraph 1",
+          "evidence": "The finance office reviews every stipend request over 200 dollars before it pays out. The finance office also flags any request that repeats within the same quarter."
+        },
+        {
+          "location": "Special Cases, paragraph 1",
+          "evidence": "The finance liaison publishes the equipment catalog at the start of the fiscal year. Every entry carries a date stamp so the record stays easy to audit."
+        }
+      ]
+    },
+    {
+      "id": "F-002",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Terminology Notes, paragraph 1",
+      "evidence": "Finance reconciles the stipend item against the request log each month.",
+      "violation": "The document refers to what appears to be one organizational unit by three different names, Finance, the finance office, and the finance liaison, across three separate sections with no defined-terms note or stated equivalence, so the reader cannot tell whether these name the same office or three distinct roles.",
+      "fix": "Pick one term, for example the finance office, and use it consistently everywhere this unit is referenced, or state explicitly at first use that Finance, the finance office, and the finance liaison are the same office.",
+      "confidence": "medium",
+      "instances": [
+        {
+          "location": "Reimbursement Amounts, paragraph 1",
+          "evidence": "The finance office deposits the amount within one pay cycle."
+        },
+        {
+          "location": "Special Cases, paragraph 1",
+          "evidence": "The finance liaison publishes the equipment catalog at the start of the fiscal year."
+        }
+      ]
+    },
+    {
+      "id": "F-003",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Program Overview, paragraph 1",
+      "evidence": "The IT asset group updates the reimbursement log at the start of the fiscal year. A copy of each update goes to the shared benefits folder the same day.",
+      "violation": "The document's first substantive section states an internal record-keeping detail, the IT asset group's reimbursement-log update cadence, instead of the reader's actual first question about the stipend, eligibility, which follows only after this section, so the section order tracks an internal workflow rather than the sequence the reader needs.",
+      "fix": "Move the Program Overview section after Eligibility and How to Apply, or cut it, so Eligibility is the first section a reader reaches.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-004",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Request Steps, paragraph 1",
+      "evidence": "Completing the request begins with confirming eligibility, and uploading the receipt.",
+      "violation": "This section restates the application process already covered in the earlier How to Apply section, four sections prior, without cross-referencing it, so the reader must locate and reconcile two separate, non-adjacent descriptions of the same task instead of finding the complete step order in one place.",
+      "fix": "Merge this sentence into How to Apply as its final step, or delete Request Steps as a duplicate section.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-005",
+      "criterion": "WILLIAMS-COHESION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Terminology Notes, paragraph 1",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review.",
+      "violation": "Each of the paragraph's three sentences opens with a new grammatical subject, you, Finance, then Payroll, and no sentence's subject picks up the actor or action the sentence before it just established, so the reader must re-orient at every sentence boundary even though the paragraph is only three sentences long.",
+      "fix": "Rewrite the sentences to share a running subject or connect each new actor explicitly to the step before it, for example: You record the stipend item on the request form, then Finance reconciles it against the request log each month before Payroll releases the amount.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 2,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

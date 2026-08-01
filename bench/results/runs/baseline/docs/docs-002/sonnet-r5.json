@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"mode: tutorial\"",
+      "fix": "Add a comment near the frontmatter, or a link to the template documentation, that lists the valid mode values and what each one controls.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "YAML frontmatter, line 2",
+      "severity": 3,
+      "violation": "The document declares a mode field but nothing in the file explains what values mode accepts or what effect tutorial has, so a reader of the raw file has no way to confirm the value is correct."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"# Send your first test alert\" is followed immediately by \"## Open the test console\" with no introductory text",
+      "fix": "Add a short prerequisites line under the title, for example, \"Requires developer menu access. New accounts have the sample alert rule by default.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "below the title, before the first step",
+      "severity": 3,
+      "violation": "The document never states what access or setup the reader needs before starting, such as developer menu permissions or an account that already has the sample alert rule, so a reader who cannot find these things does not know whether they are missing a prerequisite or looking in the wrong place."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Open the test console from the developer menu\"",
+      "fix": "State where the developer menu appears, for example, \"Open the developer menu from the top navigation bar, then open the test console.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Open the test console\" section, first sentence",
+      "severity": 3,
+      "violation": "The instruction names the developer menu but does not say where it is located, such as in the top navigation bar or account settings, so a reader unfamiliar with the interface has no way to find it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"select the sample alert rule provided for new accounts\"",
+      "fix": "Name the exact label to look for, for example, \"select the rule named Sample Alert Rule.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"Open the test console\" section, first sentence",
+      "severity": 3,
+      "violation": "If the account has more than one alert rule, the document does not say how to identify the sample one by name or label, so the reader cannot be certain which rule to select."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"#### Check the sidebar updated\"",
+      "fix": "Change the heading to level 3, or remove it and fold the sentence into the body text of the \"Open the test console\" section.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "heading between \"Open the test console\" and \"Trigger the sample alert\"",
+      "severity": 3,
+      "violation": "Every other heading in the document is a level 2 heading, but this one is a level 4 heading, skipping level 3 and breaking the document's heading hierarchy."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The status indicator takes a few seconds to update while the delivery pipeline processes the event in the background.\"",
+      "fix": "Add a troubleshooting line, for example, \"If the status has not changed after a minute, check the delivery log for an error and try again.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "\"Trigger the sample alert\" section, second paragraph",
+      "severity": 3,
+      "violation": "The document tells the reader to wait but never says what to do if the indicator does not change to Sent after waiting, so a reader whose test fails has no recovery path."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Open the delivery log and check that the test alert shows a Sent status with a timestamp.\"",
+      "fix": "Add a short closing line, for example, \"You have sent and verified your first test alert. Next, learn how to create a custom alert rule.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "end of the document, after the \"Check the delivery log\" section",
+      "severity": 3,
+      "violation": "The document ends immediately after this sentence with no confirmation that the tutorial is complete and no pointer to a next step, so the reader cannot tell whether they have finished successfully."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-002.md",
+    "artifact_sha256": "25c4dd0ebb76ed338a3330329de0387044967be4fa65c3db44b1e3042d579c91",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:24:21Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

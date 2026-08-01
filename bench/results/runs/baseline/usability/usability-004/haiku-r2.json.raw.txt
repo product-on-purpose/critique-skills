@@ -1,0 +1,39 @@
+Location: workspace-overview section, line 11
+Evidence: "This workspace holds 4 projects, synced last week." followed by a list containing only 3 items (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp)
+Problem: The text claims 4 projects exist but only 3 are displayed in the list, creating confusion about whether the list is incomplete or the count is wrong.
+Fix: Either display all 4 projects in the list, or update the text to say "3 projects" to match what is shown.
+
+Location: project-settings-duplicate-btn, line 29
+Evidence: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button> - the button contains no visible text
+Problem: The duplicate button has no visible label text, only an invisible aria-label. Sighted users cannot tell what this button does without additional context.
+Fix: Add visible button text inside the button element, such as "Duplicate" or a visible icon with descriptive text, so users can understand its purpose.
+
+Location: invite-member form, lines 37-42
+Evidence: A form with an input and "Save" button, followed separately by a "Continue" link with href="#invite-sent"
+Problem: The form's submit button and the "Continue" link serve similar purposes but are separate UI elements, creating ambiguity about which action actually sends the invite.
+Fix: Make the form submit button perform the continue action, or add clarifying text explaining the relationship between the save button and the continue link.
+
+Location: project-settings section, lines 22-33
+Evidence: Multiple action links (notification-settings, invite-member, archive-confirm, back to overview) presented as a vertical list without visual hierarchy or grouping
+Problem: All navigation options have equal visual weight, making it unclear which actions are primary workflow steps versus secondary options.
+Fix: Group related actions together and use visual styling (e.g., buttons for primary actions, links for secondary actions) to create a clear hierarchy.
+
+Location: archive-confirm-copy, line 52
+Evidence: "Archiving \"Q3 Roadmap\" will remove it from the active projects list for everyone on the team."
+Problem: The project name is hardcoded in the message rather than being dynamically inserted, which means this copy must be manually updated if the project name changes.
+Fix: Replace the hardcoded project name with a dynamic placeholder or variable reference so the message updates automatically when the project changes.
+
+Location: project-archived, line 58
+Evidence: "\"Q3 Roadmap\" has been moved to archived projects. It no longer appears in the active projects list for anyone on the team."
+Problem: The project name is hardcoded in the confirmation message, requiring manual updates if the project name changes.
+Fix: Use dynamic project name injection instead of hardcoding the name in the message text.
+
+Location: entire document
+Evidence: All form elements (project settings input, email input, notification select) are immediately followed by submit buttons with no spacing or visual grouping
+Problem: Form controls and their submit buttons lack visual separation, making the structure of each form section unclear.
+Fix: Add visual grouping such as fieldset elements or consistent spacing around form groups to clarify which inputs belong together.
+
+Location: workspace-overview and project-settings sections, lines 12-20 and 22-33
+Evidence: Navigation links in workspace-overview (Open project settings, View last import result) followed by different navigation pattern in project-settings (links to various subsections)
+Problem: Different sections use different navigation patterns (mixed link types and destinations) without consistent structure, making it harder to predict where navigation will lead.
+Fix: Establish a consistent navigation pattern where similar action types use the same visual treatment and location structure.

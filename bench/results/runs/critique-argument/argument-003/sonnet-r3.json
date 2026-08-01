@@ -1,0 +1,70 @@
+{
+  "run": {
+    "skill": "critique-argument",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/argument/argument-003.md",
+    "artifact_sha256": "3735fd3a135fcd3f730e35c6af56fb064083676684399e5b0486c140ff7894de",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T20:53:39Z",
+    "rubrics": ["TOULMIN"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "TOULMIN-GROUNDS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"Addressing the Revenue Concern\" section (second paragraph), against the \"What the Pilot Showed\" section (first paragraph)",
+      "evidence": "\"During a 16-month pilot at 5 branches, the on-time-or-eventual return rate for borrowed items held at 94 percent\" (What the Pilot Showed) states the pilot ran at 5 branches, while \"the four pilot branches absorbed the loss without a measurable change to their replacement-copy spending\" (Addressing the Revenue Concern) later states 4.",
+      "violation": "TOULMIN-GROUNDS requires each claim to carry evidence a reader could check. The revenue rebuttal's grounds, the pilot branches' spending record, cannot be checked because the artifact gives two different counts for the same pilot group, 5 branches in one section and 4 in another, with nothing telling the reader which is correct.",
+      "fix": "Use one consistent branch count for the pilot throughout the document, and correct whichever of \"5 branches\" or \"the four pilot branches\" is the error.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "TOULMIN-GROUNDS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"Recommendation\" section, third paragraph, the 60-day scope clause",
+      "evidence": "\"This recommendation applies to items returned within 60 days of their due date; items still unreturned past that window remain subject to the existing replacement-cost billing process, matching the return-rate pattern the pilot data actually established.\" No sentence anywhere in \"What the Pilot Showed\" reports a return rate broken out by day count; the only pilot figures given are the aggregate \"on-time-or-eventual return rate ... held at 94 percent, compared with 87 percent.\"",
+      "violation": "TOULMIN-GROUNDS requires a claim to be attached to evidence a reader could check. The claim that the 60-day cutoff matches \"the return-rate pattern the pilot data actually established\" points to a pattern that never appears in the artifact; the pilot section reports only one aggregate rate, not a return-by-day breakdown that could establish a 60-day pattern.",
+      "fix": "Report the specific day-by-day or windowed return data from the pilot that sets the 60-day threshold, or remove the claim that the threshold matches an established pilot pattern.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "TOULMIN-QUALIFIER",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"Why the Pilot Result Applies Systemwide\" section, first paragraph",
+      "evidence": "\"Removing the financial penalty for late returns predictably increases both on-time return rates and overall program participation, which is the reason the pilot's return-rate and avoidance-survey results, taken together, support ending fines for the whole consortium rather than only the pilot branches.\"",
+      "violation": "TOULMIN-QUALIFIER requires the claim's asserted strength to match its grounds. \"Predictably\" states the fines-to-returns relationship as a near-certain, general law, but the grounds behind it are one 16-month pilot at 5 branches plus a cited brief covering fourteen systems whose consistency of outcome the artifact never states, so the grounds support a documented association, not a predictable law.",
+      "fix": "Replace \"predictably increases\" with wording the grounds support, for example \"is associated with increases in\" or \"increased, in the pilot and in the cited fourteen-system review,\" so the claim's strength matches what the evidence shows.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-004",
+      "criterion": "TOULMIN-REBUTTAL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "evidence": "\"A skeptic on the board points to overdue fines as a source of materials-replacement funding, and argues that eliminating them systemwide will leave a shortfall the consortium has not planned for\" is the only objection the artifact raises, and the section that follows answers it in full. No sentence anywhere in the artifact addresses whether the five pilot branches represent the other five, or whether a less drastic alternative to full elimination was considered.",
+      "violation": "TOULMIN-REBUTTAL requires the argument to name and address the conditions its own grounds leave open. The artifact raises and fully answers the revenue objection but never raises the scope objection its own grounds leave open, that a 16-month pilot covering half the consortium's branches may not represent the other five, nor does it address a less drastic alternative, such as reduced rather than eliminated fines, that the pilot's fines-versus-no-fines comparison does not rule out.",
+      "fix": "Add a paragraph addressing whether the five pilot branches represent the other five (size, location, patron mix) and whether a less drastic alternative such as reduced fines was considered and ruled out, matching the treatment already given to the revenue objection.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 0,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "pass",
+    "severity_3_threshold": 0
+  }
+}

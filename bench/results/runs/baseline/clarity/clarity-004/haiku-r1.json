@@ -1,0 +1,72 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T00:00:00Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section \"Program Overview,\" second paragraph",
+      "evidence": "\"Similarly, the IT asset group tracks the equipment catalog on the first business day of the month.\"",
+      "violation": "The word \"Similarly\" incorrectly implies the equipment catalog tracking works the same way as the reimbursement log updates, but the timing differs (fiscal year vs. first business day of month), making the comparison illogical.",
+      "fix": "Replace \"Similarly\" with \"Additionally\" or \"Separately\" to acknowledge the relationship without claiming parallel timing.",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section \"Restrictions and Exceptions,\" first paragraph",
+      "evidence": "\"You must keep your equipment in good working condition and we may ask for a brief photo check once a year.\"",
+      "violation": "The sentence shifts perspective from second person (\"You\") to first person plural (\"we\"), creating inconsistent voice within a single policy statement.",
+      "fix": "Rewrite as either \"Employees must keep their equipment in good working condition and company management may request a brief photo check once a year\" or \"You must keep your equipment in good working condition and we may request a brief photo check once a year.\"",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section \"Terminology Notes,\" all three sentences",
+      "evidence": "\"You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review.\"",
+      "violation": "The phrase \"stipend item\" is used awkwardly three times in succession; \"item\" is not a standard way to refer to the reimbursement itself or the equipment claim, making the terminology confusing rather than clarifying.",
+      "fix": "Replace \"stipend item\" with either \"stipend request,\" \"equipment claim,\" or \"reimbursement\" as appropriate: \"You record the equipment claim on the request form. Finance reconciles the claim against the request log each month. Payroll releases the reimbursement after that monthly review.\"",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Section \"Terminology Notes,\" sentences 4-5",
+      "evidence": "\"Also, you submit the request in the portal. You track its status there until the payment clears.\"",
+      "violation": "The word \"Also\" does not clearly connect to the previous content about finance and payroll terminology; the connection is unclear and the adverb serves no logical function.",
+      "fix": "Remove \"Also,\" as these sentences describe basic process steps that have already been covered in previous sections; alternatively, restructure to show how this connects to the prior terminology explanation.",
+      "confidence": "medium",
+      "id": "F-004"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

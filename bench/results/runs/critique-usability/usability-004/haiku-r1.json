@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "id": "F-1",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"invite-member\" section, the Save button",
+      "evidence": "A form with an email input and a Save button, followed by a separate Continue link. The artifact does not specify what happens when Save is clicked (validation feedback, success indication, or navigation).",
+      "violation": "The user cannot tell whether the email address was successfully saved before clicking Continue, or what feedback the system provides. The coexistence of Save and Continue without explanation of their interaction compounds the confusion around a send action.",
+      "fix": "Specify what happens when Save is clicked: either display a success state and enable Continue, or clarify that Save validates the email and shows errors if invalid, or replace both controls with a single Send action that encompasses both steps.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-2",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the Save button",
+      "evidence": "A form containing a project name input and a Save button. The artifact does not specify any feedback after the button is clicked (success message, error display, loading state, or navigation).",
+      "violation": "The user has no specified indication of whether the project name save succeeded or failed, leaving the outcome of a state-changing action ambiguous.",
+      "fix": "Add a specified feedback mechanism: a success message, a loading state, or a navigational consequence of clicking Save.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-3",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"notification-settings\" section, the Save button",
+      "evidence": "A form containing a digest frequency select control and a Save button. No feedback is specified for what happens after clicking Save.",
+      "violation": "The user has no specified indication of whether the digest frequency save succeeded or failed, leaving the outcome of a state-changing action ambiguous.",
+      "fix": "Add a specified feedback mechanism: a success message, a loading state, or a navigational consequence of clicking Save.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-4",
+      "criterion": "NNG-H6-RECALL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-sent\" section",
+      "evidence": "The confirmation message reads: 'An invite was sent to the address entered above. It expires in 5 days if not accepted.' No email address is displayed on this screen.",
+      "violation": "The user must recall the email address they entered rather than seeing confirmation of which address actually received the invitation, adding cognitive load to the confirmation step.",
+      "fix": "Display the email address in the confirmation message, for example: 'An invite was sent to sarah@example.com. It expires in 5 days if not accepted.'",
+      "confidence": "high"
+    },
+    {
+      "id": "F-5",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"archive-confirm\" section, the confirmation message",
+      "evidence": "The message states: 'You can restore it at any time from the archived projects list.' However, the artifact contains no archived projects screen and no unarchive or restore control anywhere in the flow.",
+      "violation": "The reversal path for the archive action is described in the confirmation message but is not visible or accessible within the design as specified. A user reading this message cannot see how to actually restore the project.",
+      "fix": "Either add an archived projects screen to the artifact showing an unarchive control, or add a link within the project-archived or project-settings screens that navigates to archived projects, or update the message to be more specific about where restoration happens.",
+      "confidence": "high"
+    }
+  ],
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-08-01T02:17:38Z",
+    "rubrics": [
+      "NNG"
+    ]
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

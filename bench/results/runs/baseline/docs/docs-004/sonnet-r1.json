@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert.\"",
+      "fix": "Add the URL length limit and any character restrictions, and document the delivery behavior when the endpoint fails to respond successfully.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"## endpoint_url\" section",
+      "severity": 3,
+      "violation": "The field description gives no format or length constraints on the URL (query strings, ports, path length) and does not say what happens if the endpoint is unreachable, times out, or returns a non-2xx status."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The signing_secret field accepts a string used to verify the payload signature on receipt.\"",
+      "fix": "State the signing algorithm (for example HMAC-SHA256), the exact HTTP header name carrying the signature, and the secret's minimum and maximum length.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"## signing_secret\" section",
+      "severity": 3,
+      "violation": "The description names no signing algorithm, no header where the computed signature is sent, and no constraints on the secret's length or allowed characters, so a reader cannot actually implement verification from this text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential.\"",
+      "fix": "Specify the concrete schedule for each mode, including initial interval, backoff step or multiplier, and the maximum number of retries or total retry duration.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"## retry_policy\" section",
+      "severity": 3,
+      "violation": "The three retry modes are named but never defined: there is no retry interval, no backoff multiplier, and no maximum attempt count or total retry window for linear or exponential."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "only retry_policy states \"the default value is exponential\"; endpoint_url and signing_secret have no required or default statement at all",
+      "fix": "Add an explicit required or optional label and a default value (or \"no default\") line to every field, not only retry_policy.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "document overall, all three field sections",
+      "severity": 3,
+      "violation": "None of the three fields is marked required or optional, and only one of the three states a default value, so a reader cannot tell whether endpoint_url and signing_secret must be supplied."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "the document contains only three sections, endpoint_url, signing_secret, and retry_policy",
+      "fix": "Either add sections describing the actual delivery request (method, headers, payload schema, timeout) or narrow the title to something like \"Webhook configuration fields reference\" to match the actual scope.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"# Webhook delivery reference\" title versus document body",
+      "severity": 3,
+      "violation": "A \"delivery reference\" implies coverage of the delivery request itself, such as HTTP method, headers, content type, and timeout, but the document only documents three configuration fields and says nothing about the delivery mechanism."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "each field is presented as an \"## \" heading followed by a single prose sentence, for example \"## endpoint_url\\n\\nThe endpoint_url field accepts an HTTPS URL...\"",
+      "fix": "Convert the three fields into a single table with columns for field name, type, required, default, and description.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "document overall formatting",
+      "severity": 3,
+      "violation": "Presenting three parallel, same-shaped fields as separate prose paragraphs under headings makes it harder to scan type, required status, and default value at a glance, which works against the stated reference purpose of the document."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-004.md",
+    "artifact_sha256": "7f41536ab3c3f7bc93a3dde86b8e81cee5dab0339f2b1d472e9222a20b42d7ae",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:31:42Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

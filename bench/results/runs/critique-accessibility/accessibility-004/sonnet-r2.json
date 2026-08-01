@@ -1,0 +1,59 @@
+{
+  "run": {
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "393fe58fac52d6953cd372944cd352ef9181df5c42ae778bd6d17214acb080c7",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T20:38:24Z",
+    "rubrics": ["WCAG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "WCAG-2.4.5",
+      "lane": "judged",
+      "severity": 3,
+      "location": "header, nav element (id nav)",
+      "evidence": "nav element (id nav) contains exactly two links, 'Plan a trip' (href /plan) and 'Accessibility' (href /accessibility); no search form, sitemap link, or breadcrumb trail element appears anywhere else in the document",
+      "violation": "The page exposes only one navigation mechanism type, a two-link primary navigation menu, with no search form, sitemap link, or breadcrumb trail present anywhere, and nothing in the page marks it as one step in a linear process, so fewer than the two independent mechanisms WCAG-2.4.5 requires are present.",
+      "fix": "Add a second independent way to locate this page, such as a site search form, a sitemap link, or a breadcrumb trail reflecting the page's place in the site.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "WCAG-2.4.6",
+      "lane": "judged",
+      "severity": 2,
+      "location": "section s3, heading 'Fare adjustments' (id s3-h)",
+      "evidence": "heading text 'Fare adjustments'; the section it introduces also contains a control labeled 'Delete item' (aria-label), a three step sequence reading 'Choose a plan', 'Enter payment details', 'Confirm your order', and a signup form with Route, Email address, Phone number, and Promo code fields",
+      "violation": "The heading 'Fare adjustments' does not describe most of what follows it: a delete-item control, a three-step plan-and-payment sequence, and a Route, Email address, Phone number, and Promo code signup form, none of which a reader scanning the heading would predict.",
+      "fix": "Split the section by actual topic, for example a Fare adjustments subsection limited to the adjustment status text, with its own headings for the plan-and-payment sequence and for the signup form, or rewrite the heading to name everything the section covers.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-003",
+      "criterion": "WCAG-3.3.1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "section s3, form, input id promo",
+      "evidence": "input id=\"promo\" type=\"text\" aria-invalid=\"true\" carries no aria-describedby; the adjacent span id=\"s3-form-promo-error\" reads 'Enter a 6 character code using letters and numbers only.' with nothing in either element linking the two",
+      "violation": "The promo code input is marked aria-invalid=\"true\" but has no aria-describedby (or other programmatic association) pointing at the error-text span that follows it, so a screen-reader user who tabs to the field hears that it is invalid without hearing why.",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the promo input so its error text is announced together with the field.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 1,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

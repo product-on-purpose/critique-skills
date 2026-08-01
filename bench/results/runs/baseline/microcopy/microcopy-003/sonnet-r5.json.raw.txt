@@ -1,0 +1,29 @@
+Location: "Search results, no matches" section, first message entry (the one beginning "Message: This request timed out before it could finish.")
+Evidence: "This request timed out before it could finish."
+Problem: The section is titled "no matches," but this message describes a request timeout, a different failure than an empty result set, so it misrepresents what actually happened to the user.
+Fix: Replace this entry's message with one that describes an actual empty-results state, and move the timeout message to its own error-state section.
+
+Location: same entry, Fires and Suggested fix fields
+Evidence: "Fires: on-submit" paired with "Suggested fix: none"
+Problem: A timeout happens some time after submission, not immediately, so listing the same "on-submit" trigger as the instant no-results message below it is misleading, and pairing it with "Suggested fix: none" leaves the user with no way to recover from the failure.
+Fix: Give this message its own trigger, such as "on-timeout," and add a suggested fix that offers a retry action.
+
+Location: "Search results, no matches" section, second message entry (the one beginning "Message: No orders fall inside the selected date range..."), Signal field
+Evidence: "styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action"
+Problem: The message asks the user to act, but the Signal field says its styling gives no indication that action is needed, and the listed Suggested fix, which only adds a button, does not resolve that styling gap.
+Fix: Specify a distinct visual treatment, such as an icon, color, or weight change, that marks this message as actionable rather than relying on the button alone.
+
+Location: same entry, Input on resubmission field
+Evidence: "Input on resubmission: not-applicable" beside a message that reads "Change the date range, or clear the filters to see every order."
+Problem: The message directs the user to change input and try again, so marking Input on resubmission as not applicable contradicts the resubmission behavior the message itself invites.
+Fix: Specify what happens to the date range and filter inputs when the user resubmits, instead of marking the field not applicable.
+
+Location: "Notification center, sync status" section, message entry, Placement and Signal fields
+Evidence: "Placement: in the notification list, directly under the sync status row" versus "Signal: bold text at the top of the notification list, icon"
+Problem: Placement anchors the message under the sync status row, while Signal places it at the top of the list; if the sync status row is not the first row, these describe two different positions for the same message.
+Fix: Pick one anchor for the message's position, either the sync status row or the top of the list, and remove the other.
+
+Location: "Notification center, sync status" section, Message field
+Evidence: "so syncing does not spend a data allowance"
+Problem: The phrase "spend a data allowance" is awkward and unclear about what resource is being conserved.
+Fix: Reword to "so it does not use your data allowance."

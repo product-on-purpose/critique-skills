@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "the validator rejects any value below 1000, but no default value is stated anywhere on the page",
+      "fix": "Add the actual default value for timeout, for example \"the default is 5000 milliseconds,\" so the advice to leave it at default is actionable.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "timeout section, first paragraph, second sentence",
+      "severity": 3,
+      "violation": "The document tells readers that leaving timeout at its default is the right choice, without ever stating what that default value is."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "raising it is worth doing only when a specific integration needs the extra room",
+      "fix": "Name which integrations typically need a longer timeout and suggest a concrete value or range for each case.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "timeout section, second paragraph",
+      "severity": 3,
+      "violation": "The guidance for when to raise timeout is vague and unquantified, naming no specific integrations and no target value or range to raise it to."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "only a minimum of 1000 milliseconds is documented for timeout, with no maximum mentioned anywhere in the section",
+      "fix": "State the maximum accepted value for timeout, or say explicitly that there is no maximum.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "timeout section",
+      "severity": 3,
+      "violation": "A reader cannot tell whether timeout has an upper bound at all."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "retries and logging each state their accepted range or values and default, but neither mentions what happens when an out of range or invalid value is supplied, while timeout explicitly states that the validator rejects values below 1000",
+      "fix": "Add a sentence to the retries and logging sections stating what happens when an invalid value is supplied, matching the level of detail given for timeout.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "retries and logging sections, compared with the timeout section",
+      "severity": 3,
+      "violation": "Validator or rejection behavior is documented for timeout but omitted for retries and logging, an inconsistency across three fields on the same reference page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "the list contains 9 bullet items, from Metric catalog reference through Delivery status codes, none formatted as markdown links",
+      "fix": "Convert each bullet into a markdown link pointing at its corresponding page, for example \"[Metric catalog reference](../metric-catalog.md)\".",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Related pages section, closing bullet list",
+      "severity": 3,
+      "violation": "A reader cannot navigate to any of the nine related pages directly from this document."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:27:53Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/clarity/clarity-001.md",
+    "artifact_sha256": "32ee3fed58b3e9b931565041a2e195dade8e2d19c9e9172fe28b38bdb5f6ef2c",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T20:52:00Z",
+    "rubrics": ["PLAIN", "WILLIAMS"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "How to Apply, paragraph 3",
+      "evidence": "36-word sentence, 4 subordinate-clause markers: Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "violation": "The sentence runs to 36 words with 4 subordinate-clause markers, longer than the reader can hold in mind on a single pass.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Eligibility, paragraph 1",
+      "evidence": "If the position counts as full-time, the stipend can apply. If the employee has completed 90 days of continuous service, the stipend can apply. If the request arrives before the benefit year ends, the stipend can apply. Only once every condition above is met does the home-office equipment stipend become available to the employee.",
+      "violation": "The eligibility rule opens with three sentences of conditions before the fourth sentence finally states what must be true to become eligible, so a reader has to reach the end before understanding the opening sentences.",
+      "fix": "Reorder the paragraph to state the main rule first: An employee becomes eligible for the stipend when three conditions are met: the position is full-time, the employee has completed 90 days of service, and the request arrives before the benefit year ends.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Document structure, sections 7 and 3",
+      "evidence": "Restrictions and Exceptions section (line 43) appears after How to Apply section (line 17), and the document concludes with duplicate Overview (line 59), internal process sections (Program Coordination, Review Responsibility), and reference content.",
+      "violation": "A section the reader needs early, restrictions that apply to eligibility, appears after the How to Apply section. Additionally, internal process sections are interleaved with reader-facing content, and a duplicate Overview section breaks focus on the reader's task sequence.",
+      "fix": "Move Restrictions and Exceptions to appear immediately after Eligibility and before How to Apply. Move internal process sections (Program Coordination, Review Responsibility) to an appendix. Remove the duplicate Overview section.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "PLAIN-AUDIENCE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Program Overview, paragraph 1",
+      "evidence": "The people operations office publishes the reimbursement log each quarter. A copy of each update goes to the shared benefits folder the same day. Similarly, the IT asset group tracks the stipend budget each quarter. Staff can request a printed copy from the benefits team at any time.",
+      "violation": "This section addresses IT and finance staff about publishing logs and tracking budgets, not employee readers. When an employee reader encounters this section first, it is unclear which instructions apply to them.",
+      "fix": "Move Program Overview after the reader-facing sections (Eligibility, How to Apply, Approval Timeline, Reimbursement Amounts, Restrictions and Exceptions). Label it as administrative background so employees know to skip it.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Eligibility, paragraph 1",
+      "evidence": "If the position counts as full-time, the stipend can apply. If the employee has completed 90 days of continuous service, the stipend can apply. If the request arrives before the benefit year ends, the stipend can apply.",
+      "violation": "The sentences use the abstract noun 'the stipend' as the subject performing an action (can apply) when the real actor is an identifiable person or organization such as the manager or benefits team who makes the eligibility decision.",
+      "fix": "Rewrite to name the real actor: You are eligible for the stipend when your position counts as full-time. You are eligible when you have completed 90 days of continuous service. You are eligible when your request arrives before the benefit year ends.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "PLAIN-ACTIVE",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Approval Timeline, paragraph 1",
+      "evidence": "The request is reviewed within two business days.",
+      "violation": "The sentence uses a be-verb plus past-participle passive construction in a context where the actor is recoverable and worth naming directly.",
+      "fix": "Rewrite the sentence in active voice, naming the actor that performs the action.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "PLAIN-CONCISE",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Reimbursement Amounts, paragraph 2",
+      "evidence": "Also, the deposit happens in order to offset costs the employee already paid at this point in time.",
+      "violation": "The sentence uses a wordy construction from the fixed wordy-phrase list that a shorter equivalent would carry with no loss of meaning.",
+      "fix": "Replace the wordy phrase with its plain equivalent (for example, because for due to the fact that).",
+      "confidence": "high"
+    },
+    {
+      "id": "F-008",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Terminology Notes, paragraph 1",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal. You track its status there until the payment clears.",
+      "violation": "The document uses 'the request log' and earlier refers to 'the reimbursement log' as if they are different entities, when they may refer to the same concept. The term 'stipend item' is introduced late as terminology but used inconsistently earlier.",
+      "fix": "Define which term is standard: either the request log or the reimbursement log. Use one consistently throughout. Define stipend item in the Eligibility section where it is first relevant.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-009",
+      "criterion": "PLAIN-DOUBLE-NEGATIVE",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Eligibility, paragraph 2",
+      "evidence": "However, reimbursement is not available without a completed receipt.",
+      "violation": "2 negation markers from the fixed negation list co-occur in one clause, so the reader has to work out the statement's logical sign before understanding it.",
+      "fix": "Restate the sentence with at most one negation, or recast it as a positive statement.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-010",
+      "criterion": "PLAIN-HEADINGS",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "the Overview heading",
+      "evidence": "heading: Overview",
+      "violation": "The heading text matches the fixed list of non-specific heading labels, so a reader scanning headings cannot tell whether the section applies to them.",
+      "fix": "Replace the heading with text specific enough to be found by scanning.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 9,
+      "3": 5,
+      "4": 0
+    },
+    "suppressed_count": 4,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

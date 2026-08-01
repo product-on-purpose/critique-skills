@@ -1,0 +1,116 @@
+{
+  "run": {
+    "skill": "critique-argument",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/argument/argument-002.md",
+    "artifact_sha256": "0322bc2ebeb48318c56473186a8cb1f1e78d8667b99cfaf75ee7bb84f82fcfa2",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T20:41:37Z",
+    "rubrics": [
+      "TOULMIN"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "TOULMIN-CLAIM-MARKER",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "evidence": "0 conclusion-marker phrases found across 401 words.",
+      "violation": "No phrase from the conclusion-marker lexicon (therefore, thus, hence, it follows that, we recommend, this paper argues, I argue that, the conclusion is, in conclusion, we should, the case for) appears anywhere in the artifact, so a reader scanning rather than reading straight through has no signpost to where the conclusion is asserted.",
+      "fix": "Add an explicit conclusion-signalling phrase at the point the artifact states its central claim, for example \"therefore\" or \"we recommend\".",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "TOULMIN-CLAIM",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Recommendation section, second and third paragraphs",
+      "evidence": "The second paragraph states \"the stronger choice is a systemwide end to overdue fines across all ten consortium branches, effective at the start of the next fiscal year.\" The third paragraph then retreats to \"the recommended change is about making things better for patrons going forward, in whatever way the consortium finds workable.\"",
+      "violation": "The central claim shifts from specific to vague: the first version asks for elimination of all fines by a specific date, while the second version asks for an unspecified change in an unspecified timeframe. A reader finishing this section cannot state with confidence what is being asked for.",
+      "fix": "Choose one version of the claim and use it consistently. Either commit to the specific recommendation (end all fines by fiscal year start) or, if that is not the actual ask, rewrite the recommendation to state clearly what decision you want the reader to make.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "TOULMIN-QUALIFIER",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Recommendation section",
+      "evidence": "The artifact introduces the claim with \"the stronger choice is\" (qualified), but then asserts \"This recommendation removes every overdue-related charge permanently, for every item the consortium owns, without qualification.\"",
+      "violation": "The grounds (one pilot across four branches with a twelve-month horizon) do not support an unqualified systemwide recommendation for all ten branches. A decision-maker acting on this unqualified statement gets no signal that results from four branches might not generalize, that longer-term effects are unknown, or that different branch populations might respond differently.",
+      "fix": "Rewrite the claim to match the strength of evidence. For example: \"the evidence from the pilot suggests that removing fines systemwide is likely to increase patron engagement, though implementation should include monitoring to track outcomes at each branch.\" Or present the specific circumstances that must hold for the recommendation to be valid.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "TOULMIN-REBUTTAL",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Addressing the Revenue Concern section",
+      "evidence": "The artifact raises and addresses only the revenue concern. No other objections are raised, such as causation confirmation (is the behavior change causal or correlation?), sequencing risks, patron communication strategy, or whether results generalize to branches with different demographics.",
+      "violation": "The argument names one exception (revenue impact) but fails to anticipate the most obvious follow-up questions a skeptical reader would ask: Does the pilot's return-rate improvement actually cause the recommendation, or does correlation drive it? Will benefits hold at branches with different patron populations? What is the implementation timeline and who bears the cost of transition? An argument that answers only one objection is unprepared for the first questions its own evidence raises.",
+      "fix": "Add a section addressing implementation risks: causation (is the relationship actually causal?), generalization (why should these four branches predict all ten?), and logistics (sequencing, communication, staff training, monitoring). For each objection, either explain why it does not apply or specify how you will mitigate it.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "TOULMIN-WARRANT",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Why the Pilot Result Applies Systemwide section",
+      "evidence": "The artifact states \"removing the financial penalty for late returns predictably increases both on-time return rates and overall program participation, which is the reason the pilot's return-rate and avoidance-survey results, taken together, support ending fines for the whole consortium rather than only the pilot branches.\"",
+      "violation": "The connecting principle between pilot results and systemwide generalization is not explicit. The warrant \"results from four branches predict results everywhere\" is assumed but not stated. A reader does not see why a twelve-month pilot at four branches licenses a permanent systemwide decision at ten branches with potentially different populations, budgets, and operational constraints.",
+      "fix": "State the generalization principle explicitly. For example: \"Library systems with similar patron demographics and materials budgets show consistent results when implementing fines elimination\" or \"Fines elimination effects are stable across branch types and patron populations, as evidenced by the Tri-County study.\" If the principle does not hold, explain the conditions under which the pilot result applies and which other branches meet those conditions.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "TOULMIN-HEDGE-DENSITY",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "evidence": "10 of 14 sentences (0.71) carry at least one hedging term.",
+      "violation": "More than 0.35 of the artifact's sentences carry a term from the hedging lexicon (may, might, could, possibly, perhaps, arguably, somewhat, relatively, it seems, appears to, tends to, to a degree), spread across the whole document rather than concentrated where the evidence actually underdetermines the claim.",
+      "fix": "Remove the hedge from sentences whose claim the evidence actually supports, reserving qualification for the claims that genuinely need it.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "TOULMIN-BACKING",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Why the Pilot Result Applies Systemwide section, paragraph 2",
+      "evidence": "The artifact cites \"the Tri-County Library Data Cooperative's 2023 fines-elimination research brief, which reviewed return-rate data from fourteen library systems that eliminated fines between 2017 and 2022.\"",
+      "violation": "The principle that fines reduction increases return rates and participation is supported by a single research citation. A competent non-specialist reader might find one study from one cooperative insufficient to ground a permanent systemwide policy decision, especially without a link to the study or a statement of its findings.",
+      "fix": "Strengthen backing by adding one or more of the following: the specific findings from the cited research brief, access to the study, or additional sources (literature review, other studies, internal pilot data). If the Tri-County brief is your only source, acknowledge that limitation explicitly.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-008",
+      "criterion": "TOULMIN-GROUNDS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "What the Pilot Showed section, paragraph 1",
+      "evidence": "The artifact states \"Ending overdue fines is plainly the better path for the consortium\" with no supporting data or reference in that sentence.",
+      "violation": "The central claim is asserted without evidence in its opening statement. The next paragraph provides the avoidance-survey data (20% to 3%) and mentions a return-rate improvement without quantifying it. A reader cannot evaluate whether the claim is supported because the return-rate figure is never stated numerically.",
+      "fix": "Move the evidence immediately into the statement of the claim: \"The pilot showed that ending overdue fines increased patron engagement, reducing self-reported avoidance from 20 percent to 3 percent, and improved return rates.\" (Add the specific return-rate figure if available.)",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 6,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "run": {
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:43:27Z",
+    "rubrics": [
+      "NNG"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-EM-CONSTRUCTIVE",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "Search results, no matches, message 1",
+      "evidence": "This request timed out before it could finish.",
+      "violation": "The message states that a problem exists with no imperative instruction or named next step anywhere in the text.",
+      "fix": "Add a concrete next step: name the action the reader should take to resolve this.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-EM-GRACE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Search results, no matches, message 1",
+      "evidence": "This request timed out before it could finish. (Container: inline, Suggested fix: none)",
+      "violation": "This is a total, unrecoverable failure in the moment with no further message on screen offering a way forward, and the message reads as a bare technical notice without acknowledgment of the reader's frustration at the failed search attempt.",
+      "fix": "Reword to acknowledge the reader's situation: for example, 'Sorry, your search took too long. Try a simpler search or narrower date range.'",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-EM-SALIENT",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Search results, no matches, message 2",
+      "evidence": "Signal: styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action, text-label.",
+      "violation": "The message demands action from the reader but is visually styled the same as purely informational banners elsewhere on the page, so a reader scanning at normal speed might not perceive it as requiring their attention.",
+      "fix": "Apply a distinct visual treatment to this message: use a different background color, a warning icon, a border, or other design differentiation to signal that this requires action, unlike the informational-only banners.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 1,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

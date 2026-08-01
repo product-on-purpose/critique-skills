@@ -1,0 +1,34 @@
+Location: Project settings section, duplicate button
+Evidence: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>
+Problem: The button has no visible label, only an aria-label attribute. Users cannot tell what this button does without developer tools or extensive exploration.
+Fix: Add visible text to the button, either as content or as a labeled icon, so users understand its function without hovering or inspecting.
+
+Location: Invite a team member section, form and actions
+Evidence: <button id="invite-member-save-btn" type="submit">Save</button> followed by <a id="invite-member-continue-link" href="#invite-sent">Continue</a>
+Problem: The form has a Save button inside the form element, but the user flow also presents a Continue link outside the form. It is unclear whether users should click Save or Continue to proceed.
+Fix: Remove the Continue link and let the form's Save button trigger the navigation to the invite-sent section, or clarify the purpose of each action with descriptive labels.
+
+Location: Invite a team member section, email input field
+Evidence: <input id="invite-member-email-input" type="email">
+Problem: The email input field has no placeholder text or helper text to guide users on what format or information is expected.
+Fix: Add a placeholder attribute (e.g., placeholder="name@company.com") or accompanying helper text to show users the expected input format.
+
+Location: Workspace overview section, project count and list
+Evidence: <p>This workspace holds 4 projects, synced this morning.</p> but the list shows only 3 items
+Problem: The text states the workspace has 4 projects, but only 3 are listed in the recent projects section. This creates confusion about whether the list is complete or truncated.
+Fix: Either list all 4 projects or clarify that this is a filtered or recent list (e.g., "Recently accessed projects: 3 of 4").
+
+Location: Archive project confirmation section
+Evidence: <p id="archive-confirm-copy">Archiving "Vendor Onboarding" will remove it from the active projects list for everyone on the team.</p>
+Problem: The archive action is destructive but the confirmation section relies only on text and navigation links. There is no additional safety mechanism like a confirmation checkbox or warning icon.
+Fix: Add a confirmation checkbox with text like "I understand this will archive the project for my entire team" or display a warning icon to emphasize the destructive nature of this action.
+
+Location: Import status section
+Evidence: <p id="import-status-message">Import failed. Error code IMP-500. Contact support if this continues.</p>
+Problem: The error message offers only "Contact support" as a next step, with no troubleshooting options, retry button, or documentation link for error code IMP-500.
+Fix: Add a "Retry" button to attempt the import again, or provide a link to documentation for error code IMP-500 before asking users to contact support.
+
+Location: Navigation and section structure
+Evidence: Multiple sections with fragment anchors (#workspace-overview, #project-settings, #invite-member, etc.) but no breadcrumb or "Back" link in all sections
+Problem: Users navigating through multi-step workflows (e.g., project settings to invite member to invite confirmation) lack clear context of where they are in the process and how to return to the main workspace view.
+Fix: Add a breadcrumb trail or consistent "Back to workspace" link in all sections to help users maintain orientation.

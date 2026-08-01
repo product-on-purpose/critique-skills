@@ -1,0 +1,59 @@
+Location: The viewport meta tag in the document head, id="head-viewport"
+Evidence: content="width=device-width, initial-scale=1, user-scalable=no"
+Problem: user-scalable=no disables pinch to zoom, which prevents users with low vision from zooming the page even though the viewport is otherwise responsive.
+Fix: Remove user-scalable=no (and any maximum-scale restriction) from the viewport meta tag so users can zoom.
+
+Location: First paragraph of the "Accessibility improvements" section, id="s1-p1"
+Evidence: style="color:#999999" on the text "Passengers should review the updated schedule at any station kiosk..."
+Problem: Gray text at #999999 on the page's default white background produces a contrast ratio of roughly 2.85 to 1, well below the WCAG AA minimum of 4.5 to 1 for normal size text.
+Fix: Remove the inline color override or replace it with a darker color that reaches at least 4.5 to 1 contrast against the background, such as #595959.
+
+Location: Paragraphs id="s1-p1", id="s1-p2", and the status card text id="s3-statuscard"
+Evidence: The sentence "Updates post to the schedule page within one business day." appears verbatim in all three, attached to unrelated topics: kiosk schedules, mobile app fare adjustments, and online portal service issue reports.
+Problem: The same boilerplate sentence is copy pasted across unrelated paragraphs, so the content reads as templated filler rather than information specific to each section.
+Fix: Write a distinct, topic specific closing sentence for each paragraph, or remove the repeated sentence where it adds no information.
+
+Location: Table id="s2-table1" in the "Schedule changes" section
+Evidence: The table opens directly with <tr><th scope="col">Zone</th><th scope="col">Status</th></tr> and has no caption anywhere in its markup.
+Problem: The table has no caption element, so a screen reader user navigating to the table gets no description of what it contains before reaching its data cells.
+Fix: Add a caption element inside the table, for example "Zone status", describing its contents.
+
+Location: The promo banner div id="s3-banner", class "promo-banner", in the "Weekend service" section
+Evidence: style="width:960px"
+Problem: A hard coded 960px width does not shrink on narrower viewports, which will cause horizontal overflow or clipping on mobile screens given the page's device-width viewport setting.
+Fix: Replace the fixed pixel width with a relative or max width value, such as max-width:960px; width:100%.
+
+Location: The status card div id="s3-statuscard", class "status-card"
+Evidence: style="height:60px;overflow:hidden"
+Problem: A fixed 60px height combined with overflow:hidden will clip the paragraph text inside it whenever the text wraps to more lines than fit, including at larger browser font sizes or zoom levels.
+Fix: Remove the fixed height and let the box size to its content, or use min-height:60px without overflow:hidden.
+
+Location: The delete control div id="s3-customcontrol", class "icon-delete"
+Evidence: <div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">
+Problem: This interactive delete control is built from a div with role="button" instead of a native button element, and the document contains no script anywhere that would give it keyboard activation on Enter or Space, or a click handler.
+Fix: Replace the div with a native button element, for example button type="button" aria-label="Delete item", which gets correct keyboard and role semantics for free.
+
+Location: The wizard steps container id="s3-wizard" and its three child step divs (s3-step1, s3-step2, s3-step3)
+Evidence: <div class="step" id="s3-step1">Choose a plan</div> and two sibling divs with the same bare structure and no other markup.
+Problem: The three steps are plain, unnumbered divs with no list semantics and no indication of which step is current, so assistive technology users get no sense of progress or structure.
+Fix: Mark the steps up as an ordered list and add aria-current="step" to whichever step is active.
+
+Location: The link in paragraph id="s3-linkpara", link id="s3-link1"
+Evidence: <a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>, inside the sentence "For the full list of upcoming adjustments, read the accessibility improvements list."
+Problem: The link text promises an "accessibility improvements list" but the href points to /fares/history and the surrounding sentence is about upcoming adjustments, so the link text does not describe its actual destination.
+Fix: Change the link text to match the destination, for example "read the fare adjustment history."
+
+Location: Form id="s3-form", label id="s3-form-topic-label" paired with the select id="topic"
+Evidence: <label for="topic-alt" id="s3-form-topic-label">Route</label> immediately followed by <select id="topic">
+Problem: The label's for attribute points to "topic-alt" but the select element's id is "topic", so the two do not match and the "Route" label is not programmatically associated with the dropdown; clicking the label will not focus it and screen readers will not announce "Route" for the field.
+Fix: Change the label's for attribute to "topic" (or change the select's id to "topic-alt") so they match.
+
+Location: Form id="s3-form", label id="s3-form-phone-label" paired with input id="phone"
+Evidence: <label for="phone" id="s3-form-phone-label">Phone number (required)</label> next to <input id="phone" type="tel">
+Problem: The label text tells sighted users the phone field is required, but the input itself has no required attribute or aria-required="true", so screen readers and native form validation do not treat it as required.
+Fix: Add required (or aria-required="true") to the phone input so its programmatic state matches its visible label text.
+
+Location: Form id="s3-form", input id="promo" and its error message id="s3-form-promo-error"
+Evidence: <input id="promo" type="text" aria-invalid="true"> followed by <span class="error-text" id="s3-form-promo-error">Enter a 6 character code using letters and numbers only.</span>
+Problem: The promo input is flagged invalid with aria-invalid="true", but nothing in its markup points to the error message, so screen reader users are told the field is invalid without ever hearing why.
+Fix: Add aria-describedby="s3-form-promo-error" to the promo input.

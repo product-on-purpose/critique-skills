@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Enter the updated threshold value in the field provided and confirm the unit matches the metric in use.\"",
+      "fix": "Specify the field name or location (e.g., \"In the Threshold field, enter...\") and provide an example threshold value like \"100\" or \"1000\".",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section \"Set the new threshold\"",
+      "severity": 3,
+      "violation": "The instruction refers to \"the field\" without identifying which field or providing an example value."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Open the alerts panel from the console sidebar and select the rule you want to adjust.\"",
+      "fix": "Add a reference to a UI location or specify the steps more clearly, such as \"Open the [application name] console, then click the Alerts icon in the left sidebar.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section \"Open alert settings\"",
+      "severity": 3,
+      "violation": "Readers may not know what the \"console sidebar\" looks like or where it is located in the interface."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This is because the console applies the new threshold to every future evaluation of this rule.\"",
+      "fix": "Reword to: \"The unit must match the metric so the system can evaluate thresholds correctly\" or provide a concrete example of what happens if units do not match.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section \"Set the new threshold\"",
+      "severity": 3,
+      "violation": "The explanation uses causal language (\"this is because\") to explain why confirmation is necessary, but it does not clarify why the user must confirm the unit specifically."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Save the rule and open the rule list to confirm the new threshold appears there.\"",
+      "fix": "Specify the exact steps: \"Click Save, then navigate to [location] to verify the threshold is updated.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section \"Save and verify\"",
+      "severity": 3,
+      "violation": "The instructions assume the user knows where the rule list is and how to open it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The document begins with \"---\\nmode: how-to\\n---\\n# Configure alert thresholds\"",
+      "fix": "Either remove the YAML front matter from the main document view or add a note explaining what it means to readers.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Document overall",
+      "severity": 3,
+      "violation": "The purpose and scope of \"mode: how-to\" front matter is not explained, which may confuse readers unfamiliar with this documentation system."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"confirm the unit matches the metric in use\"",
+      "fix": "Provide an example: \"For example, if your metric measures response time in milliseconds, set the unit to 'ms'.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section \"Set the new threshold\"",
+      "severity": 3,
+      "violation": "The instruction does not explain what \"the metric in use\" refers to or how to determine what unit is appropriate."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-001.md",
+    "artifact_sha256": "b41787144ac8cc1ae14bcce23fa2b574f6ee68f1aaa9cc432628f9f148ddd713",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

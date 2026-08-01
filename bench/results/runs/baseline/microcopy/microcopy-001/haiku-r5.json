@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"one step bolder and larger than the field label, icon\"",
+      "fix": "Specify the icon type (e.g., \"exclamation circle\" or \"warning triangle\") for the connection error message",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Signup form, email field, first message",
+      "severity": 3,
+      "violation": "Icon signal is mentioned but not described; unclear what icon should be used for a connection failure"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"selectable, offers the one available next step as a direct action\"",
+      "fix": "Replace with a specific action: \"make the message selectable and offer a 'Retry' button that re-sends the email validation\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Signup form, email field, first message, Suggested fix line",
+      "severity": 3,
+      "violation": "The suggested fix is vague about what \"the one available next step\" actually is; no specific action is named"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: mid-keystroke\"",
+      "fix": "Change validation to fire on-blur or on-submit instead of mid-keystroke, or defer visual error until the field loses focus",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Checkout form, payment method, expiry date message",
+      "severity": 3,
+      "violation": "Validating mid-keystroke creates friction; users may see error messages before finishing input"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You keep entering the wrong value. Re-enter it to continue.\"",
+      "fix": "Replace with specific error: \"Phone number must be 10 digits in (XXX) XXX-XXXX format\" or state which part is invalid",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Profile settings, phone number, first message",
+      "severity": 3,
+      "violation": "Message does not specify what value is wrong or what constraint was violated; users lack guidance on how to fix it"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: directly below the phone number field\" and \"Suggested fix: none\"",
+      "fix": "Suggest a remediation path such as \"Offer a 'Remove from other account' action that submits a support request\" or similar self-service option",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Profile settings, phone number, second message",
+      "severity": 3,
+      "violation": "No suggested fix is provided for an error about duplicate phone numbers across accounts, which blocks users and requires support contact"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Message: Something went wrong. Contact support if this continues.\"",
+      "fix": "Investigate the specific failure and provide a targeted message, e.g., \"This payment method is no longer available. Please choose another method.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Checkout form, payment method, generic error message",
+      "severity": 3,
+      "violation": "Generic error message provides no actionable information about what went wrong with the payment method selector"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-001.md",
+    "artifact_sha256": "0580399008ca4517da0a1b1f620180b68a4cfb24e596be279a5f782cde325fc7",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

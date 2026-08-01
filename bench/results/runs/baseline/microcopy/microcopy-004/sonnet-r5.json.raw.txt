@@ -1,0 +1,29 @@
+Location: Two-factor setup, verification code, second message ("This verification code expired 10 minutes after it was sent...")
+Evidence: "This verification code expired 10 minutes after it was sent, which stops an intercepted code from being reused later. Request a new code and enter it here."
+Problem: The message opens with a security rationale before the instruction, making it roughly twice as long as every other message in the document and delaying the one action the user needs to take.
+Fix: Lead with the instruction and drop the rationale clause, for example "This code has expired. Request a new code and enter it here."
+
+Location: Billing, promo code, first message ("This promo code ended on 30 June...")
+Evidence: "This promo code ended on 30 June."
+Problem: The date has no year, so a user cannot tell whether the code expired this year or in a past year, and the ambiguity only grows the longer this copy stays live.
+Fix: Include the year, for example "This promo code ended on 30 June 2026."
+
+Location: Two-factor setup, verification code, "Predictable mistake" field, compared across the section's two messages
+Evidence: the first message ("Verification codes are 6 digits long...") is marked "Predictable mistake: yes" while the second message ("This verification code expired...") is marked "Predictable mistake: no"
+Problem: Both entering the wrong number of digits and letting a code expire before submitting are common, expectable user behaviors, so classifying one as predictable and the other as not is applied inconsistently with no stated reasoning for the difference.
+Fix: Either justify why expiration is not predictable while a wrong digit count is, or mark both consistently and explain the distinction in the document.
+
+Location: Two-factor setup, verification code, second message, "Suggested fix" field
+Evidence: "Suggested fix: selectable, offers a resend code button in place of the message"
+Problem: "Selectable" is not defined anywhere in the document, so it is unclear whether it describes the message text becoming a link, a separate control, or something else, leaving the suggested fix ambiguous to implement.
+Fix: Rewrite the fix note in plain language, for example "Replace the message with a Resend code button," and remove or define "selectable."
+
+Location: throughout the document, the Placement, Container, Signal, and Input on resubmission fields in all four message blocks
+Evidence: all four blocks repeat "Placement: directly below the...field", "Container: inline", "Signal: bold text set larger than the field label, icon", and "Input on resubmission: preserved" verbatim
+Problem: These four fields never vary across any of the four messages, so restating them in every block adds no information and makes the fields that do vary, Message, Fires, Predictable mistake, and Suggested fix, harder to scan.
+Fix: State the shared placement, container, signal, and resubmission behavior once as a document level convention, and list only the fields that vary per message in each block.
+
+Location: top of the document, before the first message block
+Evidence: "# Screens Under Review" is followed directly by "## Two-factor setup, verification code" with no explanation of the field labels that follow
+Problem: A reader unfamiliar with this format has no definition for terms like "Signal," "Fires," or "Container," so their intended meaning has to be guessed from context.
+Fix: Add a short legend defining each field label before the first message block.

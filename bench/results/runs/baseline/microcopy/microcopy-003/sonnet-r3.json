@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "heading reads \"Search results, no matches\" but the message text is \"This request timed out before it could finish.\"",
+      "fix": "Split the entry into its own subsection, for example \"Search results, request timeout\", or broaden the heading to something like \"Search results, errors and empty states\" that actually covers both cases it lists.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Search results, no matches section, first message block (\"This request timed out before it could finish.\")",
+      "severity": 3,
+      "violation": "The section heading promises copy for the no-matches state, but this entry describes a request timeout, a different failure state entirely. A reader looking under this heading for no-matches copy will find timeout copy instead, with nothing distinguishing the two."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Suggested fix: none",
+      "fix": "Add a suggested fix that offers a retry action, for example \"selectable, offers a try again button beside the message.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Search results, no matches section, first message block, Suggested fix field",
+      "severity": 3,
+      "violation": "A request timeout is normally recoverable by retrying, yet this entry offers no retry action, while the other two entries in the document each supply a specific actionable fix (a clear filters button, a resume now action)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message: No orders fall inside the selected date range. Change the date range, or clear the filters to see every order.",
+      "fix": "Either rename the section heading to match the feature it documents, for example \"Order list, no matches\", or rewrite the message to use search terminology consistent with the heading.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Search results, no matches section, second message block (\"No orders fall inside the selected date range...\")",
+      "severity": 3,
+      "violation": "The section is titled \"Search results\" but this message and its wording are about an order list filtered by a date range, not a search query. The mismatch makes it unclear whether the heading or the message is describing the actual feature."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Signal: styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action, text-label",
+      "fix": "Rewrite the Signal field to state only the actual visual treatment, for example \"styled as an informational banner, text-label\", and record the missing-visual-cue concern in a separate notes field if it needs to be tracked.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Search results, no matches section, second message block, Signal field",
+      "severity": 3,
+      "violation": "Every other Signal field in the document is a plain description of the visual treatment used, for example \"bold heading text where the first result would sit, text-label\" and \"bold text at the top of the notification list, icon\". This Signal field instead states a design judgment about a missing visual cue, breaking the field's consistent purpose across entries."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Fires: on-focus",
+      "fix": "Name the specific element or event that triggers the message, for example \"Fires: on-open, when the notification center is opened.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Notification center, sync status section, Fires field",
+      "severity": 3,
+      "violation": "\"on-focus\" does not say what element receives focus, so a reader cannot tell what user action actually triggers this message to appear, unlike the other two entries where \"on-submit\" is unambiguous given the surrounding filter and search context."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Placement: in the notification list, directly under the sync status row",
+      "fix": "Clarify the placement field, for example \"Placement: is the sync status row itself, at the top of the notification list,\" or rename the referenced row if it is genuinely a separate element.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Notification center, sync status section, Placement field",
+      "severity": 3,
+      "violation": "The message itself is the sync status text (\"Sync is paused...\"), yet the placement field describes it as sitting below a separate \"sync status row,\" leaving it unclear whether this message is that row or a distinct item duplicating it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:48:15Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

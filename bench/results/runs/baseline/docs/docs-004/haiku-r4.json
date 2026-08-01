@@ -1,0 +1,83 @@
+{
+  "run": {
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/docs/docs-004.md",
+    "artifact_sha256": "7f41536ab3c3f7bc93a3dde86b8e81cee5dab0339f2b1d472e9222a20b42d7ae",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:30:36Z",
+    "rubrics": [
+      "BASELINE"
+    ]
+  },
+  "findings": [
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "endpoint_url field description",
+      "evidence": "\"The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert.\"",
+      "violation": "The description does not explain what happens if a non-HTTPS URL is provided, or whether HTTP is rejected. It also does not specify the URL format or any validation rules.",
+      "fix": "Clarify that only HTTPS URLs are accepted and that HTTP will be rejected; explain what constitutes a valid URL format.",
+      "confidence": "medium",
+      "id": "F-001"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "signing_secret field description",
+      "evidence": "\"The signing_secret field accepts a string used to verify the payload signature on receipt.\"",
+      "violation": "The description does not explain the required format, length, or character restrictions for the signing secret, nor does it explain how the signature is verified.",
+      "fix": "Specify the minimum length, allowed character set, and briefly describe the verification mechanism or link to detailed documentation.",
+      "confidence": "medium",
+      "id": "F-002"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "retry_policy field description",
+      "evidence": "\"The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential.\"",
+      "violation": "The description does not explain what each retry policy option does or how the exponential backoff strategy works. Users cannot understand the practical differences between the options.",
+      "fix": "Add descriptions for each policy option, such as \"none: do not retry failed requests\" and \"exponential: retry with exponentially increasing delay (e.g., 1s, 2s, 4s, 8s)\".",
+      "confidence": "medium",
+      "id": "F-003"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Document structure",
+      "evidence": "Three fields with minimal documentation",
+      "violation": "The reference is missing important operational details such as maximum payload size, timeout values, maximum retry attempts, or rate limits that would help users configure the webhook correctly.",
+      "fix": "Add sections documenting timeout behavior, maximum retry attempts, payload size limits, and rate limiting behavior.",
+      "confidence": "medium",
+      "id": "F-004"
+    },
+    {
+      "criterion": "BASELINE-GENERIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "signing_secret field description",
+      "evidence": "\"a string used to verify the payload signature on receipt\"",
+      "violation": "The description mentions signature verification but provides no guidance on how to use this value or what algorithm is used for signature generation.",
+      "fix": "Explain or link to documentation on the signature algorithm (e.g., HMAC-SHA256) and how the signing_secret is used in verification.",
+      "confidence": "medium",
+      "id": "F-005"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

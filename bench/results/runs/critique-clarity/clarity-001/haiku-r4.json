@@ -1,0 +1,128 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/clarity/clarity-001.md",
+    "artifact_sha256": "32ee3fed58b3e9b931565041a2e195dade8e2d19c9e9172fe28b38bdb5f6ef2c",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T20:52:02Z",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "How to Apply, paragraph 3",
+      "evidence": "Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "violation": "The sentence runs to 36 words with 4 subordinate-clause markers, longer than the reader can hold in mind on a single pass.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Eligibility, paragraph 1",
+      "evidence": "If the position counts as full-time, the stipend can apply. If the employee has completed 90 days of continuous service, the stipend can apply. If the request arrives before the benefit year ends, the stipend can apply. Only once every condition above is met does the home-office equipment stipend become available to the employee.",
+      "violation": "A benefits rule opens with three sentences of exceptions and conditions before the fourth sentence finally states what the benefit actually is, forcing the reader to re-read to understand the main requirement.",
+      "fix": "Lead with the governing rule: All three conditions must be met. Then list each condition separately.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-008",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "document structure, sections 8-13",
+      "evidence": "The document contains a duplicate Overview section (line 59) that repeats Program Overview (line 3) with different timing information, followed by three administrative process sections (Program Coordination, Review Responsibility, Questions and Updates) that describe internal workflows rather than employee actions.",
+      "violation": "The document's structure does not follow the reader's task sequence; instead it mixes administrative process descriptions with employee-facing instructions, and repeats sections with similar headings, disrupting navigation.",
+      "fix": "Remove the duplicate Overview section. Move or remove administrative process sections (Program Coordination, Review Responsibility, Questions and Updates) or clearly separate them as internal reference material, not employee-facing policy.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-011",
+      "criterion": "WILLIAMS-COHERENCE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Terminology Notes section",
+      "evidence": "Section heading: 'Terminology Notes'. Section content (lines 51-53): 'You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal. You track its status there until the payment clears.'",
+      "violation": "The section heading promises terminology definitions, but the content describes administrative processes and employee actions without defining any terms. A reader finishing the section cannot state what it is actually about.",
+      "fix": "Either rename the section to 'Processing Timeline' and clarify the process flow, or replace the content with actual term definitions (what is a 'stipend item', what is a 'request log', etc.).",
+      "confidence": "high"
+    },
+    {
+      "id": "F-009",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Eligibility, section 1 and Overview, section 2",
+      "evidence": "Eligibility section (line 11): 'If the request arrives before the benefit year ends'. Overview section (line 61): 'after every open enrollment period'.",
+      "violation": "Two terms that refer to the identical annual cycle are used interchangeably with no signal that they mean the same thing, forcing the reader to verify the connection.",
+      "fix": "Use one consistent term throughout (either 'benefit year' or 'open enrollment period') or explicitly state that both terms refer to the same cycle.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-010",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Eligibility and How to Apply sections",
+      "evidence": "Line 11: 'If the position counts as full-time, the stipend can apply.' Line 19: 'The portal walks through each step in order.'",
+      "violation": "Multiple sentences use abstract nouns (position, stipend, portal) as grammatical subjects instead of naming the real actor performing the action, creating distance from responsibility.",
+      "fix": "Rewrite to name actual actors: 'If you work full-time, you can apply.' 'The portal guides you through each step.' or 'It guides you through each step.'",
+      "confidence": "high"
+    },
+    {
+      "id": "F-012",
+      "criterion": "WILLIAMS-COHESION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "How to Apply section, paragraph 3",
+      "evidence": "Prior sentences discuss portal use (lines 19-21). Then: 'Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.'",
+      "violation": "The sentence opens with new information about manager travel and backup reviewers that the prior sentences gave the reader no basis for, breaking the topic flow without transition.",
+      "fix": "Move this information to a separate 'Delays and Exceptions' section or integrate it with the 'Approval Timeline' section where review timing is discussed.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-013",
+      "criterion": "WILLIAMS-STRESS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "How to Apply section, paragraph 3",
+      "evidence": "Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "violation": "The critical information that the backup reviewer wasn't told about the sign-off requirement is buried in a subordinate clause after the semicolon instead of landing at the sentence's end.",
+      "fix": "Restructure to put the critical detail at the end: 'If the manager is traveling, the backup reviewer handles the request. However, the backup reviewer was not told about the sign-off requirement before the portal releases confirmation.'",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-014",
+      "criterion": "PLAIN-AUDIENCE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Terminology Notes section",
+      "evidence": "Lines 51-53 mix employee action ('You record the stipend item on the request form', 'you submit the request in the portal') with administrative action ('Finance reconciles the stipend item against the request log each month', 'Payroll releases the stipend item amount').",
+      "violation": "The section addresses both the employee reader and describes what the administrative team does without separating the two audiences or clarifying which actions are the reader's responsibility.",
+      "fix": "Separate employee responsibilities from administrative processes into distinct paragraphs or sections, or clarify with phrases like 'Your part: You record...' and 'Our part: Finance reconciles...'",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 10,
+      "3": 4,
+      "4": 0
+    },
+    "suppressed_count": 5,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.10",
+      "evidence": "declared width: 960px",
+      "fix": "Cap the element's width with a relative max-width (a percentage or viewport unit), or add a media query that shrinks it below 320px.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "line 37, <div> element",
+      "severity": 3,
+      "violation": "A fixed width of 960px forces horizontal scrolling once the viewport narrows to 320px, with no responsive override."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.3",
+      "evidence": "text color #999999 on background #ffffff, contrast ratio 2.85:1",
+      "fix": "Darken the text or lighten the background until the ratio reaches at least 4.5:1.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "line 20, <p> element, text 'Passengers should review the updated schedule at any station kiosk. Updates p...'",
+      "severity": 3,
+      "violation": "Contrast ratio 2.85:1 is below the 4.5:1 AA minimum for normal text."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.4",
+      "evidence": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\" id=\"head-viewport\">",
+      "fix": "Remove user-scalable=no so readers can zoom the page.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "line 5, meta name=\"viewport\" element",
+      "severity": 3,
+      "violation": "The viewport meta tag sets user-scalable=no, disabling browser zoom entirely."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.11",
+      "evidence": "boundary color #9d9d9d against adjacent background #ffffff, contrast ratio 2.71:1",
+      "fix": "Darken the border or outline color, or change the adjacent background, until the ratio reaches at least 3:1.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "line 43, <button> element boundary",
+      "severity": 2,
+      "violation": "Component boundary contrast ratio 2.71:1 is below the 3:1 AA minimum."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.12",
+      "evidence": "height: 60px; overflow: hidden",
+      "fix": "Remove the fixed height so the element grows with its content, or replace the clipped overflow with visible or auto.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "line 40, <div> element",
+      "severity": 2,
+      "violation": "A fixed height combined with clipped overflow truncates this element's text once a reader applies wider line, paragraph, letter, or word spacing."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-3.3.2",
+      "evidence": "<select id=\"topic\">",
+      "fix": "Add a <label for> pointing at this control's id, wrap the control in a <label>, or set aria-label.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "line 61, <select> control",
+      "severity": 2,
+      "violation": "No label, aria-label, aria-labelledby, or title identifies what this control expects."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "input with aria-invalid=\"true\", error message present but not linked via aria-describedby",
+      "fix": "Add aria-describedby on the input pointing to the error message's id, or use a wrapper label that contains both the input and error message.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "line 67, <input> element (promo field)",
+      "severity": 2,
+      "violation": "The error message for the promo field is present but not programmatically linked to the input via aria-describedby, so a screen-reader user cannot definitively associate the error with the field."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-002.html",
+    "artifact_sha256": "b49ce74681df60732a6ef3b5309ce82264ad1b6ad48c6fa8b85989f2c712f113",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-07-31T20:25:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

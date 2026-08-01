@@ -1,0 +1,141 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/clarity/clarity-001.md",
+    "artifact_sha256": "32ee3fed58b3e9b931565041a2e195dade8e2d19c9e9172fe28b38bdb5f6ef2c",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T21:00:23Z",
+    "rubrics": ["PLAIN", "WILLIAMS"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Eligibility, paragraph 1",
+      "evidence": "If the position counts as full-time, the stipend can apply. If the employee has completed 90 days of continuous service, the stipend can apply. If the request arrives before the benefit year ends, the stipend can apply. Only once every condition above is met does the home-office equipment stipend become available to the employee.",
+      "violation": "Three consecutive conditional sentences state individual eligibility conditions before the fourth sentence states the governing rule that all three must be met together, so the reader has to hold three unresolved conditions in mind before the paragraph's actual point becomes clear.",
+      "fix": "Open the paragraph with the governing rule, that eligibility requires meeting all three conditions below, then list the three conditions after it.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Eligibility, paragraph 2",
+      "evidence": "Eligibility, paragraph 2: reimbursement is not available without a completed receipt. Document title: Home-Office Equipment Stipend Policy.",
+      "violation": "The document names the benefit a stipend in its title and in most sections, then calls the same benefit a reimbursement in Eligibility and in the Reimbursement Amounts heading, and calls it a stipend item three times in Terminology Notes, with no statement anywhere that these terms name the same thing, so the reader cannot tell whether this is a pre-paid stipend or a pay back after the fact reimbursement.",
+      "fix": "Pick one term, stipend or reimbursement, and use it exclusively for this benefit throughout the document, including the Reimbursement Amounts heading and every instance of stipend item.",
+      "confidence": "medium",
+      "instances": [
+        { "location": "document title", "evidence": "Home-Office Equipment Stipend Policy" },
+        { "location": "Reimbursement Amounts, heading", "evidence": "heading: Reimbursement Amounts" },
+        { "location": "Terminology Notes, paragraph 1", "evidence": "the stipend item, used three times in one paragraph" }
+      ]
+    },
+    {
+      "id": "F-003",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "How to Apply, paragraph 3",
+      "evidence": "36-word sentence, 4 subordinate-clause markers: Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "violation": "The sentence runs to 36 words with 4 subordinate-clause markers, longer than the reader can hold in mind on a single pass.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "WILLIAMS-STRESS",
+      "lane": "judged",
+      "severity": 3,
+      "location": "How to Apply, paragraph 3",
+      "evidence": "Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "violation": "The newest, most important element, that the backup reviewer was never told sign-off was needed, lands in the middle of the sentence, and the sentence ends instead on the portal releasing the confirmation email, a detail the reader already expects from the rest of the section, so the reader's attention lands on the least important part of the sentence.",
+      "fix": "End the sentence on the backup reviewer not being told sign-off was required, and move the confirmation-email detail earlier or into its own sentence.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-005",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Request Steps, heading",
+      "evidence": "Request Steps, heading 9 of 14, appearing after Approval Timeline, Required Documentation, Reimbursement Amounts, Restrictions and Exceptions, and Terminology Notes: Completing the request begins with confirming eligibility, and uploading the receipt.",
+      "violation": "The one place the document states the concrete steps to complete a request is placed after five sections the reader does not need in order to act on it, and it duplicates ground the earlier How to Apply section already covers, so the section order tracks how the document was assembled rather than the sequence a reader completing a request actually follows.",
+      "fix": "Move the Request Steps content into or immediately after How to Apply, and remove the duplicate section.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "WILLIAMS-COHESION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Program Overview, paragraph 2",
+      "evidence": "Similarly, the IT asset group tracks the stipend budget each quarter. Staff can request a printed copy from the benefits team at any time.",
+      "violation": "The second sentence opens with staff requesting a printed copy with no stated antecedent connecting it back to the IT asset group's budget tracking in the sentence before it, so the reader has to guess whether the copy is of the budget tracking, the reimbursement log named in the paragraph above, or something else.",
+      "fix": "Name what the printed copy is a copy of in the sentence itself, for example a printed copy of the stipend budget report.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-007",
+      "criterion": "PLAIN-DOUBLE-NEGATIVE",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Eligibility, paragraph 2",
+      "evidence": "However, reimbursement is not available without a completed receipt.",
+      "violation": "2 negation markers from the fixed negation list co-occur in one clause, so the reader has to work out the statement's logical sign before understanding it.",
+      "fix": "Restate the sentence with at most one negation, or recast it as a positive statement.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-008",
+      "criterion": "PLAIN-JARGON",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Required Documentation, paragraph 1",
+      "evidence": "The manager approves items pursuant to internal discretion, notwithstanding the standard review checklist.",
+      "violation": "The sentence uses a legal or foreign-language jargon term from the fixed list with no plain-language definition in the same or the following sentence.",
+      "fix": "Replace the jargon term with a plain equivalent, or define it at first use.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-009",
+      "criterion": "PLAIN-AUDIENCE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Terminology Notes, paragraph 1",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review.",
+      "violation": "The paragraph addresses the employee reader directly in its first sentence, then shifts to narrating what Finance and Payroll do internally in the next two sentences with no separation, so the reader has to check each sentence's subject to work out which single sentence is theirs to act on.",
+      "fix": "Move the Finance and Payroll process description into its own paragraph or section, separate from the sentence telling the employee what to do.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-010",
+      "criterion": "PLAIN-HEADINGS",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "the Overview heading",
+      "evidence": "heading: Overview",
+      "violation": "The heading text matches the fixed list of non-specific heading labels, so a reader scanning headings cannot tell whether the section applies to them.",
+      "fix": "Replace the heading with text specific enough to be found by scanning.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 9,
+      "3": 5,
+      "4": 0
+    },
+    "suppressed_count": 4,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

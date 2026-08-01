@@ -1,0 +1,29 @@
+Location: endpoint_url section
+Evidence: "The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert."
+Problem: No validation constraints are documented for the URL format, such as maximum length, required path structure, or port requirements.
+Fix: Add validation details: "The endpoint_url field accepts an HTTPS URL (maximum 2048 characters, path required) that receives the webhook payload for each triggered alert."
+
+Location: signing_secret section
+Evidence: "The signing_secret field accepts a string used to verify the payload signature on receipt."
+Problem: The section does not explain which signature algorithm is used (HMAC-SHA256, etc.) or how the secret is applied to verify the payload.
+Fix: Specify the algorithm and verification method: "The signing_secret field accepts a string used to verify the payload signature using HMAC-SHA256 on receipt."
+
+Location: retry_policy section
+Evidence: "The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential."
+Problem: The three retry options are listed but not explained; a reader does not know what behavior each option provides.
+Fix: Define each option: "The retry_policy field accepts one of none (no retries), linear (retry with fixed delay between attempts), or exponential (retry with exponentially increasing delay), and the default value is exponential."
+
+Location: Document header
+Evidence: "---\nmode: reference\n---"
+Problem: The frontmatter field 'mode' is not documented anywhere, making it unclear if this is a required field or what its purpose is.
+Fix: Remove unexplained frontmatter or document its purpose in an introduction section.
+
+Location: Field name formatting
+Evidence: Section headers use "endpoint_url", "signing_secret", "retry_policy" without code formatting.
+Problem: Field names are not distinguished from regular prose, which makes them harder to identify as exact field identifiers.
+Fix: Format field names as code using backticks: `endpoint_url`, `signing_secret`, `retry_policy`.
+
+Location: Document structure
+Evidence: No sections explain whether the three fields are all required or if any are optional.
+Problem: Readers cannot determine the obligation level for each field when constructing a webhook configuration.
+Fix: Add a required/optional column or indicator for each field: "endpoint_url (required)", "signing_secret (required)", "retry_policy (optional, defaults to exponential)".

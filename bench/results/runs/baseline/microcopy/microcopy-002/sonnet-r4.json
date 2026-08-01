@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "fix": "Remove the error code from the reader facing message, or replace it with a plain language reason the field is invalid, and log the numeric code separately for support use.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Checkout form, shipping address section, second message (\"Error code: 502\")",
+      "severity": 3,
+      "violation": "502 is an HTTP gateway error code, not a field level validation code, and it is shown to the reader with no explanation of what it means or what to do about it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Placement: directly below the shipping address block / Signal: bold text set above the address block at a larger size than its labels, icon",
+      "fix": "Make Placement and Signal agree on one position, either below the block with Signal changed to match, or above it with Placement changed to match.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Checkout form, shipping address section, second message (\"Error code: 502\")",
+      "severity": 3,
+      "violation": "The placement says the message sits below the address block, but the signal description says the bold text sits above it, so the two fields describing the same message disagree on where it actually appears."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Choose a password of at least 8 characters, long enough that a guessing attack cannot work through every combination.",
+      "fix": "Either raise the stated minimum to a length that actually resists guessing attacks, or drop the \"long enough\" justification and state the real reason for the 8 character floor.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Password reset, new password section, first message (character minimum)",
+      "severity": 3,
+      "violation": "An 8 character minimum is not long enough to make exhaustive guessing infeasible, so the stated justification is inaccurate and could give the reader false confidence in a weak password."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page",
+      "fix": "Move the message inline, directly below the password field, consistent with the placement used everywhere else in the document.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Password reset, new password section, first message (character minimum)",
+      "severity": 3,
+      "violation": "Every other message in this document is placed directly next to the field it concerns, but this one sits at the top of the form, forcing the reader to scroll away from the visible field to find out why it was rejected."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Container: toast / Placement: in a dialog centered on the password reset step, over the new password field it blocks",
+      "fix": "Pick one pattern: label the container \"dialog\" to match the described placement, or change the placement to a non blocking toast position.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Password reset, new password section, second message (reset link expired)",
+      "severity": 3,
+      "violation": "A toast is a small, non blocking notification, but the placement describes a centered modal dialog that blocks the field, so the container type and the described placement describe two different UI patterns for the same message."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Fires: on-focus",
+      "fix": "Change Fires to on page load, or an equivalent earlier trigger, so the reader learns the link is expired before investing effort in the field.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Password reset, new password section, second message (reset link expired)",
+      "severity": 3,
+      "violation": "Firing only when the reader focuses the new password field lets them start filling out a form that can never be submitted, instead of learning the link is dead as soon as the page loads."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The last changes were not saved and cannot be recovered.",
+      "fix": "Name the specific change that was lost, for example \"Your username change was not saved and cannot be recovered.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Account settings, username section, only message",
+      "severity": 3,
+      "violation": "\"The last changes\" does not say what was changed, so a reader cannot tell whether it was the username edit or something else that was lost."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:44:21Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

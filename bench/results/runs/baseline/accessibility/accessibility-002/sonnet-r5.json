@@ -1,0 +1,160 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "content=\"width=device-width, initial-scale=1, user-scalable=no\"",
+      "fix": "Remove user-scalable=no (and any maximum-scale restriction) from the viewport meta tag so users can zoom.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "The viewport meta tag in the document head, id=\"head-viewport\"",
+      "severity": 3,
+      "violation": "user-scalable=no disables pinch to zoom, which prevents users with low vision from zooming the page even though the viewport is otherwise responsive."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "style=\"color:#999999\" on the text \"Passengers should review the updated schedule at any station kiosk...\"",
+      "fix": "Remove the inline color override or replace it with a darker color that reaches at least 4.5 to 1 contrast against the background, such as #595959.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "First paragraph of the \"Accessibility improvements\" section, id=\"s1-p1\"",
+      "severity": 3,
+      "violation": "Gray text at #999999 on the page's default white background produces a contrast ratio of roughly 2.85 to 1, well below the WCAG AA minimum of 4.5 to 1 for normal size text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The sentence \"Updates post to the schedule page within one business day.\" appears verbatim in all three, attached to unrelated topics: kiosk schedules, mobile app fare adjustments, and online portal service issue reports.",
+      "fix": "Write a distinct, topic specific closing sentence for each paragraph, or remove the repeated sentence where it adds no information.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Paragraphs id=\"s1-p1\", id=\"s1-p2\", and the status card text id=\"s3-statuscard\"",
+      "severity": 3,
+      "violation": "The same boilerplate sentence is copy pasted across unrelated paragraphs, so the content reads as templated filler rather than information specific to each section."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The table opens directly with <tr><th scope=\"col\">Zone</th><th scope=\"col\">Status</th></tr> and has no caption anywhere in its markup.",
+      "fix": "Add a caption element inside the table, for example \"Zone status\", describing its contents.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Table id=\"s2-table1\" in the \"Schedule changes\" section",
+      "severity": 3,
+      "violation": "The table has no caption element, so a screen reader user navigating to the table gets no description of what it contains before reaching its data cells."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "style=\"width:960px\"",
+      "fix": "Replace the fixed pixel width with a relative or max width value, such as max-width:960px; width:100%.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "The promo banner div id=\"s3-banner\", class \"promo-banner\", in the \"Weekend service\" section",
+      "severity": 3,
+      "violation": "A hard coded 960px width does not shrink on narrower viewports, which will cause horizontal overflow or clipping on mobile screens given the page's device-width viewport setting."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "style=\"height:60px;overflow:hidden\"",
+      "fix": "Remove the fixed height and let the box size to its content, or use min-height:60px without overflow:hidden.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "The status card div id=\"s3-statuscard\", class \"status-card\"",
+      "severity": 3,
+      "violation": "A fixed 60px height combined with overflow:hidden will clip the paragraph text inside it whenever the text wraps to more lines than fit, including at larger browser font sizes or zoom levels."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">",
+      "fix": "Replace the div with a native button element, for example button type=\"button\" aria-label=\"Delete item\", which gets correct keyboard and role semantics for free.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "The delete control div id=\"s3-customcontrol\", class \"icon-delete\"",
+      "severity": 3,
+      "violation": "This interactive delete control is built from a div with role=\"button\" instead of a native button element, and the document contains no script anywhere that would give it keyboard activation on Enter or Space, or a click handler."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"step\" id=\"s3-step1\">Choose a plan</div> and two sibling divs with the same bare structure and no other markup.",
+      "fix": "Mark the steps up as an ordered list and add aria-current=\"step\" to whichever step is active.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "The wizard steps container id=\"s3-wizard\" and its three child step divs (s3-step1, s3-step2, s3-step3)",
+      "severity": 3,
+      "violation": "The three steps are plain, unnumbered divs with no list semantics and no indication of which step is current, so assistive technology users get no sense of progress or structure."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a href=\"/fares/history\" id=\"s3-link1\">read the accessibility improvements list</a>, inside the sentence \"For the full list of upcoming adjustments, read the accessibility improvements list.\"",
+      "fix": "Change the link text to match the destination, for example \"read the fare adjustment history.\"",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "The link in paragraph id=\"s3-linkpara\", link id=\"s3-link1\"",
+      "severity": 3,
+      "violation": "The link text promises an \"accessibility improvements list\" but the href points to /fares/history and the surrounding sentence is about upcoming adjustments, so the link text does not describe its actual destination."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<label for=\"topic-alt\" id=\"s3-form-topic-label\">Route</label> immediately followed by <select id=\"topic\">",
+      "fix": "Change the label's for attribute to \"topic\" (or change the select's id to \"topic-alt\") so they match.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Form id=\"s3-form\", label id=\"s3-form-topic-label\" paired with the select id=\"topic\"",
+      "severity": 3,
+      "violation": "The label's for attribute points to \"topic-alt\" but the select element's id is \"topic\", so the two do not match and the \"Route\" label is not programmatically associated with the dropdown; clicking the label will not focus it and screen readers will not announce \"Route\" for the field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\">Phone number (required)</label> next to <input id=\"phone\" type=\"tel\">",
+      "fix": "Add required (or aria-required=\"true\") to the phone input so its programmatic state matches its visible label text.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Form id=\"s3-form\", label id=\"s3-form-phone-label\" paired with input id=\"phone\"",
+      "severity": 3,
+      "violation": "The label text tells sighted users the phone field is required, but the input itself has no required attribute or aria-required=\"true\", so screen readers and native form validation do not treat it as required."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> followed by <span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span>",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the promo input.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "Form id=\"s3-form\", input id=\"promo\" and its error message id=\"s3-form-promo-error\"",
+      "severity": 3,
+      "violation": "The promo input is flagged invalid with aria-invalid=\"true\", but nothing in its markup points to the error message, so screen reader users are told the field is invalid without ever hearing why."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-002.html",
+    "artifact_sha256": "b49ce74681df60732a6ef3b5309ce82264ad1b6ad48c6fa8b85989f2c712f113",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T20:26:39Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 12,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

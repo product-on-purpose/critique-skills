@@ -1,0 +1,50 @@
+{
+  "run": {
+    "rubrics": [
+      "DIATAXIS"
+    ],
+    "timestamp": "2026-07-31T21:23:06Z",
+    "skill": "critique-docs",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "artifact": "bench/results/staging/docs/docs-003.md"
+  },
+  "summary": {
+    "suppressed_count": 0,
+    "severity_3_threshold": 0,
+    "by_severity": {
+      "0": 0,
+      "2": 2,
+      "3": 0,
+      "1": 0,
+      "4": 0
+    },
+    "gate": "pass"
+  },
+  "findings": [
+    {
+      "location": "the Related pages listing",
+      "evidence": "9 flat items, no sub-headings or nested items breaking them into groups.",
+      "id": "F-001",
+      "violation": "This listing holds 9 items, more than 7 a reader can scan in one glance, with no subgrouping to break it up.",
+      "severity": 2,
+      "lane": "scripted",
+      "fix": "Split this listing into named subgroups, either nested sub-lists or sub-headings, each holding a smaller set of related items.",
+      "criterion": "DIATAXIS-NAV-LENGTH",
+      "confidence": "high"
+    },
+    {
+      "location": "the timeout field description, first paragraph",
+      "evidence": "Leaving this field at its default is the right choice for most teams, and raising it is worth doing only when a specific integration needs the extra room.",
+      "id": "F-002",
+      "violation": "This reference page includes a recommendation about when to use this field's default value versus raising it, rather than maintaining neutral description of the field's structure and behavior.",
+      "severity": 2,
+      "lane": "judged",
+      "fix": "Rewrite as neutral description: for example, 'The default value is appropriate for most use cases; custom values are available when specific integration scenarios require different timeout handling.'",
+      "criterion": "DIATAXIS-REFERENCE-NEUTRAL",
+      "confidence": "high"
+    }
+  ]
+}

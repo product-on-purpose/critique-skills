@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message text and \"Suggested fix: none\"",
+      "fix": "Either remove \"Suggested fix: none\" and provide an action (retry button, clear filters), or revise the message to include specific recovery steps.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Search results, no matches - first message (\"This request timed out before it could finish.\")",
+      "severity": 3,
+      "violation": "The timeout message is too vague and offers no recovery guidance, yet the document marks \"Suggested fix: none\", making it unclear what users should do next."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Signal described as \"bold heading text where the first result would sit, text-label\"",
+      "fix": "Upgrade the signal to use error or warning styling (color, icon, border) to make the timeout state visually distinct from normal content.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Search results, no matches - first message, signal treatment",
+      "severity": 3,
+      "violation": "A timeout error that prevents users from seeing results is being styled as a plain text label rather than an alert or error-level signal that demands attention."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Signal says \"no visual cue that this one demands action\" but Suggested fix says \"offers a clear filters button\"",
+      "fix": "Clarify whether the button is already visually prominent in the current design (and update the signal description) or whether both the visual treatment and the button need to be added.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Search results, no matches - second message, contradiction in description",
+      "severity": 3,
+      "violation": "The documented signal contradicts the suggested fix. If a clear filters button is meant to be offered, users need a visual cue it is interactive and actionable."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Select resume to sync now\"",
+      "fix": "Reword to \"Tap the Resume button to sync now\" or \"Resume sync\" depending on the UI context and interaction model.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Notification center, sync status - message text",
+      "severity": 3,
+      "violation": "The phrasing is ambiguous and grammatically awkward. It is unclear whether users are selecting a button labeled \"resume\", or selecting an action called \"resume to sync now\"."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T12:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

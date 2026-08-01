@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-blur\"",
+      "fix": "Change the fire condition to the actual submit or network event that produced the failure, or rewrite the message so it makes sense as an on-blur event.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Signup form, email field, first message (\"The connection dropped before this finished.\")",
+      "severity": 3,
+      "violation": "A message describing a dropped network connection is triggered by the user leaving the field, not by a submission attempt or network event, so the stated cause of the error does not match the moment it appears."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "both entries list \"Placement: directly below the email input field\", \"Container: inline\", and \"Fires: on-blur\"",
+      "fix": "State the precedence between the two email-field messages, or combine them into a single message with a conditional branch.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Signup form, email field, both messages",
+      "severity": 3,
+      "violation": "Two different messages are defined for the same field with the same placement, container, and trigger, and nothing in the document says which one wins if both conditions could be true at the same moment, such as a malformed address entered while the connection drops."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: none\"",
+      "fix": "Add a suggested fix, such as a retry action or a direct link to support, so the user has something to do immediately rather than only a contingent instruction.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Checkout form, payment method, first message (\"Something went wrong. Contact support if this continues.\")",
+      "severity": 3,
+      "violation": "The message gives the user no information about what failed and no immediate action beyond a conditional instruction to contact support, and the entry records no suggested fix at all, leaving an on-submit failure with no next step."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: mid-keystroke\"",
+      "fix": "Change the fire condition to on-blur or to trigger only once a complete date has been entered.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Checkout form, payment method, expiry date message",
+      "severity": 3,
+      "violation": "Validating the card expiry mid-keystroke means the message can appear before the user has finished entering the date, for example while typing \"12\" before adding the year, producing a false expired-card warning on a date that is not yet complete."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: none\"",
+      "fix": "State what makes the value invalid, for example the expected phone number format, or add a suggested fix with an example.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Profile settings, phone number, first message (\"You keep entering the wrong value. Re-enter it to continue.\")",
+      "severity": 3,
+      "violation": "The message does not say what is wrong with the value, whether it is the format, length, or disallowed characters, unlike the email field message elsewhere in the document that spells out the expected format with an example."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: cleared\"",
+      "fix": "Preserve the entered phone number on resubmission, consistent with the rest of the document, unless there is a stated reason this field must be cleared.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Profile settings, phone number, second message (\"This phone number is already on another account. Remove it there first, or contact support to move it across.\")",
+      "severity": 3,
+      "violation": "Every other message in the document preserves the user's input on resubmission, but this one clears it even though \"Predictable mistake\" is marked \"no,\" discarding a value the user did nothing wrong to enter."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Signal: one step bolder and larger than the field label, none\"",
+      "fix": "Add an icon to match the rest of the document, or state why this message does not need one.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Signup form, email field, second message (\"Enter an email address that includes an at sign and a domain, for example name@example.com, so the confirmation link has somewhere to go.\")",
+      "severity": 3,
+      "violation": "This is the only message in the document whose signal pairs the text emphasis with no icon, while every other message in the document pairs the same text emphasis with an icon, and nothing explains the exception."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You keep entering the wrong value.\"",
+      "fix": "Either restrict this message to a genuinely repeated failure and say so, or reword it to describe the single current error without implying a history of mistakes.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Profile settings, phone number, first message (\"You keep entering the wrong value. Re-enter it to continue.\")",
+      "severity": 3,
+      "violation": "The wording tells the user they have made a repeated mistake, but nothing in the entry says this message only appears after multiple failed attempts, so a user could see an accusation of repetition on their first try."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-001.md",
+    "artifact_sha256": "0580399008ca4517da0a1b1f620180b68a4cfb24e596be279a5f782cde325fc7",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:36:47Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

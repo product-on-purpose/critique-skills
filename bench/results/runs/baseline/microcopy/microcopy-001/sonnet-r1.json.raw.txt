@@ -1,0 +1,44 @@
+Location: Signup form, email field section, first message block, the "Predictable mistake" field for the message "The connection dropped before this finished."
+Evidence: "Predictable mistake: yes"
+Problem: A dropped connection is a system or network failure, not a user mistake, yet it is marked as a predictable mistake. The structurally similar system failure in the checkout section, "Something went wrong. Contact support if this continues.", is correctly marked "Predictable mistake: no", so the two entries classify the same kind of failure inconsistently.
+Fix: Change "Predictable mistake" to "no" for this message to match the analogous entry in the checkout section, or document the criteria that make one system failure predictable and the other not.
+
+Location: Signup form, email field section, first message block, the "Suggested fix" field for the message "The connection dropped before this finished."
+Evidence: "Suggested fix: selectable, offers the one available next step as a direct action"
+Problem: The Suggested fix field describes a selectable action offered directly in the message, but the Message text itself contains no action of any kind, so the two fields describe a message that does not match what is written.
+Fix: Rewrite the Message text to include the action described in Suggested fix, for example "The connection dropped before this finished. Try again."
+
+Location: Signup form, email field section, first message
+Evidence: "The connection dropped before this finished."
+Problem: The pronoun "this" has no clear antecedent in the sentence, so a reader cannot tell what failed to finish, whether it was the page load, the form submission, or something else.
+Fix: Name the action explicitly, for example "The connection dropped before your signup finished."
+
+Location: Checkout form, payment method section, first message, the "Suggested fix" field for the message "Something went wrong. Contact support if this continues."
+Evidence: "Suggested fix: none"
+Problem: The message does not say what went wrong or offer any action beyond waiting to see if the problem recurs, and no suggested fix is provided, despite this being a payment flow where users need a concrete next step.
+Fix: Add a specific action to the message, for example "Something went wrong charging this card. Try again or choose a different payment method."
+
+Location: Checkout form, payment method section, first message, the "Container" and "Placement" fields for the message "Something went wrong. Contact support if this continues."
+Evidence: "Placement: in a banner directly above the payment method selector" next to "Container: inline"
+Problem: The message is placed in a banner above the selector rather than attached to a single field, but the Container field labels it "inline" the same way every field-attached message in the document is labeled, contradicting the document's own use of that term.
+Fix: Change Container to "banner" for this message, or state explicitly what "inline" is meant to cover so it does not conflict with a banner placement.
+
+Location: Checkout form, payment method section, second message, the "Fires" field for the message "The expiry date on this card has passed."
+Evidence: "Fires: mid-keystroke"
+Problem: Validating the expiry date while the user is still typing will produce false positives, since a partially typed date can look expired before the full date has been entered.
+Fix: Change Fires to on-blur or on-submit so the message only appears once the full date has been entered.
+
+Location: Profile settings, phone number section, first message
+Evidence: "You keep entering the wrong value. Re-enter it to continue."
+Problem: The message does not say what is wrong with the value, so the user has no way to know what to change before re-entering it.
+Fix: State the specific problem, for example "That doesn't look like a valid phone number. Enter it in the format (555) 555-5555."
+
+Location: Profile settings, phone number section, second message, the "Input on resubmission" field for the message "This phone number is already on another account."
+Evidence: "Input on resubmission: cleared"
+Problem: This is the only message in the document where the field is cleared on resubmission; every other message preserves the input. The number entered was valid, just already in use elsewhere, so clearing it forces the user to retype a value that was correct, and no reason is given for the inconsistency.
+Fix: Change Input on resubmission to preserved to match the rest of the document, unless there is a reason specific to this case, in which case document that reason.
+
+Location: Signal field across the document, comparing the signup section entries to the checkout and profile section entries
+Evidence: "one step bolder and larger than the field label" versus "bold text set larger than the surrounding form labels" and "bold text set larger than the field label"
+Problem: The same visual treatment, text weight and size relative to labels, is described with different wording in different sections, making it unclear whether the specified treatment is identical across screens or deliberately different.
+Fix: Standardize the wording used for the Signal field throughout the document, or state explicitly where the treatment differs and why.

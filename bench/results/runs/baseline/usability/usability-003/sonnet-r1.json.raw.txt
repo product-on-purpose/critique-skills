@@ -1,0 +1,44 @@
+Location: #workspace-overview, the paragraph under "Your projects"
+Evidence: "This workspace holds 4 projects, synced this morning." is followed by a list with only three items: Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot
+Problem: The stated project count does not match the number of projects actually shown, so the user cannot tell whether a project is missing from the list or the count is simply wrong.
+Fix: Change the summary text to match the list ("3 projects"), or add the fourth project to the list so the count and the list agree.
+
+Location: #workspace-overview, the "View last import result" link
+Evidence: <a id="workspace-overview-import-link" href="#import-status">View last import result</a> carries no visual indication of the outcome it links to
+Problem: The linked import status screen reports "Import failed," but nothing on the overview screen signals a failure before the user clicks through, so a failed import can go unnoticed.
+Fix: Add a status indicator (for example a "Failed" badge or icon) next to the link whenever the last import did not succeed.
+
+Location: #project-settings, the button following the project name form
+Evidence: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>
+Problem: The button has no visible text content, only an aria-label, so a sighted user sees a blank, unlabeled control with no indication of what it does.
+Fix: Give the button visible text (for example "Duplicate") or an icon plus a visible label, rather than relying on aria-label alone.
+
+Location: #project-settings, the project name form's Save button
+Evidence: <button id="project-settings-save-btn" type="submit">Save</button> has no adjacent success message, status text, or confirmation state
+Problem: After clicking Save, nothing in the document shows the user that the save succeeded, leaving the outcome of the action uncertain.
+Fix: Add a visible confirmation, such as an inline "Saved" message, that appears once the save completes.
+
+Location: #invite-member, the email address field
+Evidence: <input id="invite-member-email-input" type="email"> has no required attribute, placeholder, or helper text
+Problem: Nothing tells the user the field is required or what format is expected before they submit, so an empty or malformed submission is easy to make.
+Fix: Add a required attribute and a placeholder or helper text showing the expected format, for example "name@company.com".
+
+Location: #invite-sent, confirmation paragraph
+Evidence: "An invite was sent to the address entered above. It expires in 5 days if not accepted."
+Problem: This screen refers to "the address entered above," but the email address from the previous screen is not shown anywhere on this confirmation screen, so the user cannot verify which address actually received the invite.
+Fix: Display the actual email address that was invited directly in the confirmation text instead of referring back to a field the user can no longer see.
+
+Location: #archive-confirm, the Cancel and Archive links
+Evidence: <a id="archive-confirm-cancel-link" href="#project-settings">Cancel</a> and <a id="archive-confirm-archive-link" href="#project-archived">Archive</a> are both plain, identically styled links
+Problem: The destructive action, which the copy above states affects everyone on the team, has no visual distinction from the safe Cancel action, making it easy to select by mistake.
+Fix: Style the Archive control distinctly as a warning or destructive action, such as a colored button, and keep Cancel as the visually default choice.
+
+Location: #import-status, status message
+Evidence: "Import failed. Error code IMP-500. Contact support if this continues."
+Problem: The message instructs the user to contact support but provides no link, email address, or button to actually do so, leaving the user to find that contact information elsewhere.
+Fix: Add a direct contact method, such as a "Contact support" link or mailto address, next to the error message.
+
+Location: #notification-settings, digest frequency field
+Evidence: <select id="notification-settings-digest-input"> contains <option>Daily</option> and <option>Weekly</option> with neither marked selected
+Problem: Neither option is pre-selected to reflect the user's current setting, so the user has no way to tell what their notification frequency currently is before making a change.
+Fix: Mark the option that matches the user's actual current setting as selected by default.

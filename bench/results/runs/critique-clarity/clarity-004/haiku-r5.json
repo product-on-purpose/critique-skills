@@ -1,0 +1,59 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:10:22Z",
+    "rubrics": ["PLAIN", "WILLIAMS"]
+  },
+  "findings": [
+    {
+      "id": "F-1",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Line 11 and line 19",
+      "evidence": "Line 11: 'The stipend covers one claim per employee per benefit year'. Line 19: 'Employees start a stipend request in the benefits portal'. Throughout the rest of the document, the submission is consistently called a 'request' (lines 25, 29, 50, 51, 52).",
+      "violation": "Two different terms (claim and request) refer to the same concept - a single submission or benefit allocation per employee per year - without a signal that they mean the same thing, forcing the reader to verify they are equivalent",
+      "fix": "Replace 'claim' with 'request' in line 11 for consistency throughout the document",
+      "confidence": "high"
+    },
+    {
+      "id": "F-2",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Section 'Request Steps' (lines 55-57) relative to section 'How to Apply' (lines 18-23)",
+      "evidence": "How to Apply (lines 18-23) provides detailed explanation: starting a request in portal, auto-saving draft, reviewing confirmation. Request Steps (lines 55-57) provides a brief summary: 'Completing the request begins with confirming eligibility, and uploading the receipt.' Request Steps appears after multiple intervening sections.",
+      "violation": "A high-level summary of the request process appears well after the detailed explanation, reversing the information order (detail then summary instead of summary then detail), creating potential confusion about process flow",
+      "fix": "Move Request Steps section to immediately after Eligibility and before How to Apply, or integrate it as an introductory summary within How to Apply",
+      "confidence": "high"
+    },
+    {
+      "id": "F-3",
+      "criterion": "WILLIAMS-COHESION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Terminology Notes section, lines 50-53",
+      "evidence": "Sentence sequence: 'You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal.' Subjects jump: You (employee), Finance (organization), Payroll (organization), You (employee), You (employee).",
+      "violation": "Sentences jump between different actors (employee -> Finance -> Payroll -> back to employee) describing a workflow, with the transition from back-office actions to employee action not clearly signaled, disrupting the topic thread",
+      "fix": "Reorganize to either: (1) describe all back-office steps in sequence, then all employee steps in sequence, or (2) clarify temporal relationship with transitional phrases like 'Meanwhile' or 'Once the portal closes'",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 0,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "pass",
+    "severity_3_threshold": 0
+  }
+}

@@ -1,0 +1,39 @@
+Location: workspace-overview section, "Your projects" summary and list (paragraph plus the three items under it)
+Evidence: "This workspace holds 4 projects, synced last week." is followed by a list containing only three items: Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp.
+Problem: The stated project count does not match the number of projects actually listed, and there is no link anywhere in the document that lets the user reach the fourth project.
+Fix: Either correct the count to match the list, or add a "View all projects" link so the user can reach the project that is missing from the list.
+
+Location: Project settings section, name field and Save button
+Evidence: The form wrapping the name input has no action attribute, and the button reads only "Save" with no confirmation element anywhere near it: <button id="project-settings-save-btn" type="submit">Save</button>
+Problem: Saving the project name has no visible outcome. Every other completed action in the document (inviting a member, archiving a project) leads to a dedicated confirmation screen, but this Save leads nowhere and gives the user no evidence the name change persisted.
+Fix: Route the Save action to a confirmation state, such as an inline message or a dedicated screen, the way the invite and archive flows already do.
+
+Location: Project settings section, duplicate button
+Evidence: <button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>
+Problem: The button has no visible text content and no icon markup, only an aria-label. A sighted user has no way to tell what the button does, or even to easily notice it is a functioning control.
+Fix: Add visible label text such as "Duplicate", or an icon with an equivalent visible affordance, instead of relying on aria-label alone.
+
+Location: Project settings section, list of links below the duplicate button
+Evidence: "Archive project" (href="#archive-confirm") appears in the same unstyled sequence as "Go to notification settings", "Invite a team member", and "Back to your projects".
+Problem: A destructive, team-wide action is given identical visual weight and placement as routine navigation links, making it easy to trigger by mistake.
+Fix: Visually separate or de-emphasize the archive link, for example by grouping it apart from navigation links or styling it as a warning action, so it cannot be mistaken for ordinary navigation.
+
+Location: Invite a team member section
+Evidence: The section contains both <button id="invite-member-save-btn" type="submit">Save</button> and <a id="invite-member-continue-link" href="#invite-sent">Continue</a>.
+Problem: It is unclear which control actually sends the invite. "Save" is a form submit with no action attribute and no visible effect, while "Continue" is the plain link that performs the actual transition to the confirmation screen, so the two controls have overlapping and ambiguous purposes.
+Fix: Collapse this into a single action, for example one "Send invite" button that submits the form and navigates to the confirmation screen, and remove the redundant control.
+
+Location: Archive this project? section, confirmation copy
+Evidence: "You can restore it at any time from the archived projects list."
+Problem: The document never provides an "archived projects list" screen or a link to one, so the recovery path this sentence promises is unreachable.
+Fix: Add an archived-projects list screen and a link to it, for example from the workspace overview, or remove the claim if restoration is not actually supported.
+
+Location: Project archived section
+Evidence: "\"Q3 Roadmap\" has been moved to archived projects. It no longer appears in the active projects list for anyone on the team." is followed only by a "Back to your projects" link.
+Problem: This confirmation repeats that the project is now in "archived projects" but, like the previous screen, provides no link to view that list, leaving the promised restore path dead-ended twice in a row.
+Fix: Add a link from this confirmation screen directly to the archived-projects list so the user can immediately verify or restore what was just archived.
+
+Location: Notifications section, Save button
+Evidence: The digest-frequency form has no action attribute, and <button id="notification-settings-save-btn" type="submit">Save</button> is followed only by a "Back to project settings" link.
+Problem: As with the project-settings form, saving notification preferences produces no visible confirmation or feedback, so the user cannot tell whether the change took effect.
+Fix: Apply the same fix as the project-settings Save button: show a confirmation state after Save so users get feedback that their preference was saved.

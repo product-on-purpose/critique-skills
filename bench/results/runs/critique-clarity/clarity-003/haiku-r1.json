@@ -1,0 +1,137 @@
+{
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": ["PLAIN", "WILLIAMS"],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-07-31T21:01:30Z"
+  },
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-PARAGRAPH",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout.",
+      "fix": "Rewrite the opening sentence to state the topic the rest of the paragraph covers.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "The paragraph's opening sentence shares almost no vocabulary with the rest of the paragraph, so it does not preview the paragraph's actual topic."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Approval Timeline (lines 25-29) addresses managers. How to Apply (lines 17-23) mixes employee steps with manager and finance processing steps. Terminology Notes (lines 49-53) addresses employee, finance, payroll, and manager roles without separation.",
+      "fix": "Separate employee-facing instructions into one section and backend/administrative sections into another, or clearly label each section's intended audience.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Multiple sections throughout",
+      "severity": 3,
+      "violation": "The document addresses employees, managers, finance staff, and payroll staff in interleaved sections without clear separation, making it unclear which instructions apply to each reader.",
+      "confidence": "high"
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Request Steps (line 55-57) appears as a single sentence three sections after How to Apply, where it should be included. Terminology Notes (lines 49-53) is vague and interleaves roles. Special Cases (lines 59-61), Program Coordination (lines 63-65), and Review Responsibility (lines 67-69) are backend administrative details mixed with employee-facing content.",
+      "fix": "Reorganize sections to follow employee task sequence: Overview, Eligibility, How to Apply (including all steps), Required Documentation, Approval Timeline, Reimbursement Amounts, Restrictions, then separate backend details into a distinct administrative section.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Document structure",
+      "severity": 3,
+      "violation": "Sections do not follow the sequence of questions or steps the reader actually works through; employee instructions are interleaved with backend administrative details."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "Terminology Notes: 'You record...Finance reconciles...Payroll releases...Also, you submit...Countersign...You track...' shifts between reader, finance, and payroll without coherent connection. Program Coordination: 'The benefits team coordinates every stipend request from intake to payout. A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.'",
+      "fix": "Rewrite Terminology Notes to maintain consistent voice and subject throughout. Remove sentences 2-4 from Program Coordination as they are unrelated to the stated topic.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Terminology Notes (lines 49-53) and Program Coordination (lines 63-65)",
+      "severity": 3,
+      "violation": "Multiple sentences lack information the prior sentence provides; consecutive sentences shift topics or address different audiences with no signal connecting them."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "Terminology Notes: A reader who reads only the first sentence ('You record the stipend item on the request form') and last sentence ('You track its status there until the payment clears') cannot state what the section is about. Program Coordination: The section opens with 'The benefits team coordinates every stipend request' but then discusses an unrelated audit, then guidance, then a coffee budget.",
+      "fix": "Clarify Terminology Notes' purpose and theme; remove unrelated sentences from Program Coordination or create a separate administrative section.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Terminology Notes (lines 49-53) and Program Coordination (lines 63-65)",
+      "severity": 3,
+      "violation": "Sections lack coherent themes; a reader cannot name a consistent, limited set of themes each section is about."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SUBJECT-VERB-OBJECT",
+      "evidence": "Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.",
+      "fix": "Move the interrupting clause elsewhere, or split it into its own sentence.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 2",
+      "severity": 2,
+      "violation": "3 comma-set-off clause(s) totalling 14 words intervene between the sentence's apparent subject and its verb."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-TRANSITIONS",
+      "evidence": "An incomplete request pauses the timeline until the missing item arrives. The...",
+      "fix": "Open the paragraph with a transition word that states its relationship to the prior paragraph.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 2",
+      "severity": 2,
+      "violation": "The paragraph opens with none of the fixed transition words, so the reader is not told how it relates to the paragraph before it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "stipend request (line 19, 21) vs request (line 29, 69); equipment cost (line 23) vs covered purchase amount (line 51); confirmation summary (line 23) appears once without recurrence.",
+      "fix": "Standardize terminology throughout: always use 'stipend request' for the application, always use 'amount' or 'payment' for money, and 'equipment or item' consistently.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Multiple sections throughout document",
+      "severity": 2,
+      "violation": "The same concepts are referred to with different terms interchangeably, forcing readers to check whether synonyms mean the same thing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Every entry carries a date stamp (line 5); An incomplete request pauses the timeline (line 29); The stipend pays up to 500 dollars (line 39); unused stipend amounts do not roll over (line 41); the policy applies (line 47); Federal guidance on remote work continues to evolve (line 65).",
+      "fix": "Name real-world actors: 'The system adds a date stamp to every entry'; 'When a request is incomplete, processing pauses'; 'The finance office pays up to 500 dollars'; 'The company does not roll over unused amounts'; 'The policy states'; 'Requirements for remote work continue to evolve.'",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Lines 5, 29, 39, 41, 47, 65",
+      "severity": 2,
+      "violation": "Multiple sentences use abstract nouns (entry, request, stipend, policy, guidance) as grammatical subjects instead of the real-world actors performing the actions."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-PARALLELISM",
+      "evidence": "Completing the request begins with confirming eligibility, and the uploaded receipt.",
+      "fix": "Restate every item in the series with the same grammatical form.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "Request Steps, paragraph 1",
+      "severity": 2,
+      "violation": "The series' 2 items mix grammatical forms (gerund, other) at their head words instead of sharing one form."
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

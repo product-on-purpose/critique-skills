@@ -1,0 +1,83 @@
+{
+  "run": {
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/results/staging/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "model": "claude-haiku-4-5-20251001",
+    "timestamp": "2026-07-31T21:39:34Z",
+    "rubrics": [
+      "NNG"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-002",
+      "criterion": "NNG-EM-SPECIFIC",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Checkout form, shipping address, message 2",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "violation": "The message does not name the specific problem. It says \"correct the highlighted field\" without specifying which of the multiple address fields has an error or what the error is.",
+      "fix": "Identify and name the specific field and the exact validation failure (for example: \"Zip code is invalid\" or \"State field is required\"), so the reader knows which field to correct and what the problem is.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-EM-GRACE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Account settings, username",
+      "evidence": "The last changes were not saved and cannot be recovered. Contact support for assistance.",
+      "violation": "The message reports an unrecoverable data loss with no other way forward, yet offers no sincere acknowledgment of what this means for the reader or concrete next step. The tone is bare and transactional, offering only \"contact support\" without guidance on what support can do or how to reach them.",
+      "fix": "Acknowledge the impact on the reader (\"Your changes are lost\"), briefly explain why if possible, and provide a concrete next step. For example: \"Contact support at support@example.com. They may be able to recover your data.\" This gives the reader something concrete to plan around.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-001",
+      "criterion": "NNG-EM-PLAIN-LANGUAGE",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Checkout form, shipping address, message 2",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "violation": "The message text carries an internal error code, a code-style token, or an engineering-jargon term standing in for a plain-language explanation.",
+      "fix": "Replace the code or jargon term with a plain-language sentence a non-technical reader can act on.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-EM-SELECTABLE-FIX",
+      "lane": "judged",
+      "severity": 2,
+      "location": "File upload, receipts, message 1",
+      "evidence": "This receipt is over the 10 MB limit, which keeps uploads quick on slow connections. Reduce the file size and upload it again.",
+      "violation": "The message describes an unambiguous, single fix (reduce file size and re-upload), but offers no selectable action to implement it. The reader must manually reduce the file size outside the product before re-uploading.",
+      "fix": "Provide a compress and retry action button (example: \"Compress and upload\") that performs the fix the message describes, rather than requiring the reader to leave the product and return.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-EM-PROXIMITY",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Password reset, new password, message 1",
+      "evidence": "Message placed at the top of a long form. Field is visible but requires scrolling up to see the message.",
+      "violation": "The error message appears at the top of the form, requiring the reader to scroll up to see it, even though the password field itself remains visible lower on the page. The message and field are not within the same view.",
+      "fix": "Place the message directly below or beside the password field so the reader sees both the problem and the field that caused it without scrolling.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 2,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

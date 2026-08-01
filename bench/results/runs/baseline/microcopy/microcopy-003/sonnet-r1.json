@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Message: This request timed out before it could finish.\"",
+      "fix": "Move this entry under its own heading, such as \"Search results, request timeout,\" or broaden the section heading to cover both failure and empty-result states.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" section, first message entry",
+      "severity": 3,
+      "violation": "The section heading describes a no-matches scenario, but this message describes a failed request due to timeout, which is a different failure mode entirely."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: none\"",
+      "fix": "Change the suggested fix to a selectable action, for example a try again button that resubmits the search.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" section, first message entry, Suggested fix field",
+      "severity": 3,
+      "violation": "A timeout is typically recoverable, but the entry offers no retry action or next step, leaving the user with no way to proceed after the message appears."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"No orders fall inside the selected date range.\"",
+      "fix": "Align the terminology, either by renaming the heading to reference orders and filters, or by rewriting the message to describe search results consistently with the heading.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" section, second message entry",
+      "severity": 3,
+      "violation": "The section heading calls this a search results screen, but the message and its filter language refer to orders and date ranges, not a search, so it is unclear whether this is a search feature or a filtered order list."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action\"",
+      "fix": "Update the signal description to include a visual cue, such as an icon or accent color, that distinguishes this actionable message from ordinary informational banners.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" section, second message entry, Signal field",
+      "severity": 3,
+      "violation": "This message pairs a purely informational visual treatment with a suggested fix that adds a selectable clear filters button, so the spec describes an actionable element that looks identical to a non-actionable one."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-focus\"",
+      "fix": "Change the trigger to also fire when the sync state changes, for example \"on-focus and on state-change,\" so the notification reaches the user promptly.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Notification center, sync status\" section, Fires field",
+      "severity": 3,
+      "violation": "Limiting the notification to fire only when the item gains focus means a user who never focuses the notification list may never learn that sync is paused, delaying awareness of a state that affects data usage."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Container: inline\"",
+      "fix": "Add a short glossary near the top of the document that defines the allowed values for each field.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "throughout the document, the Container field",
+      "severity": 3,
+      "violation": "The document uses shorthand field values such as inline, text-label, and on-submit without defining them anywhere, so a reader cannot confirm the values are applied consistently or correctly across entries."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T21:46:21Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

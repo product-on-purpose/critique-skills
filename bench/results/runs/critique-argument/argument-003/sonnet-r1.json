@@ -1,0 +1,59 @@
+{
+  "run": {
+    "skill": "critique-argument",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/argument/argument-003.md",
+    "artifact_sha256": "3735fd3a135fcd3f730e35c6af56fb064083676684399e5b0486c140ff7894de",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T20:52:40Z",
+    "rubrics": ["TOULMIN"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "TOULMIN-GROUNDS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Recommendation section, third paragraph, the 60-day exception clause",
+      "evidence": "Recommendation section: \"matching the return-rate pattern the pilot data actually established.\" The only return-rate figures the artifact supplies are in the What the Pilot Showed section: \"the on-time-or-eventual return rate for borrowed items held at 94 percent, compared with 87 percent,\" an aggregate rate with no breakdown by days to return.",
+      "violation": "TOULMIN-GROUNDS requires that a claim be attached to evidence a reader could check. The claim that the 60-day cutoff matches a return-rate pattern the pilot data established is presented as evidence-backed, but the artifact's only pilot return-rate figures are an aggregate on-time-or-eventual percentage with no day-based breakdown, so the specific pattern the sentence claims is never actually supplied.",
+      "fix": "Either cite the specific day-based return-rate data the 60-day threshold is drawn from, or state the 60-day cutoff as a policy choice rather than a claim about what the pilot data established.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "TOULMIN-GROUNDS",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Addressing the Revenue Concern section, second paragraph",
+      "evidence": "Addressing the Revenue Concern states \"the four pilot branches absorbed the loss without a measurable change to their replacement-copy spending,\" while What the Pilot Showed states the pilot ran \"during a 16-month pilot at 5 branches.\"",
+      "violation": "TOULMIN-GROUNDS requires evidence a reader could check. The revenue-neutrality claim cites \"the four pilot branches\" as its evidence base, but the artifact elsewhere states the pilot covered 5 branches, so a reader checking this evidence against the artifact's own account of the pilot's scope finds the two figures disagree.",
+      "fix": "Use the same branch count in both the pilot-description section and the revenue-rebuttal section, so the evidence a reader checks agrees with the pilot's stated scope.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-003",
+      "criterion": "TOULMIN-REBUTTAL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Addressing the Revenue Concern section",
+      "evidence": "The section raises and answers only the funding objection: \"A skeptic on the board points to overdue fines as a source of materials-replacement funding... Consortium finance records show fine revenue covered under 2 percent of the annual materials budget.\" No other objection appears anywhere in the artifact.",
+      "violation": "TOULMIN-REBUTTAL requires naming and addressing the conditions the argument's own grounds leave open. The pilot compared full fine elimination against keeping fines in place, a binary design that leaves open whether a middle-ground policy such as reduced or capped fines could capture similar return-rate gains without the funding tradeoff, and the artifact never raises that alternative anywhere.",
+      "fix": "Add a paragraph addressing why full elimination was chosen over a middle-ground alternative such as reduced or capped fines, referencing what the pilot's design does or does not establish about that option.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 0,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "pass",
+    "severity_3_threshold": 0
+  }
+}

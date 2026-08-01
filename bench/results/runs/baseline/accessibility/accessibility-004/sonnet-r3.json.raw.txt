@@ -1,0 +1,44 @@
+Location: "Station updates" section, the two paragraphs with id="s1-p1" and id="s1-p2"
+Evidence: "Station staff can also help with the same request in person." appears verbatim, word for word, at the end of both paragraphs.
+Problem: The exact same sentence is repeated in two consecutive paragraphs, adding no new information and reading as duplicated filler rather than distinct guidance.
+Fix: Remove the repeated sentence from one paragraph, or rewrite the second occurrence so it adds information specific to that paragraph's topic.
+
+Location: image inside the "Station updates" section, id="s1-img1"
+Evidence: alt="Crews repainting the accessible parking spaces near the station entrance." on an image file named "platform-update.jpg", under a heading about schedules and kiosks.
+Problem: The alt text describes parking lot repainting, which is unrelated to the schedule and kiosk content surrounding it and does not match what the "platform-update" filename suggests the image should show, indicating the wrong image or alt text was used.
+Fix: Confirm which image belongs on this page and rewrite the alt text to accurately describe that image's actual content in context.
+
+Location: "Schedule changes" table, id="s2-table1"
+Evidence: The table markup opens directly with the header row, "<table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>...", with no caption element.
+Problem: The table has no caption, so a screen reader user who lands on it has no programmatic statement of what the table represents beyond the two column headers.
+Fix: Add a caption element inside the table, for example "Zone status", immediately before the header row.
+
+Location: "Delete item" control in the Fare adjustments section, id="s3-customcontrol"
+Evidence: "<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">" wrapping an image with an empty alt attribute, with no visible item or label nearby indicating what it deletes.
+Problem: A native button element provides keyboard activation, focus handling, and role semantics automatically; reimplementing this with a div and role="button" is easy to get wrong, and there is no surrounding content indicating what item this control would delete.
+Fix: Replace the div with a native "button type="button"" element, and add visible context for what item it acts on, or remove the control if nothing on the page corresponds to it.
+
+Location: step indicator, id="s3-wizard" and its three child divs (id="s3-step1", id="s3-step2", id="s3-step3")
+Evidence: "<div class="step" id="s3-step1">Choose a plan</div>" repeated three times with plain text and no shared list or state markup.
+Problem: A three step sequence is built from generic divs with no list structure, no ordering semantics, and no indication of which step is current, so assistive technology cannot convey that this is a sequence or which step the user is on.
+Fix: Mark the steps up as an ordered list, and add aria-current="step" to whichever step div is the active one.
+
+Location: link at the end of the "For the full list of upcoming adjustments" paragraph, id="s3-link1"
+Evidence: The sentence "For the full list of upcoming adjustments, read the accessibility improvements list." links to href="/fares/history".
+Problem: The link text says "accessibility improvements list" but both the surrounding sentence and the destination URL are about fare adjustment history, not accessibility improvements, so the link text misleads the reader about where it goes.
+Fix: Change the link text to describe the actual destination, for example "read the full list of fare adjustments."
+
+Location: phone number field in the form, label id="s3-form-phone-label" and input id="phone"
+Evidence: Label text reads "Phone number (required)" on "<input id="phone" type="tel">", which carries no required or aria-required attribute.
+Problem: The field is marked required only in the visible label text; the input itself has no programmatic required state, so browser form validation and assistive technology have no way to know the field is mandatory.
+Fix: Add a required attribute (or aria-required="true") to the "input id="phone"" element.
+
+Location: promo code field and its error text, id="promo" and id="s3-form-promo-error"
+Evidence: "<input id="promo" type="text" aria-invalid="true">" is followed by "<span class="error-text" id="s3-form-promo-error">Enter a 6 character code using letters and numbers only.</span>" with no attribute linking the two.
+Problem: The input is marked aria-invalid="true" but has no aria-describedby pointing at the error span, so a screen reader user focused on the field is never told why it is invalid or what the error text says.
+Fix: Add aria-describedby="s3-form-promo-error" to the "input id="promo"" element.
+
+Location: promo code field, id="promo"
+Evidence: "<input id="promo" type="text" aria-invalid="true">" carries aria-invalid="true" in the page's initial markup, before any value has been entered or the form submitted.
+Problem: The field is presented as invalid on first load, before the user has typed anything, which will confuse both sighted users seeing error styling on an empty field and screen reader users told the field is invalid before they have done anything.
+Fix: Remove aria-invalid="true" from the initial markup and set it only after validation runs against what the user actually enters.

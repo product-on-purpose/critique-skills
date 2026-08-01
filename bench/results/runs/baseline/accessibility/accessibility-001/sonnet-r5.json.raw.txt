@@ -1,0 +1,59 @@
+Location: <html> opening tag, near the top of the document (id="html")
+Evidence: <html lang="translanguage" id="html">
+Problem: The lang attribute value "translanguage" is not a valid BCP 47 language code, so browsers and assistive technology cannot determine the page's actual language.
+Fix: Set lang to the correct language code for the page's content, for example lang="en".
+
+Location: <title> element in the <head> (id="head-title")
+Evidence: <title id="head-title"></title>
+Problem: The page title is empty, so the browser tab, bookmarks, and screen reader announcements have no descriptive name for the page.
+Fix: Add a concise, descriptive title, for example "Rider Service Updates".
+
+Location: First two paragraphs of the "Fare adjustments" section (id="s1-p1", id="s1-p2")
+Evidence: "Riders can check real time arrivals at any station kiosk. Station staff can also help with the same request in person."
+Problem: The closing sentence is copied verbatim from the preceding paragraph about fare adjustment requests, even though checking real time arrivals is not the same kind of request; the text reads as templated copy-paste content rather than something written for this paragraph.
+Fix: Write a sentence specific to real time arrivals, or remove the mismatched closing sentence.
+
+Location: Image in the "Fare adjustments" section (id="s1-img1")
+Evidence: <img src="/img/platform-update.jpg" id="s1-img1">
+Problem: The image has no alt attribute at all, so screen readers will typically announce the filename instead of a meaningful description.
+Fix: Add an alt attribute describing the image's content or purpose, for example alt="Updated platform layout diagram", or alt="" if it is purely decorative.
+
+Location: Heading levels across "Accessibility improvements" (id="s2-h") and "Station updates" (id="s3-h")
+Evidence: <h4 id="s2-h">Accessibility improvements</h4> follows an h2, then <h2 id="s3-h">Station updates</h2> follows that h4.
+Problem: The heading hierarchy skips from h2 to h4 and then drops back to h2, so it does not reflect a consistent document outline and can confuse anyone navigating by heading level, particularly screen reader users.
+Fix: Use sequential heading levels, for example h2 for every top-level section, or h3 if "Accessibility improvements" is meant to be a subsection of the section before it.
+
+Location: Zone status table in the "Accessibility improvements" section (id="s2-table1")
+Evidence: <table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>
+Problem: The table has no caption, so its purpose is not announced to screen reader users before they enter the table.
+Fix: Add a caption element, for example "Zone status", describing what the table contains.
+
+Location: Custom control in the "Station updates" section (id="s3-customcontrol")
+Evidence: <div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></div>
+Problem: A "Delete item" control appears with no associated list of items and no explanation of what it deletes, so its purpose is unclear to anyone who encounters it.
+Fix: Remove the control if it is leftover from another template, or place it next to the specific item it acts on with a label that names that item.
+
+Location: Wizard steps block in the "Station updates" section (id="s3-wizard")
+Evidence: <div class="wizard-steps" id="s3-wizard"> containing three step divs: "Choose a plan", "Enter payment details", "Confirm your order"
+Problem: A payment plan wizard with no semantic list structure and no indication of the current step appears in a page about fare and station updates, with no visible connection to the surrounding content.
+Fix: Remove the wizard if it does not belong on this page, or, if it does, mark it up as an ordered list with the current step indicated, for example with aria-current="step", and explain its relevance to the page.
+
+Location: Link at the end of the "Station updates" intro paragraph (id="s3-link1")
+Evidence: <a href="/fares/history" id="s3-link1">click here</a>
+Problem: "Click here" does not describe the link's destination, so it is meaningless when read out of context, for example in a screen reader's list of links on the page.
+Fix: Use descriptive link text, for example "view the full list of upcoming adjustments".
+
+Location: Phone number field in the form (id="s3-form-phone-label", input id="phone")
+Evidence: <label for="phone" id="s3-form-phone-label">Phone number (required)</label> <input id="phone" type="tel">
+Problem: The label text states the field is required, but the input has no required or aria-required attribute, so assistive technology has no programmatic way to convey that requirement.
+Fix: Add the required attribute, or aria-required="true", to the phone input so the requirement is exposed programmatically and not only visually.
+
+Location: Promo code field in the form (input id="promo", error text id="s3-form-promo-error")
+Evidence: <input id="promo" type="text" aria-invalid="true"> followed by <span class="error-text" id="s3-form-promo-error">Enter a 6 character code using letters and numbers only.</span>
+Problem: The input is marked invalid with aria-invalid="true", but it has no aria-describedby pointing to the error message, so a screen reader user focused on the field will not hear why it is invalid.
+Fix: Add aria-describedby="s3-form-promo-error" to the promo input so the error text is announced together with the field.
+
+Location: Form submit button (id="s3-form-submit")
+Evidence: <button type="submit" class="btn-primary" id="s3-form-submit" aria-label="Send form now">Submit</button>
+Problem: The aria-label "Send form now" replaces the visible text "Submit" as the button's accessible name, so voice control users who say "click Submit" will not match the button, and screen reader users hear a different label than what is displayed.
+Fix: Remove the aria-label, or change it to include the visible text, for example aria-label="Submit form", so the accessible name matches or contains the visible label.

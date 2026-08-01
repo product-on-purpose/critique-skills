@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 3 projects, synced last week.\" is followed by a list containing only \"Data Warehouse Cutover\" and \"Mobile App Revamp\"",
+      "fix": "Either correct the stated count to 2 or add the missing third project to the list.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "workspace-overview section, \"Your projects\" intro paragraph and the list beneath it",
+      "severity": 3,
+      "violation": "The text states there are 3 projects but only 2 are listed, so the count and the visible list contradict each other."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\"></button>",
+      "fix": "Add visible label text such as \"Duplicate project\" inside the button element.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "project-settings section, the button directly below the save form",
+      "severity": 3,
+      "violation": "This button has no visible text and no aria-label, so a user or screen reader has no way to know what action it performs."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\"",
+      "fix": "Add a linked archived-projects section, or remove the claim if that view is not part of this flow.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "archive-confirm section, the confirmation paragraph",
+      "severity": 3,
+      "violation": "The document contains no section or link for an \"archived projects list\", so this points users to a destination that does not exist anywhere in the document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An invite was sent to the address entered above.\"",
+      "fix": "Display the specific email address that was submitted instead of referring back to a prior screen.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "invite-sent section, confirmation message",
+      "severity": 3,
+      "violation": "The confirmation is a separate section reached by following a link, so there is no \"above\" for the reader to refer back to, and the actual email address is never shown."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"synced last week\"",
+      "fix": "Replace with a specific date and time, for example \"synced on July 24, 2026\".",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "workspace-overview section, sync status line",
+      "severity": 3,
+      "violation": "\"Last week\" is a vague relative time that does not tell the reader the actual date or time of the sync."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<select id=\"notification-settings-digest-input\"><option>Daily</option><option>Weekly</option></select>",
+      "fix": "Add a \"Never\" or \"Off\" option to the digest frequency list.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "notification-settings section, digest frequency dropdown",
+      "severity": 3,
+      "violation": "There is no option to turn notifications off, so a user who wants no digest at all has no way to express that choice."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"invite-member-email-input\" type=\"email\">",
+      "fix": "Add the \"required\" attribute to the email input.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "invite-member section, email input field",
+      "severity": 3,
+      "violation": "The field has no \"required\" attribute, so the invite form can be submitted with a blank email address."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-08-01T02:04:07Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

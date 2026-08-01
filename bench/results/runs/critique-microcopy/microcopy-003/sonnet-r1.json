@@ -1,0 +1,48 @@
+{
+  "run": {
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T21:46:34Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-EM-CONSTRUCTIVE",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "Search results, no matches, message 1",
+      "evidence": "This request timed out before it could finish.",
+      "violation": "The message states that a problem exists with no imperative instruction or named next step anywhere in the text.",
+      "fix": "Add a concrete next step: name the action the reader should take to resolve this.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-EM-SALIENT",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Search results, no matches, message 2, Signal field",
+      "evidence": "Signal: styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action, text-label",
+      "violation": "The message's visual weight is described as matching purely informational banners elsewhere on the page, with no stated cue that this one demands action, so a reader scanning the screen at normal speed has nothing prompting them to notice it needs a response, unlike the routine banners it is styled to match.",
+      "fix": "Give this message a visual treatment that reads as attention-demanding rather than merely informational, for example a bolder weight, a border, or an icon that distinguishes it from the page's routine informational banners.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 2,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

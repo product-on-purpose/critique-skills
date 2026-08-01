@@ -1,0 +1,136 @@
+{
+  "run": {
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/clarity/clarity-001.md",
+    "artifact_sha256": "32ee3fed58b3e9b931565041a2e195dade8e2d19c9e9172fe28b38bdb5f6ef2c",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-07-31T21:02:08Z",
+    "rubrics": ["PLAIN", "WILLIAMS"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Eligibility, paragraph 1",
+      "evidence": "If the position counts as full-time, the stipend can apply. If the employee has completed 90 days of continuous service, the stipend can apply. If the request arrives before the benefit year ends, the stipend can apply. Only once every condition above is met does the home-office equipment stipend become available to the employee.",
+      "violation": "The paragraph states three separate conditional sentences that each read as a complete rule on their own (if X, the stipend can apply), and only the fourth sentence reveals that all three conditions must be met together, so the reader has to re-read the first three sentences once the real rule finally arrives.",
+      "fix": "State the governing rule first, that the stipend is available only once all three conditions below are met, then list the three conditions.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Program Overview, paragraph 1",
+      "evidence": "Program Overview, paragraph 1: \"The people operations office publishes the reimbursement log each quarter.\" Overview, paragraph 1: \"The benefits team publishes the reimbursement log after every open enrollment period.\"",
+      "violation": "Two different terms, the people operations office and the benefits team, are used for whichever office publishes the reimbursement log, with no signal they name the same office, and the two passages also disagree on the publishing schedule, each quarter against after every open enrollment period, so the reader cannot tell which office and which schedule govern.",
+      "fix": "Use one consistent name for the office that publishes the reimbursement log, state its publishing schedule once, and remove the duplicate Overview section.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "PLAIN-ORGANIZE",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Review Responsibility, paragraph 1",
+      "evidence": "The finance office reviews every stipend request over 200 dollars before it pays out. The finance office also flags any request that repeats within the same quarter.",
+      "violation": "This added review step for requests over 200 dollars sits after Terminology Notes and Request Steps, well past the Approval Timeline section where the reader already reads what looks like the complete approval process, so a reader who stops after Approval Timeline never learns that larger requests face an extra review step.",
+      "fix": "Move this finance review rule into or immediately after the Approval Timeline section, next to the other approval criteria.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-004",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "lane": "judged",
+      "severity": 3,
+      "location": "Terminology Notes, paragraph 1",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal. You track its status there until the payment clears.",
+      "violation": "The stipend item and the request are used for what appears to be the same tracked object, submitted, recorded, reconciled, and released, with no signal that the two terms name the same thing, so the reader cannot tell whether a stipend item and a request are one object or two.",
+      "fix": "Pick one term, stipend item or request, and use it consistently for the object tracked from submission through payment.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "How to Apply, paragraph 3",
+      "evidence": "Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "violation": "The sentence runs to 36 words with 4 subordinate-clause markers, longer than the reader can hold in mind on a single pass.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-006",
+      "criterion": "WILLIAMS-COHERENCE",
+      "lane": "judged",
+      "severity": 2,
+      "location": "How to Apply, paragraphs 1 through 3",
+      "evidence": "Employees start a stipend request in the benefits portal. The portal walks through each step in order. Also, the portal saves a draft automatically every few minutes. Employees can return to finish later without losing progress. Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "violation": "The section opens as instructions for starting a request, then closes on an internal staffing explanation for a review delay, a tangential note connected to the section's instructional theme only loosely, so a reader who reads just the opening and closing sentences would not predict the section ends on a staffing problem rather than an application step.",
+      "fix": "Move the staffing-delay explanation to the Approval Timeline section, next to the other timing information, and keep How to Apply limited to the steps the employee performs.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-007",
+      "criterion": "PLAIN-JARGON",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Required Documentation, paragraph 1",
+      "evidence": "The manager approves items pursuant to internal discretion, notwithstanding the standard review checklist.",
+      "violation": "The sentence uses a legal or foreign-language jargon term from the fixed list with no plain-language definition in the same or the following sentence.",
+      "fix": "Replace the jargon term with a plain equivalent, or define it at first use.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-008",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "lane": "judged",
+      "severity": 2,
+      "location": "Request Steps, paragraph 1",
+      "evidence": "Completing the request begins with confirming eligibility, and uploading the receipt.",
+      "violation": "The sentence's subject, completing the request, is an abstraction standing in for the employee who actually confirms eligibility and uploads the receipt, so the reader has to supply the real actor themselves.",
+      "fix": "Name the employee as the subject, for example: you begin the request by confirming eligibility and uploading the receipt.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-009",
+      "criterion": "PLAIN-DOUBLE-NEGATIVE",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Eligibility, paragraph 2",
+      "evidence": "However, reimbursement is not available without a completed receipt.",
+      "violation": "2 negation markers from the fixed negation list co-occur in one clause, so the reader has to work out the statement's logical sign before understanding it.",
+      "fix": "Restate the sentence with at most one negation, or recast it as a positive statement.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-010",
+      "criterion": "PLAIN-ACTIVE",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "Approval Timeline, paragraph 1",
+      "evidence": "The request is reviewed within two business days.",
+      "violation": "The sentence uses a be-verb plus past-participle passive construction in a context where the actor is recoverable and worth naming directly.",
+      "fix": "Rewrite the sentence in active voice, naming the actor that performs the action.",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 8,
+      "3": 5,
+      "4": 0
+    },
+    "suppressed_count": 3,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}

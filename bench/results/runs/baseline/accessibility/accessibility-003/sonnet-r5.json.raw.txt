@@ -1,0 +1,54 @@
+Location: Section "Accessibility improvements" (id="s1"), first paragraph (id="s1-p1")
+Evidence: "Riders may request a fare adjustment through the mobile app. Station staff can also help with the same request in person."
+Problem: The section heading is "Accessibility improvements" but neither paragraph under it mentions accessibility; the text is about fare adjustments and real time arrivals instead.
+Fix: Rename the heading to match the actual content, for example "Fares and rider support," or replace the paragraph text with real accessibility related updates.
+
+Location: Section "Accessibility improvements" (id="s1"), image (id="s1-img1")
+Evidence: alt="Crews repainting the accessible parking spaces near the station entrance."
+Problem: The image's alt text describes a repainting project that is never mentioned in the surrounding paragraphs, so the image reads as unrelated to the rest of the section.
+Fix: Add a sentence in the section that introduces the repainting work shown in the image, or swap in an image that matches the fare adjustment and real time arrivals content that is actually there.
+
+Location: Section "Weekend service" (id="s2"), first paragraph (id="s2-p1")
+Evidence: "Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person."
+Problem: This paragraph is nearly identical to the opening paragraph of the "Accessibility improvements" section above it, and it has nothing to do with weekend service.
+Fix: Remove the duplicated paragraph from this section and write copy specific to weekend service, such as which routes run and how often.
+
+Location: Section "Weekend service" (id="s2"), table (id="s2-table1")
+Evidence: table with header row "Zone" and "Status" and no caption element anywhere in the table markup
+Problem: The table has no caption identifying what it shows, so a reader who reaches it out of context has no label for what the Zone and Status columns mean.
+Fix: Add a caption element as the table's first child, for example "Weekend service status by zone."
+
+Location: Section "Schedule changes" (id="s3"), first paragraph (id="s3-p1")
+Evidence: "Local residents should review the updated schedule through the mobile app. Station staff can also help with the same request in person."
+Problem: The second sentence refers to "the same request," but the first sentence describes reviewing a schedule, not making a request, so the two sentences do not logically connect.
+Fix: Rewrite the second sentence to match the first, for example "Station staff can also help riders find the updated schedule in person."
+
+Location: Section "Schedule changes" (id="s3"), status card (id="s3-statuscard")
+Evidence: "Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day."
+Problem: This text duplicates the second paragraph of the "Accessibility improvements" section (id="s1-p2") almost word for word, reused here in a status card about schedule changes rather than real time arrivals.
+Fix: Write status card copy specific to schedule changes and remove the duplicate real time arrivals text from one of the two locations.
+
+Location: Section "Schedule changes" (id="s3"), wizard steps (id="s3-wizard")
+Evidence: the steps appear in this order in the markup: "Confirm your order" (id="s3-step3"), "Enter payment details" (id="s3-step2"), "Choose a plan" (id="s3-step1"), positioned only with a CSS order value
+Problem: The steps are written into the page in reverse of their logical sequence and depend on CSS to display in the right order, so the underlying content order is confirm, pay, then choose, which is backwards.
+Fix: Reorder the step elements in the markup itself to choose a plan, enter payment details, confirm your order, instead of relying on CSS order to reverse them.
+
+Location: Section "Schedule changes" (id="s3"), delete control (id="s3-customcontrol")
+Evidence: a div with class "icon-delete" containing only an image with alt=""
+Problem: This looks like an actionable delete control, but it is a plain div containing an image with empty alt text, so it has no accessible name and nothing in the markup shows it can be activated by keyboard.
+Fix: Mark this up as a real button element with a visible or aria-label accessible name, for example aria-label="Delete," and keep the icon image decorative alongside that real button text.
+
+Location: Section "Schedule changes" (id="s3"), link paragraph (id="s3-linkpara")
+Evidence: "For the full list of upcoming adjustments, read the accessibility improvements list." where the link points to /fares/history
+Problem: The link text says "read the accessibility improvements list," but the href points to /fares/history and the surrounding sentence is about upcoming adjustments, so the link wording matches neither its destination nor its own sentence.
+Fix: Change the link text to describe where it goes, for example "view fare history" or "see upcoming adjustments," consistent with the href and the sentence around it.
+
+Location: Section "Schedule changes" (id="s3"), form phone label (id="s3-form-phone-label")
+Evidence: label element for "Phone number" with style="color:#cc0000" while every other label in the form has no inline style
+Problem: Only the "Phone number" label is styled in red with an inline style, and there is no visible text nearby explaining why, so it is unclear if the field is required, invalid, or just inconsistently styled.
+Fix: Remove the one-off inline red color, or if it signals a required or error state, add visible explanatory text the way the promo code field does and apply the same treatment consistently.
+
+Location: Section "Schedule changes" (id="s3"), form promo code field (id="promo")
+Evidence: input with aria-invalid="true" on first load, followed by a span with the text "Error."
+Problem: The promo code field is marked invalid before the user has typed anything, and the error text simply says "Error.", so it does not tell the user what is wrong or how to fix it.
+Fix: Only mark the field invalid after a failed submission or after the user leaves it with bad input, and replace "Error." with a specific message such as "This promo code was not recognized."

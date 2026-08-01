@@ -1,0 +1,64 @@
+Location: <meta name="viewport"> in the document head (id="head-viewport")
+Evidence: content="width=device-width, initial-scale=1, user-scalable=no"
+Problem: Setting user-scalable=no disables pinch to zoom, which prevents low vision users from magnifying the page and fails basic zoom and resize accessibility expectations.
+Fix: Remove user-scalable=no (and any maximum-scale restriction below 5) from the viewport meta tag so users can zoom.
+
+Location: "Accessibility improvements" heading and the paragraph under it (id="s1-h", id="s1-p1")
+Evidence: The heading reads "Accessibility improvements" but the paragraph reads "Passengers should review the updated schedule at any station kiosk. Updates post to the schedule page within one business day."
+Problem: The paragraph under the "Accessibility improvements" heading does not describe any accessibility improvement, it repeats generic schedule update text, so the heading misleads readers about what the section contains.
+Fix: Replace the paragraph with content that actually describes the accessibility improvements, or rename the heading to match the schedule content it introduces.
+
+Location: First paragraph of the "Accessibility improvements" section (id="s1-p1")
+Evidence: style="color:#999999" on an otherwise unstyled white page background
+Problem: The gray text color likely falls below the 4.5:1 contrast ratio required against a white background, making the paragraph hard to read for low vision users.
+Fix: Remove the inline color override or replace it with a color that meets at least a 4.5:1 contrast ratio against the background.
+
+Location: Paragraphs in sections 1 and 3 (id="s1-p1", id="s1-p2", id="s3-p1", id="s3-statuscard")
+Evidence: "Updates post to the schedule page within one business day." appears verbatim in s1-p1, s1-p2, and the status card paragraph; "may request a fare adjustment through the mobile app" appears near verbatim in s1-p2 and s3-p1.
+Problem: The same boilerplate sentences are reused across unrelated sections, making the page read as templated filler and making it harder for a reader to tell the sections apart by their content.
+Fix: Rewrite each section's copy so it is specific to that section's actual topic instead of reusing the same stock sentences.
+
+Location: Table in the "Schedule changes" section (id="s2-table1")
+Evidence: <table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr> followed directly by data rows, with no <caption>, <thead>, or <tbody>
+Problem: The table has no caption describing its purpose and no thead or tbody structure, so a screen reader user gets no summary of what the table is for and the header to data relationship depends only on row order.
+Fix: Add a caption such as "Zone status" and wrap the header row in thead and the data rows in tbody.
+
+Location: "promo-banner" div in the "Weekend service" section (id="s3-banner")
+Evidence: style="width:960px", on a page whose viewport meta tag also sets user-scalable=no
+Problem: A fixed 960px width will overflow narrow viewports and force horizontal scrolling, and because zooming is disabled elsewhere on the page, users on small screens have no way to reach the clipped content.
+Fix: Replace the fixed width with a responsive value such as max-width: 100% so the banner reflows to the viewport.
+
+Location: "status-card" div in the "Weekend service" section (id="s3-statuscard")
+Evidence: style="height:60px;overflow:hidden" wrapping the paragraph "Riders can report a service issue through the online portal. Updates post to the schedule page within one business day."
+Problem: The fixed height combined with overflow hidden will clip the paragraph text whenever it wraps to more lines than fit in 60px, hiding part of the message from all users.
+Fix: Remove the fixed height and overflow hidden, or use min-height instead of height so the card grows with its content.
+
+Location: "icon-delete" custom control in the "Weekend service" section (id="s3-customcontrol")
+Evidence: <div class="icon-delete" role="button" tabindex="0" aria-label="Delete item"> containing only a decorative image
+Problem: A delete control labeled only "Delete item" appears among unrelated weekend service announcements with no visible text or context indicating what it deletes, which is confusing for all users and gives screen reader users no referent for what "item" means.
+Fix: Remove the control if it is unused leftover markup, or give it a specific label naming what it deletes and place it directly next to the item it affects.
+
+Location: "wizard-steps" component in the "Weekend service" section (id="s3-wizard")
+Evidence: Three step divs reading "Choose a plan", "Enter payment details", and "Confirm your order"
+Problem: This looks like a checkout wizard unrelated to weekend transit service, with no list markup, no indication of which step is current, and no visible connection to the surrounding content, suggesting misplaced or leftover markup.
+Fix: Remove the wizard component if it does not belong on this page, or mark it up as an ordered list with an aria-current step and copy that actually relates to weekend service.
+
+Location: Link at the end of the "Weekend service" section (id="s3-link1")
+Evidence: "For the full list of upcoming adjustments, <a href="/fares/history">read the accessibility improvements list</a>."
+Problem: The link text says "read the accessibility improvements list" but the surrounding sentence is about upcoming adjustments and the href points to /fares/history, so the link text does not describe where the link actually goes.
+Fix: Change the link text to match its destination, for example "read the full list of upcoming fare adjustments."
+
+Location: "Route" field in the form (id="s3-form-topic-label", id="topic")
+Evidence: <label for="topic-alt">Route</label> immediately followed by <select id="topic">
+Problem: The label's for attribute references "topic-alt", which does not match the select element's id of "topic", so the label is not programmatically associated with the field and screen readers will not announce "Route" when the select receives focus.
+Fix: Change the label's for attribute to "topic" so it matches the select element's id.
+
+Location: "Phone number" field in the form (id="s3-form-phone-label", id="phone")
+Evidence: <label for="phone">Phone number (required)</label> next to <input id="phone" type="tel"> with no required or aria-required attribute
+Problem: The label visually states the field is required, but the input itself has neither a required nor an aria-required="true" attribute, so screen reader users are not told the field is required and the browser will not enforce it on submit.
+Fix: Add required or aria-required="true" to the phone input so the requirement is exposed programmatically, not only in the visible label text.
+
+Location: "Promo code" field in the form (id="promo", id="s3-form-promo-error")
+Evidence: <input id="promo" type="text" aria-invalid="true"> followed by <span class="error-text" id="s3-form-promo-error">Enter a 6 character code using letters and numbers only.</span>
+Problem: The promo input is marked aria-invalid="true" before the form has been submitted or the field touched, and the error text is not linked to the input through aria-describedby, so screen reader users hear that the field is invalid without hearing why.
+Fix: Only set aria-invalid="true" after validation actually fails, and add aria-describedby="s3-form-promo-error" on the input so the error message is announced together with the field.

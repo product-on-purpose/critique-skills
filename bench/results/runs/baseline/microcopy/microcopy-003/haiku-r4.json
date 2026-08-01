@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This request timed out before it could finish.\"",
+      "fix": "Add an action suggestion: \"This request timed out. Please try again or adjust your search criteria.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Line 5, Search results timeout message",
+      "severity": 3,
+      "violation": "The message describes what went wrong but does not suggest any action the user can take to resolve the problem."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"No orders fall inside the selected date range. Change the date range, or clear the filters to see every order.\"",
+      "fix": "Clarify the recommended action path: \"No orders match your date range. Clear the date filter to see all orders, or adjust the range to see a different set.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Line 14, Date range filter message",
+      "severity": 3,
+      "violation": "The message contains two separate instructions (change the date range OR clear the filters) but the structure makes it unclear which action is primary or recommended."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Sync is paused while this device is on a metered connection, so syncing does not spend a data allowance. Select resume to sync now.\"",
+      "fix": "Clarify the action: \"Sync is paused on metered connections to save your data allowance. Tap 'Resume syncing' when ready.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Line 25, Sync pause message",
+      "severity": 3,
+      "violation": "The phrasing \"Select resume to sync now\" is ambiguous about whether \"resume\" is a button name or an action verb."
+    }
+  ],
+  "run": {
+    "artifact": "bench/results/staging/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-07-31T00:00:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

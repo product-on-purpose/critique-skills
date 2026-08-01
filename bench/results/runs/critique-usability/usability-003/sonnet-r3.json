@@ -1,0 +1,119 @@
+{
+  "run": {
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "model": "claude-sonnet-5",
+    "timestamp": "2026-08-01T02:19:52Z",
+    "rubrics": ["NNG"]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "NNG-H2-CONVENTIONS",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"workspace-overview\" section, the \"Open project settings\" link",
+      "evidence": "workspace-overview lists 3 projects as plain text (\"Beta Launch Plan\", \"Holiday Campaign Assets\", \"Partner Integration Pilot\", none of them links) beside the text \"This workspace holds 4 projects, synced this morning.\" The section's only settings control, the \"Open project settings\" link, is not scoped to any listed project; it targets #project-settings, whose input carries value=\"Vendor Onboarding\", a project name that does not appear in the workspace-overview list.",
+      "violation": "The real-world task this screen stands for is picking one of the user's own projects and managing it, but the artifact provides no control that ties a specific listed project to the project-settings, invite-member, archive-confirm, or notification-settings screens: the single settings link is unscoped and lands on a project (\"Vendor Onboarding\") the workspace list never shows, and the stated project count (4) does not match the number listed (3), so a user cannot tell how the settings flow relates to any project they can actually see.",
+      "fix": "Make each item in the projects list a control that opens that specific project's settings, or otherwise name the project the \"Open project settings\" link opens before the user follows it, and reconcile the stated project count with the number of projects listed.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "NNG-H3-UNDO",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"archive-confirm\" section, the \"Archive\" link",
+      "evidence": "archive-confirm's copy reads: \"Archiving \"Vendor Onboarding\" will remove it from the active projects list for everyone on the team.\" Following its \"Archive\" link leads to project-archived, whose only control is \"Back to your projects\" (href=\"#workspace-overview\"); no section, link, or control anywhere in the document offers to restore, unarchive, or view archived projects.",
+      "violation": "Archiving is a reasonably reversible action in this kind of product, unlike delete, but the artifact names no reversal path anywhere: the only control after archiving exits to the workspace overview, with no restore or archived-projects control defined, so an accidental or reconsidered archive has no way back in the design as specified.",
+      "fix": "Add a restore or unarchive control, either on project-archived itself or via an archived-projects view linked from workspace-overview, that reverses the archive action.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "NNG-H9-IDENTIFY",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"import-status\" section",
+      "evidence": "the import-status-message paragraph reads: \"Import failed. Error code IMP-500. Contact support if this continues.\"",
+      "violation": "This message reports only that the import failed and surfaces a raw error code, with no plain-language statement of what actually went wrong, a file, a field, a size limit, a permission, so the user cannot tell which of their actions or which part of the import caused the failure.",
+      "fix": "Replace or supplement the error code with a plain-language statement of the specific cause, for example naming the file, field, or limit that failed, the way a user would describe the problem themselves.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-004",
+      "criterion": "NNG-H9-RECOVER",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"import-status\" section",
+      "evidence": "import-status's only content beyond the error message is one link, \"Back to your projects\" (href=\"#workspace-overview\"); the message's own suggested step, \"Contact support\", has no control or route anywhere in the section, and no retry control is defined.",
+      "violation": "The error names a step, contacting support, that the artifact gives the user no way to actually take from this screen, and offers no retry path either, so the only available control ends the task by returning to the overview rather than helping the user recover from the failure.",
+      "fix": "Add a retry control that re-attempts the import, and turn \"Contact support\" into an actual control or link from this screen rather than instructional text alone.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-005",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-member\" section, the \"Save\" button",
+      "evidence": "invite-member's form contains an email input and a submit button labeled \"Save\" (invite-member-save-btn); outside that form, a separate \"Continue\" link (href=\"#invite-sent\") leads to the screen whose text states \"An invite was sent to the address entered above.\" Nothing in the artifact says what the \"Save\" button does, whether it is required before \"Continue\", or how its outcome differs from Continue's.",
+      "violation": "This trigger's outcome is entirely unspecified: no confirmation, no state change, and no defined next screen, alongside a second, undocumented control, \"Continue\", that is the one shown to actually send the invite, so a user has no way to tell from the artifact what clicking \"Save\" accomplishes or whether it is needed at all.",
+      "fix": "Either remove the \"Save\" button if \"Continue\" is the only action this screen needs, or specify what Save does and what visible confirmation follows it, distinct from Continue's own defined outcome.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-006",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"notification-settings\" section, the \"Save\" button",
+      "evidence": "notification-settings's form lets the user choose a digest frequency (Daily or Weekly) and submit it with a button labeled \"Save\" (notification-settings-save-btn); no confirmation message, success state, or any other feedback follows the Save control anywhere in the artifact.",
+      "violation": "This action commits a preference change with no specified in-progress or result feedback, so a user who clicks Save has nothing on screen telling them the change was recorded.",
+      "fix": "Specify a visible confirmation after Save is clicked, for example a brief inline success message or a changed control state.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-007",
+      "criterion": "NNG-H1",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"project-settings\" section, the \"Save\" button",
+      "evidence": "project-settings's form lets the user edit the project name (prefilled \"Vendor Onboarding\") and submit it with a button labeled \"Save\" (project-settings-save-btn); no confirmation message, success state, or any other feedback follows the Save control anywhere in the artifact.",
+      "violation": "This action commits a name change with no specified in-progress or result feedback, so a user who clicks Save has nothing on screen telling them the change was recorded.",
+      "fix": "Specify a visible confirmation after Save is clicked, for example a brief inline success message or a changed control state.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-008",
+      "criterion": "NNG-H5-CONFIRM",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-member\" section, the \"Continue\" link",
+      "evidence": "invite-member's \"Continue\" link (href=\"#invite-sent\") leads directly to invite-sent, whose text states \"An invite was sent to the address entered above.\"; no confirmation step naming the recipient or the action appears anywhere between entering the email and the invite being sent.",
+      "violation": "Sending an invite reaches a recipient outside the product; the path from entering an address to \"Continue\" reaches no confirmation naming who will receive it before the send commits.",
+      "fix": "Add a brief confirmation step before Continue commits, naming the email address the invite will be sent to.",
+      "confidence": "medium"
+    },
+    {
+      "id": "F-009",
+      "criterion": "NNG-H6-RECALL",
+      "lane": "judged",
+      "severity": 2,
+      "location": "the \"invite-sent\" section",
+      "evidence": "invite-sent's text reads: \"An invite was sent to the address entered above. It expires in 5 days if not accepted.\"; the email address itself, entered on the previous invite-member screen, is not repeated anywhere on this screen.",
+      "violation": "The confirmation names the outcome but not the value the user needs to verify it, the actual address the invite went to, referring to it only as \"the address entered above\" rather than showing it, so the user can only check for a typo by returning to the previous screen.",
+      "fix": "Show the actual email address on the invite-sent screen instead of referring back to it.",
+      "confidence": "medium"
+    }
+  ],
+  "summary": {
+    "by_severity": {"0": 0, "1": 0, "2": 5, "3": 4, "4": 0},
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}
