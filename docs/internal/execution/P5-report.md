@@ -393,3 +393,13 @@ generator `--check` commands clean, version guard passed). Still worth a direct 
 `v0.1.0`: the missing external-validator output, the truncated fix-now item 8, S-07 AC-6 (CI
 runtime never measured), S-04 AC-3 (skill-template conformance not actually run in CI), and the
 absent `rc-handover.md`.
+
+### Follow-up (2026-08-02): S-04 AC-3 closed
+
+A follow-on pass closed S-04 AC-3 (skill-template conformance not run in CI): added
+`scripts/tests/test_skills_conformance.py`, which globs `skills/critique-*/` and runs
+`scripts/skill-selftest.py` against each of the six real skills as a parametrized pytest case,
+collected automatically by the existing `unit-python` CI job's `python -m pytest` command with no
+workflow edit; full suite now 784 passed (777 + 7 new), `node scripts/check.mjs` unchanged at 0
+error(s)/0 warning(s). See `docs/internal/release-plans/plan_v0.1.0/S-04_skill-template/spec.md`
+(now `status: fulfilled`, all 7 ACs checked) for the updated per-criterion evidence.

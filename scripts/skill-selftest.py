@@ -5,8 +5,9 @@
 #               exits non-zero on any breach
 # why:          six skill pipelines build in parallel, so a machine-checked template
 #               contract is the anti-drift mechanism keeping their output identical
-# used-by:      P2 skill-pipeline agents, scripts/tests/test_skill_selftest.py, and the
-#               P3 conformance sweep
+# used-by:      P2 skill-pipeline agents, scripts/tests/test_skill_selftest.py,
+#               scripts/tests/test_skills_conformance.py (runs this against every real
+#               skills/critique-<domain>/ directory in CI), and the P3 conformance sweep
 """skill-selftest: the per-skill template-conformance validator.
 
 See `docs/internal/skill-template.md`, section "Self-test", for the

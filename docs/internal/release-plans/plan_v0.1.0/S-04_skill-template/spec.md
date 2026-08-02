@@ -2,9 +2,9 @@
 id: S-04
 title: Skill template pattern
 type: spec
-status: committed
+status: fulfilled
 created: 2026-07-31
-updated: 2026-08-01
+updated: 2026-08-02
 linked-effort: S-04
 linked-plan: ../implementation/IMPL-B-skills-to-rc.md
 linked-strategy-brief: "01-strategy-brief.md (local planning archive, not committed)"
@@ -18,8 +18,8 @@ audience: agent
 
 ## Task Summary
 
-- Status: committed
-- AC: [x] AC-1 [x] AC-2 [ ] AC-3 [x] AC-4 [x] AC-5 [x] AC-6 [x] AC-7
+- Status: fulfilled
+- AC: [x] AC-1 [x] AC-2 [x] AC-3 [x] AC-4 [x] AC-5 [x] AC-6 [x] AC-7
 - AC evidence:
   - AC-1: PASS. `docs/internal/skill-template.md` (803 lines) covers directory shape, SKILL.md
     frontmatter (format, required fields, description scoring, two worked examples), SKILL.md body
@@ -40,20 +40,21 @@ audience: agent
     reproduced one mode outside pytest: truncated a copy of the toy fixture's
     `evals/triggers.eval.json` to 5 cases and ran `python scripts/skill-selftest.py` directly against
     it, which printed `[trigger-evals-too-few] ...: 5 case(s), need at least 20` distinctly.
-  - AC-3: FAIL, verified. AC-3's text requires the template-conformance script to validate all six
-    skills "uniformly in CI." Nothing does: `.github/workflows/ci.yml`'s only Python job runs
-    `python -m pytest`, and `scripts/tests/test_skill_selftest.py`'s own cases run
-    `scripts/skill-selftest.py` only against the synthetic `skills/_template-fixture/critique-toy`
-    fixture and broken `tmp_path` copies, never against a real `skills/critique-*` directory; grepped
-    `.github/workflows/`, `package.json`, and every `*.py`/`*.mjs`/`*.js` file in the repo for
-    `skill-selftest`, finding only the script itself, its own test module, and skills' own
-    `checks.py` docstring comments that name it in passing. The only place all six real skills were
-    ever swept with this script is a one-time manual audit command recorded in
-    `docs/internal/execution/P2-report.md`'s S05-AC1 row, which is not CI. Re-ran that sweep by hand
-    this pass (`for d in skills/critique-*/; do python scripts/skill-selftest.py "$d"; done`): all six
-    still pass cleanly, so the validator itself is sound, but AC-3's specific "in CI" claim is not
-    met. Left unchecked; closing this needs a CI job (or a pytest case) that globs
-    `skills/critique-*` and runs `skill-selftest.py` against each.
+  - AC-3: PASS. `scripts/tests/test_skills_conformance.py` closes the gap the prior pass left
+    open: it globs `skills/critique-*/` (excluding `skills/_shared` and
+    `skills/_template-fixture`, both already excluded by the glob prefix alone) and runs
+    `scripts/skill-selftest.py <skill-dir>` as a subprocess against each of the six real skills,
+    asserting exit 0, plus a guard test asserting the glob is non-empty so a future layout change
+    cannot silently collect zero cases. No CI workflow edit was needed: `pytest.ini`'s `testpaths`
+    already globs `scripts/tests`, so the module is collected by the existing `unit-python` job's
+    `python -m pytest` command (`.github/workflows/ci.yml`) automatically; confirmed with
+    `python -m pytest --collect-only -q`, which names all 7 new test IDs. Ran
+    `python -m pytest scripts/tests/test_skills_conformance.py -v`: 7 passed (1 guard test, 6
+    parametrized skill cases: critique-accessibility, critique-argument, critique-clarity,
+    critique-docs, critique-microcopy, critique-usability). Full suite `python -m pytest -q`: 784
+    passed (777 prior + 7 new). `node scripts/check.mjs`: 0 error(s), 0 warning(s), unchanged from
+    before this fix. See `docs/internal/execution/P5-report.md`'s "Remediation addendum
+    (2026-08-01)" section for the AC-3 closure record.
   - AC-4: PASS. `skills/_shared/gate.py`'s own module docstring: "the load-bearing file for S-04
     AC-4," re-exporting `gate_exit_code`/`validate_document` from `contract/validate.py` rather than
     reimplementing them. Grepped all six skills' `scripts/checks.py`: every one imports
@@ -80,7 +81,7 @@ audience: agent
     scripts/tests/test_skill_selftest.py -k "over_long_quote_in_references_fails or
     quoted_operationalization_cell_fails"`: 2 passed.
 - Open questions: 1
-- Last-updated: 2026-08-01
+- Last-updated: 2026-08-02
 
 ## Purpose
 
