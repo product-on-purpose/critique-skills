@@ -163,7 +163,7 @@ All eight items were tractable within this pass; none were demoted to open items
 
 ## Suite outputs
 
-All commands run from `E:/Projects/product-on-purpose/critique-skills` on branch `build/v0.1.0`
+All commands run from the repository root on branch `build/v0.1.0`
 after the fixes above, before committing.
 
 | Command | Result |

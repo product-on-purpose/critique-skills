@@ -32,7 +32,7 @@ paragraph. All three are cheaper to fix before the tag than to explain after it.
 
 ## Verdicts with evidence
 
-Every command below was run from `E:/Projects/product-on-purpose/critique-skills` on branch
+Every command below was run from the repository root on branch
 `build/v0.1.0` during this pass. Nothing in this section is quoted from a prior report.
 
 ### 1. Release readiness: PASS
