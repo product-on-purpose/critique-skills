@@ -1,12 +1,10 @@
 <a id="readme-top"></a>
 
-# Critique Skills
+# [Critique Skills](https://github.com/product-on-purpose/critique-skills)
 
 **A measured library of rubric-cited critique skills that emit machine-parseable findings.**
 
 Every skill operationalizes a published external standard, cites a permanent criterion ID on every finding, and publishes its own measured performance against a seeded-defect corpus. No taste, no vibes, no unfalsifiable commentary.
-
-[**What it is**](#-what-this-is) &nbsp;·&nbsp; [**Install**](#-quick-start) &nbsp;·&nbsp; [**Receipts**](#-the-receipts) &nbsp;·&nbsp; [**Skills**](#-the-six-skills) &nbsp;·&nbsp; [**Examples**](#-examples-and-recipes) &nbsp;·&nbsp; [**Methodology**](docs/explanation/methodology.md)
 
 <p>
   <img src="https://img.shields.io/badge/status-pre--release-orange?style=flat-square" alt="Status: pre-release">
@@ -18,6 +16,8 @@ Every skill operationalizes a published external standard, cites a permanent cri
   <a href="#-the-receipts"><img src="https://img.shields.io/badge/run%20envelopes-502-purple?style=flat-square" alt="Run envelopes: 502"></a>
   <a href="https://agentskills.io/specification"><img src="https://img.shields.io/badge/spec-agentskills.io-orange?style=flat-square" alt="Agent Skills Spec"></a>
 </p>
+
+[**What it is**](#-what-this-is) &nbsp;·&nbsp; [**Install**](#-quick-start) &nbsp;·&nbsp; [**Receipts**](#-the-receipts) &nbsp;·&nbsp; [**Skills**](#-the-six-skills) &nbsp;·&nbsp; [**Examples**](#-examples-and-recipes) &nbsp;·&nbsp; [**Methodology**](docs/explanation/methodology.md)
 
 ---
 
