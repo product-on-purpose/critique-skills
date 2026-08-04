@@ -27,5 +27,6 @@ shared library.
 - `skill-selftest.py` - validates one `skills/critique-<domain>/` directory against the S-04 skill
   template; see `docs/internal/skill-template.md`, "Self-test".
 - `lib/` - shared helpers used by the scripts above.
-- `tests/` - pytest suite for the Python tooling here (`skill-selftest.py`).
-- `__init__.py` - package marker so `scripts/tests/` resolves against the repository root.
+- `tests/` - two suites: `node --test` coverage for the Node spine above, and the pytest suite for
+  the Python tooling here (`skill-selftest.py`); see `tests/README.md` for the inventory.
+- `__init__.py` - package marker so `scripts/` resolves against the repository root.

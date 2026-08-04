@@ -5,7 +5,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## [0.1.0] - 2026-08-01
+## [0.1.0] - 2026-08-03
 
 ### Added
 - Repo scaffold: `library.json`, generated `.claude-plugin/plugin.json`, the conformance gate
@@ -89,10 +89,9 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   conformance-tier badges, a collapsible table of contents, a "What this is" comparison table,
   Mermaid flowcharts for "How a critique runs" and the Two-Part Gate, a generated release-history
   table, and a widened "The family" section that now also lists `writing-style-catalog`. The
-  conformance-tier claim was updated to match the tree: `node scripts/check.mjs` reports "Tier:
-  Convergent (Advanced blocked: 12 issues)" with 0 errors and 0 warnings at the declared tier,
-  replacing the prior wording that the plugin "targets Universal tier... with `critique-critic`
-  already at Convergent."
+  conformance-tier claim was updated to match the tree: `node scripts/check.mjs` reports tier
+  Convergent, with 0 errors and 0 warnings at the declared tier, replacing the prior wording that
+  the plugin "targets Universal tier... with `critique-critic` already at Convergent."
 - Location-level rescoring added to `bench/results/` (results schema version 1.1.0): recall and
   precision now also compute on location match alone, criterion ID ignored, alongside the original
   criterion-level cut, because the criterion-level baseline comparison is pinned at zero by

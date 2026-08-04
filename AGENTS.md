@@ -85,9 +85,12 @@ prerequisite `npm run check` and `npm run gen -- --check` share.
 | drift | `npm run gen -- --check` |
 | audit | `npm audit --audit-level=high` |
 
-A command whose target does not exist yet (no bench results, no bench corpus, no Node test files)
-succeeds vacuously with a message saying so, rather than failing on an artifact nobody has built
-yet; each script's own docstring says which future effort replaces the vacuous path.
+A command whose target does not exist yet (no bench results, no bench corpus) succeeds vacuously
+with a message saying so, rather than failing on an artifact nobody has built yet; each script's
+own docstring says which future effort replaces the vacuous path. `unit-node` (`npm test` ->
+`node --test`) is not on that vacuous list: `scripts/tests/*.test.mjs` covers the release tag
+guard, the version manifest, release-notes extraction, and a smoke test per generator `--check`
+mode (`scripts/tests/README.md` has the current inventory).
 
 `npm run gen -- --check` also enforces that every command in the table above appears in this file:
 edit both together, or the `drift` job fails (S-07 CI-pipeline spec, AC-5).

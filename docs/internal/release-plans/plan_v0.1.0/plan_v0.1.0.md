@@ -112,11 +112,11 @@ Anything the run could not honestly complete appears in the handover report as a
 
 | ID | Title | Resolution | Status | Updated |
 |----|-------|------------|--------|---------|
-| R1 | Consistency floor value for stretch gating | Set empirically from P3 core-skill data; the floor is the lowest core-skill consistency, minus nothing | Open | 2026-07-31 |
-| R2 | Usability artifact-type claim | Recommend narrow claim (HTML/markdown UI specs) in v0.1.0, widen later | Open | 2026-07-31 |
-| R3 | Baseline model tiers to pin | Recommend claude-haiku-4-5 and claude-sonnet-5 (exact IDs pinned at P3 run time) | Open | 2026-07-31 |
+| R1 | Consistency floor value for stretch gating | Resolved: floor set to 0.309 (overall lane cut, `critique-clarity` on `claude-haiku-4-5-20251001`), per [ADR 0022 (consistency floor: overall lane, min core)](../../decisions/0022-consistency-floor-overall-lane-min-core.md) | Resolved | 2026-08-03 |
+| R2 | Usability artifact-type claim | Resolved: narrow claim shipped as recommended (HTML/markdown UI specs, wireframe write-ups, page mockups; not live running applications), stated in `skills/critique-usability/SKILL.md`'s "Artifact claim" section and in `README.md`'s skill-catalog note, evidenced by S-05 AC-8 | Resolved | 2026-08-03 |
+| R3 | Baseline model tiers to pin | Resolved: pinned to `claude-haiku-4-5-20251001` and `claude-sonnet-5`, formalized in [ADR 0023 (v0.1.0 measurement basis: two pinned tiers and k=5)](../../decisions/0023-v0.1.0-measurement-basis-two-pinned-tiers-k5.md) and applied throughout `bench/results/` | Resolved | 2026-08-03 |
 
-### R1: Consistency floor value (Open)
+### R1: Consistency floor value (Resolved)
 
 **Summary.** The 0.7 Jaccard target is a placeholder; the stretch-skill gate needs a real number.
 
@@ -126,7 +126,7 @@ Anything the run could not honestly complete appears in the handover report as a
 
 **Recommendation.** Floor = min(core-skill consistency scores) measured in P3. Simple, honest, self-calibrating. Decided in-run, recorded as an ADR.
 
-> **Maintainer decision:** _(pending; delegated to the run per D8 unless Jonathan overrides at plan review)_
+> **Maintainer decision:** Accepted as recommended. Floor set to **0.309** (overall lane cut, `critique-clarity` on `claude-haiku-4-5-20251001`), recorded in [ADR 0022 (consistency floor: overall lane, min core)](../../decisions/0022-consistency-floor-overall-lane-min-core.md).
 
 ---
 

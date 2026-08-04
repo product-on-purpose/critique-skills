@@ -9,7 +9,7 @@ Every skill operationalizes a published external standard, cites a permanent cri
 [**What it is**](#-what-this-is) &nbsp;·&nbsp; [**Install**](#-quick-start) &nbsp;·&nbsp; [**Receipts**](#-the-receipts) &nbsp;·&nbsp; [**Skills**](#-the-six-skills) &nbsp;·&nbsp; [**Examples**](#-examples-and-recipes) &nbsp;·&nbsp; [**Methodology**](docs/explanation/methodology.md)
 
 <p>
-  <img src="https://img.shields.io/badge/status-initial%20release-orange?style=flat-square" alt="Status: initial release">
+  <img src="https://img.shields.io/badge/status-pre--release-orange?style=flat-square" alt="Status: pre-release">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0%20%2F%20CC--BY--4.0-blue?style=flat-square" alt="License: Apache-2.0 (code) / CC-BY-4.0 (corpus)"></a>
   <img src="https://img.shields.io/badge/version-0.1.0-blue?style=flat-square" alt="Version 0.1.0">
   <a href="#-conformance-what-convergent-silver-tier-means"><img src="https://img.shields.io/badge/tier-convergent%20(Silver)-C0C0C0?style=flat-square" alt="Conformance tier: convergent (Silver)"></a>
@@ -212,7 +212,7 @@ Three mechanisms, and one story that shows why they matter.
 
 `critique-accessibility` 0.1.0 shipped, and then **lost to the unrubricked baseline** on location-level recall on both tiers: 0.176 against 0.376 on Haiku, 0.306 against 0.776 on Sonnet.
 
-The root cause was not detection. The scripted lane was finding the defects. One helper was printing a line number where the location grammar required a navigable anchor, so half to three quarters of the skill's claims could not be resolved to anything, while the generic prompt "won" by habitually quoting element IDs it saw in the markup. Version 0.1.1 fixed exactly that and nothing else: recall reads **0.976** on Haiku and **0.965** on Sonnet, beating baseline on both tiers on both metrics, and holding under a stricter exact-node scoring cut.
+The root cause was not detection. The scripted lane was finding the defects. One helper was printing a line number where the location grammar required a navigable anchor, so half to three quarters of the skill's claims could not be resolved to anything, while the generic prompt "won" by habitually quoting element IDs it saw in the markup. Version 0.1.1 fixed exactly that and nothing else: location-level recall reads **0.988** on Haiku and **0.965** on Sonnet, beating baseline on both tiers on both metrics, and holding under a stricter exact-node scoring cut. Criterion-level recall, the skill's own rubric-operationalization cut, reads 0.976 on Haiku and 0.965 on Sonnet; see the receipts tables above.
 
 Both versions stay published side by side in the table above. The failure was not deleted when the fix arrived, because the failure is the evidence: measurement caught what review would have shipped.
 
@@ -250,7 +250,7 @@ Regenerate with `node scripts/gen-readme-catalog.mjs`; add `--check` for drift.
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'primaryColor':'#eef2ff','primaryBorderColor':'#c7d2fe','lineColor':'#6366f1','fontFamily':'system-ui, sans-serif'}}}%%
 flowchart LR
-  art["Your artifact"]:::in --> critic{"critique-critic<br/>(clean context)"}:::router
+  art["Your artifact"]:::in --> critic["critique-critic<br/>(clean context)"]:::router
   critic --> scripted["Scripted lane<br/>deterministic checks"]:::script
   critic --> judged["Judged lane<br/>four-pass protocol"]:::judge
   scripted --> env["Run envelope<br/>findings + summary.gate"]:::art
@@ -265,6 +265,8 @@ flowchart LR
   classDef human fill:#fce7f3,stroke:#f9a8d4,color:#9d174d;
   classDef ci fill:#f1f5f9,stroke:#cbd5e1,color:#334155;
 ```
+
+In text: your artifact goes to critique-critic, which runs the critique in a clean context when a subagent tool is available (direct critique runs otherwise, without a separate critic step); from there, two lanes run unconditionally, a scripted lane of deterministic checks and a judged lane using the four-pass protocol. Both lanes write into one run envelope of findings plus a gate summary; a human disposes each finding, and the envelope's exit code also feeds a CI gate.
 
 **Clean context.** Where a subagent tool is available, every skill delegates to [`critique-critic`](agents/critique-critic.md) so critique runs in a context that never saw the artifact being authored. A critic that inherits the author's framing inherits the author's blind spots, so the subagent also strips authorial steering out of its instructions and records that it did.
 
@@ -357,6 +359,7 @@ None of them depend on each other technically. They compose along one value chai
 
 | Where | What |
 |---|---|
+| [`ROADMAP.md`](ROADMAP.md) | Sequence-gated plan from here to v1.0: what shipped, what is next, and what is deliberately not being done |
 | [`QUICKSTART.md`](QUICKSTART.md) | Tutorial: install, run one critique, read the envelope, record a disposition |
 | [`examples/`](examples/) | Worked walkthroughs for all six skills, plus cross-cutting recipes |
 | [`docs/explanation/methodology.md`](docs/explanation/methodology.md) | The constitution: the Two-Part Gate, the contract, severity, determinism, evaluation |
@@ -399,7 +402,7 @@ node scripts/check.mjs
 
 ## 📈 Project status
 
-`v0.1.0` - **first release.** The contract, the severity scale, and the criterion IDs are stable commitments; the measured numbers are one honest cycle, not a settled science. Curated highlights live in [`RELEASE-NOTES.md`](RELEASE-NOTES.md); the full technical history is in [`CHANGELOG.md`](CHANGELOG.md).
+`v0.1.0` - **first release.** The contract, the severity scale, and the criterion IDs are stable commitments; the measured numbers are one honest cycle, not a settled science. Curated highlights live in [`RELEASE-NOTES.md`](RELEASE-NOTES.md); the full technical history is in [`CHANGELOG.md`](CHANGELOG.md); what is next, sequence-gated with no dates, is in [`ROADMAP.md`](ROADMAP.md).
 
 ### At a glance
 

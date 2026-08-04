@@ -29,15 +29,11 @@
 
 - [`library.json`](library.json) - authored canonical cross-agent manifest (the source of truth).
 - [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json) - Claude Code native manifest (generated; do not hand-edit).
-- [`.codex-plugin/plugin.json`](.codex-plugin/plugin.json) - Codex native manifest (generated; do not hand-edit).
-- [`manifest.generated.json`](manifest.generated.json) - agent index (generated).
 
 ## Documentation and governance
 
-- [`STANDARD.md`](STANDARD.md) - the Advanced Skill Library Standard (normative).
 - [`README.md`](README.md) - overview, positioning, quickstart.
 - [`CHANGELOG.md`](CHANGELOG.md) - full technical history; [`RELEASE-NOTES.md`](RELEASE-NOTES.md) - curated, user-facing notes.
 - [`docs/`](docs/) - Diataxis docs (reference, how-to, explanation).
-- [`docs/internal/decisions/`](docs/internal/decisions/) - ADRs; [`docs/internal/backlog/`](docs/internal/backlog/) - backlog; [`docs/internal/STATUS.md`](docs/internal/STATUS.md) - live tracker.
-- [`agents/_chain-permitted.yaml`](agents/_chain-permitted.yaml) - the chain contract; [`templates/`](templates/) - scaffolder templates.
+- [`docs/internal/decisions/`](docs/internal/decisions/) - ADRs.
 - [`scripts/`](scripts/) - the Node validation spine (conformance checks, generators, gate, evaluate).

@@ -6,7 +6,7 @@ Curated, user-facing highlights. For the full technical history, see `CHANGELOG.
 
 Nothing yet.
 
-## 0.1.0 - 2026-08-01
+## 0.1.0 - 2026-08-03
 
 **Critique that has to show its work.** Ask a general-purpose model to review your document, page,
 or argument and you get fluent commentary that changes between runs, cites no standard, and has no

@@ -82,6 +82,12 @@ because there is only one shipped version, `v0.1.0`.
 
 ## Reporting a vulnerability
 
+> [!IMPORTANT]
+> **Pre-release: both links below 404 today.** This repository is currently private, so the security
+> advisories link and the issues link that follow will not resolve for anyone outside this project
+> until it is public. If you already have direct access to this private repository, use its own
+> Security tab or Issues tab instead of the links below.
+
 Report privately first.
 
 Preferred channel: GitHub Private Vulnerability Reporting.

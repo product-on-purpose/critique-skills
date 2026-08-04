@@ -40,10 +40,12 @@ const heading = `## ${version}`;
 const nextHeadingRe = /^## \d+\.\d+\.\d+/;
 
 const extracted = [];
+let headingFound = false;
 let inSection = false;
 for (const line of notes) {
   if (line === heading || line.startsWith(`${heading} `)) {
     inSection = true;
+    headingFound = true;
     extracted.push(line);
     continue;
   }
@@ -56,11 +58,22 @@ for (const line of notes) {
 }
 
 const body = extracted.join("\n").trim();
+// The heading line itself is always in `extracted` once found, so `body` alone cannot detect a
+// heading with nothing under it; check the content below the heading separately.
+const sectionContent = extracted.slice(1).join("\n").trim();
 
-if (body === "") {
+if (!headingFound) {
   console.error(
     `::error::no RELEASE-NOTES.md section for ${version}; add a '## ${version}' heading before ` +
       "tagging (refusing to publish the whole changelog as the release body)",
+  );
+  process.exit(1);
+}
+
+if (sectionContent === "") {
+  console.error(
+    `::error::RELEASE-NOTES.md's '## ${version}' section has no content under the heading; add ` +
+      "release notes before tagging (refusing to publish an empty release body)",
   );
   process.exit(1);
 }

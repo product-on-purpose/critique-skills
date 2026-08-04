@@ -6,6 +6,12 @@ here, and what a finding has to look like once it exists, is governed by
 contribution process built on top of that; where the two disagree, the methodology is correct (its
 own closing line says as much) and this document has a bug.
 
+> [!IMPORTANT]
+> **Pre-release: opening a PR or issue against this repository does not work yet.** It is currently
+> private, so non-collaborators cannot fork it, open a pull request, or file an issue until it goes
+> public. If you already have direct access to this private repository, the process below applies as
+> written; otherwise, treat this document as a preview of how contribution will work once it is open.
+
 ## Two kinds of contribution
 
 **A new `critique-<domain>` skill.** Goes through the Two-Part Gate
