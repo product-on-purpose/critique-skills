@@ -24,6 +24,8 @@ Every skill operationalizes a published external standard, cites a permanent cri
 > [!NOTE]
 > **First release (v0.1.0).** The finding contract, the severity scale, and the criterion IDs are stable commitments. The measured numbers are honest but young: they come from one benchmark cycle on two pinned model tiers, and the consistency floor calibrated to **0.309**, well below the 0.7 that was proposed before any data existed. Read [`bench/results/README.md`](bench/results/README.md) (unflattering numbers first) before you rely on any figure here.
 
+---
+
 <details>
 <summary><strong>Table of Contents</strong></summary>
 
