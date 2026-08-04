@@ -132,6 +132,9 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
       - name: Regenerate the corpus from seed and verify it matches bench/corpus/
         run: python -m bench.generator verify --corpus bench/corpus # doc-check
 
@@ -156,6 +159,10 @@ jobs:
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: ${{ matrix.node-version }}
+
+      - name: Install toolkit dependencies
+        run: npm ci
+        working-directory: .agent-skills-toolkit
 
       - name: Check generated artifacts and documented commands for drift
         env:
