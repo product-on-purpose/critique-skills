@@ -76,7 +76,7 @@ Start at `examples/README.md`, organized by what you are trying to do rather tha
   v0.1.0 one.
 
 Full numbers, every unflattering one stated first: `bench/results/README.md`. Per-skill ship
-reasoning: `bench/results/verdicts.md`. Install path once published: the product-on-purpose
-marketplace or `npx skills add product-on-purpose/critique-skills`; see `QUICKSTART.md` for the
-current pre-release status and a no-branch first run, or `examples/README.md` for a worked
-walkthrough of every skill.
+reasoning: `bench/results/verdicts.md`. Install path: the product-on-purpose marketplace, which
+pins this release's tag, or `npx skills add product-on-purpose/critique-skills`; see
+`QUICKSTART.md` for a no-branch first run, or `examples/README.md` for a worked walkthrough of
+every skill.
