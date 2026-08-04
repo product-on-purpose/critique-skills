@@ -55,6 +55,29 @@ Two things are reported but not fatal, and `--strict` promotes both: more than f
 
 The full list, with the reasoning for each rule, is in [`contract/README.md`](../../contract/README.md). Why the review-only layer is accepted rather than approximated by a heuristic is [0016 (contract enforcement boundary)](../internal/decisions/0016-contract-enforcement-boundary.md).
 
+## The two lanes, merged into one envelope
+
+Each skill declares its scripted/judged split in `SKILL.md` frontmatter ([methodology section 7](../explanation/methodology.md#7-determinism-model)). The two lanes run through different mechanisms and land in the same `findings[]` array, distinguished only by the `lane` field each finding carries:
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#eef2ff','primaryBorderColor':'#c7d2fe','lineColor':'#6366f1','fontFamily':'system-ui, sans-serif'}}}%%
+flowchart LR
+  fm{"SKILL.md frontmatter<br/>declares the split"}:::decl --> scripted["scripts/checks.py<br/>deterministic checks"]:::script
+  fm --> judged["Four-pass protocol<br/>model judgment"]:::judge
+  scripted --> sf["lane: scripted<br/>confidence: high"]:::script
+  judged --> jf["lane: judged<br/>confidence: high / medium / low"]:::judge
+  sf --> env["One findings[] array,<br/>one run envelope"]:::env
+  jf --> env
+  env --> val["Validator reconciles<br/>by_severity against findings[]"]:::val
+  classDef decl fill:#ddd6fe,stroke:#a78bfa,color:#4c1d95;
+  classDef script fill:#e0f2fe,stroke:#7dd3fc,color:#075985;
+  classDef judge fill:#fef9c3,stroke:#fde047,color:#854d0e;
+  classDef env fill:#eef2ff,stroke:#c7d2fe,color:#3730a3;
+  classDef val fill:#f1f5f9,stroke:#cbd5e1,color:#334155;
+```
+
+In text: frontmatter routes each criterion to one of two lanes. The scripted lane runs `scripts/checks.py` and every finding it produces carries `lane: scripted` and forced `confidence: high`. The judged lane runs the four-pass protocol and its findings carry `lane: judged` with a `confidence` the model actually earned. Both lanes write into the same `findings[]` array of one run envelope, and the validator reconciles `summary.by_severity` against that merged array, never against either lane alone.
+
 ## Envelope walkthrough
 
 A run envelope has exactly three top-level keys.

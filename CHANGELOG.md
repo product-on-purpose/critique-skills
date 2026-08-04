@@ -52,11 +52,47 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `bench/results/README.md` and `bench/results/verdicts.md`.
 - Documentation: `README.md`, `QUICKSTART.md`, the Diataxis `docs/` tree (reference, how-to,
   explanation, tutorials), generated results and skill-catalog tables, `INDEX.md`.
+- Examples library: `examples/README.md` indexes nine self-contained pages by task rather than by
+  file, six one-skill walkthroughs (`examples/accessibility/`, `argument/`, `clarity/`, `docs/`,
+  `microcopy/`, `usability/`, each an artifact plus its `envelope.json` and a human's
+  `dispositions.json`) and three cross-cutting recipes (`recipes/gate-in-ci.md`,
+  `recipes/revision-loop.md`, `recipes/critic-delegation.md`), explaining once which findings are
+  bit-for-bit reproducible (`lane: scripted`) and which are curated from this library's own
+  validated golden fixtures (`lane: judged`). Cross-linked from `README.md`'s Examples section and
+  `QUICKSTART.md`'s closing pointer.
+- Skill-template conformance now runs in CI: `scripts/tests/test_skills_conformance.py` globs
+  `skills/critique-*/` and runs `scripts/skill-selftest.py` against each of the six shipped skills
+  as a parametrized pytest case, collected automatically by the existing `unit-python` job with no
+  workflow edit. Closes S-04's AC-3 ("a template-conformance script validates all six skills
+  uniformly in CI"); the spec now records all seven ACs fulfilled. Full suite: 784 tests passing
+  (777 prior plus 7 new: one guard test plus six parametrized skill cases).
+- Mermaid diagrams, each followed by a plain-text restatement of the same flow: the benchmark
+  pipeline, seed and generator version through the corpus, skill and baseline runs, metrics, to
+  published tables (`bench/README.md`, "The pipeline, at a glance"); how a scripted-lane finding
+  and a judged-lane finding merge into one run envelope (`docs/reference/critique-contract.md`,
+  "The two lanes, merged into one envelope"); and the critique, disposition, revise, re-critique
+  loop with its three-iteration bound (`examples/recipes/revision-loop.md`).
+- `CONTRIBUTING.md`: the Two-Part Gate as the entry test for a new skill, the seven-item review
+  order from `docs/explanation/methodology.md` Section 12, the copyright paraphrase policy, and how
+  to run the conformance gate and the generated-file regeneration step locally.
+- `SECURITY.md`: an inventory of what the repository ships and what it executes, naming the bench
+  harness's live-model call as the one network call anything here makes (opt-in, `workflow_dispatch`
+  only, never on `push` or `pull_request`), the supply-chain posture (pinned GitHub Actions, zero
+  third-party npm runtime dependencies, CI `npm audit` on every push and pull request), and the
+  GitHub Private Vulnerability Reporting channel for reports.
 - 29 ADRs under `docs/internal/decisions/` recording every material build-run decision, from the
   `critique-` prefix and full-slate scope through the measurement basis, the consistency floor, and
   the accessibility calibration.
 
 ### Changed
+- `README.md` restructured to the family's badge-and-table-of-contents style: status and
+  conformance-tier badges, a collapsible table of contents, a "What this is" comparison table,
+  Mermaid flowcharts for "How a critique runs" and the Two-Part Gate, a generated release-history
+  table, and a widened "The family" section that now also lists `writing-style-catalog`. The
+  conformance-tier claim was updated to match the tree: `node scripts/check.mjs` reports "Tier:
+  Convergent (Advanced blocked: 12 issues)" with 0 errors and 0 warnings at the declared tier,
+  replacing the prior wording that the plugin "targets Universal tier... with `critique-critic`
+  already at Convergent."
 - Location-level rescoring added to `bench/results/` (results schema version 1.1.0): recall and
   precision now also compute on location match alone, criterion ID ignored, alongside the original
   criterion-level cut, because the criterion-level baseline comparison is pinned at zero by

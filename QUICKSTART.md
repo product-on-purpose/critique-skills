@@ -6,9 +6,16 @@ separate API key: critique runs as a skill in the session you already have open.
 
 ## 1. Install
 
-Two ways to get `critique-skills` in place. The rest of this walkthrough assumes the plugin path;
-a repo checkout is a clearly-labeled alternative, needed only if you want to run the benchmark or
-the contract validator directly rather than through a skill invocation.
+> [!IMPORTANT]
+> **Pre-release: the commands below are not resolvable yet.** This repository is currently private
+> and its public `main` branch has not received this release's content beyond an initial placeholder
+> commit; it is also not yet listed in the `product-on-purpose/agent-plugins` marketplace registry.
+> Both install paths described here will fail until that changes. If you already have direct access
+> to this private repository, clone it and check out the release branch instead.
+
+Two ways to get `critique-skills` in place, once published. The rest of this walkthrough assumes
+the plugin path; a repo checkout is a clearly-labeled alternative, needed only if you want to run
+the benchmark or the contract validator directly rather than through a skill invocation.
 
 **As a Claude Code plugin (this walkthrough's main path):**
 

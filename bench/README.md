@@ -14,6 +14,32 @@ yet; the harness implementation stage builds them exactly as specified here. Sec
 - Why the tolerance rules are shaped this way:
   [ADR 0015 (location tolerance: per artifact type)](../docs/internal/decisions/0015-location-tolerance-per-artifact-type.md)
 
+## The pipeline, at a glance
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#eef2ff','primaryBorderColor':'#c7d2fe','lineColor':'#6366f1','fontFamily':'system-ui, sans-serif'}}}%%
+flowchart LR
+  seed["Root seed +<br/>generator version"]:::infra --> gen["bench/generator<br/>domain plugins"]:::gen
+  gen --> corpus["bench/corpus/<br/>artifacts + manifests<br/>corpus.lock.json"]:::corpus
+  corpus --> skillrun["Skill runs<br/>k=5, pinned model"]:::run
+  corpus --> baserun["Baseline runs<br/>frozen generic prompt"]:::run
+  skillrun --> env["Run envelopes<br/>contract-valid"]:::env
+  baserun --> env
+  corpus -. "ground truth" .-> metrics["bench/metrics<br/>recall, precision,<br/>consistency, clean FP"]:::metrics
+  env --> metrics
+  metrics --> results["results.json"]:::results
+  results --> table["Published tables<br/>bench-results markers"]:::infra
+  classDef infra fill:#f1f5f9,stroke:#cbd5e1,color:#334155;
+  classDef gen fill:#ddd6fe,stroke:#a78bfa,color:#4c1d95;
+  classDef corpus fill:#dcfce7,stroke:#86efac,color:#166534;
+  classDef run fill:#e0f2fe,stroke:#7dd3fc,color:#075985;
+  classDef env fill:#eef2ff,stroke:#c7d2fe,color:#3730a3;
+  classDef metrics fill:#fef9c3,stroke:#fde047,color:#854d0e;
+  classDef results fill:#fce7f3,stroke:#f9a8d4,color:#9d174d;
+```
+
+In text: a root seed and the generator version feed `bench/generator`, which builds the corpus of artifacts and manifests locked by `corpus.lock.json`. That corpus drives two kinds of runs, skill runs (k=5, pinned model) and baseline runs (a frozen generic prompt), both producing contract-valid run envelopes. The corpus's manifests, as ground truth, and those envelopes both feed `bench/metrics`, which computes recall, precision, consistency, and clean-artifact false-positive rate into `results.json`. The published tables in this repository, marked by the `bench-results` comments, are generated from that file, never hand-edited.
+
 ## Layout
 
 ```

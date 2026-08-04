@@ -11,6 +11,27 @@ level: intermediate
 walks one artifact through the full loop the library supports: critique, disposition, revise,
 re-critique, converging to zero findings at severity 3 or above.
 
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#eef2ff','primaryBorderColor':'#c7d2fe','lineColor':'#6366f1','fontFamily':'system-ui, sans-serif'}}}%%
+flowchart TD
+  art0["Artifact drafted"]:::art --> crit["Critique<br/>clean-context run"]:::action
+  crit --> disp{"Human disposition<br/>on each finding"}:::human
+  disp --> rev["Revise the artifact"]:::action
+  rev --> recrit["Re-critique<br/>clean-context run"]:::action
+  recrit --> chk{"Zero findings at<br/>severity 3 or 4?"}:::check
+  chk -- "yes" --> stopok["Loop stops: converged"]:::stop
+  chk -- "no" --> bound{"3 iterations<br/>reached?"}:::check
+  bound -- "no" --> disp
+  bound -- "yes" --> stopcap["Loop stops: bound reached<br/>remainder dispositioned as-is"]:::stop
+  classDef art fill:#dcfce7,stroke:#86efac,color:#166534;
+  classDef action fill:#eef2ff,stroke:#c7d2fe,color:#3730a3;
+  classDef human fill:#fce7f3,stroke:#f9a8d4,color:#9d174d;
+  classDef check fill:#fef9c3,stroke:#fde047,color:#854d0e;
+  classDef stop fill:#f1f5f9,stroke:#cbd5e1,color:#334155;
+```
+
+In text: critique, then a human disposes each finding, then revise, then re-critique. If zero findings remain at severity 3 or 4, the loop stops, converged. If not, and three iterations have not yet run, it loops back to disposition on what remains. If three iterations have run and findings remain, the loop stops anyway and whatever is left gets dispositioned like anything else, not fed into a fourth round.
+
 **What's real here and what's authored.** The v1 memo and its two severity-3 findings are not
 constructed for this recipe. They are `skills/critique-argument/examples/argument-golden-01-warrant-gap.md`
 and its recorded envelope, `skills/critique-argument/examples/golden-01.json`, a validated golden
