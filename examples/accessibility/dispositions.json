@@ -1,0 +1,54 @@
+{
+  "contract_version": "1.0.0",
+  "envelope": {
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "artifact": "skills/critique-accessibility/examples/artifacts/golden-04.html",
+    "artifact_sha256": "bf557d919a3f6c77aa2d312d27ef9062faac6364ca9bd20258140da4606b762a",
+    "timestamp": "2026-07-31T18:05:06Z"
+  },
+  "dispositions": [
+    {
+      "finding_id": "F-001",
+      "disposition": "accept",
+      "note": "Confirmed on the rendered page: pinch zoom does nothing. Removing user-scalable=no from the viewport meta tag is a one-line change, shipping in the next deploy.",
+      "criterion": "WCAG-1.4.4",
+      "decided_at": "2026-08-01T09:12:00Z"
+    },
+    {
+      "finding_id": "F-002",
+      "disposition": "accept",
+      "note": "Confirmed: a keyboard user tabs through both header links before ever reaching the dashboard content. Wrapping the two content divs in a main element is a small template change.",
+      "criterion": "WCAG-2.4.1",
+      "decided_at": "2026-08-01T09:14:00Z"
+    },
+    {
+      "finding_id": "F-003",
+      "disposition": "accept",
+      "note": "englandshire is a placeholder value left in from scaffolding, not an intentional locale. Fixing to lang=\"en\".",
+      "criterion": "WCAG-3.1.1",
+      "decided_at": "2026-08-01T09:15:00Z"
+    },
+    {
+      "finding_id": "F-004",
+      "disposition": "defer",
+      "note": "Real defect, but the promo banner is being replaced by the design system's responsive card component in next sprint's mobile rework. Deferring rather than patching a component that is about to be removed; tracked against that rework instead of as a standalone fix.",
+      "criterion": "WCAG-1.4.10",
+      "decided_at": "2026-08-01T09:18:00Z"
+    },
+    {
+      "finding_id": "F-005",
+      "disposition": "accept",
+      "note": "Confirmed at 2.38:1, under the 3:1 minimum. Darkening the secondary button border to our standard #767676 token clears this and is a single CSS value change.",
+      "criterion": "WCAG-1.4.11",
+      "decided_at": "2026-08-01T09:20:00Z"
+    },
+    {
+      "finding_id": "F-006",
+      "disposition": "reject",
+      "note": "The status text in this box is generated server side and truncated to a single short line before it ever reaches this template, so the wrapped-and-clipped scenario the finding describes cannot occur with the content this box actually renders. Revisiting if the truncation limit ever changes.",
+      "criterion": "WCAG-1.4.12",
+      "decided_at": "2026-08-01T09:24:00Z"
+    }
+  ]
+}

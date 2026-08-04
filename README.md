@@ -211,6 +211,15 @@ seen the artifact being authored (`docs/explanation/methodology.md`, Section 7, 
 critique"). Nothing here auto-applies a fix: skills report findings, a human disposes of them
 (`docs/how-to/dispositions.md`), and critique never edits your artifact on its own behalf.
 
+## Examples
+
+`examples/` holds nine self-contained pages: one worked walkthrough per skill above (an artifact,
+its critique, and a human's disposition on each finding), plus three recipes showing how the pieces
+fit together, gating CI, a multi-round revision loop, and clean-context subagent delegation. Every
+page states plainly which parts are bit-for-bit reproducible and which are curated illustration from
+this library's own validated golden fixtures. Start at `examples/README.md`, organized by task
+rather than by file.
+
 ## Where this stops, and thinking-framework-skills starts
 
 **One test decides it: does the framework evaluate a concrete, already-existing artifact against a

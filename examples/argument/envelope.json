@@ -1,0 +1,61 @@
+{
+  "run": {
+    "skill": "critique-argument",
+    "skill_version": "0.1.0",
+    "contract_version": "1.0.0",
+    "artifact": "skills/critique-argument/examples/argument-golden-02-hedge-and-marker.md",
+    "artifact_sha256": "f8df42e689f882da0e5d6910158466c48a03b1a02f93ae3d6b9df76d49aa9082",
+    "model": "claude-sonnet-4-5-20250929",
+    "timestamp": "2026-07-31T18:12:00Z",
+    "rubrics": [
+      "TOULMIN"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "criterion": "TOULMIN-CLAIM",
+      "lane": "judged",
+      "severity": 3,
+      "location": "the \"Onboarding Checklist Pilot: Early Notes\" heading, paragraph 4",
+      "evidence": "Rolling the checklist out more broadly is something the team might want to consider, perhaps starting with one additional department next quarter, though it may be worth waiting for a second cohort before treating the two-week figure as a stable number rather than a pilot-window coincidence.",
+      "violation": "The note never settles on one conclusion: paragraph 4 floats both rolling the checklist out further and waiting for a second cohort without choosing between them, so no single sentence assembled from the artifact's own wording states what the note is asking the reader to do.",
+      "fix": "State one explicit recommendation, for example either to wait for a second pilot cohort before expanding or to roll out to one additional department next quarter, rather than leaving both options open.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-002",
+      "criterion": "TOULMIN-HEDGE-DENSITY",
+      "lane": "scripted",
+      "severity": 3,
+      "location": "the whole document, under its \"Onboarding Checklist Pilot: Early Notes\" heading",
+      "evidence": "6 of 10 sentences (0.60) carry at least one hedging term.",
+      "violation": "More than 0.35 of the artifact's sentences carry a term from the hedging lexicon (may, might, could, possibly, perhaps, arguably, somewhat, relatively, it seems, appears to, tends to, to a degree), spread across the whole document rather than concentrated where the evidence actually underdetermines the claim.",
+      "fix": "Remove the hedge from sentences whose claim the evidence actually supports, reserving qualification for the claims that genuinely need it.",
+      "confidence": "high"
+    },
+    {
+      "id": "F-003",
+      "criterion": "TOULMIN-CLAIM-MARKER",
+      "lane": "scripted",
+      "severity": 2,
+      "location": "the whole document, under its \"Onboarding Checklist Pilot: Early Notes\" heading",
+      "evidence": "0 conclusion-marker phrases found across 286 words.",
+      "violation": "No phrase from the conclusion-marker lexicon (therefore, thus, hence, it follows that, we recommend, this paper argues, I argue that, the conclusion is, in conclusion, we should, the case for) appears anywhere in the artifact, so a reader scanning rather than reading straight through has no signpost to where the conclusion is asserted.",
+      "fix": "Add an explicit conclusion-signalling phrase at the point the artifact states its central claim, for example \"therefore\" or \"we recommend\".",
+      "confidence": "high"
+    }
+  ],
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 0
+    },
+    "suppressed_count": 0,
+    "gate": "fail",
+    "severity_3_threshold": 0
+  }
+}
