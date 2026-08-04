@@ -72,8 +72,8 @@ The claim is not that these skills critique better than a good model does. It is
 
 ## ⚡ Quick start
 
-> [!IMPORTANT]
-> **Pre-release: none of the paths below resolve yet.** This repository is currently private and has not been pushed to its public `main` branch beyond an initial placeholder commit, and it is not yet listed in the `product-on-purpose/agent-plugins` marketplace registry. Until both of those land, `/plugin install`, `npx skills add`, and a public `git clone` will all fail for anyone outside this project. If you already have direct access to this private repository, clone it and check out the release branch instead of the commands below.
+> [!NOTE]
+> **Published, and pinned.** The `product-on-purpose` marketplace pins `critique-skills` to the `v0.1.0` release tag, so `/plugin install` gives you exactly that commit rather than whatever `main` happens to hold when you run it.
 
 **Claude Code (recommended):**
 
@@ -419,7 +419,7 @@ node scripts/check.mjs
 | **Tests** | 784 |
 | **Spec** | [agentskills.io](https://agentskills.io/specification) |
 | **License** | [Apache-2.0](LICENSE) (code) / CC-BY-4.0 (corpus) |
-| **Install** | Not yet published (private repo, unlisted in the marketplace) - see [Quick start](#-quick-start) |
+| **Install** | `/plugin install critique-skills@product-on-purpose`, pinned to `v0.1.0` - see [Quick start](#-quick-start) |
 
 ### Repo structure
 
