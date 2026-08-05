@@ -1,6 +1,26 @@
+# Byte stability for hashed content.
+#
+# This repository records sha256 hashes of its own files as evidence. Git's end-of-line
+# normalization (core.autocrlf=true, the Git for Windows default) rewrites LF to CRLF on
+# checkout, which changes the bytes and therefore the hash. Any path whose content is hashed
+# anywhere in this repository MUST be listed here with -text, or the hash is wrong on every
+# Windows clone while remaining right in the repository, which is the hardest version of this
+# bug to see.
+
 # bench/corpus/** is generator output written UTF-8, no BOM, LF, exactly
 # one trailing newline (bench/generator/README.md, "Output bytes"). Without
 # this line, git normalizes line endings on checkout and every recorded
 # artifact_sha256 is wrong on Windows. Required for S-03 AC-1; see
 # bench/README.md, "Prerequisites".
 bench/corpus/** -text
+
+# Skill example artifacts are hashed into expected_envelope.run.artifact_sha256 by every
+# skills/*/examples/*.json fixture. This rule was missing until v0.1.x, and the consequence was
+# not hypothetical: all 22 recorded hashes were already wrong on a Windows working tree, matching
+# the LF form stored in git and never the CRLF form on disk. The whole examples tree is covered
+# rather than only today's artifact paths, so a skill that puts a hashed artifact somewhere new
+# does not silently reintroduce the defect.
+# The glob is recursive so a nested fixture tree (skills/_template-fixture/critique-toy/examples/)
+# is covered on the same terms as a top-level one.
+# Guarded by scripts/tests/test_example_artifact_hashes.py.
+skills/**/examples/** -text
