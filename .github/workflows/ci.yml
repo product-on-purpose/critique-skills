@@ -76,6 +76,41 @@ jobs:
       - name: Run Python unit tests
         run: python -m pytest # doc-check
 
+  # Does the plugin actually run for someone who just installed it?
+  #
+  # Every other job in this file installs dependencies before it runs anything, so none of them
+  # sees what `/plugin install` delivers: a git clone and nothing else. A fresh install crashed for
+  # exactly that reason, while 784 tests passed and the conformance gate was clean.
+  #
+  # Both user states are asserted, in order, on one runner: first with no dependencies (the state a
+  # new user is in), then with them. Asserting only the second would have missed the defect this
+  # job exists because of.
+  smoke:
+    name: smoke (Python 3.12)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      # Explicit rather than assumed: if a future runner image ever ships jsonschema, the no-deps
+      # assertion below would silently be testing the wrong environment.
+      - name: Guarantee the dependency is absent
+        run: pip uninstall -y jsonschema || true
+
+      - name: Every skill fails actionably with no dependencies installed
+        run: python scripts/smoke.py --expect no-deps # doc-check
+
+      - name: Install runtime dependencies
+        run: pip install -r requirements.txt
+
+      - name: Every skill produces a usable envelope once dependencies are installed
+        run: python scripts/smoke.py --expect ready # doc-check
+
   unit-node:
     name: unit-node (Node ${{ matrix.node-version }})
     runs-on: ubuntu-latest

@@ -84,6 +84,17 @@ prerequisite `npm run check` and `npm run gen -- --check` share.
 | corpus | `python -m bench.generator verify --corpus bench/corpus` |
 | drift | `npm run gen -- --check` |
 | audit | `npm audit --audit-level=high` |
+| smoke | `python scripts/smoke.py --expect no-deps`, then `python scripts/smoke.py --expect ready` |
+
+**`smoke` answers a question no other job asks: does this plugin run for someone who just installed
+it?** Every other job installs dependencies before it runs anything, so none of them sees what
+`/plugin install` delivers, which is a git clone and nothing else. That gap shipped a real defect:
+`contract/validate.py` imported `jsonschema` at module load, `/plugin install` does not run `pip`,
+and a fresh install answered step 2 of every skill's protocol with a raw traceback while 784 tests
+passed and the gate was clean. The job asserts both user states in order on one runner, first with
+no dependencies (every skill must fail naming the exact install command, with no traceback), then
+with them (every skill must emit a usable envelope). Asserting only the second would have missed the
+defect the job exists because of.
 
 A command whose target does not exist yet (no bench results, no bench corpus) succeeds vacuously
 with a message saying so, rather than failing on an artifact nobody has built yet; each script's
