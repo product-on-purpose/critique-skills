@@ -40,9 +40,41 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Iterator
 
-import jsonschema
-
 SCHEMA_PATH = Path(__file__).resolve().parent / "critique-contract.schema.json"
+
+# `jsonschema` is the one third-party runtime dependency this module needs (ADR 0009 permits it;
+# requirements.txt pins it). It is imported lazily, on first real use, rather than at module import.
+#
+# The reason is a user-visible failure, not style. Every skill's scripts/checks.py reaches this
+# module through skills/_shared/runner.py and gate.py, so a module-level import ran before an
+# artifact was even read. Claude Code's `/plugin install` does not install Python packages, so on
+# any machine without jsonschema a freshly installed plugin answered step 2 of every skill's
+# protocol with a bare ModuleNotFoundError traceback and no indication of the remedy. Deferring the
+# import means the chain loads cleanly and the error surfaces at the point of use, where it can be
+# caught and reported as one actionable line.
+
+MISSING_JSONSCHEMA_MESSAGE = (
+    "critique-skills: the 'jsonschema' package is required but is not installed.\n"
+    '  Install it once:  pip install "jsonschema>=4.20,<5"\n'
+    "  Claude Code's /plugin install does not install Python packages; see QUICKSTART.md step 1."
+)
+
+
+class MissingDependencyError(RuntimeError):
+    """A required third-party package is not installed.
+
+    Carries the exact install command in its message, so a caller can print
+    ``str(exc)`` verbatim and a reader knows what to run.
+    """
+
+
+def _jsonschema() -> Any:
+    """Return the ``jsonschema`` module, or raise MissingDependencyError naming the fix."""
+    try:
+        import jsonschema
+    except ImportError as exc:  # pragma: no cover - exercised via a shadowed import in tests
+        raise MissingDependencyError(MISSING_JSONSCHEMA_MESSAGE) from exc
+    return jsonschema
 
 SEVERITY_KEYS = ("0", "1", "2", "3", "4")
 
@@ -86,6 +118,7 @@ def load_schema() -> dict[str, Any]:
 def _root_validator() -> jsonschema.Draft202012Validator:
     """A validator for the schema root (envelope or disposition log, per
     the root's own if/then/else dispatch on the 'dispositions' key)."""
+    jsonschema = _jsonschema()
     schema = load_schema()
     jsonschema.Draft202012Validator.check_schema(schema)
     return jsonschema.Draft202012Validator(schema)
@@ -100,6 +133,7 @@ def _finding_validator() -> jsonschema.Draft202012Validator:
     contract/README.md: "To validate a bare finding, reference
     #/$defs/finding directly."
     """
+    jsonschema = _jsonschema()
     schema = load_schema()
     finding_schema = {"$ref": "#/$defs/finding", "$defs": schema["$defs"]}
     return jsonschema.Draft202012Validator(finding_schema)
@@ -818,6 +852,21 @@ def _build_parser() -> _ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """CLI entry point.
+
+    Wraps `_main` so a missing third-party dependency is reported as one
+    actionable line rather than an import traceback, using the same exit-code
+    convention every other environment error here uses (4 under --gate, 1
+    otherwise).
+    """
+    try:
+        return _main(argv)
+    except MissingDependencyError as exc:
+        print(str(exc), file=sys.stderr)
+        return 4 if _argv_requests_gate(argv) else 1
+
+
+def _main(argv: list[str] | None = None) -> int:
     parser = _build_parser()
     try:
         args = parser.parse_args(argv)

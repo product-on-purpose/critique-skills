@@ -584,18 +584,31 @@ numbers published in this file; the two mechanisms are not byte-equivalent, and 
 record, including model routing, ground-truth isolation, and the mid-run interruption and resume:
 [`docs/internal/execution/P3-provenance.md`](../../docs/internal/execution/P3-provenance.md).
 
-**The 40 envelopes under `bench/results/runs-cal1/` have no equivalent record, and that is a gap.**
-No provenance document exists for the cal1 run set, and
-[`measurement-manifest.json`](measurement-manifest.json)'s `calibration.cal1` block records the
-corpus, models, k and staging but does not name the mechanism that produced the envelopes. Given the
+**The 40 envelopes under `bench/results/runs-cal1/` have a weaker record, and the difference
+matters.** [P3-cal1-provenance.md](../../docs/internal/execution/P3-cal1-provenance.md) was written
+in the v0.1.x pass, four days after the runs, by a session that was not present for them. It
+establishes the grid from the committed envelopes directly (40 envelopes, `critique-accessibility`
+at 0.1.1, 4 artifacts x 2 pinned tiers x k=5, 130 scripted and 86 judged findings, corpus verified
+byte-identical), and it carries one session-supplied mechanism fact, a workflow run ID, explicitly
+labelled as unverified. **What produced each individual envelope is still not established**, and
+that document says so in a section titled "Not established" rather than inferring it. Given the
 paragraph above, that the p3 mechanism and `bench/run_bench.py` are known not to be byte-equivalent,
-a reader cannot currently tell whether the 0.1.0 and 0.1.1 accessibility figures were produced under
-the same harness. Six of the 40 cal1 envelopes also carry round-number `run.timestamp` values, four
-of them exactly `00:00:00Z`, so those timestamps are not a record of when the runs happened. Two
-things bound the damage and neither closes it: the scripted lane, which supplies 13 of the 17 planted
-defects per pass, is byte-reproducible from committed code with no model at all, and the judged
-lane's detection rate is flat between the two versions, which is not what a harness change would
-typically look like. **Writing the cal1 provenance record is an open item.**
+a reader still cannot fully confirm that the 0.1.0 and 0.1.1 accessibility figures came from the
+same harness.
+
+Three anomalies are recorded there, measured from the envelopes rather than recalled. **Nine** of
+the 40 carry a `run.timestamp` whose minute and second are both round, four of them exactly
+`2026-07-31T00:00:00Z` (an earlier draft of this paragraph said six, which undercounted); ten are
+timestamped a day before the calibration date the manifest records; and one envelope records the
+staging path instead of the corpus path in `run.artifact` and is the only one with sub-second
+timestamp precision. None of them changes what was measured, and all of them confirm that these
+timestamps are not a record of when the runs happened.
+
+Two things bound the damage and neither closes it: the scripted lane, which supplies 13 of the 17
+planted defects per pass, is byte-reproducible from committed code with no model at all, and the
+judged lane's detection rate is flat between the two versions, which is not what a harness change
+would typically look like. **What closes it is a re-measurement through a committed harness with its
+output committed alongside a log, which is what the first live `bench.yml` dispatch would establish.**
 
 ## Limitations
 

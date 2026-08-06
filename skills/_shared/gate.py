@@ -22,6 +22,7 @@ from __future__ import annotations
 
 from contract.validate import (  # noqa: F401  (re-exported, not used here)
     Issue,
+    MissingDependencyError,
     ValidationResult,
     gate_exit_code,
     load_document,
@@ -30,6 +31,7 @@ from contract.validate import (  # noqa: F401  (re-exported, not used here)
 
 __all__ = [
     "Issue",
+    "MissingDependencyError",
     "ValidationResult",
     "gate_exit_code",
     "load_document",

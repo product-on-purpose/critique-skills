@@ -1,6 +1,6 @@
 ---
 name: critique-argument
-description: "Reviews argumentative prose - essays, proposals, position papers, recommendation memos, strategy docs, and op-eds - against the Toulmin model of argument: whether the claim, grounds, warrant, backing, qualifier, and rebuttal are present, explicit, and actually hold together. Use when the user asks for a review, feedback, a second opinion, a red-line pass, a quality check, or a critique of whether an argument holds up before it goes out."
+description: "Reviews argumentative prose - essays, proposals, position papers, recommendation memos, strategy docs, and op-eds - against the Toulmin model of argument: whether the claim, grounds, warrant, backing, qualifier, and rebuttal are present, explicit, and actually hold together. Judges the argument's structure, not prose readability or sentence mechanics (critique-clarity covers that). Use when the user asks for a review, feedback, a second opinion, a red-line pass, a quality check, or a critique of whether an argument holds up before it goes out."
 version: 0.1.0
 license: Apache-2.0
 rubric_sources:
@@ -72,6 +72,9 @@ Follow these four passes in order. Do not skip ahead to severity or fixes while 
    in ascending ID order, evaluating each against the whole artifact before moving to the next.
    Run the scripted lane via `scripts/checks.py <artifact>`; perform the judged lane yourself,
    criterion by criterion, in the same fixed order.
+   One-time prerequisite: `pip install "jsonschema>=4.20,<5"`. Claude Code's `/plugin install`
+   does not install Python packages, and `checks.py` names this command itself if the package
+   is absent.
 3. **Severity assignment, as a separate pass.** Once every criterion has been swept, go back and
    assign severity to every finding using the weighing order in
    `docs/reference/severity-scale.md` (impact, then frequency, then persistence) and this skill's

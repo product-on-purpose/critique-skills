@@ -19,7 +19,7 @@ from typing import Callable, Sequence
 from skills._shared.artifact import Artifact, ArtifactError, load_artifact
 from skills._shared.envelope import assemble_envelope
 from skills._shared.findings import RawFinding
-from skills._shared.gate import gate_exit_code, validate_document
+from skills._shared.gate import MissingDependencyError, gate_exit_code, validate_document
 
 CheckFn = Callable[[Artifact], Sequence[RawFinding]]
 
@@ -91,6 +91,35 @@ def run_scripted_lane(
     except ArtifactError as exc:
         print(f"usage error: {exc}", file=sys.stderr)
         return 4 if args.gate else 1
+
+    try:
+        return _run(
+            skill_name=skill_name,
+            skill_version=skill_version,
+            rubrics=rubrics,
+            check_fn=check_fn,
+            artifact=artifact,
+            args=args,
+            now=now,
+        )
+    except MissingDependencyError as exc:
+        # The scripted lane is step 2 of every skill's protocol, so this is the first command an
+        # agent runs after a fresh install. Report the remedy, not an import traceback.
+        print(str(exc), file=sys.stderr)
+        return 4 if args.gate else 1
+
+
+def _run(
+    *,
+    skill_name: str,
+    skill_version: str,
+    rubrics: Sequence[str],
+    check_fn: CheckFn,
+    artifact: Artifact,
+    args: argparse.Namespace,
+    now: Callable[[], datetime] | None = None,
+) -> int:
+    """The part of `run_scripted_lane` that can need the contract validator."""
 
     raw_findings = list(check_fn(artifact))
 

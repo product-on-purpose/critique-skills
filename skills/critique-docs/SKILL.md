@@ -56,6 +56,9 @@ Follow these four passes in order. Do not skip ahead to severity or fixes while 
    `scripts/checks.py <artifact>`; perform the judged lane yourself, criterion by criterion, in the
    same fixed order, against the operational test each criterion states in
    `references/DIATAXIS.md`.
+   One-time prerequisite: `pip install "jsonschema>=4.20,<5"`. Claude Code's `/plugin install`
+   does not install Python packages, and `checks.py` names this command itself if the package
+   is absent.
 3. **Severity assignment, as a separate pass.** Once every criterion has been swept, go back and
    assign severity to every finding using the weighing order in
    [`docs/reference/severity-scale.md`](../../docs/reference/severity-scale.md) (impact, then

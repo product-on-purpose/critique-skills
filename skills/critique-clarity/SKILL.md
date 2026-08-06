@@ -1,6 +1,6 @@
 ---
 name: critique-clarity
-description: "Reviews markdown or plain-text prose for clarity against the Federal Plain Language Guidelines and Williams' Style: readability, passive voice, sentence length, and nominalization density. Use when the user asks for feedback, a second opinion, a red-line pass, or a quality check on a memo, PRD, proposal, or any prose document before it goes out."
+description: "Reviews markdown or plain-text prose for clarity against the Federal Plain Language Guidelines and Williams' Style: readability, passive voice, sentence length, and nominalization density. Judges sentence- and passage-level readability, not whether an argument's claim is supported or its structure holds together (critique-argument covers that). Use when the user asks for feedback, a second opinion, a red-line pass, or a quality check on a memo, PRD, proposal, or any prose document before it goes out."
 version: 0.1.0
 license: Apache-2.0
 rubric_sources:
@@ -74,6 +74,9 @@ Follow these four passes in order. Do not skip ahead to severity or fixes while 
    in ascending ID order, evaluating each against the whole artifact before moving to the next.
    Run the scripted lane via `scripts/checks.py <artifact>`; perform the judged lane yourself,
    criterion by criterion, in the same fixed order.
+   One-time prerequisite: `pip install "jsonschema>=4.20,<5"`. Claude Code's `/plugin install`
+   does not install Python packages, and `checks.py` names this command itself if the package
+   is absent.
 3. **Severity assignment, as a separate pass.** Once every criterion has been swept, go back and
    assign severity to every finding using the weighing order in
    `docs/reference/severity-scale.md` (impact, then frequency, then persistence) and this skill's

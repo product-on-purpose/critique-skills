@@ -1,6 +1,6 @@
 ---
 name: critique-accessibility
-description: "Reviews HTML pages and fragments (markdown where mappable) against WCAG 2.2 AA: contrast, alt text, heading structure, link text, and keyboard and screen-reader access. Use when the user asks for an accessibility review, feedback, a second opinion, a red-line pass, an a11y audit, or a pre-launch quality check on a page or component."
+description: "Reviews HTML pages and fragments (markdown where mappable) against WCAG 2.2 AA: contrast, alt text, heading hierarchy for screen readers, link text, and keyboard and screen-reader access. Use when the user asks for an accessibility review, feedback, a second opinion, a red-line pass, an a11y audit, or a pre-launch quality check on a page or component."
 version: 0.1.1
 license: Apache-2.0
 rubric_sources:
@@ -64,6 +64,9 @@ in this order of preference:
    p"`. Keep it to tag, `#id`, `.class`, descendant, child, and `:nth-of-type`. The double quotes
    are part of the rule, not decoration: a bare `div.wizard-steps` dropped into a sentence reads as
    prose, and a reader following it by hand has to guess which one was meant.
+   One-time prerequisite: `pip install "jsonschema>=4.20,<5"`. Claude Code's `/plugin install`
+   does not install Python packages, and `checks.py` names this command itself if the package
+   is absent.
 3. **The element's own text in double quotes**, at least eight characters and unique on the page,
    when the markup offers neither of the above: `"Reset your password"`.
 

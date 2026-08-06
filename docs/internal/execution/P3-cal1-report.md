@@ -127,12 +127,21 @@ Run set `cal1-2026-08-01`, recorded in `bench/results/measurement-manifest.json`
   committed CLI reproduces all 24 pre-calibration `results.json` entries exactly, field for field,
   confirming the half of the merged results file that was not supposed to change did not change.
 
-The re-measurement's own provenance (the mechanism that produced the 40 cal1 envelopes, and six
-envelopes' round-number timestamps) is not fully documented in this repository yet.
+The re-measurement's own provenance (the mechanism that produced the 40 cal1 envelopes, and the
+round-number timestamps) is not fully documented in this repository.
 [0028](../decisions/0028-post-calibration-verdict-accessibility-clears-ac-6.md) names this the
 weakest link in the verdict below and hands writing a `cal1` provenance record, to the standard of
-[P3-provenance.md](P3-provenance.md), to the orchestrator as an open item. That gap is disclosed
+[P3-provenance.md](P3-provenance.md), to the orchestrator as an open item. That gap was disclosed
 here rather than closed by this report.
+
+**Partially closed, 2026-08-05:** [P3-cal1-provenance.md](P3-cal1-provenance.md) was written in the
+v0.1.x pass. It does not reach P3-provenance.md's standard and does not claim to: it was written
+four days later by a session that was not present for the runs, so it establishes the grid from the
+committed envelopes directly, carries the workflow run ID as an explicitly unverified
+session-supplied fact, and lists what remains unknown in a "Not established" section rather than
+inferring it. It also corrects the round-number timestamp count from six to nine and records two
+anomalies not noted here: ten envelopes timestamped a day before the manifest's calibration date,
+and one envelope recording the staging path rather than the corpus path in `run.artifact`.
 
 ## 5. Pre-vs-post numbers
 

@@ -37,9 +37,19 @@ A caller that does anyway is handled by the boundary below, not trusted to have 
 
 `Read` to load the artifact and the named skill's `SKILL.md`, `references/*.md`, and
 `scripts/checks.py`. `Bash` to run the skill's scripted lane
-(`python skills/<skill>/scripts/checks.py <artifact>`) and to validate the assembled envelope
-(`python -m contract.validate <file>`) before returning it. No `Write`, no `Edit`: this subagent
+(`python3 skills/<skill>/scripts/checks.py <artifact>`) and to validate the assembled envelope
+(`python3 -m contract.validate <file>`) before returning it. No `Write`, no `Edit`: this subagent
 reports; it does not change the artifact, and it does not touch anything else on disk.
+
+Use `python` instead of `python3` where only that name resolves; Windows commonly ships the
+former and stock Linux and macOS commonly ship the latter, and neither command is portable on
+its own.
+
+Both commands need the `jsonschema` package. Claude Code's `/plugin install` clones a repository
+and does not install Python packages, so on a fresh install run `pip install "jsonschema>=4.20,<5"`
+once. Either command names that exact remedy itself, and exits without a traceback, if the package
+is absent; treat that message as the instruction and do not try to work around it by skipping the
+scripted lane, which would silently drop roughly half of most skills' criteria.
 
 ## Protocol
 

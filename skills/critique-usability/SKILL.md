@@ -1,6 +1,6 @@
 ---
 name: critique-usability
-description: "Reviews HTML or markdown UI specs, wireframe write-ups, and page mockups against Nielsen's 10 usability heuristics: system status, user control and exits, consistency, error prevention and recovery, recognition over recall, and minimalist design. Use when the user asks for a usability review, design feedback, a second opinion, a red-line pass, a heuristic evaluation, or a quality check on a screen, a flow, or an interface spec before it goes to build. Covers static specs and mockups, not live running applications."
+description: "Reviews HTML or markdown UI specs, wireframe write-ups, and page mockups against Nielsen's 10 usability heuristics: system status, user control and exits, consistency, error prevention and recovery, recognition over recall, and minimalist design. Judges the interface's flow, controls, and states, not the wording of error or empty-state message text (critique-microcopy covers that). Use when the user asks for a usability review, design feedback, a second opinion, a red-line pass, a heuristic evaluation, or a quality check on a screen, a flow, or an interface spec before it goes to build. Covers static specs and mockups, not live running applications."
 version: 0.1.0
 license: Apache-2.0
 rubric_sources:
@@ -120,6 +120,9 @@ Follow these four passes in order. Do not skip ahead to severity or fixes while 
    criterion by criterion, in the same fixed order. "Ascending ID order" for this skill is the
    canonical sweep order listed under "Criteria" above, which orders `NNG-H10-*` after `NNG-H9-*`
    rather than after `NNG-H1`.
+   One-time prerequisite: `pip install "jsonschema>=4.20,<5"`. Claude Code's `/plugin install`
+   does not install Python packages, and `checks.py` names this command itself if the package
+   is absent.
 3. **Severity assignment, as a separate pass.** Once every criterion has been swept, go back and
    assign severity to every finding using the weighing order in
    `docs/reference/severity-scale.md` (impact, then frequency, then persistence) and this skill's
