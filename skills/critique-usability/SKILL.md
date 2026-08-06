@@ -120,6 +120,9 @@ Follow these four passes in order. Do not skip ahead to severity or fixes while 
    criterion by criterion, in the same fixed order. "Ascending ID order" for this skill is the
    canonical sweep order listed under "Criteria" above, which orders `NNG-H10-*` after `NNG-H9-*`
    rather than after `NNG-H1`.
+   One-time prerequisite: `pip install "jsonschema>=4.20,<5"`. Claude Code's `/plugin install`
+   does not install Python packages, and `checks.py` names this command itself if the package
+   is absent.
 3. **Severity assignment, as a separate pass.** Once every criterion has been swept, go back and
    assign severity to every finding using the weighing order in
    `docs/reference/severity-scale.md` (impact, then frequency, then persistence) and this skill's

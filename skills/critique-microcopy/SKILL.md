@@ -64,6 +64,9 @@ Follow these four passes in order. Do not skip ahead to severity or fixes while 
    in ascending ID order, evaluating each against the whole artifact before moving to the next.
    Run the scripted lane via `scripts/checks.py <artifact>`; perform the judged lane yourself,
    criterion by criterion, in the same fixed order.
+   One-time prerequisite: `pip install "jsonschema>=4.20,<5"`. Claude Code's `/plugin install`
+   does not install Python packages, and `checks.py` names this command itself if the package
+   is absent.
 3. **Severity assignment, as a separate pass.** Once every criterion has been swept, go back and
    assign severity to every finding using the weighing order in
    `docs/reference/severity-scale.md` (impact, then frequency, then persistence) and this skill's
