@@ -12,5 +12,10 @@ trade-offs.
 
 ## Inventory
 
+- [`architecture.md`](architecture.md) - The five moving parts and how one critique flows through
+  them. Start here if you want the shape before the reasoning.
+- [`architecture-detail.md`](architecture-detail.md) - Why the two-lane split, how the frozen
+  contract couples the parts, how measurement is kept independent, and where the extension points
+  are.
 - [`methodology.md`](methodology.md) - How this library decides what belongs in it, how its
   skills produce findings, and how those findings are measured.
