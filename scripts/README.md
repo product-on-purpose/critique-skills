@@ -26,6 +26,12 @@ shared library.
   release body.
 - `skill-selftest.py` - validates one `skills/critique-<domain>/` directory against the S-04 skill
   template; see `docs/internal/skill-template.md`, "Self-test".
+- `smoke.py` - the does-it-actually-run check, and the CI "smoke" job's entry point. Runs every
+  skill's scripted lane on a real committed artifact and asserts the outcome for the environment:
+  `--expect no-deps` (a fresh install, where each skill must fail naming the exact install command
+  and printing no traceback) or `--expect ready` (dependencies installed, where each must emit a
+  usable envelope). Stdlib only, because it has to run in the environment where the third-party
+  dependency is missing.
 - `lib/` - shared helpers used by the scripts above.
 - `tests/` - two suites: `node --test` coverage for the Node spine above, and the pytest suite for
   the Python tooling here (`skill-selftest.py`); see `tests/README.md` for the inventory.
