@@ -6,6 +6,86 @@ Curated, user-facing highlights. For the full technical history, see `CHANGELOG.
 
 Nothing yet.
 
+## 0.1.1 - 2026-08-05
+
+**What outside eyes found in the first release.** v0.1.0 went public and was listed in the
+`product-on-purpose` marketplace on 2026-08-04. Two external validators were then pointed at it, the
+first time this library had been checked by anything it did not write itself. This release is what
+they found, plus the open items the v0.1.0 handover had carried.
+
+**No skill behavior changed.** No criterion was added, removed, or re-scored; no run envelope was
+touched; the measured numbers in `bench/results/` are the v0.1.0 numbers, unchanged. If you are
+reading these notes to decide whether the figures moved, they did not.
+
+**If you installed v0.1.0, upgrade.** The most important fix here is that a fresh install could
+crash before it read anything.
+
+### The install crash
+
+`critique-skills` needs one Python package, `jsonschema`. Claude Code's `/plugin install` clones a
+repository; it does not install Python packages. In v0.1.0 that package was imported the moment any
+skill's scripted lane loaded, so on a machine without it you got a raw Python traceback on the very
+first command of the five-minute quickstart, with no indication of what to do about it. The remedy
+was documented, but only in `QUICKSTART.md`, which is not a file an agent reads before running a
+skill.
+
+Now the import happens only when it is actually needed, and if the package is missing you get three
+lines naming the exact command to run instead of a traceback. The prerequisite is also stated in
+every skill's protocol and in the `critique-critic` subagent, where an agent will actually encounter
+it. Related: the subagent's documented commands said `python`, which does not exist on stock Linux
+or macOS; they now say `python3`.
+
+### Telling the six skills apart
+
+Six sibling skills in one namespace, all of them about critique, is a routing problem, and nothing
+in the pipeline was testing for it: each skill's trigger fixture is validated in isolation, so no
+instrument ever compared one description against another. Three pairs turned out to be genuinely
+hard to separate. `critique-argument` and `critique-clarity` both claimed proposals and memos, and
+each one's own fixture asserted that generic requests like "give me feedback on this document"
+should fire **it**. `critique-microcopy` and `critique-usability` both claimed error states.
+`critique-accessibility` and `critique-docs` both used the phrase "heading structure" while meaning
+different things by it.
+
+Each description now says what it does **not** cover and names the sibling that does. That had to go
+in the description rather than the body, because the body is not read until after a skill has
+already been chosen.
+
+There is also a new `evals/joint-routing.eval.json`: 18 queries meant to be scored with all six
+descriptions in view at once, including four lifted verbatim from the skills' own fixtures where
+each is currently claimed by a different skill. It is deliberately not scored in CI, and the fixture
+says why in its own file.
+
+### Evidence that had quietly stopped being true
+
+Every example artifact in `skills/*/examples/` records a sha256 of its own contents. On any Windows
+checkout, all 22 of those recorded hashes were wrong, and had been since they were written: git
+stores the files with Unix line endings and Windows checkouts convert them, which changes the bytes
+and therefore the hash. The repository was correct; every Windows copy of it was not; and because
+nothing read the hashes, nothing noticed. The v0.1.0 handover had listed this as something that
+*would* happen if anything ever checked. It had already happened.
+
+Both halves are fixed: the line endings are now pinned, and there is a test that recomputes every
+recorded hash so this cannot silently rot again.
+
+### New documentation
+
+- **An architecture pair.** [`docs/explanation/architecture.md`](docs/explanation/architecture.md)
+  is the shape: five parts, how one critique runs, and what the design refuses to do.
+  [`docs/explanation/architecture-detail.md`](docs/explanation/architecture-detail.md) is the
+  reasoning behind each choice, and what would count as changing the architecture rather than
+  fixing a bug.
+- **A provenance record for the calibration run set**, which three separate documents had flagged as
+  missing. It is explicit about being written after the fact by a session that was not present, and
+  lists what it cannot establish rather than inferring it. It also corrects a previously published
+  count and records two anomalies nobody had noticed.
+
+### Conformance
+
+Above-tier findings went from five to zero, mostly by fixing the grader rather than this
+repository: four of the five were defects in `agent-skills-toolkit`, which grades every plugin in
+the family, and are fixed upstream. Nothing blocks Gold now. The declared tier stays Convergent
+(Silver), because declaring Gold is a commitment to keep meeting it, not a score to claim once.
+
 ## 0.1.0 - 2026-08-03
 
 **Critique that has to show its work.** Ask a general-purpose model to review your document, page,

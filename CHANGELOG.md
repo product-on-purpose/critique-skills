@@ -5,6 +5,96 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-08-05
+
+The first release after publication, and the first shaped by evidence from outside this repository.
+`critique-skills` went public and was listed in the `product-on-purpose` marketplace on 2026-08-04;
+two external validators were then run against the shipped v0.1.0, the first time this library had
+been checked by anything it did not write itself. Everything below traces to that, or to closing an
+item the RC handover carried.
+
+No skill behavior changed. No criterion was added, removed, or re-scored. No run envelope was
+touched. The measured numbers in `bench/results/` are the v0.1.0 numbers, unchanged.
+
+### Fixed
+
+- **A fresh install crashed before reading an artifact.** `contract/validate.py` did a bare
+  module-level `import jsonschema`, and every skill's `scripts/checks.py` reaches it through
+  `skills/_shared/runner.py` and `gate.py`. Claude Code's `/plugin install` clones a repository and
+  does not run `pip`, so on any machine without the package a freshly installed plugin answered
+  step 2 of every skill's protocol with a raw `ImportError` traceback and no indication of the
+  remedy, which existed only in `QUICKSTART.md`, a file no invoking agent reads. The import is now
+  lazy behind `_jsonschema()`, raising `MissingDependencyError` whose message carries the exact
+  install command; both CLI boundaries catch it and print that message with no traceback, using the
+  exit-code convention every other environment error here already uses (4 under `--gate`, 1
+  otherwise). The prerequisite is now stated in each of the six `SKILL.md` protocol blocks and in
+  `agents/critique-critic.md`. Found by an external plugin validator, not by 784 passing tests or a
+  clean conformance gate: the repository's own tooling structurally cannot see the fresh-install
+  path.
+- **`agents/critique-critic.md` hardcoded `python`, which does not resolve on stock Linux or
+  macOS.** Now `python3`, with a note that neither name is portable alone. The six `SKILL.md` files
+  were already interpreter-agnostic; the hardcoding was only in the one subagent every skill
+  delegates to.
+- **Every recorded example-artifact hash was wrong on any Windows checkout.** `.gitattributes`
+  protected only `bench/corpus/**`, so the 25 artifacts hashed into
+  `expected_envelope.run.artifact_sha256` were left to git's end-of-line normalization. Measured
+  before the fix: 22 of 22 matched the LF form stored in git and 0 matched the bytes on disk. The
+  repository was right and every Windows checkout was wrong, and nothing read the hashes, so nothing
+  complained. Fixed with `skills/**/examples/** -text` and, more importantly,
+  `scripts/tests/test_example_artifact_hashes.py`, which recomputes every recorded hash and reports
+  a line-ending mismatch as that specific defect with its remedy. The RC handover had carried this
+  as hypothetical.
+- **The six skills were not distinguishable at trigger time.** Nothing in the pipeline tested
+  cross-skill discrimination: each skill's `evals/triggers.eval.json` is validated in isolation and
+  the description scorer is per-skill and mechanical, so neither instrument had a term for "is this
+  distinguishable from its five siblings". Three collisions are closed in the descriptions
+  themselves, which is where they must be, because a `SKILL.md` body is not read until after a skill
+  has already been selected: `critique-argument` and `critique-clarity` both claimed proposals and
+  memos; `critique-microcopy` and `critique-usability` both claimed error states; and
+  `critique-accessibility` and `critique-docs` both used the literal phrase "heading structure" while
+  meaning different things by it.
+- **Install-path and security-channel documentation that publication made false.** `README.md`,
+  `QUICKSTART.md`, `RELEASE-NOTES.md`, and `SECURITY.md` each stated the repository was private and
+  that no install path resolved. GitHub Private Vulnerability Reporting was also enabled, since
+  `SECURITY.md` names it the preferred channel and links to a form that 404s with the setting off.
+
+### Added
+
+- **`docs/explanation/architecture.md` and `docs/explanation/architecture-detail.md`**, the
+  architecture pair. The overview is the shape: the five parts, how one critique runs end to end,
+  and the three things the design structurally refuses to do. The detail page is the reasoning: what
+  decides the scripted/judged line, why the contract is frozen, why clean context is a structural
+  guarantee, the four measurement choices that carry the weight, why the gate points at another
+  repository, and what would count as an architecture change rather than a bug fix.
+- **`evals/joint-routing.eval.json`**, 18 queries scored with all six descriptions in view, in three
+  kinds: `contested` (a defensible winner plus the sibling it contests), `ambiguous` (no correct
+  single winner, where asking is the right behavior), and `control`. Four of the ambiguous cases are
+  taken verbatim from the skills' own fixtures, where each is currently asserted as an unambiguous
+  positive for a different skill. It is deliberately **not scored in CI**: routing is a model
+  decision over descriptions in context, and a lexical proxy would measure string overlap rather
+  than routing, which is exactly the kind of number this library exists not to publish.
+  `scripts/tests/test_joint_routing_eval.py` enforces what can be checked deterministically.
+- **`docs/internal/execution/P3-cal1-provenance.md`**, closing an item `bench/results/README.md`,
+  `P3-cal1-report.md`, and ADR 0028 all carried as open. It is explicit that it does not reach
+  `P3-provenance.md`'s standard, because it was written four days later by a session that was not
+  present for the runs. It corrects the round-number timestamp count from six to nine and records
+  two anomalies not previously noted: ten envelopes timestamped a day before the calibration date
+  the manifest records, and one envelope recording the staging path rather than the corpus path.
+  What it cannot establish is listed under "Not established" rather than inferred.
+
+### Changed
+
+- **`TOOLKIT_REF` bumped `6cfd68b` to `9439699`** in `ci.yml` and `release.yml`, adopting
+  `agent-skills-toolkit` PR #189. That PR fixed two defects in the grader that were producing four
+  of this repository's five above-tier findings: `SKIP_DIRS` covered the Node ecosystem's scratch
+  directories and not Python's, so the folder-README check walked into `__pycache__`; and
+  `gen-index`'s two boilerplate sections were hardcoded to the toolkit's own repository layout and
+  emitted seven links to paths that do not exist here. Verified before bumping: the patched
+  toolkit's raw `INDEX.md` output is byte-identical to the committed one.
+- **Above-tier gate findings 5 to 0.** `tier-report` now reports `Convergent (no blockers
+  detected)`, meaning nothing blocks Advanced (Gold). The declared tier is unchanged at Convergent
+  (Silver); declaring Gold is a separate decision with its own ongoing commitments.
+
 ## [0.1.0] - 2026-08-03
 
 ### Added
