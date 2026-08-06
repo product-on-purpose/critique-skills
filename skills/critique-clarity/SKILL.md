@@ -1,6 +1,6 @@
 ---
 name: critique-clarity
-description: "Reviews markdown or plain-text prose for clarity against the Federal Plain Language Guidelines and Williams' Style: readability, passive voice, sentence length, and nominalization density. Use when the user asks for feedback, a second opinion, a red-line pass, or a quality check on a memo, PRD, proposal, or any prose document before it goes out."
+description: "Reviews markdown or plain-text prose for clarity against the Federal Plain Language Guidelines and Williams' Style: readability, passive voice, sentence length, and nominalization density. Judges sentence- and passage-level readability, not whether an argument's claim is supported or its structure holds together (critique-argument covers that). Use when the user asks for feedback, a second opinion, a red-line pass, or a quality check on a memo, PRD, proposal, or any prose document before it goes out."
 version: 0.1.0
 license: Apache-2.0
 rubric_sources:

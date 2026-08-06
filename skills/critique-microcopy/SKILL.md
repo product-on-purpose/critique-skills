@@ -1,6 +1,6 @@
 ---
 name: critique-microcopy
-description: "Reviews error messages, empty states, and other short microcopy strings, including screens annotated with placement, container, timing, and behavior context, against NN/g's error-message guidelines: plain language, specificity, constructive next steps, neutral tone, and recovery grace. Use when the user asks for a review, feedback, a second opinion, a red-line pass, or a quality check on error copy, empty-state copy, form validation messages, or other short UI text before it ships."
+description: "Reviews error messages, empty states, and other short microcopy strings, including screens annotated with placement, container, timing, and behavior context, against NN/g's error-message guidelines: plain language, specificity, constructive next steps, neutral tone, and recovery grace. Judges the message text itself, not the surrounding screen's flow, controls, or confirmation behavior (critique-usability covers that). Use when the user asks for a review, feedback, a second opinion, a red-line pass, or a quality check on error copy, empty-state copy, form validation messages, or other short UI text before it ships."
 version: 0.1.0
 license: Apache-2.0
 rubric_sources:
