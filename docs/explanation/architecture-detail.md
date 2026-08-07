@@ -71,6 +71,20 @@ sets the dependency-light rule; the lazy import is documented in `contract/valid
 drafts, the authoring history, or the requester's opinion of the artifact. A skill delegates to it
 where a subagent tool is available.
 
+**One subagent, shared by all six skills, rather than one per domain.** The critic carries no
+domain knowledge; it reads the named skill's `SKILL.md` and `references/` at run time and executes
+that skill's protocol. Six near-identical critics would mean the clean-context guarantee is
+implemented six times and can drift five ways. Implementing it once is the whole point, and it is
+also why adding a seventh skill needs no seventh subagent. See
+[ADR 0004](../internal/decisions/0004-plugin-surface-skills-and-critic-subagent.md).
+
+**Nothing else may live in `agents/`.** Claude Code discovers subagents by scanning that directory
+for `*.md` and loads every one it finds, including a `README.md`. This repository shipped a phantom
+`README` subagent in v0.1.0 and v0.1.1 for exactly that reason, because the family Standard's `G8`
+check required a folder guide there. The check was fixed upstream and the file removed; the rule to
+carry forward is that `agents/` holds subagent definitions and nothing else, and that documentation
+about the directory belongs here or in `AGENTS.md`.
+
 This is worth stating plainly because it is easy to mistake for politeness. A model that has just
 helped you write a document is a poor judge of it: it has the author's frame. Clean context is the
 only mechanism in the system that removes that frame, and it is also what made the benchmark's
