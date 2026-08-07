@@ -24,9 +24,11 @@
     "procedure": "For each case, present the six skill descriptions verbatim (from each SKILL.md frontmatter) plus the query, ask which single skill should handle it or whether the request is ambiguous, and record the answer. Score contested cases against expected; score ambiguous cases as correct if the answer is in acceptable or is an explicit request for clarification.",
     "what_is_enforced_today": "scripts/tests/test_joint_routing_eval.py validates this fixture's shape and asserts that every contested pair carries a boundary clause in both siblings' descriptions naming the other. That is a structural guard against regression. The measurement itself is scripts/run-joint-routing.py, run by hand, because it calls a live model.",
     "runs": [
-      "evals/joint-routing.results-sonnet.json"
+      "evals/joint-routing.results-sonnet.json",
+      "evals/joint-routing.results-haiku.json"
     ],
-    "k_required": "Routing is stochastic. The same query at k=5 returned critique-microcopy 4 times and critique-usability once, and an earlier single run of the full fixture returned a different answer again for the same case. A k=1 run is an anecdote, not a measurement, which is the same reason bench/ runs k=5. Score with --k 3 or higher and report the modal answer."
+    "k_required": "Routing is stochastic. The same query at k=5 returned critique-microcopy 4 times and critique-usability once, and an earlier single run of the full fixture returned a different answer again for the same case. A k=1 run is an anecdote, not a measurement, which is the same reason bench/ runs k=5. Score with --k 3 or higher and report the modal answer.",
+    "result_summary": "18/18 on both pinned tiers at k=3 (sonnet and haiku), each with contested 9/9, ambiguous 6/6, control 3/3. Non-unanimous cases differ by tier and both land on boundaries the fixture already labels ambiguous: sonnet splits critique-microcopy against critique-usability on the two error-handling queries, haiku splits critique-docs against critique-clarity on one unnamed-artifact query. A split on an ambiguous case is the correct behavior, not a failure."
   },
   "skills": [
     "critique-accessibility",
