@@ -99,11 +99,18 @@ def test_every_contested_case_maps_to_a_declared_boundary_pair(eval_data: dict) 
             )
 
 
+# The pairs whose fix is mutual naming. critique-accessibility/critique-docs is deliberately absent:
+# its collision was one shared phrase ("heading structure") meaning two different things, and the fix
+# was removing the phrase rather than adding a disclaimer. That one is covered by its own test below.
 @pytest.mark.parametrize(
     "pair",
     [
         ("critique-argument", "critique-clarity"),
         ("critique-microcopy", "critique-usability"),
+        # Added 2026-08-07 after the scoring run routed "check the colour contrast on this landing
+        # page" to critique-usability. Both take HTML and markdown UI artifacts; usability disclaimed
+        # microcopy but not accessibility, and accessibility did not mention usability at all.
+        ("critique-accessibility", "critique-usability"),
     ],
     ids=lambda p: f"{p[0]}-vs-{p[1]}",
 )

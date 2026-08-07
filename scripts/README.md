@@ -26,6 +26,11 @@ shared library.
   release body.
 - `skill-selftest.py` - validates one `skills/critique-<domain>/` directory against the S-04 skill
   template; see `docs/internal/skill-template.md`, "Self-test".
+- `run-joint-routing.py` - the scorer for `evals/joint-routing.eval.json`. Loads this repo as a
+  plugin with `claude --plugin-dir`, so all six skill descriptions are in context exactly as they
+  are for a user, then puts one query at a time to a pinned model and records which skill comes
+  back. Forced choice, `--k` repeats per query with the modal answer scored, because routing is
+  stochastic. Run by hand; not in CI, because it calls a live model.
 - `smoke.py` - the does-it-actually-run check, and the CI "smoke" job's entry point. Runs every
   skill's scripted lane on a real committed artifact and asserts the outcome for the environment:
   `--expect no-deps` (a fresh install, where each skill must fail naming the exact install command
