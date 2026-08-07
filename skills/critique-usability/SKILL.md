@@ -1,6 +1,6 @@
 ---
 name: critique-usability
-description: "Reviews HTML or markdown UI specs, wireframe write-ups, and page mockups against Nielsen's 10 usability heuristics: system status, user control and exits, consistency, error prevention and recovery, recognition over recall, and minimalist design. Judges the interface's flow, controls, and states, not the wording of error or empty-state message text (critique-microcopy covers that). Use when the user asks for a usability review, design feedback, a second opinion, a red-line pass, a heuristic evaluation, or a quality check on a screen, a flow, or an interface spec before it goes to build. Covers static specs and mockups, not live running applications."
+description: "Reviews HTML or markdown UI specs, wireframe write-ups, and page mockups against Nielsen's 10 usability heuristics: system status, user control and exits, consistency, error prevention and recovery, recognition over recall, and minimalist design. Judges the interface's flow, controls, and states, not the wording of error or empty-state message text (critique-microcopy covers that), and not conformance against accessibility standards such as contrast or screen-reader access (critique-accessibility covers that). Use when the user asks for a usability review, design feedback, a second opinion, a red-line pass, a heuristic evaluation, or a quality check on a screen, a flow, or an interface spec before it goes to build. Covers static specs and mockups, not live running applications."
 version: 0.1.0
 license: Apache-2.0
 rubric_sources:

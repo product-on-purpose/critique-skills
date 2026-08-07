@@ -19,10 +19,14 @@
   },
   "scoring": {
     "mechanism": "model",
-    "status": "not-yet-run",
+    "status": "scored",
     "why_not_deterministic": "Routing is a model decision over descriptions in context. A lexical proxy scored in CI would measure string overlap, not routing, and this library does not publish numbers produced by a mechanism other than the one being described. Scoring this fixture requires putting all six descriptions plus one query to a pinned model tier and recording which skill it selects, the same discipline bench/ uses.",
     "procedure": "For each case, present the six skill descriptions verbatim (from each SKILL.md frontmatter) plus the query, ask which single skill should handle it or whether the request is ambiguous, and record the answer. Score contested cases against expected; score ambiguous cases as correct if the answer is in acceptable or is an explicit request for clarification.",
-    "what_is_enforced_today": "scripts/tests/test_joint_routing_eval.py validates this fixture's shape and asserts that every contested pair carries a boundary clause in both siblings' descriptions naming the other. That is a structural guard against regression, not a measurement of routing."
+    "what_is_enforced_today": "scripts/tests/test_joint_routing_eval.py validates this fixture's shape and asserts that every contested pair carries a boundary clause in both siblings' descriptions naming the other. That is a structural guard against regression. The measurement itself is scripts/run-joint-routing.py, run by hand, because it calls a live model.",
+    "runs": [
+      "evals/joint-routing.results-sonnet.json"
+    ],
+    "k_required": "Routing is stochastic. The same query at k=5 returned critique-microcopy 4 times and critique-usability once, and an earlier single run of the full fixture returned a different answer again for the same case. A k=1 run is an anecdote, not a measurement, which is the same reason bench/ runs k=5. Score with --k 3 or higher and report the modal answer."
   },
   "skills": [
     "critique-accessibility",
@@ -34,17 +38,34 @@
   ],
   "boundary_pairs": [
     {
-      "pair": ["critique-argument", "critique-clarity"],
+      "pair": [
+        "critique-argument",
+        "critique-clarity"
+      ],
       "collision": "Artifact nouns overlap directly: proposals and memos appear in both descriptions. Each skill's own trigger eval claims generic feedback queries as unambiguous positives for itself.",
       "severity": "highest, because proposals and memos submitted for generic feedback are probably the most common request this library will see"
     },
     {
-      "pair": ["critique-microcopy", "critique-usability"],
+      "pair": [
+        "critique-microcopy",
+        "critique-usability"
+      ],
       "collision": "Both descriptions claim error states. Microcopy accepts screens annotated with placement and behavior context, which is structurally the same object usability calls a wireframe write-up."
     },
     {
-      "pair": ["critique-accessibility", "critique-docs"],
+      "pair": [
+        "critique-accessibility",
+        "critique-docs"
+      ],
       "collision": "Both used the literal phrase 'heading structure' and both accept markdown, while meaning different things by it: semantic hierarchy for assistive technology versus heading depth as a Diataxis structural signal."
+    },
+    {
+      "pair": [
+        "critique-accessibility",
+        "critique-usability"
+      ],
+      "collision": "Both accept HTML and markdown UI artifacts. usability's description disclaimed microcopy but not accessibility, and accessibility's did not mention usability at all.",
+      "found_by": "the 2026-08-07 scoring run, on a case this fixture had labelled unambiguous"
     }
   ],
   "cases": [
@@ -52,100 +73,138 @@
       "query": "This memo argues we should sunset the legacy plan. Does it hold up?",
       "kind": "contested",
       "expected": "critique-argument",
-      "contested_with": ["critique-clarity"],
+      "contested_with": [
+        "critique-clarity"
+      ],
       "rationale": "Names a claim and asks whether it holds up, which is warrant and grounds, not readability."
     },
     {
       "query": "Tighten this proposal, it reads like treacle.",
       "kind": "contested",
       "expected": "critique-clarity",
-      "contested_with": ["critique-argument"],
+      "contested_with": [
+        "critique-argument"
+      ],
       "rationale": "Proposal is an argument artifact, but the complaint is prose texture, not reasoning."
     },
     {
       "query": "Is the reasoning in this position paper actually supported, or am I asserting?",
       "kind": "contested",
       "expected": "critique-argument",
-      "contested_with": ["critique-clarity"],
+      "contested_with": [
+        "critique-clarity"
+      ],
       "rationale": "Explicitly about support for a claim."
     },
     {
       "query": "My PRD is too long and dense. Can you tell me what to cut?",
       "kind": "contested",
       "expected": "critique-clarity",
-      "contested_with": ["critique-argument"],
+      "contested_with": [
+        "critique-argument"
+      ],
       "rationale": "Length and density are plain-language concerns; no claim is under review."
     },
     {
       "query": "Review this error screen before it ships.",
-      "kind": "contested",
-      "expected": "critique-usability",
-      "contested_with": ["critique-microcopy"],
-      "rationale": "Screen, not string: the surrounding flow, controls, and recovery path are in scope."
+      "kind": "ambiguous",
+      "rationale": "Genuinely ambiguous, and this fixture originally said otherwise. It was labelled contested with critique-usability expected, on the reasoning that a screen brings flow and recovery into scope. Measured at k=5 on 2026-08-07 the answer was critique-microcopy 4 times and critique-usability once. Re-reading the two descriptions explains it: microcopy claims 'screens annotated with placement, container, timing, and behavior context' and usability claims 'UI specs, wireframe write-ups, and page mockups'. BOTH claim screens. The boundary clauses separate them on wording versus flow, which an 'error screen' does not disambiguate. The expectation was wrong, not the router.",
+      "acceptable": [
+        "critique-microcopy",
+        "critique-usability"
+      ]
     },
     {
       "query": "Here are the twelve validation strings for the signup form. Are they any good?",
       "kind": "contested",
       "expected": "critique-microcopy",
-      "contested_with": ["critique-usability"],
+      "contested_with": [
+        "critique-usability"
+      ],
       "rationale": "Bare strings with no interface around them."
     },
     {
       "query": "Our empty state says 'Nothing here'. Fix it.",
       "kind": "contested",
       "expected": "critique-microcopy",
-      "contested_with": ["critique-usability"],
+      "contested_with": [
+        "critique-usability"
+      ],
       "rationale": "The message text itself is the artifact."
     },
     {
       "query": "Check the heading structure of this markdown page.",
       "kind": "contested",
       "expected": "critique-docs",
-      "contested_with": ["critique-accessibility"],
+      "contested_with": [
+        "critique-accessibility"
+      ],
       "rationale": "Markdown page with no assistive-technology framing reads as a Diataxis depth question."
     },
     {
       "query": "Do the headings on this page work for screen readers?",
       "kind": "contested",
       "expected": "critique-accessibility",
-      "contested_with": ["critique-docs"],
+      "contested_with": [
+        "critique-docs"
+      ],
       "rationale": "Names the assistive-technology purpose explicitly."
     },
     {
       "query": "Can you give me feedback on this document?",
       "kind": "ambiguous",
-      "acceptable": ["critique-clarity", "critique-argument", "critique-docs"],
+      "acceptable": [
+        "critique-clarity",
+        "critique-argument",
+        "critique-docs"
+      ],
       "rationale": "No artifact type, no rubric signal, no complaint. The correct behavior is to ask what kind of review is wanted, not to guess. critique-clarity's own trigger eval currently claims this as an unambiguous positive for itself, which is the defect this case records."
     },
     {
       "query": "Take a look at my draft and tell me what needs work before I send it.",
       "kind": "ambiguous",
-      "acceptable": ["critique-clarity", "critique-argument"],
+      "acceptable": [
+        "critique-clarity",
+        "critique-argument"
+      ],
       "rationale": "Claimed as an unambiguous positive by critique-clarity's fixture; nothing in the query distinguishes readability from argument structure."
     },
     {
       "query": "Any thoughts on how this reads?",
       "kind": "ambiguous",
-      "acceptable": ["critique-clarity", "critique-argument"],
+      "acceptable": [
+        "critique-clarity",
+        "critique-argument"
+      ],
       "rationale": "'Reads' leans clarity, but the artifact is unnamed."
     },
     {
       "query": "Please review this recommendation memo before I publish it externally.",
       "kind": "ambiguous",
-      "acceptable": ["critique-argument", "critique-clarity"],
+      "acceptable": [
+        "critique-argument",
+        "critique-clarity"
+      ],
       "rationale": "Claimed as an unambiguous positive by critique-argument's fixture, with zero argument-specific vocabulary in the query."
     },
     {
       "query": "Review this form's error handling.",
       "kind": "ambiguous",
-      "acceptable": ["critique-usability", "critique-microcopy", "critique-accessibility"],
+      "acceptable": [
+        "critique-usability",
+        "critique-microcopy",
+        "critique-accessibility"
+      ],
       "rationale": "Three-way: recovery flow, message wording, and WCAG-3.3.1 error identification are all legitimate readings."
     },
     {
       "query": "Check the colour contrast on this landing page.",
-      "kind": "control",
+      "kind": "contested",
       "expected": "critique-accessibility",
-      "rationale": "Unambiguous: contrast is named only by accessibility."
+      "rationale": "Contrast is a WCAG criterion and Nielsen's heuristics do not cover it, so accessibility is correct. Labelled a control until the 2026-08-07 run routed it to critique-usability: 'landing page' pulls toward the UI skill while 'contrast' pulls toward the accessibility one, and neither description disclaimed the other. Boundary clauses added to both; re-verified as critique-accessibility.",
+      "contested_with": [
+        "critique-usability"
+      ]
     },
     {
       "query": "Is this tutorial actually a tutorial, or is it reference material?",
