@@ -5,6 +5,25 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-08-07
+
+Everything here comes from asking the runtime a question instead of reasoning about it. No skill behavior changed, no criterion was added, removed, or re-scored, and no run envelope was touched. The measured numbers in `bench/results/` are the v0.1.0 numbers.
+
+### Fixed
+
+- **`agents/README.md` was registering as a live subagent.** Claude Code discovers subagents by scanning `agents/` for `*.md` and loads every one it finds. Loading this repository as a plugin and asking what it had returned `critique-skills:critique-critic, critique-skills:README`: a second subagent, with no name and no description, silently, with no warning or error. A probe plugin pinned down the rule, registering three subagents from a directory holding `real-agent.md`, `README.md`, `_README.md` and `README.txt`; the underscore prefix does not protect a file and only the non-`.md` extension is skipped. The cause was upstream, in the family Standard's `G8` check, which **required** a folder README there, so following the rule produced the defect. Fixed in `agent-skills-toolkit` v1.10.0 and adopted here by bumping `TOOLKIT_REF`; the file is deleted. Its content is not lost: the design rationale it carried moves into `docs/explanation/architecture-detail.md`, along with the rule this taught, which is that `agents/` holds subagent definitions and nothing else.
+- **Three of the six skill descriptions could not be told apart on the cases most likely to arrive.** `critique-accessibility` and `critique-usability` both accept HTML and markdown UI artifacts, and neither disclaimed the other, so "check the colour contrast on this landing page" routed to usability. Both now name the other. Found by measurement, not review: the case had been written into the eval fixture as an unambiguous control.
+
+### Added
+
+- **A `smoke` CI job that answers the question no other job asked: does this plugin run for someone who just installed it?** Every other job installs dependencies before it runs anything, so none of them sees what `/plugin install` delivers, which is a git clone and nothing else. That gap shipped the v0.1.1 install crash while 784 tests passed and the conformance gate was clean. `scripts/smoke.py` runs every skill's scripted lane on a real committed artifact and asserts the outcome for the environment: with no dependencies each skill must fail naming the exact install command and printing no traceback, and with them each must emit a usable envelope. Both are asserted, in that order, on one runner, because asserting only the second would have missed the original defect. Confirmed able to fail: against the pre-fix code it fails 6 of 6.
+- **The joint-routing eval is scored, not just written.** `scripts/run-joint-routing.py` drives `claude --plugin-dir` so all six descriptions sit in context exactly as they do for a user, then puts one query at a time to a pinned model. Result on sonnet at k=3: **18/18**, with contested 9/9, ambiguous 6/6, control 3/3. Routing turned out to be stochastic, so the runner takes `--k`, scores the modal answer, and reports unanimity per case; a k=1 run is an anecdote, which is the same conclusion `bench/` reached with k=5. Two cases remain non-unanimous, both `critique-microcopy` against `critique-usability`, and both are fixture cases labelled ambiguous, where a split is the correct behavior rather than a failure.
+- **ADR 0030 (replace the API key in the bench harness), Accepted.** `claude setup-token` mints a long-lived token from a Claude subscription, so a CI benchmark run can authenticate without an API key, and the acceptance gate ran: a one-skill run through `claude --plugin-dir` produced a contract-valid envelope with findings across both lanes citing real criterion IDs. Recorded with the constraint that `--bare` mode reads only `ANTHROPIC_API_KEY` and never OAuth, and the decision that the frozen baseline condition stays on the API path, because moving it would break comparability with every published figure. The key narrows to one condition rather than disappearing.
+
+### Changed
+
+- **`TOOLKIT_REF` bumped twice**, to `9439699` and then to `cafe6b6`, adopting `agent-skills-toolkit` PRs #189 and #193. Above-tier gate findings went 5 to 0 across those adoptions plus the new architecture pair, and `tier-report` now reports `Convergent (no blockers detected)`, meaning nothing blocks Advanced (Gold). The declared tier stays Convergent; declaring Gold is a commitment to keep meeting it, not a score to claim once.
+
 ## [0.1.1] - 2026-08-05
 
 The first release after publication, and the first shaped by evidence from outside this repository.

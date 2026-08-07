@@ -6,6 +6,40 @@ Curated, user-facing highlights. For the full technical history, see `CHANGELOG.
 
 Nothing yet.
 
+## 0.1.2 - 2026-08-07
+
+**The release where we stopped reasoning about the runtime and started asking it.** Every fix below came from running something and reading the answer, and two of them contradicted a confident conclusion written down earlier in this repository.
+
+**No skill behavior changed.** No criterion was added, removed, or re-scored; no run envelope was touched; the measured numbers in `bench/results/` are the v0.1.0 numbers. If you are reading these notes to see whether the figures moved, they did not.
+
+**If you installed v0.1.1, upgrade.** It shipped a subagent nobody wrote.
+
+### The subagent nobody wrote
+
+Claude Code finds subagents by looking for markdown files in the `agents/` folder, and it loads every one it finds. This plugin had a `README.md` in there, describing the folder. So it was being loaded as a subagent, called `README`, with no description and no purpose. Silently, with no warning.
+
+We found it by loading the plugin and asking what subagents it had. The answer came back with two names where there should have been one.
+
+The cause was not ours. The family quality standard this library is graded against **required** a documentation file in that folder, so following the rule created the problem. That rule is withdrawn upstream, and the file is gone. What it explained has moved into the architecture documentation, along with the lesson: `agents/` holds subagent definitions and nothing else.
+
+### Telling two skills apart
+
+`critique-accessibility` and `critique-usability` both review interfaces, and neither said what it did *not* cover. So "check the colour contrast on this landing page" went to the usability skill, when contrast is an accessibility question.
+
+Worth saying how this was found: not by review. The case had been written into our own test fixture as an obvious one that could not possibly go wrong. It went wrong. Both descriptions now name the other.
+
+### Two new things that check the library rather than describe it
+
+**A "does it actually run" check.** Every other test in this project installs its dependencies first, so none of them saw what a real install looks like: a download and nothing else. That blind spot is exactly how v0.1.1 shipped a crash. There is now a check that runs every skill the way a brand-new user's machine would, with nothing installed, and requires it to fail with a clear instruction rather than a wall of Python errors. Then it installs the dependency and requires everything to work. Both halves matter; checking only the second is what missed the original bug.
+
+**We now measure whether the right skill gets picked.** Six skills that all do critique is a real problem: when you ask for "feedback on this document," something has to choose. Until now nothing tested that choice. It is now measured, by loading all six descriptions the way you get them and asking. **18 out of 18.**
+
+One finding from that worth passing on: the choice is not perfectly repeatable. The same question can get different answers on different days, so a single run proves nothing. The measurement runs each question several times and reports how often the answers agreed.
+
+### Conformance
+
+Outstanding issues above our declared quality tier went from five to zero. Four of the five were bugs in the grader, not in this library, and are fixed upstream. Nothing now blocks the top tier. We are staying at the current one anyway, because claiming a tier is a promise to keep meeting it, not a score to bank.
+
 ## 0.1.1 - 2026-08-05
 
 **What outside eyes found in the first release.** v0.1.0 went public and was listed in the
