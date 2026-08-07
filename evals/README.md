@@ -32,6 +32,8 @@ whose `status` is `not-yet-run` publishes no results, and a test enforces that.
   correct single winner, where asking for clarification is the right behavior), and `control`
   (unambiguous, present so a scoring run that fails these has a wiring problem rather than a
   discrimination problem).
+- `joint-routing.results-haiku.json` - the same fixture scored on the other pinned tier.
+  Both tiers are recorded, because a routing result from one model is not a claim about the other.
 - `joint-routing.results-sonnet.json` - the scored output of that fixture, written by
   `scripts/run-joint-routing.py`. Records the model, `k`, every trial per case, and whether the
   answers were unanimous, so a shaky win is distinguishable from a solid one. Committed because
