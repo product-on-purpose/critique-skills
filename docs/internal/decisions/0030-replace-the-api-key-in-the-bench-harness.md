@@ -14,12 +14,17 @@
 - **What that buys:** a live `bench.yml` dispatch would mean "the published figures still hold"
   rather than "a different harness also produces figures." That is the difference between a
   reproduction and a demo, and reproduction is the claim this library trades on.
-- **Status:** **Proposed** (2026-08-06). Not accepted. One open question below is load-bearing and
-  is not answerable from inside this repository.
+- **What it does not buy:** the key does not fully disappear. The frozen baseline condition stays on
+  the Anthropic API path, because moving it would change its execution context and break
+  comparability with every published comparison. The rewrite is scoped to the skill condition.
+- **Status:** **Accepted** (2026-08-07). Both blockers cleared. `claude setup-token` mints a
+  long-lived token from a Claude subscription, so a CI run authenticates without an API key; and the
+  acceptance gate ran and passed, producing a contract-valid envelope from the real skill through
+  `claude --plugin-dir`. See "Mechanism, established" and "Acceptance gate" below.
 
-- **Status:** Proposed
-- **Date:** 2026-08-06
-- **Deciders:** Jonathan Prisant (pending)
+- **Status:** Accepted
+- **Date:** 2026-08-06, accepted 2026-08-07
+- **Deciders:** Jonathan Prisant
 - **Supersedes in part:** [ADR 0025](0025-anthropic-sdk-runtime-dependency.md), which accepted the
   `anthropic` package as a runtime dependency. That decision was correct for what it solved (closing
   the provenance gap with production-grade client code rather than a hand-rolled HTTP layer). This
@@ -86,24 +91,90 @@ posture [ADR 0009](0009-python-node-toolchain-split.md) set.
 and its postprocessor, and the rule that envelopes are immutable evidence. This proposal is about
 who executes a run, not what a run is.
 
-## Open questions, in the order they block
+## Mechanism, established 2026-08-06
 
-1. **Can Claude Code authenticate a non-interactive run in CI under the maintainer's plan?** This is
-   the load-bearing one and it cannot be answered from inside this repository. If the only supported
-   CI authentication is an API key, this proposal reduces to "same key, better mechanism," which is
-   still worth doing for the drift reason above but is a much smaller win. **Answer this before
-   estimating anything else.**
-2. **Is the baseline condition still comparable?** The frozen baseline is a raw prompt with no
-   skill and no subagent. Running it through Claude Code rather than the API changes its execution
-   context too. If the baseline moves, the published comparisons are not comparable to new ones, and
-   the baseline is supposed to be frozen. This may argue for keeping the baseline on the API path
-   even after the skill condition moves, which would mean the key does not fully go away.
-3. **Determinism and cost of the k=5 grid.** 460+ Claude Code invocations is a different cost and
-   latency profile from 460+ API calls, and the mechanism has to guarantee genuinely fresh context
-   per run or the k=5 consistency metric is measuring something else.
-4. **What proves the replacement is faithful?** The honest test is a partial re-run of the existing
-   grid whose figures land within measured run-to-run variance of the committed ones. That is itself
-   a paid run, so the first live dispatch is the acceptance test for this ADR, not a routine check.
+Three facts from the installed Claude Code CLI (2.1.224), each verified directly:
+
+- **`claude setup-token`**: "Set up a long-lived authentication token (requires Claude subscription)."
+  This is the CI path. The token goes in a repository secret; the subscription authenticates the run;
+  no API key and no separate API billing.
+- **`claude --print` / `-p`** is the non-interactive mode. `--append-system-prompt` and
+  `--output-format` shape the output.
+- **`claude --plugin-dir <path>`** loads a plugin from a directory for one session. This is the
+  loading hook the harness needs: it can point Claude Code at this repository and have the real
+  skill and the real `critique-critic` subagent execute, rather than a reimplementation of them.
+
+**A hard constraint that must be written into the harness.** `--bare` mode sets
+`CLAUDE_CODE_SIMPLE=1` and its documentation states that under it "Anthropic auth is strictly
+`ANTHROPIC_API_KEY` or `apiKeyHelper` via `--settings` (OAuth and keychain are never read)." So the
+harness **must not** run in `--bare` mode, or subscription auth silently stops working and the key
+comes back. This is easy to reintroduce accidentally while chasing determinism, since `--bare` is
+otherwise attractive for a benchmark: it skips hooks, plugin sync, and CLAUDE.md discovery.
+
+## Decisions taken
+
+**The frozen baseline condition stays on the Anthropic API path.** The baseline is a raw prompt with
+no skill and no subagent, and its published figures were produced that way. Running it through
+Claude Code changes its execution context, which would make new baseline numbers incomparable to
+every comparison already published, and the baseline is supposed to be frozen. So `ANTHROPIC_API_KEY`
+and the `anthropic` dependency **do not fully disappear**; they narrow to one condition.
+
+That is a smaller win than "delete the key," and worth being honest about. The win that remains is
+the one that mattered: the **skill** condition stops being a second implementation of the protocol,
+so a live run measures the skills as they actually ship.
+
+## Open questions
+
+1. **Determinism and cost of the k=5 grid.** 460+ Claude Code invocations is a different cost and
+   latency profile from 460+ API calls, and the mechanism must guarantee genuinely fresh context per
+   run or the k=5 consistency metric is measuring something else.
+2. **What proves the replacement is faithful?** A partial re-run whose figures land within measured
+   run-to-run variance of the committed ones. That is itself a paid run, so it is the acceptance
+   test for this ADR rather than a routine check.
+
+## Acceptance gate: run 2026-08-07, passed
+
+The gate was a one-skill, one-artifact, k=1 run through `claude --plugin-dir`, required to produce a
+contract-valid envelope for the skill condition.
+
+```
+claude --plugin-dir <repo> -p "Use the critique-clarity skill to critique <artifact>.
+                               Follow the skill's protocol. Output ONLY the final run envelope."
+  -> 5,391 bytes of JSON
+
+python -m contract.validate proof.json
+  -> valid          (exit 0)
+```
+
+The envelope is a genuine run, not a shape that happens to validate:
+
+| Property | Result |
+|---|---|
+| Findings | 6 |
+| Lanes exercised | **both**, `scripted` and `judged` |
+| Criteria cited | `PLAIN-PARAGRAPH`, `PLAIN-LISTS`, `PLAIN-AUDIENCE`, `WILLIAMS-COHESION`, `WILLIAMS-CHARACTER-ACTION`, `WILLIAMS-PARALLELISM` |
+| `run.artifact_sha256` | present and computed |
+| `stripped_context` | populated; the runner recorded that the filename itself named two criteria and treated that as scope steering |
+
+That last row is the strongest signal. The run did not merely execute; it applied the skill's own
+clean-context discipline and recorded the steering it noticed, which is behavior that lives in
+`SKILL.md` and `critique-critic.md` and is exactly what `run_bench.py`'s reimplementation would have
+had to duplicate.
+
+**Two caveats on the proof, both real.**
+
+1. **It used ambient session credentials, not a `setup-token` credential.** The token path is a
+   documented command and the same OAuth mechanism, but it has not been exercised in a CI runner. It
+   is a one-command check, not an unknown, and it is the remaining thing to confirm before the
+   rewrite ships.
+2. **The model was not pinned.** The envelope recorded `claude-opus-5`, the session's model, which
+   is neither of the two pinned measurement tiers. `claude --model <alias-or-full-name>` exists and
+   the harness **must** pass it explicitly; a benchmark that silently inherits whatever model the
+   caller happens to be running is measuring nothing reproducible. This is the single most likely
+   way to get the rewrite subtly wrong.
+
+**Status: Accepted.** The mechanism is proven. The rewrite is v0.2 work, scoped to the skill
+condition only, with the baseline staying on the Anthropic API path per the decision above.
 
 ## Consequences if accepted
 
