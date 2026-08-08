@@ -5,6 +5,24 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-08-07
+
+A dependency-hygiene release. No skill behavior changed, no criterion was added, removed, or re-scored, and no run envelope was touched.
+
+### Fixed
+
+- **`pip install -r requirements.txt` was installing an Anthropic API client into every environment that installed this plugin.** `requirements.txt` carried `jsonschema`, which every skill genuinely needs, alongside `anthropic`, which only `bench/run_bench.py` needs. Since that is the obvious command, and since the file is what a self-healing agent reaches for after the scripted lane reports a missing dependency, the practical effect was that installing a plugin which never calls a model pulled in an API client, and a reasonable reader concluded the library wanted an API key from them. It does not, and never did: **skills are instructions read by the agent you are already using, and never place a call of their own.** `requirements.txt` is now `jsonschema` alone; `anthropic` moved to a new `requirements-bench.txt`, needed only by someone re-running the benchmark live. `requirements-dev.txt` inherits the runtime file and so no longer pulls the SDK either, and `bench.yml` is the only CI job that changed, because it was the only one that needed it. Verified on a machine with `jsonschema` and no `anthropic` package: all six skills produce contract-valid envelopes, and `run_bench.py --dry-run` plans the full grid without a key.
+
+### Added
+
+- **`docs/explanation/the-benchmark-harness.md`**, which answers "do I need an API key?" in its first line (no) and then explains `bench/run_bench.py` for anyone who wants to know. It states the distinction nothing in this repository had stated plainly: a skill never calls a model, so there is nothing for it to authenticate with, whereas the benchmark is a standalone Python script that must go and fetch a judgment and cannot borrow your agent's login. The key is a property of having written the measurement as a standalone program, not a property of the measurement. The page also records what the harness does step by step and which two of its seven steps touch a model at all, why it exists (the published numbers came from a live multi-agent workflow and nothing committed could have reproduced them), its honest status (never run live, not once), the four ways to run it including two that need no key, and why the frozen baseline condition stays on the API path regardless.
+- **The joint-routing eval is scored on both pinned tiers.** Haiku returns 18/18 at k=3, matching sonnet, with contested 9/9, ambiguous 6/6, control 3/3 on each. The non-unanimous cases differ by tier and both sit on boundaries the fixture already labels ambiguous, which is the correct behavior rather than a failure. Recorded because a routing result from one model is not a claim about the other.
+
+### Changed
+
+- **`docs/how-to/gate-in-ci.md`** described installing `jsonschema` directly as a way to skip the `anthropic` dependency. That workaround is no longer necessary and the page says so.
+- **ADR 0025** named `pip install -r requirements.txt` as the way to install the harness dependency, which is no longer true. Corrected with a dated note rather than a rewrite, since it is an accepted record.
+
 ## [0.1.2] - 2026-08-07
 
 Everything here comes from asking the runtime a question instead of reasoning about it. No skill behavior changed, no criterion was added, removed, or re-scored, and no run envelope was touched. The measured numbers in `bench/results/` are the v0.1.0 numbers.
