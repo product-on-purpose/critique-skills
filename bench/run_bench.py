@@ -25,9 +25,11 @@ For a given (skill, artifact, tier, k) grid, this module:
 Existing envelopes under `bench/results/runs/` are immutable measurement evidence; this harness
 never reads them and writing new ones is always to a caller-chosen `--out-dir`, never implied.
 
-Live runs require `ANTHROPIC_API_KEY`. `--dry-run` validates inputs, plans the exact grid, and
-prints it, without calling any model, importing the `anthropic` package, or requiring the secret
-(S-07 AC-3: "dry-run mode works without the secret").
+A live run reaches the model through the Claude Code CLI, not the Anthropic API, so it needs NO
+API key: it authenticates from a Claude subscription, interactively on a workstation or via a
+`claude setup-token` credential in CLAUDE_CODE_OAUTH_TOKEN where nobody is logged in (ADR 0030).
+`--dry-run` validates inputs and plans the exact grid without calling any model or needing the CLI
+at all (S-07 AC-3: "dry-run mode works without the secret").
 
 Usage:
     python bench/run_bench.py [--skills all] [--k 5] [--tiers ""] [--dry-run]
@@ -44,6 +46,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -527,6 +530,113 @@ def _parse_judged_findings(text: str, *, allowed_criteria: set[str]) -> list[dic
     return findings
 
 
+# ---------------------------------------------------------------------------
+# Transport: Claude Code, not the Anthropic SDK
+# ---------------------------------------------------------------------------
+#
+# Both lanes reach a model through an object exposing `client.messages.create(...)`. That was the
+# Anthropic SDK's shape, and it is kept, because it is also the shape the test doubles implement:
+# swapping the transport therefore changes one factory function and nothing else, and every existing
+# test still exercises the same code path.
+#
+# It is Claude Code rather than the API for the reason ADR 0030 gives: a run authenticates from a
+# Claude subscription, so no ANTHROPIC_API_KEY exists anywhere, for a user or a maintainer. Probed
+# on a clean CI runner 2026-08-08 with a `claude setup-token` credential in CLAUDE_CODE_OAUTH_TOKEN.
+#
+# Two constraints this must respect, both easy to break by accident:
+#
+#   1. NEVER pass --bare. Its own documentation says auth there is "strictly ANTHROPIC_API_KEY or
+#      apiKeyHelper (OAuth and keychain are never read)", so it silently reintroduces the key. It is
+#      otherwise attractive for a benchmark because it skips hooks and plugin sync.
+#   2. ALWAYS pass --model. Without it a run inherits whatever model the caller happens to be using,
+#      and a benchmark that does not control its own model is measuring nothing reproducible.
+
+
+@dataclass(frozen=True)
+class _TextBlock:
+    """One content block, shaped like the Messages API's, so _response_text reads it unchanged."""
+
+    text: str
+    type: str = "text"
+
+
+@dataclass(frozen=True)
+class _ClaudeCodeResponse:
+    content: list[_TextBlock]
+
+
+class _ClaudeCodeMessages:
+    """`messages.create(...)`, backed by a non-interactive `claude -p` invocation."""
+
+    def __init__(self, *, cli: str = "claude", timeout: int = 900) -> None:
+        self._cli = cli
+        self._timeout = timeout
+
+    def create(
+        self,
+        *,
+        model: str,
+        messages: Sequence[dict[str, Any]],
+        system: str | None = None,
+        max_tokens: int | None = None,  # noqa: ARG002 - accepted for interface parity, see below
+        **_ignored: Any,
+    ) -> _ClaudeCodeResponse:
+        # max_tokens has no Claude Code equivalent and is accepted only so the call sites and the
+        # SDK-shaped test doubles stay identical. Dropping it is safe here: it was an upper bound,
+        # never a target, and the judged lane's output is bounded by the protocol rather than by
+        # token count.
+        #
+        # NEITHER prompt goes on the command line. The first live run of this transport failed every
+        # skill cell with "[WinError 206] The filename or extension is too long", because a judged
+        # system prompt assembled from SKILL.md plus references/*.md exceeds the platform's argument
+        # limit. Baseline cells, which carry no system prompt, succeeded in the same run. So the
+        # system prompt goes to a temp file and the user prompt goes over stdin, and neither can
+        # grow into that failure again as skills or artifacts get larger.
+        prompt = "\n\n".join(str(m.get("content", "")) for m in messages)
+        argv = [self._cli, "--model", model, "-p"]
+        system_file: Path | None = None
+        try:
+            if system:
+                # --append-system-prompt-file rather than --system-prompt-file: the original
+                # measurement ran under a subagent that had Claude Code's own context plus its
+                # instructions, so replacing the system prompt outright would diverge from it
+                # further, not less.
+                fd, name = tempfile.mkstemp(prefix="bench-system-", suffix=".txt", text=True)
+                system_file = Path(name)
+                with os.fdopen(fd, "w", encoding="utf-8") as fh:
+                    fh.write(system)
+                argv[1:1] = ["--append-system-prompt-file", str(system_file)]
+            proc = subprocess.run(
+                argv,
+                input=prompt,
+                capture_output=True,
+                text=True,
+                timeout=self._timeout,
+                encoding="utf-8",
+            )
+        finally:
+            if system_file is not None:
+                system_file.unlink(missing_ok=True)
+        if proc.returncode != 0:
+            raise RuntimeError(
+                f"claude exited {proc.returncode} for model {model}: "
+                f"{(proc.stderr or proc.stdout or '').strip()[:400]}"
+            )
+        return _ClaudeCodeResponse(content=[_TextBlock(text=(proc.stdout or "").strip())])
+
+
+class ClaudeCodeClient:
+    """An Anthropic-SDK-shaped client that runs prompts through the Claude Code CLI.
+
+    Exists so a live benchmark run needs no API key. `claude` must be on PATH, and must be
+    authenticated: interactively on a workstation, or via a `claude setup-token` credential in
+    CLAUDE_CODE_OAUTH_TOKEN on a machine where nobody is logged in.
+    """
+
+    def __init__(self, *, cli: str = "claude", timeout: int = 900) -> None:
+        self.messages = _ClaudeCodeMessages(cli=cli, timeout=timeout)
+
+
 def call_judged_lane(
     client: Any,
     *,
@@ -802,13 +912,60 @@ def execute_grid(
 
 
 def _client_factory() -> Any:
+    """The transport a live run uses. See ClaudeCodeClient for why it is not the Anthropic SDK."""
+    return ClaudeCodeClient()
+
+
+def _check_out_dir_is_not_committed_evidence(out_dir: Path) -> str | None:
+    """Refuse to write into a run set that already holds committed envelopes."""
+
+    # bench/results/runs*/ is immutable measurement evidence: the published figures are recomputed
+    # from those files, so overwriting them silently invalidates every number this library reports.
+    # The default --out-dir was that directory, which made a live run with no arguments destructive
+    # by default. That is not hypothetical: on 2026-08-08 a unit test whose precondition had changed
+    # fell through to the live path with default arguments and overwrote nine committed baseline
+    # envelopes. They were restored from git, but nothing had stopped it.
+    #
+    # An empty or absent directory is fine, so a fresh run set needs no ceremony.
     try:
-        import anthropic
-    except ImportError as exc:
-        raise RuntimeError(
-            "the anthropic package is required for a live run; install it with pip install -r requirements.txt"
-        ) from exc
-    return anthropic.Anthropic()
+        existing = sorted(out_dir.rglob("*.json")) if out_dir.exists() else []
+    except OSError:
+        return None
+    if not existing:
+        return None
+    return (
+        f"--out-dir {out_dir} already contains {len(existing)} envelope(s). Envelopes under "
+        "bench/results/runs*/ are immutable measurement evidence and are never overwritten: the "
+        "published figures are recomputed from them. Pass --out-dir pointing at a fresh directory."
+    )
+
+
+def _check_claude_cli(cli: str = "claude") -> str | None:
+    """Return a message naming what is wrong, or None if a live run can proceed.
+
+    Two failures are worth telling apart: the CLI missing, and the CLI present but unable to
+    authenticate. The second is what happens on a build machine with no credential, and the remedy
+    is different, so the message says which one it is.
+    """
+    try:
+        proc = subprocess.run(
+            [cli, "--version"], capture_output=True, text=True, timeout=60, stdin=subprocess.DEVNULL
+        )
+    except FileNotFoundError:
+        return (
+            f"the '{cli}' CLI is required for a live run and is not on PATH. Install Claude Code, or "
+            "pass --dry-run to validate the wiring without it. No API key is needed either way."
+        )
+    except subprocess.TimeoutExpired:
+        return f"'{cli} --version' timed out; the CLI appears installed but is not responding."
+    if proc.returncode != 0:
+        return f"'{cli} --version' exited {proc.returncode}: {(proc.stderr or '').strip()[:200]}"
+    if os.environ.get("CLAUDE_CODE_OAUTH_TOKEN"):
+        return None
+    # No token in the environment is normal and fine on a workstation, where the CLI is logged in
+    # interactively. It is only a problem where nobody is logged in, which the first model call
+    # will surface with the CLI's own error rather than a guess made here.
+    return None
 
 
 def _build_arg_parser() -> argparse.ArgumentParser:
@@ -827,7 +984,10 @@ def _build_arg_parser() -> argparse.ArgumentParser:
         help="Print the exact planned grid and exit; no model call, no secret required.",
     )
     parser.add_argument(
-        "--out-dir", default=str(DEFAULT_OUT_DIR), help="Where envelopes are written (default bench/results/runs)."
+        "--out-dir",
+        default=str(DEFAULT_OUT_DIR),
+        help="Where envelopes are written. Refuses to write into a run set that already holds "
+        "committed evidence; pass a fresh directory for a live run.",
     )
     parser.add_argument("--corpus", default=str(DEFAULT_CORPUS_DIR), help="Corpus root (default bench/corpus).")
     parser.add_argument(
@@ -901,12 +1061,17 @@ def main(argv: list[str] | None = None) -> int:
     if args.dry_run:
         return 0
 
-    if not os.environ.get("ANTHROPIC_API_KEY"):
-        print(
-            "bench: ANTHROPIC_API_KEY is required for a live run (S-07 CI-pipeline spec, AC-3); "
-            "set the secret, or pass --dry-run to validate wiring without it.",
-            file=sys.stderr,
-        )
+    # A live run needs the Claude Code CLI, not an API key (ADR 0030). Checked here rather than at
+    # the first model call so a misconfigured dispatch fails immediately and says what is wrong,
+    # instead of after planning a grid and part-running it.
+    cli_check = _check_claude_cli()
+    if cli_check is not None:
+        print(f"bench: {cli_check}", file=sys.stderr)
+        return 1
+
+    out_dir_check = _check_out_dir_is_not_committed_evidence(Path(args.out_dir))
+    if out_dir_check is not None:
+        print(f"bench: {out_dir_check}", file=sys.stderr)
         return 1
 
     if not selected or not cells:

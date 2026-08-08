@@ -49,3 +49,15 @@ Option 1. `anthropic>=0.40,<1` is added to `requirements.txt`, alongside `jsonsc
 - [ADR 0009 (Python and Node toolchain split)](0009-python-node-toolchain-split.md): the dependency-policy source this ADR satisfies; not edited by this ADR.
 
 **Correction, 2026-08-07.** This ADR said the harness dependency is installed with `pip install -r requirements.txt`. That is no longer true, and the change matters more than a path edit: `requirements.txt` now contains `jsonschema` alone, and `anthropic` moved to `requirements-bench.txt`. The reason is that the obvious command was pulling an API client into every environment that installed this plugin, including ones that will never run a benchmark, which made the library look as though it wanted an API key from ordinary users. It does not, and never did. See [the benchmark harness](../../explanation/the-benchmark-harness.md). [ADR 0030](0030-replace-the-api-key-in-the-bench-harness.md) proposes removing this dependency altogether for the skill condition.
+
+**Superseded, 2026-08-08.** The `anthropic` package is removed from this repository entirely, and
+so is the `requirements-bench.txt` that carried it. `bench/run_bench.py` now reaches the model
+through the Claude Code CLI, which authenticates from a Claude subscription, so no API key exists
+anywhere for a user or a maintainer. Verified by a live run: `critique-clarity` on a corpus
+artifact produced a contract-valid envelope with 9 findings across both lanes and no
+`ANTHROPIC_API_KEY` in the environment.
+
+This ADR was correct for what it solved. Its reasoning, that a hand-rolled HTTP client is worse
+audit surface than a maintained SDK, still holds; what changed is that the harness no longer needs
+an HTTP client of any kind. See
+[ADR 0030](0030-replace-the-api-key-in-the-bench-harness.md).

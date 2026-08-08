@@ -6,9 +6,12 @@ name: Bench
 # scheduler for one script, same as ci.yml: the job is a single documented command, reproducible
 # locally (AGENTS.md "Checks").
 #
-# --dry-run validates inputs and wiring without calling any model and without ANTHROPIC_API_KEY
-# (AC-3). A live run requires the secret; bench/run_bench.py itself refuses to proceed without it,
-# so a misconfigured dispatch fails loudly instead of silently doing nothing.
+# --dry-run validates inputs and wiring without calling any model and without any credential at
+# all (AC-3). A live run reaches the model through the Claude Code CLI rather than the Anthropic
+# API, so it needs NO API key: it authenticates from a Claude subscription via a `claude
+# setup-token` credential in CLAUDE_CODE_OAUTH_TOKEN (ADR 0030, probed on a clean runner
+# 2026-08-08). run_bench.py checks for the CLI up front, so a misconfigured dispatch fails loudly
+# and names the remedy instead of failing at the first model call.
 #
 # Results are never pushed directly to main: a live run that produces new envelopes commits them to
 # a fresh branch and pushes only that branch, for review as a diff.
@@ -53,11 +56,14 @@ jobs:
           python-version: '3.12'
 
       - name: Install Python dependencies
-        run: pip install -r requirements-bench.txt
+        run: pip install -r requirements.txt
+
+      - name: Install the Claude Code CLI (the harness reaches the model through it, not the API)
+        run: npm install -g @anthropic-ai/claude-code
 
       - name: Run the bench harness
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         run: python bench/run_bench.py --skills "${{ inputs.skills }}" --k "${{ inputs.k }}" --tiers "${{ inputs.tiers }}" ${{ inputs.dry_run && '--dry-run' || '' }}
 
       - name: Publish results as a branch diff (never a direct push)

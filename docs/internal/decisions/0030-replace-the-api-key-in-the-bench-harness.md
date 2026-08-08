@@ -158,6 +158,33 @@ agreeing with itself.
 personal subscription rather than to the repository, and it grants whatever that subscription
 grants. Rotating it is `claude setup-token` again followed by re-setting the secret.
 
+## Implemented in two halves; the first is done
+
+**Half one, the transport, landed 2026-08-08.** `_client_factory()` returns a `ClaudeCodeClient`
+exposing the same `messages.create(...)` surface the Anthropic SDK did, so both lane call sites and
+every SDK-shaped test double are unchanged. `anthropic` is removed from the repository, along with
+`requirements-bench.txt`. `bench.yml` installs the CLI and passes `CLAUDE_CODE_OAUTH_TOKEN`.
+
+Verified by a live run rather than by inspection: `critique-clarity` against a corpus artifact on
+the pinned haiku tier, with no `ANTHROPIC_API_KEY` in the environment, produced a contract-valid
+envelope with 9 findings, 5 scripted and 4 judged, citing real criterion IDs.
+
+**That live run also found a real defect that no unit test or dry-run could have.** The first
+attempt failed every skill cell with `[WinError 206] The filename or extension is too long`,
+because a judged system prompt assembled from `SKILL.md` plus `references/*.md` exceeds the
+platform's command-line argument limit. Baseline cells, which carry no system prompt, succeeded in
+the same run. The system prompt now goes to a temp file via `--append-system-prompt-file` and the
+user prompt over stdin, so neither can grow into that failure again.
+
+**Half two, fidelity, is not done.** The judged lane is still a prompt this harness assembles,
+which is the second definition of the protocol this ADR set out to delete. Closing it means asking
+Claude Code to run the real skill via `--plugin-dir` and returning its envelope, which would also
+delete `build_judged_system_prompt`, `call_judged_lane`, `_parse_judged_findings`, and the lane
+merge. The mechanism is already proven; this is a restructuring, not an unknown.
+
+Splitting it this way was deliberate: half one removes the API key completely and is small enough
+to verify in one live run, and half two changes what is measured and deserves its own scrutiny.
+
 ## Open questions
 
 1. **Determinism and cost of the k=5 grid.** 460+ Claude Code invocations is a different cost and
