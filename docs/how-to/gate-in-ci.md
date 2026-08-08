@@ -84,9 +84,10 @@ jobs:
         run: python -m contract.validate critique/prd-envelope.json --gate --threshold 0
 ```
 
-`contract/validate.py`'s only runtime dependency is `jsonschema`; installing it directly, rather
-than the full `requirements.txt`, skips the `anthropic` dependency this repository's own bench
-harness needs but a gate-only consumer does not. `PYTHONPATH` points at the pinned checkout so
+`contract/validate.py`'s only runtime dependency is `jsonschema`, and installing it directly is
+still the leanest thing to do. As of 2026-08-07 `requirements.txt` also contains nothing else: the
+`anthropic` package moved to `requirements-bench.txt`, which only someone re-running this
+repository's benchmark needs. Either command now gets you the same one package. `PYTHONPATH` points at the pinned checkout so
 `python -m contract.validate` resolves as a package without installing anything into your own
 repository. This shape, running the module against a path outside the checkout while
 `PYTHONPATH` points at it, was verified directly in this repository before writing this page.
