@@ -110,64 +110,51 @@ depends on it running.
 
 ---
 
-## The ways to run it, including the ones with no key
+## How to run it
 
-Four options. They are genuinely different, and the project has not committed to one.
+**There is no API key anywhere in this, and there is no decision left to make.** As of v0.1.4 the
+harness reaches the model through the Claude Code CLI, so it authenticates from a Claude
+subscription exactly the way you already do.
 
-### Option A: run it on your own machine
+### On your own machine
 
-Nothing stops you running the harness locally, where you are already logged in. This is the
-lowest-ceremony option and it needs **no secret, no token, and no CI configuration**. Benchmarking
-is not something anyone needs on every commit; it is something you do when you want to re-verify.
+```
+python bench/run_bench.py --skills critique-clarity --k 1 --tiers haiku --out-dir /tmp/bench-run
+```
 
-### Option B: have it drive Claude Code instead of the API
+Needs `claude` on PATH and logged in, which it is if you use Claude Code. No secret, no token, no
+CI configuration. This is the lowest-ceremony way to re-verify anything.
 
-The step-3 and step-6 model calls do not have to go through the API. They could ask Claude Code to
-run the real skill, the same way you do. Then Claude Code's own login applies and no API key exists
-anywhere in the picture.
+### On a build machine
 
-This is [ADR 0030](../internal/decisions/0030-replace-the-api-key-in-the-bench-harness.md), and it
-is accepted. The mechanism is proven: a real skill was run this way and produced a valid record.
+`bench.yml` installs the CLI and passes a `claude setup-token` credential from the
+`CLAUDE_CODE_OAUTH_TOKEN` repository secret. Probed on a clean `ubuntu-24.04` runner on 2026-08-08:
+it authenticates and answers.
 
-It is better than Option A for a reason beyond the key. **The published numbers came from Claude
-Code running the real skill.** The current harness is a second, separate implementation of the same
-protocol, written in Python. So a run through it validates that implementation rather than
-reproducing the original measurement. Option B removes that gap: it would run the same thing the
-numbers came from.
+This is the mode the public roadmap's "first live `bench.yml` dispatch, on infrastructure the
+maintainer does not control end to end" refers to. Running locally cannot satisfy that item, since
+the whole point is that the machine is not the maintainer's.
 
-There is one loose end. On a build machine nobody is logged in, so Claude Code has nothing to
-authenticate with. `claude setup-token` makes a long-lived token from a Claude subscription for
-exactly this, and that has not yet been tried in a real build.
+**The token is a real credential.** Long-lived, tied to a personal subscription rather than to the
+repository, and granting whatever that subscription grants. Rotate with `claude setup-token` again
+and re-set the secret.
 
-### Option C: the current wiring, with a key
-
-The `bench.yml` workflow can run the harness with `ANTHROPIC_API_KEY` in a repository secret. This
-works and has never been used. It bills to an Anthropic API account, which is separate from any
-Claude subscription.
-
-### Option D: `--dry-run`, which needs nothing at all
+### Without running anything
 
 ```
 python bench/run_bench.py --skills all --k 5 --dry-run
 ```
 
-Plans the entire grid, prints every cell it would run, and validates the wiring, **without importing
-the Anthropic package, calling any model, or requiring a key**. This works today and is the only
-mode that has actually been exercised in CI.
+Plans the entire grid and prints every cell it would run, **without calling any model or needing the
+CLI at all**. Useful for checking the wiring after changing a skill or the corpus.
 
-### What the project actually does
+### What is still true about the numbers
 
-Nothing is blocked on this decision, which is why it is still open. The numbers are published with
-an honest account of how they were made, the dry-run proves the wiring, and the harness exists if
-anyone wants it. The question becomes urgent the first time somebody says "prove it," and not
-before.
-
-One piece is settled: **the baseline stays on the API path even if everything else moves.** The
-baseline was measured by calling the API, and re-measuring it a different way would make new
-baseline numbers incomparable to every comparison already published. Changing how something is
-measured breaks comparability with everything measured the old way.
-
----
+The published figures came from a live multi-agent workflow, not from this harness, and
+[`bench/results/README.md`](../../bench/results/README.md) says so under Provenance. Moving the
+transport to Claude Code narrows that gap but does not close it: the judged lane here is still a
+prompt this harness assembles, rather than the shipped skill being run. Closing that is the
+remaining half of [ADR 0030](../internal/decisions/0030-replace-the-api-key-in-the-bench-harness.md).
 
 ## Technical reference
 
@@ -203,8 +190,9 @@ Nothing is hardcoded. The grid is derived from what the repository already decla
   reads those files and never writes to that directory; new records go to `--out-dir`.
 - **It never writes an invalid record.** Every assembled record is validated against the contract
   first, and a failure means nothing is written.
-- **A live run cannot happen by accident.** Without `ANTHROPIC_API_KEY` the script refuses to
-  proceed rather than silently doing nothing, so a misconfigured run fails loudly.
+- **A live run cannot happen by accident.** The script checks for the Claude Code CLI up front
+  and stops with a message naming the remedy, rather than planning a grid and failing partway
+  through it.
 - **`--dry-run` provably imports nothing.** A test poisons `sys.modules["anthropic"]` and asserts
   the dry-run path still exits 0.
 
@@ -212,12 +200,15 @@ Nothing is hardcoded. The grid is derived from what the repository already decla
 
 | File | Contents | Who needs it |
 |---|---|---|
-| `requirements.txt` | `jsonschema` | **Everyone using the plugin** |
-| `requirements-bench.txt` | adds `anthropic` | Only someone re-running the benchmark live |
+| `requirements.txt` | `jsonschema` | **Everyone**, and it is the whole list |
 | `requirements-dev.txt` | adds `pytest` | Contributors running the test suite |
 
-The split exists so that the obvious command, `pip install -r requirements.txt`, never pulls an API
-client into an environment that has no use for one.
+There is no third file and no API client. As of v0.1.4 the harness reaches the model through the
+Claude Code CLI, so the `anthropic` package and the `requirements-bench.txt` that carried it are
+both gone.
+
+The obvious command, `pip install -r requirements.txt`, installs one small open-source package and
+nothing else.
 
 ---
 

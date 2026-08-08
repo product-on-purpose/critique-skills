@@ -15,6 +15,7 @@ from typing import Any
 
 import pytest
 
+import bench.run_bench as run_bench
 from bench.baseline.postprocess import postprocess as baseline_postprocess
 from bench.run_bench import (
     ArtifactRef,
@@ -74,6 +75,22 @@ class FakeMessages:
     def create(self, **kwargs: Any) -> FakeResponse:
         self.calls.append(kwargs)
         return self._responses.pop(0)
+
+
+def _forbid(name: str):
+    """A stand-in that fails the test if called.
+
+    A live-path test that accidentally reaches a real transport spawns real `claude` processes,
+    which hangs the suite and costs tokens. That happened once while ADR 0030 was being
+    implemented, because a test asserting the old ANTHROPIC_API_KEY precondition fell through to
+    the run loop when the precondition changed. Patching the seams with this makes the same
+    mistake fail fast and say so.
+    """
+
+    def _boom(*_args: Any, **_kwargs: Any):
+        raise AssertionError(f"{name} must not be reached in this test; it would call a real model")
+
+    return _boom
 
 
 class FakeClient:
@@ -740,13 +757,14 @@ def test_main_dry_run_needs_no_api_key_and_prints_the_planned_grid(monkeypatch, 
     assert "[baseline]" in out
 
 
-def test_main_dry_run_does_not_import_anthropic(monkeypatch, capsys) -> None:
-    """--dry-run must stay secretless and dependency-light: it never needs the anthropic
-    package, only the wiring (S-07 AC-3)."""
-    import sys as _sys
-
+def test_main_dry_run_needs_neither_a_key_nor_the_cli(monkeypatch, capsys) -> None:
+    """--dry-run stays secretless and dependency-light: no API key, and not even the Claude Code
+    CLI, because it plans the grid without reaching a model at all (S-07 AC-3)."""
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
-    monkeypatch.setitem(_sys.modules, "anthropic", None)  # importing it would now raise
+    monkeypatch.delenv("CLAUDE_CODE_OAUTH_TOKEN", raising=False)
+    # Fail the run loudly if anything tries to reach a model or probe for the CLI.
+    monkeypatch.setattr(run_bench, "_client_factory", _forbid("_client_factory"))
+    monkeypatch.setattr(run_bench, "_check_claude_cli", _forbid("_check_claude_cli"))
 
     exit_code = main(["--skills", "critique-clarity", "--k", "1", "--dry-run"])
 
@@ -767,19 +785,71 @@ def test_main_rejects_an_unknown_tier_alias(capsys) -> None:
     assert "unknown tier alias" in capsys.readouterr().err
 
 
-def test_main_live_without_api_key_fails_loudly(monkeypatch, capsys) -> None:
+def test_main_live_without_the_cli_fails_loudly_and_names_the_remedy(monkeypatch, capsys) -> None:
+    """A live run needs the Claude Code CLI, not an API key (ADR 0030). Absent it, the run must
+    stop before planning anything and say what to do, rather than failing at the first model call.
+    """
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.setattr(
+        run_bench, "_check_claude_cli", lambda *a, **k: "the 'claude' CLI is required and is not on PATH."
+    )
+    monkeypatch.setattr(run_bench, "_client_factory", _forbid("_client_factory"))
 
     exit_code = main(["--skills", "critique-clarity", "--k", "1"])
 
+    err = capsys.readouterr().err
     assert exit_code == 1
-    assert "ANTHROPIC_API_KEY is required" in capsys.readouterr().err
+    assert "'claude' CLI is required" in err
+    assert "ANTHROPIC_API_KEY" not in err, "the harness must not ask for an API key any more"
 
 
-def test_main_live_with_no_matching_skills_and_a_key_present_does_nothing(monkeypatch, capsys) -> None:
-    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key-not-used")
+def test_main_live_with_no_matching_skills_does_nothing(tmp_path, monkeypatch, capsys) -> None:
+    monkeypatch.setattr(run_bench, "_check_claude_cli", lambda *a, **k: None)
+    monkeypatch.setattr(run_bench, "_client_factory", _forbid("_client_factory"))
 
-    exit_code = main(["--skills", "no-such-skill", "--k", "1"])
+    # A fresh --out-dir, because the default is the committed evidence directory and the
+    # immutability guard would (correctly) refuse it. This test is about skill filtering.
+    exit_code = main(["--skills", "no-such-skill", "--k", "1", "--out-dir", str(tmp_path / "runs")])
+
+    assert exit_code == 0
+    assert "nothing to do" in capsys.readouterr().out
+
+
+# ---------------------------------------------------------------------------
+# The immutability guard
+# ---------------------------------------------------------------------------
+
+
+def test_a_live_run_refuses_to_write_over_committed_evidence(tmp_path, monkeypatch, capsys) -> None:
+    """bench/results/runs*/ is immutable evidence, and the default --out-dir pointed straight at it.
+
+    On 2026-08-08 a unit test whose precondition had changed fell through to the live path with
+    default arguments and overwrote nine committed baseline envelopes. They were restored from git,
+    but nothing had stopped it, and the published figures are recomputed from those files.
+    """
+    populated = tmp_path / "runs"
+    (populated / "critique-clarity" / "clarity-001").mkdir(parents=True)
+    (populated / "critique-clarity" / "clarity-001" / "haiku-r1.json").write_text("{}", encoding="utf-8")
+
+    monkeypatch.setattr(run_bench, "_check_claude_cli", lambda *a, **k: None)
+    monkeypatch.setattr(run_bench, "_client_factory", _forbid("_client_factory"))
+
+    exit_code = main(["--skills", "critique-clarity", "--k", "1", "--out-dir", str(populated)])
+
+    err = capsys.readouterr().err
+    assert exit_code == 1
+    assert "already contains 1 envelope" in err
+    assert "immutable measurement evidence" in err
+
+
+def test_a_live_run_accepts_a_fresh_out_dir(tmp_path, monkeypatch, capsys) -> None:
+    """The guard must not make a legitimate re-measurement awkward: an empty or absent
+    directory needs no ceremony."""
+    monkeypatch.setattr(run_bench, "_check_claude_cli", lambda *a, **k: None)
+    monkeypatch.setattr(run_bench, "_client_factory", _forbid("_client_factory"))
+
+    # No matching skill, so the run stops before any model call; the guard must not fire first.
+    exit_code = main(["--skills", "no-such-skill", "--k", "1", "--out-dir", str(tmp_path / "fresh")])
 
     assert exit_code == 0
     assert "nothing to do" in capsys.readouterr().out
