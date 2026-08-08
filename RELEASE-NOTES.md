@@ -6,6 +6,32 @@ Curated, user-facing highlights. For the full technical history, see `CHANGELOG.
 
 Nothing yet.
 
+## 0.1.3 - 2026-08-07
+
+**This library never needed an API key from you, and now it stops looking like it does.**
+
+No skill behavior changed. No criterion was added, removed, or re-scored. No run envelope was touched.
+
+### The problem
+
+Installing this plugin's one Python dependency, with the obvious command, also installed an Anthropic API client you have no use for.
+
+That was our packaging mistake, not a requirement. The dependency file listed two things: the small open-source package the skills actually need, and an API client that only our own benchmark tool uses. Anyone reading that reasonably concluded they were expected to bring an API key.
+
+**You are not.** A skill is a set of instructions that the AI assistant you are already using reads and follows. It never places a call of its own, so there is nothing to authenticate and nothing to pay for beyond whatever you already have.
+
+The two are now separate files. The default one installs a single package. We verified it by running every skill on a machine with the API client deliberately absent: all six work.
+
+### The explanation, for anyone who wants it
+
+There is a new page, [The benchmark harness, and why it does not affect you](docs/explanation/the-benchmark-harness.md). It opens by answering the question directly and telling you that you can stop reading there.
+
+If you carry on, it explains the one tool in this repository that *can* use an API key: what it does, why a library about honest measurement keeps it around, and why it has never actually been run. Short version: we publish numbers about how well our own skills perform, and that tool exists so somebody who does not trust us can re-run the measurement and check. It is a receipt, not a feature.
+
+### Also
+
+The check on whether the right skill gets picked, out of the six, now runs on both of the AI models we measure against. Both score 18 out of 18.
+
 ## 0.1.2 - 2026-08-07
 
 **The release where we stopped reasoning about the runtime and started asking it.** Every fix below came from running something and reading the answer, and two of them contradicted a confident conclusion written down earlier in this repository.
