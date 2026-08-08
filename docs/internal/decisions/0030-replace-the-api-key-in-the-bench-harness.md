@@ -14,9 +14,10 @@
 - **What that buys:** a live `bench.yml` dispatch would mean "the published figures still hold"
   rather than "a different harness also produces figures." That is the difference between a
   reproduction and a demo, and reproduction is the claim this library trades on.
-- **What it does not buy:** the key does not fully disappear. The frozen baseline condition stays on
-  the Anthropic API path, because moving it would change its execution context and break
-  comparability with every published comparison. The rewrite is scoped to the skill condition.
+- **What it buys, corrected 2026-08-08:** the key goes away entirely, not partially. An earlier
+  draft kept the baseline on the API path; that rested on a wrong premise and is corrected under
+  "Decisions taken". CI authentication was probed on a clean runner and works with a subscription
+  token and no `ANTHROPIC_API_KEY`.
 - **Status:** **Accepted** (2026-08-07). Both blockers cleared. `claude setup-token` mints a
   long-lived token from a Claude subscription, so a CI run authenticates without an API key; and the
   acceptance gate ran and passed, producing a contract-valid envelope from the real skill through
@@ -113,15 +114,49 @@ otherwise attractive for a benchmark: it skips hooks, plugin sync, and CLAUDE.md
 
 ## Decisions taken
 
-**The frozen baseline condition stays on the Anthropic API path.** The baseline is a raw prompt with
-no skill and no subagent, and its published figures were produced that way. Running it through
-Claude Code changes its execution context, which would make new baseline numbers incomparable to
-every comparison already published, and the baseline is supposed to be frozen. So `ANTHROPIC_API_KEY`
-and the `anthropic` dependency **do not fully disappear**; they narrow to one condition.
+**Both conditions move. The API key goes away entirely.**
 
-That is a smaller win than "delete the key," and worth being honest about. The win that remains is
-the one that mattered: the **skill** condition stops being a second implementation of the protocol,
-so a live run measures the skills as they actually ship.
+An earlier draft of this ADR held that the frozen baseline had to stay on the Anthropic API path, on
+the grounds that re-measuring it another way would make new baseline numbers incomparable to the
+published ones. **That reasoning was wrong, and the error is worth recording because it nearly cost
+the whole point of the change.**
+
+The baseline is not a fixed external constant. It is a row in `results.json`, `skill: baseline-generic`,
+scored on the same artifacts, the same pinned models, and the same metrics as every skill row. **The
+claim this library makes is "a rubric-cited skill beats a generic prompt," and that is a comparison
+between two rows of the same run set.** It does not require the baseline to be identical across run
+sets; it requires both conditions to be measured the same way *within* one.
+
+What moving both does cost is the ability to compare new absolute figures against the published
+ones. That is a real loss and a small one: a re-measurement is its own run set regardless, which is
+already how `p3` and `cal1` are handled. Trading cross-run absolute comparability for a harness that
+actually runs the shipped skills is the right trade.
+
+## CI authentication: probed 2026-08-08, it works
+
+The question that blocked this ADR was whether Claude Code can authenticate a non-interactive run
+on a machine where nobody is logged in. It can.
+
+A temporary workflow installed the CLI on a clean `ubuntu-24.04` runner, with a subscription token
+from `claude setup-token` in a repository secret as `CLAUDE_CODE_OAUTH_TOKEN`, and ran one prompt:
+
+```
+model said: AUTH_OK
+PROBE RESULT: authentication works in CI
+```
+
+No `ANTHROPIC_API_KEY` was present. The workflow was deleted after answering; it triggered on push
+to its own branch so a temporary file never had to reach `main`.
+
+**Consequences.** Every remaining reason to keep the `anthropic` dependency is now gone. The
+public roadmap's "first live `bench.yml` dispatch, on infrastructure the maintainer does not control
+end to end" is satisfiable without buying API credit, and satisfiable using the same mechanism that
+produced the published numbers, which makes it a reproduction rather than a second implementation
+agreeing with itself.
+
+**The token is a real credential and should be treated as one.** It is long-lived, it is tied to a
+personal subscription rather than to the repository, and it grants whatever that subscription
+grants. Rotating it is `claude setup-token` again followed by re-setting the secret.
 
 ## Open questions
 
