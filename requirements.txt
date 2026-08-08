@@ -1,10 +1,11 @@
-# Runtime dependency for contract/validate.py. Python 3.12 stdlib plus
-# this one package, per docs/internal/release-plans/plan_v0.1.0/
-# S-02_critique-contract/spec.md Non-Functional Requirements.
+# Runtime dependencies for using this plugin. One package.
+#
+# Needed by contract/validate.py, and therefore by every skill's scripted lane, which reaches it
+# through skills/_shared/runner.py and gate.py. Per docs/internal/release-plans/plan_v0.1.0/
+# S-02_critique-contract/spec.md Non-Functional Requirements: Python 3.12 stdlib plus this.
+#
+# NO API KEY IS NEEDED TO USE THIS PLUGIN. Skills run inside your agent session and never call a
+# model themselves. The Anthropic SDK lives in requirements-bench.txt, because the only thing that
+# needs it is the benchmark reproduction harness, which is a maintainer tool nobody has to run.
+# See docs/explanation/the-benchmark-harness.md.
 jsonschema>=4.20,<5
-
-# Runtime dependency for bench/run_bench.py's judged-lane and baseline-condition Anthropic API
-# calls. ADR-justified per docs/internal/release-plans/plan_v0.1.0/S-03_bench-harness/spec.md
-# Non-Functional Requirements ("any third-party dependency ADR-justified"); see
-# docs/internal/decisions/0025-anthropic-sdk-dependency.md.
-anthropic>=0.40,<1
