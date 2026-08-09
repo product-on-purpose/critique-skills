@@ -280,6 +280,43 @@ hand write access to the repository being measured, and would contradict `SECURI
 the critic has no `Write` and no `Edit`. `--allowedTools "Read,Bash,Glob,Grep,Task,Skill"` was
 measured to be sufficient: the same artifact produced 9 findings across both lanes under it.
 
+### Resolved: which repairs the harness may make
+
+The three failures below forced a question this ADR had not asked: the harness must stop
+*reimplementing the protocol*, but may it still repair *output*? Deleting `_sanitize_prose` alongside
+the protocol logic answered "no" by accident, because the two happened to sit next to each other.
+
+**Decided 2026-08-09. The line is whether a repair can change what was found.**
+
+| Class | Examples | Changes what was found? | Harness may repair |
+|---|---|---|---|
+| Transport / format | strip a code fence, extract an envelope from narration, normalise house-style punctuation, truncate to the schema maximum | No | **Yes** |
+| Protocol / measurement | merge lanes, rank, bound output, build the histogram, decide the gate | **Yes** | **No** |
+
+Three consequences, all implemented:
+
+1. **`_sanitize_prose` is restored for the skill lane.** It is transport: it cannot change which
+   criterion was cited, at what severity, or where. `bench/baseline/postprocess.py` has applied
+   exactly this to the baseline from the start, stating the policy itself, that the model "was never
+   told this rule, so this function enforces it on its behalf rather than letting a stray dash turn
+   a whole envelope contract-invalid". Leaving it deleted for the skill alone made the comparison
+   unfair in the baseline's favour, which is not a defensible way to run "skill beats generic
+   prompt". The frozen baseline could not move to meet the skill, so the skill moved to meet it.
+2. **A bad histogram remains a failed cell.** Recomputing it would put the harness back in the
+   business of measuring. The old lane's envelopes were valid by construction precisely because the
+   harness built `summary` itself, and that is the thing being deleted.
+3. **A non-final response is retried, not scored.** `SKILL_RUN_ATTEMPTS = 3`, small on purpose:
+   each retry costs a full agentic run, and retrying past a few attempts would hide a systematic
+   failure behind cost rather than reporting it.
+
+### Also added: a scripted-only envelope is not a complete run
+
+A scripted-only envelope is structurally indistinguishable from a merged one, so a run that never
+reached the judged lane would be written and scored as if it had. `execute_skill_cell` now requires
+at least one judged-lane finding whenever the skill's own `SKILL.md` frontmatter declares judged
+criteria, and says so when it fails. The check keys off what the skill declares, so a scripted-only
+skill is never punished for behaving as specified.
+
 ### Cell reliability: 1 of 4 haiku cells produced a usable envelope
 
 Four cells were run against the same artifact on the pinned haiku tier. Three distinct failure
@@ -326,6 +363,47 @@ lane could not produce this failure, because the harness built `summary` itself 
 Trusting the skill means the skill's own assembly errors now surface as failed cells. That is the
 honest measurement, but it means a re-run's pass rate is no longer comparable to the committed one
 without accounting for it, and it may say more about a tier's arithmetic than about its critique.
+
+### The fixes did not improve the success rate, and that is the real finding
+
+A second k=3 run on the same artifact and tier, with prose normalisation, retries and the
+both-lanes check all in place, scored **1 of 3 again**. The failure modes moved; the reliability did
+not.
+
+| | Round 1 | Round 2 |
+|---|---|---|
+| r1 | no envelope, a non-final "running in the background" response | invalid: histogram total 7 against 6 findings plus 2 suppressed |
+| r2 | invalid: em dash in `violation` | invalid: `findings[4].confidence` was not `high` on a `scripted` finding |
+| r3 | **valid** | **valid** |
+
+The two failures the fixes targeted did not recur. The two that replaced them are both
+**protocol-class**, and both are the skill making a false statement about its own measurement:
+arithmetic that does not add up, and a claim of less-than-high confidence on a deterministic
+scripted check, which `contract/critique-contract.schema.json` rejects on the stated grounds that
+"scripted-lane findings are always high confidence or they are bugs". By the repair policy above
+these correctly stay failed cells, because repairing either one would mean the harness deciding the
+measurement.
+
+**Across every haiku cell run on 2026-08-09: 2 valid out of 7.** That is the single most important
+thing the fidelity half has produced, and the old lane could not have produced it at all, because
+the harness built `summary` and normalised prose itself so every envelope was valid by construction
+whatever the model returned. What looked like a working measurement was partly the harness writing
+the answer down for the model.
+
+**The consequence is concrete: a k=5 grid on this tier would lose most of its cells.** That has to be
+resolved before a graded re-run, and the options are genuinely different decisions, not
+implementation details:
+
+1. **Strengthen the skill.** If `SKILL.md` and `critique-critic.md` cannot get a small model to
+   assemble a valid envelope reliably, that is arguably a defect in the skill rather than in the
+   model, and fixing it is ordinary product work that helps every user on every tier.
+2. **Retire haiku as a measurement tier for this design.** Defensible, but it narrows the claim the
+   benchmark can make and abandons a pinned tier the published figures already use.
+3. **Score an invalid envelope rather than dropping it.** Record it as a scored-zero cell so the
+   grid stays complete and the invalidity is visible in the results rather than as an absence.
+
+Nothing here argues for going back. It argues that the number the old lane reported was flattering
+in a way nobody could see.
 
 ### Cost, which answers open question 1 concretely
 

@@ -5,6 +5,16 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- **The benchmark harness now has a stated rule for which repairs it may make to a skill's output, and it is not the one v0.1.4 shipped by accident.** ADR 0030 deleted the harness's reimplementation of the critique protocol, correctly. It also deleted `_sanitize_prose()`, which was sitting next to that logic but is not part of it. The line, decided now and recorded in ADR 0030: **a repair the harness may make is one that cannot change what was found.** Stripping a code fence, extracting an envelope from a narrated run, normalising house-style punctuation and truncating to the schema maximum are all transport, and none of them can alter which criterion was cited, at what severity, or where. Merging lanes, ranking, bounding output, building the histogram and deciding the gate are the measurement itself, and the harness must not touch them.
+- **Prose normalisation is restored for the skill lane, because leaving it out made the benchmark unfair.** `bench/baseline/postprocess.py` has always applied it to the baseline, stating the reason itself: the model "was never told this rule, so this function enforces it on its behalf rather than letting a stray dash turn a whole envelope contract-invalid". With it deleted for the skill only, one stray em dash in one `violation` field cost an entire skill cell on 2026-08-09 while the baseline's identical slip would have been repaired in silence. That biases "skill beats generic prompt" against the skill. The frozen baseline could not move to meet the skill, so the skill moved to meet it, and both lanes are now normalised identically. **A malformed `summary` is still a failed cell**, because recomputing that would put the harness back in the business of measuring.
+
+### Added
+
+- **A non-final response is retried rather than scored.** A cell can return a promise instead of a result: measured on 2026-08-09, one returned "The critique-critic agent is running in the background to evaluate clarity-001.md. I'll output the final run envelope when it completes." In a one-shot `claude -p` there is no "when it completes", so that is the skill's delegation pattern meeting non-interactive mode, not the tier failing the critique. An API call cannot fail this way at all. `SKILL_RUN_ATTEMPTS` is 3, deliberately small: each retry costs a full agentic run, and retrying further would hide a systematic failure behind cost instead of reporting it.
+- **A scripted-only envelope is rejected as an incomplete run.** It is structurally indistinguishable from a merged one, so a run that never reached the judged lane would otherwise be written and scored as though it had. The harness now requires at least one judged-lane finding whenever the skill's own `SKILL.md` frontmatter declares judged criteria, and names the lanes it did find when it refuses. The check keys off what the skill declares, so a scripted-only skill is never punished for behaving exactly as specified.
+
 ## [0.1.4] - 2026-08-09
 
 The release where the API key leaves the project entirely, and where the benchmark stops carrying a second copy of the thing it measures. No skill behavior changed, no criterion was added, removed, or re-scored, and no run envelope was touched.
