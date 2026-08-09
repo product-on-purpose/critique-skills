@@ -26,6 +26,13 @@ skill.
   is reimplemented; `tests/test_gate.py` asserts function identity, not just equivalent behavior.
 - `runner.py` - `run_scripted_lane()`: the whole body of a skill's `checks.py` `main()`, parameterized
   by that skill's own check function.
+- `merge.py` - the CLI form of `envelope.py`, for the judged lane. `runner.py` gave the scripted lane
+  a way to reach `assemble_envelope()`; the critic had none, because it is prose plus `Bash` and that
+  was a Python function, so it did pass 4 in its head from instructions. It did not do it reliably:
+  measured 2026-08-09, 2 of 7 benchmark cells produced a contract-valid envelope, failing on a
+  histogram that did not total `len(findings)` plus `suppressed_count` and on a `scripted` finding
+  claiming less than `high` confidence. Findings in on stdin, one validated envelope out, and
+  nothing at all on stdout if it would not validate.
 - `tests/` - pytest suite for this library, including the determinism comparison
   (`test_runner.py::test_same_artifact_twice_produces_identical_findings_and_summary`) that the
   template's "What determinism does and does not cover" section points at.

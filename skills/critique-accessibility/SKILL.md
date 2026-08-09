@@ -113,8 +113,10 @@ Follow these four passes in order. Do not skip ahead to severity or fixes while 
 
 Report every severity 3 and 4 finding. Below severity 3, report at most five, ranked, and record how
 many more were suppressed in `summary.suppressed_count`. Never omit a suppressed count to make the
-output shorter. The scripted lane gets this for free from `skills/_shared/envelope.py`; a judged-lane
-pass performed inline must apply it by hand.
+output shorter. The scripted lane gets this for free from `skills/_shared/envelope.py`, and a judged-lane pass
+gets it from `skills/_shared/merge.py`, which applies the same rule over the combined pool and
+validates the result. Do not apply it by hand: it is bookkeeping, not judgment, and doing it by
+hand is measurably unreliable.
 
 ## Clean-context critique
 

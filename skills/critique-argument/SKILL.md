@@ -117,15 +117,17 @@ They are separate defects and they are counted separately.
 
 Report every severity 3 and 4 finding. Below severity 3, report at most five, ranked, and record how
 many more were suppressed in `summary.suppressed_count`. Never omit a suppressed count to make the
-output shorter. The scripted lane gets this for free from `skills/_shared/envelope.py`; the judged
-lane, which is six of this skill's eight criteria, applies it by hand.
+output shorter. The scripted lane gets this for free from `skills/_shared/envelope.py`, and the
+judged lane, which is six of this skill's eight criteria, gets it from `skills/_shared/merge.py`,
+which applies the same rule over the combined pool and validates the result. Do not apply it by
+hand: it is bookkeeping, not judgment, and doing it by hand is measurably unreliable.
 
-**Rank on the same key the scripted lane uses**, so a mixed-lane envelope is ordered by one rule and
-two runs over the same artifact emit the same findings in the same order: severity descending, then
-criterion ID ascending, then location. That is `skills/_shared/envelope.py`'s own `_rank_key`, and
-applying it by hand to the judged lane is what makes this skill's run-to-run consistency a property
-of the protocol rather than an accident of which defect the sweep noticed first. Assign `F-NNN` ids
-only after ranking, never in discovery order.
+**Both lanes rank on one key**, so a mixed-lane envelope is ordered by a single rule and two runs
+over the same artifact emit the same findings in the same order: severity descending, then criterion
+ID ascending, then location. That is `skills/_shared/envelope.py`'s own `_rank_key`, which
+`merge.py` applies to the combined pool, and it is what makes this skill's run-to-run consistency a
+property of the protocol rather than an accident of which defect the sweep noticed first. `F-NNN`
+ids are assigned after ranking, never in discovery order, which is also `merge.py`'s job.
 
 ## Clean-context critique
 
