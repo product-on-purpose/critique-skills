@@ -725,6 +725,55 @@ def test_transport_passes_plugin_dir_model_and_cwd_and_never_bare(tmp_path, monk
     assert calls[0]["cwd"] == str(tmp_path / "staged")
 
 
+def test_transport_isolates_the_run_from_the_operators_own_configuration(tmp_path, monkeypatch) -> None:
+    """Measured 2026-08-09: without these flags a nested run offered 97 skills, the six under test
+    plus 91 from the operator's ambient configuration, and a full skill run never finished.
+
+    `--plugin-dir` adds a plugin; it does not isolate an environment. Without isolation two
+    operators are not running the same benchmark, and nothing in the envelope records which
+    configuration produced it. With `--setting-sources ""` and `--strict-mcp-config` the same probe
+    offered 18, all of them the CLI's own built-ins plus the plugin under test, and the run
+    completed in about two minutes.
+    """
+    calls = _capture_claude_calls(monkeypatch)
+
+    run_bench._ClaudeCodeMessages().create(
+        model="claude-haiku-4-5-20251001",
+        messages=[{"role": "user", "content": "critique ./clarity-001.md"}],
+        plugin_dir=tmp_path / "repo",
+        cwd=tmp_path,
+    )
+
+    argv = calls[0]["argv"]
+    assert argv[argv.index("--setting-sources") + 1] == ""
+    assert "--strict-mcp-config" in argv
+
+
+def test_transport_gives_a_skill_run_no_way_to_write_anything(tmp_path, monkeypatch) -> None:
+    """SECURITY.md's claim about the critic is that it has no Write and no Edit, so it cannot
+    modify the artifact it critiques or anything else. A benchmark that ran with
+    --permission-mode bypassPermissions would quietly contradict that, and would hand write access
+    to the very repository it is measuring. An explicit allowlist was measured to be sufficient:
+    the same run completed with 9 findings across both lanes without it.
+    """
+    calls = _capture_claude_calls(monkeypatch)
+
+    run_bench._ClaudeCodeMessages().create(
+        model="claude-haiku-4-5-20251001",
+        messages=[{"role": "user", "content": "critique ./clarity-001.md"}],
+        plugin_dir=tmp_path / "repo",
+        cwd=tmp_path,
+    )
+
+    argv = calls[0]["argv"]
+    allowed = argv[argv.index("--allowedTools") + 1]
+    assert "Read" in allowed and "Bash" in allowed
+    assert "Write" not in allowed
+    assert "Edit" not in allowed
+    assert "--permission-mode" not in argv
+    assert "--dangerously-skip-permissions" not in argv
+
+
 def test_transport_omits_plugin_dir_for_the_frozen_baseline_lane(monkeypatch) -> None:
     """The baseline condition is frozen: a generic prompt with no skill and no plugin loaded.
     Loading the plugin for it would make the baseline stop being a baseline."""
@@ -810,6 +859,56 @@ def test_skill_lane_accepts_a_fenced_envelope(monkeypatch, tmp_path) -> None:
     )
 
     assert envelope["findings"][0]["severity"] == 2
+
+
+def test_skill_lane_extracts_the_envelope_from_a_narrated_run(monkeypatch, tmp_path) -> None:
+    """A real skill run narrates its protocol and then emits the envelope, so stdout is not one
+    JSON object however firmly the instruction asks for one.
+
+    Measured against the pinned haiku tier on 2026-08-09: 7403 bytes of stdout, opening with
+    "Now I'll perform the judged criterion sweep" and four passes of commentary before the
+    envelope arrived, fenced, at the end. Requiring the whole response to parse would have thrown
+    away a complete, contract-valid run with findings in both lanes.
+    """
+    narrated = (
+        "Now I'll perform the judged criterion sweep.\n\n"
+        "**Pass 1: Inventory**\nSections: Program Overview, Eligibility.\n"
+        'Here is an interim thought with a brace: {"not": "the envelope"}\n\n'
+        "```json\n" + json.dumps(_ENVELOPE_FROM_SKILL) + "\n```\n"
+    )
+    _capture_claude_calls(monkeypatch, stdout=narrated)
+
+    envelope = run_bench.call_skill_lane(
+        run_bench.ClaudeCodeClient(),
+        model_id="claude-haiku-4-5-20251001",
+        skill="critique-clarity",
+        staged_path=tmp_path / "clarity-001.md",
+        repo_root=tmp_path,
+    )
+
+    assert envelope["findings"][0]["criterion"] == "PLAIN-DOUBLE-NEGATIVE"
+    assert envelope["summary"]["gate"] == "pass"
+
+
+def test_skill_lane_ignores_earlier_json_that_is_not_an_envelope(monkeypatch, tmp_path) -> None:
+    """The scripted lane's own output is often echoed mid-run. Picking the first JSON object
+    would capture that instead of the final merged envelope."""
+    narrated = (
+        'Running the scripted lane: {"findings": [], "note": "scripted only"}\n\n'
+        "Now the merged envelope:\n" + json.dumps(_ENVELOPE_FROM_SKILL) + "\n"
+    )
+    _capture_claude_calls(monkeypatch, stdout=narrated)
+
+    envelope = run_bench.call_skill_lane(
+        run_bench.ClaudeCodeClient(),
+        model_id="claude-haiku-4-5-20251001",
+        skill="critique-clarity",
+        staged_path=tmp_path / "clarity-001.md",
+        repo_root=tmp_path,
+    )
+
+    assert envelope["findings"], "took the empty scripted echo instead of the final envelope"
+    assert envelope["run"]["skill"] == "critique-clarity"
 
 
 def test_skill_lane_rejects_a_response_that_is_not_an_envelope(monkeypatch, tmp_path) -> None:

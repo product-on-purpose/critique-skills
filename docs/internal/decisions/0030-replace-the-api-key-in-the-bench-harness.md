@@ -245,15 +245,63 @@ That is a measurement defect, not just a performance problem:
 3. **The old design was immune to this by construction.** It sent an assembled system prompt to a
    plain API call, so the environment was exactly what the harness built and nothing else.
 
-**Consequence for this ADR.** The fidelity half is implemented and unit-tested, but it cannot be
-accepted until a skill run completes in a *controlled* environment. The remaining work is
-environment isolation, not the restructuring itself: the harness has to pin what the nested run
-loads rather than inheriting the operator's configuration. Until that exists, a figure produced
-this way would be less trustworthy than the one it replaced, which is the opposite of the point.
+### Isolation, resolved the same day
 
-**This is the third time on this ADR that running the thing found what reading it could not**, after
-the `WinError 206` argument limit and the sibling-manifest leak. All three were invisible to a
-passing test suite.
+`--setting-sources ""` plus `--strict-mcp-config` fixes it, and the effect is measurable:
+
+| Flags | Skills offered | Full skill run |
+|---|---|---|
+| `--plugin-dir` alone | **97** | never finished (killed at 240s, no output) |
+| plus `--setting-sources "" --strict-mcp-config` | **18** | **completed, exit 0, about 2 minutes** |
+
+The remaining 18 are the CLI's own built-ins plus the six under test, which now appear namespaced
+as `critique-skills:critique-*`. Those ship with the CLI version rather than with the operator, so
+they are a property of the pinned runtime and are reproducible in a way the other 91 were not.
+
+Both flags go on **both** lanes. The committed baseline envelopes were produced by a plain API call
+with no environment at all, so isolating the baseline moves it closer to how it was measured, not
+further from it.
+
+**Tool access is an explicit allowlist, not `--permission-mode bypassPermissions`.** Bypassing would
+hand write access to the repository being measured, and would contradict `SECURITY.md`'s claim that
+the critic has no `Write` and no `Edit`. `--allowedTools "Read,Bash,Glob,Grep,Task,Skill"` was
+measured to be sufficient: the same artifact produced 9 findings across both lanes under it.
+
+### What the gate then found: the skill's own envelope was not contract-valid
+
+With isolation in place the harness ran end to end in 94 seconds, and `validate_document` rejected
+what came back:
+
+```
+summary.by_severity: histogram total 9 does not equal len(findings) (9) plus suppressed_count (2)
+```
+
+The envelope is required to histogram **everything found** and then emit a bounded subset, so the
+total must be `len(findings) + suppressed_count`. The skill, on the pinned haiku tier, histogrammed
+only what it emitted. The harness refused to write the cell, which is correct behavior.
+
+**This is the fidelity half working as intended, and it is also the first real cost of it.** The old
+lane could not produce this failure, because the harness built `summary` itself with
+`build_summary()`, so every envelope was valid by construction no matter what the model returned.
+Trusting the skill means the skill's own assembly errors now surface as failed cells. That is the
+honest measurement, but it means a re-run's pass rate is no longer comparable to the committed one
+without accounting for it, and it may say more about a tier's arithmetic than about its critique.
+
+### Cost, which answers open question 1 concretely
+
+| Tier | One skill cell |
+|---|---|
+| haiku | 94s to 173s |
+| sonnet | **exceeded 9 minutes**, killed before finishing |
+
+The old lane was one API call per cell. This is a full agentic run per cell, and the sonnet figure
+in particular makes a k=5 grid over six skills and two tiers a many-hour job rather than a
+many-minute one. That has to be planned for and budgeted before a full re-run is scheduled, not
+discovered partway through one.
+
+**This is the fourth and fifth time on this ADR that running the thing found what reading it could
+not**, after the `WinError 206` argument limit, the sibling-manifest leak, and the ambient-config
+leak. Every one was invisible to a passing test suite.
 
 Passing the wiring gate does **not** close this ADR. The 2026-08-07 acceptance gate above already
 ran one k=1 skill invocation by hand and passed; repeating it through the harness proves the

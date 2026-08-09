@@ -347,6 +347,45 @@ def _strip_code_fence(text: str) -> str:
     return match.group(1) if match else text.strip()
 
 
+def _extract_envelope(text: str) -> dict[str, Any] | None:
+    """The last balanced JSON object in `text` that looks like a run envelope, or None.
+
+    A real skill run narrates. Measured against the pinned haiku tier on 2026-08-09, the response
+    was 7403 bytes that opened "Now I'll perform the judged criterion sweep", walked through four
+    protocol passes, and only then emitted the envelope, fenced, at the end. Requiring the whole
+    response to parse would have discarded a complete, contract-valid run.
+
+    Last rather than first, and shape-checked rather than merely valid JSON, because a run
+    typically echoes its scripted lane's own output on the way past. Taking the first object, or
+    any object that happens to parse, captures that intermediate instead of the merged result.
+    """
+    candidate: dict[str, Any] | None = None
+    for start, char in enumerate(text):
+        if char != "{":
+            continue
+        depth = 0
+        for end in range(start, len(text)):
+            if text[end] == "{":
+                depth += 1
+            elif text[end] == "}":
+                depth -= 1
+                if depth == 0:
+                    try:
+                        parsed = json.loads(text[start : end + 1])
+                    except json.JSONDecodeError:
+                        pass
+                    else:
+                        if (
+                            isinstance(parsed, dict)
+                            and isinstance(parsed.get("findings"), list)
+                            and isinstance(parsed.get("run"), dict)
+                            and isinstance(parsed.get("summary"), dict)
+                        ):
+                            candidate = parsed
+                    break
+    return candidate
+
+
 # ---------------------------------------------------------------------------
 # Transport: Claude Code, not the Anthropic SDK
 # ---------------------------------------------------------------------------
@@ -412,12 +451,29 @@ class _ClaudeCodeMessages:
         # system prompt goes to a temp file and the user prompt goes over stdin, and neither can
         # grow into that failure again as skills or artifacts get larger.
         prompt = "\n\n".join(str(m.get("content", "")) for m in messages)
-        argv = [self._cli, "--model", model, "-p"]
+        # Isolation, on BOTH lanes. Measured 2026-08-09: without these two flags a nested run
+        # offered 97 skills, the six under test plus 91 from the operator's own ambient
+        # configuration, along with whatever plugins, MCP servers and hooks it carries, and a full
+        # skill run never finished. --plugin-dir adds a plugin; it does not isolate an environment,
+        # and without isolation two operators are not running the same benchmark. With these, the
+        # same probe offered 18, all of them the CLI's own built-ins plus the plugin under test.
+        # The baseline gets them too: the committed baseline envelopes were produced by a plain API
+        # call with no environment at all, so isolating it moves it closer to that, not further.
+        argv = [self._cli, "--model", model, "--setting-sources", "", "--strict-mcp-config", "-p"]
         # --plugin-dir loads this repository as a plugin so the judged lane can run the REAL skill
         # (ADR 0030's fidelity half) instead of a prompt the harness assembles. The frozen baseline
         # condition passes no plugin_dir: loading the plugin for it would stop it being a baseline.
         if plugin_dir is not None:
-            argv[1:1] = ["--plugin-dir", str(plugin_dir)]
+            # An explicit allowlist rather than --permission-mode bypassPermissions, which would
+            # hand write access to the repository being measured and would contradict SECURITY.md's
+            # claim that the critic has no Write and no Edit. Measured sufficient: the same run
+            # completed with 9 findings across both lanes under this allowlist alone.
+            argv[1:1] = [
+                "--plugin-dir",
+                str(plugin_dir),
+                "--allowedTools",
+                "Read,Bash,Glob,Grep,Task,Skill",
+            ]
         system_file: Path | None = None
         try:
             if system:
@@ -506,15 +562,10 @@ def call_skill_lane(
         cwd=staged_path.parent,
     )
     text = _strip_code_fence(_response_text(response))
-    try:
-        envelope = json.loads(text)
-    except json.JSONDecodeError as exc:
+    envelope = _extract_envelope(text)
+    if envelope is None:
         raise JudgedLaneError(
-            f"{skill}: the skill did not return a JSON envelope: {text[:300]}"
-        ) from exc
-    if not isinstance(envelope, dict) or not isinstance(envelope.get("findings"), list):
-        raise JudgedLaneError(
-            f"{skill}: the skill returned JSON that is not a run envelope: {text[:300]}"
+            f"{skill}: no run envelope found in the skill's response: {text[:300]}"
         )
     return envelope
 
