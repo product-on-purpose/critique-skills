@@ -364,6 +364,47 @@ Trusting the skill means the skill's own assembly errors now surface as failed c
 honest measurement, but it means a re-run's pass rate is no longer comparable to the committed one
 without accounting for it, and it may say more about a tier's arithmetic than about its critique.
 
+### The fixes did not improve the success rate, and that is the real finding
+
+A second k=3 run on the same artifact and tier, with prose normalisation, retries and the
+both-lanes check all in place, scored **1 of 3 again**. The failure modes moved; the reliability did
+not.
+
+| | Round 1 | Round 2 |
+|---|---|---|
+| r1 | no envelope, a non-final "running in the background" response | invalid: histogram total 7 against 6 findings plus 2 suppressed |
+| r2 | invalid: em dash in `violation` | invalid: `findings[4].confidence` was not `high` on a `scripted` finding |
+| r3 | **valid** | **valid** |
+
+The two failures the fixes targeted did not recur. The two that replaced them are both
+**protocol-class**, and both are the skill making a false statement about its own measurement:
+arithmetic that does not add up, and a claim of less-than-high confidence on a deterministic
+scripted check, which `contract/critique-contract.schema.json` rejects on the stated grounds that
+"scripted-lane findings are always high confidence or they are bugs". By the repair policy above
+these correctly stay failed cells, because repairing either one would mean the harness deciding the
+measurement.
+
+**Across every haiku cell run on 2026-08-09: 2 valid out of 7.** That is the single most important
+thing the fidelity half has produced, and the old lane could not have produced it at all, because
+the harness built `summary` and normalised prose itself so every envelope was valid by construction
+whatever the model returned. What looked like a working measurement was partly the harness writing
+the answer down for the model.
+
+**The consequence is concrete: a k=5 grid on this tier would lose most of its cells.** That has to be
+resolved before a graded re-run, and the options are genuinely different decisions, not
+implementation details:
+
+1. **Strengthen the skill.** If `SKILL.md` and `critique-critic.md` cannot get a small model to
+   assemble a valid envelope reliably, that is arguably a defect in the skill rather than in the
+   model, and fixing it is ordinary product work that helps every user on every tier.
+2. **Retire haiku as a measurement tier for this design.** Defensible, but it narrows the claim the
+   benchmark can make and abandons a pinned tier the published figures already use.
+3. **Score an invalid envelope rather than dropping it.** Record it as a scored-zero cell so the
+   grid stays complete and the invalidity is visible in the results rather than as an absence.
+
+Nothing here argues for going back. It argues that the number the old lane reported was flattering
+in a way nobody could see.
+
 ### Cost, which answers open question 1 concretely
 
 | Tier | One skill cell |
