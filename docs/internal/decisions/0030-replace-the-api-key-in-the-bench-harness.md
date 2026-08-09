@@ -211,8 +211,21 @@ Rule 4 is what makes keeping the real filename safe.
 
 | Gate | What it proves | Status |
 |---|---|---|
-| Wiring | The rewritten path runs, and produces a contract-valid envelope | **Attempted 2026-08-09, did not pass.** See below |
-| Fidelity (Open question 2) | The replacement measures the same thing: a partial re-run landing within measured run-to-run variance of the committed figures | **Not run,** and blocked behind the wiring gate |
+| Wiring | The rewritten path runs, and produces a contract-valid envelope | **Passed 2026-08-09.** See below |
+| Fidelity (Open question 2) | The replacement measures the same thing: a partial re-run landing within measured run-to-run variance of the committed figures | **Not run,** and blocked on the cell reliability below |
+
+**The wiring gate passed** on the pinned haiku tier, `python -m contract.validate` reporting `valid`:
+
+| Property | Value |
+|---|---|
+| `run.artifact` | `bench/corpus/clarity/clarity-001.md`, the corpus path, not the staging path |
+| `run.artifact_sha256` | `32ee3fed...`, matching the manifest |
+| `run.model` | `claude-haiku-4-5-20251001`, the pinned id, passed explicitly |
+| Findings | 7, across **both** lanes |
+| Criteria | `PLAIN-ACTIVE`, `PLAIN-CONCISE`, `PLAIN-DOUBLE-NEGATIVE`, `PLAIN-HEADINGS`, `PLAIN-JARGON`, `PLAIN-ORGANIZE`, `PLAIN-SENTENCE-LENGTH` |
+| Summary | internally consistent: histogram total 8 = 7 emitted + 1 suppressed |
+
+Staging, invocation, envelope extraction, provenance rewriting and contract validation all work.
 
 ### The wiring gate attempt, 2026-08-09: a blocker the unit tests could not see
 
@@ -267,7 +280,34 @@ hand write access to the repository being measured, and would contradict `SECURI
 the critic has no `Write` and no `Edit`. `--allowedTools "Read,Bash,Glob,Grep,Task,Skill"` was
 measured to be sufficient: the same artifact produced 9 findings across both lanes under it.
 
-### What the gate then found: the skill's own envelope was not contract-valid
+### Cell reliability: 1 of 4 haiku cells produced a usable envelope
+
+Four cells were run against the same artifact on the pinned haiku tier. Three distinct failure
+modes, and they are not the same problem:
+
+| Run | Outcome |
+|---|---|
+| single | Invalid: `histogram total 9 does not equal len(findings) (9) plus suppressed_count (2)` |
+| k3 r1 | **No envelope at all.** Returned "The critique-critic agent is running in the background to evaluate clarity-001.md. I'll output the final run envelope when it completes." |
+| k3 r2 | Invalid: an em dash in `findings[7].violation`, against the contract's prose rule |
+| k3 r3 | **Valid.** The gate result above |
+
+**r1 is the most serious, and it is a property of running an agent rather than calling an API.** The
+outer `claude -p` returned a *promise* rather than a result: the skill delegated to `critique-critic`
+and the process exited before the subagent finished. An API call cannot do this. Nothing currently
+distinguishes "the skill found nothing worth reporting" from "the skill had not finished thinking",
+and a harness that scores the second as the first is measuring noise. This needs handling before any
+graded run, not after.
+
+**r2 exposes an asymmetry this ADR created, and it biases the comparison against the skill.** The
+deleted `_sanitize_prose()` stripped em and en dashes from judged findings, on the stated grounds
+that "the model was never told the house style either", and `bench/baseline/postprocess.py` still
+does exactly that for the baseline lane. So as things stand the baseline's prose is normalised and
+passes, while the skill's identical slip is rejected and fails the entire cell. Whatever is decided
+about validity, **the two conditions have to be treated the same way**, or "skill beats generic
+prompt" stops being a fair comparison.
+
+### The first failure in detail: the skill's own envelope was not contract-valid
 
 With isolation in place the harness ran end to end in 94 seconds, and `validate_document` rejected
 what came back:
