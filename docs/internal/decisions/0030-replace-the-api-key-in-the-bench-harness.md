@@ -276,9 +276,17 @@ with no environment at all, so isolating the baseline moves it closer to how it 
 further from it.
 
 **Tool access is an explicit allowlist, not `--permission-mode bypassPermissions`.** Bypassing would
-hand write access to the repository being measured, and would contradict `SECURITY.md`'s claim that
-the critic has no `Write` and no `Edit`. `--allowedTools "Read,Bash,Glob,Grep,Task,Skill"` was
-measured to be sufficient: the same artifact produced 9 findings across both lanes under it.
+contradict `SECURITY.md`'s claim that the critic has no `Write` and no `Edit`.
+`--allowedTools "Read,Bash,Glob,Grep,Task,Skill"` was measured to be sufficient: the same artifact
+produced 9 findings across both lanes under it.
+
+**The allowlist is not a sandbox, and it should not be described as one.** `Bash` is on it because
+the skill's protocol requires it, and `Bash` can write. Observed 2026-08-09: a probe run left a copy
+of the staged artifact inside `skills/critique-clarity/`, which the conformance gate caught as an
+un-inventoried file. Withholding `Write` and `Edit` is worth doing and is strictly better than
+bypassing permissions, but a benchmark run can still write to the repository it is measuring, and
+nothing here prevents that. Real isolation would mean running against a copy of the plugin rather
+than the working tree, which is not done today.
 
 ### Resolved: which repairs the harness may make
 
