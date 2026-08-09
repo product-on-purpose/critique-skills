@@ -128,16 +128,33 @@ Follow these four passes in order. Do not skip ahead to severity or fixes while 
    `docs/reference/severity-scale.md` (impact, then frequency, then persistence) and this skill's
    own `references/severity-anchors.md`. Do not assign severity while still discovering problems;
    that inflates it. Do not re-rate a scripted finding: its severity is fixed by rule.
-4. **Rank and bound.** Order all findings by severity, then apply the output bound: every severity
-   3 and 4 finding, plus at most five below that threshold, ranked. Count everything suppressed in
-   `summary.suppressed_count`; nothing disappears without being counted.
+4. **Assemble the envelope. Do not do this pass by hand.** Write every finding from both lanes as
+   JSON and pipe it to the library's own assembler:
+
+   ```
+   python3 skills/_shared/merge.py --skill <this-skill> --artifact <artifact>
+   ```
+
+   It ranks by severity, applies the output bound (every severity 3 and 4 finding, plus at most
+   five below that threshold), assigns `F-NNN` ids after ranking, counts everything suppressed into
+   `summary.suppressed_count` so nothing disappears uncounted, builds `summary.by_severity` over
+   **everything found** rather than only what survived bounding, computes the gate, normalises
+   prose to the contract's rules, and validates before printing. Same path shape as
+   `scripts/checks.py` in pass 2. Add `--severity-3-threshold N` if a threshold was supplied.
+
+   Return its output verbatim. It prints nothing at all rather than print an invalid envelope, so
+   if you have output you have a valid one, and editing it afterwards makes it unvalidated again.
+   Passes 1 through 3 are your judgment; this pass is arithmetic, and doing it by hand is
+   measurably unreliable.
 
 ## Output bounding
 
 Report every severity 3 and 4 finding. Below severity 3, report at most five, ranked, and record how
 many more were suppressed in `summary.suppressed_count`. Never omit a suppressed count to make the
-output shorter. The scripted lane gets this for free from `skills/_shared/envelope.py`; a judged-lane
-pass performed inline must apply it by hand.
+output shorter. The scripted lane gets this for free from `skills/_shared/envelope.py`, and a judged-lane pass
+gets it from `skills/_shared/merge.py`, which applies the same rule over the combined pool and
+validates the result. Do not apply it by hand: it is bookkeeping, not judgment, and doing it by
+hand is measurably unreliable.
 
 Heuristic evaluation generates long lists, and this bound is where that habit is checked. A screen
 with eleven minor inconsistencies produces five reported findings and a suppressed count of six, not

@@ -761,12 +761,18 @@ def test_transport_isolates_the_run_from_the_operators_own_configuration(tmp_pat
     assert "--strict-mcp-config" in argv
 
 
-def test_transport_gives_a_skill_run_no_way_to_write_anything(tmp_path, monkeypatch) -> None:
-    """SECURITY.md's claim about the critic is that it has no Write and no Edit, so it cannot
-    modify the artifact it critiques or anything else. A benchmark that ran with
-    --permission-mode bypassPermissions would quietly contradict that, and would hand write access
-    to the very repository it is measuring. An explicit allowlist was measured to be sufficient:
-    the same run completed with 9 findings across both lanes without it.
+def test_transport_grants_no_write_or_edit_tool_and_no_permission_bypass(tmp_path, monkeypatch) -> None:
+    """The allowlist withholds `Write` and `Edit` and never passes a permissions bypass, matching
+    what SECURITY.md says about the critic. It was measured sufficient for a real run: the same
+    artifact produced 9 findings across both lanes under it.
+
+    It is NOT a sandbox, and this test deliberately does not claim to be one. `Bash` is on the
+    allowlist because the skill's protocol requires it, and `Bash` can write. Observed on
+    2026-08-09: a probe run left a copy of the staged artifact inside
+    `skills/critique-clarity/`, which the conformance gate then flagged as an un-inventoried file.
+    So this asserts the two things the flags do control, and the ADR records the residual: a
+    benchmark run can still write through `Bash`, and the repository under measurement is not
+    protected from it by tool choice alone.
     """
     calls = _capture_claude_calls(monkeypatch)
 

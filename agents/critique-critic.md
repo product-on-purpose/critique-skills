@@ -66,10 +66,27 @@ bounded-output rule are the ones this run follows; they are not restated here
 4. Assign severity to every finding as its own pass, using
    [severity-scale.md](../docs/reference/severity-scale.md) plus the skill's own
    `references/severity-anchors.md`.
-5. Combine both lanes' findings into one pool and apply the skill's bounded-output rule by hand over
-   that combined pool: every severity 3 and 4 finding, plus at most five below, ranked; count the rest
-   in `summary.suppressed_count`. The result is one envelope for the whole run, not one lane reported
-   in isolation.
+5. Combine both lanes' findings into one pool and **assemble the envelope with the library's own
+   assembler rather than by hand**. Write the combined pool as JSON and pipe it to:
+
+   ```
+   python skills/_shared/merge.py --skill <skill-name> --artifact <artifact-path> --model <your-model-id>
+   ```
+
+   It applies the bounded-output rule over the combined pool (every severity 3 and 4 finding, plus
+   at most five below, ranked), assigns finding ids, builds `summary.by_severity` over **everything
+   found** rather than only what survived bounding, counts the remainder into
+   `summary.suppressed_count`, computes the gate, normalises prose to the contract's rules,
+   derives `run.rubrics` and `run.artifact_sha256`, and validates before printing. Add
+   `--severity-3-threshold N` when a threshold was passed in.
+
+   **Do not compute any of that yourself.** It is arithmetic and schema recall, not judgment, and
+   doing it by hand is measurably unreliable: on 2026-08-09 only 2 of 7 benchmark cells produced a
+   contract-valid envelope, and the recurring failures were a histogram that did not total
+   `len(findings)` plus `suppressed_count`, and a `scripted` finding claiming less than `high`
+   confidence. Your judgment is passes 1 through 4. Pass 5 is bookkeeping, and the library does it.
+
+   The result is one envelope for the whole run, not one lane reported in isolation.
 
 ## Clean-context boundary
 
@@ -91,7 +108,11 @@ Framing arrives with an invocation in two different shapes, handled differently
 On every non-refused run, the final message is exactly one contract-valid run envelope
 ([critique-contract.schema.json](../contract/critique-contract.schema.json)) as JSON, and nothing
 else: no preamble, no restated findings, no closing remarks. `run.skill` is the skill name passed in;
-`run.model` is this subagent's own pinned model id; `summary.severity_3_threshold` reflects any
-threshold passed in, else 0. Validate before returning and never return a document that fails.
+`run.model` is this subagent's own pinned model id, passed to `merge.py` as `--model`;
+`summary.severity_3_threshold` reflects any threshold passed in, else 0.
+
+Return `merge.py`'s output verbatim. It has already validated, and it prints nothing at all rather
+than print a document that fails, so if you have output you have a valid envelope. Never hand-edit
+what it produced: an edit after validation is an unvalidated envelope again.
 
 On a refusal, the final message is the one-line refusal statement above, and nothing else.

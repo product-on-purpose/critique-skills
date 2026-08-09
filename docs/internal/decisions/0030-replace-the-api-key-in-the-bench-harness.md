@@ -276,9 +276,17 @@ with no environment at all, so isolating the baseline moves it closer to how it 
 further from it.
 
 **Tool access is an explicit allowlist, not `--permission-mode bypassPermissions`.** Bypassing would
-hand write access to the repository being measured, and would contradict `SECURITY.md`'s claim that
-the critic has no `Write` and no `Edit`. `--allowedTools "Read,Bash,Glob,Grep,Task,Skill"` was
-measured to be sufficient: the same artifact produced 9 findings across both lanes under it.
+contradict `SECURITY.md`'s claim that the critic has no `Write` and no `Edit`.
+`--allowedTools "Read,Bash,Glob,Grep,Task,Skill"` was measured to be sufficient: the same artifact
+produced 9 findings across both lanes under it.
+
+**The allowlist is not a sandbox, and it should not be described as one.** `Bash` is on it because
+the skill's protocol requires it, and `Bash` can write. Observed 2026-08-09: a probe run left a copy
+of the staged artifact inside `skills/critique-clarity/`, which the conformance gate caught as an
+un-inventoried file. Withholding `Write` and `Edit` is worth doing and is strictly better than
+bypassing permissions, but a benchmark run can still write to the repository it is measuring, and
+nothing here prevents that. Real isolation would mean running against a copy of the plugin rather
+than the working tree, which is not done today.
 
 ### Resolved: which repairs the harness may make
 
@@ -404,6 +412,47 @@ implementation details:
 
 Nothing here argues for going back. It argues that the number the old lane reported was flattering
 in a way nobody could see.
+
+### Resolution: give the critic the assembler, measured 2026-08-09
+
+`skills/_shared/envelope.py` had carried the deterministic assembly logic all along, and
+`assemble_envelope`'s own docstring named its intended callers as "skills/_shared/runner.py, or a
+judged-lane critic merging both lanes". The scripted lane could reach it, because `runner.py` is a
+CLI. The critic could not: it is prose plus `Read` and `Bash`, and this was a Python function with
+no entry point. So pass 4 was performed from a prose description of the algorithm, every run.
+
+`skills/_shared/merge.py` is that entry point. Findings in on stdin, one validated envelope out,
+nothing at all on stdout if it would not validate.
+
+**The first attempt at this shipped inert, which is worth recording.** `merge.py` was added and
+pointed at from `critique-critic.md` and from each `SKILL.md`'s "Output bounding" prose. A live
+probe came back hand-assembled with the same histogram error as before. The cause was that
+`SKILL.md`'s **pass 4** still said "Order all findings by severity, then apply the output bound",
+and the numbered pass is the imperative a run follows; the section further down is description. A
+run that critiques inline never reads `critique-critic.md` at all, so pointing only there missed
+the common path. Instructions have a hot path, and editing the prose beside a step changes nothing.
+
+**Measured after pass 4 itself was rewritten,** same artifact and pinned haiku tier:
+
+| | Before | After |
+|---|---|---|
+| Contract-valid cells | **2 of 7** | **3 of 4** |
+| Malformed-envelope failures | 3 of 7 | **0 of 4** |
+| Per-cell wall clock | 94s to 173s | 3m35s to 6m01s |
+
+The three valid envelopes all carry correct histogram arithmetic (12 = 7 + 5, 14 = 9 + 5) and omit
+`stripped_context` rather than emitting an empty array, which was a third way hand assembly had been
+failing. The one failure was a different class entirely: a scripted-only envelope, caught by the
+both-lanes check rather than by contract validation, meaning the run never reached the judged lane.
+
+Two honest caveats. **The sample is small**, four cells of one skill on one artifact, so this is
+evidence the mechanism works rather than a reliability figure to publish. And **the headline rate is
+now measuring something stricter**, because the both-lanes check rejects incomplete runs that would
+previously have been written and scored as complete; that pulls the rate down at the same time as
+`merge.py` pulls it up.
+
+**It is also roughly twice as slow per cell**, which makes the grid cost worse rather than better
+and compounds the problem in the next section.
 
 ### Cost, which answers open question 1 concretely
 
