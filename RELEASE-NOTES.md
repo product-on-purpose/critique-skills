@@ -4,6 +4,10 @@ Curated, user-facing highlights. For the full technical history, see `CHANGELOG.
 
 ## Unreleased
 
+Nothing yet.
+
+## 0.1.4 - 2026-08-09
+
 **The API key is gone from this project entirely, including from our own benchmark tool.**
 
 No skill behavior changed. No criterion was added, removed, or re-scored. No run envelope was touched.
