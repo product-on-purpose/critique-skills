@@ -374,10 +374,22 @@ def _toy_envelope_from_skill(criterion: str = "TOY-ALPHA", severity: int = 2) ->
                 "violation": "v",
                 "fix": "f",
                 "confidence": "high",
-            }
+            },
+            {
+                "id": "F-002",
+                "criterion": "TOY-BETA",
+                "lane": "judged",
+                "severity": 1,
+                "location": "p2",
+                "evidence": "e2",
+                "violation": "v2",
+                "fix": "f2",
+                "confidence": "medium",
+            },
         ],
         "summary": {
-            "by_severity": {str(i): (1 if i == severity else 0) for i in range(5)},
+            "by_severity": {str(i): (1 if i in (severity, 1) else 0) for i in range(5)}
+            | ({"1": 2} if severity == 1 else {}),
             "gate": "pass",
             "severity_3_threshold": 0,
             "suppressed_count": 0,
@@ -431,10 +443,10 @@ def test_execute_grid_a_failed_cell_does_not_stop_the_rest(tmp_path: Path) -> No
     cells = plan_grid(["critique-toy"], tiers, k=1, corpus_dir=corpus_dir, out_dir=out_dir)
 
     client = FakeClient(
-        [
-            FakeResponse("I could not read that file, sorry."),  # skill cell: not an envelope
-            FakeResponse("No problems found."),  # baseline cell
-        ]
+        # The skill cell is attempted SKILL_RUN_ATTEMPTS times before it is given up on, because a
+        # missing envelope is usually a non-final response rather than a refusal.
+        [FakeResponse("I could not read that file, sorry.")] * run_bench.SKILL_RUN_ATTEMPTS
+        + [FakeResponse("No problems found.")]  # baseline cell
     )
 
     results = execute_grid(cells, client=client, repo_root=tmp_path, now_fn=_now)
@@ -816,10 +828,24 @@ _ENVELOPE_FROM_SKILL = {
             "fix": "State it positively.",
             "lane": "scripted",
             "confidence": "high",
-        }
+        },
+        # A real envelope carries both lanes, because the skill runs both. A fixture with only one
+        # would not survive the both-lanes check, and should not: that check exists precisely
+        # because a scripted-only envelope looks identical to a complete one.
+        {
+            "id": "F-002",
+            "criterion": "PLAIN-AUDIENCE",
+            "severity": 1,
+            "location": "Program Overview, first paragraph",
+            "evidence": "eligible participants may elect to avail themselves",
+            "violation": "Written for an internal reader, not the employee it addresses.",
+            "fix": "Address the reader directly.",
+            "lane": "judged",
+            "confidence": "medium",
+        },
     ],
     "summary": {
-        "by_severity": {"0": 0, "1": 0, "2": 1, "3": 0, "4": 0},
+        "by_severity": {"0": 0, "1": 1, "2": 1, "3": 0, "4": 0},
         "gate": "pass",
         "severity_3_threshold": 0,
         "suppressed_count": 0,
@@ -943,6 +969,188 @@ def test_skill_lane_names_the_skill_and_the_staged_file_in_its_prompt(monkeypatc
     assert "critique-clarity" in prompt
     assert "clarity-001.md" in prompt
     assert "bench/corpus" not in prompt, "the corpus path must never reach the skill"
+
+
+# ---------------------------------------------------------------------------
+# Transport-class repair, protocol-class failure
+# ---------------------------------------------------------------------------
+#
+# The line these draw: a repair that cannot change WHAT WAS FOUND is transport, and the harness may
+# make it. A repair that recomputes the measurement is protocol, and the harness must not, because
+# that is the second definition of the critique protocol ADR 0030 deleted.
+#
+# Stripping a code fence, extracting an envelope from narration, and normalising house-style
+# punctuation are transport. Merging lanes, ranking, bounding, building the histogram and deciding
+# the gate are protocol. `_sanitize_prose` was deleted with the protocol logic because it sat next
+# to it, but it belongs on the transport side, and bench/baseline/postprocess.py still applies it to
+# the baseline lane. Leaving it deleted for the skill alone made the comparison unfair in the
+# baseline's favour.
+
+_EM_DASH = chr(0x2014)
+_EN_DASH = chr(0x2013)
+
+
+def _skill_envelope_with(**finding_overrides: Any) -> dict[str, Any]:
+    env = json.loads(json.dumps(_ENVELOPE_FROM_SKILL))
+    env["findings"][0].update(finding_overrides)
+    return env
+
+
+def test_skill_prose_is_normalised_the_same_way_the_baseline_lane_normalises_it(monkeypatch, tmp_path) -> None:
+    """A stray em dash cost a whole cell on 2026-08-09 while the baseline's identical slip was
+    silently repaired, which biases "skill beats generic prompt" against the skill.
+
+    bench/baseline/postprocess.py states the policy this follows: the model "was never told this
+    rule, so this function enforces it on its behalf rather than letting a stray dash turn a whole
+    envelope contract-invalid".
+    """
+    violation = f"The section addresses two readers{_EM_DASH}employee and staff{_EN_DASH}at once."
+    _capture_claude_calls(monkeypatch, stdout=json.dumps(_skill_envelope_with(violation=violation)))
+
+    envelope = run_bench.call_skill_lane(
+        run_bench.ClaudeCodeClient(),
+        model_id="claude-haiku-4-5-20251001",
+        skill="critique-clarity",
+        staged_path=tmp_path / "clarity-001.md",
+        repo_root=tmp_path,
+    )
+
+    got = envelope["findings"][0]["violation"]
+    assert _EM_DASH not in got and _EN_DASH not in got
+    assert "two readers - employee" in got
+
+
+def test_skill_prose_normalisation_truncates_to_the_schema_maximum(monkeypatch, tmp_path) -> None:
+    """A truncated but contract-valid envelope is preferred to a faithful but invalid one, which is
+    the rule the baseline postprocessor already states for itself."""
+    _capture_claude_calls(monkeypatch, stdout=json.dumps(_skill_envelope_with(fix="x" * 1500)))
+
+    envelope = run_bench.call_skill_lane(
+        run_bench.ClaudeCodeClient(),
+        model_id="claude-haiku-4-5-20251001",
+        skill="critique-clarity",
+        staged_path=tmp_path / "clarity-001.md",
+        repo_root=tmp_path,
+    )
+
+    assert len(envelope["findings"][0]["fix"]) == 1000
+
+
+def test_a_bad_histogram_is_still_a_failed_cell(tmp_path) -> None:
+    """Protocol, not transport. Recomputing the summary would put the harness back in the business
+    of measuring, which is exactly what ADR 0030 deleted; the old lane's envelopes were valid by
+    construction precisely because the harness built this itself."""
+    _, artifact = _corpus_with_manifest(tmp_path)
+    broken = json.loads(json.dumps(_ENVELOPE_FROM_SKILL))
+    broken["summary"]["by_severity"] = {"0": 0, "1": 0, "2": 9, "3": 0, "4": 0}
+    broken["summary"]["suppressed_count"] = 2
+    client = FakeClient([FakeResponse(json.dumps(broken))])
+
+    envelope = run_bench.execute_skill_cell(
+        _clarity_cell(tmp_path, artifact),
+        client=client,
+        repo_root=tmp_path,
+        frontmatter=_CLARITY_FRONTMATTER,
+        now_fn=_now,
+    )
+
+    assert not validate_document(envelope).ok, "the harness must not repair a protocol-class error"
+
+
+# ---------------------------------------------------------------------------
+# Non-final responses, and the both-lanes assertion
+# ---------------------------------------------------------------------------
+
+
+def test_a_promise_instead_of_a_result_is_retried(monkeypatch, tmp_path) -> None:
+    """Measured 2026-08-09: a cell returned "The critique-critic agent is running in the background
+    to evaluate clarity-001.md. I'll output the final run envelope when it completes."
+
+    In a one-shot `-p` run there is no "when it completes". That is the skill's delegation pattern
+    meeting non-interactive mode, not the tier failing the critique, so it is retried rather than
+    scored.
+    """
+    calls = _capture_claude_calls(monkeypatch, stdout="The agent is running in the background.")
+    responses = iter(
+        [
+            "The critique-critic agent is running in the background. I'll output the envelope when it completes.",
+            json.dumps(_ENVELOPE_FROM_SKILL),
+        ]
+    )
+
+    def _fake_run(argv, **kwargs):
+        calls.append({"argv": list(argv), **kwargs})
+        return _FakeProc(stdout=next(responses))
+
+    monkeypatch.setattr(run_bench.subprocess, "run", _fake_run)
+
+    envelope = run_bench.call_skill_lane(
+        run_bench.ClaudeCodeClient(),
+        model_id="claude-haiku-4-5-20251001",
+        skill="critique-clarity",
+        staged_path=tmp_path / "clarity-001.md",
+        repo_root=tmp_path,
+    )
+
+    assert envelope["findings"][0]["criterion"] == "PLAIN-DOUBLE-NEGATIVE"
+    assert len(calls) == 2, "the first attempt should have been retried, not scored"
+
+
+def test_a_persistent_non_final_response_fails_the_cell(monkeypatch, tmp_path) -> None:
+    """Retrying forever would hide a systematic problem behind cost. The budget is bounded and the
+    cell fails when it is spent."""
+    calls = _capture_claude_calls(monkeypatch, stdout="Still working on it in the background.")
+
+    with pytest.raises(JudgedLaneError):
+        run_bench.call_skill_lane(
+            run_bench.ClaudeCodeClient(),
+            model_id="claude-haiku-4-5-20251001",
+            skill="critique-clarity",
+            staged_path=tmp_path / "clarity-001.md",
+            repo_root=tmp_path,
+        )
+
+    assert 1 < len(calls) <= 4, f"expected a small bounded retry budget, got {len(calls)} attempts"
+
+
+def test_a_scripted_only_envelope_fails_when_the_skill_declares_judged_criteria(tmp_path) -> None:
+    """A scripted-only envelope is structurally identical to a merged one, so a run that never
+    reached the judged lane would score as a complete run. The skill's own SKILL.md frontmatter
+    says whether a judged lane was supposed to happen, and the harness already loads it."""
+    _, artifact = _corpus_with_manifest(tmp_path)
+    scripted_only = json.loads(json.dumps(_ENVELOPE_FROM_SKILL))
+    for finding in scripted_only["findings"]:
+        finding["lane"] = "scripted"
+    client = FakeClient([FakeResponse(json.dumps(scripted_only))])
+
+    with pytest.raises(JudgedLaneError, match="judged"):
+        run_bench.execute_skill_cell(
+            _clarity_cell(tmp_path, artifact),
+            client=client,
+            repo_root=tmp_path,
+            frontmatter=_CLARITY_FRONTMATTER,
+            now_fn=_now,
+        )
+
+
+def test_a_scripted_only_envelope_is_fine_when_the_skill_declares_no_judged_criteria(tmp_path) -> None:
+    """The check keys off what the skill declares, so a scripted-only skill is not punished for
+    behaving exactly as specified."""
+    _, artifact = _corpus_with_manifest(tmp_path)
+    scripted_only = json.loads(json.dumps(_ENVELOPE_FROM_SKILL))
+    for finding in scripted_only["findings"]:
+        finding["lane"] = "scripted"
+    client = FakeClient([FakeResponse(json.dumps(scripted_only))])
+
+    envelope = run_bench.execute_skill_cell(
+        _clarity_cell(tmp_path, artifact),
+        client=client,
+        repo_root=tmp_path,
+        frontmatter={**_CLARITY_FRONTMATTER, "judged": []},
+        now_fn=_now,
+    )
+
+    assert envelope["findings"]
 
 
 def _clarity_cell(tmp_path: Path, artifact: ArtifactRef) -> GridCell:

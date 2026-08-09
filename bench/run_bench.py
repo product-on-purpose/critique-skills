@@ -86,6 +86,11 @@ DEFAULT_MANIFEST_PATH = ROOT / "bench" / "results" / "measurement-manifest.json"
 BASELINE_PROMPT_PATH = ROOT / "bench" / "baseline" / "prompt.txt"
 DEFAULT_MAX_TOKENS = 8192
 
+# How many times one skill cell is attempted before it is recorded as failed. Small on purpose: a
+# retry costs a full agentic run (94s to 173s on haiku, longer on sonnet), and retrying past a few
+# attempts would hide a systematic failure behind cost rather than reporting it.
+SKILL_RUN_ATTEMPTS = 3
+
 
 # ---------------------------------------------------------------------------
 # Skill discovery and filtering (unchanged from the pre-harness stub)
@@ -347,6 +352,56 @@ def _strip_code_fence(text: str) -> str:
     return match.group(1) if match else text.strip()
 
 
+# Built with chr() so this file carries none of the punctuation it exists to strip, matching
+# contract/validate.py's and bench/baseline/postprocess.py's own convention.
+_DASHES = {chr(0x2014): " - ", chr(0x2013): " - "}
+_WHITESPACE_RE = re.compile(r"\s+")
+
+# contract/critique-contract.schema.json: $defs/locationText and $defs/finding's own properties.
+_PROSE_FIELD_MAX_LENGTH = {"location": 400, "evidence": 2000, "violation": 1000, "fix": 1000}
+
+
+def _sanitize_prose(text: str, *, max_length: int) -> str:
+    """Enforce the contract's prose rules on one field: no em dash, no en dash, no runs of
+    whitespace, no leading or trailing whitespace, and no more than the schema's maximum.
+
+    This is transport, not measurement: it cannot change which criterion was cited, at what
+    severity, or where. `bench/baseline/postprocess.py` has applied exactly this to the baseline
+    lane from the start, on the stated grounds that the model "was never told this rule, so this
+    function enforces it on its behalf rather than letting a stray dash turn a whole envelope
+    contract-invalid", and that "a truncated but contract-valid envelope is preferred to a
+    faithful-but-invalid one".
+
+    It was deleted with ADR 0030's protocol logic because it sat next to it. That left the baseline
+    normalised and the skill not, so on 2026-08-09 a single em dash in one `violation` field cost an
+    entire skill cell while the baseline's identical slip would have been repaired in silence. That
+    asymmetry biases "skill beats generic prompt" against the skill, so both lanes get it.
+    """
+    for bad, replacement in _DASHES.items():
+        text = text.replace(bad, replacement)
+    text = _WHITESPACE_RE.sub(" ", text).strip()
+    if len(text) > max_length:
+        text = text[:max_length].rstrip()
+    return text
+
+
+def _sanitize_envelope_prose(envelope: dict[str, Any]) -> dict[str, Any]:
+    """Apply the prose rules to every prose field of every finding, in place."""
+    for finding in envelope.get("findings") or []:
+        if not isinstance(finding, dict):
+            continue
+        for field, max_length in _PROSE_FIELD_MAX_LENGTH.items():
+            value = finding.get(field)
+            # location is the one field the contract also allows as a structured object; only a
+            # plain string carries prose to normalise.
+            if isinstance(value, str):
+                finding[field] = _sanitize_prose(value, max_length=max_length)
+        for instance in finding.get("instances") or []:
+            if isinstance(instance, dict) and isinstance(instance.get("evidence"), str):
+                instance["evidence"] = _sanitize_prose(instance["evidence"], max_length=2000)
+    return envelope
+
+
 def _extract_envelope(text: str) -> dict[str, Any] | None:
     """The last balanced JSON object in `text` that looks like a run envelope, or None.
 
@@ -555,19 +610,32 @@ def call_skill_lane(
         # gate threshold; 0 when omitted", so saying nothing is how you ask for 0, and mentioning
         # it anyway would change the prompt for every cell the committed evidence was measured with.
         instruction += f"\n\nUse severity_3_threshold = {severity_3_threshold} for the gate."
-    response = client.messages.create(
-        model=model_id,
-        messages=[{"role": "user", "content": instruction}],
-        plugin_dir=repo_root,
-        cwd=staged_path.parent,
-    )
-    text = _strip_code_fence(_response_text(response))
-    envelope = _extract_envelope(text)
-    if envelope is None:
-        raise JudgedLaneError(
-            f"{skill}: no run envelope found in the skill's response: {text[:300]}"
+
+    last_text = ""
+    for attempt in range(1, SKILL_RUN_ATTEMPTS + 1):
+        response = client.messages.create(
+            model=model_id,
+            messages=[{"role": "user", "content": instruction}],
+            plugin_dir=repo_root,
+            cwd=staged_path.parent,
         )
-    return envelope
+        last_text = _strip_code_fence(_response_text(response))
+        envelope = _extract_envelope(last_text)
+        if envelope is not None:
+            return _sanitize_envelope_prose(envelope)
+        # No envelope is usually a NON-FINAL response rather than a refusal. Measured 2026-08-09, a
+        # cell returned "The critique-critic agent is running in the background to evaluate
+        # clarity-001.md. I'll output the final run envelope when it completes." In a one-shot
+        # `claude -p` there is no "when it completes": the skill's delegation pattern met
+        # non-interactive mode and the process returned a promise instead of a result. An API call
+        # cannot do that, so it is an artifact of driving an agent and not a judgment about the
+        # tier's critique, and retrying is more honest than scoring it. The budget is small on
+        # purpose: retrying indefinitely would hide a systematic problem behind cost.
+
+    raise JudgedLaneError(
+        f"{skill}: no run envelope after {SKILL_RUN_ATTEMPTS} attempts. The last response was "
+        f"probably non-final (the run had not finished when the process exited): {last_text[:300]}"
+    )
 
 
 @functools.lru_cache(maxsize=1)
@@ -682,6 +750,19 @@ def execute_skill_cell(
             repo_root=repo_root,
             severity_3_threshold=severity_3_threshold,
         )
+
+    # A scripted-only envelope is structurally indistinguishable from a merged one, so a run that
+    # never reached the judged lane would be written and scored as a complete run. The skill's own
+    # SKILL.md frontmatter is the authority on whether a judged lane was supposed to happen, which
+    # is why the check keys off `judged` rather than assuming every skill has one.
+    if frontmatter["judged"]:
+        lanes = {f.get("lane") for f in envelope.get("findings") or [] if isinstance(f, dict)}
+        if "judged" not in lanes:
+            raise JudgedLaneError(
+                f"{cell.skill}: the envelope carries no judged-lane finding, but the skill declares "
+                f"{len(frontmatter['judged'])} judged criteria. Lanes present: {sorted(l for l in lanes if l)}. "
+                "A scripted-only envelope is not a complete run and must not be scored as one."
+            )
 
     envelope["run"] = {
         "skill": cell.skill,
