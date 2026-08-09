@@ -7,16 +7,18 @@ For a given (skill, artifact, tier, k) grid, this module:
 1. Discovers the grid from what is actually declared: skills from library.json, artifacts from
    `bench/corpus/<domain>/*.manifest.json`, tiers from `bench/results/measurement-manifest.json`'s
    pinned `models` list (the same file ADR 0023 records the measurement basis in).
-2. Runs the scripted lane locally, via each skill's own `scripts/checks.py`, exactly as
-   `agents/critique-critic.md`'s Protocol section describes it.
-3. Runs the judged lane against the Anthropic API (the `anthropic` package; see ADR 0025), with a
-   system prompt assembled from the skill's `SKILL.md` and `references/*.md`, restricted to that
-   skill's `checks.judged` criteria (the scripted criteria are already covered by step 2).
-4. Merges both lanes into one pool and applies the skill's bounded-output rule over that combined
-   pool, the same rule `skills/_shared/envelope.py` already implements for the scripted-only case
-   (methodology section 7; `agents/critique-critic.md`, Protocol step 5).
-5. Validates the assembled envelope against the contract before writing it, and never writes one
-   that fails.
+2. Stages each artifact alone in a temp directory, away from the `*.manifest.json` seeded-defect
+   answer key that sits beside it in the corpus (see `staged_artifact`).
+3. Runs the REAL skill against that staged copy, through `claude --plugin-dir`, and takes the
+   envelope it emits (ADR 0030's fidelity half). The harness assembles no prompt of its own: it
+   used to build a judged-lane system prompt from the skill's `SKILL.md` and `references/*.md`,
+   which was a second definition of the critique protocol with nothing keeping it in step with
+   the real one in `agents/critique-critic.md` and the six `SKILL.md` files.
+4. Fills in the `run` block, which the skill cannot know: the corpus path, the manifest sha256,
+   the pinned model id and the run timestamp. `findings` and `summary` are the skill's own, and
+   are never rewritten; the skill runs both lanes and applies its own bounded-output rule over the
+   combined pool (methodology section 7; `agents/critique-critic.md`, Protocol step 5).
+5. Validates the envelope against the contract before writing it, and never writes one that fails.
 6. Runs the frozen baseline condition (`bench/baseline/prompt.txt` plus
    `bench/baseline/postprocess.py`) against the same artifacts and tiers, alongside every skill.
 7. Scores the resulting run set with `bench/metrics`, writing a `results.schema.json`-valid
@@ -39,18 +41,20 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import contextlib
 import functools
 import hashlib
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable, Sequence
+from typing import Any, Callable, Iterator, Sequence
 
 
 def _find_repo_root(start: Path) -> Path:
@@ -71,21 +75,15 @@ if str(ROOT) not in sys.path:
 from bench.baseline.postprocess import BASELINE_SKILL, postprocess as baseline_postprocess  # noqa: E402
 from bench.metrics.__main__ import ScoreError, build_results  # noqa: E402
 from contract.validate import validate_document  # noqa: E402
-from skills._shared.envelope import (  # noqa: E402
-    CONTRACT_VERSION,
-    build_summary,
-    by_severity_histogram,
-    rank_and_bound,
-    to_finding_dict,
-)
-from skills._shared.findings import RawFinding  # noqa: E402
+# Only CONTRACT_VERSION: since ADR 0030's fidelity half the skill does its own ranking, bounding
+# and summarising, and the harness no longer keeps a second copy of that logic.
+from skills._shared.envelope import CONTRACT_VERSION  # noqa: E402
 
 LIBRARY_JSON = ROOT / "library.json"
 DEFAULT_CORPUS_DIR = ROOT / "bench" / "corpus"
 DEFAULT_OUT_DIR = ROOT / "bench" / "results" / "runs"
 DEFAULT_MANIFEST_PATH = ROOT / "bench" / "results" / "measurement-manifest.json"
 BASELINE_PROMPT_PATH = ROOT / "bench" / "baseline" / "prompt.txt"
-SEVERITY_SCALE_PATH = ROOT / "docs" / "reference" / "severity-scale.md"
 DEFAULT_MAX_TOKENS = 8192
 
 
@@ -302,110 +300,21 @@ def format_grid(cells: Sequence[GridCell]) -> list[str]:
 
 
 # ---------------------------------------------------------------------------
-# Scripted lane: run a skill's own scripts/checks.py
+# The judged lane runs the real skill; the harness only reads its frontmatter
 # ---------------------------------------------------------------------------
 
+def load_skill_frontmatter(skill: str, *, repo_root: Path = ROOT) -> dict[str, Any]:
+    """The parsed SKILL.md frontmatter (`judged`, `scripted`, `rubrics`, `version`) the harness
+    needs to fill in an envelope's `run` block.
 
-class ScriptedLaneError(RuntimeError):
-    """Raised when a skill's scripts/checks.py exits non-zero or does not print a JSON envelope."""
-
-
-def run_scripted_lane_subprocess(skill: str, artifact_disk_path: Path, *, repo_root: Path) -> dict[str, Any]:
-    """Run `python skills/<skill>/scripts/checks.py <artifact> --repo-root <repo_root>`, the same
-    invocation `agents/critique-critic.md`'s Protocol section describes, and parse its stdout
-    envelope (`run.model` is "none": no judged lane ran inside checks.py itself).
+    This is all that survives of what used to be build_judged_system_prompt(). The harness no
+    longer assembles a judged-lane prompt from SKILL.md and references/*.md: that was a second
+    definition of the critique protocol, and ADR 0030's fidelity half deleted it in favour of
+    running the real skill. What is still needed from the file is its declared version and
+    rubrics, because the skill is never told which run it is part of.
     """
-    checks_py = repo_root / "skills" / skill / "scripts" / "checks.py"
-    if not checks_py.is_file():
-        raise ScriptedLaneError(f"{checks_py} does not exist")
-    proc = subprocess.run(
-        [sys.executable, str(checks_py), str(artifact_disk_path), "--repo-root", str(repo_root)],
-        cwd=repo_root,
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-    )
-    if proc.returncode != 0:
-        raise ScriptedLaneError(f"{checks_py} exited {proc.returncode}: {proc.stderr.strip()}")
-    try:
-        return json.loads(proc.stdout)
-    except json.JSONDecodeError as exc:
-        raise ScriptedLaneError(f"{checks_py} did not print a JSON envelope: {exc}") from exc
-
-
-# ---------------------------------------------------------------------------
-# Judged lane: prompt assembly and the Anthropic API call
-# ---------------------------------------------------------------------------
-
-_JUDGED_SYSTEM_TEMPLATE = """You are performing the judged-lane portion of a {skill_name} critique run, the same clean-context
-protocol agents/critique-critic.md defines: you have not seen any authoring history, drafts, prior
-critique, or the requester's opinion of the artifact, and you never edit anything.
-
-This run's scripted-lane criteria are already covered by a separate deterministic pass. Evaluate
-only the judged criteria listed below, in the order listed, and report no finding against any
-other criterion.
-
-Judged criteria for this run:
-{judged_criteria_list}
-
-Follow this protocol:
-1. Inventory the artifact's structure. No findings yet.
-2. Sweep every judged criterion above, in the listed order, evaluating each against the whole
-   artifact before moving to the next.
-3. Once every criterion has been swept, assign severity to every finding as its own pass, using
-   the weighing order below (impact, then frequency, then persistence) and this skill's own
-   severity anchors.
-4. Do not rank or bound your output. Report every finding you found in step 2, in the order you
-   found it; a separate process combines your findings with the scripted lane's and applies the
-   output bound once, over the combined pool.
-
-Severity scale, weighed impact first, then frequency, then persistence:
-{severity_scale}
-
-This skill's own SKILL.md, in full, for the criterion definitions, operational tests, and
-severity anchors your sweep must use:
-{skill_md}
-
-This skill's reference material:
-{references}
-
-Output contract: your final message is exactly one JSON object and nothing else, no markdown
-code fence, no prose before or after it:
-
-{{"findings": [{{"criterion": "<one of the judged criteria above, exact string>", "severity": <integer 0 to 4>, "location": "<where in the artifact, specific enough to navigate to unaided>", "evidence": "<a short quotation from the artifact or a measurement taken from it, never a characterization>", "violation": "<which part of the criterion was breached>", "fix": "<a specific, actionable change>", "confidence": "<high, medium, or low>"}}]}}
-
-If you find no problems under any judged criterion, output {{"findings": []}} and nothing else.
-Never invent a location, a quotation, or a fix: every finding you report must be checkable
-against the artifact text you were given.
-"""
-
-
-def build_judged_system_prompt(skill: str, *, repo_root: Path = ROOT) -> tuple[str, dict[str, Any]]:
-    """The judged-lane system prompt for `skill`, assembled from its SKILL.md and
-    references/*.md, plus the parsed frontmatter (`judged`, `rubrics`, `version`) the caller
-    needs to build the rest of the envelope.
-    """
-    skill_dir = repo_root / "skills" / skill
-    skill_md_text = (skill_dir / "SKILL.md").read_text(encoding="utf-8")
-    frontmatter = parse_skill_frontmatter(skill_md_text)
-
-    references_dir = skill_dir / "references"
-    reference_parts = []
-    if references_dir.is_dir():
-        for ref_path in sorted(references_dir.glob("*.md")):
-            reference_parts.append(f"### {ref_path.name}\n\n{ref_path.read_text(encoding='utf-8')}")
-
-    severity_scale_text = SEVERITY_SCALE_PATH.read_text(encoding="utf-8")
-    judged_criteria_list = "\n".join(f"- {c}" for c in frontmatter["judged"])
-
-    system_prompt = _JUDGED_SYSTEM_TEMPLATE.format(
-        skill_name=skill,
-        judged_criteria_list=judged_criteria_list,
-        severity_scale=severity_scale_text,
-        skill_md=skill_md_text,
-        references="\n\n".join(reference_parts) if reference_parts else "(no references directory)",
-    )
-    return system_prompt, frontmatter
+    skill_md_text = (repo_root / "skills" / skill / "SKILL.md").read_text(encoding="utf-8")
+    return parse_skill_frontmatter(skill_md_text)
 
 
 def _response_text(response: Any) -> str:
@@ -424,110 +333,57 @@ def _response_text(response: Any) -> str:
 
 
 _CODE_FENCE_RE = re.compile(r"^```(?:json)?\s*\n(.*)\n```\s*$", re.DOTALL)
-_DASHES = {chr(0x2014): " - ", chr(0x2013): " - "}
-_WHITESPACE_RE = re.compile(r"\s+")
-
-_JUDGED_FIELD_MAX_LENGTH = {"location": 400, "evidence": 2000, "violation": 1000, "fix": 1000}
-
-
-def _sanitize_prose(text: str, *, max_length: int) -> str:
-    """Enforce the contract's prose rules (no em dash, no en dash, no leading or trailing
-    whitespace) on a judged-lane model response, the way bench/baseline/postprocess.py already
-    does for the baseline lane: the model was never told the house style either. Built with
-    chr() so this file carries none of the punctuation it exists to strip, matching
-    contract/validate.py's own convention.
-    """
-    for bad, replacement in _DASHES.items():
-        text = text.replace(bad, replacement)
-    text = _WHITESPACE_RE.sub(" ", text).strip()
-    if len(text) > max_length:
-        text = text[:max_length].rstrip()
-    return text
-
-
 class JudgedLaneError(RuntimeError):
-    """Raised when a judged-lane response cannot be parsed at all: not valid JSON, or missing the
-    required top-level shape. A single malformed finding inside an otherwise-valid response is
-    dropped instead, matching bench/baseline/postprocess.py's own "drop this block" policy.
+    """Raised when a skill run cannot be turned into an envelope at all: the response was not
+    JSON, or was JSON of the wrong shape. The cell is recorded as failed rather than written,
+    because a harness must never invent or partially assemble measurement evidence.
     """
 
 
 def _strip_code_fence(text: str) -> str:
+    """Models wrap JSON in a fence regardless of instruction, so an envelope arrives fenced often
+    enough that treating it as a failure would throw away good cells."""
     match = _CODE_FENCE_RE.match(text.strip())
     return match.group(1) if match else text.strip()
 
 
-def _coerce_severity(value: Any) -> int | None:
-    if isinstance(value, bool):
-        return None
-    if isinstance(value, int):
-        severity = value
-    elif isinstance(value, float) and value.is_integer():
-        severity = int(value)
-    elif isinstance(value, str) and value.strip().lstrip("-").isdigit():
-        severity = int(value.strip())
-    else:
-        return None
-    return severity if 0 <= severity <= 4 else None
+def _extract_envelope(text: str) -> dict[str, Any] | None:
+    """The last balanced JSON object in `text` that looks like a run envelope, or None.
 
+    A real skill run narrates. Measured against the pinned haiku tier on 2026-08-09, the response
+    was 7403 bytes that opened "Now I'll perform the judged criterion sweep", walked through four
+    protocol passes, and only then emitted the envelope, fenced, at the end. Requiring the whole
+    response to parse would have discarded a complete, contract-valid run.
 
-def _coerce_confidence(value: Any) -> str:
-    if isinstance(value, str) and value.strip().lower() in ("high", "medium", "low"):
-        return value.strip().lower()
-    return "medium"
-
-
-def _parse_judged_findings(text: str, *, allowed_criteria: set[str]) -> list[dict[str, Any]]:
-    """Parse a judged-lane response into finding dicts (no `id`, `lane` forced to "judged"). A
-    finding whose criterion is not in `allowed_criteria`, whose severity does not parse to an
-    integer 0 to 4, or that is missing a required text field, is dropped rather than guessed at.
+    Last rather than first, and shape-checked rather than merely valid JSON, because a run
+    typically echoes its scripted lane's own output on the way past. Taking the first object, or
+    any object that happens to parse, captures that intermediate instead of the merged result.
     """
-    stripped = _strip_code_fence(text)
-    try:
-        data = json.loads(stripped)
-    except json.JSONDecodeError as exc:
-        raise JudgedLaneError(
-            f"judged-lane response is not valid JSON: {exc}; response started with {stripped[:200]!r}"
-        ) from exc
-
-    if isinstance(data, list):
-        raw_items = data
-    elif isinstance(data, dict) and isinstance(data.get("findings"), list):
-        raw_items = data["findings"]
-    else:
-        raise JudgedLaneError("judged-lane response JSON has no top-level 'findings' array")
-
-    findings: list[dict[str, Any]] = []
-    for item in raw_items:
-        if not isinstance(item, dict):
+    candidate: dict[str, Any] | None = None
+    for start, char in enumerate(text):
+        if char != "{":
             continue
-        criterion = item.get("criterion")
-        if not isinstance(criterion, str) or criterion not in allowed_criteria:
-            continue
-        severity = _coerce_severity(item.get("severity"))
-        if severity is None:
-            continue
-
-        text_fields: dict[str, str] | None = {}
-        for field_name, max_length in _JUDGED_FIELD_MAX_LENGTH.items():
-            value = item.get(field_name)
-            if not isinstance(value, str) or not value.strip():
-                text_fields = None
-                break
-            text_fields[field_name] = _sanitize_prose(value, max_length=max_length)
-        if text_fields is None:
-            continue
-
-        findings.append(
-            {
-                "criterion": criterion,
-                "lane": "judged",
-                "severity": severity,
-                "confidence": _coerce_confidence(item.get("confidence")),
-                **text_fields,
-            }
-        )
-    return findings
+        depth = 0
+        for end in range(start, len(text)):
+            if text[end] == "{":
+                depth += 1
+            elif text[end] == "}":
+                depth -= 1
+                if depth == 0:
+                    try:
+                        parsed = json.loads(text[start : end + 1])
+                    except json.JSONDecodeError:
+                        pass
+                    else:
+                        if (
+                            isinstance(parsed, dict)
+                            and isinstance(parsed.get("findings"), list)
+                            and isinstance(parsed.get("run"), dict)
+                            and isinstance(parsed.get("summary"), dict)
+                        ):
+                            candidate = parsed
+                    break
+    return candidate
 
 
 # ---------------------------------------------------------------------------
@@ -579,6 +435,8 @@ class _ClaudeCodeMessages:
         messages: Sequence[dict[str, Any]],
         system: str | None = None,
         max_tokens: int | None = None,  # noqa: ARG002 - accepted for interface parity, see below
+        plugin_dir: Path | str | None = None,
+        cwd: Path | str | None = None,
         **_ignored: Any,
     ) -> _ClaudeCodeResponse:
         # max_tokens has no Claude Code equivalent and is accepted only so the call sites and the
@@ -593,7 +451,29 @@ class _ClaudeCodeMessages:
         # system prompt goes to a temp file and the user prompt goes over stdin, and neither can
         # grow into that failure again as skills or artifacts get larger.
         prompt = "\n\n".join(str(m.get("content", "")) for m in messages)
-        argv = [self._cli, "--model", model, "-p"]
+        # Isolation, on BOTH lanes. Measured 2026-08-09: without these two flags a nested run
+        # offered 97 skills, the six under test plus 91 from the operator's own ambient
+        # configuration, along with whatever plugins, MCP servers and hooks it carries, and a full
+        # skill run never finished. --plugin-dir adds a plugin; it does not isolate an environment,
+        # and without isolation two operators are not running the same benchmark. With these, the
+        # same probe offered 18, all of them the CLI's own built-ins plus the plugin under test.
+        # The baseline gets them too: the committed baseline envelopes were produced by a plain API
+        # call with no environment at all, so isolating it moves it closer to that, not further.
+        argv = [self._cli, "--model", model, "--setting-sources", "", "--strict-mcp-config", "-p"]
+        # --plugin-dir loads this repository as a plugin so the judged lane can run the REAL skill
+        # (ADR 0030's fidelity half) instead of a prompt the harness assembles. The frozen baseline
+        # condition passes no plugin_dir: loading the plugin for it would stop it being a baseline.
+        if plugin_dir is not None:
+            # An explicit allowlist rather than --permission-mode bypassPermissions, which would
+            # hand write access to the repository being measured and would contradict SECURITY.md's
+            # claim that the critic has no Write and no Edit. Measured sufficient: the same run
+            # completed with 9 findings across both lanes under this allowlist alone.
+            argv[1:1] = [
+                "--plugin-dir",
+                str(plugin_dir),
+                "--allowedTools",
+                "Read,Bash,Glob,Grep,Task,Skill",
+            ]
         system_file: Path | None = None
         try:
             if system:
@@ -613,6 +493,9 @@ class _ClaudeCodeMessages:
                 text=True,
                 timeout=self._timeout,
                 encoding="utf-8",
+                # cwd is the staged artifact's directory for a skill run, so the agent's working
+                # directory contains the artifact and nothing else. See staged_artifact().
+                cwd=str(cwd) if cwd is not None else None,
             )
         finally:
             if system_file is not None:
@@ -637,23 +520,54 @@ class ClaudeCodeClient:
         self.messages = _ClaudeCodeMessages(cli=cli, timeout=timeout)
 
 
-def call_judged_lane(
+_SKILL_RUN_INSTRUCTION = (
+    "Use the {skill} skill to critique {artifact}. Follow the skill's protocol exactly, including "
+    "running its scripted lane. Output ONLY the final run envelope: one JSON object, with no prose "
+    "before or after it and no markdown code fence."
+)
+
+
+def call_skill_lane(
     client: Any,
     *,
     model_id: str,
-    system_prompt: str,
-    artifact_path: str,
-    artifact_text: str,
-    allowed_criteria: Sequence[str],
-    max_tokens: int = DEFAULT_MAX_TOKENS,
-) -> list[dict[str, Any]]:
+    skill: str,
+    staged_path: Path,
+    repo_root: Path,
+    severity_3_threshold: int = 0,
+) -> dict[str, Any]:
+    """Run the REAL skill through Claude Code and return the envelope it emitted.
+
+    This is ADR 0030's fidelity half. The harness used to assemble its own judged-lane system
+    prompt from a skill's SKILL.md and references/*.md, which was a second definition of the
+    critique protocol living alongside the real one in agents/critique-critic.md and the six
+    SKILL.md files, with nothing keeping them in step. Now the skill runs, and the harness only
+    transports the result: the skill does its own lane merge and output bounding, so the harness
+    must not do either.
+
+    The artifact is named by its bare filename and the process runs with cwd set to the staging
+    directory, so the corpus path never reaches the skill and the sibling seeded-defect manifest
+    is not discoverable. See staged_artifact().
+    """
+    instruction = _SKILL_RUN_INSTRUCTION.format(skill=skill, artifact=staged_path.name)
+    if severity_3_threshold:
+        # Only when it is not the default. agents/critique-critic.md documents this input as "a
+        # gate threshold; 0 when omitted", so saying nothing is how you ask for 0, and mentioning
+        # it anyway would change the prompt for every cell the committed evidence was measured with.
+        instruction += f"\n\nUse severity_3_threshold = {severity_3_threshold} for the gate."
     response = client.messages.create(
         model=model_id,
-        max_tokens=max_tokens,
-        system=system_prompt,
-        messages=[{"role": "user", "content": f"Artifact: {artifact_path}\n\n{artifact_text}"}],
+        messages=[{"role": "user", "content": instruction}],
+        plugin_dir=repo_root,
+        cwd=staged_path.parent,
     )
-    return _parse_judged_findings(_response_text(response), allowed_criteria=set(allowed_criteria))
+    text = _strip_code_fence(_response_text(response))
+    envelope = _extract_envelope(text)
+    if envelope is None:
+        raise JudgedLaneError(
+            f"{skill}: no run envelope found in the skill's response: {text[:300]}"
+        )
+    return envelope
 
 
 @functools.lru_cache(maxsize=1)
@@ -677,78 +591,48 @@ def call_baseline_lane(
 
 
 # ---------------------------------------------------------------------------
-# Lane merge and bounding
-# ---------------------------------------------------------------------------
-
-
-def _to_raw_finding(finding: dict[str, Any]) -> RawFinding:
-    return RawFinding(
-        criterion=finding["criterion"],
-        severity=int(finding["severity"]),
-        location=finding["location"],
-        evidence=finding["evidence"],
-        violation=finding["violation"],
-        fix=finding["fix"],
-        lane=finding.get("lane", "scripted"),
-        confidence=finding.get("confidence", "high"),
-        instances=tuple(finding.get("instances") or ()),
-        rubric_source=finding.get("rubric_source"),
-        selector=finding.get("selector"),
-    )
-
-
-def merge_lanes(
-    scripted_findings: Sequence[dict[str, Any]], judged_findings: Sequence[dict[str, Any]]
-) -> tuple[list[dict[str, Any]], int, dict[str, int]]:
-    """Combine both lanes' findings into one pool and apply the skill's bounded-output rule over
-    that combined pool (agents/critique-critic.md, Protocol step 5), reusing the library's own
-    canonical rank-and-bound implementation (skills/_shared/envelope.py) rather than a second
-    copy of it. Returns (findings, suppressed_count, histogram); `findings` carries fresh
-    F-NNN ids assigned after ranking, so a scripted id and a judged id can never collide.
-    """
-    raw = [_to_raw_finding(f) for f in scripted_findings] + [_to_raw_finding(f) for f in judged_findings]
-    histogram = by_severity_histogram(raw)
-    emitted_raw, suppressed_count = rank_and_bound(raw)
-    findings = [to_finding_dict(r, finding_id=f"F-{index:03d}") for index, r in enumerate(emitted_raw, start=1)]
-    return findings, suppressed_count, histogram
-
-
-def assemble_merged_envelope(
-    *,
-    skill: str,
-    skill_version: str,
-    artifact_path: str,
-    artifact_sha256: str,
-    model: str,
-    timestamp: str,
-    rubrics: Sequence[str],
-    scripted_findings: Sequence[dict[str, Any]],
-    judged_findings: Sequence[dict[str, Any]],
-    severity_3_threshold: int = 0,
-) -> dict[str, Any]:
-    """Assemble one contract-valid run envelope from both lanes' findings."""
-    findings, suppressed_count, histogram = merge_lanes(scripted_findings, judged_findings)
-    summary = build_summary(histogram=histogram, suppressed_count=suppressed_count, severity_3_threshold=severity_3_threshold)
-    run = {
-        "skill": skill,
-        "skill_version": skill_version,
-        "contract_version": CONTRACT_VERSION,
-        "artifact": artifact_path,
-        "artifact_sha256": artifact_sha256,
-        "model": model,
-        "timestamp": timestamp,
-        "rubrics": list(rubrics),
-    }
-    return {"run": run, "findings": findings, "summary": summary}
-
-
-# ---------------------------------------------------------------------------
 # Cell execution
 # ---------------------------------------------------------------------------
 
 
 def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+@contextlib.contextmanager
+def staged_artifact(artifact: ArtifactRef, *, repo_root: Path) -> Iterator[Path]:
+    """Copy `artifact` alone into a fresh temporary directory and yield the copy.
+
+    Ground-truth isolation. `bench/corpus/<domain>/<id>.manifest.json` is the complete
+    seeded-defect answer key (criterion, location, expected severity) and it sits directly beside
+    `<id>.md`. That was harmless while the judged lane inlined the artifact's text into a prompt,
+    because the model had no filesystem. It stops being harmless the moment the lane runs the real
+    skill through Claude Code: `agents/critique-critic.md` declares `Read` and `Bash`, and the
+    skill's own protocol tells it to run `scripts/checks.py <artifact>` against a real path. A
+    skill that can read the answer key it is being scored against is not being measured.
+
+    `bench/generator/README.md`'s leak rule already covers the artifact's own text and the naming
+    of corpus paths, on the stated grounds that "the artifact path is handed to the skill under
+    test". It does not cover a sibling answer key, because until now nothing could read one.
+
+    The filename is kept: leak rule 4 guarantees corpus ids carry no criterion ID, no defect
+    count, and none of `clean`, `defect`, `seed`, `plant`, `bug`, so the name reveals nothing, and
+    keeping it means a failed cell can be traced back to its artifact.
+    """
+    disk_path = repo_root / artifact.path
+    raw = disk_path.read_bytes()
+    digest = hashlib.sha256(raw).hexdigest()
+    if digest != artifact.sha256:
+        raise RuntimeError(
+            f"{disk_path}: sha256 {digest} does not match manifest artifact_sha256 {artifact.sha256}"
+        )
+    staging = Path(tempfile.mkdtemp(prefix="bench-artifact-"))
+    try:
+        staged = staging / disk_path.name
+        staged.write_bytes(raw)
+        yield staged
+    finally:
+        shutil.rmtree(staging, ignore_errors=True)
 
 
 def _read_artifact(repo_root: Path, artifact: ArtifactRef) -> str:
@@ -766,51 +650,50 @@ def _read_artifact(repo_root: Path, artifact: ArtifactRef) -> str:
     return raw.decode("utf-8")
 
 
-RunScriptedFn = Callable[..., dict[str, Any]]
-
-
 def execute_skill_cell(
     cell: GridCell,
     *,
     client: Any,
     repo_root: Path,
-    run_scripted_fn: RunScriptedFn,
-    system_prompt: str,
     frontmatter: dict[str, Any],
-    max_tokens: int,
-    severity_3_threshold: int,
     now_fn: Callable[[], str],
+    severity_3_threshold: int = 0,
 ) -> dict[str, Any]:
-    artifact_text = _read_artifact(repo_root, cell.artifact)
-    scripted_env = run_scripted_fn(cell.skill, repo_root / cell.artifact.path, repo_root=repo_root)
-    if scripted_env.get("run", {}).get("artifact_sha256") != cell.artifact.sha256:
-        raise RuntimeError("scripted lane reported a different artifact_sha256 than the manifest")
+    """Run the real skill against a staged copy of the artifact and return its envelope, with the
+    provenance the skill could not know filled in by the harness.
 
-    if frontmatter["judged"]:
-        judged_findings = call_judged_lane(
+    Two responsibilities, split on who can be trusted to know what:
+
+    * The **skill** owns `findings` and `summary`. It is what is being measured, it runs both of
+      its own lanes, and it applies its own bounded-output rule over the combined pool. The
+      harness deliberately no longer does any of that; doing it here is what made this module a
+      second definition of the protocol (ADR 0030).
+    * The **harness** owns the `run` block. The skill is handed a staged file in a temp directory
+      and is never told the corpus path, the pinned model id, or the run timestamp, so it cannot
+      fill these in and must not be trusted to. Writing the staged path into a committed envelope
+      would also publish the running user's home directory and make the evidence unreproducible.
+    """
+    with staged_artifact(cell.artifact, repo_root=repo_root) as staged:
+        envelope = call_skill_lane(
             client,
             model_id=cell.tier.model_id,
-            system_prompt=system_prompt,
-            artifact_path=cell.artifact.path,
-            artifact_text=artifact_text,
-            allowed_criteria=frontmatter["judged"],
-            max_tokens=max_tokens,
+            skill=cell.skill,
+            staged_path=staged,
+            repo_root=repo_root,
+            severity_3_threshold=severity_3_threshold,
         )
-    else:
-        judged_findings = []
 
-    return assemble_merged_envelope(
-        skill=cell.skill,
-        skill_version=frontmatter["version"],
-        artifact_path=cell.artifact.path,
-        artifact_sha256=cell.artifact.sha256,
-        model=cell.tier.model_id,
-        timestamp=now_fn(),
-        rubrics=frontmatter["rubrics"],
-        scripted_findings=scripted_env["findings"],
-        judged_findings=judged_findings,
-        severity_3_threshold=severity_3_threshold,
-    )
+    envelope["run"] = {
+        "skill": cell.skill,
+        "skill_version": frontmatter["version"],
+        "contract_version": CONTRACT_VERSION,
+        "artifact": cell.artifact.path,
+        "artifact_sha256": cell.artifact.sha256,
+        "model": cell.tier.model_id,
+        "timestamp": now_fn(),
+        "rubrics": list(frontmatter["rubrics"]),
+    }
+    return envelope
 
 
 def execute_baseline_cell(
@@ -855,7 +738,6 @@ def execute_grid(
     *,
     client: Any,
     repo_root: Path,
-    run_scripted_fn: RunScriptedFn = run_scripted_lane_subprocess,
     max_tokens: int = DEFAULT_MAX_TOKENS,
     severity_3_threshold: int = 0,
     now_fn: Callable[[], str] | None = None,
@@ -866,25 +748,21 @@ def execute_grid(
     harness that aborts on the first bad cell throws away every good run that ran before it.
     """
     now_fn = now_fn or _utc_now_iso
-    prompt_cache: dict[str, tuple[str, dict[str, Any]]] = {}
+    frontmatter_cache: dict[str, dict[str, Any]] = {}
     results: list[CellResult] = []
 
     for cell in cells:
         try:
             if cell.condition == "skill":
-                if cell.skill not in prompt_cache:
-                    prompt_cache[cell.skill] = build_judged_system_prompt(cell.skill, repo_root=repo_root)
-                system_prompt, frontmatter = prompt_cache[cell.skill]
+                if cell.skill not in frontmatter_cache:
+                    frontmatter_cache[cell.skill] = load_skill_frontmatter(cell.skill, repo_root=repo_root)
                 envelope = execute_skill_cell(
                     cell,
                     client=client,
                     repo_root=repo_root,
-                    run_scripted_fn=run_scripted_fn,
-                    system_prompt=system_prompt,
-                    frontmatter=frontmatter,
-                    max_tokens=max_tokens,
-                    severity_3_threshold=severity_3_threshold,
+                    frontmatter=frontmatter_cache[cell.skill],
                     now_fn=now_fn,
+                    severity_3_threshold=severity_3_threshold,
                 )
                 validation = validate_document(envelope)
                 if not validation.ok:

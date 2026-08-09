@@ -1,14 +1,15 @@
-"""Tests for bench/run_bench.py: grid planning, the scripted-plus-judged lane merge and
-bounding, envelope validity, judged-lane response parsing, and the baseline (postprocess) path.
+"""Tests for bench/run_bench.py: grid planning, ground-truth isolation, the skill-lane transport,
+envelope validity, and the baseline (postprocess) path.
 
-No test in this file makes a network call. Every Anthropic API call is a fake client object
-implementing the same `client.messages.create(**kwargs) -> response` shape the real SDK does
-(response.content is a list of objects carrying `.text`), matching this module's own
-`_response_text` helper.
+No test in this file reaches a model. Every model call is a fake client object implementing the
+same `client.messages.create(**kwargs) -> response` shape the transport does (response.content is
+a list of objects carrying `.text`), matching this module's own `_response_text` helper. Tests
+that could otherwise fall through to a real `claude` process patch the seam with `_forbid`.
 """
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 from typing import Any
@@ -21,26 +22,19 @@ from bench.run_bench import (
     ArtifactRef,
     GridCell,
     JudgedLaneError,
-    ScriptedLaneError,
     Tier,
-    _parse_judged_findings,
     _response_text,
-    assemble_merged_envelope,
-    build_judged_system_prompt,
     call_baseline_lane,
-    call_judged_lane,
     declared_skills,
     discover_skill_artifacts,
     execute_baseline_cell,
     execute_grid,
     format_grid,
     main,
-    merge_lanes,
     parse_skill_frontmatter,
     plan_grid,
     resolve_filter,
     resolve_tiers,
-    run_scripted_lane_subprocess,
 )
 from contract.validate import validate_document
 
@@ -128,8 +122,8 @@ def _write_corpus_artifact(corpus_dir: Path, domain: str, name: str, text: str, 
 
 def _write_fake_skill(repo_root: Path, skill: str, *, scripted: list[str], judged: list[str], version: str = "0.1.0") -> None:
     """A minimal, self-contained skills/<skill>/SKILL.md fixture, so tests that exercise
-    build_judged_system_prompt / execute_grid never need to read the real repository's skills
-    tree or write into it."""
+    load_skill_frontmatter / execute_grid never need to read the real repository's skills tree or
+    write into it."""
     skill_dir = repo_root / "skills" / skill
     skill_dir.mkdir(parents=True, exist_ok=True)
     scripted_lines = "\n".join(f"    - {c}" for c in scripted) or "    - PLACEHOLDER"
@@ -296,284 +290,15 @@ def test_parse_skill_frontmatter_missing_block_raises() -> None:
         parse_skill_frontmatter("# no frontmatter here\n")
 
 
-def test_build_judged_system_prompt_against_the_real_critique_clarity_skill() -> None:
-    system_prompt, frontmatter = build_judged_system_prompt("critique-clarity")
-    assert frontmatter["judged"] == [
-        "PLAIN-AUDIENCE",
-        "PLAIN-CONSISTENT-TERMS",
-        "PLAIN-MAIN-IDEA-FIRST",
-        "PLAIN-ORGANIZE",
-        "WILLIAMS-CHARACTER-ACTION",
-        "WILLIAMS-COHERENCE",
-        "WILLIAMS-COHESION",
-        "WILLIAMS-STRESS",
-    ]
+def test_load_skill_frontmatter_against_the_real_critique_clarity_skill() -> None:
+    """What survives of build_judged_system_prompt(): the harness still needs the declared
+    version and rubric namespaces to fill in an envelope's run block, but no longer assembles a
+    judged-lane prompt, because the real skill now runs instead."""
+    frontmatter = run_bench.load_skill_frontmatter("critique-clarity")
+
+    assert frontmatter["version"]
     assert frontmatter["rubrics"] == ["PLAIN", "WILLIAMS"]
-    assert "PLAIN-AUDIENCE" in system_prompt
-    assert "critique-clarity" in system_prompt
-    # references/*.md content is folded in
-    assert "PLAIN.md" in system_prompt
-    assert "WILLIAMS.md" in system_prompt
-
-
-# ---------------------------------------------------------------------------
-# Judged-lane response parsing
-# ---------------------------------------------------------------------------
-
-
-def test_response_text_concatenates_text_blocks() -> None:
-    response = FakeResponse("hello world")
-    assert _response_text(response) == "hello world"
-
-
-def test_response_text_ignores_non_text_attribute_and_dict_blocks() -> None:
-    class Response:
-        content = [{"type": "text", "text": "a"}, FakeTextBlock("b")]
-
-    assert _response_text(Response()) == "ab"
-
-
-def test_parse_judged_findings_well_formed_response() -> None:
-    text = json.dumps(
-        {
-            "findings": [
-                {
-                    "criterion": "PLAIN-AUDIENCE",
-                    "severity": 3,
-                    "location": "Section 1",
-                    "evidence": "quoted text",
-                    "violation": "breach",
-                    "fix": "do this",
-                    "confidence": "high",
-                }
-            ]
-        }
-    )
-    findings = _parse_judged_findings(text, allowed_criteria={"PLAIN-AUDIENCE"})
-    assert len(findings) == 1
-    assert findings[0]["lane"] == "judged"
-    assert findings[0]["severity"] == 3
-    assert findings[0]["confidence"] == "high"
-
-
-def test_parse_judged_findings_strips_a_markdown_code_fence() -> None:
-    text = '```json\n{"findings": []}\n```'
-    assert _parse_judged_findings(text, allowed_criteria=set()) == []
-
-
-def test_parse_judged_findings_drops_a_criterion_outside_the_judged_list() -> None:
-    text = json.dumps(
-        {
-            "findings": [
-                {
-                    "criterion": "PLAIN-ACTIVE",  # a scripted criterion, not in the judged allowlist
-                    "severity": 2,
-                    "location": "L",
-                    "evidence": "E",
-                    "violation": "V",
-                    "fix": "F",
-                }
-            ]
-        }
-    )
-    assert _parse_judged_findings(text, allowed_criteria={"PLAIN-AUDIENCE"}) == []
-
-
-def test_parse_judged_findings_drops_an_unparseable_severity() -> None:
-    text = json.dumps(
-        {"findings": [{"criterion": "PLAIN-AUDIENCE", "severity": "catastrophic", "location": "L", "evidence": "E", "violation": "V", "fix": "F"}]}
-    )
-    assert _parse_judged_findings(text, allowed_criteria={"PLAIN-AUDIENCE"}) == []
-
-
-def test_parse_judged_findings_drops_a_finding_missing_a_required_field() -> None:
-    text = json.dumps(
-        {"findings": [{"criterion": "PLAIN-AUDIENCE", "severity": 2, "location": "L", "evidence": "E", "violation": "V"}]}
-    )
-    assert _parse_judged_findings(text, allowed_criteria={"PLAIN-AUDIENCE"}) == []
-
-
-def test_parse_judged_findings_sanitizes_em_and_en_dashes() -> None:
-    text = json.dumps(
-        {
-            "findings": [
-                {
-                    "criterion": "PLAIN-AUDIENCE",
-                    "severity": 2,
-                    "location": "L",
-                    "evidence": "before" + chr(0x2014) + "after",
-                    "violation": "V",
-                    "fix": "F",
-                }
-            ]
-        }
-    )
-    findings = _parse_judged_findings(text, allowed_criteria={"PLAIN-AUDIENCE"})
-    assert chr(0x2014) not in findings[0]["evidence"]
-    assert "before - after" == findings[0]["evidence"]
-
-
-def test_parse_judged_findings_not_json_raises_judged_lane_error() -> None:
-    with pytest.raises(JudgedLaneError, match="not valid JSON"):
-        _parse_judged_findings("this is not json at all", allowed_criteria=set())
-
-
-def test_parse_judged_findings_missing_findings_key_raises() -> None:
-    with pytest.raises(JudgedLaneError, match="findings"):
-        _parse_judged_findings(json.dumps({"other": []}), allowed_criteria=set())
-
-
-def test_call_judged_lane_sends_system_and_artifact_and_returns_parsed_findings() -> None:
-    response_text = json.dumps(
-        {"findings": [{"criterion": "PLAIN-AUDIENCE", "severity": 2, "location": "L", "evidence": "E", "violation": "V", "fix": "F"}]}
-    )
-    client = FakeClient([FakeResponse(response_text)])
-
-    findings = call_judged_lane(
-        client,
-        model_id="claude-haiku-4-5-20251001",
-        system_prompt="SYSTEM",
-        artifact_path="bench/corpus/clarity/clarity-001.md",
-        artifact_text="Some text.",
-        allowed_criteria=["PLAIN-AUDIENCE"],
-    )
-
-    assert len(findings) == 1
-    call = client.messages.calls[0]
-    assert call["system"] == "SYSTEM"
-    assert call["model"] == "claude-haiku-4-5-20251001"
-    assert "Some text." in call["messages"][0]["content"]
-
-
-# ---------------------------------------------------------------------------
-# Lane merge and bounding
-# ---------------------------------------------------------------------------
-
-
-def _scripted_finding(criterion: str, severity: int, location: str) -> dict[str, Any]:
-    return {
-        "criterion": criterion,
-        "lane": "scripted",
-        "severity": severity,
-        "location": location,
-        "evidence": "evidence",
-        "violation": "violation",
-        "fix": "fix",
-        "confidence": "high",
-    }
-
-
-def _judged_finding(criterion: str, severity: int, location: str) -> dict[str, Any]:
-    return {
-        "criterion": criterion,
-        "lane": "judged",
-        "severity": severity,
-        "location": location,
-        "evidence": "evidence",
-        "violation": "violation",
-        "fix": "fix",
-        "confidence": "medium",
-    }
-
-
-def test_merge_lanes_combines_both_lanes_with_fresh_sequential_ids() -> None:
-    scripted = [_scripted_finding("TOY-A", 2, "p1")]
-    judged = [_judged_finding("TOY-B", 3, "p2")]
-
-    findings, suppressed, histogram = merge_lanes(scripted, judged)
-
-    assert [f["id"] for f in findings] == ["F-001", "F-002"]
-    assert suppressed == 0
-    assert histogram == {"0": 0, "1": 0, "2": 1, "3": 1, "4": 0}
-    lanes = {f["lane"] for f in findings}
-    assert lanes == {"scripted", "judged"}
-
-
-def test_merge_lanes_bounds_the_combined_pool_not_each_lane_separately() -> None:
-    """Three low-severity scripted findings plus four low-severity judged findings is seven
-    below-severity-3 findings combined; the output bound (skills/_shared/envelope.py,
-    OUTPUT_BOUND_BELOW_SEVERITY_3 = 5) applies to the combined pool, not per lane, so two of the
-    seven are suppressed regardless of which lane found them."""
-    scripted = [_scripted_finding("TOY-A", 2, f"s{i}") for i in range(3)]
-    judged = [_judged_finding("TOY-B", 2, f"j{i}") for i in range(4)]
-
-    findings, suppressed, histogram = merge_lanes(scripted, judged)
-
-    assert len(findings) == 5
-    assert suppressed == 2
-    assert histogram["2"] == 7
-
-
-def test_merge_lanes_keeps_every_severity_3_and_4_finding_regardless_of_bound() -> None:
-    scripted = [_scripted_finding("TOY-A", 4, f"s{i}") for i in range(6)]
-
-    findings, suppressed, _histogram = merge_lanes(scripted, [])
-
-    assert len(findings) == 6
-    assert suppressed == 0
-
-
-def test_merge_lanes_ranks_by_severity_descending() -> None:
-    scripted = [_scripted_finding("TOY-A", 1, "s1")]
-    judged = [_judged_finding("TOY-B", 4, "j1")]
-
-    findings, _suppressed, _histogram = merge_lanes(scripted, judged)
-
-    assert [f["severity"] for f in findings] == [4, 1]
-
-
-# ---------------------------------------------------------------------------
-# Envelope validity
-# ---------------------------------------------------------------------------
-
-
-def test_assemble_merged_envelope_is_contract_valid() -> None:
-    envelope = assemble_merged_envelope(
-        skill="critique-clarity",
-        skill_version="0.1.0",
-        artifact_path="bench/corpus/clarity/clarity-001.md",
-        artifact_sha256="a" * 64,
-        model="claude-sonnet-5",
-        timestamp=FIXED_TIMESTAMP,
-        rubrics=["PLAIN", "WILLIAMS"],
-        scripted_findings=[_scripted_finding("PLAIN-ACTIVE", 2, "p1")],
-        judged_findings=[_judged_finding("PLAIN-AUDIENCE", 3, "p2")],
-    )
-    result = validate_document(envelope)
-    assert result.ok, result.errors
-
-
-def test_assemble_merged_envelope_empty_both_lanes_is_a_clean_pass() -> None:
-    envelope = assemble_merged_envelope(
-        skill="critique-clarity",
-        skill_version="0.1.0",
-        artifact_path="bench/corpus/clarity/clarity-001.md",
-        artifact_sha256="a" * 64,
-        model="claude-sonnet-5",
-        timestamp=FIXED_TIMESTAMP,
-        rubrics=["PLAIN", "WILLIAMS"],
-        scripted_findings=[],
-        judged_findings=[],
-    )
-    result = validate_document(envelope)
-    assert result.ok, result.errors
-    assert envelope["summary"]["gate"] == "pass"
-    assert envelope["findings"] == []
-
-
-def test_assemble_merged_envelope_gate_fails_on_a_severity_3_judged_finding() -> None:
-    envelope = assemble_merged_envelope(
-        skill="critique-clarity",
-        skill_version="0.1.0",
-        artifact_path="bench/corpus/clarity/clarity-001.md",
-        artifact_sha256="a" * 64,
-        model="claude-sonnet-5",
-        timestamp=FIXED_TIMESTAMP,
-        rubrics=["PLAIN", "WILLIAMS"],
-        scripted_findings=[],
-        judged_findings=[_judged_finding("PLAIN-AUDIENCE", 3, "p1")],
-    )
-    assert envelope["summary"]["gate"] == "fail"
+    assert frontmatter["judged"], "critique-clarity declares judged criteria"
 
 
 # ---------------------------------------------------------------------------
@@ -619,49 +344,31 @@ def test_execute_baseline_cell_matches_calling_postprocess_directly(tmp_path: Pa
 
 
 # ---------------------------------------------------------------------------
-# Scripted lane subprocess
-# ---------------------------------------------------------------------------
-
-
-def test_run_scripted_lane_subprocess_against_the_real_critique_clarity_checks() -> None:
-    """An integration check against the real, committed critique-clarity skill. `checks.py`
-    lives under `repo_root/skills/critique-clarity/scripts/`, and the artifact must live inside
-    `repo_root` too (skills/_shared/artifact.py's load_artifact requires it), so this test reads
-    an existing committed corpus artifact rather than writing a fixture file: nothing here writes
-    to the repository."""
-    repo_root = Path(__file__).resolve().parent.parent.parent
-    artifact = repo_root / "bench" / "corpus" / "clarity" / "clarity-001.md"
-
-    envelope = run_scripted_lane_subprocess("critique-clarity", artifact, repo_root=repo_root)
-
-    assert envelope["run"]["skill"] == "critique-clarity"
-    assert envelope["run"]["model"] == "none"
-    assert envelope["run"]["artifact"] == "bench/corpus/clarity/clarity-001.md"
-    assert all(f["lane"] == "scripted" for f in envelope["findings"])
-
-
-def test_run_scripted_lane_subprocess_missing_skill_raises() -> None:
-    with pytest.raises(ScriptedLaneError):
-        run_scripted_lane_subprocess("critique-does-not-exist", Path("nope.md"), repo_root=Path(".").resolve())
-
-
-# ---------------------------------------------------------------------------
 # execute_grid: the full pipeline, scripted and judged lanes both faked
 # ---------------------------------------------------------------------------
 
 
-def _fake_scripted_ok(skill: str, artifact_disk_path: Path, *, repo_root: Path) -> dict[str, Any]:
-    import hashlib
-
-    sha256 = hashlib.sha256(Path(artifact_disk_path).read_bytes()).hexdigest()
+def _toy_envelope_from_skill(criterion: str = "TOY-ALPHA", severity: int = 2) -> dict[str, Any]:
+    """What the real skill returns now: a complete envelope, both lanes already merged and
+    bounded by the skill itself. The `run` block is deliberately wrong here, because the harness
+    overwrites it with provenance the skill is never told."""
     return {
-        "run": {"skill": skill, "artifact_sha256": sha256},
+        "run": {
+            "skill": "critique-toy",
+            "skill_version": "0.0.0",
+            "contract_version": "1.0.0",
+            "artifact": "toy-001.md",
+            "artifact_sha256": "0" * 64,
+            "model": "whatever-the-skill-thought",
+            "timestamp": "2020-01-01T00:00:00Z",
+            "rubrics": ["TOY"],
+        },
         "findings": [
             {
                 "id": "F-001",
-                "criterion": "TOY-ALPHA",
+                "criterion": criterion,
                 "lane": "scripted",
-                "severity": 2,
+                "severity": severity,
                 "location": "p1",
                 "evidence": "e",
                 "violation": "v",
@@ -669,6 +376,12 @@ def _fake_scripted_ok(skill: str, artifact_disk_path: Path, *, repo_root: Path) 
                 "confidence": "high",
             }
         ],
+        "summary": {
+            "by_severity": {str(i): (1 if i == severity else 0) for i in range(5)},
+            "gate": "pass",
+            "severity_3_threshold": 0,
+            "suppressed_count": 0,
+        },
     }
 
 
@@ -680,11 +393,14 @@ def test_execute_grid_writes_a_contract_valid_envelope_per_cell_and_a_raw_txt_fo
     tiers = [Tier(alias="haiku", model_id="claude-haiku-4-5-20251001")]
     cells = plan_grid(["critique-toy"], tiers, k=1, corpus_dir=corpus_dir, out_dir=out_dir)
 
-    judged_response = FakeResponse(json.dumps({"findings": []}))
-    baseline_response = FakeResponse("No problems found.")
-    client = FakeClient([judged_response, baseline_response])
+    client = FakeClient(
+        [
+            FakeResponse(json.dumps(_toy_envelope_from_skill())),  # skill cell
+            FakeResponse("No problems found."),  # baseline cell
+        ]
+    )
 
-    results = execute_grid(cells, client=client, repo_root=tmp_path, run_scripted_fn=_fake_scripted_ok, now_fn=_now)
+    results = execute_grid(cells, client=client, repo_root=tmp_path, now_fn=_now)
 
     assert all(r.ok for r in results), [r.detail for r in results if not r.ok]
     skill_path = out_dir / "critique-toy" / "toy-001" / "haiku-r1.json"
@@ -698,9 +414,15 @@ def test_execute_grid_writes_a_contract_valid_envelope_per_cell_and_a_raw_txt_fo
     result = validate_document(skill_envelope)
     assert result.ok, result.errors
     assert skill_envelope["findings"][0]["criterion"] == "TOY-ALPHA"
+    # The harness's provenance replaced the skill's placeholder run block.
+    assert skill_envelope["run"]["artifact"] == "bench/corpus/toy/toy-001.md"
+    assert skill_envelope["run"]["model"] == "claude-haiku-4-5-20251001"
+    assert skill_envelope["run"]["timestamp"] == FIXED_TIMESTAMP
 
 
 def test_execute_grid_a_failed_cell_does_not_stop_the_rest(tmp_path: Path) -> None:
+    """A skill that cannot produce an envelope fails its own cell only. The baseline cell behind
+    it must still run: a harness that aborts on the first bad cell throws away every good run."""
     _write_fake_skill(tmp_path, "critique-toy", scripted=["TOY-ALPHA"], judged=["TOY-BETA"])
     corpus_dir = tmp_path / "bench" / "corpus"
     _write_corpus_artifact(corpus_dir, "toy", "toy-001", "Body one.\n")
@@ -708,20 +430,25 @@ def test_execute_grid_a_failed_cell_does_not_stop_the_rest(tmp_path: Path) -> No
     tiers = [Tier(alias="haiku", model_id="claude-haiku-4-5-20251001")]
     cells = plan_grid(["critique-toy"], tiers, k=1, corpus_dir=corpus_dir, out_dir=out_dir)
 
-    def broken_scripted(skill: str, artifact_disk_path: Path, *, repo_root: Path) -> dict[str, Any]:
-        raise ScriptedLaneError("boom")
+    client = FakeClient(
+        [
+            FakeResponse("I could not read that file, sorry."),  # skill cell: not an envelope
+            FakeResponse("No problems found."),  # baseline cell
+        ]
+    )
 
-    client = FakeClient([FakeResponse("No problems found.")])  # only the baseline cell reaches the client
-
-    results = execute_grid(cells, client=client, repo_root=tmp_path, run_scripted_fn=broken_scripted, now_fn=_now)
+    results = execute_grid(cells, client=client, repo_root=tmp_path, now_fn=_now)
 
     by_condition = {r.cell.condition: r for r in results}
     assert by_condition["skill"].ok is False
-    assert "boom" in by_condition["skill"].detail
+    assert "envelope" in by_condition["skill"].detail
     assert by_condition["baseline"].ok is True
+    assert not (out_dir / "critique-toy" / "toy-001" / "haiku-r1.json").exists()
 
 
 def test_execute_grid_rejects_an_artifact_whose_bytes_do_not_match_the_manifest_sha256(tmp_path: Path) -> None:
+    """The sha256 guard moved into staging, which is where the artifact is now read. A run
+    against different bytes is not a reproduction of anything."""
     _write_fake_skill(tmp_path, "critique-toy", scripted=["TOY-ALPHA"], judged=["TOY-BETA"])
     corpus_dir = tmp_path / "bench" / "corpus"
     artifact_ref = _write_corpus_artifact(corpus_dir, "toy", "toy-001", "Body one.\n")
@@ -731,9 +458,10 @@ def test_execute_grid_rejects_an_artifact_whose_bytes_do_not_match_the_manifest_
     tiers = [Tier(alias="haiku", model_id="claude-haiku-4-5-20251001")]
     cells = plan_grid(["critique-toy"], tiers, k=1, corpus_dir=corpus_dir, out_dir=out_dir, include_baseline=False)
 
+    # Empty: the cell must fail before it reaches a model at all.
     client = FakeClient([])
 
-    results = execute_grid(cells, client=client, repo_root=tmp_path, run_scripted_fn=_fake_scripted_ok, now_fn=_now)
+    results = execute_grid(cells, client=client, repo_root=tmp_path, now_fn=_now)
 
     assert len(results) == 1
     assert results[0].ok is False
@@ -853,3 +581,484 @@ def test_a_live_run_accepts_a_fresh_out_dir(tmp_path, monkeypatch, capsys) -> No
 
     assert exit_code == 0
     assert "nothing to do" in capsys.readouterr().out
+
+
+# ---------------------------------------------------------------------------
+# Ground-truth isolation: staging an artifact away from its manifest
+# ---------------------------------------------------------------------------
+#
+# These matter more than they look. Until the fidelity half of ADR 0030, the judged lane read the
+# artifact's TEXT and inlined it into a prompt, so the model had no filesystem and the corpus layout
+# was irrelevant. Running the REAL skill through `claude --plugin-dir` changes that: the critic
+# declares Read and Bash, and the skill's own protocol tells it to run `scripts/checks.py <artifact>`
+# against a real path. `bench/corpus/<domain>/<id>.manifest.json` is the complete seeded-defect
+# answer key, and it sits directly beside `<id>.md`.
+#
+# bench/generator/README.md's leak rule already covers artifact content and path naming, on the
+# stated grounds that "the artifact path is handed to the skill under test". It does not cover a
+# sibling answer key, because nothing could read one until now.
+
+
+def _corpus_with_manifest(tmp_path: Path) -> tuple[Path, ArtifactRef]:
+    """A miniature corpus laid out the way bench/corpus/ actually is: artifact and answer key
+    side by side in one directory."""
+    corpus = tmp_path / "bench" / "corpus" / "clarity"
+    corpus.mkdir(parents=True)
+    # write_bytes, not write_text: on Windows write_text translates \n to \r\n, and the real corpus
+    # is LF on disk (.gitattributes enforces it, after every recorded example hash was once wrong
+    # for exactly this reason). The manifest sha256 is over the bytes, so the fixture must match.
+    body = b"# Home-Office Equipment Stipend Policy\n\nEligibility is described below.\n"
+    (corpus / "clarity-001.md").write_bytes(body)
+    (corpus / "clarity-001.manifest.json").write_bytes(
+        json.dumps({"defects": [{"criterion": "PLAIN-DOUBLE-NEGATIVE", "severity_expected": 2}]}).encode("utf-8")
+    )
+
+    artifact = ArtifactRef(
+        domain="clarity",
+        path="bench/corpus/clarity/clarity-001.md",
+        sha256=hashlib.sha256(body).hexdigest(),
+        artifact_type="markdown-prose",
+    )
+    return corpus, artifact
+
+
+def test_staged_artifact_directory_holds_the_artifact_and_nothing_else(tmp_path) -> None:
+    """The seeded-defect manifest must not be reachable from the staged artifact's directory.
+
+    Without this, a judged lane running the real skill could read the answer key it is being
+    measured against, and every score it produced would be worthless.
+    """
+    _, artifact = _corpus_with_manifest(tmp_path)
+
+    with run_bench.staged_artifact(artifact, repo_root=tmp_path) as staged:
+        siblings = sorted(p.name for p in staged.parent.iterdir())
+
+    assert siblings == ["clarity-001.md"], f"staged directory leaked {siblings}"
+
+
+def test_staged_artifact_is_byte_identical_to_the_corpus_copy(tmp_path) -> None:
+    """A run against different bytes is not a reproduction of anything, so staging must not
+    normalise line endings or re-encode. The manifest sha256 is checked against the staged file."""
+    corpus, artifact = _corpus_with_manifest(tmp_path)
+
+    with run_bench.staged_artifact(artifact, repo_root=tmp_path) as staged:
+        assert staged.read_bytes() == (corpus / "clarity-001.md").read_bytes()
+
+
+def test_staged_artifact_keeps_the_opaque_corpus_filename(tmp_path) -> None:
+    """Corpus ids are opaque sequential slugs precisely because the path reaches the skill
+    (bench/generator/README.md, leak rule 4), so the real filename is safe and keeping it means
+    a failing cell can be traced back to its artifact."""
+    _, artifact = _corpus_with_manifest(tmp_path)
+
+    with run_bench.staged_artifact(artifact, repo_root=tmp_path) as staged:
+        assert staged.name == "clarity-001.md"
+
+
+def test_staged_artifact_is_removed_on_exit(tmp_path) -> None:
+    """A k=5 grid over six skills stages hundreds of copies; leaving them behind fills the disk."""
+    _, artifact = _corpus_with_manifest(tmp_path)
+
+    with run_bench.staged_artifact(artifact, repo_root=tmp_path) as staged:
+        staged_dir = staged.parent
+        assert staged_dir.exists()
+
+    assert not staged_dir.exists()
+
+
+def test_staged_artifact_rejects_bytes_that_do_not_match_the_manifest(tmp_path) -> None:
+    """The existing _read_artifact sha256 guard must survive the rewrite: staging is where the
+    artifact is now read, so it is where the check has to happen."""
+    corpus, artifact = _corpus_with_manifest(tmp_path)
+    (corpus / "clarity-001.md").write_text("tampered\n", encoding="utf-8")
+
+    with pytest.raises(RuntimeError, match="does not match manifest"):
+        with run_bench.staged_artifact(artifact, repo_root=tmp_path):
+            pass
+
+
+# ---------------------------------------------------------------------------
+# Transport: the two constraints ADR 0030 says are easiest to break by accident
+# ---------------------------------------------------------------------------
+
+
+class _FakeProc:
+    def __init__(self, stdout: str = "{}", returncode: int = 0) -> None:
+        self.stdout = stdout
+        self.stderr = ""
+        self.returncode = returncode
+
+
+def _capture_claude_calls(monkeypatch, stdout: str = "{}") -> list[dict[str, Any]]:
+    """Record every subprocess invocation the transport makes, without running one."""
+    calls: list[dict[str, Any]] = []
+
+    def _fake_run(argv, **kwargs):
+        calls.append({"argv": list(argv), **kwargs})
+        return _FakeProc(stdout=stdout)
+
+    monkeypatch.setattr(run_bench.subprocess, "run", _fake_run)
+    return calls
+
+
+def test_transport_passes_plugin_dir_model_and_cwd_and_never_bare(tmp_path, monkeypatch) -> None:
+    """ADR 0030 names both failure modes explicitly.
+
+    `--bare` reads "strictly ANTHROPIC_API_KEY or apiKeyHelper (OAuth and keychain are never
+    read)", so passing it silently reintroduces the API key this whole ADR exists to delete.
+    Omitting `--model` makes the run inherit whatever model the caller happens to be using, which
+    measures nothing reproducible. Both were comments until now.
+    """
+    calls = _capture_claude_calls(monkeypatch)
+
+    run_bench._ClaudeCodeMessages().create(
+        model="claude-haiku-4-5-20251001",
+        messages=[{"role": "user", "content": "critique ./clarity-001.md"}],
+        plugin_dir=tmp_path / "repo",
+        cwd=tmp_path / "staged",
+    )
+
+    argv = calls[0]["argv"]
+    assert "--bare" not in argv, "--bare silently reintroduces ANTHROPIC_API_KEY"
+    assert argv[argv.index("--model") + 1] == "claude-haiku-4-5-20251001"
+    assert argv[argv.index("--plugin-dir") + 1] == str(tmp_path / "repo")
+    assert calls[0]["cwd"] == str(tmp_path / "staged")
+
+
+def test_transport_isolates_the_run_from_the_operators_own_configuration(tmp_path, monkeypatch) -> None:
+    """Measured 2026-08-09: without these flags a nested run offered 97 skills, the six under test
+    plus 91 from the operator's ambient configuration, and a full skill run never finished.
+
+    `--plugin-dir` adds a plugin; it does not isolate an environment. Without isolation two
+    operators are not running the same benchmark, and nothing in the envelope records which
+    configuration produced it. With `--setting-sources ""` and `--strict-mcp-config` the same probe
+    offered 18, all of them the CLI's own built-ins plus the plugin under test, and the run
+    completed in about two minutes.
+    """
+    calls = _capture_claude_calls(monkeypatch)
+
+    run_bench._ClaudeCodeMessages().create(
+        model="claude-haiku-4-5-20251001",
+        messages=[{"role": "user", "content": "critique ./clarity-001.md"}],
+        plugin_dir=tmp_path / "repo",
+        cwd=tmp_path,
+    )
+
+    argv = calls[0]["argv"]
+    assert argv[argv.index("--setting-sources") + 1] == ""
+    assert "--strict-mcp-config" in argv
+
+
+def test_transport_gives_a_skill_run_no_way_to_write_anything(tmp_path, monkeypatch) -> None:
+    """SECURITY.md's claim about the critic is that it has no Write and no Edit, so it cannot
+    modify the artifact it critiques or anything else. A benchmark that ran with
+    --permission-mode bypassPermissions would quietly contradict that, and would hand write access
+    to the very repository it is measuring. An explicit allowlist was measured to be sufficient:
+    the same run completed with 9 findings across both lanes without it.
+    """
+    calls = _capture_claude_calls(monkeypatch)
+
+    run_bench._ClaudeCodeMessages().create(
+        model="claude-haiku-4-5-20251001",
+        messages=[{"role": "user", "content": "critique ./clarity-001.md"}],
+        plugin_dir=tmp_path / "repo",
+        cwd=tmp_path,
+    )
+
+    argv = calls[0]["argv"]
+    allowed = argv[argv.index("--allowedTools") + 1]
+    assert "Read" in allowed and "Bash" in allowed
+    assert "Write" not in allowed
+    assert "Edit" not in allowed
+    assert "--permission-mode" not in argv
+    assert "--dangerously-skip-permissions" not in argv
+
+
+def test_transport_omits_plugin_dir_for_the_frozen_baseline_lane(monkeypatch) -> None:
+    """The baseline condition is frozen: a generic prompt with no skill and no plugin loaded.
+    Loading the plugin for it would make the baseline stop being a baseline."""
+    calls = _capture_claude_calls(monkeypatch)
+
+    run_bench._ClaudeCodeMessages().create(
+        model="claude-haiku-4-5-20251001",
+        messages=[{"role": "user", "content": "review this"}],
+    )
+
+    argv = calls[0]["argv"]
+    assert "--plugin-dir" not in argv
+    assert argv[argv.index("--model") + 1] == "claude-haiku-4-5-20251001"
+
+
+# ---------------------------------------------------------------------------
+# The judged lane, running the real skill instead of a reimplementation of it
+# ---------------------------------------------------------------------------
+
+
+_ENVELOPE_FROM_SKILL = {
+    "run": {
+        "skill": "critique-clarity",
+        "skill_version": "0.1.0",
+        "contract_version": "1.0.0",
+        "artifact": "clarity-001.md",
+        "artifact_sha256": "0" * 64,
+        "model": "whatever-the-skill-thought",
+        "timestamp": "2020-01-01T00:00:00Z",
+        "rubrics": ["PLAIN"],
+    },
+    "findings": [
+        {
+            "id": "F-001",
+            "criterion": "PLAIN-DOUBLE-NEGATIVE",
+            "severity": 2,
+            "location": "Eligibility, second paragraph",
+            "evidence": "not uncommon",
+            "violation": "Two negation markers in one clause.",
+            "fix": "State it positively.",
+            "lane": "scripted",
+            "confidence": "high",
+        }
+    ],
+    "summary": {
+        "by_severity": {"0": 0, "1": 0, "2": 1, "3": 0, "4": 0},
+        "gate": "pass",
+        "severity_3_threshold": 0,
+        "suppressed_count": 0,
+    },
+}
+
+
+def test_skill_lane_returns_the_envelope_the_skill_emitted(monkeypatch, tmp_path) -> None:
+    """The point of the fidelity half: the harness stops assembling findings and merely
+    transports the envelope the real skill produced."""
+    _capture_claude_calls(monkeypatch, stdout=json.dumps(_ENVELOPE_FROM_SKILL))
+
+    envelope = run_bench.call_skill_lane(
+        run_bench.ClaudeCodeClient(),
+        model_id="claude-haiku-4-5-20251001",
+        skill="critique-clarity",
+        staged_path=tmp_path / "clarity-001.md",
+        repo_root=tmp_path,
+    )
+
+    assert envelope["findings"][0]["criterion"] == "PLAIN-DOUBLE-NEGATIVE"
+    assert envelope["summary"]["gate"] == "pass"
+
+
+def test_skill_lane_accepts_a_fenced_envelope(monkeypatch, tmp_path) -> None:
+    """Models wrap JSON in a code fence regardless of instruction. The old judged lane already
+    stripped fences, and dropping that would turn a formatting habit into a failed cell."""
+    fenced = "```json\n" + json.dumps(_ENVELOPE_FROM_SKILL) + "\n```"
+    _capture_claude_calls(monkeypatch, stdout=fenced)
+
+    envelope = run_bench.call_skill_lane(
+        run_bench.ClaudeCodeClient(),
+        model_id="claude-haiku-4-5-20251001",
+        skill="critique-clarity",
+        staged_path=tmp_path / "clarity-001.md",
+        repo_root=tmp_path,
+    )
+
+    assert envelope["findings"][0]["severity"] == 2
+
+
+def test_skill_lane_extracts_the_envelope_from_a_narrated_run(monkeypatch, tmp_path) -> None:
+    """A real skill run narrates its protocol and then emits the envelope, so stdout is not one
+    JSON object however firmly the instruction asks for one.
+
+    Measured against the pinned haiku tier on 2026-08-09: 7403 bytes of stdout, opening with
+    "Now I'll perform the judged criterion sweep" and four passes of commentary before the
+    envelope arrived, fenced, at the end. Requiring the whole response to parse would have thrown
+    away a complete, contract-valid run with findings in both lanes.
+    """
+    narrated = (
+        "Now I'll perform the judged criterion sweep.\n\n"
+        "**Pass 1: Inventory**\nSections: Program Overview, Eligibility.\n"
+        'Here is an interim thought with a brace: {"not": "the envelope"}\n\n'
+        "```json\n" + json.dumps(_ENVELOPE_FROM_SKILL) + "\n```\n"
+    )
+    _capture_claude_calls(monkeypatch, stdout=narrated)
+
+    envelope = run_bench.call_skill_lane(
+        run_bench.ClaudeCodeClient(),
+        model_id="claude-haiku-4-5-20251001",
+        skill="critique-clarity",
+        staged_path=tmp_path / "clarity-001.md",
+        repo_root=tmp_path,
+    )
+
+    assert envelope["findings"][0]["criterion"] == "PLAIN-DOUBLE-NEGATIVE"
+    assert envelope["summary"]["gate"] == "pass"
+
+
+def test_skill_lane_ignores_earlier_json_that_is_not_an_envelope(monkeypatch, tmp_path) -> None:
+    """The scripted lane's own output is often echoed mid-run. Picking the first JSON object
+    would capture that instead of the final merged envelope."""
+    narrated = (
+        'Running the scripted lane: {"findings": [], "note": "scripted only"}\n\n'
+        "Now the merged envelope:\n" + json.dumps(_ENVELOPE_FROM_SKILL) + "\n"
+    )
+    _capture_claude_calls(monkeypatch, stdout=narrated)
+
+    envelope = run_bench.call_skill_lane(
+        run_bench.ClaudeCodeClient(),
+        model_id="claude-haiku-4-5-20251001",
+        skill="critique-clarity",
+        staged_path=tmp_path / "clarity-001.md",
+        repo_root=tmp_path,
+    )
+
+    assert envelope["findings"], "took the empty scripted echo instead of the final envelope"
+    assert envelope["run"]["skill"] == "critique-clarity"
+
+
+def test_skill_lane_rejects_a_response_that_is_not_an_envelope(monkeypatch, tmp_path) -> None:
+    """A cell that cannot produce an envelope must fail loudly and be recorded as a failed cell,
+    never written as a partial or invented one."""
+    _capture_claude_calls(monkeypatch, stdout="I had trouble reading that file, sorry.")
+
+    with pytest.raises(JudgedLaneError):
+        run_bench.call_skill_lane(
+            run_bench.ClaudeCodeClient(),
+            model_id="claude-haiku-4-5-20251001",
+            skill="critique-clarity",
+            staged_path=tmp_path / "clarity-001.md",
+            repo_root=tmp_path,
+        )
+
+
+def test_skill_lane_names_the_skill_and_the_staged_file_in_its_prompt(monkeypatch, tmp_path) -> None:
+    """The instruction must name the skill (so the right one runs) and the staged filename (so
+    the corpus path, and therefore the sibling manifest, is never mentioned)."""
+    calls = _capture_claude_calls(monkeypatch, stdout=json.dumps(_ENVELOPE_FROM_SKILL))
+
+    run_bench.call_skill_lane(
+        run_bench.ClaudeCodeClient(),
+        model_id="claude-haiku-4-5-20251001",
+        skill="critique-clarity",
+        staged_path=tmp_path / "staged" / "clarity-001.md",
+        repo_root=tmp_path,
+    )
+
+    prompt = calls[0]["input"]
+    assert "critique-clarity" in prompt
+    assert "clarity-001.md" in prompt
+    assert "bench/corpus" not in prompt, "the corpus path must never reach the skill"
+
+
+def _clarity_cell(tmp_path: Path, artifact: ArtifactRef) -> GridCell:
+    return GridCell(
+        condition="skill",
+        skill="critique-clarity",
+        artifact=artifact,
+        tier=Tier(alias="haiku", model_id="claude-haiku-4-5-20251001"),
+        run_index=1,
+        out_path=tmp_path / "out" / "haiku-r1.json",
+    )
+
+
+_CLARITY_FRONTMATTER = {
+    "version": "0.1.0",
+    "rubrics": ["PLAIN", "WILLIAMS"],
+    "scripted": ["PLAIN-SENTENCE-LENGTH"],
+    "judged": ["PLAIN-DOUBLE-NEGATIVE"],
+}
+
+
+def test_execute_skill_cell_keeps_the_skills_measurement_and_owns_the_provenance(tmp_path) -> None:
+    """The split the fidelity half introduces: `findings` and `summary` are the skill's, because
+    the skill is what is being measured, and the `run` block is the harness's, because the skill
+    is deliberately never told the corpus path, the pinned model id, or the run timestamp."""
+    _, artifact = _corpus_with_manifest(tmp_path)
+    client = FakeClient([FakeResponse(json.dumps(_ENVELOPE_FROM_SKILL))])
+
+    envelope = run_bench.execute_skill_cell(
+        _clarity_cell(tmp_path, artifact),
+        client=client,
+        repo_root=tmp_path,
+        frontmatter=_CLARITY_FRONTMATTER,
+        now_fn=_now,
+    )
+
+    assert envelope["run"]["artifact"] == "bench/corpus/clarity/clarity-001.md"
+    assert envelope["run"]["artifact_sha256"] == artifact.sha256
+    assert envelope["run"]["model"] == "claude-haiku-4-5-20251001"
+    assert envelope["run"]["timestamp"] == FIXED_TIMESTAMP
+    assert envelope["run"]["skill"] == "critique-clarity"
+    assert envelope["run"]["skill_version"] == "0.1.0"
+    assert envelope["run"]["rubrics"] == ["PLAIN", "WILLIAMS"]
+
+    assert envelope["findings"] == _ENVELOPE_FROM_SKILL["findings"]
+    assert envelope["summary"] == _ENVELOPE_FROM_SKILL["summary"]
+
+
+def test_execute_skill_cell_never_leaks_a_staging_path_into_the_envelope(tmp_path) -> None:
+    """Envelopes are committed evidence. A temp path would make them non-reproducible and would
+    publish the running user's home directory into a public repository."""
+    _, artifact = _corpus_with_manifest(tmp_path)
+    client = FakeClient([FakeResponse(json.dumps(_ENVELOPE_FROM_SKILL))])
+
+    envelope = run_bench.execute_skill_cell(
+        _clarity_cell(tmp_path, artifact),
+        client=client,
+        repo_root=tmp_path,
+        frontmatter=_CLARITY_FRONTMATTER,
+        now_fn=_now,
+    )
+
+    assert "bench-artifact-" not in json.dumps(envelope)
+    assert str(tmp_path) not in json.dumps(envelope)
+
+
+def test_execute_skill_cell_runs_the_skill_against_the_staged_copy(tmp_path) -> None:
+    """The manifest must not be in the directory the skill is pointed at."""
+    _, artifact = _corpus_with_manifest(tmp_path)
+    client = FakeClient([FakeResponse(json.dumps(_ENVELOPE_FROM_SKILL))])
+
+    run_bench.execute_skill_cell(
+        _clarity_cell(tmp_path, artifact),
+        client=client,
+        repo_root=tmp_path,
+        frontmatter=_CLARITY_FRONTMATTER,
+        now_fn=_now,
+    )
+
+    call = client.messages.calls[0]
+    assert call["plugin_dir"] == tmp_path
+    assert Path(call["cwd"]).name.startswith("bench-artifact-")
+
+
+def test_skill_lane_passes_a_non_default_gate_threshold_to_the_skill(monkeypatch, tmp_path) -> None:
+    """--severity-3-threshold has to keep meaning what it says. The skill now builds its own
+    summary, so the harness can no longer stamp the threshold on afterwards; it must pass it in
+    through the interface agents/critique-critic.md already documents ("a gate threshold; 0 when
+    omitted")."""
+    calls = _capture_claude_calls(monkeypatch, stdout=json.dumps(_ENVELOPE_FROM_SKILL))
+
+    run_bench.call_skill_lane(
+        run_bench.ClaudeCodeClient(),
+        model_id="claude-haiku-4-5-20251001",
+        skill="critique-clarity",
+        staged_path=tmp_path / "clarity-001.md",
+        repo_root=tmp_path,
+        severity_3_threshold=2,
+    )
+
+    assert "severity_3_threshold" in calls[0]["input"]
+    assert "2" in calls[0]["input"]
+
+
+def test_skill_lane_stays_silent_about_the_threshold_when_it_is_the_default(monkeypatch, tmp_path) -> None:
+    """Every committed envelope was measured at the default. Mentioning it anyway would change
+    the prompt for every historical cell and make the re-run non-comparable."""
+    calls = _capture_claude_calls(monkeypatch, stdout=json.dumps(_ENVELOPE_FROM_SKILL))
+
+    run_bench.call_skill_lane(
+        run_bench.ClaudeCodeClient(),
+        model_id="claude-haiku-4-5-20251001",
+        skill="critique-clarity",
+        staged_path=tmp_path / "clarity-001.md",
+        repo_root=tmp_path,
+        severity_3_threshold=0,
+    )
+
+    assert "severity_3_threshold" not in calls[0]["input"]

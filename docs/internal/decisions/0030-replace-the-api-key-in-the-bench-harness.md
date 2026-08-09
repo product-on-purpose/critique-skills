@@ -176,11 +176,183 @@ platform's command-line argument limit. Baseline cells, which carry no system pr
 the same run. The system prompt now goes to a temp file via `--append-system-prompt-file` and the
 user prompt over stdin, so neither can grow into that failure again.
 
-**Half two, fidelity, is not done.** The judged lane is still a prompt this harness assembles,
-which is the second definition of the protocol this ADR set out to delete. Closing it means asking
-Claude Code to run the real skill via `--plugin-dir` and returning its envelope, which would also
-delete `build_judged_system_prompt`, `call_judged_lane`, `_parse_judged_findings`, and the lane
-merge. The mechanism is already proven; this is a restructuring, not an unknown.
+**Half two, fidelity, landed 2026-08-08.** The judged lane no longer assembles a prompt. The
+harness stages the artifact, runs the real skill through `claude --plugin-dir`, and keeps the
+envelope it emits. `build_judged_system_prompt`, `call_judged_lane`, `_parse_judged_findings`,
+`merge_lanes`, `assemble_merged_envelope`, the four response-coercion helpers, and the harness's
+own `run_scripted_lane_subprocess` are gone: `bench/run_bench.py` went from 1124 lines to 951, and
+what remains contains no second copy of the critique protocol.
+
+The division of responsibility is now explicit, and it is the point of the change. The **skill**
+owns `findings` and `summary`, because the skill is what is being measured and it runs both of its
+own lanes and applies its own bounded-output rule. The **harness** owns the `run` block, because
+the skill is deliberately never told the corpus path, the pinned model id, or the run timestamp.
+
+**This half was not the pure restructuring the previous session predicted, and the reason is worth
+recording.** Handing the real skill a real path exposes a leak the old design made impossible.
+`bench/corpus/<domain>/<id>.manifest.json` is the complete seeded-defect answer key: criterion,
+location, and expected severity for every plant. It sits directly beside `<id>.md`. That was
+harmless while the judged lane inlined the artifact's **text** into a prompt, because the model had
+no filesystem. It stops being harmless the moment the lane runs the real skill, because
+`agents/critique-critic.md` declares `Read` and `Bash` and the protocol tells it to run
+`scripts/checks.py` against a path. A skill that can read the answer key it is scored against is
+not being measured at all.
+
+`bench/generator/README.md`'s leak rule anticipated the adjacent risk and not this one. Rules 1
+through 3 cover the artifact's own text; rule 4 covers the naming of corpus paths, on the stated
+grounds that "the artifact path is handed to the skill under test". None of them cover a sibling
+answer key, because until this change nothing could read one. So `staged_artifact()` is new work,
+not a preserved constraint: it copies the artifact alone into a fresh temp directory, verifies it
+against the manifest sha256 on the way through, and the process runs with `cwd` set to that
+directory and names the file by its bare filename, so the corpus path never reaches the skill.
+Rule 4 is what makes keeping the real filename safe.
+
+**Acceptance status, stated precisely, because the two gates are easy to conflate.**
+
+| Gate | What it proves | Status |
+|---|---|---|
+| Wiring | The rewritten path runs, and produces a contract-valid envelope | **Passed 2026-08-09.** See below |
+| Fidelity (Open question 2) | The replacement measures the same thing: a partial re-run landing within measured run-to-run variance of the committed figures | **Not run,** and blocked on the cell reliability below |
+
+**The wiring gate passed** on the pinned haiku tier, `python -m contract.validate` reporting `valid`:
+
+| Property | Value |
+|---|---|
+| `run.artifact` | `bench/corpus/clarity/clarity-001.md`, the corpus path, not the staging path |
+| `run.artifact_sha256` | `32ee3fed...`, matching the manifest |
+| `run.model` | `claude-haiku-4-5-20251001`, the pinned id, passed explicitly |
+| Findings | 7, across **both** lanes |
+| Criteria | `PLAIN-ACTIVE`, `PLAIN-CONCISE`, `PLAIN-DOUBLE-NEGATIVE`, `PLAIN-HEADINGS`, `PLAIN-JARGON`, `PLAIN-ORGANIZE`, `PLAIN-SENTENCE-LENGTH` |
+| Summary | internally consistent: histogram total 8 = 7 emitted + 1 suppressed |
+
+Staging, invocation, envelope extraction, provenance rewriting and contract validation all work.
+
+### The wiring gate attempt, 2026-08-09: a blocker the unit tests could not see
+
+A live k=1 run to a fresh `--out-dir` produced **no envelope and no error**. Bisected with bounded
+probes, each `claude -p` against the pinned haiku tier:
+
+| Probe | Result |
+|---|---|
+| Trivial prompt, no plugin | exit 0, immediate |
+| Trivial prompt, `--plugin-dir` | exit 0, immediate |
+| Read a staged file (tool use, no plugin) | exit 0, immediate |
+| Ask the plugin to name its skills | exit 0, all six `critique-*` skills present |
+| **Run the real skill on a staged artifact** | **exit 124 at 240s, zero stdout, zero stderr**, with `--permission-mode bypassPermissions` |
+
+So the plugin loads, the skills register, tool use works, and authentication is fine. What does not
+finish is a full skill run.
+
+**The skill-listing probe found the reason, and it is worse than a timeout.** The nested run offered
+**97 skills**. The six under test were among them; the other ninety-one came from the operator's own
+ambient Claude Code configuration, along with whatever plugins, MCP servers and hooks that
+configuration carries. `--plugin-dir` adds a plugin, it does not isolate an environment.
+
+That is a measurement defect, not just a performance problem:
+
+1. **The environment is the operator's, so the figures are not reproducible.** A maintainer with 97
+   skills and a clean CI runner with 6 are not running the same benchmark, and nothing in the
+   envelope records which one produced it.
+2. **Other skills can influence the critique.** Several ambient skills describe reviewing or
+   authoring documents, and the router sees all of them.
+3. **The old design was immune to this by construction.** It sent an assembled system prompt to a
+   plain API call, so the environment was exactly what the harness built and nothing else.
+
+### Isolation, resolved the same day
+
+`--setting-sources ""` plus `--strict-mcp-config` fixes it, and the effect is measurable:
+
+| Flags | Skills offered | Full skill run |
+|---|---|---|
+| `--plugin-dir` alone | **97** | never finished (killed at 240s, no output) |
+| plus `--setting-sources "" --strict-mcp-config` | **18** | **completed, exit 0, about 2 minutes** |
+
+The remaining 18 are the CLI's own built-ins plus the six under test, which now appear namespaced
+as `critique-skills:critique-*`. Those ship with the CLI version rather than with the operator, so
+they are a property of the pinned runtime and are reproducible in a way the other 91 were not.
+
+Both flags go on **both** lanes. The committed baseline envelopes were produced by a plain API call
+with no environment at all, so isolating the baseline moves it closer to how it was measured, not
+further from it.
+
+**Tool access is an explicit allowlist, not `--permission-mode bypassPermissions`.** Bypassing would
+hand write access to the repository being measured, and would contradict `SECURITY.md`'s claim that
+the critic has no `Write` and no `Edit`. `--allowedTools "Read,Bash,Glob,Grep,Task,Skill"` was
+measured to be sufficient: the same artifact produced 9 findings across both lanes under it.
+
+### Cell reliability: 1 of 4 haiku cells produced a usable envelope
+
+Four cells were run against the same artifact on the pinned haiku tier. Three distinct failure
+modes, and they are not the same problem:
+
+| Run | Outcome |
+|---|---|
+| single | Invalid: `histogram total 9 does not equal len(findings) (9) plus suppressed_count (2)` |
+| k3 r1 | **No envelope at all.** Returned "The critique-critic agent is running in the background to evaluate clarity-001.md. I'll output the final run envelope when it completes." |
+| k3 r2 | Invalid: an em dash in `findings[7].violation`, against the contract's prose rule |
+| k3 r3 | **Valid.** The gate result above |
+
+**r1 is the most serious, and it is a property of running an agent rather than calling an API.** The
+outer `claude -p` returned a *promise* rather than a result: the skill delegated to `critique-critic`
+and the process exited before the subagent finished. An API call cannot do this. Nothing currently
+distinguishes "the skill found nothing worth reporting" from "the skill had not finished thinking",
+and a harness that scores the second as the first is measuring noise. This needs handling before any
+graded run, not after.
+
+**r2 exposes an asymmetry this ADR created, and it biases the comparison against the skill.** The
+deleted `_sanitize_prose()` stripped em and en dashes from judged findings, on the stated grounds
+that "the model was never told the house style either", and `bench/baseline/postprocess.py` still
+does exactly that for the baseline lane. So as things stand the baseline's prose is normalised and
+passes, while the skill's identical slip is rejected and fails the entire cell. Whatever is decided
+about validity, **the two conditions have to be treated the same way**, or "skill beats generic
+prompt" stops being a fair comparison.
+
+### The first failure in detail: the skill's own envelope was not contract-valid
+
+With isolation in place the harness ran end to end in 94 seconds, and `validate_document` rejected
+what came back:
+
+```
+summary.by_severity: histogram total 9 does not equal len(findings) (9) plus suppressed_count (2)
+```
+
+The envelope is required to histogram **everything found** and then emit a bounded subset, so the
+total must be `len(findings) + suppressed_count`. The skill, on the pinned haiku tier, histogrammed
+only what it emitted. The harness refused to write the cell, which is correct behavior.
+
+**This is the fidelity half working as intended, and it is also the first real cost of it.** The old
+lane could not produce this failure, because the harness built `summary` itself with
+`build_summary()`, so every envelope was valid by construction no matter what the model returned.
+Trusting the skill means the skill's own assembly errors now surface as failed cells. That is the
+honest measurement, but it means a re-run's pass rate is no longer comparable to the committed one
+without accounting for it, and it may say more about a tier's arithmetic than about its critique.
+
+### Cost, which answers open question 1 concretely
+
+| Tier | One skill cell |
+|---|---|
+| haiku | 94s to 173s |
+| sonnet | **exceeded 9 minutes**, killed before finishing |
+
+The old lane was one API call per cell. This is a full agentic run per cell, and the sonnet figure
+in particular makes a k=5 grid over six skills and two tiers a many-hour job rather than a
+many-minute one. That has to be planned for and budgeted before a full re-run is scheduled, not
+discovered partway through one.
+
+**This is the fourth and fifth time on this ADR that running the thing found what reading it could
+not**, after the `WinError 206` argument limit, the sibling-manifest leak, and the ambient-config
+leak. Every one was invisible to a passing test suite.
+
+Passing the wiring gate does **not** close this ADR. The 2026-08-07 acceptance gate above already
+ran one k=1 skill invocation by hand and passed; repeating it through the harness proves the
+plumbing, not that the numbers are comparable. Until the fidelity gate runs, the committed figures
+in `bench/results/` remain the figures produced by the **old** judged lane, and nothing may claim
+otherwise.
+
+**Open question 1 gets worse under this half, not better.** Every judged cell is now a full
+plugin-loading agent invocation rather than one API call carrying an assembled prompt. Whatever the
+k=5 grid cost before, it costs more now, and that has to be measured before a full re-run is
+scheduled rather than discovered partway through one.
 
 Splitting it this way was deliberate: half one removes the API key completely and is small enough
 to verify in one live run, and half two changes what is measured and deserves its own scrutiny.

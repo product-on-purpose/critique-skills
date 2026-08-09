@@ -115,9 +115,18 @@ non-deterministic). Reproduce a dispatch locally:
 python bench/run_bench.py --skills all --k 5 --tiers "" --dry-run
 ```
 
-Drop `--dry-run` for a live run; that requires `ANTHROPIC_API_KEY` in the environment. See
-`bench/README.md` for the corpus, metrics, and results design this command will drive once the
-judged-lane harness (S-03, S-06) ships.
+Drop `--dry-run` for a live run. **That needs no API key**, and you must not add one: the harness
+reaches the model through the Claude Code CLI, which authenticates from a Claude subscription
+([ADR 0030](docs/internal/decisions/0030-replace-the-api-key-in-the-bench-harness.md)). A live run
+does need the `claude` CLI on `PATH`, and it always passes `--model` explicitly, because a benchmark
+that inherits the caller's model measures nothing reproducible.
+
+Point every live run at a fresh `--out-dir`. `bench/results/runs*/` is immutable measurement
+evidence; the harness refuses an `--out-dir` that already holds envelopes for exactly that reason.
+
+See `bench/README.md` for the corpus, metrics, and results design, and
+`docs/explanation/the-benchmark-harness.md` for what the harness does step by step and which of its
+steps touch a model at all.
 
 ### Release (`.github/workflows/release.yml`)
 

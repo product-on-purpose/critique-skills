@@ -85,9 +85,10 @@ jobs:
 ```
 
 `contract/validate.py`'s only runtime dependency is `jsonschema`, and installing it directly is
-still the leanest thing to do. As of 2026-08-07 `requirements.txt` also contains nothing else: the
-`anthropic` package moved to `requirements-bench.txt`, which only someone re-running this
-repository's benchmark needs. Either command now gets you the same one package. `PYTHONPATH` points at the pinned checkout so
+still the leanest thing to do. `requirements.txt` contains nothing else either, so both commands get
+you the same one package: the `anthropic` package was removed from this repository entirely on
+2026-08-08, because the benchmark harness now reaches a model through the Claude Code CLI rather than
+an API client and so needs no key and no SDK (ADR 0030). `PYTHONPATH` points at the pinned checkout so
 `python -m contract.validate` resolves as a package without installing anything into your own
 repository. This shape, running the module against a path outside the checkout while
 `PYTHONPATH` points at it, was verified directly in this repository before writing this page.

@@ -36,16 +36,26 @@ the artifact or anything else.
 
 ## The one network call: the bench harness
 
-`bench/run_bench.py` calls the Anthropic Messages API, via the `anthropic` SDK, to run a skill's
-judged lane and the frozen baseline comparison against pinned model tiers
-([ADR 0025](docs/internal/decisions/0025-anthropic-sdk-dependency.md)). This is opt-in and explicit:
+`bench/run_bench.py` reaches a model to run a skill's judged lane and the frozen baseline comparison
+against pinned model tiers. It does so by shelling out to the Claude Code CLI, not by calling an HTTP
+API directly ([ADR 0030](docs/internal/decisions/0030-replace-the-api-key-in-the-bench-harness.md),
+which supersedes [ADR 0025](docs/internal/decisions/0025-anthropic-sdk-dependency.md)). This is
+opt-in and explicit:
 
-- It requires `ANTHROPIC_API_KEY` in the environment. Without it, only `--dry-run` grid planning
-  works, and that path makes no network call at all.
-- `anthropic` is imported lazily, only on the live-run code path; `contract/validate.py`,
-  `bench/generator/`, and `bench/metrics/` never import it (ADR 0025, "Implementation sites").
+- **It needs no API key, and there is no `ANTHROPIC_API_KEY` anywhere in this repository**, for a
+  user or for a maintainer. The `claude` CLI authenticates from a Claude subscription. The
+  `anthropic` SDK is no longer a dependency, and the `requirements-bench.txt` that carried it is
+  deleted.
+- Nothing beyond `contract/validate.py`'s own `jsonschema` is installed to make this work. On a
+  machine without the `claude` CLI the harness fails with an actionable message rather than
+  reaching the network.
+- Without the CLI, only `--dry-run` grid planning works, and that path reaches no model at all.
 - `bench.yml`, the one GitHub Actions workflow that can run this harness live, is
   `workflow_dispatch` only. It never runs on `push` or `pull_request` (`AGENTS.md`, "Bench").
+
+**Skills themselves never call a model.** A skill is instructions read and followed by the agent you
+are already using, so there is nothing for it to authenticate. Only the standalone benchmark script
+reaches a model, and only when you run it directly.
 
 Nothing else in this repository makes a network call.
 
@@ -65,10 +75,11 @@ Nothing else in this repository makes a network call.
   pinned commit (`TOOLKIT_REF`), bumped deliberately rather than tracked against a moving branch.
 - **Third-party runtime dependencies require their own ADR**
   ([ADR 0009](docs/internal/decisions/0009-python-node-toolchain-split.md): "any third-party
-  dependency requiring its own ADR justification"). Python currently carries two:
-  `jsonschema` (`contract/validate.py`'s schema validation) and `anthropic` (the bench harness's
-  live-model calls, ADR 0025 above). Node carries zero. Adding one, in either language, needs a
-  decision doc under `docs/internal/decisions/` before it lands.
+  dependency requiring its own ADR justification"). Python currently carries exactly one:
+  `jsonschema`, for `contract/validate.py`'s schema validation. The second, `anthropic`, is gone:
+  the bench harness reaches a model through the Claude Code CLI instead, so it needs no API client
+  (ADR 0030 above, which supersedes ADR 0025). Node carries zero. Adding one, in either language,
+  needs a decision doc under `docs/internal/decisions/` before it lands.
 - **Releases are tag-triggered and version-guarded.** Pushing a tag matching `v*` runs
   `release.yml`, which re-runs the full CI suite, then fails the build if the tag does not equal
   every version-bearing manifest listed in `scripts/lib/version-manifest.mjs`
@@ -77,8 +88,9 @@ Nothing else in this repository makes a network call.
 
 ## Supported versions
 
-Pre-1.0: only the version at the tip of `main` is supported. There is no version-support matrix yet
-because there is only one shipped version, `v0.1.0`.
+Pre-1.0: only the most recent release is supported. Fixes land at the tip of `main` and ship in the
+next release rather than being backported to earlier tags, so there is no version-support matrix and
+there will not be one before 1.0.
 
 ## Reporting a vulnerability
 

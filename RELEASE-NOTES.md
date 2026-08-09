@@ -4,7 +4,25 @@ Curated, user-facing highlights. For the full technical history, see `CHANGELOG.
 
 ## Unreleased
 
-Nothing yet.
+**The API key is gone from this project entirely, including from our own benchmark tool.**
+
+No skill behavior changed. No criterion was added, removed, or re-scored. No run envelope was touched.
+
+### What changed
+
+The last release explained that you never needed an API key to use these skills, and split the packaging so it stopped looking like you did. One thing stayed behind: our own benchmark tool, the one that produces the published performance numbers, still called a paid API and still needed a key to run.
+
+That is gone too. The benchmark now reaches the model through Claude Code itself, signing in from a Claude subscription rather than a key. The API client package has been deleted from this repository, along with the separate dependency file that carried it.
+
+**There is now no API key anywhere in this project, for you or for us.** Installing it pulls exactly one small open-source package, which is all it ever needed.
+
+### Why this is more than tidiness
+
+We publish numbers about how well our own skills perform. The tool that produces those numbers exists so that somebody who does not trust us can re-run the measurement and check. That argument only works if re-running it is actually practical, and requiring a separate paid API account put a bill between a skeptical reader and the receipt. Now it costs whatever your existing Claude subscription already costs.
+
+### Also
+
+We found and corrected three documents that still described the old arrangement. One of them was our security policy, which is public, and which was telling readers we required a key we no longer use.
 
 ## 0.1.3 - 2026-08-07
 
