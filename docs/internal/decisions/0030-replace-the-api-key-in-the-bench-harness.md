@@ -176,11 +176,95 @@ platform's command-line argument limit. Baseline cells, which carry no system pr
 the same run. The system prompt now goes to a temp file via `--append-system-prompt-file` and the
 user prompt over stdin, so neither can grow into that failure again.
 
-**Half two, fidelity, is not done.** The judged lane is still a prompt this harness assembles,
-which is the second definition of the protocol this ADR set out to delete. Closing it means asking
-Claude Code to run the real skill via `--plugin-dir` and returning its envelope, which would also
-delete `build_judged_system_prompt`, `call_judged_lane`, `_parse_judged_findings`, and the lane
-merge. The mechanism is already proven; this is a restructuring, not an unknown.
+**Half two, fidelity, landed 2026-08-08.** The judged lane no longer assembles a prompt. The
+harness stages the artifact, runs the real skill through `claude --plugin-dir`, and keeps the
+envelope it emits. `build_judged_system_prompt`, `call_judged_lane`, `_parse_judged_findings`,
+`merge_lanes`, `assemble_merged_envelope`, the four response-coercion helpers, and the harness's
+own `run_scripted_lane_subprocess` are gone: `bench/run_bench.py` went from 1124 lines to 951, and
+what remains contains no second copy of the critique protocol.
+
+The division of responsibility is now explicit, and it is the point of the change. The **skill**
+owns `findings` and `summary`, because the skill is what is being measured and it runs both of its
+own lanes and applies its own bounded-output rule. The **harness** owns the `run` block, because
+the skill is deliberately never told the corpus path, the pinned model id, or the run timestamp.
+
+**This half was not the pure restructuring the previous session predicted, and the reason is worth
+recording.** Handing the real skill a real path exposes a leak the old design made impossible.
+`bench/corpus/<domain>/<id>.manifest.json` is the complete seeded-defect answer key: criterion,
+location, and expected severity for every plant. It sits directly beside `<id>.md`. That was
+harmless while the judged lane inlined the artifact's **text** into a prompt, because the model had
+no filesystem. It stops being harmless the moment the lane runs the real skill, because
+`agents/critique-critic.md` declares `Read` and `Bash` and the protocol tells it to run
+`scripts/checks.py` against a path. A skill that can read the answer key it is scored against is
+not being measured at all.
+
+`bench/generator/README.md`'s leak rule anticipated the adjacent risk and not this one. Rules 1
+through 3 cover the artifact's own text; rule 4 covers the naming of corpus paths, on the stated
+grounds that "the artifact path is handed to the skill under test". None of them cover a sibling
+answer key, because until this change nothing could read one. So `staged_artifact()` is new work,
+not a preserved constraint: it copies the artifact alone into a fresh temp directory, verifies it
+against the manifest sha256 on the way through, and the process runs with `cwd` set to that
+directory and names the file by its bare filename, so the corpus path never reaches the skill.
+Rule 4 is what makes keeping the real filename safe.
+
+**Acceptance status, stated precisely, because the two gates are easy to conflate.**
+
+| Gate | What it proves | Status |
+|---|---|---|
+| Wiring | The rewritten path runs, and produces a contract-valid envelope | **Attempted 2026-08-09, did not pass.** See below |
+| Fidelity (Open question 2) | The replacement measures the same thing: a partial re-run landing within measured run-to-run variance of the committed figures | **Not run,** and blocked behind the wiring gate |
+
+### The wiring gate attempt, 2026-08-09: a blocker the unit tests could not see
+
+A live k=1 run to a fresh `--out-dir` produced **no envelope and no error**. Bisected with bounded
+probes, each `claude -p` against the pinned haiku tier:
+
+| Probe | Result |
+|---|---|
+| Trivial prompt, no plugin | exit 0, immediate |
+| Trivial prompt, `--plugin-dir` | exit 0, immediate |
+| Read a staged file (tool use, no plugin) | exit 0, immediate |
+| Ask the plugin to name its skills | exit 0, all six `critique-*` skills present |
+| **Run the real skill on a staged artifact** | **exit 124 at 240s, zero stdout, zero stderr**, with `--permission-mode bypassPermissions` |
+
+So the plugin loads, the skills register, tool use works, and authentication is fine. What does not
+finish is a full skill run.
+
+**The skill-listing probe found the reason, and it is worse than a timeout.** The nested run offered
+**97 skills**. The six under test were among them; the other ninety-one came from the operator's own
+ambient Claude Code configuration, along with whatever plugins, MCP servers and hooks that
+configuration carries. `--plugin-dir` adds a plugin, it does not isolate an environment.
+
+That is a measurement defect, not just a performance problem:
+
+1. **The environment is the operator's, so the figures are not reproducible.** A maintainer with 97
+   skills and a clean CI runner with 6 are not running the same benchmark, and nothing in the
+   envelope records which one produced it.
+2. **Other skills can influence the critique.** Several ambient skills describe reviewing or
+   authoring documents, and the router sees all of them.
+3. **The old design was immune to this by construction.** It sent an assembled system prompt to a
+   plain API call, so the environment was exactly what the harness built and nothing else.
+
+**Consequence for this ADR.** The fidelity half is implemented and unit-tested, but it cannot be
+accepted until a skill run completes in a *controlled* environment. The remaining work is
+environment isolation, not the restructuring itself: the harness has to pin what the nested run
+loads rather than inheriting the operator's configuration. Until that exists, a figure produced
+this way would be less trustworthy than the one it replaced, which is the opposite of the point.
+
+**This is the third time on this ADR that running the thing found what reading it could not**, after
+the `WinError 206` argument limit and the sibling-manifest leak. All three were invisible to a
+passing test suite.
+
+Passing the wiring gate does **not** close this ADR. The 2026-08-07 acceptance gate above already
+ran one k=1 skill invocation by hand and passed; repeating it through the harness proves the
+plumbing, not that the numbers are comparable. Until the fidelity gate runs, the committed figures
+in `bench/results/` remain the figures produced by the **old** judged lane, and nothing may claim
+otherwise.
+
+**Open question 1 gets worse under this half, not better.** Every judged cell is now a full
+plugin-loading agent invocation rather than one API call carrying an assembled prompt. Whatever the
+k=5 grid cost before, it costs more now, and that has to be measured before a full re-run is
+scheduled rather than discovered partway through one.
 
 Splitting it this way was deliberate: half one removes the API key completely and is small enough
 to verify in one live run, and half two changes what is measured and deserves its own scrutiny.
