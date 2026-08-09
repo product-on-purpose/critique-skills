@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-08-09
+
+The release where the API key leaves the project entirely, and where the benchmark stops carrying a second copy of the thing it measures. No skill behavior changed, no criterion was added, removed, or re-scored, and no run envelope was touched.
+
 ### Changed
 
 - **The benchmark harness reaches the model through the Claude Code CLI, and the `anthropic` SDK is gone from this repository entirely.** `bench/run_bench.py` used to call the Anthropic Messages API directly, which meant the one command that reproduces the published figures needed an `ANTHROPIC_API_KEY` that nothing else here has ever needed, and a reasonable reader concluded the library wanted a key from them. `_client_factory()` now returns a client exposing the same `messages.create(...)` surface the SDK did, so both lane call sites and every SDK-shaped test double are unchanged, and it authenticates from a Claude subscription rather than a key. `anthropic` and the `requirements-bench.txt` that carried it are deleted, leaving `requirements.txt` at `jsonschema` alone, and `bench.yml` installs the CLI and passes a `CLAUDE_CODE_OAUTH_TOKEN` minted by `claude setup-token`. **There is now no `ANTHROPIC_API_KEY` anywhere in this repository, for a user or for a maintainer.** [ADR 0030](docs/internal/decisions/0030-replace-the-api-key-in-the-bench-harness.md) records the decision and supersedes [ADR 0025](docs/internal/decisions/0025-anthropic-sdk-dependency.md); CI authentication was probed separately on a clean `ubuntu-24.04` runner before the change shipped. Verified by a live run rather than by inspection: `critique-clarity` against a corpus artifact on the pinned haiku tier, with no key in the environment, produced a contract-valid envelope with 9 findings, 5 scripted and 4 judged, citing real criterion IDs.
