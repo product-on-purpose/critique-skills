@@ -105,19 +105,34 @@ Follow these four passes in order. Do not skip ahead to severity or fixes while 
    `docs/reference/severity-scale.md` (impact, then frequency, then persistence) and this skill's
    own `references/severity-anchors.md`. Do not assign severity while still discovering problems;
    that inflates it.
-4. **Assemble the envelope. Do not do this pass by hand.** Write every finding from both lanes as
-   JSON and pipe it to the library's own assembler:
+4. **Assemble the envelope. Do not do this pass by hand.** Write every finding from both lanes to
+   one JSON file, then hand that file to the library's own assembler. Two steps, in this order:
 
    ```
-   python3 skills/_shared/merge.py --skill <this-skill> --artifact <artifact>
+   # 1. Write the combined pool. Use an ABSOLUTE path; you are about to change directory.
+   cat > /absolute/path/to/findings.json << 'EOF'
+   {"findings": [ ...every finding from both lanes... ]}
+   EOF
+
+   # 2. Assemble, from this skill's directory, exactly as you ran scripts/checks.py in pass 2.
+   python3 scripts/merge.py --artifact <the SAME artifact path you gave checks.py> --findings /absolute/path/to/findings.json
    ```
 
    It ranks by severity, applies the output bound (every severity 3 and 4 finding, plus at most
    five below that threshold), assigns `F-NNN` ids after ranking, counts everything suppressed into
    `summary.suppressed_count` so nothing disappears uncounted, builds `summary.by_severity` over
    **everything found** rather than only what survived bounding, computes the gate, normalises
-   prose to the contract's rules, and validates before printing. Same path shape as
-   `scripts/checks.py` in pass 2. Add `--severity-3-threshold N` if a threshold was supplied.
+   prose to the contract's rules, and validates before printing.
+
+   `scripts/merge.py` sits beside `scripts/checks.py` and is run the same way, from the same
+   directory, so if pass 2 worked then this works. It knows its own skill name from its own
+   location, so there is no `--skill` to get wrong. Use the same artifact path you gave
+   `checks.py`. Add `--severity-3-threshold N` if a threshold was supplied.
+
+   **If it fails, say so and stop.** Report the command and its error as your final message.
+   Never substitute a prose write-up of the findings: the output contract is one envelope or
+   nothing, and a readable summary that is not an envelope looks like success to everything
+   downstream while being unusable by it.
 
    Return its output verbatim. It prints nothing at all rather than print an invalid envelope, so
    if you have output you have a valid one, and editing it afterwards makes it unvalidated again.

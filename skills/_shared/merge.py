@@ -216,16 +216,26 @@ def _read_findings(text: str) -> list[Mapping[str, Any]]:
         return payload
     if isinstance(payload, dict) and isinstance(payload.get("findings"), list):
         return payload["findings"]
-    raise MergeError('expected {"findings": [...]} or a bare [...] on stdin')
+    raise MergeError('expected {"findings": [...]} or a bare [...]')
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        prog="python skills/_shared/merge.py",
+        # Named after however it was actually invoked, which is usually a skill's own
+        # scripts/merge.py shim. A fixed prog string sent a real session chasing
+        # skills/_shared/merge.py, a path that does not resolve from where it was standing, at the
+        # exact moment the usage message was supposed to be helping it recover.
+        prog=f"python3 {Path(sys.argv[0]).name}" if sys.argv and sys.argv[0] else "merge.py",
         description="Assemble one contract-valid run envelope from merged critique findings.",
     )
     parser.add_argument("--skill", required=True, help="Skill name, e.g. critique-clarity.")
     parser.add_argument("--artifact", required=True, type=Path, help="Path to the critiqued artifact.")
+    parser.add_argument(
+        "--findings",
+        default=None,
+        type=Path,
+        help="JSON file of findings. Omit to read them from stdin instead.",
+    )
     parser.add_argument(
         "--artifact-label",
         default=None,
@@ -237,10 +247,30 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
+        if args.findings is not None:
+            if not args.findings.is_file():
+                print(f"merge: --findings {args.findings} does not exist", file=sys.stderr)
+                return 1
+            raw = args.findings.read_text(encoding="utf-8")
+        else:
+            raw = sys.stdin.read()
+            if not raw.strip():
+                # The observed failure: invoked with nothing on stdin, which is easy to do when the
+                # command also has to `cd` to reach this script. Say what to do rather than let a
+                # JSON parser error stand, because the run that hit this abandoned the tool instead
+                # of correcting the call.
+                print(
+                    "merge: no findings on stdin. Either pipe them in "
+                    "(cat findings.json | merge.py ...) or pass --findings <file>, "
+                    "which avoids stdin entirely and is easier when the command has to cd first.",
+                    file=sys.stderr,
+                )
+                return 1
+
         envelope = assemble(
             skill=args.skill,
             artifact=args.artifact,
-            findings=_read_findings(sys.stdin.read()),
+            findings=_read_findings(raw),
             model=args.model,
             timestamp=args.timestamp,
             severity_3_threshold=args.severity_3_threshold,
