@@ -4,7 +4,7 @@
 > drift-checked (G4). Edit the source, not this file. Overview and positioning are
 > in [`README.md`](README.md); agent guidance is in [`AGENTS.md`](AGENTS.md).
 
-**Tier:** Silver (convergent). Standard 0.12. Version 0.1.4. Self-validating: `node scripts/check.mjs`.
+**Tier:** Silver (convergent). Standard 0.12. Version 0.1.5. Self-validating: `node scripts/check.mjs`.
 
 ## Components
 
