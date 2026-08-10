@@ -211,6 +211,59 @@ def test_the_cli_accepts_a_bare_list_of_findings(artifact: Path) -> None:
     assert validate_document(json.loads(proc.stdout)).ok
 
 
+def test_the_cli_reads_findings_from_a_file(artifact: Path, tmp_path: Path) -> None:
+    """--findings, because stdin plumbing is what actually broke it in the field.
+
+    Measured in a real session 2026-08-09: the run invoked merge.py with nothing on stdin, got
+    "stdin is not valid JSON", then wrote its findings to a JSON file and abandoned the assembler.
+    Writing a file first is the natural move for an agent, especially when the command also has to
+    `cd` to reach the script, so the tool accepts what it was already doing.
+    """
+    findings_file = tmp_path / "findings.json"
+    findings_file.write_text(json.dumps({"findings": [_finding("PLAIN-ACTIVE", 2)]}), encoding="utf-8")
+
+    proc = subprocess.run(
+        [
+            sys.executable,
+            str(REPO_ROOT / "skills" / "_shared" / "merge.py"),
+            "--skill",
+            "critique-clarity",
+            "--artifact",
+            str(artifact),
+            "--findings",
+            str(findings_file),
+        ],
+        capture_output=True,
+        text=True,
+        cwd=REPO_ROOT,
+    )
+
+    assert proc.returncode == 0, proc.stderr
+    assert validate_document(json.loads(proc.stdout)).ok
+
+
+def test_an_empty_stdin_says_what_to_do_about_it(artifact: Path) -> None:
+    """The observed failure mode deserves an actionable message rather than a JSON parser error,
+    because the run that hit it gave up on the tool instead of correcting the call."""
+    proc = subprocess.run(
+        [
+            sys.executable,
+            str(REPO_ROOT / "skills" / "_shared" / "merge.py"),
+            "--skill",
+            "critique-clarity",
+            "--artifact",
+            str(artifact),
+        ],
+        input="",
+        capture_output=True,
+        text=True,
+        cwd=REPO_ROOT,
+    )
+
+    assert proc.returncode != 0
+    assert "--findings" in proc.stderr, "the error must name the flag that avoids stdin entirely"
+
+
 def test_the_cli_fails_loudly_rather_than_printing_an_invalid_envelope(artifact: Path) -> None:
     """Never print something that does not validate: a downstream reader cannot tell a broken
     envelope from a real one, and runner.py already holds this line for the scripted lane.
