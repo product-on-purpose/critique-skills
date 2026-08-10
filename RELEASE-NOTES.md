@@ -6,6 +6,30 @@ Curated, user-facing highlights. For the full technical history, see `CHANGELOG.
 
 Nothing yet.
 
+## 0.1.5 - 2026-08-09
+
+**The skills stop doing arithmetic in their heads.**
+
+No criterion was added, removed, or re-scored. No run envelope was touched. What changed is the last step of how a critique is assembled.
+
+### The problem
+
+Every critique ends by combining what the automated checks found with what the model judged, ranking it, keeping the important findings, counting what was left out, and tallying the result. Until now the skills were told to do that in prose, by hand, every time.
+
+They were not reliable at it. Measured against a small model, **only 2 runs in 7 produced a usable report.** The critiques themselves were fine. The bookkeeping was wrong: a tally that did not add up, or a field filled in where it should have been left empty. Good work, discarded over arithmetic.
+
+The counting is now done by a script that ships with each skill, which also refuses to hand back a report that does not pass its own validation. **After the change: 3 of 4 runs usable, and none of the remaining failures were bookkeeping.**
+
+### The part worth admitting
+
+The first two attempts at this fix did not work, and we only found out by running the skills the way you actually use them: from an ordinary folder, with the plugin installed somewhere else. The script could not be found from there, and each time a skill could not find it, it fell back to writing a readable summary instead of a structured report.
+
+That is a worse failure than the one being fixed, because a readable summary looks fine to a person and is unusable by anything automated. The script now sits in the same place as the checks each skill already runs, which is a path that has worked in every release so far.
+
+### Also
+
+The benchmark tool that produces our published numbers no longer inherits whatever else you happen to have installed when it runs, so two people running it now measure the same thing.
+
 ## 0.1.4 - 2026-08-09
 
 **The API key is gone from this project entirely, including from our own benchmark tool.**
