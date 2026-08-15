@@ -349,6 +349,28 @@ prompt-injection-resistance probe carrying the
 `run.stripped_context` field. They are contract-valid and remain on disk. Including them inflates
 `critique-clarity` on sonnet from 20 scored runs to 22 and from 40 consistency pairs to 51.
 
+**Every figure on this page is a k=5 pool, and the five runs behind it disagree more than the pooled
+figure suggests.** [`variance.json`](variance.json) publishes the spread: for each cell and metric,
+what each single repetition would have reported on its own, and a 95 percent band on the pooled
+statistic. It is computed by `python -m bench.variance` from these same committed envelopes, with no
+new runs, and it refuses to emit anything unless pooling the repetitions back together reproduces
+the numbers on this page exactly (currently 104 of 104 cell-metrics).
+
+Read it before reading any single figure here as precise. `critique-accessibility` 0.1.0 on sonnet
+publishes a location recall of **0.306** from five runs that measured **0.529, 0.294, 0.353, 0.118
+and 0.235**. The median band width across the skill cells is 0.082 and the widest is 0.247. Two
+things follow that are not obvious from the tables: **haiku's bands are 2.3x wider than sonnet's**,
+so the cheaper tier is also the less reliable one, and **consistency has no band at all**, because
+it compares pairs of envelopes and is undefined for a single repetition, so the 0.309 floor below
+carries no uncertainty estimate.
+
+The band exists because
+[ADR 0030](../../docs/internal/decisions/0030-replace-the-api-key-in-the-bench-harness.md)'s fidelity
+gate accepts a re-run whose figures land "within measured run-to-run variance of the committed
+ones", and that variance had never been measured, so the gate could not be failed.
+[ADR 0031](../../docs/internal/decisions/0031-fidelity-gate-acceptance-band.md) records the method,
+the gate specification, and what the band does not cover.
+
 ## The numbers
 
 Overall lane (every finding), from [`results.json`](results.json). Full tables including every baseline
