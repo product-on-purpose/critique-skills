@@ -466,6 +466,62 @@ in particular makes a k=5 grid over six skills and two tiers a many-hour job rat
 many-minute one. That has to be planned for and budgeted before a full re-run is scheduled, not
 discovered partway through one.
 
+### Amendment, 2026-08-16: the sonnet row above is not a duration, and the cause is not speed
+
+**Read the sonnet row exactly as written: "exceeded 9 minutes, killed before finishing". No sonnet
+cell has ever completed through this lane.** It is a timeout, not a measurement, and it has been
+misread as "a sonnet cell takes a bit over nine minutes" in the `CHANGELOG`, in session handovers,
+and in [ADR 0031](0031-fidelity-gate-acceptance-band.md)'s recommendation, which is corrected there.
+
+Re-measured 2026-08-16 against a longer ceiling. A k=1 probe of `critique-clarity` on sonnet, four
+cells, one per clarity artifact, ran for **60 minutes and wrote 0 of 4 envelopes**: every cell hit
+`subprocess.TimeoutExpired` at the harness's **900 second** ceiling, which is hardcoded in
+`_ClaudeCodeMessages.__init__` and `ClaudeCodeClient.__init__` with no CLI flag to raise it.
+
+**A single cell was then streamed with no timeout, and the time is not going into inference.** The
+run reaches the skill in 3.3 seconds and delegates to the critic subagent at 6.6 seconds. The
+subagent then starts hunting the filesystem for the plugin it is supposed to be running:
+
+```
++35.4s  Bash: ls /e/Projects/ ; ls "E:/Projects" ; find / -maxdepth 2 -iname "Projects"
++47.3s  Bash: find "/e/Projects/product-on-purpose-critique-skills" -maxdepth 2
++51.7s  Bash: find "/e/Projects" -maxdepth 1 -iname "*critique*" ...
++55.6s  Bash: find /e -maxdepth 3 -iname "*critique-skills*" -type d
+                find /c -maxdepth 4 -iname "*critique-skills*" -type d
+```
+
+It never returned from that last pair of whole-drive scans. It had come within one directory level
+of the answer, searching `/e/Projects` at depth 1 when the repository sits at
+`/e/Projects/product-on-purpose/critique-skills`, and escalated to scanning two entire drives
+rather than widening by one.
+
+**The cause is a repo-relative path in this repository's own subagent definition.**
+`agents/critique-critic.md`, "Tools", instructs the critic to run the scripted lane as
+`python3 skills/<skill>/scripts/checks.py <artifact>`. That resolves only when the working directory
+is the repository root. A benchmark cell runs with `cwd` set to the manifest-free staging directory
+by design, so the path cannot resolve, and the subagent is given a skill *name* but never a skill
+*location*: `SKILL.md`'s "Delegation" section passes "only the artifact (path or inline content),
+this skill's name, and, if the caller supplied one, a severity-3 gate threshold".
+
+**This is the same defect class v0.1.5 fixed one layer up and did not fix here.** PR #19 established
+that "a path referenced from `skills/_shared/` was unreachable in a real session" and moved the
+assembler beside `scripts/checks.py` because that path had resolved in every shipped release. It
+rewrote pass 4 in the six `SKILL.md` files and the critic's protocol. The critic's **Tools** section
+kept its repo-relative invocation, and the instruction a run actually follows is the one it reads.
+
+**Two consequences, and the second is larger than this ADR.**
+
+First, the tier split is not a cost split. Haiku completes because it runs the protocol inline;
+sonnet fails because it delegates, and the delegated critic cannot find what it was asked to run.
+So the fidelity gate cannot be run on sonnet at all, and **this harness can currently reproduce only
+the haiku half of the published grid**.
+
+Second, and outside the benchmark entirely: **a user who invokes a critique skill from any directory
+other than the repository root, on a tier that chooses to delegate, hits this same wall.** The
+benchmark surfaced it because staging guarantees a foreign working directory on every run, which is
+the environment a user is always in. It is a user-facing defect, not a measurement artifact, and it
+is recorded here pending its own decision record and fix.
+
 **This is the fourth and fifth time on this ADR that running the thing found what reading it could
 not**, after the `WinError 206` argument limit, the sibling-manifest leak, and the ambient-config
 leak. Every one was invisible to a passing test suite.
