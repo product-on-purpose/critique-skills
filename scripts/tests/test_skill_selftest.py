@@ -23,6 +23,8 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -678,3 +680,89 @@ def test_each_failure_mode_produces_a_distinct_rule_set(tmp_path):
         "under-20-trigger-evals": "trigger-evals-too-few",
     }
     assert len(set(rules.values())) == len(rules)
+
+
+# --------------------------------------------------------------------------
+# How the nested pytest is invoked, which two tests in this file used to fail
+# intermittently because of
+# --------------------------------------------------------------------------
+
+
+class _RecordingRun:
+    """Stands in for subprocess.run so the invocation can be asserted without paying for it."""
+
+    def __init__(self, returncode=0, stdout="", stderr=""):
+        self.calls = []
+        self._result = subprocess.CompletedProcess([], returncode, stdout, stderr)
+
+    def __call__(self, argv, **kwargs):
+        self.calls.append((argv, kwargs))
+        return self._result
+
+
+def test_the_nested_pytest_cannot_reach_a_shared_temp_directory(tmp_path, monkeypatch):
+    """The argument must be relative to a working directory inside the skill.
+
+    An absolute argument combined with a working directory elsewhere leaves pytest unable to build
+    a collection tree from its rootdir to the argument when the two are on different drives, which
+    is exactly the case for a skill written into a temp directory. It then walks up from the
+    argument and creates a directory collector for the temp root, and listing that directory races
+    every other process on the machine. Measured 2026-08-15: under deliberate temp churn the old
+    invocation failed 10 of 10 runs with "ERROR collecting test session / FileNotFoundError
+    [WinError 2]", naming a directory belonging to an unrelated project, and this one 0 of 10.
+    """
+    skill_dir = write_valid_skill(tmp_path)
+    recorder = _RecordingRun()
+    monkeypatch.setattr(selftest.subprocess, "run", recorder)
+
+    selftest.check_pytest(skill_dir)
+
+    (argv, kwargs) = recorder.calls[0]
+    target = argv[-2]
+    assert not Path(target).is_absolute(), f"nested pytest was given an absolute path: {target}"
+    assert Path(kwargs["cwd"]) == skill_dir
+
+
+def test_the_nested_pytest_keeps_this_repository_importable(tmp_path, monkeypatch):
+    """Moving the working directory off the repository root would otherwise stop a real skill's
+    tests importing skills._shared and contract, which running from the root provided implicitly."""
+    skill_dir = write_valid_skill(tmp_path)
+    recorder = _RecordingRun()
+    monkeypatch.setattr(selftest.subprocess, "run", recorder)
+
+    selftest.check_pytest(skill_dir)
+
+    (_argv, kwargs) = recorder.calls[0]
+    repo_root = Path(selftest.__file__).resolve().parent.parent
+    assert str(repo_root) in kwargs["env"]["PYTHONPATH"].split(os.pathsep)
+
+
+def test_a_failed_nested_run_reports_the_exit_code_and_both_streams(tmp_path, monkeypatch):
+    """The previous version kept the last 20 lines of stdout and used stderr only when stdout was
+    empty, so a failure with any stdout at all discarded stderr and never said what the exit code
+    was. It reported the collection error above faithfully enough to be seen and nowhere near well
+    enough to be diagnosed, which is why that failure went three sessions without a cause."""
+    skill_dir = write_valid_skill(tmp_path)
+    recorder = _RecordingRun(returncode=2, stdout="a line of stdout", stderr="the real cause")
+    monkeypatch.setattr(selftest.subprocess, "run", recorder)
+
+    issues = selftest.check_pytest(skill_dir)
+
+    assert len(issues) == 1
+    detail = issues[0].message
+    assert "exited 2" in detail
+    assert "a line of stdout" in detail
+    assert "the real cause" in detail
+
+
+def test_a_long_failure_says_what_it_elided(tmp_path, monkeypatch):
+    """Truncation is fine; silent truncation is what hid the cause."""
+    skill_dir = write_valid_skill(tmp_path)
+    stdout = "\n".join(f"line {i}" for i in range(200))
+    recorder = _RecordingRun(returncode=1, stdout=stdout)
+    monkeypatch.setattr(selftest.subprocess, "run", recorder)
+
+    detail = selftest.check_pytest(skill_dir)[0].message
+
+    assert "earlier line(s) elided" in detail
+    assert "line 199" in detail
