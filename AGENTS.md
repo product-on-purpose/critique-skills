@@ -123,10 +123,41 @@ that inherits the caller's model measures nothing reproducible.
 
 Point every live run at a fresh `--out-dir`. `bench/results/runs*/` is immutable measurement
 evidence; the harness refuses an `--out-dir` that already holds envelopes for exactly that reason.
+`--out-dir` defaults to `bench/results/runs`, so a live run that omits it is refused:
+
+```
+python bench/run_bench.py --skills critique-clarity --k 5 --tiers "" --out-dir bench/results/runs-local
+```
+
+A dispatch names its own directory. `bench.yml` writes to `bench/results/runs-dispatch-<run id>`
+unless its `out_dir` input says otherwise, which is what makes a live dispatch possible at all: it
+passed no `--out-dir` until v0.1.6 and so exited at the immutability guard before its first model
+call. `bench/tests/test_bench_workflow.py` holds that contract.
 
 See `bench/README.md` for the corpus, metrics, and results design, and
 `docs/explanation/the-benchmark-harness.md` for what the harness does step by step and which of its
 steps touch a model at all.
+
+### Variance and the fidelity gate's acceptance band
+
+`bench/results/results.json` pools every k=5 repetition into one figure per cell, so no published
+number carries a spread. `bench/results/variance.json` supplies it, and with it the threshold
+[ADR 0030](docs/internal/decisions/0030-replace-the-api-key-in-the-bench-harness.md)'s fidelity gate
+needs to be failable at all. Regenerate it from committed evidence, calling no model:
+
+```
+python -m bench.variance --corpus bench/corpus --runs bench/results/runs --run-set p3-2026-07-31 --runs bench/results/runs-cal1 --run-set cal1-2026-08-01 --committed bench/results/results.json --out bench/results/variance.json
+```
+
+`--committed` is what makes the output trustworthy: the command refuses to emit a band unless
+pooling every repetition reproduces `results.json` exactly, and refuses equally if no cell matched
+anything at all. Omitting it produces an unverified file and says so.
+
+The gate specification, the measured bands, and what they do not cover are in
+[ADR 0031](docs/internal/decisions/0031-fidelity-gate-acceptance-band.md). Two results worth knowing
+before planning any re-run: **haiku's bands are 2.3x wider than sonnet's**, so the cheap tier is the
+weak test, and **consistency cannot be banded by this method**, so the 0.309 floor has no
+uncertainty estimate.
 
 ### Release (`.github/workflows/release.yml`)
 
