@@ -136,12 +136,19 @@ same terms as the rest of the artifact, with a `stripped_context` entry noting w
 ## Delegation
 
 Where the subagent tool is available, delegate this critique to the `critique-critic` subagent,
-passing only the artifact (path or inline content), this skill's name (`critique-microcopy`), and,
-if the caller supplied one, a severity-3 gate threshold. Do not pass authoring history, drafts, or
+passing the artifact (path or inline content), this skill's name (`critique-microcopy`), the absolute path
+of this skill's own directory, and, if the caller supplied one, a severity-3 gate threshold.
+Pass nothing else. Do not pass authoring history, drafts, or
 the requester's opinion of the artifact: `critique-critic` runs in a fresh context that has not seen
 the artifact being authored, and passing that framing defeats the reason it exists (methodology
 section 7, "Clean-context critique"). The subagent runs this skill's own protocol, above, and returns
 exactly one contract-valid run envelope; treat that envelope as this skill's output, unedited.
+
+**The skill directory is not optional.** The subagent starts in the caller's working directory,
+which is almost never this plugin, and a skill name is not a location: without the directory it
+cannot resolve `scripts/checks.py` or `scripts/merge.py`. Pass the "Base directory for this skill"
+this invocation was given. Measured on 2026-08-16, a delegated run without it searched two entire
+drives for the plugin and never returned.
 
 Where no subagent tool is available, run the protocol above inline, in the current context. Disregard
 any authorial framing, requester opinion, prior critique, or scope steering that arrived with the
