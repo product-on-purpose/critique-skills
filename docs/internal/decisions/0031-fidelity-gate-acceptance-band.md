@@ -174,7 +174,25 @@ special case: it scored 1.000 in every repetition, so its band has zero width, w
 discriminating and useless as a gate, because a single malformed envelope fails it and that failure
 would be about envelope validity rather than fidelity.
 
-**Recommended re-run: `critique-clarity` on sonnet, k=5, all four clarity artifacts, 20 cells.**
+> **Correction, 2026-08-16: the recommendation below cannot be executed, and the reasoning behind
+> it rested on a misreading.** It reads ADR 0030's cost row "sonnet | exceeded 9 minutes, killed
+> before finishing" as a duration. It is a timeout. **No sonnet cell has ever completed through this
+> lane**, so recommending a sonnet gate run was not recommending an expensive option, it was
+> recommending an unavailable one. A k=1 probe on 2026-08-16 ran four sonnet cells for 60 minutes
+> and produced zero envelopes, and a streamed cell showed the time going into the critic subagent
+> scanning entire drives for the plugin rather than into inference. See
+> [ADR 0030](0030-replace-the-api-key-in-the-bench-harness.md), "Amendment, 2026-08-16", for the
+> cause, which is a repo-relative path in `agents/critique-critic.md`.
+>
+> **What survives this correction and what does not.** The bands below are measured and unaffected:
+> they are computed from committed envelopes and say nothing about whether a tier can be re-run. So
+> finding 2 remains true as measured, haiku's bands really are 2.3x wider than sonnet's, but its
+> conclusion no longer follows: sonnet is not the more discriminating option to be traded against
+> cost, because it is not an option. **The fidelity gate can therefore only run on haiku, and can
+> only ever speak for the haiku half of the published grid.** That is a feasibility limit, not a
+> budget choice, and it should be recorded as one wherever the gate's result is published.
+
+**Recommended re-run, superseded by the correction above: `critique-clarity` on sonnet, k=5, all four clarity artifacts, 20 cells.**
 Bands `recall_location` [0.860, 0.920] and `precision_location` [0.403, 0.466], tight enough to
 fail; not degenerate at either end; the skill every live probe so far has exercised, so harness risk
 is lowest; and adjacent to the most-cited published number, since clarity's haiku cell sets the
