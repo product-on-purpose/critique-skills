@@ -123,6 +123,16 @@ that inherits the caller's model measures nothing reproducible.
 
 Point every live run at a fresh `--out-dir`. `bench/results/runs*/` is immutable measurement
 evidence; the harness refuses an `--out-dir` that already holds envelopes for exactly that reason.
+`--out-dir` defaults to `bench/results/runs`, so a live run that omits it is refused:
+
+```
+python bench/run_bench.py --skills critique-clarity --k 5 --tiers "" --out-dir bench/results/runs-local
+```
+
+A dispatch names its own directory. `bench.yml` writes to `bench/results/runs-dispatch-<run id>`
+unless its `out_dir` input says otherwise, which is what makes a live dispatch possible at all: it
+passed no `--out-dir` until v0.1.6 and so exited at the immutability guard before its first model
+call. `bench/tests/test_bench_workflow.py` holds that contract.
 
 See `bench/README.md` for the corpus, metrics, and results design, and
 `docs/explanation/the-benchmark-harness.md` for what the harness does step by step and which of its

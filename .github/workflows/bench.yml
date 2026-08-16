@@ -13,6 +13,13 @@ name: Bench
 # 2026-08-08). run_bench.py checks for the CLI up front, so a misconfigured dispatch fails loudly
 # and names the remedy instead of failing at the first model call.
 #
+# Every dispatch names its own --out-dir, and that is load-bearing rather than tidy. run_bench.py
+# defaults --out-dir to bench/results/runs, which holds the committed measurement evidence every
+# published figure is recomputed from, and its immutability guard refuses any directory that
+# already holds envelopes. A dispatch passing no --out-dir therefore reached that guard and exited
+# 1 before any model call. The guard sits after --dry-run returns, so a dry run was unaffected and
+# the failure was invisible to the only dispatch this workflow had ever had.
+#
 # Results are never pushed directly to main: a live run that produces new envelopes commits them to
 # a fresh branch and pushes only that branch, for review as a diff.
 
@@ -31,6 +38,11 @@ on:
         type: string
       tiers:
         description: 'Comma-separated model tier list (blank = the two pinned tiers)'
+        required: false
+        default: ''
+        type: string
+      out_dir:
+        description: 'Where envelopes are written. Blank uses a fresh per-dispatch directory; the harness refuses one that already holds envelopes.'
         required: false
         default: ''
         type: string
@@ -64,7 +76,10 @@ jobs:
       - name: Run the bench harness
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-        run: python bench/run_bench.py --skills "${{ inputs.skills }}" --k "${{ inputs.k }}" --tiers "${{ inputs.tiers }}" ${{ inputs.dry_run && '--dry-run' || '' }}
+          # Keyed on the run id so two dispatches can never collide, and kept under bench/results/
+          # because the publish step below stages exactly that path.
+          BENCH_OUT_DIR: ${{ inputs.out_dir || format('bench/results/runs-dispatch-{0}', github.run_id) }}
+        run: python bench/run_bench.py --skills "${{ inputs.skills }}" --k "${{ inputs.k }}" --tiers "${{ inputs.tiers }}" --out-dir "$BENCH_OUT_DIR" ${{ inputs.dry_run && '--dry-run' || '' }}
 
       - name: Publish results as a branch diff (never a direct push)
         if: ${{ !inputs.dry_run }}
