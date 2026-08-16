@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/product-on-purpose/critique-skills/main/bench/results/variance.schema.json",
+  "title": "Bench run-to-run variance and acceptance bands",
+  "description": "The run-to-run spread of every published figure, and the acceptance band derived from it, produced by `python -m bench.variance` from committed manifests and run envelopes and nothing else. This exists because results.json pools every k=5 repetition into one cell figure, so the published numbers carry no recorded spread, and ADR 0030's fidelity gate (\"figures within measured run-to-run variance of the committed ones\") had no threshold behind it and could not be failed. This file is variance version 1.0.0 and validates 1.x documents only.",
+  "$comment": "Two design points differ deliberately from results.schema.json. First, every entry carries its own `run_set`: results.json records one run_set on a file holding two concatenated run sets, which ROADMAP.md lists as v0.2.0 measurement debt, and there was no reason to repeat it here. Second, `entries[]` is keyed by (run_set, skill, skill_version, model, domain, metric) rather than one row per group, because a band is a property of a single metric and the four metrics of one cell have genuinely different widths. Consistency and clean_fp_rate are absent on purpose and not by oversight: score_consistency compares pairs of envelopes and is undefined for a single repetition, so no band for it can be produced by this method, and the published consistency floor therefore carries no uncertainty estimate at all.",
+  "type": "object",
+  "required": ["variance_version", "run_sets", "generated_at", "method", "verification", "envelopes_scored", "entries"],
+  "additionalProperties": false,
+  "properties": {
+    "variance_version": {
+      "title": "Variance document version",
+      "type": "string",
+      "pattern": "^1\\.[0-9]+\\.[0-9]+(?![\\s\\S])"
+    },
+    "run_sets": {
+      "title": "Run set identifiers, in the order given",
+      "description": "Every run set decomposed into this file. Each entry names its own, so a reader never has to infer which one a row came from.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/runSet" }
+    },
+    "generated_at": { "$ref": "#/$defs/timestamp" },
+    "method": {
+      "title": "How the band was estimated",
+      "description": "Recorded in the file rather than only in prose, because a band read without its method is easy to over-trust.",
+      "type": "object",
+      "required": ["estimator", "interval", "draws", "seed", "repetition_index_source", "covers", "not_banded"],
+      "additionalProperties": false,
+      "properties": {
+        "estimator": {
+          "description": "Whole repetitions are resampled rather than individual artifact scores, because the published statistic is a ratio of sums across repetitions and artifacts, not a mean of per-repetition ratios; resampling whole repetitions preserves both that structure and the within-repetition correlation across artifacts.",
+          "type": "string",
+          "minLength": 1
+        },
+        "interval": { "type": "string", "minLength": 1 },
+        "draws": {
+          "description": "Bootstrap resamples. With k=5 there are at most 5**5 distinct resamples, so percentile resolution is coarse however high this is, and the band understates true uncertainty rather than overstating it.",
+          "type": "integer",
+          "minimum": 1000
+        },
+        "seed": {
+          "description": "Fixed so the published band is reproducible byte for byte.",
+          "type": "integer"
+        },
+        "repetition_index_source": {
+          "description": "The repetition index is parsed from the envelope filename because no contract field records it. When that schema debt is paid, this string and bench/variance.py's parse_repetition_index change together.",
+          "type": "string",
+          "minLength": 1
+        },
+        "covers": {
+          "description": "What the band measures, stated so a passing gate is not read as more than it is: repetition variance within one run set, not the transport, date, staging or isolation differences a re-run also carries.",
+          "type": "string",
+          "minLength": 1
+        },
+        "not_banded": { "type": "string", "minLength": 1 }
+      }
+    },
+    "verification": {
+      "title": "Whether the decomposition was checked against the published figures",
+      "description": "Pooling every repetition of a cell must reproduce the committed numerator and denominator exactly, or the decomposition is measuring something other than what was published. bench/variance.py refuses to emit a band when it does not, so a file with performed=false was produced without that check and its bands are unverified.",
+      "type": "object",
+      "required": ["performed"],
+      "additionalProperties": false,
+      "properties": {
+        "performed": { "type": "boolean" },
+        "cell_metrics_checked": { "type": "integer", "minimum": 0 },
+        "cell_metrics_matched": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "envelopes_scored": { "type": "integer", "minimum": 0 },
+    "excluded_as_probe": {
+      "title": "Envelopes excluded as probe run sets",
+      "description": "Paths under a run set that share identity fields with the measurement grid but are not part of it, such as runs/steering/. Listed rather than silently dropped, because bench/results/README.md records this exclusion as a step in a recipe someone has to remember, and a file that does not say what it left out repeats that fragility.",
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "entries": {
+      "title": "One entry per (run set, skill, skill version, model, domain, metric)",
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/entry" }
+    }
+  },
+
+  "$defs": {
+
+    "runSet": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+    },
+
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,9})?Z(?![\\s\\S])"
+    },
+
+    "ratio": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+
+    "entry": {
+      "title": "The band on one metric of one cell",
+      "type": "object",
+      "required": [
+        "run_set",
+        "skill",
+        "skill_version",
+        "model",
+        "domain",
+        "metric",
+        "k",
+        "pooled",
+        "per_repetition",
+        "repetition_min",
+        "repetition_max",
+        "repetition_spread",
+        "band_low",
+        "band_high",
+        "band_width",
+        "bootstrap_sd"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "run_set": { "$ref": "#/$defs/runSet" },
+        "skill": { "type": "string", "minLength": 1 },
+        "skill_version": { "type": "string", "minLength": 1 },
+        "model": { "type": "string", "minLength": 1 },
+        "domain": { "type": "string", "minLength": 1 },
+        "metric": {
+          "description": "Consistency is absent by construction; see this schema's $comment.",
+          "enum": ["recall", "precision", "recall_location", "precision_location"]
+        },
+        "k": {
+          "description": "Repetitions this band was computed from. A band is only comparable to a re-run at the same k.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "pooled": {
+          "description": "The published figure, recomputed here. Equal to the matching results.json value whenever verification.performed is true.",
+          "$ref": "#/$defs/ratio"
+        },
+        "per_repetition": {
+          "description": "The figure each single repetition would have published on its own, pooled across the cell's artifacts. This is the evidence the band is derived from, kept so a reader can see the spread rather than take the interval on trust.",
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/ratio" }
+        },
+        "repetition_min": { "$ref": "#/$defs/ratio" },
+        "repetition_max": { "$ref": "#/$defs/ratio" },
+        "repetition_spread": {
+          "description": "repetition_max minus repetition_min: how far a single run swings, which is consistently wider than the band on the pooled statistic.",
+          "$ref": "#/$defs/ratio"
+        },
+        "band_low": { "$ref": "#/$defs/ratio" },
+        "band_high": { "$ref": "#/$defs/ratio" },
+        "band_width": {
+          "description": "band_high minus band_low. A cell's discriminating power as a gate: a narrow band fails on a small shift, a wide one passes almost anything.",
+          "$ref": "#/$defs/ratio"
+        },
+        "bootstrap_sd": { "type": "number", "minimum": 0 }
+      }
+    }
+  }
+}
