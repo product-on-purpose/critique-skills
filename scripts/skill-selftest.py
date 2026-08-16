@@ -42,6 +42,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import os
 import re
 import subprocess
 import sys
@@ -885,16 +886,63 @@ def check_pytest(skill_dir: Path) -> list[Issue]:
     if not test_files:
         return [Issue("checks-py-tests-missing", str(tests_dir), "scripts/tests/ has no test_*.py files")]
 
+    # The path is relative and the working directory is the skill, which is load-bearing rather
+    # than tidy. Passing an absolute path while running from _REPO_ROOT means pytest cannot build
+    # a collection tree from its rootdir to the argument whenever the two are on different drives,
+    # as they are for a skill written into a temp directory, so it walks up from the argument
+    # instead and creates a directory collector for the temp root itself. Listing that directory
+    # races every other process on the machine: measured on 2026-08-15, an entry belonging to an
+    # unrelated project vanished between the listdir and the stat, and the nested run died with
+    # "ERROR collecting test session / FileNotFoundError: [WinError 2]". That produced an
+    # intermittent, load-correlated failure in two tests of this file's own suite which never once
+    # appeared in CI, because a Linux runner's /tmp is quiet. Under deliberate temp-directory churn
+    # the old invocation failed 10 times out of 10 and this one 0 times out of 10.
+    #
+    # PYTHONPATH carries _REPO_ROOT because moving cwd off it would otherwise stop a real skill's
+    # tests importing skills._shared and contract, which running from the repository root had been
+    # providing implicitly.
     result = subprocess.run(
-        [sys.executable, "-m", "pytest", str(tests_dir), "-q"],
-        cwd=str(_REPO_ROOT),
+        [sys.executable, "-m", "pytest", str(Path("scripts") / "tests"), "-q"],
+        cwd=str(skill_dir),
+        env=_child_env(),
         capture_output=True,
         text=True,
     )
     if result.returncode != 0:
-        tail = "\n".join(result.stdout.strip().splitlines()[-20:])
-        return [Issue("checks-py-pytest-failed", str(tests_dir), tail or result.stderr.strip())]
+        return [Issue("checks-py-pytest-failed", str(tests_dir), _pytest_failure_detail(result))]
     return []
+
+
+def _child_env() -> dict[str, str]:
+    """The environment for the nested pytest, with this repository kept importable."""
+    env = dict(os.environ)
+    existing = env.get("PYTHONPATH")
+    env["PYTHONPATH"] = os.pathsep.join([str(_REPO_ROOT)] + ([existing] if existing else []))
+    return env
+
+
+_FAILURE_TAIL_LINES = 40
+
+
+def _pytest_failure_detail(result: subprocess.CompletedProcess) -> str:
+    """Enough to diagnose the failure from this report alone.
+
+    The previous version kept the last 20 lines of stdout and fell back to stderr only when stdout
+    was empty, so a failure with any stdout at all discarded stderr entirely and said nothing about
+    the exit code. It reported the collection error above faithfully enough to be seen and not
+    nearly well enough to be diagnosed, which is why that failure went three sessions without a
+    cause. Report the exit code, both streams, and say when something was elided.
+    """
+    parts = [f"pytest exited {result.returncode}"]
+    for name, stream in (("stdout", result.stdout), ("stderr", result.stderr)):
+        text = (stream or "").strip()
+        if not text:
+            continue
+        lines = text.splitlines()
+        elided = len(lines) - _FAILURE_TAIL_LINES
+        prefix = f"[{elided} earlier line(s) elided]\n" if elided > 0 else ""
+        parts.append(f"{name}:\n{prefix}" + "\n".join(lines[-_FAILURE_TAIL_LINES:]))
+    return "\n".join(parts)
 
 
 # --------------------------------------------------------------------------
