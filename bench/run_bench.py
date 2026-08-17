@@ -179,10 +179,19 @@ class ArtifactRef:
     path: str
     sha256: str
     artifact_type: str
+    # Every criterion this artifact plants a defect under, from its manifest. Empty for a clean
+    # control artifact, which plants nothing on purpose. Carried here because the judged-lane
+    # completeness check below cannot otherwise tell "the lane found nothing, correctly" from "the
+    # lane never ran", and on a clean artifact the first is the right answer.
+    planted_criteria: tuple[str, ...] = ()
 
     @property
     def artifact_id(self) -> str:
         return Path(self.path).stem
+
+    @property
+    def is_clean(self) -> bool:
+        return not self.planted_criteria
 
 
 @dataclass(frozen=True)
@@ -237,6 +246,9 @@ def discover_skill_artifacts(corpus_dir: Path, skill: str) -> list[ArtifactRef]:
                 path=manifest["artifact"],
                 sha256=manifest["artifact_sha256"],
                 artifact_type=manifest["artifact_type"],
+                planted_criteria=tuple(
+                    sorted({d["criterion"] for d in manifest.get("defects") or [] if d.get("criterion")})
+                ),
             )
         )
     return refs
@@ -755,13 +767,26 @@ def execute_skill_cell(
     # never reached the judged lane would be written and scored as a complete run. The skill's own
     # SKILL.md frontmatter is the authority on whether a judged lane was supposed to happen, which
     # is why the check keys off `judged` rather than assuming every skill has one.
-    if frontmatter["judged"]:
+    #
+    # It also keys off what the corpus actually planted, which the first version did not, and that
+    # omission inverted the check on exactly the artifacts it mattered most for. Measured on
+    # 2026-08-17: a 40-cell dispatch lost three cells, all of them `clarity-004`, which plants zero
+    # defects because it is the clean control. On a clean artifact an empty judged lane is the
+    # correct result, so the check was failing the runs that behaved and passing the two runs that
+    # invented a finding on a document with nothing to find. Since clean artifacts are precisely
+    # where `clean_fp_rate` is measured, keeping that would have biased the published
+    # false-positive rate upward in every future run set, by discarding the zero-false-positive
+    # runs and scoring only the ones that hallucinated.
+    expected_judged = set(frontmatter["judged"]) & set(cell.artifact.planted_criteria)
+    if expected_judged:
         lanes = {f.get("lane") for f in envelope.get("findings") or [] if isinstance(f, dict)}
         if "judged" not in lanes:
             raise JudgedLaneError(
-                f"{cell.skill}: the envelope carries no judged-lane finding, but the skill declares "
-                f"{len(frontmatter['judged'])} judged criteria. Lanes present: {sorted(l for l in lanes if l)}. "
-                "A scripted-only envelope is not a complete run and must not be scored as one."
+                f"{cell.skill}: the envelope carries no judged-lane finding, but "
+                f"{cell.artifact.artifact_id} plants {len(expected_judged)} defect(s) under this "
+                f"skill's judged criteria ({', '.join(sorted(expected_judged))}). Lanes present: "
+                f"{sorted(l for l in lanes if l)}. A scripted-only envelope is not a complete run "
+                "and must not be scored as one."
             )
 
     envelope["run"] = {

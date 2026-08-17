@@ -105,6 +105,25 @@ def test_the_fallback_is_not_a_committed_run_set() -> None:
 # ---------------------------------------------------------------------------
 
 
+def test_results_are_published_even_when_the_run_partly_failed() -> None:
+    """A partial failure is the case where publishing matters most, and it was the one case that
+    published nothing.
+
+    Measured 2026-08-17: a 40-cell dispatch produced 37 valid envelopes over 72 minutes of paid
+    model time, three cells failed, the bench step exited non-zero, and this step was skipped as a
+    consequence. Every one of those envelopes was discarded with the runner. A results branch is
+    reviewed as a diff before anything is merged, so publishing a partial set costs nothing and
+    losing it costs the whole run.
+    """
+    text = _workflow_text()
+    publish = text.index("Publish results as a branch diff")
+    condition = text[publish : publish + 400]
+    assert "!cancelled()" in condition or "always()" in condition, (
+        "the publish step is still conditioned only on dry_run, so a failed bench step discards "
+        "every envelope the run paid for"
+    )
+
+
 def test_dry_run_still_needs_no_fresh_directory() -> None:
     """A dry run writes nothing, so it returns before the guard. That ordering is correct, and it
     is also why the one dispatch on record passed while the live path was broken. Asserted so a

@@ -81,8 +81,14 @@ jobs:
           BENCH_OUT_DIR: ${{ inputs.out_dir || format('bench/results/runs-dispatch-{0}', github.run_id) }}
         run: python bench/run_bench.py --skills "${{ inputs.skills }}" --k "${{ inputs.k }}" --tiers "${{ inputs.tiers }}" --out-dir "$BENCH_OUT_DIR" ${{ inputs.dry_run && '--dry-run' || '' }}
 
+      # `!cancelled()` rather than a bare condition, because a partial failure is the case where
+      # publishing matters most. On 2026-08-17 a 40-cell dispatch produced 37 valid envelopes over
+      # 72 minutes of paid model time, three cells failed, this step was skipped as a consequence,
+      # and every one of those envelopes was discarded with the runner. Evidence a run paid for
+      # must survive the run failing; a results branch is reviewed as a diff before anything is
+      # merged, so publishing a partial set costs nothing and losing it costs the whole run.
       - name: Publish results as a branch diff (never a direct push)
-        if: ${{ !inputs.dry_run }}
+        if: ${{ !inputs.dry_run && !cancelled() }}
         run: |
           set -euo pipefail
           if [ -z "$(git status --porcelain -- bench/results)" ]; then
