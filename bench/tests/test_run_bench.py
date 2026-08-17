@@ -611,9 +611,13 @@ def test_a_live_run_accepts_a_fresh_out_dir(tmp_path, monkeypatch, capsys) -> No
 # sibling answer key, because nothing could read one until now.
 
 
-def _corpus_with_manifest(tmp_path: Path) -> tuple[Path, ArtifactRef]:
+def _corpus_with_manifest(tmp_path: Path, *, defects: list[dict] | None = None) -> tuple[Path, ArtifactRef]:
     """A miniature corpus laid out the way bench/corpus/ actually is: artifact and answer key
-    side by side in one directory."""
+    side by side in one directory.
+
+    Pass `defects=[]` for a clean control artifact, which is the shape `clarity-004` has in the
+    real corpus and the shape that broke the judged-lane check.
+    """
     corpus = tmp_path / "bench" / "corpus" / "clarity"
     corpus.mkdir(parents=True)
     # write_bytes, not write_text: on Windows write_text translates \n to \r\n, and the real corpus
@@ -621,15 +625,18 @@ def _corpus_with_manifest(tmp_path: Path) -> tuple[Path, ArtifactRef]:
     # for exactly this reason). The manifest sha256 is over the bytes, so the fixture must match.
     body = b"# Home-Office Equipment Stipend Policy\n\nEligibility is described below.\n"
     (corpus / "clarity-001.md").write_bytes(body)
-    (corpus / "clarity-001.manifest.json").write_bytes(
-        json.dumps({"defects": [{"criterion": "PLAIN-DOUBLE-NEGATIVE", "severity_expected": 2}]}).encode("utf-8")
-    )
+    if defects is None:
+        defects = [{"criterion": "PLAIN-DOUBLE-NEGATIVE", "severity_expected": 2}]
+    (corpus / "clarity-001.manifest.json").write_bytes(json.dumps({"defects": defects}).encode("utf-8"))
 
     artifact = ArtifactRef(
         domain="clarity",
         path="bench/corpus/clarity/clarity-001.md",
         sha256=hashlib.sha256(body).hexdigest(),
         artifact_type="markdown-prose",
+        # Derived from the manifest just written rather than restated, so the fixture cannot claim
+        # an artifact plants something its own answer key does not.
+        planted_criteria=tuple(sorted({d["criterion"] for d in defects})),
     )
     return corpus, artifact
 
@@ -1119,11 +1126,106 @@ def test_a_persistent_non_final_response_fails_the_cell(monkeypatch, tmp_path) -
     assert 1 < len(calls) <= 4, f"expected a small bounded retry budget, got {len(calls)} attempts"
 
 
-def test_a_scripted_only_envelope_fails_when_the_skill_declares_judged_criteria(tmp_path) -> None:
+def _scripted_only_client() -> "FakeClient":
+    scripted_only = json.loads(json.dumps(_ENVELOPE_FROM_SKILL))
+    for finding in scripted_only["findings"]:
+        finding["lane"] = "scripted"
+    return FakeClient([FakeResponse(json.dumps(scripted_only))])
+
+
+def test_a_clean_control_artifact_may_return_an_empty_judged_lane(tmp_path) -> None:
+    """The inversion this check shipped with, measured 2026-08-17.
+
+    A 40-cell dispatch lost three cells, all of them `clarity-004`, which plants zero defects
+    because it is the clean control. On a clean artifact an empty judged lane is the correct
+    result: there is nothing there to find. The check was failing the runs that behaved and
+    passing the two runs that invented a finding on a document with nothing in it.
+
+    That is not merely backwards, it is biased in the one place it matters most. Clean artifacts
+    are where `clean_fp_rate` is measured, so discarding the zero-false-positive runs and scoring
+    only the hallucinating ones would have pushed the published false-positive rate up in every
+    future run set.
+    """
+    _, artifact = _corpus_with_manifest(tmp_path, defects=[])
+    assert artifact.is_clean
+
+    envelope = run_bench.execute_skill_cell(
+        _clarity_cell(tmp_path, artifact),
+        client=_scripted_only_client(),
+        repo_root=tmp_path,
+        frontmatter=_CLARITY_FRONTMATTER,
+        now_fn=_now,
+    )
+
+    assert {f["lane"] for f in envelope["findings"]} == {"scripted"}
+
+
+def test_an_artifact_planting_only_scripted_defects_needs_no_judged_finding(tmp_path) -> None:
+    """The check keys off what the corpus planted under THIS skill's judged criteria, not off the
+    artifact merely having defects. A seeded artifact whose every planted defect is scripted-lane
+    has nothing for the judged lane to catch either."""
+    _, artifact = _corpus_with_manifest(
+        tmp_path, defects=[{"criterion": "PLAIN-SENTENCE-LENGTH", "severity_expected": 2}]
+    )
+    assert not artifact.is_clean
+    assert not set(_CLARITY_FRONTMATTER["judged"]) & set(artifact.planted_criteria)
+
+    envelope = run_bench.execute_skill_cell(
+        _clarity_cell(tmp_path, artifact),
+        client=_scripted_only_client(),
+        repo_root=tmp_path,
+        frontmatter=_CLARITY_FRONTMATTER,
+        now_fn=_now,
+    )
+
+    assert envelope["findings"]
+
+
+def test_discover_skill_artifacts_records_what_each_manifest_plants(tmp_path) -> None:
+    """The check cannot tell "found nothing, correctly" from "never ran" without this, and the
+    manifest is the only thing that knows."""
+    corpus, _ = _corpus_with_manifest(tmp_path)
+    (corpus / "clarity-004.md").write_bytes(b"# A clean document\n\nNothing is wrong here.\n")
+    (corpus / "clarity-004.manifest.json").write_bytes(
+        json.dumps(
+            {
+                "artifact": "bench/corpus/clarity/clarity-004.md",
+                "artifact_sha256": "0" * 64,
+                "artifact_type": "markdown-prose",
+                "defects": [],
+            }
+        ).encode("utf-8")
+    )
+    (corpus / "clarity-001.manifest.json").write_bytes(
+        json.dumps(
+            {
+                "artifact": "bench/corpus/clarity/clarity-001.md",
+                "artifact_sha256": "1" * 64,
+                "artifact_type": "markdown-prose",
+                "defects": [
+                    {"criterion": "PLAIN-DOUBLE-NEGATIVE"},
+                    {"criterion": "PLAIN-SENTENCE-LENGTH"},
+                    {"criterion": "PLAIN-DOUBLE-NEGATIVE"},
+                ],
+            }
+        ).encode("utf-8")
+    )
+
+    refs = {r.artifact_id: r for r in run_bench.discover_skill_artifacts(tmp_path / "bench" / "corpus", "critique-clarity")}
+
+    assert refs["clarity-004"].planted_criteria == ()
+    assert refs["clarity-004"].is_clean
+    # Deduplicated and sorted: two defects under one criterion are one criterion.
+    assert refs["clarity-001"].planted_criteria == ("PLAIN-DOUBLE-NEGATIVE", "PLAIN-SENTENCE-LENGTH")
+    assert not refs["clarity-001"].is_clean
+
+
+def test_a_scripted_only_envelope_fails_when_the_artifact_plants_a_judged_defect(tmp_path) -> None:
     """A scripted-only envelope is structurally identical to a merged one, so a run that never
-    reached the judged lane would score as a complete run. The skill's own SKILL.md frontmatter
-    says whether a judged lane was supposed to happen, and the harness already loads it."""
+    reached the judged lane would score as a complete run. What makes it detectable is the corpus
+    planting something the judged lane was supposed to catch."""
     _, artifact = _corpus_with_manifest(tmp_path)
+    assert set(_CLARITY_FRONTMATTER["judged"]) & set(artifact.planted_criteria)
     scripted_only = json.loads(json.dumps(_ENVELOPE_FROM_SKILL))
     for finding in scripted_only["findings"]:
         finding["lane"] = "scripted"
