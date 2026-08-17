@@ -140,6 +140,76 @@ does not hold.
 > not cover the transport change, the date, the staging, or the isolation flags, all of which differ
 > in the re-run.
 
+## The gate ran, 2026-08-17: one gated figure inside, one outside, and the reason is nameable
+
+Run `31988100372`, `critique-clarity` on haiku, k=5, dispatched through `bench.yml`. **This was the
+first live dispatch of that workflow in the project's history**, so it also discharges the
+`ROADMAP.md` v0.1.x commitment to a live run "on infrastructure the maintainer does not control".
+
+**Coverage: 19 of 20 skill cells.** `clarity-001` r1 returned a scripted-only envelope on an
+artifact that plants a judged defect, which is the completeness check doing its job. Rather than
+compare 19 cells against a band computed over 20, the band was rebuilt over exactly the coverage
+obtained, which is the remedy this ADR's own specification names. Both figures below are 19 against
+19.
+
+| metric | committed | re-run | matched band | verdict |
+|---|---|---|---|---|
+| `recall_location` | 0.796 | 0.806 | [0.709, 0.882] | **inside** (gated) |
+| `precision_location` | 0.413 | **0.551** | [0.326, 0.494] | **outside** (gated) |
+| `recall` | 0.731 | 0.645 | [0.651, 0.806] | outside (reported) |
+| `precision` | 0.380 | 0.441 | [0.290, 0.455] | inside (reported) |
+
+`precision_location` is outside by **0.057** against a band **0.168** wide, so by roughly a third of
+the band's own width. Under the specification above that is **one miss, by less than the band's
+width: investigation, not failure.**
+
+### What moved, and which half of the skill it was
+
+The direction is favourable, which is not the same as being unremarkable. Precision up, clean
+false-positive rate down from 8.6 to 4.8, unresolvable claims down from 18 to 14, location recall
+flat. The finding inventory says which lane accounts for it:
+
+| | committed, 2026-07-31 | re-run, 2026-08-17 |
+|---|---|---|
+| scripted findings | 68 | 71 |
+| **judged findings** | **99** | **65** |
+| suppressed by bounding | 43 | 55 |
+| findings per run, mean | 8.35 | 7.16 |
+
+**The scripted lane is unchanged, and the judged lane emits a third fewer findings.** That is
+exactly the half ADR 0030 rewrote, and the scripted lane being flat is the control that makes the
+comparison legible: a deterministic lane measured twice returns the same thing, so the movement is
+not drift in the corpus, the scorer, or the artifacts.
+
+Two causes are consistent with this and the run cannot separate them:
+
+1. **The judged lane now runs the real skill** rather than a prompt the harness assembled from
+   `SKILL.md`. That is ADR 0030's entire change, and it is the thing this gate exists to assess.
+2. **The committed figures predate `scripts/merge.py`.** They were measured 2026-07-31; the
+   assembler shipped in v0.1.5 on 2026-08-09 and applies the bounded-output rule deterministically
+   where hand assembly did it unreliably. `suppressed_count` rising from 43 to 55 is that rule
+   biting harder.
+
+### What this licenses, and what it does not
+
+**It does not license republishing the committed figures as though the new lane reproduces them.**
+It measurably does not, on one of two gated metrics, in a direction and a magnitude that are
+explicable but real.
+
+**The honest reading is that the gate worked.** It was built to detect whether the rewritten lane
+measures the same thing, it detected that it does not quite, and the difference is attributable to a
+named change rather than to noise. A gate that had passed here would have been a gate with nothing
+behind it.
+
+**What it establishes positively:** the rewritten lane produces contract-valid envelopes at scale
+through the real skill, on infrastructure the maintainer does not control, with location recall
+statistically indistinguishable from the committed figures and precision better than them.
+
+**What remains open.** This covers one skill, one tier, one domain, at 19 of 20 coverage. It says
+nothing about the other five skills, and nothing at all about sonnet, which still cannot complete a
+cell. The published v0.1.0 figures stand as the measurement of record, now with the added and
+recorded caveat that they describe the pre-assembler skill measured through the old lane.
+
 ## Consequences
 
 ### What the band shows
