@@ -6,6 +6,38 @@ Curated, user-facing highlights. For the full technical history, see `CHANGELOG.
 
 Nothing yet.
 
+## 0.1.6 - 2026-08-16
+
+**Three things that had never actually been run, run for the first time. All three were broken.**
+
+No criterion changed, no skill's judgment changed, and no published number moved.
+
+### The one that affects you
+
+**A critique could hang instead of finishing.** Each skill can hand the work to a separate reviewer that starts with a clean slate, which is how the library keeps a critique honest about work you wrote yourself. That reviewer was told where to find the skill's own scripts using a path that only worked if you happened to be sitting in the library's own folder. From anywhere else it could not find them.
+
+It did not stop and say so. It went looking, and when the obvious places did not turn one up it began searching your drives. In our test it scanned two entire drives and never came back.
+
+The reviewer is now told exactly where the skill lives, and told in as many words to stop and say it does not know rather than go looking. Searching for a missing path is not a fallback; it is the failure.
+
+If you have ever had a critique sit there doing nothing, this is very likely why, and it is fixed.
+
+### The ones that affect what you can trust
+
+**Every published score now shows its spread.** The results tables report one number per skill per tier, and each of those is five separate runs pooled together. Those five runs disagree with each other more than the single number suggests. One accessibility figure published as 0.306 came from runs measuring 0.529, 0.294, 0.353, 0.118 and 0.235.
+
+That spread is now published alongside the scores, computed from the same committed evidence with no new runs. Read it before treating any single figure here as precise. Two things it makes visible: the cheaper model tier is noticeably less consistent than the more expensive one, and the run-to-run agreement figure has no error bar at all, which we now say plainly rather than leave implied.
+
+**The command that reproduces our numbers could never have run.** The benchmark workflow is the thing that lets someone else check our figures on infrastructure we do not control. It had one missing setting that made it exit immediately, before reaching a model, on every attempt. It had never been tried, because trying it costs money and it only ever runs on request. Fixed, and there is now a test that fails if it regresses.
+
+### Still open, stated rather than buried
+
+The benchmark can currently only reproduce the cheaper tier's half of our published figures. The expensive tier hits a second version of the same searching problem, in a different place, and no run on it has completed yet. Until that is resolved the published figures remain the ones we measured originally, and nothing here claims otherwise.
+
+### The part worth admitting
+
+The reviewer's broken path was the *same mistake* the previous release fixed one layer up. That release moved a script "because that path resolves", rewrote six files to match, and left the reviewer's own instructions pointing at the old location. Its own recorded lesson was that the instruction a run follows is the one it actually reads, and it did not apply that lesson to itself. There is now a test that checks the commands rather than the prose around them.
+
 ## 0.1.5 - 2026-08-09
 
 **The skills stop doing arithmetic in their heads.**
