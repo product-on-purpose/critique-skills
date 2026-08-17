@@ -1,0 +1,106 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "evidence": "71-word sentence, 5 subordinate-clause markers: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "severity": 3,
+      "violation": "The sentence runs to 71 words with 5 subordinate-clause markers, longer than the reader can hold in mind on a single pass."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-SHAPE",
+      "evidence": "71-word sentence: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "fix": "Move subordinate clauses and modifiers after the main clause, not between its subject and verb.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "severity": 3,
+      "violation": "At 71 words, with 0 comma-set-off clause(s) and 5 subordinate-clause marker(s), the sentence stacks interruptions between its subject and its main verb instead of holding the main clause together."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "The document addresses employees (lines 11, 19, 21, 23, 33, 35) alongside descriptions of internal processes performed by the benefits team, finance office, and manager (lines 5, 7, 27, 29, 39, 65, 69). Internal-workflow sections (Program Coordination, Review Responsibility) lack clear audience signals, creating ambiguity about whether employees need to understand internal procedures.",
+      "fix": "Separate employee-facing content from internal workflow descriptions into clearly marked sections, or move internal content to an appendix.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Multiple sections: Program Overview, Program Coordination, Review Responsibility",
+      "severity": 2,
+      "violation": "The document addresses both employees and internal processes within the same sections without clear boundaries, making it unclear which audience each paragraph targets."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Lines 5 and 72 use 'fiscal year'; lines 11, 14, 47 use 'benefit year'. Line 72 repeats lines 5-6 verbatim in Questions and Updates section. The document never clarifies whether these terms refer to the same period or distinct concepts.",
+      "fix": "Choose one term and use it consistently throughout, or define both terms and their relationship if they differ.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Program Overview (lines 5), Eligibility (lines 11, 14, 47), Questions and Updates (line 72)",
+      "severity": 2,
+      "violation": "Two terms for what appears to be the same concept (annual periods) are used interchangeably without explanation of their difference or equivalence."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-LISTS",
+      "evidence": "Employees must submit the receipt, the manager's approval form, and the original purchase order before the review begins.",
+      "fix": "Reformat the inline items as a numbered or bulleted list.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence embeds three or more comma- or semicolon-separated parallel items inline rather than presenting them as a formatted list."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-MUST",
+      "evidence": "Additionally, employees shall retain receipts for one year after the purchase date.",
+      "fix": "Restate the requirement using must.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "Required Documentation, paragraph 2",
+      "severity": 2,
+      "violation": "The sentence states a binding requirement using shall or an indirect requirement phrasing instead of must."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-NOMINALIZATION",
+      "evidence": "The finance office conducts an evaluation of every submitted receipt before it approves the amount.",
+      "fix": "Restate the nominalized noun as the sentence's main verb.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Reimbursement Amounts, paragraph 1",
+      "severity": 2,
+      "violation": "The action is buried inside the noun 'evaluation', carried by a generic support verb, instead of stated as the sentence's own main verb."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-002.md",
+    "artifact_sha256": "7fd910197f585ef10416cde2ed6b94fa48de539377a1082d82e29ccee509e6df",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-08-17T02:59:20Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 12,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 7
+  }
+}

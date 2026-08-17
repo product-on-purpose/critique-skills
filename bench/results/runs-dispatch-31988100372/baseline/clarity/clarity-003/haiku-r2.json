@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The stipend covers one claim per employee per benefit year\" followed by \"employees on an approved leave of absence remain eligible once they return to active status. The stipend clock resumes on their first day back.\"",
+      "fix": "Clarify the interaction: \"If an employee has not yet used their annual stipend before taking leave, they may submit a claim upon returning. Employees already paid for a stipend during the benefit year remain ineligible to claim again until the next benefit year.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Eligibility section, second paragraph",
+      "severity": 3,
+      "violation": "It's unclear whether an employee returning from leave can claim a second time in the same benefit year or if their annual claim was already used before the leave."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The employee receives a confirmation email once processing finishes. Then, the employee reviews the confirmation summary before submitting the final request.\"",
+      "fix": "Reorder the steps so the employee reviews the summary before final processing begins, not after.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "How to Apply section, second and third paragraphs",
+      "severity": 3,
+      "violation": "The process is backwards - the employee is described as reviewing the summary after final processing, when they should review it before final submission."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.\"",
+      "fix": "Rewrite as: \"Once the manager signs the request and finance confirms the budget line, the stipend request moves to final processing.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "How to Apply section, second paragraph",
+      "severity": 3,
+      "violation": "The sentence structure is unclear about the sequence - does the manager sign before or after finance confirms the budget line?"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An incomplete request pauses the timeline until the missing item arrives.\"",
+      "fix": "Replace \"item\" with \"documentation\": \"An incomplete request pauses the timeline until the missing documentation arrives.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Approval Timeline section",
+      "severity": 3,
+      "violation": "\"Missing item\" is ambiguous - it could refer to missing documentation or missing equipment information."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You must keep your equipment in good working condition and we may ask for a brief photo check once a year.\"",
+      "fix": "Rewrite as: \"Employees must keep equipment in good working condition. The benefits team may request a photo verification once per benefit year.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Restrictions and Exceptions section, first paragraph",
+      "severity": 3,
+      "violation": "The voice shifts from third person (used throughout the policy) to second person \"You\" and first person \"we,\" creating inconsistency."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"once a year\"",
+      "fix": "Specify \"once per benefit year\" or \"annually in the same calendar month.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Restrictions and Exceptions section, first paragraph",
+      "severity": 3,
+      "violation": "The timeframe is ambiguous - it could mean calendar year, benefit year, or 12 months from each purchase date."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You record the stipend item on the request form...Countersign the employee request within two business days...You track its status there until the payment clears.\"",
+      "fix": "Either delete this section, which duplicates earlier instructions, or rewrite with clear role labels: \"Employees submit requests in the portal. Managers countersign within two business days. Finance and payroll track status until payment clears.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Terminology Notes section",
+      "severity": 3,
+      "violation": "This section uses undefined second-person instructions without clarity about which role (employee, manager, finance staff) they apply to."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Completing the request begins with confirming eligibility, and the uploaded receipt.\"",
+      "fix": "Replace with complete steps: \"Completing the request includes: confirming eligibility, uploading the receipt, and selecting the equipment category.\"",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Request Steps section",
+      "severity": 3,
+      "violation": "This is an incomplete sentence that does not provide a clear, full list of request steps."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Every entry carries a date stamp so the record stays easy to audit.\"",
+      "fix": "Remove the duplicate sentence, or revise to: \"Each catalog update carries a date stamp for audit purposes.\"",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Special Cases section",
+      "severity": 3,
+      "violation": "This exact sentence appears verbatim in the Program Overview section - it is a duplicate."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.\"",
+      "fix": "Delete these sentences. Keep only: \"The benefits team coordinates every stipend request from intake to payout.\"",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Program Coordination section",
+      "severity": 3,
+      "violation": "These three sentences are completely unrelated to the home-office equipment stipend policy."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-08-17T03:13:09Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

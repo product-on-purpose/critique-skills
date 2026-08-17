@@ -1,0 +1,117 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "evidence": "71-word sentence, 5 subordinate-clause markers: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "severity": 3,
+      "violation": "The sentence runs to 71 words with 5 subordinate-clause markers, longer than the reader can hold in mind on a single pass."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "Special Cases (line 59-61) repeats the exact sentences from Program Overview (line 5-7): The finance liaison reviews the stipend budget at the start of the fiscal year. Staff can request a printed copy from the benefits team at any time. Similarly, Questions and Updates (line 72-73) repeats the same two sentences again.",
+      "fix": "Either delete the duplicate sections, or rewrite Special Cases and Questions and Updates to explain what makes them distinct from Program Overview and each other.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Special Cases and Questions and Updates",
+      "severity": 3,
+      "violation": "Two sections repeat Program Overview content verbatim without explanation, violating coherence: a reader cannot state what these sections are about because they are identical duplicates."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-SHAPE",
+      "evidence": "71-word sentence: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "fix": "Move subordinate clauses and modifiers after the main clause, not between its subject and verb.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "severity": 3,
+      "violation": "At 71 words, with 0 comma-set-off clause(s) and 5 subordinate-clause marker(s), the sentence stacks interruptions between its subject and its main verb instead of holding the main clause together."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "The benefit is called home-office equipment stipend (line 1), stipend (line 5, 41), workspace stipend (line 9), and home-office equipment stipend (line 9 again). No definition clarifies whether these are the same benefit.",
+      "fix": "Pick one term and use it consistently throughout, or define each term's scope clearly at first use.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Program Overview through Eligibility",
+      "severity": 2,
+      "violation": "Multiple terms refer to the same benefit without signal they mean the same thing, forcing the reader to check whether workspace stipend is a distinct benefit."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-LISTS",
+      "evidence": "Employees must submit the receipt, the manager's approval form, and the original purchase order before the review begins.",
+      "fix": "Reformat the inline items as a numbered or bulleted list.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence embeds three or more comma- or semicolon-separated parallel items inline rather than presenting them as a formatted list."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-MUST",
+      "evidence": "Additionally, employees shall retain receipts for one year after the purchase date.",
+      "fix": "Restate the requirement using must.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "Required Documentation, paragraph 2",
+      "severity": 2,
+      "violation": "The sentence states a binding requirement using shall or an indirect requirement phrasing instead of must."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-NOMINALIZATION",
+      "evidence": "The finance office conducts an evaluation of every submitted receipt before it approves the amount.",
+      "fix": "Restate the nominalized noun as the sentence's main verb.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Reimbursement Amounts, paragraph 1",
+      "severity": 2,
+      "violation": "The action is buried inside the noun 'evaluation', carried by a generic support verb, instead of stated as the sentence's own main verb."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Sections appear in this order: Overview, Eligibility, How to Apply, Approval Timeline, Required Documentation, Reimbursement, Restrictions, Terminology, Request Steps, Special Cases, Coordination, Responsibility, Questions. A reader would need documentation requirements before applying, and restrictions before attempting to request, but both appear after Approval Timeline.",
+      "fix": "Reorder sections to match the reader's actual task flow: Eligibility, Restrictions, How to Apply and Required Documentation together, Approval Timeline, Reimbursement.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Document structure, all sections",
+      "severity": 2,
+      "violation": "The section order does not track the reader's actual question sequence. Readers need eligibility and restrictions early, but they appear scattered after application steps."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-002.md",
+    "artifact_sha256": "7fd910197f585ef10416cde2ed6b94fa48de539377a1082d82e29ccee509e6df",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-08-17T03:02:34Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 10,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 5
+  }
+}

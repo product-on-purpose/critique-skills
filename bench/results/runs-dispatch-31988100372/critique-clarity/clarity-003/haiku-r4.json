@@ -1,0 +1,95 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-PARAGRAPH",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout.",
+      "fix": "Rewrite the opening sentence to state the topic the rest of the paragraph covers.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "The paragraph's opening sentence shares almost no vocabulary with the rest of the paragraph, so it does not preview the paragraph's actual topic."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-STRUCTURE",
+      "evidence": "Completing the request begins with confirming eligibility, and the uploaded receipt.",
+      "fix": "Move the 'Request Steps' section to immediately follow 'How to Apply' where it logically belongs, since it is part of the application process.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Request Steps, line 55; placement after line 59",
+      "severity": 2,
+      "violation": "The 'Request Steps' section appears after 'Special Cases', disrupting the logical flow from application instructions to application steps."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SUBJECT-VERB-OBJECT",
+      "evidence": "Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.",
+      "fix": "Move the interrupting clause elsewhere, or split it into its own sentence.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 2",
+      "severity": 2,
+      "violation": "3 comma-set-off clause(s) totalling 14 words intervene between the sentence's apparent subject and its verb."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-TRANSITIONS",
+      "evidence": "An incomplete request pauses the timeline until the missing item arrives. The...",
+      "fix": "Open the paragraph with a transition word that states its relationship to the prior paragraph.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 2",
+      "severity": 2,
+      "violation": "The paragraph opens with none of the fixed transition words, so the reader is not told how it relates to the paragraph before it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-AUDIENCE",
+      "evidence": "You must keep your equipment in good working condition and we may ask for a brief photo check once a year. Additionally, employees must retain receipts for one year after the purchase date.",
+      "fix": "Choose a consistent voice throughout the document. Use either 'you/your' or 'employees' and 'they/their', not both.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Restrictions and Exceptions, lines 45; Required Documentation, line 35",
+      "severity": 2,
+      "violation": "The document shifts between second person ('you'), first person ('we'), and third person ('employees', 'the finance office'), creating inconsistent voice and audience orientation."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.",
+      "fix": "Remove sentences unrelated to the equipment stipend policy, or move them to a separate communication.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Program Coordination, line 65",
+      "severity": 2,
+      "violation": "The paragraph contains sentences that are completely off-topic (travel audit, coffee budget), disrupting document coherence and distracting from the main subject."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-08-17T03:17:18Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

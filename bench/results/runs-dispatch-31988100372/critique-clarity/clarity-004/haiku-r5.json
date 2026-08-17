@@ -1,0 +1,117 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "The section mixes employee actions ('You record the stipend item on the request form') with internal process descriptions ('Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount'). An employee reading this cannot distinguish which actions are their responsibility from which describe background company processes.",
+      "fix": "Either remove the Terminology Notes section entirely, or restructure it as a glossary placed at the document's end and labeled clearly as internal reference material, separate from employee-facing instructions.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "lines 49-53, Terminology Notes section",
+      "severity": 3,
+      "violation": "The section addresses two distinct audiences (employees and internal staff) within the same passage without signaling which text applies to which reader, violating PLAIN-AUDIENCE's requirement that distinct audiences be separated into distinct sections."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "The terms 'benefit year' (lines 11, 37: 'one claim per employee per benefit year'; 'The stipend pays up to 500 dollars per benefit year') and 'fiscal year' (lines 5, 61: 'at the start of the fiscal year') are used interchangeably without explanation. It is unclear whether they refer to the same calendar period or different ones. 'Stipend item' (line 51) is used three times but never defined - a reader cannot determine whether it means the equipment, a form entry, or the money.",
+      "fix": "Replace 'fiscal year' with 'calendar year' throughout, and define explicitly at first use in the Eligibility section: 'one claim per employee per calendar year (January through December)'. Add a sentence defining stipend item: 'A stipend item is a single piece of office equipment, such as a desk, monitor, or chair, for which you request reimbursement.'",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "lines 5, 11, 37, 39, 51, 61",
+      "severity": 3,
+      "violation": "Two terms ('benefit year' and 'fiscal year') that may refer to the same concept are used without signal of equivalence, and a key term ('stipend item') is used three times without definition, forcing readers to check whether terms name the same thing or different concepts."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Program Overview (lines 5-7) describes internal IT workflows ('The IT asset group updates the reimbursement log') that appear before the reader's first need (understanding eligibility). Program Coordination (lines 63-65) and Review Responsibility (lines 67-69) describe internal processes appearing mid-document rather than grouped at the end. An employee seeking eligibility and application steps must navigate past irrelevant internal material.",
+      "fix": "Reorganize to follow the employee's workflow: Eligibility first, then How to Apply, then Required Documentation, then Reimbursement Amounts, then Restrictions. Move Program Overview, Program Coordination, and Review Responsibility to a separate section at the end titled Internal Process or remove them from this employee-facing document.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "overall document structure; examples at lines 5-7, 11-23, 63-70",
+      "severity": 3,
+      "violation": "The document's section order does not follow the employee reader's actual question sequence. The reader's first question is 'Am I eligible?', but internal process descriptions appear before and between the sections that answer this."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "After reading the first sentence ('You record the stipend item on the request form') and the last sentence ('You track its status there until the payment clears'), a reader cannot state what this section is about as a unified whole. The section purports to be 'Terminology Notes' (implying definitions), but contains no definitions. Instead it describes three separate unrelated processes: employee recording, finance reconciliation, and payroll release.",
+      "fix": "Delete the Terminology Notes section. The internal processes it describes (reconciliation and payroll) do not belong in an employee-facing policy. Employee-facing content should focus on what employees must do, not what happens behind the scenes.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "lines 49-53, Terminology Notes section",
+      "severity": 3,
+      "violation": "The section's sentences pursue three unrelated themes with no signal connecting them, so a reader cannot name a consistent theme the section is about."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "'You record the stipend item on the request form' introduces recording. The next sentence, 'Finance reconciles the stipend item against the request log each month', introduces reconciliation with no prior context. 'Payroll releases the stipend item amount' shifts to payroll processing. Then 'Also, you submit the request in the portal' introduces a fourth unrelated topic. Each sentence opens with wholly new information the prior sentence did not establish.",
+      "fix": "Delete the Terminology Notes section. If definitions are truly needed, replace it with a focused glossary section at the end that defines only 'stipend item' and 'benefit year', not a description of internal workflows.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "lines 49-53, Terminology Notes section",
+      "severity": 3,
+      "violation": "Consecutive sentences shift topics abruptly with no signal connecting the new subject to what preceded it. The reader cannot follow how these ideas relate to one another."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "evidence": "Line 13 opens with 'However, employees on an approved leave of absence remain eligible...' This exception appears before the reader has been told the main eligibility rule. Line 29 opens with 'However, an incomplete request pauses the timeline' - an exception - before explaining the main approval process.",
+      "fix": "Reorder line 13: state the main rule first, then the exception: 'Full-time employees with 90 days of service are eligible. However, employees on an approved leave of absence remain eligible once they return.' Similarly reorder line 29 to explain the normal approval process first, then the incomplete-request exception.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "lines 13, 29",
+      "severity": 2,
+      "violation": "Both lines state an exception or condition before stating the governing rule, requiring the reader to hold an unresolved statement in mind before understanding its context."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Line 39: 'The stipend pays up to 500 dollars' names the stipend (a policy mechanism) as the actor, not the organization that disburses funds. Line 45: 'we may ask for a brief photo check' uses an undefined 'we' - unclear who performs the action. Line 51: 'Finance reconciles the stipend item' names an abstraction instead of an identifiable person or department.",
+      "fix": "Name the real actors: Line 39: 'The company will reimburse up to 500 dollars per calendar year.' Line 45: 'The benefits team may ask you to provide a brief photo of your equipment once a year.' Line 51: Remove or relocate to internal documentation only.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "lines 39, 45, 51",
+      "severity": 2,
+      "violation": "Subjects are abstractions or undefined pronouns standing in for real actors, rather than naming the identifiable person or organization performing the action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-STRESS",
+      "evidence": "The sentence reads: 'You must keep your equipment in good working condition and we may ask for a brief photo check once a year.' The newest and most important information - that a photo check may be requested - is buried in the middle. The sentence ends on 'once a year', a frequency detail subordinate to the main point.",
+      "fix": "Split into two sentences and end on the main requirement: 'You must keep your equipment in good working condition. Once a year, the benefits team may ask you to send a photo to verify the equipment is still in use.'",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "line 45",
+      "severity": 2,
+      "violation": "The newest and most important information (the photo-check requirement) does not land at the sentence's end, where reader attention weighs most heavily. Instead, a minor frequency detail occupies the final stressed position."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-08-17T03:44:30Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
