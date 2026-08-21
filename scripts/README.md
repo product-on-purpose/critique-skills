@@ -37,6 +37,11 @@ shared library.
   and printing no traceback) or `--expect ready` (dependencies installed, where each must emit a
   usable envelope). Stdlib only, because it has to run in the environment where the third-party
   dependency is missing.
+- `site-base.mjs` - the one place the docs site's published base path (`/critique-skills`) is
+  written down, exported as `BASE`. Not a runnable script: `site/astro.config.mjs` imports it, and
+  the site's link and route guards will import the same value, so the build and the checks cannot
+  disagree about where the site lives. See
+  `docs/internal/decisions/0032-astro-site-conformance-position.md`.
 - `lib/` - shared helpers used by the scripts above.
 - `tests/` - two suites: `node --test` coverage for the Node spine above, and the pytest suite for
   the Python tooling here (`skill-selftest.py`); see `tests/README.md` for the inventory.

@@ -1,0 +1,42 @@
+/* critique-skills custom Starlight styles (W1 scaffold).
+   Ported from pm-skills/site/src/styles/custom.css, which is the family reference
+   implementation named by the family Astro site standard. */
+
+/* Family brand accent (#5C7CFA). Interim per-site values until the shared
+   @product-on-purpose/astro-docs-preset accent.css owns the triplet (14.9 and family
+   decision A-2). The mid accent is the normative #5C7CFA; the low and high companions
+   are tuned per color mode (low = subtle background tint, high = high-contrast text on
+   accent). Pairs with the branded mermaid lineColor #5C7CFA in astro.config.mjs. */
+:root {
+  --sl-color-accent-low: #1e2a5e;
+  --sl-color-accent: #5C7CFA;
+  --sl-color-accent-high: #c5d0fb;
+  --sl-content-width: 60rem;
+}
+:root[data-theme='light'] {
+  --sl-color-accent-low: #dfe4fe;
+  --sl-color-accent: #5C7CFA;
+  --sl-color-accent-high: #1c2654;
+}
+
+/* Mermaid diagram sizing and polish. Conservative scope, applied across light and dark
+   mode and across every diagram type: a stroke-width bump for readability, a subtle
+   node corner radius, and cluster fill-opacity for nested-graph layering. */
+.mermaid {
+  max-width: 100%;
+}
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+.mermaid .edgePath path,
+.mermaid .flowchart-link {
+  stroke-width: 1.75px;
+}
+.mermaid .node rect {
+  rx: 6;
+  ry: 6;
+}
+.mermaid .cluster rect {
+  fill-opacity: 0.4;
+}
