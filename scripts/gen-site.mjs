@@ -76,13 +76,45 @@ export const SLUG_OVERRIDES = {
 };
 
 /**
- * Publishable sources that do not live under docs/, as repo-relative path to site route.
+ * Publishable sources that do not live under docs/.
+ *
+ * Keyed by repo-relative path. `title` and `description` are overrides, and the three bench
+ * documents need them for two reasons: none of them carries frontmatter at all, and two are both
+ * named `README.md`, so the filename fallback would title them both "README" and put two
+ * identically-named entries in the sidebar. The titles here are also nav labels rather than
+ * document titles: `bench/README.md` opens "# The bench", which is right at the top of a file and
+ * useless as a sidebar entry under a wing called "The receipts".
+ *
  * The six skill pages are not listed here: they are discovered from library.json so the site
  * cannot publish a page for a skill the plugin does not ship.
  */
 export const EXTRA_ROUTES = {
-  "agents/critique-critic.md": "/reference/critic-subagent/",
+  "agents/critique-critic.md": { route: "/reference/critic-subagent/" },
+  "bench/results/README.md": {
+    route: "/receipts/narrative/",
+    title: "What the skills measured",
+    description:
+      "The run-by-run narrative behind the published figures, unflattering numbers first, from the committed results file.",
+  },
+  "bench/results/verdicts.md": {
+    route: "/receipts/verdicts/",
+    title: "Ship and hold verdicts",
+    description:
+      "The per-skill ship-or-hold decision each measured cell produced, and the thresholds those decisions were taken against.",
+  },
+  "bench/README.md": {
+    route: "/receipts/how-we-measure/",
+    title: "How we measure",
+    description:
+      "The seeded-defect corpus, the metric definitions, the frozen baseline, and the commands that reproduce every published number.",
+  },
 };
+
+/**
+ * The receipts explorer's route. Like the criteria explorer it is an aggregate with no single
+ * source file, so it sets `editUrl: false` and is deliberately absent from the route map.
+ */
+export const RECEIPTS_ROUTE = "/receipts/";
 
 /**
  * The criteria explorer's route. It has no single source file: it is an aggregate of all six
@@ -431,6 +463,133 @@ export function loadSkills() {
   return skills;
 }
 
+// --- results.json -----------------------------------------------------------
+
+/**
+ * The metrics every entry carries, in the order the explorer shows them.
+ *
+ * `higherIsWorse` exists for exactly one of them: `clean_fp_rate` counts false positives raised on
+ * artifacts that had no defect planted, so it is a rate per clean artifact rather than a ratio,
+ * it is not bounded by 1 (the worst measured cell is 9.40), and a reader scanning a wall of
+ * 0-to-1 figures will otherwise read it as "94% good".
+ */
+export const METRICS = [
+  { key: "recall_location", label: "Recall (location)", higherIsWorse: false },
+  { key: "precision_location", label: "Precision (location)", higherIsWorse: false },
+  { key: "recall", label: "Recall (criterion)", higherIsWorse: false },
+  { key: "precision", label: "Precision (criterion)", higherIsWorse: false },
+  { key: "consistency", label: "Consistency", higherIsWorse: false },
+  { key: "clean_fp_rate", label: "Clean false positives", higherIsWorse: true },
+];
+
+/**
+ * Read the committed benchmark results.
+ *
+ * This is the ONE reader of results.json in the site build, on purpose. W3's skill pages
+ * deliberately shipped without their measured figures so that the file would be parsed in one
+ * place rather than two: two parsers are how two pages come to disagree about a number, which on
+ * a page whose entire claim is "every figure traces to the committed evidence" is the one failure
+ * that cannot be argued down.
+ *
+ * No Python in the site build (plan 4.1), so the deploy workflow needs only setup-node and the
+ * site builds in a checkout with no Python environment at all.
+ *
+ * @returns {{entries: object[], runSet: string, generatedAt: string, resultsVersion: string}}
+ */
+export function loadResults() {
+  const data = readJson(join(ROOT, "bench", "results", "results.json"));
+  const entries = data.entries;
+  if (!Array.isArray(entries) || entries.length === 0) {
+    throw new Error("gen-site: bench/results/results.json carries no entries.");
+  }
+  for (const entry of entries) {
+    for (const field of ["skill", "skill_version", "model", "domain", "artifact_type"]) {
+      if (typeof entry[field] !== "string") {
+        throw new Error(`gen-site: a results entry is missing ${field}.`);
+      }
+    }
+    for (const { key } of METRICS) {
+      if (typeof entry[key]?.value !== "number") {
+        throw new Error(`gen-site: results entry ${entry.skill}/${entry.model} has no ${key}.value.`);
+      }
+    }
+  }
+  return {
+    entries,
+    runSet: data.run_set ?? "",
+    generatedAt: data.generated_at ?? "",
+    resultsVersion: data.results_version ?? "",
+  };
+}
+
+/** True for the frozen generic-prompt baseline rather than one of this library's skills. */
+export function isBaseline(entry) {
+  return entry.skill.startsWith("baseline");
+}
+
+/**
+ * The cut every headline figure is taken over: this library's skills, active versions only.
+ *
+ * Superseded versions stay in the dataset and stay on the page, because the
+ * `critique-accessibility` 0.1.0-to-0.1.1 jump is the most useful thing the benchmark has ever
+ * shown. They are excluded from the floor strip because a floor computed over a version nobody can
+ * install describes software that no longer exists. Filtering at load instead of here would lose
+ * the comparison rows entirely, which is why this is a named function and not an inline filter.
+ *
+ * @param {object[]} entries
+ * @param {Map<string,string>} activeVersions - skill name to the version library.json ships
+ */
+export function activeCut(entries, activeVersions) {
+  return entries.filter(
+    (entry) => !isBaseline(entry) && activeVersions.get(entry.skill) === entry.skill_version,
+  );
+}
+
+/** Short tier label from a pinned model id, e.g. "claude-haiku-4-5-20251001" -> "haiku". */
+export function tierOf(entry) {
+  const match = entry.model.match(/(haiku|sonnet|opus|fable)/i);
+  return match ? match[1].toLowerCase() : entry.model;
+}
+
+/**
+ * The count behind a metric, as text.
+ *
+ * Two shapes exist in the schema and both have to be handled explicitly: precision, recall and
+ * clean_fp_rate carry `numerator`/`denominator`, while consistency carries
+ * `artifacts_with_pairs`/`total_pairs`, because it compares pairs of runs rather than scoring
+ * claims. Rendering one shape's keys against the other prints "undefined" on a page whose whole
+ * argument is that its figures are traceable.
+ */
+export function countText(metric, key) {
+  if (typeof metric.numerator === "number" && typeof metric.denominator === "number") {
+    // clean_fp_rate's numerator and denominator are not a matched-out-of-total pair like the
+    // others: they are false positives raised across clean artifacts. "47 of 5" is nonsense, and
+    // on a page whose argument is that its figures are legible, nonsense in the counts column is
+    // worse than no counts at all.
+    return key === "clean_fp_rate"
+      ? `${metric.numerator} across ${metric.denominator} clean`
+      : `${metric.numerator} of ${metric.denominator}`;
+  }
+  if (typeof metric.total_pairs === "number") {
+    return `${metric.total_pairs} pairs`;
+  }
+  return "";
+}
+
+/** A metric value formatted for display. clean_fp_rate is a rate, not a ratio, so it is not 0-1. */
+export function valueText(key, metric) {
+  return key === "clean_fp_rate" ? metric.value.toFixed(2) : metric.value.toFixed(3);
+}
+
+/** Escape a string for use in HTML text or an attribute value. */
+export function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 // --- routes -----------------------------------------------------------------
 
 /**
@@ -486,7 +645,7 @@ export function buildRouteMap(skills = loadSkills()) {
     }
   }
   for (const skill of skills) routes.set(skill.path, skill.route);
-  for (const [source, route] of Object.entries(EXTRA_ROUTES)) routes.set(source, route);
+  for (const [source, extra] of Object.entries(EXTRA_ROUTES)) routes.set(source, extra.route);
   return routes;
 }
 
@@ -597,9 +756,15 @@ function generatePage(repoPath, routes) {
   const file = repoPath.split("/").pop();
   const repoOut = `site/src/content/docs${outputPathFor(routes.get(repoPath))}`;
 
+  // Title precedence: an explicit EXTRA_ROUTES override, then frontmatter, then the body's own H1,
+  // and the filename only as a last resort. The H1 step matters because the three bench documents
+  // carry no frontmatter at all, and two of them are named README.md: without it the sidebar would
+  // hold two entries both labelled "README".
+  const override = EXTRA_ROUTES[repoPath] ?? {};
+  const h1 = body.match(/^\s*#\s+(.+?)\s*$/m)?.[1];
   const frontmatter = emitFrontmatter({
-    title: meta.title || file.replace(/\.md$/, ""),
-    description: meta.description,
+    title: override.title || meta.title || h1 || file.replace(/\.md$/, ""),
+    description: override.description || meta.description,
     editUrl: `${GH_EDIT}/${repoPath}`,
   });
   const banner = `<!-- Generated by scripts/gen-site.mjs from ${repoPath}. Do not edit: this file is gitignored and rewritten on every build. -->`;
@@ -628,7 +793,7 @@ function criterionList(ids) {
  * Carries the version badge read from library.json, the rubric provenance table with citation
  * URLs, both criterion lanes, and boundary links to the sibling skills its own description names.
  */
-function generateSkillPage(skill, index, skills, routes) {
+function generateSkillPage(skill, index, skills, routes, measured) {
   const siblings = skills
     .filter((other) => other.name !== skill.name && skill.description.includes(other.name))
     .map((other) => `[${other.name}](${BASE}${other.route})`);
@@ -674,6 +839,30 @@ function generateSkillPage(skill, index, skills, routes) {
       "## Boundaries",
       "",
       `This skill's own description marks its edge against ${siblings.join(" and ")}. The boundary is deliberate: overlapping skills that both claim an artifact produce double-counted findings.`,
+      "",
+    );
+  }
+
+  if (measured.length > 0) {
+    // W4 owes this strip to W3: the skill pages shipped without their figures so that
+    // results.json would have exactly one reader in the build. These rows come from that reader.
+    sections.push(
+      "## What it measured",
+      "",
+      `Version ${skill.version}, from the committed benchmark. Every ratio carries the counts behind it, and [the receipts](${BASE}${RECEIPTS_ROUTE}) carries every cell, the floors, and the frozen generic-prompt baseline to compare against.`,
+      "",
+      "| Tier | Artifacts | Recall (location) | Precision (location) | Consistency | Clean false positives |",
+      "|---|---:|---|---|---|---|",
+      ...measured.map(
+        (e) =>
+          `| ${tierOf(e)} | ${e.artifacts_scored} | ` +
+          `${valueText("recall_location", e.recall_location)} (${countText(e.recall_location, "recall_location")}) | ` +
+          `${valueText("precision_location", e.precision_location)} (${countText(e.precision_location, "precision_location")}) | ` +
+          `${valueText("consistency", e.consistency)} (${countText(e.consistency, "consistency")}) | ` +
+          `${valueText("clean_fp_rate", e.clean_fp_rate)} per clean artifact |`,
+      ),
+      "",
+      "Clean false positives is a rate rather than a ratio, and higher is worse.",
       "",
     );
   }
@@ -773,6 +962,283 @@ function generateCriteriaExplorer(skills) {
 }
 
 /**
+ * The presentational CSS for the receipts explorer, emitted with the page.
+ *
+ * Kept here rather than in the tracked custom.css because it is specific to this one page and
+ * meaningless without it, and because this function is the tracked, reviewable source either way.
+ * custom.css stays about the family theme.
+ */
+const RECEIPTS_STYLE = `<style>
+  .receipts-controls { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1rem 0; align-items: end; }
+  .receipts-controls div { display: flex; flex-direction: column; gap: 0.25rem; }
+  .receipts-controls label { font-size: 0.8rem; font-weight: 600; }
+  .receipts-controls select { padding: 0.3rem; }
+  .receipts-count { font-size: 0.85rem; margin: 0.5rem 0; }
+  .receipts-scroll { overflow-x: auto; }
+  .receipts-scroll table { font-variant-numeric: tabular-nums; }
+  .receipts-scroll th button { background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; text-decoration: underline dotted; }
+  .nd { display: block; font-size: 0.75rem; opacity: 0.75; font-weight: 400; }
+  .receipts-baseline td { opacity: 0.75; }
+  .receipts-retired td { opacity: 0.75; font-style: italic; }
+</style>`;
+
+/**
+ * The client-side enhancer. Vanilla, no dependencies, and deliberately an ENHANCEMENT: the full
+ * table is already in the HTML, so the page is complete for a reader with no JavaScript, for
+ * Pagefind's indexer, and for anyone reading the built file directly. This only filters and sorts
+ * what is already there.
+ */
+const RECEIPTS_SCRIPT = `<script>
+  (function () {
+    var root = document.getElementById("receipts");
+    if (!root) return;
+    var table = document.getElementById("receipts-table");
+    var body = table.querySelector("tbody");
+    var rows = Array.prototype.slice.call(body.querySelectorAll("tr"));
+    var count = document.getElementById("receipts-count");
+    var selects = Array.prototype.slice.call(root.querySelectorAll("select[data-filter]"));
+
+    function apply() {
+      var shown = 0;
+      rows.forEach(function (row) {
+        var visible = selects.every(function (select) {
+          return select.value === "" || row.getAttribute("data-" + select.dataset.filter) === select.value;
+        });
+        row.hidden = !visible;
+        if (visible) shown++;
+      });
+      count.textContent = shown + " of " + rows.length + " measured cells shown.";
+    }
+
+    selects.forEach(function (select) { select.addEventListener("change", apply); });
+
+    Array.prototype.slice.call(table.querySelectorAll("th[data-sort]")).forEach(function (th) {
+      var button = th.querySelector("button");
+      if (!button) return;
+      button.addEventListener("click", function () {
+        var key = th.dataset.sort;
+        var numeric = th.dataset.numeric === "true";
+        var ascending = th.getAttribute("aria-sort") !== "ascending";
+        table.querySelectorAll("th[data-sort]").forEach(function (other) {
+          other.setAttribute("aria-sort", "none");
+        });
+        th.setAttribute("aria-sort", ascending ? "ascending" : "descending");
+        rows.sort(function (a, b) {
+          var x = a.getAttribute("data-" + key);
+          var y = b.getAttribute("data-" + key);
+          var result = numeric ? parseFloat(x) - parseFloat(y) : String(x).localeCompare(String(y));
+          return ascending ? result : -result;
+        });
+        rows.forEach(function (row) { body.appendChild(row); });
+      });
+    });
+
+    apply();
+  })();
+</script>`;
+
+/** One <select> filter with a real label, because an unlabelled control on this site is a self-own. */
+function filterControl(id, filterKey, label, values) {
+  const options = ["", ...values]
+    .map(
+      (value) =>
+        `      <option value="${escapeHtml(value)}">${value === "" ? "All" : escapeHtml(value)}</option>`,
+    )
+    .join("\n");
+  return [
+    "    <div>",
+    `      <label for="${id}">${escapeHtml(label)}</label>`,
+    `      <select id="${id}" data-filter="${filterKey}">`,
+    options,
+    "      </select>",
+    "    </div>",
+  ].join("\n");
+}
+
+/**
+ * Emit the receipts explorer: every measured cell, with the counts behind every ratio.
+ *
+ * The plan calls this "an audit artifact wedged into an introduction" when it lives in the README,
+ * and a page is the right container for an audit artifact. Three things a markdown table cannot do
+ * and this page does: it surfaces the numerator and denominator the README's tables discard, it
+ * puts the location-level and criterion-level cuts in one row instead of forty rows apart, and it
+ * leads with the floors rather than the highs.
+ */
+function generateReceiptsExplorer(results, activeVersions, routes) {
+  const { entries, runSet, generatedAt, resultsVersion } = results;
+  const active = activeCut(entries, activeVersions);
+  const sorted = [...entries].sort(
+    (a, b) =>
+      a.skill.localeCompare(b.skill) ||
+      a.skill_version.localeCompare(b.skill_version) ||
+      tierOf(a).localeCompare(tierOf(b)),
+  );
+
+  // The floor strip: the worst active cell per metric. Not the best, on purpose.
+  const floorRows = METRICS.map(({ key, label, higherIsWorse }) => {
+    const worst = active.reduce((acc, entry) =>
+      higherIsWorse
+        ? entry[key].value > acc[key].value
+          ? entry
+          : acc
+        : entry[key].value < acc[key].value
+          ? entry
+          : acc,
+    );
+    const where = `${worst.skill} ${worst.skill_version}, ${tierOf(worst)}`;
+    return `| ${label} | **${valueText(key, worst[key])}** | ${countText(worst[key], key)} | ${where} |`;
+  });
+
+  const headerCells = [
+    { label: "Skill", key: "skill", numeric: false },
+    { label: "Version", key: "version", numeric: false },
+    { label: "Tier", key: "tier", numeric: false },
+    { label: "Domain", key: "domain", numeric: false },
+    { label: "Artifacts", key: "artifacts", numeric: true },
+    ...METRICS.map((m) => ({ label: m.label, key: m.key, numeric: true })),
+    { label: "Unresolvable claims", key: "unresolvable", numeric: true },
+  ];
+
+  const head = headerCells
+    .map(
+      (cell) =>
+        `        <th scope="col" data-sort="${cell.key}" data-numeric="${cell.numeric}" aria-sort="none">` +
+        `<button type="button">${escapeHtml(cell.label)}</button></th>`,
+    )
+    .join("\n");
+
+  const bodyRows = sorted.map((entry) => {
+    const retired = !isBaseline(entry) && activeVersions.get(entry.skill) !== entry.skill_version;
+    const className = isBaseline(entry) ? "receipts-baseline" : retired ? "receipts-retired" : "";
+    const attrs = [
+      `data-skill="${escapeHtml(entry.skill)}"`,
+      `data-version="${escapeHtml(entry.skill_version)}"`,
+      `data-tier="${escapeHtml(tierOf(entry))}"`,
+      `data-domain="${escapeHtml(entry.domain)}"`,
+      `data-artifacts="${entry.artifacts_scored}"`,
+      `data-unresolvable="${entry.unresolvable_claims}"`,
+      ...METRICS.map(({ key }) => `data-${key}="${entry[key].value}"`),
+    ].join(" ");
+    const cells = [
+      `<th scope="row">${escapeHtml(entry.skill)}${retired ? " <em>(superseded)</em>" : ""}</th>`,
+      `<td>${escapeHtml(entry.skill_version)}</td>`,
+      `<td>${escapeHtml(tierOf(entry))}</td>`,
+      `<td>${escapeHtml(entry.domain)}</td>`,
+      `<td>${entry.artifacts_scored}</td>`,
+      ...METRICS.map(
+        ({ key }) =>
+          `<td>${valueText(key, entry[key])}<span class="nd">${escapeHtml(countText(entry[key], key))}</span></td>`,
+      ),
+      `<td>${entry.unresolvable_claims}</td>`,
+    ].join("");
+    return `        <tr${className ? ` class="${className}"` : ""} ${attrs}>${cells}</tr>`;
+  });
+
+  const uniq = (values) => [...new Set(values)].sort();
+  const controls = [
+    '  <div class="receipts-controls">',
+    filterControl("receipts-skill", "skill", "Skill", uniq(sorted.map((e) => e.skill))),
+    filterControl("receipts-tier", "tier", "Model tier", uniq(sorted.map((e) => tierOf(e)))),
+    filterControl("receipts-domain", "domain", "Domain", uniq(sorted.map((e) => e.domain))),
+    "  </div>",
+  ].join("\n");
+
+  // The JSON payload the page carries so the dataset travels with it. `<` is escaped so a future
+  // string value can never close this script element early.
+  const payload = JSON.stringify({ run_set: runSet, generated_at: generatedAt, entries }).replace(
+    /</g,
+    "\\u003c",
+  );
+
+  const accessibility = entries.filter((e) => e.skill === "critique-accessibility");
+  const comparisonRows = accessibility
+    .sort((a, b) => a.skill_version.localeCompare(b.skill_version) || tierOf(a).localeCompare(tierOf(b)))
+    .map(
+      (e) =>
+        `| ${e.skill_version} | ${tierOf(e)} | ${valueText("recall_location", e.recall_location)} | ` +
+        `${valueText("precision_location", e.precision_location)} | ` +
+        `${valueText("clean_fp_rate", e.clean_fp_rate)} | ${e.unresolvable_claims} |`,
+    );
+
+  const baselineZeros = entries.filter((e) => isBaseline(e) && e.precision.value === 0).length;
+  const baselineTotal = entries.filter(isBaseline).length;
+
+  const lines = [
+    `Every figure on this page is read from [\`bench/results/results.json\`](${GH_BLOB}/bench/results/results.json) at build time. Nothing here is typed by hand, and nothing here is rounded in a direction. Run set \`${runSet}\`, generated \`${generatedAt}\`, results schema \`${resultsVersion}\`, ${entries.length} measured cells.`,
+    "",
+    `Two things this page shows that a markdown table cannot. **Every ratio carries the counts underneath it**, because a precision of 0.169 reads very differently next to "30 of 178 claims matched". And **the location-level and criterion-level cuts sit in the same row**, rather than in two tables forty rows apart.`,
+    "",
+    "## The floors",
+    "",
+    `The worst measured cell for each metric, over this library's **active** skill versions only: ${active.length} cells, baseline and superseded versions excluded. A floor computed over a version nobody can install describes software that no longer exists.`,
+    "",
+    "| Metric | Worst measured | Counts | Where |",
+    "|---|---|---|---|",
+    ...floorRows,
+    "",
+    "Clean false positives is a **rate, not a ratio**: it counts findings raised against artifacts that had no defect planted at all, per clean artifact, so it is not bounded by 1 and **higher is worse**. Every other row above is a 0-to-1 figure where higher is better.",
+    "",
+    "## Every measured cell",
+    "",
+    `All ${entries.length} cells, including the frozen generic-prompt baseline and the superseded \`critique-accessibility\` 0.1.0, which stay here because the comparison below is the most useful thing this benchmark has produced. The filters and the sortable columns need JavaScript; **the table itself does not**, and neither does anything above.`,
+    "",
+    '<div id="receipts">',
+    "",
+    controls,
+    `  <p class="receipts-count" id="receipts-count" aria-live="polite">${sorted.length} of ${sorted.length} measured cells shown.</p>`,
+    '  <div class="receipts-scroll">',
+    '    <table id="receipts-table">',
+    "      <caption>Measured cells from the committed benchmark results. Counts appear under each ratio.</caption>",
+    "      <thead>",
+    "        <tr>",
+    head,
+    "        </tr>",
+    "      </thead>",
+    "      <tbody>",
+    ...bodyRows,
+    "      </tbody>",
+    "    </table>",
+    "  </div>",
+    "</div>",
+    "",
+    RECEIPTS_STYLE,
+    "",
+    `<script type="application/json" id="receipts-data">${payload}</script>`,
+    "",
+    RECEIPTS_SCRIPT,
+    "",
+    "## Why the baseline's criterion-level scores are all zero",
+    "",
+    `All ${baselineZeros} of the ${baselineTotal} baseline cells show criterion-level precision and recall of exactly 0.000, and that is **structural rather than a result**. The frozen baseline is a generic critique prompt: it emits prose findings that carry no criterion ID, so no finding it produces can match a planted defect *at the criterion level*, whatever the finding says. Its location-level scores are the ones to read, and they are real: the baseline finds defects, it just cannot say which criterion each one breaches. That is the difference this library is claiming, and it is why the location-level columns are the honest comparison.`,
+    "",
+    "## What a version bump looked like, measured",
+    "",
+    "`critique-accessibility` is the only skill in the dataset with two measured versions, and the gap between them is the strongest evidence here that the benchmark reports rather than flatters.",
+    "",
+    "| Version | Tier | Recall (location) | Precision (location) | Clean false positives | Unresolvable claims |",
+    "|---|---|---|---|---|---|",
+    ...comparisonRows,
+    "",
+    "0.1.0 shipped and was measured finding roughly a fifth of the planted defects on the cheap tier, with 71 claims that could not be resolved against the artifact at all. Those figures were published rather than withheld, which is what made the rebuild obviously necessary. **The unresolvable-claim count is the one to watch**: it falls from 71 and 65 to 3 and 0, which says the rebuilt skill stopped asserting things about the document that nobody could check.",
+    "",
+    `The narrative behind these figures, unflattering numbers first, is in [what the skills measured](${BASE}/receipts/narrative/). The thresholds each cell was judged against are in [ship and hold verdicts](${BASE}/receipts/verdicts/). The corpus, the metric definitions and the reproduction commands are in [how we measure](${BASE}/receipts/how-we-measure/).`,
+    "",
+  ];
+
+  const frontmatter = emitFrontmatter({
+    title: "The receipts",
+    description: `Every measured cell of the ${entries.length}-cell benchmark, with the counts behind every ratio, the worst-case floors, and what a version bump looked like when it was measured.`,
+    editUrl: false,
+    extra: ["tableOfContents:", "  maxHeadingLevel: 2"],
+  });
+  const repoOut = `site/src/content/docs${outputPathFor(RECEIPTS_ROUTE)}`;
+  const banner =
+    "<!-- Generated by scripts/gen-site.mjs from bench/results/results.json. Do not edit: this file is gitignored and rewritten on every build. -->";
+  writeUtf8(join(ROOT, repoOut), `${frontmatter}\n\n${banner}\n\n${lines.join("\n").trim()}\n`);
+  return repoOut;
+}
+
+/**
  * Generate the site content tree.
  *
  * Idempotent, and quiet enough to run on every astro entrypoint: one summary line. Returns the
@@ -788,8 +1254,10 @@ export function generate({ quiet = false } = {}) {
   }
 
   const skills = loadSkills();
+  const results = loadResults();
   const routes = buildRouteMap(skills);
   const skillSources = new Set(skills.map((skill) => skill.path));
+  const activeVersions = new Map(skills.map((skill) => [skill.name, skill.version]));
   const files = [];
   const unresolved = [];
 
@@ -800,6 +1268,8 @@ export function generate({ quiet = false } = {}) {
   for (const quadrant of QUADRANTS) {
     freshDir(join(DOCS_OUT, quadrant));
   }
+  // receipts/ holds no hand-authored page, so unlike skills/ it is cleared wholesale.
+  freshDir(join(DOCS_OUT, "receipts"));
   removeGeneratedSkillPages();
 
   for (const repoPath of routes.keys()) {
@@ -810,9 +1280,15 @@ export function generate({ quiet = false } = {}) {
     for (const href of result.unresolved) unresolved.push(`${repoPath}: ${href}`);
   }
   skills.forEach((skill, index) => {
-    files.push(generateSkillPage(skill, index, skills, routes));
+    // Each skill page gets only its own ACTIVE version's cells. A page headed v0.1.1 carrying a
+    // v0.1.0 row would be the exact drift the receipts page exists to make impossible.
+    const measured = results.entries
+      .filter((e) => e.skill === skill.name && e.skill_version === skill.version)
+      .sort((a, b) => tierOf(a).localeCompare(tierOf(b)));
+    files.push(generateSkillPage(skill, index, skills, routes, measured));
   });
   files.push(generateCriteriaExplorer(skills));
+  files.push(generateReceiptsExplorer(results, activeVersions, routes));
 
   if (unresolved.length > 0) {
     // Left unchanged in the output rather than guessed at, so the W6 rendered-link guard fails
@@ -826,10 +1302,11 @@ export function generate({ quiet = false } = {}) {
     const criteria = skills.reduce((n, s) => n + s.scripted.length + s.judged.length, 0);
     console.log(
       `gen-site: ${files.length} pages -> ${DOCS_OUT} ` +
-        `(${QUADRANTS.length} quadrants, ${skills.length} skills, ${criteria} criteria)`,
+        `(${QUADRANTS.length} quadrants, ${skills.length} skills, ${criteria} criteria, ` +
+        `${results.entries.length} measured cells)`,
     );
   }
-  return { files, routes, skills };
+  return { files, routes, skills, results };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) generate();

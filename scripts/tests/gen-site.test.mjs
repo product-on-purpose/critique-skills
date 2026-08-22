@@ -25,7 +25,16 @@ import {
   QUADRANTS,
   SLUG_OVERRIDES,
   CRITERIA_ROUTE,
+  RECEIPTS_ROUTE,
   EXTRA_ROUTES,
+  generate,
+  loadResults,
+  activeCut,
+  isBaseline,
+  tierOf,
+  countText,
+  valueText,
+  escapeHtml,
   criterionPattern,
   parseSkill,
   extractIntro,
@@ -264,6 +273,7 @@ test("buildRouteMap covers every publishable doc and routes no internal one", ()
 const GITIGNORE_FIXTURE = [
   "site/src/content/docs/how-to/",
   "site/src/content/docs/reference/",
+  "site/src/content/docs/receipts/",
   "site/src/content/docs/skills/critique-*.md",
 ].join("\n") + "\n";
 
@@ -319,6 +329,47 @@ function buildGuardFixture(t) {
     ].join("\n"),
     "utf8",
   );
+  mkdirSync(resolve(root, "bench", "results"), { recursive: true });
+  // The generator reads the committed benchmark results, so the fixture needs a minimal, valid
+  // one. Values are arbitrary; only the shape matters here.
+  writeFileSync(
+    resolve(root, "bench", "results", "results.json"),
+    JSON.stringify({
+      run_set: "fixture",
+      generated_at: "2026-01-01T00:00:00Z",
+      results_version: "1.1.0",
+      entries: [
+        {
+          skill: "critique-fixture",
+          skill_version: "0.1.0",
+          model: "claude-haiku-4-5-20251001",
+          domain: "fixture",
+          artifact_type: "markdown-prose",
+          artifacts_scored: 2,
+          unresolvable_claims: 0,
+          recall: { "value": 0.5, "numerator": 1, "denominator": 2 },
+          precision: { "value": 0.5, "numerator": 1, "denominator": 2 },
+          recall_location: { "value": 0.5, "numerator": 1, "denominator": 2 },
+          precision_location: { "value": 0.5, "numerator": 1, "denominator": 2 },
+          clean_fp_rate: { value: 0.0, numerator: 0, denominator: 1 },
+          consistency: { value: 0.5, artifacts_with_pairs: 1, total_pairs: 2 },
+          consistency_exact: { value: 0.5, artifacts_with_pairs: 1, total_pairs: 2 },
+        },
+      ],
+    }),
+    "utf8",
+  );
+  writeFileSync(
+    resolve(root, "bench", "results", "README.md"),
+    ["# P3 results", "", "Narrative."].join("\n"),
+    "utf8",
+  );
+  writeFileSync(
+    resolve(root, "bench", "results", "verdicts.md"),
+    ["# Verdicts", "", "Verdicts."].join("\n"),
+    "utf8",
+  );
+  writeFileSync(resolve(root, "bench", "README.md"), ["# The bench", "", "Design."].join("\n"), "utf8");
   mkdirSync(resolve(root, "agents"), { recursive: true });
   writeFileSync(
     resolve(root, "agents", "critique-critic.md"),
@@ -523,8 +574,8 @@ test("the route map routes every shipped skill and the critic subagent", () => {
   for (const skill of skills) {
     assert.equal(routes.get(skill.path), `/skills/${skill.name}/`);
   }
-  for (const [source, route] of Object.entries(EXTRA_ROUTES)) {
-    assert.equal(routes.get(source), route);
+  for (const [source, extra] of Object.entries(EXTRA_ROUTES)) {
+    assert.equal(routes.get(source), extra.route);
   }
   // The criteria explorer is an aggregate with no source file, so it is deliberately absent.
   assert.ok(![...routes.values()].includes(CRITERIA_ROUTE));
@@ -535,5 +586,151 @@ test("a skill page resolves to the file the gitignore claims the generator owns"
   for (const skill of loadSkills()) {
     const out = outputPathFor(skill.route);
     assert.match(out, /^\/skills\/critique-[\w-]+\.md$/, `${skill.name} -> ${out}`);
+  }
+});
+
+// --- results.json (W4) ------------------------------------------------------
+
+/** The active version of each shipped skill, as library.json ships it. */
+function activeVersionMap() {
+  return new Map(loadSkills().map((skill) => [skill.name, skill.version]));
+}
+
+test("loadResults reads the committed benchmark file and its provenance", () => {
+  const results = loadResults();
+  assert.equal(results.entries.length, 26);
+  assert.equal(results.runSet, "p3-2026-07-31-plus-cal1-2026-08-01");
+  assert.ok(results.generatedAt, "generated_at");
+  assert.ok(results.resultsVersion, "results_version");
+});
+
+test("activeCut drops the baseline and every superseded version, and nothing else", () => {
+  const results = loadResults();
+  const active = activeCut(results.entries, activeVersionMap());
+  assert.equal(active.length, 12);
+  assert.ok(active.every((e) => !isBaseline(e)), "no baseline row survives the cut");
+  // critique-accessibility 0.1.0 is the one superseded version in the dataset, and it must stay
+  // OUT of the floors while staying IN the table: the 0.1.0-to-0.1.1 comparison is the page's
+  // strongest section, so filtering at load rather than here would delete it.
+  assert.ok(
+    !active.some((e) => e.skill === "critique-accessibility" && e.skill_version === "0.1.0"),
+    "superseded accessibility must not reach the floor strip",
+  );
+  assert.ok(
+    results.entries.some((e) => e.skill === "critique-accessibility" && e.skill_version === "0.1.0"),
+    "superseded accessibility must stay in the dataset",
+  );
+});
+
+test("countText handles both count shapes and refuses to phrase a rate as a ratio", () => {
+  assert.equal(countText({ numerator: 83, denominator: 85 }, "recall_location"), "83 of 85");
+  // consistency compares pairs of runs, so it carries total_pairs rather than a numerator.
+  assert.equal(countText({ artifacts_with_pairs: 4, total_pairs: 40 }, "consistency"), "40 pairs");
+  // clean_fp_rate's pair is not matched-out-of-total: "47 of 5" is nonsense.
+  assert.equal(countText({ numerator: 47, denominator: 5 }, "clean_fp_rate"), "47 across 5 clean");
+  assert.equal(countText({}, "recall"), "");
+});
+
+test("valueText keeps clean_fp_rate as a two-place rate and everything else at three places", () => {
+  assert.equal(valueText("recall_location", { value: 0.9755 }), "0.976");
+  assert.equal(valueText("clean_fp_rate", { value: 9.4 }), "9.40");
+});
+
+test("escapeHtml closes the attribute and element injection routes", () => {
+  assert.equal(escapeHtml('a"b<c>d&e'), "a&quot;b&lt;c&gt;d&amp;e");
+});
+
+test("the published floors are what the committed evidence says they are", () => {
+  // Hard-coded for the same reason as 42/54/96: results.json changes only by a deliberate merge of
+  // new run evidence, so a break here is the correct alarm that the site's headline worst-case
+  // figures moved and every document quoting them needs re-reading.
+  const active = activeCut(loadResults().entries, activeVersionMap());
+  const worst = (key) => Math.min(...active.map((e) => e[key].value));
+  assert.equal(worst("consistency"), 0.309, "consistency floor");
+  assert.equal(worst("precision"), 0.169, "criterion-level precision floor");
+  assert.equal(worst("precision_location"), 0.169, "location-level precision floor");
+  assert.equal(worst("recall"), 0.686, "criterion-level recall floor");
+  assert.equal(Math.max(...active.map((e) => e.clean_fp_rate.value)), 9.4, "worst clean-FP rate");
+});
+
+test("the baseline scores exactly zero at criterion level, which is structural", () => {
+  // The baseline emits prose findings carrying no criterion ID, so no finding it produces can
+  // match at the criterion level whatever it says. The page explains this in place; if a future
+  // baseline ever scores non-zero here, that explanation is wrong and must be rewritten.
+  const baseline = loadResults().entries.filter(isBaseline);
+  assert.equal(baseline.length, 12);
+  for (const entry of baseline) {
+    assert.equal(entry.precision.value, 0, `${entry.domain}/${entry.model} precision`);
+    assert.equal(entry.recall.value, 0, `${entry.domain}/${entry.model} recall`);
+    assert.ok(entry.recall_location.value >= 0, "location-level scores are the real comparison");
+  }
+});
+
+test("tierOf reduces a pinned model id to its tier", () => {
+  assert.equal(tierOf({ model: "claude-haiku-4-5-20251001" }), "haiku");
+  assert.equal(tierOf({ model: "claude-sonnet-5" }), "sonnet");
+});
+
+// --- the emitted receipts page ----------------------------------------------
+
+test("the receipts page carries every measured cell, the data, and the enhancer", () => {
+  // generate() is idempotent and writes only into the gitignored content tree, which every build
+  // rewrites anyway; this is the same thing check-generated-untracked.mjs does.
+  const { files } = generate({ quiet: true });
+  const repoOut = `site/src/content/docs${outputPathFor(RECEIPTS_ROUTE)}`;
+  assert.ok(files.includes(repoOut), "the receipts page is emitted");
+
+  const page = readFileSync(resolve(REPO_ROOT, repoOut), "utf8");
+  const results = loadResults();
+
+  const rows = page.match(/<tr[^>]*data-skill=/g) ?? [];
+  assert.equal(rows.length, results.entries.length, "one row per measured cell");
+
+  assert.match(page, /id="receipts-data"/, "the dataset travels with the page");
+  assert.match(page, /editUrl: false/, "an aggregate page has no single source to edit");
+
+  // Progressive enhancement: the table must be complete before any script runs, so the page works
+  // with JavaScript off and Pagefind can index the figures.
+  const tableAt = page.indexOf("<table id=\"receipts-table\">");
+  const scriptAt = page.indexOf("id=\"receipts-data\"");
+  assert.ok(tableAt !== -1 && scriptAt > tableAt, "the static table precedes the data and enhancer");
+
+  // Accessibility, on the site that ships critique-accessibility.
+  assert.equal((page.match(/<label for="receipts-/g) ?? []).length, 3);
+  assert.equal((page.match(/<select id="receipts-/g) ?? []).length, 3);
+  assert.match(page, /<caption>/);
+  assert.match(page, /aria-live="polite"/);
+});
+
+test("every skill page carries its own active version's measured rows, and no other", () => {
+  generate({ quiet: true });
+  const results = loadResults();
+  for (const skill of loadSkills()) {
+    const page = readFileSync(
+      resolve(REPO_ROOT, `site/src/content/docs${outputPathFor(skill.route)}`),
+      "utf8",
+    );
+    const expected = results.entries.filter(
+      (e) => e.skill === skill.name && e.skill_version === skill.version,
+    );
+    assert.ok(expected.length > 0, `${skill.name} has no measured cell`);
+    assert.match(page, /## What it measured/, `${skill.name} stat strip`);
+    for (const entry of expected) {
+      assert.ok(
+        page.includes(entry.recall_location.value.toFixed(3)),
+        `${skill.name} is missing its ${tierOf(entry)} recall figure`,
+      );
+    }
+    // A page headed v0.1.1 must not carry a v0.1.0 row.
+    const superseded = results.entries.filter(
+      (e) => e.skill === skill.name && e.skill_version !== skill.version,
+    );
+    for (const entry of superseded) {
+      const strip = page.slice(page.indexOf("## What it measured"), page.indexOf("## Elsewhere"));
+      assert.ok(
+        !strip.includes(`| ${entry.skill_version} |`),
+        `${skill.name} strip leaked superseded ${entry.skill_version}`,
+      );
+    }
   }
 });
