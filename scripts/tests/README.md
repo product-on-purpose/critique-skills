@@ -48,7 +48,14 @@ Python half.
   The 42/54/96 figures are hard-coded on purpose: a criterion moves only by a deliberate, versioned
   change, so a break there is the correct alarm that the README's hand-typed lane-split sentence has
   gone stale. Plus `check-generated-untracked.mjs` exercised against an isolated temp git
-  repository in all three states: not ignored, ignored, and force-tracked.
+  repository in all three states: not ignored, ignored, and force-tracked. Also the benchmark
+  results reader: both count shapes (numerator/denominator and total_pairs), the clean-FP rate that
+  is not a ratio, the active-version cut that excludes the baseline and the superseded
+  `critique-accessibility` 0.1.0 while leaving both in the dataset, the published floors (0.309
+  consistency, 0.169 precision, 9.40 clean-FP), the baseline's structural criterion-level zeros, and
+  the emitted receipts page: one row per measured cell, the inlined dataset, and the static table
+  preceding the enhancer so the page works with JavaScript off. The floor figures are hard-coded for
+  the same reason as 42/54/96: results.json changes only by a deliberate evidence merge.
 - `helpers/proc.mjs` - spawns a script under test as a child process (`runNode()`). Several scripts
   above run unconditional top-level code, including `process.exit()`, on module load - see the
   file's own header comment for why importing them directly into the test runner is unsafe.
