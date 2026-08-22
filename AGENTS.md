@@ -85,6 +85,14 @@ prerequisite `npm run check` and `npm run gen -- --check` share.
 | drift | `npm run gen -- --check` |
 | audit | `npm audit --audit-level=high` |
 | smoke | `python scripts/smoke.py --expect no-deps`, then `python scripts/smoke.py --expect ready` |
+| build-site | `node scripts/check-site.mjs` |
+
+**`build-site` builds the documentation site and runs its guards without deploying anything.** It
+runs the same recipe as `deploy-pages.yml` so a green pull request predicts a green deploy, which it
+cannot do if the two builds diverge. `node scripts/check-site.mjs` runs the three ported link and
+route validators plus the generated-tree guard against the built `site/dist`; run it locally after
+`cd site && npm ci && npm run build`. `node scripts/check.mjs` also runs it when a built site is
+present, and says so when one is not.
 
 **`smoke` answers a question no other job asks: does this plugin run for someone who just installed
 it?** Every other job installs dependencies before it runs anything, so none of them sees what

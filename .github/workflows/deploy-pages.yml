@@ -1,0 +1,84 @@
+name: Deploy docs site
+
+# Publishes the Astro Starlight site at https://product-on-purpose.github.io/critique-skills/.
+#
+# Two things this workflow shares with ci.yml's build-site job, deliberately and by family Astro
+# site standard 14.6: the SAME build recipe, and the SAME guards. A green PR has to predict a green
+# deploy, which it cannot do if the deploy build runs a different recipe or skips the validators.
+# The guards run HERE too, not on the PR only.
+#
+# Pages source must be set to "GitHub Actions" in repository settings. That is an owner action in
+# the UI that no script can perform; it was done 2026-08-18. After the flip, this workflow's last
+# successful deployment IS production.
+#
+# ROLLBACK. This repo has no gh-pages branch and therefore no static fossil to fall back to. The
+# rollback is "re-run the previous successful deployment" from the Actions UI. Worth knowing before
+# a bad deploy rather than during one.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# contents: read to check out; pages + id-token for the Pages deployment itself.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time, and NEVER cancel one in flight: a cancelled deploy can leave Pages
+# serving a half-published state, and the next push would have deployed the newer commit anyway.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build the site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # node-version-file rather than a literal (14.8): the pin lives in .nvmrc and is read, never
+      # restated. The plugin core's own two-version matrix in ci.yml is deliberately untouched;
+      # testing a floor and a ceiling is a different purpose from the site's single build target.
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Configure Pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+
+      - name: Install site dependencies
+        run: npm ci
+        working-directory: site
+
+      - name: Build the site
+        run: npm run build
+        working-directory: site
+
+      # Same guards as the PR build. A deploy that skips them is a deploy that can publish a broken
+      # link set, which is exactly what the guards exist to prevent.
+      - name: Run the site guards
+        run: node scripts/check-site.mjs
+
+      - name: Upload the artifact
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: site/dist
+
+  deploy:
+    name: Deploy to Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
