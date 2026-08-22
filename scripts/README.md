@@ -50,6 +50,23 @@ shared library.
 - `check-generated-untracked.mjs` - asserts that every file `gen-site.mjs` emits is gitignored and
   untracked, which is what keeps the gitignored-and-rebuilt model from failing silently when a new
   emit directory is added.
+- `check-site.mjs` - the one command that runs every docs-site guard against a built `site/dist`:
+  the three ported 14.11 validators below plus `check-generated-untracked.mjs`. `check.mjs` runs it
+  when a built site is present, and both CI jobs call it directly.
+- `check-rendered-links.mjs` - the browser-broken-link guard. Resolves every intra-site href against
+  the page's real served URL and asserts the target exists in `dist`, with fragments checked against
+  the target page's element ids. A filesystem-correct link can still 404 in a browser, because pages
+  build to `slug/index.html` and are served one URL level deeper than their source.
+- `check-route-parity.mjs` - the guard against silently removing a published route. Diffs the built
+  route set against `route-manifest.txt` and fails when a baseline route disappears; added routes are
+  allowed. Run with `--update` to rewrite the baseline after an intentional removal.
+- `verify-edit-links.mjs` - asserts every "Edit page" link in the built site points at a file that
+  really exists, and fails when the total count collapses. This site is generator-heavy and
+  Starlight's `editUrl` auto-derivation resolves to the gitignored generated tree, so this is the
+  guard that keeps every generated page's explicit `editUrl` honest.
+- `route-manifest.txt` - the committed baseline `check-route-parity.mjs` diffs against: one line per
+  built route. Regenerate with `node scripts/check-route-parity.mjs --update` and commit it in the
+  same change as the route removal that made it necessary, with the reason in the message.
 - `lib/` - shared helpers used by the scripts above.
 - `tests/` - two suites: `node --test` coverage for the Node spine above, and the pytest suite for
   the Python tooling here (`skill-selftest.py`); see `tests/README.md` for the inventory.
