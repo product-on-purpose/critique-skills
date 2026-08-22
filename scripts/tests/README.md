@@ -37,12 +37,18 @@ Python half.
 - `gen-index.filter.test.mjs` - unit tests for `lib/gen-index-filter.mjs`'s `dropPhantomRows()`
   (the INDEX.md phantom-link filter); not part of this task's scope, documented here for inventory
   completeness only.
-- `gen-site.test.mjs` - the docs-site content generator's pure helpers (path normalization, the
+- `gen-site.test.mjs` - the docs-site content generator. Pure helpers (path normalization, the
   route and output-path mapping plus the invariant that the two agree, link resolution across its
-  four outcomes, fence-aware link rewriting, frontmatter parsing and emission), a live check that
-  `buildRouteMap()` covers the publishable docs and routes nothing from `docs/internal/`, and
-  `check-generated-untracked.mjs` exercised against an isolated temp git repository in all three
-  states: not ignored, ignored, and force-tracked.
+  four outcomes, fence-aware link rewriting, frontmatter parsing and emission) and the `SKILL.md`
+  parser (both rubric sources including one with `url: null`, both criterion lanes, intro
+  extraction, and the loud failures on a missing frontmatter block or scalar). Live checks against
+  the real repository: `buildRouteMap()` routes nothing from `docs/internal/`, the shipped skills
+  carry exactly **42 scripted and 54 judged criteria**, every criterion ID is unique and matches the
+  grammar read from the frozen contract schema, and every skill version agrees with `library.json`.
+  The 42/54/96 figures are hard-coded on purpose: a criterion moves only by a deliberate, versioned
+  change, so a break there is the correct alarm that the README's hand-typed lane-split sentence has
+  gone stale. Plus `check-generated-untracked.mjs` exercised against an isolated temp git
+  repository in all three states: not ignored, ignored, and force-tracked.
 - `helpers/proc.mjs` - spawns a script under test as a child process (`runNode()`). Several scripts
   above run unconditional top-level code, including `process.exit()`, on module load - see the
   file's own header comment for why importing them directly into the test runner is unsafe.
