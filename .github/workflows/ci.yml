@@ -5,12 +5,17 @@ name: CI
 # is exactly one documented command, each reproducible locally with identical results (AGENTS.md
 # "Checks"). CI is a scheduler, not a judge.
 #
-# Seven jobs (S-07 CI-pipeline spec, AC-1): conformance, unit-python, unit-node, schema, corpus,
-# drift, audit. Each command a job runs is marked "# doc-check"; scripts/gen-plugin-manifest.mjs
-# --check (the "drift" job) fails if any "# doc-check" command is not documented in AGENTS.md
-# (AC-5).
+# Nine jobs (S-07 CI-pipeline spec, AC-1): conformance, unit-python, unit-node, schema, corpus,
+# drift, audit, smoke, build-site. Each command a job runs is marked "# doc-check";
+# scripts/gen-plugin-manifest.mjs --check (the "drift" job) fails if any "# doc-check" command is
+# not documented in AGENTS.md (AC-5).
 #
 # Node matrix: 22.12.0 (floor) and 24 (current). Python: 3.12.
+#
+# build-site is the NON-DEPLOYING half of family Astro site standard 14.6: it runs the same recipe
+# and the same guards as deploy-pages.yml, so a green PR predicts a green deploy. It is off the
+# plugin-core Node matrix on purpose and reads .nvmrc instead (14.8), because the site has one
+# build environment while the core deliberately tests a floor and a ceiling.
 
 on:
   pull_request:
@@ -221,3 +226,28 @@ jobs:
 
       - name: Audit npm dependencies
         run: npm audit --audit-level=high # doc-check
+
+  build-site:
+    name: build-site (Node from .nvmrc)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Install site dependencies
+        run: npm ci
+        working-directory: site
+
+      - name: Build the site
+        run: npm run build
+        working-directory: site
+
+      - name: Run the site guards
+        run: node scripts/check-site.mjs # doc-check
