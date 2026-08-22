@@ -8,13 +8,15 @@ This is a public statement of sequence, not a schedule. It says what shipped, wh
 
 **Sequence-only, no dates.** Every version below is gated by the exit criteria of the version before it. `v0.2.0` does not open until `v0.1.x`'s exit gate closes; `v0.3.0` does not open until `v0.2.0`'s does. This is a solo-maintained project that publishes its own honest measurement numbers, and a solo maintainer who commits to dates ends up choosing between missing them in public or quietly padding the numbers to hit them. Sequence-gating avoids that trade entirely: a version opens when its prerequisite work is actually done, not when a calendar says it should be.
 
-**This document is also a list of what is not done.** Reading only the "Now" section tells you what exists. Reading the rest tells you, just as precisely, what does not: no taxonomy survey yet, no BYOR mode yet, no docs site yet, no revision loop as a first-class chain yet. Treat every "Then" and "After" item as a feature this library does not currently have, not a promise about when it will.
+**This document is also a list of what is not done.** Reading only the "Now" section tells you what exists. Reading the rest tells you, just as precisely, what does not: no taxonomy survey yet, no BYOR mode yet, no docs site deployed yet, no revision loop as a first-class chain yet. Treat every "Then" and "After" item as a feature this library does not currently have, not a promise about when it will.
 
 **Where the numbers live.** Nothing on this page overrides the measured results. `bench/results/README.md` is the source of truth for what the library actually catches; this page only sequences the work that produces future measurements.
 
 ---
 
-## Now: v0.1.0
+## Now: v0.1.6
+
+Six patch releases have shipped since `v0.1.0`. None added a skill, a criterion, or a re-score, which is what patch scope means here; each fixed defects found by running something that had never been run. `CHANGELOG.md` carries the detail.
 
 Shipped: six measured critique skills (`critique-accessibility`, `critique-argument`, `critique-clarity`, `critique-docs`, `critique-microcopy`, `critique-usability`), the Critique Contract (finding schema, run envelope, disposition log) frozen with a JSON Schema and validator, the `critique-critic` clean-context subagent, a deterministic seeded-defect benchmark with 502 committed run envelopes across two pinned model tiers, `--gate` mode for CI, and Convergent (Silver) conformance with 0 errors and 0 warnings.
 
@@ -61,7 +63,7 @@ Widening the skill base and regenerating the research spine underneath the catal
 
 **7. Samples corpus.** Worked, narrative samples distinct from the benchmark: multiple skills applied across a small set of running example threads, each following the same scenario-to-disposition shape, with machine-validated envelopes checked in CI and provenance honestly labeled as illustrative single runs, never conflated with k=5 measurement. Samples never enter `bench/` and never carry ground-truth manifests; that boundary is what keeps a compelling example from being mistaken for a measured claim.
 
-**8. Astro docs site**, sequenced deliberately after the samples corpus, not before it and not at v0.1.0. Two reasons for the order: the samples are the content that gives a docs site an information architecture actually worth designing, and a site built before that content exists is just a nicer-looking README. Two reasons it is not deferred further: this README is long enough that it is the classic signal content wants a dedicated site, and the library's marketplace listing has a docs-site line item that should not stay unaddressed indefinitely. Trigger conditions that would pull the site earlier than this sequence, if any of them fires: the README passes roughly 600 lines, the marketplace listing starts producing real traffic, or a public essay about this library ships and needs a stable link target that is not a GitHub anchor.
+**8. Astro docs site. This item's sequence position was overtaken on 2026-08-18 and the site is being built now, ahead of the samples corpus.** The original order put it after the samples on the reasoning that they are the content which gives a site an information architecture worth designing, and that a site built before that content exists is just a nicer-looking README. That reasoning still holds for the site's *content*, and it is not what moved the item. What moved it was a decision that the README is the project's front door, which makes the site a prerequisite for fixing the README rather than a reward for finishing the samples. **None of the three trigger conditions this item named actually fired**: the README is 517 lines against the roughly 600 named here, the marketplace listing has produced no traffic worth calling real, and no public essay has shipped. The item was pulled early for a reason it did not anticipate, and saying so is more useful than retrofitting a trigger. Work in progress: the scaffold and the generated documentation tree exist and build, nothing is deployed, and the exit gate below still reads "docs site deployed", which is unchanged and unmet.
 
 **Exit gate:** survey published; every listed skill measured; BYOR pattern documented and shipped on one skill; docs site deployed; every new component in this version built and measured to the same bar as v0.1.0.
 

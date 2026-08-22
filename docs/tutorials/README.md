@@ -11,4 +11,7 @@ Learning-oriented walkthroughs for getting a critique skill running end to end.
 
 ## Inventory
 
-- none yet; the first lands alongside the first shipped skill.
+- None yet. The premise of the sentence that used to sit here expired: it said the first tutorial
+  would land alongside the first shipped skill, and all six shipped without one. The closest thing
+  today is [`QUICKSTART.md`](../../QUICKSTART.md) at the repository root, which walks one skill from
+  install to a read envelope. A tutorial proper belongs here and is not written.
