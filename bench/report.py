@@ -1,4 +1,4 @@
-"""`python -m bench.report table --results FILE [--target FILE] [--check]`
+"""`python -m bench.report {table,scoreboard} --results FILE [--target FILE] [--check]`
 
 Renders a `bench/results/results.schema.json`-valid `results.json` into
 the markdown results tables `bench/README.md` publishes, replacing the
@@ -310,6 +310,178 @@ def render_block(results: dict[str, Any]) -> str:
     )
 
 
+SCOREBOARD_START_MARKER = "<!-- bench-scoreboard:start -->"
+SCOREBOARD_END_MARKER = "<!-- bench-scoreboard:end -->"
+
+
+def _active_versions(library_path: Path) -> dict[str, str]:
+    """The version of each skill this plugin currently ships, read from
+    `library.json`'s active component set.
+
+    The scoreboard is a front-door summary, so it shows the skill a
+    reader can actually install and nothing else. `critique-accessibility`
+    has two measured versions in `results.json` and only 0.1.1 ships; a
+    scoreboard row for 0.1.0 would describe software no one can get. The
+    full grid keeps both, because the 0.1.0-to-0.1.1 comparison is the
+    most instructive thing the benchmark has produced, and the receipts
+    explorer is where that comparison belongs.
+
+    Reading `library.json` rather than "highest version wins" is
+    deliberate: it is the same source `scripts/gen-site.mjs` and
+    `scripts/gen-readme-catalog.mjs` read, so three generators cannot
+    disagree about which skills ship.
+    """
+    data = json.loads(library_path.read_text(encoding="utf-8"))
+    return {
+        component["name"]: component["version"]
+        for component in data.get("components", {}).get("skills", [])
+        if component.get("status") == "active"
+    }
+
+
+def render_scoreboard(entries: list[dict[str, Any]], active: dict[str, str]) -> str:
+    """One row per shipped skill: location-level recall and precision on
+    each pinned tier, plus the baseline verdict.
+
+    Location-level rather than criterion-level, because that is the cut
+    where the comparison is fair: the frozen baseline emits prose
+    findings carrying no criterion ID, so its criterion-level score is
+    pinned at 0.000 by construction and a table using it would flatter
+    every skill for a reason that has nothing to do with the skill.
+
+    The verdict column reuses `_dominance_verdict`, so the scoreboard
+    and the full grid cannot disagree about whether a skill passed a
+    tier: recall alone is not a pass, and a row that wins recall while
+    losing precision reads as a mixed non-pass rather than a win.
+    """
+    by_skill: dict[str, dict[str, dict[str, Any]]] = {}
+    baselines: dict[tuple[str, str], dict[str, Any]] = {}
+
+    for (domain, model), skills in _by_domain_model(entries).items():
+        baseline = _find_baseline(skills)
+        if baseline is not None:
+            baselines[(domain, model)] = baseline
+        for skill_name, skill_version in skills:
+            if skill_name == BASELINE_SKILL:
+                continue
+            if active.get(skill_name) != skill_version:
+                continue
+            entry = skills[(skill_name, skill_version)]
+            by_skill.setdefault(skill_name, {})[_tier_label(model)] = {
+                "entry": entry,
+                "domain": domain,
+                "model": model,
+            }
+
+    if not by_skill:
+        return "_No shipped skill has been measured yet._"
+
+    tiers = sorted({tier for cells in by_skill.values() for tier in cells})
+    header = (
+        "| Skill "
+        + "".join(f"| Recall, {tier} " for tier in tiers)
+        + "".join(f"| Precision, {tier} " for tier in tiers)
+        + "| Versus rubric-free baseline |"
+    )
+    divider = "|---" + "|---:" * (2 * len(tiers)) + "|---|"
+
+    rows: list[str] = []
+    for skill_name in sorted(by_skill):
+        cells = by_skill[skill_name]
+        version = active[skill_name]
+        recalls = []
+        precisions = []
+        verdicts: dict[str, str] = {}
+        for tier in tiers:
+            cell = cells.get(tier)
+            if cell is None:
+                recalls.append("| n/a ")
+                precisions.append("| n/a ")
+                continue
+            entry = cell["entry"]
+            recalls.append(f"| {_fmt_value(entry['recall_location']['value'])} ")
+            precisions.append(f"| {_fmt_value(entry['precision_location']['value'])} ")
+            baseline = baselines.get((cell["domain"], cell["model"]))
+            verdicts[tier] = _dominance_verdict(
+                entry["recall_location"]["value"],
+                None if baseline is None else baseline["recall_location"]["value"],
+                entry["precision_location"]["value"],
+                None if baseline is None else baseline["precision_location"]["value"],
+            )
+        rows.append(
+            f"| `{skill_name}` {version} "
+            + "".join(recalls)
+            + "".join(precisions)
+            + f"| {_summarize_verdicts(verdicts, tiers)} |"
+        )
+
+    return "\n".join([header, divider, *rows])
+
+
+def _summarize_verdicts(verdicts: dict[str, str], tiers: list[str]) -> str:
+    """Collapse the per-tier verdicts into one readable phrase, without
+    rounding a mixed result into a clean one. "beats on both tiers" only
+    when every tier beats; a tier that did not pass is named, because a
+    scoreboard that hid it would be the flattering summary this library
+    exists not to publish."""
+    if not verdicts:
+        return "not measured"
+    values = [verdicts.get(tier) for tier in tiers if tier in verdicts]
+    if all(v == "beats baseline" for v in values):
+        return "beats on both tiers" if len(values) > 1 else "beats baseline"
+    if all(v in _QUALIFYING_VERDICTS for v in values):
+        return "ties on both tiers" if len(values) > 1 else "ties baseline"
+    parts = []
+    for tier in tiers:
+        verdict = verdicts.get(tier)
+        if verdict is None:
+            continue
+        if verdict == "beats baseline":
+            parts.append(f"beats on {tier}")
+        elif verdict == "ties baseline":
+            parts.append(f"ties on {tier}")
+        elif verdict == "no pass on this tier":
+            parts.append(f"no pass on {tier}")
+        else:
+            parts.append(f"below baseline on {tier}")
+    return ", ".join(parts)
+
+
+def render_scoreboard_block(results: dict[str, Any], active: dict[str, str]) -> str:
+    """The full marker-to-marker text a scoreboard target should hold."""
+    entries = results.get("entries", [])
+    run_set = results.get("run_set", "")
+    return "\n".join(
+        [
+            SCOREBOARD_START_MARKER,
+            (
+                "<!-- Generated by `python -m bench.report scoreboard`. Do not edit by hand: edit "
+                "`bench/results/results.json` and regenerate. -->"
+            ),
+            "",
+            render_scoreboard(entries, active),
+            "",
+            (
+                f"_Location-level, shipped versions only, run set `{run_set}`. "
+                "Every figure is computed from `bench/results/results.json`._"
+            ),
+            SCOREBOARD_END_MARKER,
+        ]
+    )
+
+
+def splice_scoreboard(target_text: str, block: str) -> str:
+    """`splice`, for the scoreboard marker pair."""
+    if SCOREBOARD_START_MARKER not in target_text or SCOREBOARD_END_MARKER not in target_text:
+        raise ValueError(
+            f"{SCOREBOARD_START_MARKER} / {SCOREBOARD_END_MARKER} not found in target; add the pair "
+            "once before this command can update it"
+        )
+    before = target_text.split(SCOREBOARD_START_MARKER, 1)[0]
+    after = target_text.split(SCOREBOARD_END_MARKER, 1)[1]
+    return before + block + after
+
+
 def splice(target_text: str, block: str) -> str:
     """Replace the marker-to-marker region of `target_text` with `block`
     (which itself starts and ends with the markers), leaving everything
@@ -337,6 +509,23 @@ def _build_arg_parser() -> argparse.ArgumentParser:
     table_cmd.add_argument(
         "--check", action="store_true", help="Compare against --target instead of writing; exit 1 on drift."
     )
+
+    scoreboard_cmd = sub.add_parser(
+        "scoreboard",
+        help="Render the front-door scoreboard: one row per shipped skill, location-level.",
+    )
+    scoreboard_cmd.add_argument(
+        "--results", type=Path, default=Path("bench/results/results.json"), help="results.json to read"
+    )
+    scoreboard_cmd.add_argument(
+        "--target", type=Path, default=Path("README.md"), help="Markdown file to update (default README.md)"
+    )
+    scoreboard_cmd.add_argument(
+        "--library", type=Path, default=Path("library.json"), help="library.json naming the shipped skills"
+    )
+    scoreboard_cmd.add_argument(
+        "--check", action="store_true", help="Compare against --target instead of writing; exit 1 on drift."
+    )
     return parser
 
 
@@ -344,7 +533,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = _build_arg_parser()
     args = parser.parse_args(argv)
 
-    if args.command != "table":
+    if args.command not in ("table", "scoreboard"):
         print(f"usage error: unknown command {args.command!r}", file=sys.stderr)
         return 1
 
@@ -362,16 +551,33 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     target_text = args.target.read_text(encoding="utf-8")
 
-    block = render_block(results)
+    if args.command == "scoreboard":
+        try:
+            active = _active_versions(args.library)
+        except OSError as exc:
+            print(f"usage error: cannot read {args.library}: {exc}", file=sys.stderr)
+            return 1
+        except json.JSONDecodeError as exc:
+            print(f"usage error: {args.library} is not valid JSON: {exc}", file=sys.stderr)
+            return 1
+        block = render_scoreboard_block(results, active)
+        splicer = splice_scoreboard
+    else:
+        block = render_block(results)
+        splicer = splice
+
     try:
-        new_text = splice(target_text, block)
+        new_text = splicer(target_text, block)
     except ValueError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
 
     if args.check:
         if new_text != target_text:
-            print(f"drift: {args.target} does not match the table regenerated from {args.results}", file=sys.stderr)
+            print(
+                f"drift: {args.target} does not match the {args.command} regenerated from {args.results}",
+                file=sys.stderr,
+            )
             return 1
         print("no drift")
         return 0

@@ -15,7 +15,8 @@ shared library.
   `--check`, the CI "drift" job's entry point instead.
 - `gen-readme-catalog.mjs` - regenerates `README.md`'s skill-catalog table from `library.json` and
   each shipped skill's own `SKILL.md` frontmatter; `--check` compares instead of writing. The
-  README's results table has its own generator, `python -m bench.report table` (see
+  README's scoreboard has its own generator, `python -m bench.report scoreboard`, and the results
+  table `python -m bench.report table` (see
   `bench/README.md`, "Results"); this script does not touch it.
 - `gen-index.mjs` - regenerates the navigational `INDEX.md` from `library.json` plus component
   frontmatter; `--check` compares instead of writing. `gen-plugin-manifest.mjs` folds this in under
@@ -64,6 +65,11 @@ shared library.
   really exists, and fails when the total count collapses. This site is generator-heavy and
   Starlight's `editUrl` auto-derivation resolves to the gitignored generated tree, so this is the
   guard that keeps every generated page's explicit `editUrl` honest.
+- `check-readme-links.mjs` - the guard on the README's front-door contract with the site: every
+  documentation-site link in `README.md` must name a route in `route-manifest.txt`, and the README's
+  three door labels must match the three `<Card title>` values on the site's landing page. Runs
+  UNCONDITIONALLY from `check.mjs`, unlike the guards above, because it compares tracked files
+  against a tracked manifest and needs no build.
 - `route-manifest.txt` - the committed baseline `check-route-parity.mjs` diffs against: one line per
   built route. Regenerate with `node scripts/check-route-parity.mjs --update` and commit it in the
   same change as the route removal that made it necessary, with the reason in the message.

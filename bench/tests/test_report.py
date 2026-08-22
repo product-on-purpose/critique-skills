@@ -322,3 +322,129 @@ def test_cli_check_detects_drift_before_update(tmp_path: Path) -> None:
     assert check_code == 1
     # --check must not have written anything.
     assert "placeholder" in target_path.read_text(encoding="utf-8")
+
+
+# --- the front-door scoreboard (W8) ------------------------------------------
+
+
+def _scoreboard_results() -> dict:
+    """Two skills across two tiers plus the baseline, with one skill carrying a
+    superseded version that must not reach the scoreboard."""
+
+    def cell(recall: float, precision: float) -> dict:
+        return {"value": recall, "numerator": 1, "denominator": 1}, {
+            "value": precision,
+            "numerator": 1,
+            "denominator": 1,
+        }
+
+    entries = []
+    for model, base_r, base_p in (("claude-haiku-4-5-20251001", 0.30, 0.20), ("claude-sonnet-5", 0.40, 0.25)):
+        r, p = cell(base_r, base_p)
+        entries.append(
+            {
+                "skill": "baseline-generic",
+                "skill_version": "1.0.0",
+                "model": model,
+                "domain": "clarity",
+                "artifact_type": "markdown-prose",
+                "recall_location": r,
+                "precision_location": p,
+            }
+        )
+        for version, sr, sp in (("0.1.0", 0.10, 0.10), ("0.1.1", 0.90, 0.80)):
+            r, p = cell(sr, sp)
+            entries.append(
+                {
+                    "skill": "critique-shipped",
+                    "skill_version": version,
+                    "model": model,
+                    "domain": "clarity",
+                    "artifact_type": "markdown-prose",
+                    "recall_location": r,
+                    "precision_location": p,
+                }
+            )
+    return {"entries": entries, "run_set": "fixture"}
+
+
+def test_scoreboard_shows_only_the_shipped_version() -> None:
+    """A scoreboard row for a superseded version would describe software nobody
+    can install. The full grid keeps both versions; this cut does not."""
+    from bench.report import render_scoreboard
+
+    rendered = render_scoreboard(_scoreboard_results()["entries"], {"critique-shipped": "0.1.1"})
+    assert "`critique-shipped` 0.1.1" in rendered
+    assert "0.1.0" not in rendered
+    assert "baseline-generic" not in rendered
+
+
+def test_scoreboard_verdict_reuses_the_dominance_rule() -> None:
+    """The scoreboard and the full grid must not disagree about whether a skill
+    passed a tier, so the verdict column is computed by _dominance_verdict."""
+    from bench.report import render_scoreboard
+
+    rendered = render_scoreboard(_scoreboard_results()["entries"], {"critique-shipped": "0.1.1"})
+    assert "beats on both tiers" in rendered
+
+
+def test_scoreboard_names_a_tier_it_did_not_pass() -> None:
+    """A scoreboard that collapsed a mixed result into a clean one would be the
+    flattering summary this library exists not to publish."""
+    from bench.report import render_scoreboard
+
+    results = _scoreboard_results()
+    # Make the sonnet cell win recall and lose precision: a mixed non-pass.
+    for entry in results["entries"]:
+        if entry["skill"] == "critique-shipped" and entry["skill_version"] == "0.1.1" and "sonnet" in entry["model"]:
+            entry["recall_location"]["value"] = 0.50
+            entry["precision_location"]["value"] = 0.10
+
+    rendered = render_scoreboard(results["entries"], {"critique-shipped": "0.1.1"})
+    assert "no pass on sonnet" in rendered
+
+
+def test_scoreboard_block_round_trips_through_its_markers(tmp_path) -> None:
+    from bench.report import main
+
+    target = tmp_path / "README.md"
+    target.write_text(
+        "before\n<!-- bench-scoreboard:start -->\nstale\n<!-- bench-scoreboard:end -->\nafter\n",
+        encoding="utf-8",
+    )
+    results_path = tmp_path / "results.json"
+    results_path.write_text(json.dumps(_scoreboard_results()), encoding="utf-8")
+    library_path = tmp_path / "library.json"
+    library_path.write_text(
+        json.dumps(
+            {"components": {"skills": [{"name": "critique-shipped", "version": "0.1.1", "status": "active"}]}}
+        ),
+        encoding="utf-8",
+    )
+
+    argv = [
+        "scoreboard",
+        "--results",
+        str(results_path),
+        "--target",
+        str(target),
+        "--library",
+        str(library_path),
+    ]
+    assert main(argv) == 0
+    text = target.read_text(encoding="utf-8")
+    assert text.startswith("before\n") and text.endswith("after\n"), "content outside the markers is untouched"
+    assert "stale" not in text
+    assert main([*argv, "--check"]) == 0
+
+    target.write_text(text.replace("0.900", "0.999"), encoding="utf-8")
+    assert main([*argv, "--check"]) == 1, "drift must fail"
+
+
+def test_scoreboard_ignores_a_skill_library_json_does_not_ship() -> None:
+    """library.json is the source of truth for what ships, not the results file:
+    three generators read it so they cannot disagree."""
+    from bench.report import render_scoreboard
+
+    rendered = render_scoreboard(_scoreboard_results()["entries"], {})
+    assert rendered == "_No shipped skill has been measured yet._"

@@ -63,6 +63,11 @@ Python half.
   without it exiting the process. Also the edit-link guard's tracked-ness check: a target that exists
   on disk but is gitignored must fail, because an edit link points at GitHub where only tracked files
   exist.
+- `check-readme-links.test.mjs` - the README front-door guard: a site link naming a route the
+  manifest does not carry must fail, doors that disagree with the landing cards must fail, a
+  missing door table must fail, plus a live assertion that the real README and the real landing
+  page currently agree. The first fixture is a real defect this guard caught on its first run: the
+  applied README linked twice to `/conformance/`, a page W5 deliberately did not build.
 - `helpers/proc.mjs` - spawns a script under test as a child process (`runNode()`). Several scripts
   above run unconditional top-level code, including `process.exit()`, on module load - see the
   file's own header comment for why importing them directly into the test runner is unsafe.
