@@ -15,7 +15,7 @@
 // used-by:      "npm test" (node --test), .github/workflows/ci.yml's unit-node job
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { resolve, dirname, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -24,6 +24,12 @@ import { tempDir, copyInto } from "./helpers/tmp.mjs";
 import {
   QUADRANTS,
   SLUG_OVERRIDES,
+  CRITERIA_ROUTE,
+  EXTRA_ROUTES,
+  criterionPattern,
+  parseSkill,
+  extractIntro,
+  loadSkills,
   normalizePosix,
   parseFrontmatter,
   stripLeadingH1,
@@ -236,8 +242,9 @@ test("buildRouteMap covers every publishable doc and routes no internal one", ()
   const routes = buildRouteMap();
   assert.ok(routes.size >= 13, `expected at least 13 routed docs, got ${routes.size}`);
   for (const source of routes.keys()) {
-    assert.ok(source.startsWith("docs/"), `${source} is outside docs/`);
+    // The load-bearing half, and the one that must never relax: governance docs are not routed.
     assert.ok(!source.startsWith("docs/internal/"), `${source} must never be routed (standard 14.1)`);
+    if (!source.startsWith("docs/")) continue; // W3 widened the map beyond docs/: skills, agents
     const quadrant = source.split("/")[1];
     assert.ok(QUADRANTS.includes(quadrant), `${source} is in an unpublished quadrant`);
   }
@@ -254,11 +261,70 @@ test("buildRouteMap covers every publishable doc and routes no internal one", ()
  * source doc. The scripts resolve their root as resolve(HERE, ".."), so the fixture mirrors the
  * real layout: <root>/scripts/*.mjs and <root>/docs/<quadrant>/README.md.
  */
+const GITIGNORE_FIXTURE = [
+  "site/src/content/docs/how-to/",
+  "site/src/content/docs/reference/",
+  "site/src/content/docs/skills/critique-*.md",
+].join("\n") + "\n";
+
 function buildGuardFixture(t) {
   const root = tempDir(t, "gen-site-guard-");
   for (const name of ["gen-site.mjs", "site-base.mjs", "check-generated-untracked.mjs"]) {
     copyInto(resolve(root, "scripts", name), resolve(REPO_ROOT, "scripts", name));
   }
+  // The real contract schema, because the generator reads the criterion-ID grammar out of it
+  // rather than carrying a copy. Copied whole so the fixture cannot drift from the frozen file.
+  copyInto(
+    resolve(root, "contract", "critique-contract.schema.json"),
+    resolve(REPO_ROOT, "contract", "critique-contract.schema.json"),
+  );
+  writeFileSync(
+    resolve(root, "library.json"),
+    JSON.stringify({
+      components: {
+        skills: [
+          { name: "critique-fixture", path: "skills/critique-fixture", version: "0.1.0", status: "active" },
+          { name: "critique-gated", path: "skills/critique-gated", version: "0.1.0", status: "gated" },
+        ],
+      },
+    }),
+    "utf8",
+  );
+  mkdirSync(resolve(root, "skills", "critique-fixture"), { recursive: true });
+  writeFileSync(
+    resolve(root, "skills", "critique-fixture", "SKILL.md"),
+    [
+      "---",
+      "name: critique-fixture",
+      'description: "Reviews fixtures. Use when testing."',
+      "version: 0.1.0",
+      "license: Apache-2.0",
+      "rubric_sources:",
+      "  - id: OPENSTD",
+      '    citation: "An Open Standard (2020)"',
+      "    url: https://example.invalid/std",
+      "    accessed: 2026-07-31",
+      "    operationalization: open-standard",
+      "checks:",
+      "  scripted:",
+      "    - OPENSTD-ALPHA",
+      "  judged:",
+      "    - OPENSTD-BETA",
+      "---",
+      "",
+      "# critique-fixture",
+      "",
+      "Intro.",
+      "",
+    ].join("\n"),
+    "utf8",
+  );
+  mkdirSync(resolve(root, "agents"), { recursive: true });
+  writeFileSync(
+    resolve(root, "agents", "critique-critic.md"),
+    ["---", "name: critique-critic", 'description: "The critic."', "---", "", "# critique-critic", "", "Body."].join("\n"),
+    "utf8",
+  );
   mkdirSync(resolve(root, "docs", "how-to"), { recursive: true });
   writeFileSync(
     resolve(root, "docs", "how-to", "README.md"),
@@ -280,7 +346,7 @@ test("check-generated-untracked fails when a generated file is not gitignored", 
 
 test("check-generated-untracked passes once the emitting directory is ignored", (t) => {
   const root = buildGuardFixture(t);
-  writeFileSync(resolve(root, ".gitignore"), "site/src/content/docs/how-to/\n", "utf8");
+  writeFileSync(resolve(root, ".gitignore"), GITIGNORE_FIXTURE, "utf8");
   const { status, stdout, stderr } = runNode(resolve(root, "scripts", "check-generated-untracked.mjs"), [], { cwd: root });
   assert.equal(status, 0, stderr);
   assert.match(stdout, /all gitignored, none tracked/);
@@ -288,7 +354,7 @@ test("check-generated-untracked passes once the emitting directory is ignored", 
 
 test("check-generated-untracked fails when a generated file is tracked", (t) => {
   const root = buildGuardFixture(t);
-  writeFileSync(resolve(root, ".gitignore"), "site/src/content/docs/how-to/\n", "utf8");
+  writeFileSync(resolve(root, ".gitignore"), GITIGNORE_FIXTURE, "utf8");
   // Generate first, then force the emitted page into the index past its own ignore rule, which
   // is exactly the state this guard exists to catch.
   runNode(resolve(root, "scripts", "gen-site.mjs"), [], { cwd: root });
@@ -298,4 +364,176 @@ test("check-generated-untracked fails when a generated file is tracked", (t) => 
   const { status, stderr } = runNode(resolve(root, "scripts", "check-generated-untracked.mjs"), [], { cwd: root });
   assert.equal(status, 1);
   assert.match(stderr, /TRACKED by git/);
+});
+
+// --- SKILL.md parsing (W3) --------------------------------------------------
+
+/** A SKILL.md frontmatter exercising every shape the real six use, including `url: null`. */
+const FIXTURE_SKILL = [
+  "---",
+  "name: critique-fixture",
+  'description: "Reviews fixtures. Use when testing. See critique-sibling for the other half."',
+  "version: 0.2.0",
+  "license: Apache-2.0",
+  "rubric_sources:",
+  "  - id: OPENSTD",
+  '    citation: "An Open Standard (2020)"',
+  "    url: https://example.invalid/std",
+  "    accessed: 2026-07-31",
+  "    operationalization: open-standard",
+  "  - id: BOOK",
+  '    citation: "Someone, A. (2003). A Printed Book. ISBN 1-2-3."',
+  "    url: null",
+  "    accessed: 2026-07-31",
+  "    operationalization: paraphrased",
+  "checks:",
+  "  scripted:",
+  "    - OPENSTD-1.4.11",
+  "    - OPENSTD-ALPHA",
+  "  judged:",
+  "    - BOOK-BETA",
+  "---",
+  "",
+  "# critique-fixture",
+  "",
+  "Intro prose stating the artifact claim.",
+  "",
+  "## Contract",
+  "",
+  "Agent-facing protocol that must not reach the page.",
+  "",
+].join("\n");
+
+test("parseSkill reads both rubric sources, including one with url: null", () => {
+  const skill = parseSkill(FIXTURE_SKILL, "skills/critique-fixture/SKILL.md");
+  assert.equal(skill.name, "critique-fixture");
+  assert.equal(skill.version, "0.2.0");
+  assert.equal(skill.license, "Apache-2.0");
+  assert.equal(skill.rubricSources.length, 2);
+  assert.deepEqual(skill.rubricSources[0], {
+    id: "OPENSTD",
+    citation: "An Open Standard (2020)",
+    url: "https://example.invalid/std",
+    accessed: "2026-07-31",
+    operationalization: "open-standard",
+  });
+  // `url: null` is the convention for a printed source and must normalize to empty, never to
+  // the literal string "null", which would render as a link to a four-character path.
+  assert.equal(skill.rubricSources[1].id, "BOOK");
+  assert.equal(skill.rubricSources[1].url, "");
+  assert.equal(skill.rubricSources[1].citation, "Someone, A. (2003). A Printed Book. ISBN 1-2-3.");
+});
+
+test("parseSkill reads both criterion lanes, dotted IDs included", () => {
+  const skill = parseSkill(FIXTURE_SKILL, "skills/critique-fixture/SKILL.md");
+  // A lane that comes back empty is the failure this asserts against: two different stop-regex
+  // bugs in development each returned [] for every lane, and the generator happily emitted six
+  // skill pages carrying no criteria at all.
+  assert.deepEqual(skill.scripted, ["OPENSTD-1.4.11", "OPENSTD-ALPHA"]);
+  assert.deepEqual(skill.judged, ["BOOK-BETA"]);
+});
+
+test("parseSkill throws on a missing frontmatter block and on a missing scalar", () => {
+  assert.throws(() => parseSkill("# no frontmatter\n", "x/SKILL.md"), /no frontmatter/);
+  assert.throws(
+    () => parseSkill(["---", "name: x", "---", "", "body"].join("\n"), "x/SKILL.md"),
+    /no description/,
+  );
+});
+
+test("extractIntro keeps the prose above the first H2 and drops the protocol below it", () => {
+  const { body } = parseSkill(FIXTURE_SKILL, "skills/critique-fixture/SKILL.md");
+  const intro = extractIntro(body);
+  assert.equal(intro, "Intro prose stating the artifact claim.");
+  assert.doesNotMatch(intro, /Contract/);
+  assert.doesNotMatch(intro, /must not reach the page/);
+});
+
+test("criterionPattern comes from the frozen contract schema, not a copy of it", () => {
+  const pattern = criterionPattern();
+  // The exact bug this guards: a hand-typed [A-Z][A-Z0-9-]* silently drops every dotted WCAG ID.
+  assert.ok(pattern.test("WCAG-1.4.11"), "dotted IDs must match");
+  assert.ok(pattern.test("DIATAXIS-HEADING-DEPTH"));
+  assert.ok(pattern.test("NNG-EM-CONSTRUCTIVE"));
+  assert.ok(!pattern.test("lowercase-id"));
+  assert.ok(!pattern.test("NOHYPHEN"));
+
+  const schema = JSON.parse(
+    readFileSync(resolve(REPO_ROOT, "contract", "critique-contract.schema.json"), "utf8"),
+  );
+  assert.equal(pattern.source, schema.$defs.criterionId.pattern);
+});
+
+// --- the real skills --------------------------------------------------------
+
+test("the shipped skills carry exactly 42 scripted and 54 judged criteria", () => {
+  // Hard-coded on purpose. In this repository a criterion is added, removed, or moved between
+  // lanes only by a deliberate, versioned change to a skill, so this test breaking is the
+  // correct alarm and not friction: it means the site's headline figure moved and the README's
+  // hand-typed sentence ("42 run as deterministic scripts and 54 require judgment") is stale.
+  const skills = loadSkills();
+  assert.equal(skills.length, 6);
+  const scripted = skills.reduce((n, s) => n + s.scripted.length, 0);
+  const judged = skills.reduce((n, s) => n + s.judged.length, 0);
+  assert.equal(scripted, 42, "scripted lane");
+  assert.equal(judged, 54, "judged lane");
+  assert.equal(scripted + judged, 96, "total criteria");
+});
+
+test("every shipped criterion ID is unique and matches the contract grammar", () => {
+  const pattern = criterionPattern();
+  const seen = new Set();
+  for (const skill of loadSkills()) {
+    for (const id of [...skill.scripted, ...skill.judged]) {
+      assert.ok(pattern.test(id), `${id} (${skill.name}) does not match the contract grammar`);
+      assert.ok(!seen.has(id), `${id} is declared twice`);
+      seen.add(id);
+    }
+  }
+  assert.equal(seen.size, 96);
+});
+
+test("every skill version agrees with library.json", () => {
+  const library = JSON.parse(readFileSync(resolve(REPO_ROOT, "library.json"), "utf8"));
+  const active = new Map(
+    library.components.skills.filter((s) => s.status === "active").map((s) => [s.name, s.version]),
+  );
+  const skills = loadSkills();
+  assert.equal(skills.length, active.size);
+  for (const skill of skills) {
+    assert.equal(skill.version, active.get(skill.name), `${skill.name} version`);
+  }
+});
+
+test("every shipped rubric source has a citation, and a url only when one exists", () => {
+  for (const skill of loadSkills()) {
+    assert.ok(skill.rubricSources.length > 0, `${skill.name} declares no rubric source`);
+    for (const src of skill.rubricSources) {
+      assert.ok(src.citation, `${skill.name}/${src.id} has no citation`);
+      assert.ok(src.accessed, `${skill.name}/${src.id} has no accessed date`);
+      assert.notEqual(src.url, "null", `${skill.name}/${src.id} kept the literal string null`);
+      if (src.url) assert.match(src.url, /^https:\/\//, `${skill.name}/${src.id} url`);
+    }
+  }
+});
+
+test("the route map routes every shipped skill and the critic subagent", () => {
+  const skills = loadSkills();
+  const routes = buildRouteMap(skills);
+  for (const skill of skills) {
+    assert.equal(routes.get(skill.path), `/skills/${skill.name}/`);
+  }
+  for (const [source, route] of Object.entries(EXTRA_ROUTES)) {
+    assert.equal(routes.get(source), route);
+  }
+  // The criteria explorer is an aggregate with no source file, so it is deliberately absent.
+  assert.ok(![...routes.values()].includes(CRITERIA_ROUTE));
+  assert.equal(outputPathFor(CRITERIA_ROUTE), "/reference/criteria.md");
+});
+
+test("a skill page resolves to the file the gitignore claims the generator owns", () => {
+  for (const skill of loadSkills()) {
+    const out = outputPathFor(skill.route);
+    assert.match(out, /^\/skills\/critique-[\w-]+\.md$/, `${skill.name} -> ${out}`);
+  }
 });
