@@ -37,6 +37,12 @@ Python half.
 - `gen-index.filter.test.mjs` - unit tests for `lib/gen-index-filter.mjs`'s `dropPhantomRows()`
   (the INDEX.md phantom-link filter); not part of this task's scope, documented here for inventory
   completeness only.
+- `gen-site.test.mjs` - the docs-site content generator's pure helpers (path normalization, the
+  route and output-path mapping plus the invariant that the two agree, link resolution across its
+  four outcomes, fence-aware link rewriting, frontmatter parsing and emission), a live check that
+  `buildRouteMap()` covers the publishable docs and routes nothing from `docs/internal/`, and
+  `check-generated-untracked.mjs` exercised against an isolated temp git repository in all three
+  states: not ignored, ignored, and force-tracked.
 - `helpers/proc.mjs` - spawns a script under test as a child process (`runNode()`). Several scripts
   above run unconditional top-level code, including `process.exit()`, on module load - see the
   file's own header comment for why importing them directly into the test runner is unsafe.
