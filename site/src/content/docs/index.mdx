@@ -1,24 +1,77 @@
 ---
 title: critique-skills
 description: Rubric-cited, machine-parseable critique skills that produce measured, evidence-graded findings instead of freeform opinion.
+template: splash
+hero:
+  tagline: Six critique skills that read an artifact against a published rubric and return findings you can check. Every claim this library makes about them is a measured number, published with the runs behind it.
+  actions:
+    - text: Get started
+      link: getting-started/
+      icon: right-arrow
+      variant: primary
+    - text: See the measurements
+      link: receipts/
+      icon: bars
+      variant: secondary
+    - text: Source on GitHub
+      link: https://github.com/product-on-purpose/critique-skills
+      icon: external
+      variant: minimal
 ---
 
-{/*
-  W1 scaffold placeholder. This file is hand-authored and tracked; it sits beside the
-  generated tree, which is gitignored and rebuilt every build.
+import { Card, CardGrid } from '@astrojs/starlight/components';
 
-  W5 replaces this body with the splash landing page decided on 2026-08-19: frontmatter
-  gains `template: splash` and a `hero:` block, and the body becomes a <CardGrid> of the
-  three reader doors. The file is already .mdx so that change is an edit, not a rename.
-  Hero action links are written bare-relative with no base prefix, because this page is
-  the site root and the browser resolves them against it; prefixing the base would double
-  it. Keep the links here pointing only at routes that exist.
+{/*
+  Hand-authored and tracked, and deliberately NOT generated from README.md (site plan route map
+  5.1): a repo README answers "what is this repo", a docs landing page answers "what can I do here
+  and where do I go". Generating one from the other guarantees whichever is secondary reads badly.
+
+  `template: splash` hides the sidebar and the table of contents on this page only.
+
+  EVERY LINK ON THIS PAGE IS BARE-RELATIVE, WITH NO BASE PREFIX (site decision D3). This page is
+  served at the site root, so the browser resolves `getting-started/` against it correctly, and
+  prefixing the base here would double it into /critique-skills/critique-skills/getting-started/.
+  Every OTHER page in this site carries base-absolute links, because the generator writes them.
+  This is the one file where the rule is inverted, which is why it is stated here rather than
+  assumed.
+
+  No hero image: there is no mark for this library that would carry one, and an invented graphic
+  would say less than the tagline does.
 */}
 
-Six critique skills that read an artifact against a published rubric and return findings
-you can check: each one cited to a criterion, graded for evidence, and emitted in a
-machine-parseable envelope rather than as prose.
+## Three ways in
 
-This site is being built. Until the generated pages land, the [README on
-GitHub](https://github.com/product-on-purpose/critique-skills) is the complete
-documentation, and [the skills overview](skills/) is the only other page here.
+<CardGrid>
+  <Card title="The skills" icon="puzzle">
+    Six domains: accessibility, argument, clarity, documentation, microcopy, and usability. Each one
+    scores an artifact against a named public rubric and returns findings carrying a permanent
+    criterion ID, an evidence grade, and a fix.
+
+    [What each skill does](skills/) and [all 96 criteria](reference/criteria/).
+  </Card>
+
+  <Card title="The receipts" icon="approve-check">
+    The uncomfortable part, published on purpose. Every skill was measured on a seeded-defect
+    corpus against a frozen baseline, and the floors are on the page next to the highs.
+
+    [Every measured cell](receipts/), with the counts behind every ratio.
+  </Card>
+
+  <Card title="How it works" icon="open-book">
+    Two lanes on every artifact: a deterministic scripted lane, and a judged lane that a model has
+    to reason about. One frozen contract governs what a finding may say.
+
+    [The methodology](explanation/methodology/) and [the critique contract](reference/critique-contract/).
+  </Card>
+</CardGrid>
+
+## What this is not
+
+It does not auto-fix anything. It does not rewrite your document, and it never edits an artifact it
+was asked to critique. It returns findings, and what to do about each one stays a human decision
+that gets recorded as a [disposition](how-to/dispositions/).
+
+It also does not claim to be right. It claims to be *measured*: the numbers behind every skill are
+published with the run envelopes that produced them, including the cells where a skill does badly.
+The worst consistency figure in the library is 0.309, and it is [on the receipts page](receipts/)
+rather than in a footnote.

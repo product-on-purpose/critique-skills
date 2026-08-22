@@ -108,7 +108,42 @@ export const EXTRA_ROUTES = {
     description:
       "The seeded-defect corpus, the metric definitions, the frozen baseline, and the commands that reproduce every published number.",
   },
+  "QUICKSTART.md": {
+    route: "/getting-started/",
+    title: "Getting started",
+    description: "Install one skill, run it against a real artifact, and read the envelope it returns.",
+  },
+  "CONTRIBUTING.md": {
+    route: "/contributing/",
+    title: "Contributing",
+    description: "The bar a new skill has to clear, and what every change is checked against before it ships.",
+  },
+  "SECURITY.md": {
+    route: "/contributing/security/",
+    title: "Security policy",
+    description: "What to do about a suspected vulnerability, and what this project does in return.",
+  },
+  "RELEASE-NOTES.md": {
+    route: "/releases/",
+    title: "Release notes",
+    description: "What changed in each release, written for the people using the library rather than building it.",
+  },
+  "CHANGELOG.md": {
+    route: "/releases/changelog/",
+    title: "Changelog",
+    description: "The full technical history, every release, in the detail the release notes deliberately leave out.",
+    // 354 lines of headings would swamp the page nav; cap it at H2 so the sidebar stays readable.
+    frontmatterExtra: ["tableOfContents:", "  maxHeadingLevel: 2"],
+  },
+  "ROADMAP.md": {
+    route: "/releases/roadmap/",
+    title: "Roadmap",
+    description: "A public statement of sequence rather than a schedule: what shipped, what is next, and what has not shipped at all.",
+  },
 };
+
+/** The directory whose markdown becomes the examples wing, discovered rather than listed. */
+export const EXAMPLES_DIR = "examples";
 
 /**
  * The receipts explorer's route. Like the criteria explorer it is an aggregate with no single
@@ -239,7 +274,23 @@ export function parseFrontmatter(content) {
  * @returns {string}
  */
 export function stripLeadingH1(body) {
-  return body.replace(/^\s*#\s+[^\n]*\r?\n+/, "");
+  const lines = body.split(/\r?\n/);
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (line === "") continue;
+    if (/^#\s+/.test(line)) {
+      let j = i + 1;
+      while (j < lines.length && lines[j].trim() === "") j++;
+      return [...lines.slice(0, i), ...lines.slice(j)].join("\n");
+    }
+    // Skip past a leading anchor or HTML comment and keep looking: ROADMAP.md opens with
+    // `<a id="roadmap-top"></a>` before its H1, and that anchor is a live link target, so it has
+    // to survive while the duplicated heading still goes. Anything else means the document does
+    // not open with an H1 and nothing is removed.
+    if (/^(?:<[^>]*>\s*)+$/.test(line) || line.startsWith("<!--")) continue;
+    return body;
+  }
+  return body;
 }
 
 /** Quote a string as a YAML double-quoted scalar. Safe for any title or description here. */
@@ -616,12 +667,20 @@ export function routeFor(repoPath) {
  * @param {string} route
  * @returns {string}
  */
-export function outputPathFor(route) {
+export function outputPathFor(route, allRoutes = []) {
   const segments = route.split("/").filter(Boolean);
-  // A single-segment route is a section index, and it must be <section>/index.md rather than
-  // <section>.md: `autogenerate: { directory }` in the sidebar reads the directory, and a
-  // sibling file would leave the section without its own overview page.
-  if (segments.length === 1) return `/${segments[0]}/index.md`;
+  // Two ways a route is a section index rather than a leaf.
+  //
+  // A single-segment route always is, and it must be <section>/index.md rather than <section>.md:
+  // `autogenerate: { directory }` reads the directory, a sibling file would leave the section
+  // without its overview page, and .gitignore lists these as DIRECTORIES, so a sibling .md would
+  // not be ignored and would fail the untracked guard.
+  //
+  // A deeper route is one when another route nests under it. `/examples/docs/` has
+  // `/examples/docs/artifact/` beneath it, so it needs to be a directory index; `/examples/
+  // accessibility/` has nothing beneath it (that domain ships no artifact file) and stays a leaf.
+  const nested = allRoutes.some((other) => other !== route && other.startsWith(route));
+  if (segments.length === 1 || nested) return `/${segments.join("/")}/index.md`;
   const file = `${segments[segments.length - 1]}.md`;
   return `/${segments.slice(0, -1).join("/")}/${file}`;
 }
@@ -636,6 +695,36 @@ export function outputPathFor(route) {
  * regeneration with no edit to any document.
  * @returns {Map<string,string>}
  */
+/**
+ * Every markdown file under examples/, as repo-relative source path to site route.
+ *
+ * Discovered rather than listed, the same reasoning as the docs quadrants: adding a worked example
+ * should add a route without anyone editing a table. `README.md` becomes its directory's index, so
+ * `examples/docs/README.md` serves `/examples/docs/` and `examples/docs/artifact.md` serves
+ * `/examples/docs/artifact/`.
+ */
+export function exampleRoutes() {
+  const routes = new Map();
+  const walk = (relative) => {
+    const absolute = join(ROOT, relative);
+    if (!existsSync(absolute)) return;
+    for (const entry of readdirSync(absolute, { withFileTypes: true }).sort((a, b) =>
+      a.name.localeCompare(b.name),
+    )) {
+      const child = `${relative}/${entry.name}`;
+      if (entry.isDirectory()) {
+        walk(child);
+      } else if (entry.name.endsWith(".md")) {
+        const withoutRoot = child.slice(EXAMPLES_DIR.length + 1).replace(/\.md$/, "");
+        const slug = withoutRoot === "README" ? "" : `${withoutRoot.replace(/\/README$/, "")}/`;
+        routes.set(child, `/${EXAMPLES_DIR}/${slug}`);
+      }
+    }
+  };
+  walk(EXAMPLES_DIR);
+  return routes;
+}
+
 export function buildRouteMap(skills = loadSkills()) {
   const routes = new Map();
   for (const quadrant of QUADRANTS) {
@@ -646,6 +735,7 @@ export function buildRouteMap(skills = loadSkills()) {
   }
   for (const skill of skills) routes.set(skill.path, skill.route);
   for (const [source, extra] of Object.entries(EXTRA_ROUTES)) routes.set(source, extra.route);
+  for (const [source, route] of exampleRoutes()) routes.set(source, route);
   return routes;
 }
 
@@ -746,6 +836,12 @@ export function rewriteLinks(body, fromDir, routes) {
  * @returns {{outPath: string, repoOut: string, unresolved: string[]}}
  */
 function generatePage(repoPath, routes) {
+  // A routed source that does not exist used to emit a page with a title and no body, silently.
+  // Caught by the untracked guard's own fixture rather than by anything looking at the site: the
+  // fixture routed seven documents it did not have and got seven near-empty pages without a word.
+  if (!existsSync(join(ROOT, repoPath))) {
+    throw new Error(`gen-site: ${repoPath} is routed but does not exist.`);
+  }
   const { meta, body } = parseFrontmatter(readUtf8(join(ROOT, repoPath)));
   const fromDir = repoPath.split("/").slice(0, -1).join("/");
   const { body: linked, unresolved } = rewriteLinks(stripLeadingH1(body), fromDir, routes);
@@ -754,7 +850,7 @@ function generatePage(repoPath, routes) {
   // override cannot move the route while leaving the file where it was: that combination emits
   // links to a page that does not exist and is invisible until something crawls the built dist.
   const file = repoPath.split("/").pop();
-  const repoOut = `site/src/content/docs${outputPathFor(routes.get(repoPath))}`;
+  const repoOut = `site/src/content/docs${outputPathFor(routes.get(repoPath), [...routes.values()])}`;
 
   // Title precedence: an explicit EXTRA_ROUTES override, then frontmatter, then the body's own H1,
   // and the filename only as a last resort. The H1 step matters because the three bench documents
@@ -766,6 +862,7 @@ function generatePage(repoPath, routes) {
     title: override.title || meta.title || h1 || file.replace(/\.md$/, ""),
     description: override.description || meta.description,
     editUrl: `${GH_EDIT}/${repoPath}`,
+    extra: override.frontmatterExtra ?? [],
   });
   const banner = `<!-- Generated by scripts/gen-site.mjs from ${repoPath}. Do not edit: this file is gitignored and rewritten on every build. -->`;
 
@@ -1268,8 +1365,12 @@ export function generate({ quiet = false } = {}) {
   for (const quadrant of QUADRANTS) {
     freshDir(join(DOCS_OUT, quadrant));
   }
-  // receipts/ holds no hand-authored page, so unlike skills/ it is cleared wholesale.
-  freshDir(join(DOCS_OUT, "receipts"));
+  // These wings hold no hand-authored page, so unlike skills/ they are cleared wholesale. Every
+  // name here must also appear in .gitignore's Astro block, which check-generated-untracked.mjs
+  // verifies against what the generator actually emitted rather than against this list.
+  for (const wing of ["receipts", "examples", "getting-started", "contributing", "releases"]) {
+    freshDir(join(DOCS_OUT, wing));
+  }
   removeGeneratedSkillPages();
 
   for (const repoPath of routes.keys()) {

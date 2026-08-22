@@ -56,6 +56,13 @@ Python half.
   the emitted receipts page: one row per measured cell, the inlined dataset, and the static table
   preceding the enhancer so the page works with JavaScript off. The floor figures are hard-coded for
   the same reason as 42/54/96: results.json changes only by a deliberate evidence merge.
+- `site-guards.test.mjs` - the three ported 14.11 docs-site guards and their aggregate, against tiny
+  `dist` fixtures. Each guard's pass and fail paths, plus the four robustness rules that silently
+  turn a guard into one that always passes: an existing-but-empty `dist`, a wrong base path (which
+  must FAIL, proving the guard consumes the base), a single-quoted `href`, and importing a guard
+  without it exiting the process. Also the edit-link guard's tracked-ness check: a target that exists
+  on disk but is gitignored must fail, because an edit link points at GitHub where only tracked files
+  exist.
 - `helpers/proc.mjs` - spawns a script under test as a child process (`runNode()`). Several scripts
   above run unconditional top-level code, including `process.exit()`, on module load - see the
   file's own header comment for why importing them directly into the test runner is unsafe.

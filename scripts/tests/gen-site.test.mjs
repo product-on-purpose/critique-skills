@@ -15,7 +15,7 @@
 // used-by:      "npm test" (node --test), .github/workflows/ci.yml's unit-node job
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
+import { writeFileSync, mkdirSync, readFileSync, existsSync } from "node:fs";
 import { resolve, dirname, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -35,6 +35,7 @@ import {
   countText,
   valueText,
   escapeHtml,
+  exampleRoutes,
   criterionPattern,
   parseSkill,
   extractIntro,
@@ -274,6 +275,10 @@ const GITIGNORE_FIXTURE = [
   "site/src/content/docs/how-to/",
   "site/src/content/docs/reference/",
   "site/src/content/docs/receipts/",
+  "site/src/content/docs/examples/",
+  "site/src/content/docs/getting-started/",
+  "site/src/content/docs/contributing/",
+  "site/src/content/docs/releases/",
   "site/src/content/docs/skills/critique-*.md",
 ].join("\n") + "\n";
 
@@ -382,6 +387,23 @@ function buildGuardFixture(t) {
     ["---", "title: How-to guides", "description: Recipes", "---", "", "# How-to guides", "", "Body."].join("\n"),
     "utf8",
   );
+  // Every source EXTRA_ROUTES routes has to exist: the generator now refuses to emit a page for a
+  // source that does not, which is what caught this fixture routing seven documents it lacked.
+  for (const name of ["QUICKSTART", "CONTRIBUTING", "SECURITY", "RELEASE-NOTES", "CHANGELOG", "ROADMAP"]) {
+    writeFileSync(resolve(root, `${name}.md`), [`# ${name}`, "", "Body."].join("\n"), "utf8");
+  }
+  mkdirSync(resolve(root, "examples", "fixture"), { recursive: true });
+  writeFileSync(
+    resolve(root, "examples", "README.md"),
+    ["---", "title: Examples", "---", "", "# Examples", "", "Body."].join("\n"),
+    "utf8",
+  );
+  writeFileSync(
+    resolve(root, "examples", "fixture", "README.md"),
+    ["---", "title: A worked example", "---", "", "# A worked example", "", "Body."].join("\n"),
+    "utf8",
+  );
+
   const init = spawnSync("git", ["init", "--quiet"], { cwd: root, encoding: "utf8" });
   assert.equal(init.status, 0, `git init failed: ${init.stderr}`);
   return root;
@@ -733,4 +755,66 @@ test("every skill page carries its own active version's measured rows, and no ot
       );
     }
   }
+});
+
+// --- the narrative wings (W5) -----------------------------------------------
+
+test("outputPathFor makes a route an index when another route nests under it", () => {
+  const all = ["/examples/", "/examples/docs/", "/examples/docs/artifact/", "/examples/accessibility/"];
+  // A directory route with something beneath it has to be <dir>/index.md, or the nested page and
+  // the overview cannot both exist.
+  assert.equal(outputPathFor("/examples/docs/", all), "/examples/docs/index.md");
+  assert.equal(outputPathFor("/examples/docs/artifact/", all), "/examples/docs/artifact.md");
+  // ...and one with nothing beneath it stays a leaf. critique-accessibility ships no artifact
+  // file, so /examples/accessibility/ has no children, and a directory there would be empty.
+  assert.equal(outputPathFor("/examples/accessibility/", all), "/examples/accessibility.md");
+});
+
+test("a single-segment route is always an index, children or not", () => {
+  // Load-bearing beyond tidiness: .gitignore lists these as DIRECTORIES, so a sibling
+  // tutorials.md would not be ignored and would fail the untracked guard.
+  assert.equal(outputPathFor("/tutorials/", ["/tutorials/"]), "/tutorials/index.md");
+  assert.equal(outputPathFor("/receipts/", []), "/receipts/index.md");
+});
+
+test("stripLeadingH1 steps over a leading anchor and still removes the heading", () => {
+  // ROADMAP.md opens with <a id="roadmap-top"></a> before its H1. The anchor is a live link
+  // target so it has to survive; the H1 duplicates the frontmatter title so it has to go.
+  const body = ['<a id="roadmap-top"></a>', "", "# Roadmap", "", "Sequence, not schedule."].join("\n");
+  const stripped = stripLeadingH1(body);
+  assert.match(stripped, /roadmap-top/, "the anchor survives");
+  assert.doesNotMatch(stripped, /^#\s+Roadmap/m, "the duplicated heading goes");
+});
+
+test("stripLeadingH1 removes nothing from a document that does not open with a heading", () => {
+  assert.equal(stripLeadingH1("Prose first.\n\n# Later\n"), "Prose first.\n\n# Later\n");
+});
+
+test("exampleRoutes maps each README to its directory and every other file to a leaf", () => {
+  const routes = exampleRoutes();
+  assert.equal(routes.get("examples/README.md"), "/examples/");
+  assert.equal(routes.get("examples/docs/README.md"), "/examples/docs/");
+  assert.equal(routes.get("examples/docs/artifact.md"), "/examples/docs/artifact/");
+  assert.equal(routes.get("examples/recipes/gate-in-ci.md"), "/examples/recipes/gate-in-ci/");
+  // Discovered, not listed: every markdown file under examples/ is routed.
+  assert.equal(routes.size, 16);
+});
+
+test("every routed source exists, and a missing one fails the build rather than emitting a stub", () => {
+  const routes = buildRouteMap();
+  for (const source of routes.keys()) {
+    assert.ok(
+      existsSync(resolve(REPO_ROOT, source)),
+      `${source} is routed but is not on disk`,
+    );
+  }
+});
+
+test("the site's own root docs are all routed", () => {
+  const routes = buildRouteMap();
+  for (const source of ["QUICKSTART.md", "CONTRIBUTING.md", "SECURITY.md", "RELEASE-NOTES.md", "CHANGELOG.md", "ROADMAP.md"]) {
+    assert.ok(routes.has(source), `${source} should be published`);
+  }
+  // README.md is deliberately NOT routed: the landing page is a different document (route map 5.1).
+  assert.ok(!routes.has("README.md"), "README.md must not be generated into the site");
 });
