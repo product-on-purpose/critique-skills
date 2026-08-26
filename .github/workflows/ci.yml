@@ -2,13 +2,19 @@ name: CI
 
 # Per Standard sec 4.1/4.4 and this repo's CI plan (see _local/initial-plan/04-ci-plan.md, a local
 # planning archive, not shipped), this workflow contains NO validation logic of its own: every job
-# is exactly one documented command, each reproducible locally with identical results (AGENTS.md
-# "Checks"). CI is a scheduler, not a judge.
+# that checks the repository is exactly one documented command, each reproducible locally with
+# identical results (AGENTS.md "Checks"). CI is a scheduler, not a judge.
 #
-# Nine jobs (S-07 CI-pipeline spec, AC-1): conformance, unit-python, unit-node, schema, corpus,
+# Nine such jobs (S-07 CI-pipeline spec, AC-1): conformance, unit-python, unit-node, schema, corpus,
 # drift, audit, smoke, build-site. Each command a job runs is marked "# doc-check";
 # scripts/gen-plugin-manifest.mjs --check (the "drift" job) fails if any "# doc-check" command is
 # not documented in AGENTS.md (AC-5).
+#
+# A tenth job, ci-ok, is the deliberate exception to every sentence above, and the only check that
+# branch protection on main requires. It runs no command, checks nothing about this repository, and
+# cannot be reproduced locally, because what it reports is whether the other nine passed. Its own
+# comment below says why that job exists; docs/internal/decisions/0033-aggregate-ci-gate.md says why
+# branch protection requires it instead of them.
 #
 # Node matrix: 22.12.0 (floor) and 24 (current). Python: 3.12.
 #
@@ -251,3 +257,41 @@ jobs:
 
       - name: Run the site guards
         run: node scripts/check-site.mjs # doc-check
+
+  # The one check branch protection on main requires.
+  #
+  # Every job above reports a matrix-expanded name ("conformance (Node 24)"), so requiring them
+  # directly means naming all fourteen, and bumping the Node matrix silently strands the old names:
+  # the ruleset goes on waiting for a context that nothing will ever emit again, and every pull
+  # request blocks on a check that cannot report. This job is the one stable name, so the matrix can
+  # change without anyone remembering to edit branch protection.
+  #
+  # `if: always()` is load-bearing, not defensive habit. Without it, GitHub skips this job the
+  # moment a job it needs fails, a skipped check counts as a passing one for branch protection, and
+  # the gate would go green in exactly the case it exists to catch. So it always runs and reads the
+  # results itself, where `skipped` and `cancelled` are failures too: a job that did not run has not
+  # passed.
+  #
+  # `needs` is checked, not trusted. A job added to this file but not listed here would be gated by
+  # nothing, so scripts/lib/ci-gate.mjs fails the drift job when the two disagree.
+  ci-ok:
+    name: ci-ok
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - conformance
+      - unit-python
+      - smoke
+      - unit-node
+      - schema
+      - corpus
+      - drift
+      - audit
+      - build-site
+    steps:
+      - name: Every job this gate depends on succeeded
+        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'skipped') }}
+        run: |
+          echo "ci-ok: at least one job did not succeed."
+          echo '${{ toJSON(needs) }}'
+          exit 1
