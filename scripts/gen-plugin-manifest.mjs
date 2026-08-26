@@ -7,8 +7,9 @@
 //               --check, instead of writing, it diffs the native manifest and INDEX.md against what
 //               library.json (plus component frontmatter, for INDEX.md) would generate, notes any
 //               other generated doc this repo does not have yet (the README result and catalog
-//               tables), and checks that AGENTS.md documents every command
-//               .github/workflows/ci.yml runs, marked "# doc-check" (S-07 CI-pipeline spec, AC-5).
+//               tables), checks that AGENTS.md documents every command
+//               .github/workflows/ci.yml runs, marked "# doc-check" (S-07 CI-pipeline spec, AC-5),
+//               and checks that ci.yml's aggregate gate job still depends on every job in the file.
 // why:          library.json is the single source of truth; regenerating deterministically from it
 //               keeps the manifest and INDEX.md diff-free instead of hand-edited in parallel and
 //               drifting. --check is the "drift" job's one command (S-07): CI must never
@@ -27,6 +28,7 @@ import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { resolveToolkit, toolkitCandidates, TOOLKIT_REPO_URL } from "./lib/resolve-toolkit.mjs";
 import { checkIndexDrift, writeIndex } from "./gen-index.mjs";
+import { checkCiGate } from "./lib/ci-gate.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "..");
@@ -106,8 +108,9 @@ function checkGeneratedDocsPlaceholder() {
 /**
  * AC-5: AGENTS.md must document every command .github/workflows/ci.yml runs. Commands opt in by
  * ending their `run:` line with the literal comment "# doc-check"; every such command must appear
- * verbatim as a substring somewhere in AGENTS.md. This is the deliberate, narrow scope: the seven
- * ci.yml job commands (S-07 AC-1, AC-5), not every install/checkout step in every workflow.
+ * verbatim as a substring somewhere in AGENTS.md. This is the deliberate, narrow scope: the nine
+ * ci.yml job commands (S-07 AC-1, AC-5, plus smoke and build-site, added after it), not every
+ * install/checkout step in every workflow. ci-ok runs no command, so there is nothing to document.
  */
 function checkAgentsDocCoverage() {
   const ciPath = resolve(ROOT, ".github", "workflows", "ci.yml");
@@ -149,10 +152,35 @@ function checkAgentsDocCoverage() {
   };
 }
 
+/**
+ * ci.yml's "ci-ok" job must depend on every other job in the file, and must still carry the
+ * `if: always()` that lets it fail. Branch protection on main requires that one context instead of
+ * the fourteen matrix-expanded ones (docs/internal/decisions/0033-aggregate-ci-gate.md), so a job
+ * missing from its `needs:` is a job that nothing gates and nothing reports on. The parsing lives in
+ * scripts/lib/ci-gate.mjs, which has no toolkit dependency and so is unit-testable on its own.
+ */
+function checkCiGateCoverage() {
+  const ciPath = resolve(ROOT, ".github", "workflows", "ci.yml");
+  if (!existsSync(ciPath)) {
+    return {
+      ok: true,
+      messages: ["gen --check: .github/workflows/ci.yml not found yet; skipping the CI gate check."],
+    };
+  }
+  const result = checkCiGate(readFileSync(ciPath, "utf8"));
+  return { ok: result.ok, messages: result.messages.map((m) => `gen --check: ${m}`) };
+}
+
 const args = process.argv.slice(2);
 
 if (args.includes("--check")) {
-  const results = [checkManifestDrift(), checkIndexMd(), checkGeneratedDocsPlaceholder(), checkAgentsDocCoverage()];
+  const results = [
+    checkManifestDrift(),
+    checkIndexMd(),
+    checkGeneratedDocsPlaceholder(),
+    checkAgentsDocCoverage(),
+    checkCiGateCoverage(),
+  ];
   let ok = true;
   for (const r of results) {
     for (const m of r.messages) console.log(m);
