@@ -23,6 +23,7 @@ import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { resolveToolkit, toolkitCandidates, TOOLKIT_REPO_URL } from "./lib/resolve-toolkit.mjs";
 import { checkSite } from "./check-site.mjs";
+import { checkReadmeLinks } from "./check-readme-links.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, ".."); // this repo's root, cwd-independent
@@ -56,6 +57,14 @@ const toolkitStatus = result.status ?? 1;
 // failed, because the plugin's conformance does not depend on the site being built locally. CI
 // builds the site first and then calls scripts/check-site.mjs directly, so the guards are never
 // skipped where they matter. Pass --skip-site to suppress this half entirely.
+
+// The README front-door guard runs UNCONDITIONALLY, unlike the dist-based site guards below: it
+// compares tracked files against the tracked route manifest and needs no build. Gating it on a
+// built site would leave the README's links unchecked in exactly the situation where nobody has
+// built one.
+console.log("");
+const readmeStatus = checkReadmeLinks();
+
 let siteStatus = 0;
 if (!args.includes("--skip-site")) {
   if (existsSync(resolve(ROOT, "site", "dist"))) {
@@ -69,4 +78,4 @@ if (!args.includes("--skip-site")) {
   }
 }
 
-process.exit(toolkitStatus !== 0 ? toolkitStatus : siteStatus);
+process.exit(toolkitStatus || readmeStatus || siteStatus);
