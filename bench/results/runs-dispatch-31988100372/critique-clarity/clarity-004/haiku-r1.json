@@ -1,0 +1,84 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Line 26-27: 'The manager reviews the request within two business days' describes manager action without context for employee reader. Line 64-66: 'The benefits team coordinates every stipend request from intake to payout. The team logs each request...' is process description for internal stakeholders, not employees.",
+      "fix": "Clearly separate internal process descriptions from employee-facing instructions. Use distinct sections or subsections with explicit audience labels (e.g., 'For Employees', 'For Managers', 'Internal Process').",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "sections Approval Timeline (line 26), Program Coordination (line 64), Review Responsibility (line 68)",
+      "severity": 2,
+      "violation": "Document addresses multiple distinct audiences (employees, managers, finance office, benefits team) within the same sections without separating content by intended reader. Sections describing what the manager or finance office does are interleaved with employee instructions without signals indicating which reader should act on which content."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Line 4: 'the equipment catalog'. Line 23: 'The summary shows the equipment cost'. Line 51: 'You record the stipend item on the request form.' Line 52: 'Finance reconciles the stipend item against the request log.'",
+      "fix": "Choose one term and use it consistently throughout, or define the terms' equivalence explicitly (e.g., 'the item (equipment) you are claiming'). Current usage requires readers to infer whether 'equipment' and 'stipend item' name the same thing.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "lines 4, 23, 51",
+      "severity": 2,
+      "violation": "Two different terms are used interchangeably for the single concept of what an employee claims reimbursement for: 'equipment' and 'stipend item' are used without signal that they refer to the same thing."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Lines 3-7 describe administrative update schedules before explaining eligibility or how to apply. Lines 18-24 (How to Apply) instruct the reader to start a request and confirm details before line 31-35 (Required Documentation) states what proof must be kept.",
+      "fix": "Reorder sections to match employee task flow: Eligibility → Required Documentation → How to Apply → Approval Timeline. Consider moving Program Overview to the end or marking it as background for reference.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "lines 3-7 (Program Overview), line 18 (How to Apply) before line 31 (Required Documentation)",
+      "severity": 2,
+      "violation": "Sections appear in an order that doesn't follow the reader's task sequence. Required Documentation appears after How to Apply, but employees need to know what documentation to gather before starting the application process."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Line 39: 'The stipend pays up to 500 dollars per benefit year.' The stipend does not pay; the finance office or organization pays. Line 41: 'Unused stipend amounts do not roll over to the next benefit year.' Amounts do not decide this rule; policy makers or the organization do.",
+      "fix": "Rewrite with concrete actors: 'The finance office deposits up to 500 dollars per benefit year' and 'The policy specifies that unused stipend amounts do not roll over to the next benefit year.'",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "lines 39, 41",
+      "severity": 2,
+      "violation": "Sentences use abstract subjects (the stipend, amounts) instead of naming the real-world actors (organization, finance office, policy makers) who perform the actions."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "Lines 50-53: 'You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal. You track its status there until the payment clears.' The section heading is 'Terminology Notes' but the content describes both terminology and workflow.",
+      "fix": "Either retitle the section to 'Request Workflow and Terminology' and clearly separate the two subsections, or create a separate 'Terminology' section with just the definitions and move the process description to 'Program Coordination'.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Terminology Notes section, lines 50-53",
+      "severity": 2,
+      "violation": "Section mixes definitions of terminology with descriptions of process flow, making its theme unclear. A reader finishing the section cannot state with confidence whether it is about terminology, process, or both."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-08-17T03:25:32Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 1,
+      "1": 0,
+      "2": 7,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 3
+  }
+}

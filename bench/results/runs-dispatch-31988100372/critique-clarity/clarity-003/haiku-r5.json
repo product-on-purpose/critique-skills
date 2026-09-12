@@ -1,0 +1,106 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-PARAGRAPH",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout.",
+      "fix": "Rewrite the opening sentence to state the topic the rest of the paragraph covers.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "The paragraph's opening sentence shares almost no vocabulary with the rest of the paragraph, so it does not preview the paragraph's actual topic."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout. A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.",
+      "fix": "Remove the unrelated sentences about the audit, federal guidance evolution, and coffee budget. If these topics are relevant, move them to appropriate sections or delete them entirely.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Program Coordination section",
+      "severity": 3,
+      "violation": "The section's sentences pursue at least four unrelated themes (stipend coordination, past audit, federal guidance, office budget) with no signal connecting them, so a reader cannot name a consistent topic the section is about."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Line 5: 'The benefits team publishes the equipment catalog on the first business day of the month.' Line 73: 'The finance liaison publishes the vendor list on the first business day of the month.'",
+      "fix": "Choose one term - either 'equipment catalog' or 'vendor list' - and use it consistently throughout the document. Add a defined-terms section if the distinction is intentional.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Program Overview and Questions and Updates sections",
+      "severity": 2,
+      "violation": "The document uses two different terms, 'equipment catalog' (line 5, 62) and 'vendor list' (line 73), interchangeably for the same concept without signaling that they mean the same thing."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SUBJECT-VERB-OBJECT",
+      "evidence": "Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.",
+      "fix": "Move the interrupting clause elsewhere, or split it into its own sentence.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 2",
+      "severity": 2,
+      "violation": "3 comma-set-off clause(s) totalling 14 words intervene between the sentence's apparent subject and its verb."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-TRANSITIONS",
+      "evidence": "An incomplete request pauses the timeline until the missing item arrives. The...",
+      "fix": "Open the paragraph with a transition word that states its relationship to the prior paragraph.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 2",
+      "severity": 2,
+      "violation": "The paragraph opens with none of the fixed transition words, so the reader is not told how it relates to the paragraph before it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "The stipend covers one claim per employee per benefit year. The stipend pays up to 500 dollars per benefit year. the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.",
+      "fix": "Replace abstract subjects with the real actors: 'Employees may claim one reimbursement per benefit year' instead of 'The stipend covers one claim'; 'The company pays up to 500 dollars' instead of 'The stipend pays'; 'Once the manager signs the request and finance confirms the budget, it moves to final processing' (real actors in context).",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Multiple locations: Eligibility (line 11), Reimbursement Amounts (line 39), How to Apply (line 21)",
+      "severity": 2,
+      "violation": "Multiple sentences use abstract nouns (the stipend, the request) as grammatical subjects instead of naming the real-world actor (the company, the employee, the manager, the finance office) who performs the action."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-PARALLELISM",
+      "evidence": "Completing the request begins with confirming eligibility, and the uploaded receipt.",
+      "fix": "Restate every item in the series with the same grammatical form.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Request Steps, paragraph 1",
+      "severity": 2,
+      "violation": "The series' 2 items mix grammatical forms (gerund, other) at their head words instead of sharing one form."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-08-17T03:20:28Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
