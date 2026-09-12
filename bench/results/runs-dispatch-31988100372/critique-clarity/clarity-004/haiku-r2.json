@@ -1,0 +1,62 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Line 47 uses 'device' ('the policy applies to one device per category per employee'), while lines 1, 27, 45, 61, 73 consistently use 'equipment' ('equipment stipend,' 'equipment category,' 'equipment,' 'equipment catalog'). The terms refer to the same concept but are used without definition of equivalence.",
+      "fix": "Replace 'device' on line 47 with 'equipment' to maintain consistent terminology: 'the policy applies to one piece of equipment per category per employee.'",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "line 47, compared against lines 1, 27, 45, 61, 73",
+      "severity": 2,
+      "violation": "The terms 'device' and 'equipment' are used interchangeably for the same concept without prior definition or signal that they are synonymous, forcing the reader to verify whether they mean the same thing."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "The 'Request Steps' section appears after 'Terminology Notes' (starting at line 49). Its single sentence states: 'Completing the request begins with confirming eligibility, and uploading the receipt.' The 'How to Apply' section (lines 17-23) describes the portal process but stops before naming the concrete first and second steps.",
+      "fix": "Relocate the 'Request Steps' section to immediately follow 'How to Apply,' or integrate its content into that section so the employee's application workflow appears consecutively.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "lines 55-57, 'Request Steps' section",
+      "severity": 2,
+      "violation": "A section describing the basic structure of the request - first confirm eligibility, then upload the receipt - appears late in the document, after sections on terminology, special cases, and internal workflows, instead of immediately following 'How to Apply' where it logically belongs in the reader's task sequence."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "The section opens: 'You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review.' These three sentences shift subjects from 'You' to 'Finance' to 'Payroll' with no transition words connecting them or showing how the three roles relate to each other.",
+      "fix": "Restructure to group related subjects: first establish what the employee does ('You record...'), then in a separate sentence explain what happens afterward with a transition word ('After that, Finance reconciles...').",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "lines 51-53, 'Terminology Notes' section, first three sentences",
+      "severity": 2,
+      "violation": "Consecutive sentences' subjects shift between unrelated actors ('You,' 'Finance,' 'Payroll') with no signal connecting the new subject back to what came before, so the reader cannot tell whether these steps happen in sequence, in parallel, or what the thread connecting them is."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-08-17T03:29:37Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "evidence": "36-word sentence, 4 subordinate-clause markers: Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 3",
+      "severity": 3,
+      "violation": "The sentence runs to 36 words with 4 subordinate-clause markers, longer than the reader can hold in mind on a single pass."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-ORGANIZATION",
+      "evidence": "Section order: Program Overview → Eligibility → How to Apply → Approval Timeline → Required Documentation → Reimbursement Amounts → Restrictions → Terminology Notes → Request Steps → Overview (duplicate) → Program Coordination → Review Responsibility. Procedural steps appear after general policy sections; 'Program Coordination' and 'Review Responsibility' appear at the end rather than early in the explanation of how the program works.",
+      "fix": "Reorganize to follow a logical narrative: (1) What is the program? (2) Who qualifies? (3) How does the process work? (4) What are the restrictions? (5) FAQ/definitions.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "document structure, sections 1-14",
+      "severity": 3,
+      "violation": "The sections do not follow a logical progression; procedural and administrative details are scattered, forcing readers to jump between sections to understand the workflow."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ACTIVE",
+      "evidence": "The request is reviewed within two business days.",
+      "fix": "Rewrite the sentence in active voice, naming the actor that performs the action.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence uses a be-verb plus past-participle passive construction in a context where the actor is recoverable and worth naming directly."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONCISE",
+      "evidence": "Also, the deposit happens in order to offset costs the employee already paid at this point in time.",
+      "fix": "Replace the wordy phrase with its plain equivalent (for example, because for due to the fact that).",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "Reimbursement Amounts, paragraph 2",
+      "severity": 2,
+      "violation": "The sentence uses a wordy construction from the fixed wordy-phrase list that a shorter equivalent would carry with no loss of meaning."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-DOUBLE-NEGATIVE",
+      "evidence": "However, reimbursement is not available without a completed receipt.",
+      "fix": "Restate the sentence with at most one negation, or recast it as a positive statement.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "Eligibility, paragraph 2",
+      "severity": 2,
+      "violation": "2 negation markers from the fixed negation list co-occur in one clause, so the reader has to work out the statement's logical sign before understanding it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-HEADINGS",
+      "evidence": "heading: Overview",
+      "fix": "Replace the heading with text specific enough to be found by scanning.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "the Overview heading",
+      "severity": 2,
+      "violation": "The heading text matches the fixed list of non-specific heading labels, so a reader scanning headings cannot tell whether the section applies to them."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-JARGON",
+      "evidence": "The manager approves items pursuant to internal discretion, notwithstanding the standard review checklist.",
+      "fix": "Replace the jargon term with a plain equivalent, or define it at first use.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Required Documentation, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence uses a legal or foreign-language jargon term from the fixed list with no plain-language definition in the same or the following sentence."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-001.md",
+    "artifact_sha256": "32ee3fed58b3e9b931565041a2e195dade8e2d19c9e9172fe28b38bdb5f6ef2c",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-08-17T02:48:50Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 1,
+      "2": 11,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 7
+  }
+}

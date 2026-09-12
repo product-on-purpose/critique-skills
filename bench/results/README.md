@@ -632,6 +632,32 @@ judged lane's detection rate is flat between the two versions, which is not what
 would typically look like. **What closes it is a re-measurement through a committed harness with its
 output committed alongside a log, which is what the first live `bench.yml` dispatch would establish.**
 
+**That dispatch has since happened, and its output is the third run directory,
+`bench/results/runs-dispatch-31988100372/`.** Workflow run `31988100372`, dispatched 2026-08-17
+through `bench.yml`, `critique-clarity` on the pinned haiku tier at k=5. It is the first run set in
+this repository produced end to end by `bench/run_bench.py` on infrastructure the maintainer does
+not control, and it is committed here with its envelopes rather than summarised.
+
+**39 envelopes, not the 40 the grid intended.** The baseline arm is complete at 20, four artifacts
+by k=5. The `critique-clarity` arm holds 19: `critique-clarity/clarity-001/haiku-r1.json` never
+landed. That single absence is the "19 of 20 skill cells" coverage figure named in `CHANGELOG.md`
+and it is why [ADR 0031](../../docs/internal/decisions/0031-fidelity-gate-acceptance-band.md)
+rebuilt the acceptance band over the coverage actually obtained rather than over 20.
+
+**These envelopes feed no published number, by design.** `results.json` carries one `run_set`,
+`p3-2026-07-31-plus-cal1-2026-08-01`, and this dispatch is not in it. ADR 0031 treats the run as a
+check against the measurement of record, not a replacement for it, and the changelog entry states
+the same conclusion in the same words: the committed figures "stand as the measurement of record"
+and this run "does not license republishing" them as reproduced. The envelopes are committed so a
+reader can audit the check, not so the check can be averaged into the thing it checked.
+
+**What it closes, and what it does not.** It closes the mechanism question for one cell of the grid:
+`critique-clarity` on haiku now has a run set whose harness, infrastructure, and log are all
+established. It does not close the paragraph above it. That paragraph is about
+`critique-accessibility` 0.1.0 against 0.1.1 in `runs-cal1/`, which this dispatch did not measure,
+and the five other skills and the sonnet tier remain where they were. Sonnet in particular has still
+never completed a cell through this harness.
+
 ## Limitations
 
 Stated so no reader has to infer them from an absence.

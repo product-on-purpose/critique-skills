@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Employees must submit the receipt, the manager's approval form, and the original purchase order before the review begins\" followed by \"the portal saves a draft automatically every few minutes\"",
+      "fix": "Clarify the workflow order, for example: \"Employees start in the portal by saving a draft containing the receipt, manager's approval form, and purchase order, then submit the final request after reviewing the confirmation summary\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "How to Apply section",
+      "severity": 3,
+      "violation": "The sequence of application steps is unclear - whether using the portal (with auto-save) precedes or follows the formal submission of required documents"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The requester gets an automatic reminder after three days.\"",
+      "fix": "Specify the trigger explicitly, for example: \"The requester gets an automatic reminder three days after the request is marked incomplete\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Approval Timeline section, second paragraph",
+      "severity": 3,
+      "violation": "The trigger for the three-day timer is ambiguous - it is unclear whether it starts after the request submission, after the request is marked incomplete, or another event"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"A photo of the receipt is enough for most requests\" immediately followed by \"employees shall retain receipts for one year after the purchase date\"",
+      "fix": "Clarify the retention requirement, for example: \"Employees shall retain either the original receipt or a dated photo copy for one year after the purchase date\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Required Documentation section",
+      "severity": 3,
+      "violation": "These statements appear contradictory - if a photograph is acceptable for submission, requiring physical receipt retention for a year is unexplained"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.\"",
+      "fix": "Break into multiple shorter sentences and restructure for clarity, for example: \"Employees in roles that require regular fieldwork may request a second device in a category if the benefits team confirms necessity. Such second devices are tracked against the same annual limit per category in the equipment catalog.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Restrictions and Exceptions section, second paragraph",
+      "severity": 3,
+      "violation": "This is a run-on sentence with multiple embedded clauses that is difficult to parse, and \"Similarly\" does not establish a clear parallel to the previous statement about equipment maintenance"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal. You track its status there until the payment clears.\"",
+      "fix": "Adopt consistent voice throughout - either maintain second person for all instructions or use third person for all descriptions",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Terminology Notes section",
+      "severity": 3,
+      "violation": "The section inconsistently shifts between second person (\"you\") and third person (department names), making it unclear whether instructions are directly addressing the employee or describing others' actions"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Section heading reads \"Request Steps\" with the following content: \"Completing the request begins with confirming eligibility, and uploading the receipt.\"",
+      "fix": "Either rename the section to \"Initial Request Steps\" or provide the complete sequence of all steps required to complete a request",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Request Steps section",
+      "severity": 3,
+      "violation": "The heading promises multiple steps but the section contains only the initial step, making the heading misleading"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The section heading is \"Questions and Updates\" but the content is: \"The people operations office tracks the stipend budget at the start of the fiscal year. Every entry carries a date stamp so the record stays easy to audit.\"",
+      "fix": "Either replace the content with actual guidance on how employees can ask questions and receive updates, or rename the section to match its content about budget maintenance",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Questions and Updates section",
+      "severity": 3,
+      "violation": "The section heading suggests guidance on getting answers to questions or receiving policy updates, but the content is procedural information about budget tracking"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-002.md",
+    "artifact_sha256": "7fd910197f585ef10416cde2ed6b94fa48de539377a1082d82e29ccee509e6df",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-08-17T03:04:34Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

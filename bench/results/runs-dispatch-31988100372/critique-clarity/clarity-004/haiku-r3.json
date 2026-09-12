@@ -1,0 +1,106 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Line 11: 'per benefit year'; Line 39: 'per benefit year'; Line 5: 'at the start of the fiscal year'; Line 61: 'at the start of the fiscal year'; Line 28: 'approved list'; Line 7: 'equipment catalog'",
+      "fix": "Add a defined-terms section stating 'Benefit year and fiscal year refer to the same 12-month period' and 'The equipment catalog is the approved list of eligible items.' Alternatively, select one term throughout and use it consistently.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "{'start_line': 11, 'end_line': 73, 'section': 'Multiple sections'}",
+      "severity": 3,
+      "violation": "Two undefined terms recur throughout the document: 'benefit year' (lines 11, 39) and 'fiscal year' (lines 5, 7, 61, 73) appear interchangeably but are never stated to mean the same thing, forcing the reader to infer their relationship. Similarly, 'equipment catalog' (lines 7, 61, 73) and 'approved list' (line 28) are not defined as equivalent, creating ambiguity about whether they name the same concept."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "Line 51-53: 'You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal. You track its status there until the payment clears.'",
+      "fix": "Restructure the section to track one actor or process at a time. Either organize by actor (what Finance does, what you do, what Payroll does) or by process stage (intake, reconciliation, release). Use consistent subjects: 'Finance reconciles the stipend item each month, then Payroll releases the amount after that review. Meanwhile, you submit the request and track its status in the portal until payment clears.'",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "{'start_line': 51, 'end_line': 53, 'section': 'Terminology Notes'}",
+      "severity": 3,
+      "violation": "The Terminology Notes section shifts its grammatical subject in nearly every clause with no connecting thread. Line 51 moves from 'You record' (employee as subject) to 'Finance reconciles' (Finance as subject) to 'Payroll releases' (Payroll as subject), then line 53 reverts to 'you submit'. The reader has to track four different actors performing four different actions with no stated relationship between them, disrupting topic continuity at every sentence boundary."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Lines 5-7 (Program Overview: IT asset group updates); Lines 51-65 (Terminology Notes and Program Coordination: internal reconciliation and routing process); Lines 69 (Review Responsibility: finance office review); Lines 73-75 (Questions and Updates: blends catalog review with staff directions).",
+      "fix": "Add a note at the top of internal-process sections: 'The following section describes how our team processes your request; you do not need to read it to apply.' Alternatively, move all internal-process sections into an appendix titled 'How We Process Your Request.'",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "{'start_line': 5, 'end_line': 73, 'section': 'Program Overview, Terminology Notes, Program Coordination, Review Responsibility'}",
+      "severity": 2,
+      "violation": "The document blends employee-facing guidance (Eligibility, How to Apply) with internal-process documentation (what the IT asset group, benefits team, and finance office do) without separating audiences or signaling which sections apply to employees reading the document. An employee can still extract the information needed to apply, but has to skip internal-administration detail without a clear flag that the section is optional."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "evidence": "Lines 51-53: Terminology Notes begins with process steps ('You record... Finance reconciles... Payroll releases...') without a prefatory statement of the section's purpose. Line 57: Request Steps begins with 'Completing the request begins' rather than 'To apply, complete these steps:' or 'Here is a quick summary of the application.'",
+      "fix": "Add an introductory sentence to Terminology Notes: 'Here's what happens to your request behind the scenes:' or 'Here's how we use the terms in this document.' Retitle or reintroduce Request Steps with 'Quick reference: the key steps to apply are...' or 'In brief, you'll need to...'",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "{'start_line': 49, 'end_line': 57, 'section': 'Terminology Notes, Request Steps'}",
+      "severity": 2,
+      "violation": "The Terminology Notes section opens with examples of what employees do (you record, you submit) without stating upfront what the section is meant to accomplish - whether it's defining terms for legal clarity, summarizing the process, or explaining internal terminology. The reader encounters processes and actors before understanding why these terms matter. Request Steps (line 57) similarly opens with an action verb ('Completing the request begins...') rather than establishing what the section is for."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Lines 5-7 (Program Overview about IT asset group) precede line 11 (Eligibility); Lines 43-47 (Restrictions and Exceptions) appear after line 39 (Reimbursement Amounts).",
+      "fix": "Move Restrictions and Exceptions immediately after Eligibility (before How to Apply) so readers know the full boundary conditions before starting the application. Consider moving Program Overview to an appendix or removing it entirely if it addresses only internal stakeholders.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "{'start_line': 5, 'end_line': 43, 'section': 'Document structure'}",
+      "severity": 2,
+      "violation": "The section order includes a detour before actionable steps (Program Overview describes IT asset group administration before employees see eligibility requirements) and misplaces a critical section (Restrictions and Exceptions appears after Reimbursement Amounts, forcing a reader to discover device limits and maintenance requirements only after the benefit description). An employee reading linearly cannot confirm the full scope of restrictions before entering the application process."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Line 20: 'The portal walks through each step'; Line 21: 'the portal saves a draft'; Line 29: 'an incomplete request pauses the timeline'; Line 47: 'the policy applies'; Line 57: 'Completing the request begins with...'",
+      "fix": "Rewrite to name real actors: 'The portal guides you through each step' (active, agent named); 'If your request is incomplete, the system will pause processing' or 'we'll pause processing'; 'Employees may claim one device per category' (not 'policy applies'); 'To complete the request, confirm your eligibility first, then upload the receipt.'",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "{'start_line': 20, 'end_line': 57, 'section': 'Multiple sentences'}",
+      "severity": 2,
+      "violation": "Several sentences name abstract processes or systems as grammatical subjects instead of the identifiable people or entities performing the action. 'The portal walks through each step' and 'the portal saves a draft' (lines 20-21) make the software the actor instead of naming the system's function. 'An incomplete request pauses the timeline' (line 29) abstracts away whoever pauses it (likely staff). 'The policy applies' (line 47) abstracts the rule-maker. 'Completing the request begins with...' (line 57) uses a gerund as subject instead of naming the employee."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "Terminology Notes (51-53): defines terms through process actors without stating the definitions. Request Steps (57): 'Completing the request begins with confirming eligibility, and uploading the receipt' contradicts How to Apply (19-23). Special Cases (61) repeats catalog-publication detail mentioned in Program Overview (7). Questions and Updates (73) combines catalog review and print-copy access without clear connection.",
+      "fix": "Remove or consolidate Terminology Notes into How to Apply or an appendix. Combine Request Steps with How to Apply as a single section, or use it as a quick-reference checklist after the full process description. Merge Special Cases into Program Overview or a single 'Behind the Scenes' appendix. Retitle Questions and Updates to clarify its function (e.g., 'Getting Help and Additional Resources').",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "{'start_line': 49, 'end_line': 74, 'section': 'Terminology Notes, Request Steps, Special Cases, Questions and Updates'}",
+      "severity": 2,
+      "violation": "Four supplementary sections fail to establish a clear throughline that lets a reader state the section's topic. Terminology Notes defines terms by describing processes (who records, reconciles, releases) without explaining when or why an employee should care about these terms. Request Steps contradicts the preceding How to Apply section by listing only two steps (confirm eligibility, upload receipt) after detailing a multi-step portal process. Special Cases mentions a finance liaison publishing an equipment catalog without clarifying its relation to Program Overview, which already mentions catalog tracking. Questions and Updates mixes two unrelated statements about catalog review and obtaining a printed copy without a connecting principle."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-08-17T03:34:18Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}
