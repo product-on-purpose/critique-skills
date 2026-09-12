@@ -68,9 +68,10 @@ Equivalent: `npm run gen`.
 
 ### CI (`.github/workflows/ci.yml`)
 
-Every push and pull request against `main` runs seven jobs, each a single command with zero
+Every push and pull request against `main` runs nine jobs, each a single command with zero
 validation logic in the workflow itself (Standard sec 4.1/4.4); every command below is exactly what
-the workflow runs and reproduces the same result locally. Node matrix: `22.12.0` and `24`. Python:
+the workflow runs and reproduces the same result locally. A tenth job, `ci-ok`, runs no command and
+is described under the table. Node matrix: `22.12.0` and `24`. Python:
 `3.12`. See `docs/internal/release-plans/plan_v0.1.0/S-07_ci-pipeline/spec.md` for the acceptance
 criteria and `docs/internal/decisions/0011-gate-wiring-toolkit-wrapper.md` for the toolkit-checkout
 prerequisite `npm run check` and `npm run gen -- --check` share.
@@ -86,6 +87,19 @@ prerequisite `npm run check` and `npm run gen -- --check` share.
 | audit | `npm audit --audit-level=high` |
 | smoke | `python scripts/smoke.py --expect no-deps`, then `python scripts/smoke.py --expect ready` |
 | build-site | `node scripts/check-site.mjs` |
+
+**`ci-ok` is the only check branch protection on `main` requires, and it is the one job in the
+file that checks nothing about this repository.** It depends on the nine above and reports whether
+they passed. It exists because every other job reports a matrix-expanded name (`conformance (Node
+24)`), so requiring them directly means naming all fourteen, and bumping the Node matrix strands the
+old names: branch protection waits forever for a context nothing emits, and every pull request
+blocks on a check that cannot report. One stable name lets the matrix change without anyone
+remembering to edit a setting that lives outside the repository. Two properties make it real rather
+than decorative, and `npm run gen -- --check` fails if either lapses: it must depend on every job in
+`ci.yml`, since a job missing from its `needs` is gated by nothing, and it must keep its job-level
+`if: always()`, since without it GitHub skips the job when a dependency fails and branch protection
+counts a skipped check as a passing one. See
+[ADR 0033](docs/internal/decisions/0033-aggregate-ci-gate.md).
 
 **`build-site` builds the documentation site and runs its guards without deploying anything.** It
 runs the same recipe as `deploy-pages.yml` so a green pull request predicts a green deploy, which it
