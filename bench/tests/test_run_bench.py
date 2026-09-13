@@ -1378,3 +1378,64 @@ def test_skill_lane_stays_silent_about_the_threshold_when_it_is_the_default(monk
     )
 
     assert "severity_3_threshold" not in calls[0]["input"]
+
+def test_transport_timeout_defaults_to_the_module_constant(tmp_path, monkeypatch) -> None:
+    """The ceiling was a bare 900 at two sites through v0.1.6. Pin it to one named constant so a
+    change to it is visible in a diff rather than buried in a signature."""
+    calls = _capture_claude_calls(monkeypatch)
+
+    run_bench.ClaudeCodeClient().messages.create(
+        model="claude-haiku-4-5-20251001",
+        messages=[{"role": "user", "content": "critique ./clarity-001.md"}],
+        plugin_dir=tmp_path / "repo",
+        cwd=tmp_path / "staged",
+    )
+
+    assert calls[0]["timeout"] == run_bench.DEFAULT_TIMEOUT_SECONDS == 900
+
+
+def test_timeout_override_reaches_the_subprocess(tmp_path, monkeypatch) -> None:
+    """--timeout exists because an agentic sonnet run is materially slower than haiku at every
+    step, and before this the only way to raise the ceiling was to edit run_bench.py."""
+    calls = _capture_claude_calls(monkeypatch)
+
+    run_bench.ClaudeCodeClient(timeout=2400).messages.create(
+        model="claude-sonnet-4-5-20250929",
+        messages=[{"role": "user", "content": "critique ./clarity-001.md"}],
+        plugin_dir=tmp_path / "repo",
+        cwd=tmp_path / "staged",
+    )
+
+    assert calls[0]["timeout"] == 2400
+
+
+def test_client_factory_forwards_its_timeout() -> None:
+    """The CLI parses --timeout; this is the seam that carries it to the transport."""
+    assert run_bench._client_factory(2400).messages._timeout == 2400
+    assert run_bench._client_factory().messages._timeout == run_bench.DEFAULT_TIMEOUT_SECONDS
+
+
+def test_skill_lane_names_the_artifact_bare_and_runs_in_the_staging_directory(monkeypatch, tmp_path) -> None:
+    """Ground-truth isolation, pinned.
+
+    staged_artifact() copies the artifact alone into a temp directory; the lane then names it by
+    bare filename with cwd set to that directory. Handing the model a resolvable path instead
+    would change the prompt for every cell the committed evidence was measured with, which is a
+    measurement decision and not a bug fix. This test exists so that change cannot happen quietly.
+    """
+    calls = _capture_claude_calls(monkeypatch, stdout=json.dumps(_ENVELOPE_FROM_SKILL))
+    staged = tmp_path / "bench-artifact-xyz" / "clarity-001.md"
+    staged.parent.mkdir(parents=True)
+
+    run_bench.call_skill_lane(
+        run_bench.ClaudeCodeClient(),
+        model_id="claude-haiku-4-5-20251001",
+        skill="critique-clarity",
+        staged_path=staged,
+        repo_root=tmp_path / "repo",
+        severity_3_threshold=0,
+    )
+
+    assert "clarity-001.md" in calls[0]["input"]
+    assert str(staged) not in calls[0]["input"], "the staged path must not reach the prompt"
+    assert calls[0]["cwd"] == str(staged.parent)

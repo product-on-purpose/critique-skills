@@ -69,6 +69,16 @@ Synthesized from P6's "Must know before tagging" and "Open items" sections (P6, 
 report for full evidence on each. Items this pass already closed are checked off and kept here only
 so the list stays complete.
 
+> [!IMPORTANT]
+> **This list is frozen at the v0.1.0 tag and is no longer the live tracker.** It was re-verified on
+> 2026-09-11 and over half of it had closed without being struck through. Whatever remains open is
+> now tracked in [`docs/internal/backlog/enhancements.md`](../backlog/enhancements.md): the three
+> confirmed-open items are E5 (fabricated run metadata in the example and golden envelopes, which
+> the audit found affects 31 files rather than the six counted below), E6 (per-entry `run_set` and a
+> lane dimension in the results schema) and E7 (move `bench/results/runs/steering/` out of the
+> `runs*` glob). Of the carried items, the upstream `SKIP_DIRS` issue is E34 and the two unrun
+> external validators are E35. Add nothing new to this document; add it to the backlog.
+
 ### Before tag
 
 - [x] **`RELEASE_BODY.md` was not gitignored** (P6 must-know item 3). Closed by this pass: added to
