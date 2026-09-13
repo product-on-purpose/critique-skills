@@ -98,21 +98,20 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-42 items depend on nothing and can start today, while E1 stays pending. This list is what makes the
-shape deferral survivable, and it is derived from each item's own `Depends on` field rather than
-asserted.
+**39 items depend on nothing and can start today.** Derived from each item's own `Depends on`
+field rather than asserted, and regenerated whenever an item closes. Two items that were on this
+list when it was first written are now done: E1 (the v0.2.0 shape ruling) and E14 (the exit-gate
+clock ruling). E2 (sonnet unblock) has left the list because it now depends on a fresh trace that
+costs a live run.
 
 | ID | Item | Size | Release |
 |---|---|---|---|
-| E1 | Rule the v0.2.0 shape | S | v0.2.0 |
-| E2 | Unblock sonnet cells in run_bench.py: line-619 path fix plus a --timeout override | S | v0.1.x |
 | E3 | Regenerate README/ROADMAP stale receipts (541 envelopes, 907/126 tests) and guard them | S | v0.1.x |
 | E4 | Fix the two false claims in the published benchmark-harness explainer | S | v0.1.x |
 | E7 | Move bench/results/runs/steering/ out of the runs* glob | S | v0.1.x |
 | E8 | Retire methodology.md's stale 0.7 consistency-target placeholder | S | v0.1.x |
 | E9 | Delete the stale validate_envelopes known-issue from bench/results/README.md | S | v0.1.x |
 | E13 | Update ROADMAP.md's v0.1.x section: two of four verification items are met | S | v0.1.x |
-| E14 | Rule whether a site-guard defect resets the v0.1.x exit-gate clock | S | v0.1.x |
 | E15 | Exercise the tag-guard's negative path from a scratch clone (S-07 AC-4) | S | v0.1.x |
 | E18 | Fix QUICKSTART.md's stale v0.1.0 marketplace-pin claim | S | v0.1.x |
 | E28 | Pin or record the Claude Code CLI version bench.yml installs | S | v0.1.x |
@@ -121,10 +120,10 @@ asserted.
 | E31 | Add criterion-table completeness to skill-selftest.py | S | v0.1.x |
 | E32 | Close S-03 AC-3: flip the checkbox and add a corpus-composition CI check | S | v0.1.x |
 | E33 | Correct ROADMAP's Gold-tier bullet (3 of 4 done) and decide the tier declaration | S | v0.1.x |
-| E34 | Close the SKIP_DIRS carry-forward note, fixed upstream and already adopted | S | v0.1.x |
+| E34 | Close the SKIP_DIRS carry-forward note - fixed upstream and already adopted | S | v0.1.x |
 | E35 | Run plugin-dev:plugin-validator and plugin-dev:skill-reviewer, or record why not | S | v0.2.0 |
 | E36 | Confirm or deprecate the reserved selector field per ADR 0012's own RC question | S | v0.1.x |
-| E37 | Run the TOULMIN-HEDGE-DENSITY false-positive check ADR 0017 named | S | v0.1.x |
+| E37 | Run the TOULMIN-HEDGE-DENSITY false-positive check ADR 0017 named, and fix TOULMIN.md's future tense | S | v0.1.x |
 | E38 | Measure critique-accessibility's location fix on id-poor markup | S | v0.2.0 |
 | E39 | Record the CLAUDE_CODE_OAUTH_TOKEN retention decision and a rotation procedure | S | v0.1.x |
 | E40 | Look at a Mermaid diagram in light and dark on the live site | S | v0.1.x |
@@ -147,9 +146,9 @@ asserted.
 | E54 | Ship one documented cross-library composition workflow | M | v0.3.0 |
 | E25 | Rewrite verdicts.md as one current-state document | L | v0.2.0 |
 
-**The single highest-leverage item on that list is E2 (sonnet unblock).** It is S-sized, blocked by
-nothing, and E19, E20 and E26 all queue behind it, as does two-tier measurement for every skill in
-`new-components.md`.
+**The highest-leverage item on that list is E16 (live planted-failure checks)**, because it is one
+of the two verification items ADR 0034 names as the honest condition for closing v0.1.x, alongside
+E15 (tag guard from a scratch clone). Everything else here is genuinely optional ordering.
 
 ## Critical paths
 
