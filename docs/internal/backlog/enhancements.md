@@ -60,7 +60,7 @@ and the repository did not have.
   and E14 (the v0.1.x exit-gate declaration) still comes first.
 - **Rank at intake:** 1 of 64. **Status:** RULED 2026-09-11; the three riders remain open.
 
-## E2 - Unblock sonnet cells: --timeout shipped, root cause still unidentified
+## E2 - Unblock sonnet cells: RESOLVED, sonnet was already working
 
 - **Target:** `bench/run_bench.py`, `CHANGELOG.md`, `bench/tests/test_run_bench.py`
 - **Change:** PARTIALLY DONE 2026-09-11. `--timeout` shipped: the 900-second ceiling was hardcoded at two sites with no way to raise it for a slower tier, and is now `DEFAULT_TIMEOUT_SECONDS` with a `--timeout` CLI override threaded through `_client_factory`, covered by four new tests. **The path fix was NOT applied, because the recorded diagnosis is wrong.** Remaining: capture a fresh post-v0.1.6 sonnet trace, identify the actual failure, fix it, and complete one sonnet cell through `bench.yml`.
@@ -91,10 +91,27 @@ and the repository did not have.
   "hits a second version of the same searching problem, **in a different place**". No trace of
   that post-fix failure exists in the repository, so the current root cause is genuinely
   unidentified and cannot be inferred from the pre-fix trace.
-- **Next step, and it costs money.** One sonnet cell with `--timeout 2400` and the stream
-  captured, to see where it goes now. Until that trace exists, any further code change is a guess.
-- **Rank at intake:** 2 of 64. **Status:** partially done 2026-09-11 (`--timeout` shipped);
-  root cause open.
+- **RESOLVED 2026-09-13, by running it rather than by changing anything.** One cell,
+  `critique-clarity` / `clarity-001` / sonnet (`claude-sonnet-5`, the pinned tier), k=1, against a
+  single-artifact scratch corpus. **It completed**, producing a schema-valid envelope (0 errors
+  against the frozen contract) with 5 scripted and 3 judged findings.
+- **The two numbers that settle the diagnosis.** The scripted count is non-zero, so the skill
+  resolved its own `scripts/checks.py` instead of searching for it: the plugin-hunting failure is
+  gone. And it took **639 seconds, inside the 900-second ceiling that was already in force**, so
+  the `--timeout` flag shipped earlier the same day is **not** what unblocked it. Neither recorded
+  cause was the cause.
+- **What most likely fixed it:** v0.1.6's change giving the critic subagent its own `skill_dir`
+  (`skills/critique-clarity/SKILL.md:156-160`). Sonnet was never re-run after that shipped, so the
+  "still cannot complete a cell" claim propagated into `bench/results/README.md`, ADR 0031 and the
+  changelog on the authority of a pre-fix trace. **The tier was working for roughly four weeks and
+  nobody knew.**
+- **Scope, stated at the same length.** One skill, one artifact, one repetition. It says nothing
+  about the other five skills, the other three clarity artifacts, or any published figure. The
+  envelope is a diagnostic probe, not a measurement, and is not committed into any run set.
+- **Follow-on:** `bench/results/README.md` corrected. `RELEASE-NOTES.md`'s 0.1.6 section and ADR
+  0031 still carry the old claim and were deliberately left alone as dated records. E19 (fidelity
+  gate on sonnet) and E20 (usability sonnet re-measure) are now genuinely unblocked.
+- **Rank at intake:** 2 of 64. **Status:** RESOLVED 2026-09-13.
 
 ## E3 - Regenerate README/ROADMAP stale receipts (541 envelopes, 907/126 tests) and guard them
 

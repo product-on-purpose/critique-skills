@@ -655,8 +655,24 @@ reader can audit the check, not so the check can be averaged into the thing it c
 `critique-clarity` on haiku now has a run set whose harness, infrastructure, and log are all
 established. It does not close the paragraph above it. That paragraph is about
 `critique-accessibility` 0.1.0 against 0.1.1 in `runs-cal1/`, which this dispatch did not measure,
-and the five other skills and the sonnet tier remain where they were. Sonnet in particular has still
-never completed a cell through this harness.
+and the five other skills and the sonnet tier remain where they were.
+
+**Correction, 2026-09-13: sonnet has now completed a cell through this harness.** This paragraph
+previously ended by saying it never had. A single diagnostic cell was run on 2026-09-13,
+`critique-clarity` / `clarity-001` / sonnet (`claude-sonnet-5`, the pinned tier) at k=1, and it
+produced a schema-valid envelope in **639 seconds** with both lanes populated: 5 scripted findings
+and 3 judged. Both halves matter. The scripted count is non-zero, which means the skill resolved
+its own `scripts/checks.py` rather than searching for it, so the plugin-hunting failure recorded
+on 2026-08-16 is not present. And 639 seconds is comfortably inside the 900-second ceiling that was
+already in force, so **wall clock was not the blocker either**. The most likely explanation is that
+the v0.1.6 fix which gave the critic subagent its own `skill_dir` resolved this, and nobody re-ran
+sonnet afterwards to find out.
+
+**What that cell does not establish**, stated at the same length as what it does: it covers one
+skill, one artifact and one repetition. It says nothing about the other five skills, nothing about
+the other three clarity artifacts, and nothing about any published figure. It was run against a
+single-artifact scratch corpus outside this tree and is a diagnostic probe, not a measurement, so
+no run set here contains it and nothing in the tables below moves.
 
 ## Limitations
 
