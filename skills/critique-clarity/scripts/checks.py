@@ -1,4 +1,3 @@
-raise SystemExit('planted failure for S-07 AC-1')
 """critique-clarity scripted lane: the 15 PLAIN-* and WILLIAMS-* criteria
 docs/reference/criterion-ids.md and this skill's own SKILL.md declare
 scripted (checks.scripted). Every criterion below is a closed lexicon, a
