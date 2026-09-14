@@ -297,7 +297,7 @@ Everything on the site is a rendering of something in this repo. Nothing lives o
 | **Criteria** | 96 (42 scripted, 54 judged), each with a permanent ID |
 | **Subagents** | 1 (`critique-critic`, clean-context) |
 | **Conformance** | convergent (Silver), 0 errors / 0 warnings; reproduce with `node scripts/check.mjs` |
-| **Measurement** | 541 committed run envelopes, k=5, two pinned model tiers, 23-artifact seeded corpus |
+| **Measurement** | 999 committed run envelopes, k=5, two pinned model tiers, 23-artifact seeded corpus |
 | **Tests** | 911 Python, 126 Node; reproduce with `python -m pytest -q` and `npm test` |
 | **License** | [Apache-2.0](LICENSE) (code) / CC-BY-4.0 (corpus) |
 
