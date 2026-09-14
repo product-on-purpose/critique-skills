@@ -35,5 +35,5 @@
 - [`README.md`](README.md) - overview, positioning, quickstart.
 - [`CHANGELOG.md`](CHANGELOG.md) - full technical history; [`RELEASE-NOTES.md`](RELEASE-NOTES.md) - curated, user-facing notes.
 - [`docs/`](docs/) - Diataxis docs (reference, how-to, explanation).
-- [`docs/internal/decisions/`](docs/internal/decisions/) - ADRs.
+- [`docs/internal/decisions/`](docs/internal/decisions/) - ADRs; [`docs/internal/backlog/`](docs/internal/backlog/) - backlog.
 - [`scripts/`](scripts/) - the Node validation spine (conformance checks, generators, gate, evaluate).

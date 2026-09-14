@@ -85,6 +85,12 @@ DEFAULT_OUT_DIR = ROOT / "bench" / "results" / "runs"
 DEFAULT_MANIFEST_PATH = ROOT / "bench" / "results" / "measurement-manifest.json"
 BASELINE_PROMPT_PATH = ROOT / "bench" / "baseline" / "prompt.txt"
 DEFAULT_MAX_TOKENS = 8192
+# Wall-clock ceiling for one `claude -p` invocation. An agentic skill run is not a single model
+# call: it reads the artifact, runs the scripted lane, and assembles an envelope, and the sonnet
+# tier is materially slower than haiku at every step. 900s was the hardcoded value through
+# v0.1.6, with no way to raise it for a slow tier without editing this file. --timeout overrides
+# it; nothing else about the invocation changes.
+DEFAULT_TIMEOUT_SECONDS = 900
 
 # How many times one skill cell is attempted before it is recorded as failed. Small on purpose: a
 # retry costs a full agentic run (94s to 173s on haiku, longer on sonnet), and retrying past a few
@@ -491,7 +497,7 @@ class _ClaudeCodeResponse:
 class _ClaudeCodeMessages:
     """`messages.create(...)`, backed by a non-interactive `claude -p` invocation."""
 
-    def __init__(self, *, cli: str = "claude", timeout: int = 900) -> None:
+    def __init__(self, *, cli: str = "claude", timeout: int = DEFAULT_TIMEOUT_SECONDS) -> None:
         self._cli = cli
         self._timeout = timeout
 
@@ -583,7 +589,7 @@ class ClaudeCodeClient:
     CLAUDE_CODE_OAUTH_TOKEN on a machine where nobody is logged in.
     """
 
-    def __init__(self, *, cli: str = "claude", timeout: int = 900) -> None:
+    def __init__(self, *, cli: str = "claude", timeout: int = DEFAULT_TIMEOUT_SECONDS) -> None:
         self.messages = _ClaudeCodeMessages(cli=cli, timeout=timeout)
 
 
@@ -895,9 +901,9 @@ def execute_grid(
 # ---------------------------------------------------------------------------
 
 
-def _client_factory() -> Any:
+def _client_factory(timeout: int = DEFAULT_TIMEOUT_SECONDS) -> Any:
     """The transport a live run uses. See ClaudeCodeClient for why it is not the Anthropic SDK."""
-    return ClaudeCodeClient()
+    return ClaudeCodeClient(timeout=timeout)
 
 
 def _check_out_dir_is_not_committed_evidence(out_dir: Path) -> str | None:
@@ -997,6 +1003,16 @@ def _build_arg_parser() -> argparse.ArgumentParser:
         help="Gate threshold recorded on every emitted envelope (default 0).",
     )
     parser.add_argument(
+        "--timeout",
+        type=int,
+        default=DEFAULT_TIMEOUT_SECONDS,
+        dest="timeout",
+        help=(
+            "Wall-clock seconds allowed for one skill or baseline invocation "
+            f"(default {DEFAULT_TIMEOUT_SECONDS}). Raise it for slower tiers."
+        ),
+    )
+    parser.add_argument(
         "--max-tokens",
         type=int,
         default=DEFAULT_MAX_TOKENS,
@@ -1063,7 +1079,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     try:
-        client = _client_factory()
+        client = _client_factory(args.timeout)
     except RuntimeError as exc:
         print(f"bench: {exc}", file=sys.stderr)
         return 1
