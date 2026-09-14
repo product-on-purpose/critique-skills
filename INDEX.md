@@ -37,3 +37,5 @@
 - [`docs/`](docs/) - Diataxis docs (reference, how-to, explanation).
 - [`docs/internal/decisions/`](docs/internal/decisions/) - ADRs; [`docs/internal/backlog/`](docs/internal/backlog/) - backlog.
 - [`scripts/`](scripts/) - the Node validation spine (conformance checks, generators, gate, evaluate).
+
+- [phantom](does/not/exist.md) - a row no generator would emit.
