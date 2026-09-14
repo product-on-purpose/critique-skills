@@ -71,6 +71,3 @@ The finance office reviews every stipend request over 200 dollars before it pays
 ## Questions and Updates
 
 The benefits team publishes the vendor list each quarter. Every entry carries a date stamp so the record stays easy to audit.
-
-
-A sentence the corpus lock does not know about.
