@@ -278,7 +278,7 @@ Generation is seeded and reproducible, so the corpus is a stable target across s
 
 Each skill is run k=5 times against the same artifact. Consistency is the mean pairwise Jaccard similarity over the set of `(criterion_id, location)` pairs.
 
-An initial target of 0.7 is proposed as a release gate. This number is a placeholder and will be replaced by an empirically calibrated threshold once baseline data exists. It is entirely possible that the realistic ceiling for judged-lane consistency is lower, in which case the target moves and the library says so publicly.
+**The 0.7 figure originally proposed here was a placeholder, and measurement has replaced it.** It was named as a release gate before any data existed. The measured floor is **0.309**, set on 2026-07-31 by [ADR 0022](../internal/decisions/0022-consistency-floor-overall-lane-min-core.md) as the lowest overall-lane figure any core skill reached, `critique-clarity` on haiku. The original guess that the realistic ceiling might be lower was right in direction and badly wrong in magnitude, which is why the number is published as a floor rather than a target: it is the worst a shipped skill measured, not a bar anything cleared comfortably. The floor is itself provisional in a narrower sense, having been calibrated once on one run set, and replacing it with a per-lane threshold published with its method is a tracked v0.2.0 item.
 
 ### Baseline comparison
 
@@ -369,7 +369,7 @@ These are unresolved and are stated here rather than hidden:
 
 - **Domain slate.** The Section 2 table is a working proposal with no completed candidate survey behind it yet. A critique-framework survey is a tracked v0.2 deliverable. Membership will change.
 - **Cross-domain severity.** Whether Nielsen's anchors transfer cleanly to prose and argumentation is untested. Per-domain anchor wording under a shared numeric scale is the current hypothesis.
-- **Consistency ceiling.** The 0.7 target is a placeholder with no empirical basis yet.
+- **Consistency ceiling.** Settled empirically on 2026-07-31 and no longer open in its original form: the floor is 0.309 per [ADR 0022](../internal/decisions/0022-consistency-floor-overall-lane-min-core.md), replacing the 0.7 placeholder. What remains open is narrower, that the floor was calibrated once on one run set; a per-lane threshold published with its method is a tracked v0.2.0 item.
 - **Location granularity.** There is no settled convention for locating findings in non-linear artifacts such as designs and dashboards. Text artifacts are straightforward; visual ones are not.
 - **Instance explosion.** A criterion violated forty times should probably not produce forty findings, but the aggregation rule is undecided.
 - **Model sensitivity.** Consistency and recall vary by model and version. How often benchmarks must be re-run to stay honest is unknown.

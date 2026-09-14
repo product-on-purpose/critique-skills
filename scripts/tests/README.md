@@ -63,6 +63,10 @@ Python half.
   without it exiting the process. Also the edit-link guard's tracked-ness check: a target that exists
   on disk but is gitignored must fail, because an edit link points at GitHub where only tracked files
   exist.
+- `check-readme-figures.test.mjs` - the front-door envelope-count guard: every figure shape it
+  claims to cover (prose, the badge value, the badge alt text), the disagreement path, the
+  refuse-on-an-empty-tree precondition, a missing document, and a live check that the shipped
+  `README.md` and `ROADMAP.md` agree with the committed tree.
 - `check-readme-links.test.mjs` - the README front-door guard: a site link naming a route the
   manifest does not carry must fail, doors that disagree with the landing cards must fail, a
   missing door table must fail, plus a live assertion that the real README and the real landing

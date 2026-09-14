@@ -98,22 +98,14 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**39 items depend on nothing and can start today.** Derived from each item's own `Depends on`
-field rather than asserted, and regenerated whenever an item closes. Two items that were on this
-list when it was first written are now done: E1 (the v0.2.0 shape ruling) and E14 (the exit-gate
-clock ruling). E2 (sonnet unblock) has left the list because it now depends on a fresh trace that
-costs a live run.
+**33 items depend on nothing and can start today.** Derived from each item's own `Depends on`
+field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
 |---|---|---|---|
-| E3 | Regenerate README/ROADMAP stale receipts (541 envelopes, 907/126 tests) and guard them | S | v0.1.x |
-| E4 | Fix the two false claims in the published benchmark-harness explainer | S | v0.1.x |
 | E7 | Move bench/results/runs/steering/ out of the runs* glob | S | v0.1.x |
-| E8 | Retire methodology.md's stale 0.7 consistency-target placeholder | S | v0.1.x |
-| E9 | Delete the stale validate_envelopes known-issue from bench/results/README.md | S | v0.1.x |
 | E13 | Update ROADMAP.md's v0.1.x section: two of four verification items are met | S | v0.1.x |
 | E15 | Exercise the tag-guard's negative path from a scratch clone (S-07 AC-4) | S | v0.1.x |
-| E18 | Fix QUICKSTART.md's stale v0.1.0 marketplace-pin claim | S | v0.1.x |
 | E28 | Pin or record the Claude Code CLI version bench.yml installs | S | v0.1.x |
 | E29 | Make release.yml's re-run suite match what it claims to run | S | v0.1.x |
 | E30 | Fix two gaps in skill-template.md before the next skill is built from it | S | v0.1.x |
@@ -127,7 +119,6 @@ costs a live run.
 | E38 | Measure critique-accessibility's location fix on id-poor markup | S | v0.2.0 |
 | E39 | Record the CLAUDE_CODE_OAUTH_TOKEN retention decision and a rotation procedure | S | v0.1.x |
 | E40 | Look at a Mermaid diagram in light and dark on the live site | S | v0.1.x |
-| E41 | Remove bench/README.md's stale '.gitattributes does not exist yet' prerequisite | S | v0.1.x |
 | E42 | Reconcile 'frozen with a JSON Schema' against 'freezes at v1.0' | S | unscheduled |
 | E43 | Create a v1.0 readiness tracker for the four declaration criteria | S | v1.0.0 |
 | E51 | Give the precision and corpus-provenance limitations a retirement path or an explicit 'accepted' | S | unscheduled |
@@ -146,9 +137,9 @@ costs a live run.
 | E54 | Ship one documented cross-library composition workflow | M | v0.3.0 |
 | E25 | Rewrite verdicts.md as one current-state document | L | v0.2.0 |
 
-**The highest-leverage item on that list is E16 (live planted-failure checks)**, because it is one
-of the two verification items ADR 0034 names as the honest condition for closing v0.1.x, alongside
-E15 (tag guard from a scratch clone). Everything else here is genuinely optional ordering.
+**The two that matter most are E15 (tag guard from a scratch clone) and E16 (live planted-failure
+checks)**, because [ADR 0034](../decisions/0034-v0.1.x-exit-gate-declaration.md) names them as the
+honest condition for closing v0.1.x. Everything else here is optional ordering.
 
 ## Critical paths
 

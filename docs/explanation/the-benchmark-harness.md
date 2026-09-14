@@ -104,9 +104,14 @@ degrades into "we measured it once, please trust us."
 
 `run_bench.py` was built to close that hole. It is the answer to "prove it."
 
-**Its honest status today: it has never been run live. Not once.** It is insurance, not machinery.
-Its value is entirely that someone *could* check us, which is real, but nothing in the project
-depends on it running.
+**Its honest status today: it has been run live.** The first dispatch through `bench.yml` was run
+`31988100372` on 2026-08-17, `critique-clarity` on the pinned haiku tier at k=5, whose 39 envelopes
+are committed under `bench/results/runs-dispatch-31988100372/`. A single diagnostic cell on the
+pinned sonnet tier completed on 2026-09-13. **What that does not mean is that the published figures
+have been reproduced.** They have not: the dispatch covered one skill, one tier and one domain, and
+it is recorded as a check against the measurement of record rather than a replacement for it. The
+harness is machinery that has been started rather than insurance nobody had tested, and that is a
+smaller claim than reproduction.
 
 ---
 
@@ -151,10 +156,13 @@ CLI at all**. Useful for checking the wiring after changing a skill or the corpu
 ### What is still true about the numbers
 
 The published figures came from a live multi-agent workflow, not from this harness, and
-[`bench/results/README.md`](../../bench/results/README.md) says so under Provenance. Moving the
-transport to Claude Code narrows that gap but does not close it: the judged lane here is still a
-prompt this harness assembles, rather than the shipped skill being run. Closing that is the
-remaining half of [ADR 0030](../internal/decisions/0030-replace-the-api-key-in-the-bench-harness.md).
+[`bench/results/README.md`](../../bench/results/README.md) says so under Provenance. **That half of
+[ADR 0030](../internal/decisions/0030-replace-the-api-key-in-the-bench-harness.md) has since been
+closed.** The judged lane is no longer a prompt this harness assembles: the harness invokes the
+shipped skill through Claude Code and only transports the result, so the skill performs its own lane
+merge and output bounding and the harness must not do either. The consequence is visible in the
+committed evidence rather than asserted, since the judged lane emits about a third fewer findings
+than the hand-assembled prompt did while the deterministic scripted lane holds steady.
 
 ## Technical reference
 

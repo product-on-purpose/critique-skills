@@ -24,6 +24,7 @@ import { fileURLToPath } from "node:url";
 import { resolveToolkit, toolkitCandidates, TOOLKIT_REPO_URL } from "./lib/resolve-toolkit.mjs";
 import { checkSite } from "./check-site.mjs";
 import { checkReadmeLinks } from "./check-readme-links.mjs";
+import { checkReadmeFigures } from "./check-readme-figures.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, ".."); // this repo's root, cwd-independent
@@ -65,6 +66,11 @@ const toolkitStatus = result.status ?? 1;
 console.log("");
 const readmeStatus = checkReadmeLinks();
 
+// Same reasoning as the link guard above: this compares TRACKED prose against the TRACKED
+// envelope tree, needs no build, and so runs unconditionally.
+console.log("");
+const figuresStatus = checkReadmeFigures();
+
 let siteStatus = 0;
 if (!args.includes("--skip-site")) {
   if (existsSync(resolve(ROOT, "site", "dist"))) {
@@ -78,4 +84,4 @@ if (!args.includes("--skip-site")) {
   }
 }
 
-process.exit(toolkitStatus || readmeStatus || siteStatus);
+process.exit(toolkitStatus || readmeStatus || figuresStatus || siteStatus);
