@@ -70,6 +70,12 @@ shared library.
   three door labels must match the three `<Card title>` values on the site's landing page. Runs
   UNCONDITIONALLY from `check.mjs`, unlike the guards above, because it compares tracked files
   against a tracked manifest and needs no build.
+- `check-readme-figures.mjs` - the guard on every hand-typed run-envelope count in `README.md` and
+  `ROADMAP.md`, including both halves of the shields.io badge. It counts the committed envelopes on
+  disk and fails when any typed figure disagrees. Written because the scoreboard block beside these
+  figures is generated and drift-checked while the figures themselves were hand-typed, and six of
+  them said 502 while the tree held 541. Runs UNCONDITIONALLY from `check.mjs`, for the same reason
+  as the link guard above: tracked prose against a tracked tree, no build needed.
 - `route-manifest.txt` - the committed baseline `check-route-parity.mjs` diffs against: one line per
   built route. Regenerate with `node scripts/check-route-parity.mjs --update` and commit it in the
   same change as the route removal that made it necessary, with the reason in the message.

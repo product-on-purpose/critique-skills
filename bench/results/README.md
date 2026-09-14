@@ -834,22 +834,21 @@ primitives are lane-agnostic and take the filtered envelope unchanged.
 
 Reported, not fixed. Each affects how far a reader should trust the surrounding claims.
 
-- **`contract/validate_envelopes.py` does not reach these files.** Its discovery glob is
-  `bench/results/*/*.json`, one level below `bench/results/`, while the harness writes three to four
-  levels deep at `bench/results/runs/<skill>/<artifact>/<run>.json`. Run today it reports "does not
-  exist or is empty; nothing to validate yet" despite 462 envelopes on disk. This is the documented CI
-  schema-job entry point, so as wired that job is not exercising these files. The 462-of-462 validity
-  result above was obtained by calling the underlying `contract.validate.validate_document` on each
-  file directly, which is the same check the CLI would have applied.
+- **RESOLVED 2026-09-14: `contract/validate_envelopes.py` reaches these files.** This entry used to
+  report that the discovery glob sat one level too shallow, so the CI schema job was exercising no
+  envelope at all. The validator now discovers run roots by a `runs*` glob and walks them, CI's
+  `schema` job runs it as `npm run validate:envelopes`, and it reports **541 files valid**. Kept as a
+  resolved entry rather than deleted, because the surrounding claims were written while it was true.
 - **Scoring `bench/results/runs` directly does not reproduce `results.json`.** The steering envelopes
   share identity fields with the main grid and pool into `critique-clarity` / sonnet / clarity, taking
   it to 22 scored runs and 51 consistency pairs. The exclusion is a step in the reproduction recipe
   rather than a property of the layout, which is fragile. A separate top-level directory for probe run
   sets would make the mistake impossible.
-- **Path drift in the generated block.** `bench/README.md`'s generated results block builds the file
-  path to edit out of `run_set`, so it now names
-  `bench/results/p3-2026-07-31-plus-cal1-2026-08-01/results.json`; the committed file is and always
-  was `bench/results/results.json`. Unchanged defect, longer wrong string.
+- **RESOLVED 2026-09-14: path drift in the generated block.** `bench.report table` built the path a
+  reader is told to edit out of `run_set`, naming a directory that has never existed, while its
+  sibling `bench.report scoreboard` in the same module hardcoded the correct
+  `bench/results/results.json`. One of two generators in one file was right. The `table` generator now
+  emits the same literal path, and both blocks were regenerated.
 - **`results.json` cannot say which run set an entry came from.** The schema carries one `run_set` for
   the whole file and sets `additionalProperties: false`, so a file holding two run sets has to name
   both in one identifier and rely on `skill_version` to separate the rows. That works here only

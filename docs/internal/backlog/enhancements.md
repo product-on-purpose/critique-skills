@@ -127,7 +127,15 @@ and the repository did not have.
   were originally attributed to `CHANGELOG.md`, which does not contain them; they are in the commit
   body for `8950878`. The underlying finding was independently reproduced (`python -m
   contract.validate_envelopes` returns 541; the suites return 907 and 126).
-- **Rank at intake:** 3 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-09-14.** All six figures corrected (README badge value, badge alt text, routing
+  table, receipts paragraph, Fast-facts row, and `ROADMAP.md`), and **guarded**: new
+  `scripts/check-readme-figures.mjs` counts the committed envelopes on disk and fails when any typed
+  figure disagrees, wired unconditionally into `scripts/check.mjs` and covered by 8 tests. The test
+  counts were refreshed to 911 / 126 and now carry their reproduce commands, matching the
+  Conformance row's existing pattern in the same table; they are deliberately NOT guarded, because
+  they are knowable only by running the suites and a guard would either duplicate the unit jobs or
+  trust a second hand-typed number.
+- **Rank at intake:** 3 of 64. **Status:** CLOSED 2026-09-14.
 
 ## E4 - Fix the two false claims in the published benchmark-harness explainer
 
@@ -139,7 +147,11 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.1.x. **Category:** docs. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
-- **Rank at intake:** 4 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-09-14.** Both passages rewritten. The page said the harness had never been run
+  live, which two dispatches contradict, and said the judged lane is a prompt the harness assembles,
+  which ADR 0030's second half closed. The replacement states what the live runs do NOT establish at
+  the same length as what they do, since one skill on one tier is not reproduction.
+- **Rank at intake:** 4 of 64. **Status:** CLOSED 2026-09-14.
 
 ## E5 - Retire fabricated run metadata across all 31 example and golden envelopes
 
@@ -187,7 +199,11 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.1.x. **Category:** docs. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
-- **Rank at intake:** 8 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-09-14.** Both passages replaced with the measured 0.309 floor and its ADR. The
+  rewrite keeps the original guess on the record and says it was right in direction and badly wrong
+  in magnitude, and narrows what is still open to the real remaining gap: the floor was calibrated
+  once on one run set.
+- **Rank at intake:** 8 of 64. **Status:** CLOSED 2026-09-14.
 
 ## E9 - Delete the stale validate_envelopes known-issue from bench/results/README.md
 
@@ -199,7 +215,13 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.1.x. **Category:** docs. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
-- **Rank at intake:** 9 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-09-14.** Marked resolved rather than deleted, so the surrounding claims still read
+  against the state they were written in. **A second bullet in the same section closed with it**: the
+  path-drift defect, where `bench.report table` built the results path out of `run_set` and named a
+  directory that has never existed while its sibling `bench.report scoreboard` hardcoded the correct
+  one. Two generators in one module disagreeing about where their own source lives. Fixed and both
+  blocks regenerated; the drift check confirmed it.
+- **Rank at intake:** 9 of 64. **Status:** CLOSED 2026-09-14.
 
 ## E10 - Rule how BYOR is measured under the measured-only exclusion
 
@@ -316,7 +338,10 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.1.x. **Category:** docs. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
-- **Rank at intake:** 18 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-09-14.** Rewritten so it cannot go stale again: the note no longer names a patch
+  version at all, and points at the README badge for the current release, since which tag is pinned
+  is a property of the marketplace registry rather than of this document.
+- **Rank at intake:** 18 of 64. **Status:** CLOSED 2026-09-14.
 
 ## E19 - Run the fidelity gate on the sonnet tier
 
@@ -594,7 +619,10 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.1.x. **Category:** docs. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
-- **Rank at intake:** 41 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-09-14.** The section now dates both prerequisites as made rather than pending, and
+  says why they are kept: they are load-bearing for corpus reproducibility, so a reader restoring
+  this setup elsewhere still needs them.
+- **Rank at intake:** 41 of 64. **Status:** CLOSED 2026-09-14.
 
 ## E42 - Reconcile 'frozen with a JSON Schema' against 'freezes at v1.0'
 

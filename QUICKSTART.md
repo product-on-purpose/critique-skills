@@ -7,9 +7,11 @@ separate API key: critique runs as a skill in the session you already have open.
 ## 1. Install
 
 > [!NOTE]
-> **Published, and pinned.** The `product-on-purpose` marketplace pins `critique-skills` to the
-> `v0.1.0` release tag, so the plugin path below installs exactly that commit rather than whatever
-> `main` happens to hold when you run it.
+> **Published, and pinned.** The `product-on-purpose` marketplace pins `critique-skills` to a
+> specific release tag, so the plugin path below installs exactly that commit rather than whatever
+> `main` happens to hold when you run it. Which tag is pinned is a property of the marketplace
+> registry rather than of this document, so it is deliberately not restated here; the badge at the
+> top of [`README.md`](README.md) carries the current release.
 
 Two ways to get `critique-skills` in place. The rest of this walkthrough assumes
 the plugin path; a repo checkout is a clearly-labeled alternative, needed only if you want to run

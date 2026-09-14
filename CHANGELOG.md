@@ -57,6 +57,40 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- **Six published figures said 502 while the tree held 541, and now a guard says so instead of a
+reader.** The README badge, its alt text, the routing table, the receipts paragraph, the Fast-facts
+row and `ROADMAP.md` all carried a stale run-envelope count. New `scripts/check-readme-figures.mjs`
+counts the committed envelopes on disk and fails when any typed figure disagrees, covering all three
+shapes the number appears in, prose and both halves of the shields.io badge. It is wired
+unconditionally into `scripts/check.mjs` and carries 8 tests. **The wiring had the same defect it
+was written to prevent**: the first version reported its result and was left out of the exit
+expression, so it would have printed FAIL and exited 0, which is the aggregate-gate failure ADR 0033
+describes. Caught by breaking a figure on purpose and checking the exit code rather than by reading
+the line. Test counts were refreshed to 911 Python / 126 Node and now carry their reproduce commands,
+matching the Conformance row beside them; they are deliberately not guarded, because they are
+knowable only by running the suites.
+
+- **Two generators in one module disagreed about where their own source lives.** `bench.report table`
+built the path it tells a reader to edit out of `run_set`, so the generated block in `bench/README.md`
+named `bench/results/p3-2026-07-31-plus-cal1-2026-08-01/results.json`, a directory that has never
+existed, while `bench.report scoreboard` a few hundred lines below hardcoded the correct
+`bench/results/results.json`. The `table` generator now emits the same literal, and the block was
+regenerated.
+
+- **Four documents published claims that had stopped being true.** The benchmark-harness explainer,
+served on the live site, said the harness had never been run live and that the judged lane is a
+prompt the harness assembles; two dispatches and ADR 0030's second half contradict both, and the
+replacement states what the live runs do not establish at the same length as what they do.
+`methodology.md` still carried the 0.7 consistency target as a placeholder awaiting data, superseded
+on 2026-07-31 by the measured 0.309 floor. `QUICKSTART.md` said the marketplace pins `v0.1.0`, and is
+now written so it names no patch version at all. `bench/README.md` told the reader `.gitattributes`
+does not exist and must be created; it has existed since 2026-08-04. `bench/results/README.md`'s
+Known-issues section reported that the envelope validator could not reach any envelope, which a
+`runs*` glob fixed long ago; both that entry and the path-drift entry above are marked resolved
+rather than deleted, so the claims written around them still read against the state they were
+written in.
+
+
 - **`AGENTS.md` said the pipeline runs seven jobs, above a table listing nine.** The same drift was recorded once already in this changelog for `ci.yml`'s own header comment ("Seven jobs" over eight), and fixing it there did not fix it in the two places that repeat the figure: the contributor-facing CI section, and the comment in `scripts/gen-plugin-manifest.mjs` describing the scope of the check that reads those very commands. Both now say nine. The historical figures in this changelog and in the execution reports are left alone, because seven was accurate when they were written.
 
 - **The judged-lane completeness check was inverted on clean control artifacts, and it was biasing the one metric those artifacts exist to measure.** v0.1.5 added a guard rejecting a scripted-only envelope as an incomplete run, on the correct reasoning that such an envelope is structurally indistinguishable from a merged one. It keyed off the skill's declared judged criteria alone: if a skill declares any, the envelope must carry a judged finding. **On a clean artifact that is exactly wrong.** `bench/corpus/clarity/clarity-004.manifest.json` plants zero defects on purpose, so an empty judged lane is the correct result, and the guard was failing the runs that behaved while passing the runs that invented a finding on a document with nothing in it. Clean artifacts are precisely where `clean_fp_rate` is measured, so keeping this would have discarded every zero-false-positive run and scored only the hallucinating ones, pushing the published false-positive rate upward in any future run set. Found by a live dispatch on 2026-08-17: 3 of 40 cells failed, all three `clarity-004`. **The check now keys off what the corpus actually planted**, requiring a judged finding only when the manifest seeds at least one defect under a criterion in that skill's judged set, which `ArtifactRef` now carries as `planted_criteria`, derived from the manifest at discovery. A clean control, and a seeded artifact whose every planted defect is scripted-lane, are both exempt. **The committed v0.1.0 figures are unaffected**: that run set was measured on 2026-07-31, before this guard existed.
