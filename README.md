@@ -23,7 +23,7 @@ Every skill operationalizes a published external standard, cites a permanent cri
 
 | You want to | Start at | Then |
 |---|---|---|
-| **Use it on something else** | [Install](#-install), then [the shelf](#-the-shelf): six skills, what each reviews, one prompt each | [`QUICKSTART.md`](QUICKSTART.md) for one run start to finish, [`examples/`](examples/) for a worked walkthrough per skill |
+| **Use it on something** | [Install](#-install), then [the shelf](#-the-shelf): six skills, what each reviews, one prompt each | [`QUICKSTART.md`](QUICKSTART.md) for one run start to finish, [`examples/`](examples/) for a worked walkthrough per skill |
 | **Decide whether to believe it** | [The scoreboard](#-the-scoreboard): recall and precision per skill, both pinned model tiers | [The receipts explorer](https://product-on-purpose.github.io/critique-skills/receipts/) for all 54 rows and 541 run envelopes, [`bench/results/README.md`](bench/results/README.md) for the narrative, unflattering numbers first |
 | **Build on it or contribute** | [How a critique runs](#-how-a-critique-runs) and [where this stops](#-where-this-stops) | [The methodology](https://product-on-purpose.github.io/critique-skills/explanation/methodology/), the [Critique Contract](docs/reference/critique-contract.md), and [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 
