@@ -1,0 +1,106 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "the equipment category matches the approved list (line 27); the policy applies to one device per category per employee (line 47); proof of purchase for every stipend item (line 33); You record the stipend item on the request form (line 51)",
+      "fix": "Pick one term, for example equipment, and use it everywhere a device, an item, or a stipend item is currently used to mean the same physical thing.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Approval Timeline (line 27), Restrictions and Exceptions (line 47), Required Documentation (line 33), Terminology Notes (line 51)",
+      "severity": 3,
+      "violation": "PLAIN-CONSISTENT-TERMS requires one term per concept throughout a document. The physical thing being reimbursed is named three different ways in close proximity, equipment, device, and stipend item, including two different nouns paired with the identical word category in adjacent sections, so a reader cannot tell whether these name the same object or three different things."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "The IT asset group updates the reimbursement log at the start of the fiscal year. A copy of each update goes to the shared benefits folder the same day. Similarly, the IT asset group tracks the equipment catalog on the first business day of the month.",
+      "fix": "Replace the opening section with a short summary of what the stipend covers, who is eligible, and how to start, and move the internal log/catalog-update cadence to an internal-process appendix or drop it entirely if the employee reader has no action tied to it.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Program Overview (lines 3-7)",
+      "severity": 3,
+      "violation": "PLAIN-ORGANIZE requires section order to follow the reader's actual task sequence rather than an internal process the reader never sees. The document's opening section, in the most structurally privileged position, describes internal IT-asset recordkeeping cadence instead of stating what the stipend is, who qualifies, or how much it pays, so the employee reader learns nothing they need before continuing."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Completing the request begins with confirming eligibility, and uploading the receipt.",
+      "fix": "Merge Request Steps into How to Apply as the first numbered step, in the order the employee actually performs them: confirm eligibility, upload the receipt, then proceed through the portal.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Request Steps (line 57), relative to How to Apply (lines 17-23)",
+      "severity": 3,
+      "violation": "PLAIN-ORGANIZE requires the steps of a single task to stay together in the order the reader works through them. This one-sentence section restates the beginning of the request process, five sections after How to Apply already described starting a request in the portal without mentioning eligibility confirmation or receipt upload as first steps, and after Required Documentation separately described keeping receipts. A reader has to assemble the actual step order from three non-adjacent sections and cannot tell whether Request Steps describes the same process as How to Apply or a separate one."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "The stipend covers one claim per employee per benefit year.",
+      "fix": "Change claim to request in this sentence to match the term used everywhere else in the document.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Eligibility (line 11)",
+      "severity": 2,
+      "violation": "PLAIN-CONSISTENT-TERMS is breached in isolation: claim is used once here for what every other section calls a request (stipend request, the request, requester), a single substitution in an otherwise consistent document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "The IT asset group updates the reimbursement log (line 5); heading Reimbursement Amounts (line 37) whose body reads The stipend pays up to 500 dollars per benefit year (line 39)",
+      "fix": "Use stipend consistently, including in the reimbursement log and Reimbursement Amounts headings, or state once that the two words name the same payment.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Program Overview (line 5) and Reimbursement Amounts (line 37) headings/body",
+      "severity": 2,
+      "violation": "PLAIN-CONSISTENT-TERMS is breached at a minor level: the payment is called reimbursement in headings and stipend throughout the body, an isolated substitution a careful reader can resolve but still has to check."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "the IT asset group tracks the equipment catalog on the first business day of the month (line 7); The finance liaison publishes the equipment catalog at the start of the fiscal year (line 61); The benefits team reviews the equipment catalog at the start of the fiscal year (line 73)",
+      "fix": "Consolidate all equipment-catalog information (who maintains it, on what cadence, how to request a copy) into one section, ideally placed near Eligibility or Restrictions and Exceptions where the catalog is first relevant to the reader.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Program Overview (line 7), Special Cases (line 61), Questions and Updates (line 73)",
+      "severity": 2,
+      "violation": "PLAIN-ORGANIZE is breached by fragmentation: information about the equipment catalog is scattered across three non-adjacent sections separated by unrelated content, so a reader trying to understand how the catalog is maintained has to search the whole document rather than finding it in one place."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Completing the request begins with confirming eligibility, and uploading the receipt.",
+      "fix": "Rewrite with the employee as subject: The employee starts the request by confirming eligibility and uploading the receipt.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Request Steps (line 57)",
+      "severity": 2,
+      "violation": "WILLIAMS-CHARACTER-ACTION requires a sentence's grammatical subject to name the real actor performing the action. The subject here is the abstraction Completing the request rather than the employee who actually confirms eligibility and uploads the receipt, so the sentence never names who does the work."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T03:43:44Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

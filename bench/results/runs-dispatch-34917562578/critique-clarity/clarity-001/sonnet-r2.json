@@ -1,0 +1,128 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "evidence": "If the position counts as full-time, the stipend can apply. If the employee has completed 90 days of continuous service, the stipend can apply. If the request arrives before the benefit year ends, the stipend can apply. Only once every condition above is met does the home-office equipment stipend become available to the employee.",
+      "fix": "Open the paragraph with the governing rule, for example: the stipend is available only when all three conditions below are met, then list the three conditions.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Eligibility, paragraph 1",
+      "severity": 3,
+      "violation": "Each of the first three sentences independently reads as if satisfying that one condition alone makes the stipend available; only the fourth sentence reveals that all three are jointly required. A reader stops before the fourth sentence with the wrong rule."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Program Overview: The people operations office publishes the reimbursement log each quarter. / Overview: The benefits team publishes the reimbursement log after every open enrollment period.",
+      "fix": "Merge the two overview sections into one, near the top of the document, stating the log's publisher and cadence once.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Program Overview (paragraph 1) and the later Overview section (paragraph 1)",
+      "severity": 3,
+      "violation": "The document restates the same reimbursement-log-publication fact in two non-adjacent sections with conflicting owners (people operations office versus benefits team) and conflicting cadences (each quarter versus after every open enrollment period), with no signal that these are different logs or that one supersedes the other. A reader cannot tell which statement governs."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "evidence": "36-word sentence, 4 subordinate-clause markers: Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 3",
+      "severity": 3,
+      "violation": "The sentence runs to 36 words with 4 subordinate-clause markers, longer than the reader can hold in mind on a single pass."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "Employees start a stipend request in the benefits portal. The portal walks through each step in order. Also, the portal saves a draft automatically every few minutes. Employees can return to finish later without losing progress. Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "fix": "Move the traveling-manager and backup-reviewer note to Approval Timeline, where it belongs with the rest of the review-delay information, and keep How to Apply limited to the reader's own submission steps.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "How to Apply, paragraphs 1-3",
+      "severity": 3,
+      "violation": "The section is headed How to Apply and its first two paragraphs stay on the reader's own task of submitting a request, but the third paragraph shifts with no connecting signal into an internal staffing narrative about a traveling manager and an uninformed backup reviewer. A reader who has read only the section's first and last sentences cannot state what the section as a whole is about."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ACTIVE",
+      "evidence": "The request is reviewed within two business days.",
+      "fix": "Rewrite the sentence in active voice, naming the actor that performs the action.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence uses a be-verb plus past-participle passive construction in a context where the actor is recoverable and worth naming directly."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONCISE",
+      "evidence": "Also, the deposit happens in order to offset costs the employee already paid at this point in time.",
+      "fix": "Replace the wordy phrase with its plain equivalent (for example, because for due to the fact that).",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "Reimbursement Amounts, paragraph 2",
+      "severity": 2,
+      "violation": "The sentence uses a wordy construction from the fixed wordy-phrase list that a shorter equivalent would carry with no loss of meaning."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal.",
+      "fix": "Pick one term for the thing being submitted and tracked, e.g. the request, and use it throughout instead of introducing the stipend item as an apparent synonym.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Terminology Notes, paragraphs 1-2",
+      "severity": 2,
+      "violation": "The section headed Terminology Notes, which a reader would expect to fix vocabulary, instead introduces a new undefined term, the stipend item, alongside the request already used elsewhere in the document, with no stated equivalence between the two."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-DOUBLE-NEGATIVE",
+      "evidence": "However, reimbursement is not available without a completed receipt.",
+      "fix": "Restate the sentence with at most one negation, or recast it as a positive statement.",
+      "id": "F-008",
+      "lane": "scripted",
+      "location": "Eligibility, paragraph 2",
+      "severity": 2,
+      "violation": "2 negation markers from the fixed negation list co-occur in one clause, so the reader has to work out the statement's logical sign before understanding it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-HEADINGS",
+      "evidence": "heading: Overview",
+      "fix": "Replace the heading with text specific enough to be found by scanning.",
+      "id": "F-009",
+      "lane": "scripted",
+      "location": "the Overview heading",
+      "severity": 2,
+      "violation": "The heading text matches the fixed list of non-specific heading labels, so a reader scanning headings cannot tell whether the section applies to them."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-001.md",
+    "artifact_sha256": "32ee3fed58b3e9b931565041a2e195dade8e2d19c9e9172fe28b38bdb5f6ef2c",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T01:46:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 8,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 3
+  }
+}

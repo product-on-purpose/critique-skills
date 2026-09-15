@@ -1,0 +1,84 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "\"the IT asset group tracks the equipment catalog\" (Program Overview); \"Employees keep proof of purchase for every stipend item\" (Required Documentation); \"the policy applies to one device per category per employee\" (Restrictions and Exceptions); \"You record the stipend item on the request form\" (Terminology Notes)",
+      "fix": "Pick one term, for example equipment item, and use it every place this concept appears (the catalog references, the documentation requirement, the restrictions section, and the terminology section), or add an explicit line the first time a synonym is introduced stating it means the same thing as the term used elsewhere.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Program Overview, Required Documentation, Restrictions and Exceptions, and Terminology Notes sections",
+      "severity": 3,
+      "violation": "PLAIN-CONSISTENT-TERMS is breached: three different terms, equipment, stipend item, and device, are used across separate sections for what reads as the identical concept, a single reimbursable home-office item, with no defined-terms statement or stated equivalence tying them together, so a reader cannot tell whether the policy is describing one thing or three."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "\"The stipend covers one claim per employee per benefit year\" (Eligibility) versus \"Employees start a stipend request in the benefits portal\" (How to Apply) and \"The requester gets an automatic reminder after three days\" (Approval Timeline)",
+      "fix": "Standardize on request throughout, or add a short line stating that a claim is the term for a submitted stipend request.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Eligibility section, and How to Apply / Approval Timeline sections",
+      "severity": 2,
+      "violation": "PLAIN-CONSISTENT-TERMS is breached: claim is used once for the same submission that request and requester name everywhere else in the document, forcing a careful reader to check whether a claim is a different thing from a request."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "\"The IT asset group updates the reimbursement log at the start of the fiscal year. A copy of each update goes to the shared benefits folder the same day. Similarly, the IT asset group tracks the equipment catalog on the first business day of the month.\"",
+      "fix": "Open the document with Eligibility, and move the internal record-keeping detail about the reimbursement log and catalog update cadence later, into a reference or appendix section a reader only needs if they are checking whether the catalog is current.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Program Overview section, opening the document before Eligibility",
+      "severity": 2,
+      "violation": "PLAIN-ORGANIZE is breached: the document opens with two paragraphs describing the IT asset group's internal record-keeping cadence, an internal-workflow detail the employee reader takes no action on, before Eligibility, the section the reader actually needs first to know whether any of this applies to them."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "\"Completing the request begins with confirming eligibility, and uploading the receipt.\"",
+      "fix": "Name the employee as the subject: Employees confirm eligibility, then upload the receipt, to complete the request.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Request Steps section",
+      "severity": 2,
+      "violation": "WILLIAMS-CHARACTER-ACTION is breached: the sentence's grammatical subject is the abstraction Completing the request rather than the employee who actually confirms eligibility and uploads the receipt."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-STRESS",
+      "evidence": "\"The stipend pays up to 500 dollars per benefit year.\" (Reimbursement Amounts); \"The finance office reviews every stipend request over 200 dollars before it pays out.\" (Review Responsibility)",
+      "fix": "End the sentence on the dollar figure: Per benefit year, the stipend pays up to 500 dollars.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Reimbursement Amounts section, and Review Responsibility section",
+      "severity": 2,
+      "violation": "WILLIAMS-STRESS is breached: the sentence's newest, most important element, the 500-dollar cap, lands mid-sentence, and the sentence instead ends on per benefit year, a cadence already established in the Eligibility section, so the reader's attention lands on old information rather than the figure that matters."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T03:23:17Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

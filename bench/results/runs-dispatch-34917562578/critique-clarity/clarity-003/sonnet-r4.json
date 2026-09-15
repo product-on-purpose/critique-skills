@@ -1,0 +1,128 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Also, you submit the request in the portal. Countersign the employee request within two business days. You track its status there until the payment clears.",
+      "fix": "Name the countersigning actor explicitly, for example the manager countersigns the employee's request within two business days, so the reader is not asked to resolve who the sentence is for.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Terminology Notes, paragraph 2",
+      "severity": 3,
+      "violation": "The paragraph addresses the reader directly as the employee submitting and tracking the request in the surrounding sentences, but the middle sentence instructs an unnamed actor to countersign that same employee's request, an action the rest of the document assigns to the manager. Nothing signals the addressee has changed, so a reader cannot tell whether they themselves are meant to countersign their own request or whether this sentence is not addressed to them at all."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the reimbursable item against the request log each month. Payroll releases the covered purchase amount after that monthly review.",
+      "fix": "Pick one term for the thing being recorded, reconciled, and paid, and use it in all three sentences; reserve a separate term only for the dollar amount if that is genuinely a distinct concept.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Terminology Notes, paragraph 1",
+      "severity": 3,
+      "violation": "Three consecutive sentences use three different terms, stipend item, reimbursable item, and covered purchase amount, for what appears to be the single thing a reader records, finance reconciles, and payroll pays out, with no defined-terms signal that the three are meant to mean the same thing. A reader cannot tell whether these are one concept or three different ones, in a section titled Terminology Notes that exists specifically to prevent that confusion."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-PARAGRAPH",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout.",
+      "fix": "Rewrite the opening sentence to state the topic the rest of the paragraph covers.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "The paragraph's opening sentence shares almost no vocabulary with the rest of the paragraph, so it does not preview the paragraph's actual topic."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.",
+      "fix": "Delete the three unrelated sentences, or move each to a section its own topic actually belongs to, leaving this section about the benefits team's coordination role alone.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "After a topic sentence about the benefits team coordinating stipend requests, the section's remaining three sentences pursue three unrelated themes (an unrelated audit, federal guidance in general, and the office coffee budget) with no signal connecting any of them to the stated topic or to each other, so a reader finishing the section cannot state what it was actually about."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "The finance office reviews every stipend request over 200 dollars before it pays out. The finance office also flags any request that repeats within the same quarter.",
+      "fix": "Move this finance-review condition into the Approval Timeline section, next to the manager's review step it complements.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Review Responsibility, paragraph 1",
+      "severity": 2,
+      "violation": "This finance-review step belongs to the same approval sequence as the Approval Timeline section, but it appears five sections later, after Required Documentation, Reimbursement Amounts, Restrictions and Exceptions, Terminology Notes, Request Steps, Special Cases, and Program Coordination intervene. A reader trying to learn the complete set of conditions that determine whether and when a request is approved has to read past seven unrelated sections to find the second one, rather than finding both review steps together."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SUBJECT-VERB-OBJECT",
+      "evidence": "Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.",
+      "fix": "Move the interrupting clause elsewhere, or split it into its own sentence.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 2",
+      "severity": 2,
+      "violation": "3 comma-set-off clause(s) totalling 14 words intervene between the sentence's apparent subject and its verb."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-TRANSITIONS",
+      "evidence": "An incomplete request pauses the timeline until the missing item arrives.",
+      "fix": "Open the paragraph with a transition word that states its relationship to the prior paragraph.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 2",
+      "severity": 2,
+      "violation": "The paragraph opens with none of the fixed transition words, so the reader is not told how it relates to the paragraph before it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "Also, the benefits team reviews the reimbursement log on the first business day of the month. The most recent version supersedes the one that came before it.",
+      "fix": "Name the document the versioning rule applies to directly, for example the most recent reimbursement log supersedes the one before it, instead of leaving version to stand in for an ambiguous antecedent.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Program Overview, paragraph 2",
+      "severity": 2,
+      "violation": "The sentence the most recent version supersedes the one that came before it opens with a definite reference to a version, but the paragraph has just introduced two candidate referents, the equipment catalog from the first paragraph and the reimbursement log from the immediately preceding sentence, with nothing signalling which one versioning sentence describes."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-PARALLELISM",
+      "evidence": "Completing the request begins with confirming eligibility, and the uploaded receipt.",
+      "fix": "Restate every item in the series with the same grammatical form.",
+      "id": "F-009",
+      "lane": "scripted",
+      "location": "Request Steps, paragraph 1",
+      "severity": 2,
+      "violation": "The series' 2 items mix grammatical forms (gerund, other) at their head words instead of sharing one form."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T03:04:03Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
