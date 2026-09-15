@@ -233,6 +233,12 @@ jobs:
       - name: Audit npm dependencies
         run: npm audit --audit-level=high # doc-check
 
+      # The root audit passed green on every run while site/ carried one critical and three high
+      # advisories, because nothing ever audited the tree that actually gets deployed. npm audit
+      # reads package-lock.json directly, so this needs no install step of its own.
+      - name: Audit the site's dependencies
+        run: npm audit --audit-level=high --prefix site # doc-check
+
   build-site:
     name: build-site (Node from .nvmrc)
     runs-on: ubuntu-latest

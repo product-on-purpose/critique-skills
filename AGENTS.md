@@ -84,7 +84,7 @@ prerequisite `npm run check` and `npm run gen -- --check` share.
 | schema | `npm run validate:envelopes` |
 | corpus | `python -m bench.generator verify --corpus bench/corpus` |
 | drift | `npm run gen -- --check` |
-| audit | `npm audit --audit-level=high` |
+| audit | `npm audit --audit-level=high`, then `npm audit --audit-level=high --prefix site` |
 | smoke | `python scripts/smoke.py --expect no-deps`, then `python scripts/smoke.py --expect ready` |
 | build-site | `node scripts/check-site.mjs` |
 

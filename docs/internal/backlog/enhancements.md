@@ -271,10 +271,10 @@ and the repository did not have.
 
 ## E11 - Rule on the two v0.2.0 commitments that vanished: askit-* authoring and CodeQL
 
-- **Target:** `_local/_session-logs/2026-08-04_08-27_claude-opus-5_critique-skills-v0.1.0-build-and-release.md`, `_local/initial-plan/02-roadmap.md`, `_local/initial-plan/04-ci-plan.md`
+- **Target:** `_local/_session-logs/2026-08/2026-08-04_08-27_claude-opus-5_critique-skills-v0.1.0-build-and-release.md`, `_local/initial-plan/02-roadmap.md`, `_local/initial-plan/04-ci-plan.md`
 - **Change:** The local plan made every new v0.2.0 component buildable through an agent-skills-toolkit askit-* authoring skill (E9 of _local/initial-plan/02-roadmap.md, with its own exit-gate clause) and scheduled CodeQL for v0.2 in both 04-ci-plan.md and S-07 (CI pipeline spec) Non-Goals. Neither appears in the public ROADMAP.md and no record cuts them. Done: a recorded adopt-or-drop ruling for each, plus a one-pass sweep of the local plans for any other v0.2.0-v0.4.0 line item that failed the same transition.
 - **Why:** Whichever shape wins, new components start being authored immediately; once built by hand or without a CodeQL workflow, both commitments become impossible to honor retroactively.
-- **Evidence:** _local/_session-logs/2026-08-04_08-27_claude-opus-5_critique-skills-v0.1.0-build-and-release.md:57,116-127,163-169; _local/initial-plan/02-roadmap.md:48-58; _local/initial-plan/04-ci-plan.md (Secrets and supply chain section, 'CodeQL adoption follows the family pattern in v0.2'); _local/initial-plan/specs/S-07_ci-pipeline/spec.md:36 (Non-Goals: 'CodeQL (v0.2)'); ROADMAP.md:44-70 (no mention of either item); no hits for 'askit' or 'codeql' anywhere in ROADMAP.md or CHANGELOG.md
+- **Evidence:** _local/_session-logs/2026-08/2026-08-04_08-27_claude-opus-5_critique-skills-v0.1.0-build-and-release.md:57,116-127,163-169; _local/initial-plan/02-roadmap.md:48-58; _local/initial-plan/04-ci-plan.md (Secrets and supply chain section, 'CodeQL adoption follows the family pattern in v0.2'); _local/initial-plan/specs/S-07_ci-pipeline/spec.md:36 (Non-Goals: 'CodeQL (v0.2)'); ROADMAP.md:44-70 (no mention of either item); no hits for 'askit' or 'codeql' anywhere in ROADMAP.md or CHANGELOG.md
 - **Derives from:** 2026-08-04 session log decision 'agent-skills-toolkit dogfooding deferred to v0.2' + local roadmap E9 + S-07 spec Non-Goals
 - **Size:** S. **Release:** v0.2.0. **Category:** decision. **Confidence:** verified.
 - **Blocks:** E12; a defensible v0.2.0 exit-gate declaration
@@ -500,8 +500,17 @@ and the repository did not have.
   20 from one provenance. That is roughly 40 cells rather than one, and it is a new measurement
   rather than a repair. **Recommend closing this item as not-worth-doing** and keeping ADR 0031's
   rebuilt band, unless a full-coverage haiku re-run is wanted for its own sake.
-- **Rank at intake:** 21 of 64. **Status:** attempted and deliberately left open 2026-09-14; needs a
-  maintainer ruling on whether to close as not-worth-doing.
+- **CLOSED 2026-09-15 as not worth doing**, on the maintainer's delegation of the ruling. The
+  reasoning recorded above stands unchanged and is the reason: the cell was run and it succeeded,
+  and committing it into `runs-dispatch-31988100372/` would have made that directory assert GitHub
+  Actions provenance on 2026-08-17 for a file produced on a laptop a month later through a changed
+  harness. ADR 0031 rebuilt its acceptance band over exactly the coverage obtained, which the ADR
+  names as its own specified remedy, so the gate is already honest at 19 of 20.
+- **What closing this does not close.** If full haiku coverage is ever wanted for its own sake, the
+  honest version is a fresh `bench.yml` dispatch of `critique-clarity` on haiku at k=5, committed as
+  its own run set under its own run id. That is roughly 40 cells and a new measurement rather than
+  a repair, so it would be a new item and not this one.
+- **Rank at intake:** 21 of 64. **Status:** CLOSED 2026-09-15.
 
 
 ## E22 - Turn on severity_expected scoring
@@ -722,10 +731,10 @@ and the repository did not have.
 
 ## E39 - Record the CLAUDE_CODE_OAUTH_TOKEN retention decision and a rotation procedure
 
-- **Target:** `_local/_session-logs/2026-08-09_21-10_claude-opus-5_adr-0030-fidelity-and-two-releases.md`, `.memsearch/memory/2026-08-15.md`, `.github/workflows/bench.yml`
+- **Target:** `_local/_session-logs/2026-08/2026-08-09_21-10_claude-opus-5_adr-0030-fidelity-and-two-releases.md`, `.memsearch/memory/2026-08-15.md`, `.github/workflows/bench.yml`
 - **Change:** The keep-or-remove call was raised in the 2026-08-08/09 session logs, settled ('retain, required for gate and live dispatch') only in a compressed memsearch summary of an unwrapped 2026-08-15 session, and never recorded durably. Separately ADR 0030 describes the token as a long-lived personal-subscription credential with rotation summarized in one clause and no runbook. Done: an ADR amendment recording the retention decision, its reasoning, and a short rotation/revocation procedure. The retention half is likely; the procedure half is the ci-contract surface's speculative extension.
 - **Why:** The token is load-bearing (bench.yml's only live-run credential) and the project's discipline is that every load-bearing fact lives in one authored place.
-- **Evidence:** _local/_session-logs/2026-08-09_21-10_claude-opus-5_adr-0030-fidelity-and-two-releases.md:163,322 (raised, left open); .memsearch/memory/2026-08-15.md:454 (the only record that it was actually decided); .github/workflows/bench.yml:78 (the secret is still live and load-bearing); docs/internal/decisions/0030-replace-the-api-key-in-the-bench-harness.md lines ~157-159; CHANGELOG.md [Unreleased] 'Added' entry naming run 31988100372
+- **Evidence:** _local/_session-logs/2026-08/2026-08-09_21-10_claude-opus-5_adr-0030-fidelity-and-two-releases.md:163,322 (raised, left open); .memsearch/memory/2026-08-15.md:454 (the only record that it was actually decided); .github/workflows/bench.yml:78 (the secret is still live and load-bearing); docs/internal/decisions/0030-replace-the-api-key-in-the-bench-harness.md lines ~157-159; CHANGELOG.md [Unreleased] 'Added' entry naming run 31988100372
 - **Derives from:** 2026-08-08 session log 'Decide whether to keep the CLAUDE_CODE_OAUTH_TOKEN repository secret'; ADR 0030 (replace the API key in the bench harness)
 - **Size:** S. **Release:** v0.1.x. **Category:** docs. **Confidence:** likely.
 - **Blocks:** Nothing operationally
@@ -788,7 +797,7 @@ and the repository did not have.
 - **Target:** `ROADMAP.md`, `docs/internal/research`, `_local/audit/2026-08-18_audit_gemini-pro-research_Review`
 - **Change:** ROADMAP.md v0.2.0 E1 commits to a research pass with a Two-Part Gate verdict per candidate, published at docs/internal/research/critique-framework-survey.md; the directory does not exist. The 2026-08-20 session directed that the Gemini audit's slate (four architectural recommendations: slash commands revisited, Critique-Diff, MCP exposure, a CI Action; five candidate skills) be treated as survey input, and none has a recorded verdict. Done: the survey published with every candidate, including that slate, shipped/deferred/rejected with a reason, feeding E43 row 2.
 - **Why:** It sequences the skill wave, the v0.4.0+ domain waves and the v1.0 triage criterion, and its absence has left external recommendations with no institutional verdict for a month. The 2026-09-11 ruling brought it into v0.2.0.
-- **Evidence:** ROADMAP.md:48; docs/internal/research/ (confirmed absent in repo); _local/audit/2026-08-18_audit_gemini-pro-research_Review Critique Skills GitHub Repo.md:138-172 (the four Part 1 recommendations) and :179-238 (the five candidate skills); _local/_session-logs/2026-08-20_22-10_claude_readme-drafts-and-audit-review.md:99-103 ('treat the Gemini audit as survey input rather than a plan'); ROADMAP.md:44-114
+- **Evidence:** ROADMAP.md:48; docs/internal/research/ (confirmed absent in repo); _local/audit/2026-08-18_audit_gemini-pro-research_Review Critique Skills GitHub Repo.md:138-172 (the four Part 1 recommendations) and :179-238 (the five candidate skills); _local/_session-logs/2026-08/2026-08-20_22-10_claude_readme-drafts-and-audit-review.md:99-103 ('treat the Gemini audit as survey input rather than a plan'); ROADMAP.md:44-114
 - **Derives from:** ROADMAP.md v0.2.0 E1 (Taxonomy survey regeneration); the 2026-08-20 audit-review decision
 - **Size:** L. **Release:** unscheduled. **Category:** research. **Confidence:** verified.
 - **Ruling 2026-09-11, superseded:** v0.2.0 was ruled Option A plus Option C, which brought the
@@ -1019,4 +1028,39 @@ and the repository did not have.
   the five known live decisions, and three of them (E1, E2, E14) reached the backlog anyway through
   synthesis while this one did not. It is recorded here because the argument for this directory is
   precisely that a decision surviving only in session logs eventually gets dropped.
-- **Rank at intake:** unranked (added 2026-09-11, after the 64-item pass). **Status:** backlog.
+- **CLOSED 2026-09-15 on the maintainer's delegation, and the premise did not survive the check.**
+  There is no family baseline to return to. The five sibling repositories resolve five different
+  astro versions and four different mermaid versions: `agent-skills-toolkit` 7.2.9 / 11.16.0,
+  `pm-skills` 7.2.4 / 11.16.1, `thinking-framework-skills` 7.3.2 / 11.17.2, `writing-style-catalog`
+  7.2.2 / 11.16.0, and this repository 7.2.4 / 11.17.0 before the change below. The
+  reference-or-conform question this item asks has no answer, because the thing it would conform to
+  does not exist.
+- **The reproducibility half was already solved before the item was written.**
+  `site/package-lock.json` is committed, and every job that installs the site uses `npm ci`, which
+  installs the lock exactly and refuses outright when the manifest disagrees with it:
+  `ci.yml` build-site, `ci.yml` smoke, and `deploy-pages.yml`. The hard pin this item proposed would
+  have added nothing the lockfile was not already providing.
+- **What the check found instead, which is why this item turned out to matter.** `npm audit
+  --audit-level=high` inside `site/` exited 1 on four advisories: **astro `<7.2.8`, severity
+  critical**, plus high-severity advisories in `js-yaml`, `sharp` and `svgo`. The `audit` CI job
+  runs that same command at the repository root, where it finds zero, and it carried **no
+  `site`-scoped step at all**, so nothing had ever audited the tree that actually gets deployed to
+  GitHub Pages. Blessing the observed 7.2.4 as the declared floor, which is what this item was on
+  its way to doing, would have pinned the manifest to a version carrying a critical advisory.
+- **Resolved by fixing the versions rather than by recording the spread.** `astro` moved to
+  `~7.2.10`, which stays on the 7.2 line the site was built and tested against; `sharp` to
+  `^0.35.4`; and `js-yaml` (`^4.3.2`) and `svgo` (`^4.1.0`) joined the `overrides` block this file
+  already uses for `mermaid` and `devalue`, both being transitive. The tilde is the answer to the
+  item's pin clause: the declared floor and the lock now read the same version, which is the
+  property the caret was breaking.
+- **And the gate that missed it now exists.** `ci.yml`'s `audit` job gained a second step running
+  `npm audit --audit-level=high --prefix site`, marked `# doc-check` and documented in `AGENTS.md`
+  as S-07 (CI pipeline spec) AC-5 requires. It was **proven to gate before being trusted**: exit 1
+  against the pre-change lockfile, exit 0 after. This is the fourth unfired gate this repository
+  has found in itself across two sessions, after `ci-ok` without `if: always()`, Gold checks G1 and
+  G3 passing vacuously, and the Standard's section 7.1 having no check module.
+- **Verification:** `npm ci` in `site/` exit 0 from a removed `node_modules`; `npm run build` built
+  **50 pages**, matching what is deployed; `node scripts/check-site.mjs` passed 4 of 4 guards;
+  `npm run gen -- --check` reports `AGENTS.md` documenting all 11 `ci.yml` commands and `ci-ok`
+  gating all 9 jobs.
+- **Rank at intake:** unranked (added 2026-09-11, after the 64-item pass). **Status:** CLOSED 2026-09-15.
