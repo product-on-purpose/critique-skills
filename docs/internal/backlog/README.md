@@ -98,7 +98,7 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**29 items depend on nothing and can start today.** Derived from each item's own
+**28 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
@@ -122,7 +122,6 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E51 | Give the precision and corpus-provenance limitations a retirement path or an explicit 'accepted' | S | unscheduled |
 | E52 | Decide who performs 'revise' in the automated revision loop before building it | S | v0.3.0 |
 | E59 | Verify what the marketplace consumes the homepage field for | S | unscheduled |
-| E61 | Rule the site lockfile version spread against the family baseline | S | v0.1.x |
 | E10 | Rule how BYOR is measured under the measured-only exclusion | M | v0.2.0 |
 | E22 | Turn on severity_expected scoring | M | v0.2.0 |
 | E23 | Write methodology.md's location-level metrics section | M | v0.2.0 |
