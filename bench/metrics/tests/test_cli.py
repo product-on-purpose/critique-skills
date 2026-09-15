@@ -65,11 +65,14 @@ def test_build_results_end_to_end(tmp_path: Path) -> None:
         corpus_dir, runs_dir, run_set="test-run-set", generated_at="2026-07-31T00:00:00Z", repo_root=repo_root
     )
 
-    assert results["results_version"] == "1.1.0"
+    assert results["results_version"] == "1.2.0"
     assert results["run_set"] == "test-run-set"
-    assert len(results["entries"]) == 1
+    # Three entries per cell since 1.2.0: one per lane. The overall lane is the pre-1.2.0 figure.
+    assert len(results["entries"]) == 3
+    assert sorted(e["lane"] for e in results["entries"]) == ["judged", "overall", "scripted"]
+    assert {e["run_set"] for e in results["entries"]} == {"test-run-set"}
 
-    entry = results["entries"][0]
+    entry = next(e for e in results["entries"] if e["lane"] == "overall")
     assert entry["skill"] == "critique-toy"
     assert entry["domain"] == "toy"
     assert entry["artifact_type"] == "markdown-prose"
@@ -105,3 +108,52 @@ def test_build_results_is_empty_but_valid_when_nothing_matches(tmp_path: Path) -
         corpus_dir, runs_dir, run_set="empty-run-set", generated_at="2026-07-31T00:00:00Z", repo_root=tmp_path
     )
     assert results["entries"] == []
+
+
+def test_lanes_partition_the_overall_claim_set() -> None:
+    """judged + scripted claims must equal overall claims, on the committed file.
+
+    This is the invariant that makes a lane column trustworthy rather than merely present. If a
+    finding carried no lane, or carried one outside the two, it would be scored into `overall` and
+    into neither of the others, and the three entries would quietly stop describing the same run.
+    Ground-truth denominators (recall) are a property of the corpus and must instead be IDENTICAL
+    across lanes; a lane filter that changed them would mean the filter had reached the manifest.
+    """
+    import json
+    from pathlib import Path
+
+    results_path = Path(__file__).resolve().parents[2] / "results" / "results.json"
+    results = json.loads(results_path.read_text(encoding="utf-8"))
+    by_cell: dict[tuple[str, ...], dict[str, dict]] = {}
+    for e in results["entries"]:
+        by_cell.setdefault((e["skill"], e["skill_version"], e["model"], e["domain"]), {})[e["lane"]] = e
+
+    assert by_cell, "committed results.json carries no entries"
+    for cell, lanes in by_cell.items():
+        assert set(lanes) == {"overall", "judged", "scripted"}, (cell, sorted(lanes))
+        overall, judged, scripted = lanes["overall"], lanes["judged"], lanes["scripted"]
+        assert (
+            judged["precision"]["denominator"] + scripted["precision"]["denominator"]
+            == overall["precision"]["denominator"]
+        ), (cell, "claims do not partition")
+        assert (
+            overall["recall"]["denominator"]
+            == judged["recall"]["denominator"]
+            == scripted["recall"]["denominator"]
+        ), (cell, "ground-truth denominator moved with the lane filter")
+
+
+def test_every_committed_entry_names_its_run_set() -> None:
+    """The defect per-entry run_set exists to fix: a committed file may concatenate run sets, and
+    before 1.2.0 it carried one invented top-level identifier for the pair."""
+    import json
+    from pathlib import Path
+
+    results_path = Path(__file__).resolve().parents[2] / "results" / "results.json"
+    results = json.loads(results_path.read_text(encoding="utf-8"))
+    run_sets = {e["run_set"] for e in results["entries"]}
+    assert all(e.get("run_set") for e in results["entries"]), "an entry does not name its run set"
+    assert len(run_sets) > 1, (
+        "the committed file is expected to hold more than one run set; if it no longer does, the "
+        "top-level run_set is sufficient again and this test should be revisited"
+    )

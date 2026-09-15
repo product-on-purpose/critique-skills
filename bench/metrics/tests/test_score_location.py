@@ -227,8 +227,10 @@ def test_build_results_computes_recall_location_and_precision_location(tmp_path:
         corpus_dir, runs_dir, run_set="test-run-set", generated_at="2026-07-31T00:00:00Z", repo_root=repo_root
     )
 
-    assert len(results["entries"]) == 1
-    entry = results["entries"][0]
+    # Three entries per cell since results_version 1.2.0, one per lane. Location scoring is a
+    # property of the overall lane here: this fixture plants findings on one lane only.
+    assert len(results["entries"]) == 3
+    entry = next(e for e in results["entries"] if e["lane"] == "overall")
 
     assert entry["recall"] == {"value": 0.0, "numerator": 0, "denominator": 2}
     assert entry["precision"] == {"value": 0.0, "numerator": 0, "denominator": 2}

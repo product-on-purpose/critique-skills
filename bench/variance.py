@@ -284,9 +284,15 @@ def build_variance(
 
     verification: dict[str, Any] = {"performed": False}
     if committed_results is not None:
+        # Overall lane only. Since results_version 1.2.0 a committed file carries three entries per
+        # cell, one per lane, which share every identity field except `lane`; indexing without that
+        # filter silently keeps whichever lane sorted last and then compares repetition pools
+        # against it. A file written before 1.2.0 carries no lane field, so a missing lane reads as
+        # "overall" and this stays correct against both shapes.
         committed_by_key = {
             (e["skill"], e["skill_version"], e["model"], e["domain"]): e
             for e in committed_results["entries"]
+            if e.get("lane", "overall") == "overall"
         }
         failures, checked, matched = _reproduction_failures(cells, committed_by_key)
         if failures:

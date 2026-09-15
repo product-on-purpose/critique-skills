@@ -825,11 +825,26 @@ figure published in
 [ADR 0026](../../docs/internal/decisions/0026-location-level-re-examination-of-baseline-gates.md),
 which is the check that it is measuring what that ADR measured.
 
-**To reproduce a judged-lane or scripted-lane column**, repeat step 3 with each envelope's `findings[]`
-filtered to `lane == "judged"` (or `"scripted"`) before it reaches `bench.metrics.score`. The score
-primitives are lane-agnostic and take the filtered envelope unchanged.
+**Judged-lane and scripted-lane columns are now in the committed file** and need no recipe. Since
+`results_version` 1.2.0 every cell carries three entries, one per `lane`: `overall`, `judged` and
+`scripted`. `overall` is the cut every published figure reports and is what this file meant before
+1.2.0. Read a lane column by filtering `entries[]` on `lane`.
+
+The lanes partition, and that is checked rather than assumed: judged claims plus scripted claims
+equal overall claims in all 26 cells, while the ground-truth denominator is identical across all
+three, since a lane filter that moved it would mean the filter had reached the manifest. Both
+invariants are asserted in `bench/metrics/tests/test_cli.py` against this committed file.
+
+What the split shows is worth reading before the pooled numbers. On `critique-clarity` / haiku the
+scripted lane scores **0.853** precision against the judged lane's **0.11**, pooling to the published
+0.382. The deterministic lane carries the precision; the judged lane is where the weak axis actually
+is. No published figure moved when this landed: all 26 overall-lane entries are byte-identical to
+the pre-1.2.0 file.
 
 ## Known issues in the measurement tooling
+
+- **RESOLVED 2026-09-14: `results.json` can say which run set an entry came from.** Every entry carries `run_set` as of `results_version` 1.2.0. Before that the file held a single top-level identifier, and because the committed file concatenates two run sets that identifier was the invented string `p3-2026-07-31-plus-cal1-2026-08-01`, describing no directory that has ever existed. The top-level field is retained as a label for the file; the per-entry field is the authoritative answer.
+
 
 Reported, not fixed. Each affects how far a reader should trust the surrounding claims.
 

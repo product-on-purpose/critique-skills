@@ -175,7 +175,28 @@ and the repository did not have.
 - **Size:** M. **Release:** v0.2.0. **Category:** contract. **Confidence:** verified.
 - **Blocks:** Publishing judged and scripted cuts as committed, drift-checked numbers
 - **Depends on:** Nothing
-- **Rank at intake:** 6 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-09-14.** `results_version` 1.2.0. Every entry now carries `run_set` and `lane`,
+  and an entry is identified by (skill, skill_version, model, domain, run_set, lane) where it used
+  to be the first four. The committed file goes from 26 entries to 78: three lanes per cell.
+- **The safety property, checked rather than hoped for.** All 26 `overall`-lane entries are
+  **byte-identical** to the pre-1.2.0 file, compared by identity rather than position, and both
+  published tables report **no drift**. The schema gained two dimensions and the file tripled
+  without one published number moving.
+- **Two invariants are now asserted** in `bench/metrics/tests/test_cli.py` against the committed
+  file: judged claims plus scripted claims equal overall claims in every cell, and the
+  ground-truth denominator is identical across lanes, since a lane filter that moved it would mean
+  the filter had reached the manifest.
+- **What the lane split immediately showed.** On `critique-clarity` / haiku the scripted lane
+  scores 0.853 precision against the judged lane's 0.11, pooling to the published 0.382. The
+  deterministic lane carries the precision and the judged lane is where the weak axis actually is.
+  That was previously obtainable only by monkeypatching the scorer per a documented recipe; it is
+  now a field.
+- **Consumers updated, not left to drift.** `bench/report.py` filters both of its readers to the
+  overall lane, and `bench/variance.py`'s committed-results index does the same: without it, three
+  entries share every identity field but `lane` and the decomposition silently compares repetition
+  pools against whichever lane sorted last. Both treat a missing `lane` as `overall`, so they keep
+  working against pre-1.2.0 files.
+- **Rank at intake:** 6 of 64. **Status:** CLOSED 2026-09-14.
 
 ## E7 - Move bench/results/runs/steering/ out of the runs* glob
 
