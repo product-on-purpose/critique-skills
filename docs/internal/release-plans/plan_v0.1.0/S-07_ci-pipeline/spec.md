@@ -19,27 +19,66 @@ audience: agent
 ## Task Summary
 
 - Status: committed
-- AC: [ ] AC-1 [x] AC-2 [x] AC-3 [ ] AC-4 [x] AC-5 [ ] AC-6
+- AC: [x] AC-1 [x] AC-2 [x] AC-3 [ ] AC-4 [x] AC-5 [x] AC-6
 - AC evidence:
-  - AC-1: docs/internal/execution/P1-report.md (S07-AC1, DEFERRED, scheduled for P4).
-    docs/internal/execution/P4-report.md ("S07-AC1-local") reports all seven planted failures
-    failed locally and were reverted, but that is a narrower local replay, not the live-Actions
-    test-branch verification the criterion names. Strictly honest reading: still deferred; left
-    unchecked.
+  - AC-1: **MET 2026-09-14.** Both halves of the criterion were run. Local: a deliberate failure
+    planted in each category, one at a time, reproduced a failure with that job's own command, with
+    the tree asserted clean between cases. Live: each plant was pushed as its own commit to
+    `verify/s07-ac1-planted-failures` and run on GitHub-hosted infrastructure through PR 42, and in
+    every case the job the plant was aimed at went red. **8 of 8 categories, plus a green control.**
+
+      | category | commit | run | plant |
+      |---|---|---|---|
+      | conformance | `79171b1` | [34873969976](https://github.com/product-on-purpose/critique-skills/actions/runs/34873969976) | README envelope figure 541 to 999 |
+      | drift | `36a7b7f` | [34874249231](https://github.com/product-on-purpose/critique-skills/actions/runs/34874249231) | hand-written row appended to generated `INDEX.md` |
+      | schema | `70c6108` | [34874340934](https://github.com/product-on-purpose/critique-skills/actions/runs/34874340934) | `run.skill` removed from one committed envelope |
+      | corpus | `9892f6c` | [34873984315](https://github.com/product-on-purpose/critique-skills/actions/runs/34873984315) | prose appended to a locked corpus artifact |
+      | unit-node | `e88df3f` | [34874425180](https://github.com/product-on-purpose/critique-skills/actions/runs/34874425180) | a README door label renamed |
+      | unit-python | `92de2e7` | [34873991315](https://github.com/product-on-purpose/critique-skills/actions/runs/34873991315) | `SKILL.md` frontmatter name no longer matches its directory |
+      | smoke | `90cd04c` | [34874510947](https://github.com/product-on-purpose/critique-skills/actions/runs/34874510947) | `critique-clarity`'s scripted lane raises on import |
+      | build-site | `2405610` | [34874591367](https://github.com/product-on-purpose/critique-skills/actions/runs/34874591367) | a baseline route the site does not build |
+      | CONTROL | `d2d0891` | [34874008925](https://github.com/product-on-purpose/critique-skills/actions/runs/34874008925) | tree restored: **15 jobs, 0 failures** |
+
+    Three things the exercise established beyond the criterion itself. **`ci-ok` failed in all eight
+    red runs and passed in the green one**, which is the first live evidence that ADR 0033's
+    aggregate gate actually gates rather than merely reporting. **The control run is what makes the
+    eight reds mean anything**: without it they are equally consistent with a branch that was simply
+    broken. And **matrix `fail-fast` defaults to true**, so a failing leg cancels its sibling and a
+    run shows `schema (Node 24)` red with `schema (Node 22.12.0)` neither red nor green; the
+    category still fails, which is what this criterion asks, but a reader should not read a
+    cancelled sibling as a pass.
+
+    **`audit` is the one category not planted, deliberately.** Making `npm audit --audit-level=high`
+    fail requires introducing a genuinely vulnerable dependency into a public repository, which is
+    not a thing to do for a test. That leaves one of nine categories evidenced by inspection only,
+    and saying so is more useful than a table that implies otherwise.
   - AC-2: docs/internal/execution/P1-report.md (S07-AC2, FAIL: `release.yml` computed a verdict
     inline via shell/`awk`). Fixed in P2 (docs/internal/execution/P2-report.md phase summary,
     commit `9ef369d`) and independently reconfirmed this pass: `release.yml` now calls
     `scripts/extract-release-notes.mjs`, no inline `awk`.
   - AC-3: docs/internal/execution/P1-report.md (S07-AC3, PASS)
-  - AC-4: docs/internal/execution/P1-report.md (S07-AC4, DEFERRED, scheduled for P4-P5).
-    docs/internal/execution/P4-report.md ("AC-4-local") reports the tag guard blocks a mismatched
-    tag locally, but that is not the scratch-clone test-tag scenario the criterion names. Strictly
-    honest reading: still deferred; left unchecked.
+  - AC-4: **PARTIALLY MET 2026-09-14, and left unchecked on the same strict reading as before.**
+    What was done: a scratch clone was made outside this tree, and `scripts/check-release-versions.mjs`
+    was exercised in it against five tags. A matching tag exits 0; `v9.9.9`, `v0.1.5` and a
+    non-semver string each exit 1. **The criterion's exact scenario was then run**: `library.json`
+    forced to `0.9.9` while `package.json` and `.claude-plugin/plugin.json` stayed at `0.1.6`, tag
+    `v0.1.6`. The guard exits 1, names `library.json` specifically, and reports the other two as
+    passing. `.github/workflows/release.yml` carries no `continue-on-error`, so a non-zero step
+    fails the job.
+
+    What is still missing, and why it stays unchecked: the criterion says `release.yml` **on a test
+    tag**, and `release.yml` is tag-triggered, so the honest version of this test needs a pushed tag
+    against a real Actions runner. Doing that in this repository would leave a stray tag and a
+    deliberately red release run in a public history; the recorded preference is a scratch GitHub
+    repository instead. That was not done because the available `gh` token carries `repo` but not
+    `delete_repo`, so a scratch repository could be created and then not cleaned up. Tracked as E15.
   - AC-5: docs/internal/execution/P1-report.md (S07-AC5, PASS)
-  - AC-6: docs/internal/execution/P1-report.md (S07-AC6, DEFERRED, "measured at P5"). No P5 report
-    exists; `ci.yml` runtime on GitHub-hosted runners has never been measured. Left unchecked.
+  - AC-6: **MET 2026-09-14.** Measured on GitHub-hosted runners across the three most recent `main`
+    runs of `ci.yml`: **31, 41 and 67 seconds**, against a target of under 4 minutes. The criterion
+    named P5 as the measurement point and no P5 report was ever written, which is why this sat
+    unchecked long after it was satisfiable; the measurement itself was never the hard part.
 - Open questions: 0
-- Last-updated: 2026-08-01
+- Last-updated: 2026-09-14
 
 ## Purpose
 

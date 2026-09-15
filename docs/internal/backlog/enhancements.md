@@ -302,7 +302,18 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.1.x. **Category:** ci. **Confidence:** likely.
 - **Blocks:** Declaring the v0.1.x exit gate fully met with all four sub-items closed
 - **Depends on:** Nothing
-- **Rank at intake:** 15 of 64. **Status:** backlog (recorded 2026-09-11).
+- **PARTIALLY DONE 2026-09-14.** The guard logic is verified in a scratch clone against five tags,
+  including the criterion's exact scenario: `library.json` forced to `0.9.9` against tag `v0.1.6`
+  exits 1 and names the offending file while passing the other two manifests. `release.yml` has no
+  `continue-on-error`, so a non-zero step fails the job.
+- **Still open, and it is a permissions problem rather than a technical one.** The criterion says
+  `release.yml` on a test tag, and that workflow is tag-triggered, so the honest test needs a
+  pushed tag against a real runner. The recorded preference is a scratch GitHub repository rather
+  than a stray tag and a red release run in this public history. The available `gh` token carries
+  `repo` but **not `delete_repo`**, so a scratch repository could be created and not cleaned up.
+  Unblocking this needs either a token with `delete_repo` or a decision to accept the cleanup by
+  hand.
+- **Rank at intake:** 15 of 64. **Status:** partially done 2026-09-14; the live-tag half is blocked on token scope.
 
 ## E16 - Run the live planted-failure checks on GitHub Actions (S-07 AC-1)
 
@@ -314,7 +325,15 @@ and the repository did not have.
 - **Size:** M. **Release:** v0.1.x. **Category:** ci. **Confidence:** likely.
 - **Blocks:** Declaring the v0.1.x exit gate fully met with all four sub-items closed
 - **Depends on:** Nothing
-- **Rank at intake:** 16 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-09-14.** Both halves of AC-1 run. Locally, a failure planted in each category
+  reproduced with that job's own command, tree asserted clean between cases. Live, each plant was
+  pushed as its own commit and run on GitHub-hosted infrastructure through PR 42: **8 of 8
+  categories saw the job they were aimed at go red, plus a green 15-job control**. Run URLs are in
+  the S-07 spec's AC evidence. `ci-ok` failed in all eight reds and passed in the green control,
+  which is also the first live evidence that ADR 0033's aggregate gate gates rather than reports.
+- **The honest gap:** `audit` was not planted. Failing `npm audit --audit-level=high` needs a real
+  vulnerable dependency in a public repository. One of nine categories rests on inspection.
+- **Rank at intake:** 16 of 64. **Status:** CLOSED 2026-09-14.
 
 ## E17 - Write RELEASE-NOTES.md's Unreleased section and pick the release that absorbs it
 

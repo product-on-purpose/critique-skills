@@ -98,7 +98,7 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**33 items depend on nothing and can start today.** Derived from each item's own `Depends on`
+**32 items depend on nothing and can start today.** Derived from each item's own `Depends on`
 field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
@@ -127,7 +127,6 @@ field rather than asserted, and regenerated whenever an item closes.
 | E61 | Rule the site lockfile version spread against the family baseline | S | v0.1.x |
 | E6 | Add per-entry run_set and a lane dimension to results.schema.json (v1.2.0) | M | v0.2.0 |
 | E10 | Rule how BYOR is measured under the measured-only exclusion | M | v0.2.0 |
-| E16 | Run the live planted-failure checks on GitHub Actions (S-07 AC-1) | M | v0.1.x |
 | E22 | Turn on severity_expected scoring | M | v0.2.0 |
 | E23 | Write methodology.md's location-level metrics section | M | v0.2.0 |
 | E24 | Add an automated evidence-quotes-not-characterizes check | M | v0.2.0 |
@@ -137,9 +136,10 @@ field rather than asserted, and regenerated whenever an item closes.
 | E54 | Ship one documented cross-library composition workflow | M | v0.3.0 |
 | E25 | Rewrite verdicts.md as one current-state document | L | v0.2.0 |
 
-**The two that matter most are E15 (tag guard from a scratch clone) and E16 (live planted-failure
-checks)**, because [ADR 0034](../decisions/0034-v0.1.x-exit-gate-declaration.md) names them as the
-honest condition for closing v0.1.x. Everything else here is optional ordering.
+E15 (tag guard) and E16 (planted failures) have left this list: E16 is closed, and E15 is
+partially done with its remaining half blocked on token scope rather than on effort. With both
+of the conditions [ADR 0034](../decisions/0034-v0.1.x-exit-gate-declaration.md) names now met or
+nearly so, nothing on this list is a v0.1.x blocker.
 
 ## Critical paths
 
