@@ -98,13 +98,12 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**30 items depend on nothing and can start today.** Derived from each item's own
+**29 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
 |---|---|---|---|
 | E13 | Update ROADMAP.md's v0.1.x section: two of four verification items are met | S | v0.1.x |
-| E15 | Exercise the tag-guard's negative path from a scratch clone (S-07 AC-4) | S | v0.1.x |
 | E28 | Pin or record the Claude Code CLI version bench.yml installs | S | v0.1.x |
 | E29 | Make release.yml's re-run suite match what it claims to run | S | v0.1.x |
 | E30 | Fix two gaps in skill-template.md before the next skill is built from it | S | v0.1.x |
@@ -133,6 +132,10 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E53 | Harden --gate as a documented per-skill CI recipe for consumers | M | v0.3.0 |
 | E54 | Ship one documented cross-library composition workflow | M | v0.3.0 |
 | E25 | Rewrite verdicts.md as one current-state document | L | v0.2.0 |
+
+With S-07's AC-4 closed, every criterion in that spec passes and
+[ADR 0034](../decisions/0034-v0.1.x-exit-gate-declaration.md)'s two named conditions for calling
+v0.1.x finished are both discharged.
 
 ## Critical paths
 

@@ -347,7 +347,23 @@ and the repository did not have.
   `repo` but **not `delete_repo`**, so a scratch repository could be created and not cleaned up.
   Unblocking this needs either a token with `delete_repo` or a decision to accept the cleanup by
   hand.
-- **Rank at intake:** 15 of 64. **Status:** partially done 2026-09-14; the live-tag half is blocked on token scope.
+- **CLOSED 2026-09-15.** Run
+  [34932832402](https://github.com/product-on-purpose/critique-skills/actions/runs/34932832402).
+  Tag `v9.9.9` pushed against manifests reading `0.1.6`: the guard step **failed**, and both the
+  RELEASE-NOTES extract and the Create-GitHub-release steps were **skipped**. No release was
+  created; the tag was deleted from the remote immediately after.
+- **The `delete_repo` blocker was self-inflicted and is withdrawn.** It came from reading "in a
+  scratch clone" as "in a scratch repository", carried forward from an earlier session's
+  preference for keeping deliberate red runs out of public history. A pushed tag makes GitHub
+  check out a clean clone on a runner, so the criterion was satisfiable all along, in this
+  repository, with the token already in hand. No token change is needed and none should be made
+  for this.
+- **What it added, since it was nearly skipped.** Six unit tests already covered the guard's logic
+  and `release.yml` had already succeeded on five real tags. Neither covered the negative path on
+  real infrastructure. **The guard had never been observed blocking anything**, which is the same
+  shape as the `ci-ok` job that would have passed green without `if: always()`, the vacuous Gold
+  G1 and G3, and the absent section 7.1 check.
+- **Rank at intake:** 15 of 64. **Status:** CLOSED 2026-09-15.
 
 ## E16 - Run the live planted-failure checks on GitHub Actions (S-07 AC-1)
 
@@ -420,7 +436,13 @@ and the repository did not have.
 - **Precedent worth knowing:** the 2026-08-17 haiku dispatch is recorded as a workflow FAILURE that
   still produced 39 usable envelopes, because one cell failed and the job reported that. A red run
   here does not necessarily mean no evidence.
-- **Rank at intake:** 19 of 64. **Status:** dispatched 2026-09-14, awaiting results.
+- **DISPATCH LANDED 2026-09-15: 40 of 40 cells written**, no failed step, on branch
+  `bench-results/34917562578`. Full coverage, where the 2026-08-17 haiku dispatch managed 39 of 40.
+  **The sonnet tier now has complete k=5 coverage for `critique-clarity` for the first time.**
+- **Remaining, and it is the next session's first task:** review the branch as a diff, commit the
+  envelopes, rescore, and re-evaluate ADR 0031's acceptance band on this tier. Nothing here is
+  blocked; it is unstarted.
+- **Rank at intake:** 19 of 64. **Status:** dispatch landed 2026-09-15; envelopes not yet reviewed or committed.
 
 ## E20 - Re-measure critique-usability's Sonnet cell
 
@@ -441,7 +463,13 @@ and the repository did not have.
   scoreboard, `verdicts.md` and the Known-limitations bullet **either way**. A re-measure that
   confirms the cell still does not qualify is as publishable as one that clears it, and the item is
   not done until whichever result it is has been written down.
-- **Rank at intake:** 20 of 64. **Status:** dispatched 2026-09-14, awaiting results.
+- **DISPATCH LANDED 2026-09-15: 40 of 40 cells written**, no failed step, on branch
+  `bench-results/34917728793`.
+- **Remaining:** review the branch, commit the envelopes, rescore, and update the scoreboard,
+  `verdicts.md` and the Known-limitations bullet **either way**. A re-measure confirming the cell
+  still does not qualify is as publishable as one clearing it, and this item is not done until
+  whichever result it is has been written down.
+- **Rank at intake:** 20 of 64. **Status:** dispatch landed 2026-09-15; envelopes not yet reviewed or committed.
 
 ## E21 - Backfill the missing fidelity-dispatch cell clarity-001/haiku-r1.json
 
@@ -543,7 +571,9 @@ and the repository did not have.
   `critique-clarity` / haiku the scripted lane scores 0.853 precision against the judged lane's
   0.11. A single pooled floor across two lanes that behave that differently is the thing v2 exists
   to replace.
-- **Rank at intake:** 26 of 64. **Status:** blocked on E19's dispatch, 2026-09-14.
+- **UNBLOCKED 2026-09-15.** E19's dispatch landed at 40 of 40, so the sonnet-tier consistency data
+  this item needs now exists on `bench-results/34917562578` and only needs committing.
+- **Rank at intake:** 26 of 64. **Status:** unblocked 2026-09-15; awaiting E19's envelopes being committed.
 
 ## E27 - Isolate the bench harness from the working tree it measures
 
