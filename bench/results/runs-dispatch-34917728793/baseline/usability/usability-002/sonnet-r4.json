@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 5 projects, synced last week.\" followed by a `<ul>` containing only 4 `<li>` items (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)",
+      "fix": "Either add the missing fifth project to the list, correct the count to \"4 projects,\" or add a visible label/link (e.g., \"recent projects, view all\") clarifying that the list is not exhaustive.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<section id=\"workspace-overview\">`, the intro paragraph and the following list",
+      "severity": 3,
+      "violation": "The stated project count (5) doesn't match the number of projects actually listed (4), and nothing in the visible text indicates the list is a partial/\"recent\" subset."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form>...<button id=\"project-settings-save-btn\" type=\"submit\">Save</button></form>` with no `action` attribute on the `<form>`",
+      "fix": "Wire the Save button to navigate to a confirmation state (or at least add visible save-confirmation text), consistent with how other actions (e.g., invite, archive) provide feedback.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, the form's submit button",
+      "severity": 3,
+      "violation": "Clicking \"Save\" submits the form with no target action and no in-mockup navigation or confirmation, so the user gets no feedback that the rename succeeded, unlike other flows in the document that navigate to a confirmation view."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible button text (e.g., \"Duplicate\") or an icon plus link to a duplicate-confirmation section, matching the pattern used by other actions.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, `project-settings-duplicate-btn`",
+      "severity": 3,
+      "violation": "The button has no visible text content and no href/handler wiring anywhere in the document, so it renders with no visible label and does nothing when activated - a dead control inconsistent with every other interactive element in the mockup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a>`",
+      "fix": "Change the href to `#archive-confirm` so the confirmation step is shown before the project is archived.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, `project-settings-archive-link`",
+      "severity": 3,
+      "violation": "This link jumps straight to the \"Project archived\" result screen, bypassing the dedicated `#archive-confirm` confirmation section that exists elsewhere in the document for exactly this destructive action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<h2>Archive this project?</h2>` - no `href` anywhere in the document points to `#archive-confirm`",
+      "fix": "Point `project-settings-archive-link` (or another appropriate trigger) at `#archive-confirm` so the section is actually reachable.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`<section id=\"archive-confirm\">`",
+      "severity": 3,
+      "violation": "This confirmation section is unreachable; no link in the document navigates to it, making it dead/orphaned content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"notification-settings-save-btn\" type=\"submit\">Submit</button>`",
+      "fix": "Change the button text to \"Save\" for consistency with the rest of the document.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`<section id=\"notification-settings\">`, form submit button",
+      "severity": 3,
+      "violation": "Every other save action in the document is labeled \"Save\" (project settings, invite member); this one is labeled \"Submit,\" an inconsistent label for the same kind of action."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-09-15T02:31:44Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

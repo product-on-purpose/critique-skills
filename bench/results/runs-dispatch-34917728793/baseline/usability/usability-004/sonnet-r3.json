@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced last week.\" is followed by a `<ul>` containing only three `<li>` entries (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp)",
+      "fix": "Either add the fourth project (e.g. \"Q3 Roadmap,\" which appears later in project-settings) to the list, or correct the copy to say \"3 projects.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "workspace-overview section, \"Your projects\" intro paragraph and the project list",
+      "severity": 3,
+      "violation": "The stated project count (4) does not match the number of projects actually listed (3), leaving it unclear whether a project is missing or the count is wrong."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Links such as `href=\"#invite-member\"`, `href=\"#archive-confirm\"`, `href=\"#invite-sent\"` target sibling `<section>` elements, but the document has no CSS (e.g. `:target` rules) or script to hide non-active sections.",
+      "fix": "Add CSS such as `section:not(:target){display:none}` (with the initial screen shown by default) or equivalent JS show/hide logic so only one section is visible at a time.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "overall document structure (no `<style>` or `<script>` anywhere, applies to all `<section>` elements linked via `href=\"#...\"`)",
+      "severity": 3,
+      "violation": "The anchors imply a step-by-step \"screen\" flow (Save → Continue → confirmation, Cancel/Archive, etc.), but with nothing to hide inactive sections, every section renders simultaneously on one long page, defeating the intended wizard-style navigation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"project-settings-name-input\" type=\"text\" value=\"Q3 Roadmap\">`, `<input id=\"invite-member-email-input\" type=\"email\">`, and `<select id=\"notification-settings-digest-input\">` - none carry a `name` attribute.",
+      "fix": "Add appropriate `name` attributes, e.g. `name=\"project_name\"`, `name=\"email\"`, `name=\"digest_frequency\"`.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "project-settings, invite-member, and notification-settings form controls",
+      "severity": 3,
+      "violation": "Without `name` attributes, none of the form controls would submit identifiable data even if the forms were properly wired to a backend."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form>` ... `<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>` - none of the three `<form>` tags specify an `action` or `method` attribute.",
+      "fix": "Add real `action`/`method` attributes, or add a submit handler (e.g. `onsubmit=\"return false\"`) if this is intended to remain a client-only mockup.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "project-settings, invite-member, and notification-settings `<form>` elements",
+      "severity": 3,
+      "violation": "Clicking any \"Save\" button will trigger a real form submission (GET to the current URL) since nothing intercepts it, reloading the page and discarding the current fragment/screen state instead of performing an inline save."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible label text (e.g. \"Duplicate\") or an icon plus visually-hidden text alongside the `aria-label`.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "project-settings section, duplicate button",
+      "severity": 3,
+      "violation": "The button has no visible text or icon content, only an `aria-label`, so sighted users see a blank, unlabeled button with no indication of its purpose."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` next to `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>`",
+      "fix": "Collapse this into a single control (e.g. one \"Send invite\" button/link that both saves and navigates to `#invite-sent`), removing the redundant, ambiguous pairing.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "invite-member section",
+      "severity": 3,
+      "violation": "It's ambiguous which control actually sends the invite - \"Save\" looks like the primary action but has no defined effect, while the separate, vaguely-labeled \"Continue\" link is what actually advances to the \"Invite sent\" confirmation screen."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\"",
+      "fix": "Either add an \"archived projects list\" section reachable from the workspace overview, or remove/rewrite the sentence so it doesn't reference a nonexistent feature.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "archive-confirm section, confirmation copy",
+      "severity": 3,
+      "violation": "The document has no \"archived projects list\" screen or link anywhere, so this promised destination doesn't exist within the mockup."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-09-15T03:31:50Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

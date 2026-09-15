@@ -1,0 +1,115 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-DEADEND",
+      "evidence": "the \"invite-sent\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+      "fix": "Add a control inside the \"invite-sent\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "the \"invite-sent\" section",
+      "severity": 3,
+      "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "archive-confirm-copy states: \"You can restore it at any time from the archived projects list.\" The \"project-archived\" section's only control is <a id=\"project-archived-exit-link\" href=\"#workspace-overview\">Back to your projects</a>, and no section, link, or list named an archived projects list appears anywhere in the artifact.",
+      "fix": "Either add the archived-projects-list state the copy promises, with a restore control reachable from it, or add a direct restore control to the \"project-archived\" section.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"project-archived\" section",
+      "severity": 3,
+      "violation": "The archive action is presented by the artifact's own copy as reversible (\"restore it at any time from the archived projects list\"), but no restore control, undo control, or archived-list state exists anywhere in the artifact: the stated way back does not exist in the design as specified."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>, with no confirmation message, changed control state, or next screen named anywhere in the section",
+      "fix": "Add a stated outcome for this action in place: a saved confirmation shown on the same screen, or a defined next state the button's own path leads to.",
+      "id": "F-003",
+      "instances": [
+        {
+          "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>, with no confirmation or changed state named in the section, and no stated relationship to the separate \"Continue\" link",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button>, with no confirmation or changed state named anywhere in the section",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "The artifact names a state-changing action (saving the project name) but specifies no visible indication of what the system is doing or what the outcome was once it completes: no confirmation, no changed state, and no next screen this control's own path leads to."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H4-INTERNAL",
+      "evidence": "invite-member's form commits with <button id=\"invite-member-save-btn\" type=\"submit\">Save</button>, yet the section still requires a separate <a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a> to reach \"invite-sent\"; the \"project-settings\" and \"notification-settings\" sections each complete their task on their own \"Save\" button alone, with no separate continue control.",
+      "fix": "Either make invite-member's Save button itself lead to invite-sent, matching how the other two forms' Save buttons complete their task, or rename the two controls to distinguish what each does, for example \"Save draft\" and \"Send invite\".",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button",
+      "severity": 2,
+      "violation": "The \"Save\" button pattern means \"this completes the task\" on project-settings and notification-settings, but on invite-member completing the task also requires the separate Continue link, and nothing in the artifact signals that this Save behaves differently from the other two."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-LABELED",
+      "evidence": "<button> with no text content and no accessible-name attribute",
+      "fix": "Add visible text to this control, or an aria-label attribute naming what it does.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "This control has neither visible text nor an accessible-name attribute, so nothing on screen names what the control does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "\"An invite was sent to the address entered above. It expires in 5 days if not accepted.\" The actual email address is not restated, and the section defines no control back to \"invite-member\" or anywhere else the value could be checked.",
+      "fix": "Restate the actual email address on the invite-sent confirmation, for example \"An invite was sent to jane@example.com\".",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the \"invite-sent\" section",
+      "severity": 2,
+      "violation": "The confirmation depends on the address entered on the previous screen but does not repeat it, and the state offers no control back to where it could be retrieved, so the user has no way in the artifact to verify which address the invite actually reached."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H8",
+      "evidence": "<div id=\"workspace-overview-promo-referral\">Invite 3 teammates this month to unlock the advanced reporting add-on.</div> appears in reading order before the section's own primary links, <a id=\"workspace-overview-projects-link\">Open project settings</a> and <a id=\"workspace-overview-import-link\">View last import result</a>.",
+      "fix": "Move the promotional referral message below the section's primary action links, or elsewhere off the path to them.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "the \"workspace-overview\" section, the \"workspace-overview-promo-referral\" div",
+      "severity": 2,
+      "violation": "This promotional element, unrelated to the section's task of viewing and acting on the user's projects, is placed ahead of the primary action links in reading order, which on an unstyled mockup is what outranking the primary controls for attention looks like."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T01:39:45Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

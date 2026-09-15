@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced this morning.\" followed by a `<ul>` with only three `<li>` entries (Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot)",
+      "fix": "Either add the missing fourth project to the list or change the copy to clarify it's showing \"3 of 4\" / \"recent\" projects only.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "section#workspace-overview, div#workspace-overview-recent",
+      "severity": 3,
+      "violation": "The stated project count (4) does not match the number of projects actually listed (3), with no label indicating the list is partial."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>` with no form action and no linked confirmation state",
+      "fix": "Add a \"Settings saved\" confirmation section/state (or at minimum a visible success message) that Save navigates to or displays.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "section#project-settings, button#project-settings-save-btn",
+      "severity": 3,
+      "violation": "Clicking Save has no defined destination or feedback, unlike the Invite and Archive flows which both navigate to explicit confirmation sections (#invite-sent, #project-archived)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Give the button visible text (e.g. \"Duplicate\") and wire it to a result state, such as a new \"project-duplicated\" section or a confirmation dialog.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "section#project-settings, button#project-settings-duplicate-btn",
+      "severity": 3,
+      "violation": "The button has no visible label text (only an aria-label) and no href or target section, so sighted users see an empty control that appears to do nothing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Project name input value is \"Vendor Onboarding\", but the \"Your projects\" list in #workspace-overview-recent contains only Beta Launch Plan, Holiday Campaign Assets, and Partner Integration Pilot",
+      "fix": "Include \"Vendor Onboarding\" in the workspace-overview list (or explain in copy why it's absent, e.g. it's not \"recent\").",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "section#project-settings, input#project-settings-name-input value; compare to section#workspace-overview list",
+      "severity": 3,
+      "violation": "The project currently being edited/archived (\"Vendor Onboarding\") never appears in the workspace's project list, so its origin and relation to the \"4 projects\" count is unclear."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "A submit button `Save` inside the form, plus a separate `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>` outside the form",
+      "fix": "Consolidate into a single action (e.g. rename the submit button \"Send invite\" and remove the separate Continue link, or make Continue the only actionable control).",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "section#invite-member",
+      "severity": 3,
+      "violation": "Two competing controls (Save vs Continue) both appear to finalize the invite action, but their relationship is undefined - it's unclear whether Save must be clicked before Continue or whether Continue alone sends the invite."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"invite-member-email-input\" type=\"email\">` has no `required` attribute, yet #invite-member-continue-link allows proceeding to #invite-sent regardless",
+      "fix": "Mark the email input as required and block navigation to #invite-sent until a valid address is present.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "section#invite-member, input#invite-member-email-input",
+      "severity": 3,
+      "violation": "A user can reach the \"Invite sent\" confirmation without ever entering an email address, contradicting the confirmation page's claim that an invite was sent to \"the address entered above.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An invite was sent to the address entered above. It expires in 5 days if not accepted.\"",
+      "fix": "Display the submitted email address directly on the invite-sent confirmation (e.g. \"An invite was sent to jane@example.com\").",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "section#invite-sent, paragraph",
+      "severity": 3,
+      "violation": "The confirmation text refers to \"the address entered above,\" but that address is on a different section (#invite-member) and is never actually displayed or echoed on this page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"will remove it from the active projects list for everyone on the team\" and \"has been moved to archived projects\"",
+      "fix": "Add an \"archived projects\" section with a link to it (e.g. from #workspace-overview or #project-archived), or remove the implication that one exists.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "section#archive-confirm and section#project-archived",
+      "severity": 3,
+      "violation": "Both sections imply the existence of a separate \"archived projects\" list/view, but no such section or link exists anywhere in the document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button>` with no destination or confirmation",
+      "fix": "Provide a saved-confirmation state or inline success message after clicking Save.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "section#notification-settings, button#notification-settings-save-btn",
+      "severity": 3,
+      "violation": "As with the project-settings Save button, this control has no visible effect or confirmation state after being clicked, inconsistent with other completed actions in the document that show explicit confirmation screens."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`id=\"archive-confirm-copy\"` versus `id=\"import-status-message\"`",
+      "fix": "Standardize on one suffix (e.g. always \"-message\") for descriptive paragraph ids across sections.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "section#archive-confirm paragraph id vs section#import-status paragraph id",
+      "severity": 3,
+      "violation": "Two paragraphs serving the same structural role (the section's main descriptive text) use inconsistent id-naming suffixes (\"copy\" vs \"message\"), breaking the naming convention used elsewhere in the document."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-09-15T02:45:01Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,24 @@
+Location: section#workspace-overview, paragraph and following list
+Evidence: "This workspace holds 5 projects, synced last week." followed by a `<ul>` with only 4 `<li>` items (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)
+Problem: The stated project count (5) doesn't match the number of projects actually listed (4).
+Fix: Either add the missing fifth project to the list or correct the paragraph to say "4 projects".
+
+Location: section#project-settings, form save button
+Evidence: `<button id="project-settings-save-btn" type="submit">Save</button>` has no corresponding confirmation section or feedback link
+Problem: Unlike the invite flow (which links Save/Continue to a dedicated "Invite sent" confirmation section), saving the project name has no visible confirmation or next state.
+Fix: Add a confirmation state (e.g., a "Saved" message or section) after the save action, matching the pattern used elsewhere.
+
+Location: section#project-settings, duplicate button
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text or icon content (relying only on an aria-label) and has no href or action wiring to any section, making it a blank, non-functional control.
+Fix: Give the button visible text or an icon, and link/wire it to an actual duplicate action or a confirmation section.
+
+Location: section#project-settings, archive link
+Evidence: `<a id="project-settings-archive-link" href="#project-archived">Archive project</a>`
+Problem: This bypasses the existing "archive-confirm" confirmation section (id="archive-confirm") entirely — nothing in the document links to that section, so it is unreachable, and clicking "Archive project" archives immediately with no confirmation step.
+Fix: Change the href to "#archive-confirm" so the confirmation dialog is shown before the project is archived.
+
+Location: section#notification-settings, submit button
+Evidence: `<button id="notification-settings-save-btn" type="submit">Submit</button>`
+Problem: The button's id follows the "save-btn" naming used elsewhere, but its visible label reads "Submit" instead of "Save," inconsistent with project-settings-save-btn and invite-member-save-btn; it also has no confirmation/next state after submission.
+Fix: Change the label to "Save" for consistency, and add a confirmation state after the digest frequency is saved.

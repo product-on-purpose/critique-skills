@@ -1,0 +1,104 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "archive-confirm's copy states archiving 'will remove it from the active projects list for everyone on the team. You can restore it at any time from the archived projects list,' and project-archived repeats that the project no longer appears for anyone. Neither state, nor any other state in the artifact, defines an archived-projects list, a restore control, or any link to one; project-archived's only control is 'Back to your projects' to workspace-overview.",
+      "fix": "Add the archived-projects list screen the confirmation text refers to, with a restore control on each archived project, and link to it from project-archived (and from workspace-overview) so the stated reversal path actually exists in the artifact.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "archive-confirm and project-archived states, reached from project-settings-archive-link",
+      "severity": 3,
+      "violation": "Archiving is presented to the user as reversible at any time, but the artifact names no control or screen that performs that reversal anywhere, so a user who archives has no path back in the design as specified despite the explicit promise that one exists."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "project-settings-save-btn is type=submit inside a form with no action attribute, and no state in the artifact names a message, changed control state, or next screen following it.",
+      "fix": "Specify an in-place confirmation (for example, a saved message or a visibly updated field state) after Save, or route to a screen the artifact defines.",
+      "id": "F-002",
+      "instances": [
+        {
+          "evidence": "project-settings-duplicate-btn is type=button with no href, target state, or feedback specified anywhere in the artifact.",
+          "location": "project-settings: Duplicate project button (project-settings-duplicate-btn)"
+        },
+        {
+          "evidence": "notification-settings-save-btn is type=submit inside a form with no action attribute, and no state in the artifact names a message or next screen following it.",
+          "location": "notification-settings: Save button (notification-settings-save-btn)"
+        }
+      ],
+      "lane": "judged",
+      "location": "project-settings: Save button (project-settings-save-btn)",
+      "severity": 2,
+      "violation": "Save triggers a state-changing action (persisting the project name) but the artifact specifies nothing the user sees while or after it runs: no success message, no changed control state, no next screen."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "invite-sent states an invite was sent and that it 'expires in 5 days if not accepted,' but neither invite-sent nor any other state in the artifact defines a control to cancel or revoke a pending invite before it expires.",
+      "fix": "Add a revoke or cancel-invite control reachable from invite-sent or from a pending-invites list, so a user who invited the wrong person is not left waiting out the expiry window.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "invite-member and invite-sent states, reached from project-settings-invite-link",
+      "severity": 2,
+      "violation": "Sending a team invite is reasonably reversible in this kind of product (an admin can normally revoke a pending invite), but the artifact names no revoke path, leaving the 5-day expiry as the only way an accidental invite resolves."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H4-INTERNAL",
+      "evidence": "project-settings-save-btn and notification-settings-save-btn are each the sole control that commits their form, but invite-member's form has both a Save submit button and a separate Continue link, and only Continue's target (invite-sent) is defined anywhere in the artifact; Save's outcome is not.",
+      "fix": "Either remove the Save button from invite-member and let Continue both store the email and send the invite, or state explicitly what each control does (for example, Save keeps a draft, Continue sends), so the established meaning of Save is not silently broken in this one flow.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "invite-member: invite-member-save-btn alongside invite-member-continue-link",
+      "severity": 2,
+      "violation": "The label 'Save' establishes a pattern elsewhere in the artifact of being the single control that commits a form's data, but in invite-member that same label sits beside a second control that actually advances the flow, with nothing in the artifact explaining what Save does differently here or how the two relate."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H5-CONFIRM",
+      "evidence": "Clicking Continue on invite-member goes directly to invite-sent, whose copy states in the past tense that 'an invite was sent to the address entered above'; no state between invite-member and invite-sent names the recipient address or asks the user to confirm before it sends.",
+      "fix": "Insert a confirmation step between invite-member and invite-sent that repeats the entered email address and requires an explicit confirm action before the invite is sent.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "invite-member-continue-link, transitioning to invite-sent",
+      "severity": 2,
+      "violation": "Sending an invite to an external recipient is gated behind a single click with no confirmation step naming the address about to receive it, so a mistyped or wrong email is committed before the user has any chance to review it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "import-status-message reports 'The last import finished with 4 rows skipped: each referenced a project that does not exist in this workspace. Rows 35, 71, 78, and 83 were skipped,' and the state's only control is import-status-exit-link, 'Back to your projects.'",
+      "fix": "Add a recovery control on import-status, such as a link to create the missing referenced projects or to re-import just the skipped rows, so the user has a defined path to finish the four rows the artifact says failed.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "import-status, import-status-message",
+      "severity": 2,
+      "violation": "The message identifies which rows failed and why, but names no next step for fixing them: no control to create the missing projects, re-upload the skipped rows, or re-run the import, and no other state in the artifact defines an import trigger to return to."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T03:22:33Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

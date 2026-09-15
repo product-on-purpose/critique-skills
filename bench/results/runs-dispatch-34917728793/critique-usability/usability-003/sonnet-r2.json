@@ -1,0 +1,115 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "the Duplicate project button (aria-label \"Duplicate project\", type=button) has no href, no target state, and no confirmation text anywhere in the artifact, and the workspace overview's project list is fixed static text that would not reflect a duplicate even after the action fires",
+      "fix": "Define what happens after Duplicate project fires: a confirmation message, a new state showing the duplicated project, or an update to the projects list the user can see.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the project settings screen, the Duplicate project button",
+      "severity": 3,
+      "violation": "NNG-H1 requires a visible indication of the outcome of a state-changing action; duplicating a project creates new data but the artifact specifies no feedback and no way for the user to ever observe the result."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H2-CONVENTIONS",
+      "evidence": "the workspace overview lists three projects (Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot) as plain text with no links, while the single Open project settings link leads to settings for \"Vendor Onboarding,\" a project that appears in none of the visible lists",
+      "fix": "Link each project entry in the recent projects list to its own settings state, and remove or repurpose the single generic Open project settings link so it does not silently target an unrelated project.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the workspace overview screen, the recent projects list and the Open project settings link",
+      "severity": 3,
+      "violation": "NNG-H2-CONVENTIONS expects the artifact's ordering and grouping to follow the real-world task of choosing which of several existing projects to configure; instead the design provides exactly one settings destination, unconnected to the projects the workspace actually shows, so the real task of managing a specific project has no supported path."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-IDENTIFY",
+      "evidence": "\"Import failed. Error code IMP-500. Contact support if this continues.\"",
+      "fix": "Replace or supplement the code with a plain-language cause, for example naming the file or step that failed and what the user can check.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the import status screen",
+      "severity": 3,
+      "violation": "NNG-H9-IDENTIFY requires error text to say in plain language what went wrong and where; this message surfaces only a raw error code and does not name what about the import failed or which of the user's actions or files was at fault."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "the only control on the import status screen is \"Back to your projects,\" which returns to the workspace overview; no retry or re-import control is defined anywhere the message appears",
+      "fix": "Add a retry or re-import control on the import status screen itself, or link to the step where a new import can be started.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the import status screen",
+      "severity": 3,
+      "violation": "NNG-H9-RECOVER requires an error to point to a next step the user can take from where the message appears; this error names no recovery action, only an exit."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "the Save button (type=submit) inside the project settings form has no href, target state, loading indicator, or confirmation message anywhere in the artifact",
+      "fix": "Specify what the user sees after saving: a confirmation message, a brief saved-state indicator on the button, or a defined next state.",
+      "id": "F-005",
+      "instances": [
+        {
+          "evidence": "the Save button inside the invite-member form has no href, target state, loading indicator, or confirmation message anywhere in the artifact",
+          "location": "the invite a team member screen, the Save button next to the Email address field"
+        },
+        {
+          "evidence": "the Save button inside the notification-settings form has no href, target state, loading indicator, or confirmation message anywhere in the artifact",
+          "location": "the notifications screen, the Save button next to the Digest frequency field"
+        }
+      ],
+      "lane": "judged",
+      "location": "the project settings screen, the Save button next to the Project name field",
+      "severity": 2,
+      "violation": "NNG-H1 requires a visible indication of what the system is doing and what the outcome was for a state-changing action; this save action defines a trigger but names no in-progress or result feedback."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "\"An invite was sent to the address entered above. It expires in 5 days if not accepted.\" names no way to revoke or cancel the pending invite before it expires",
+      "fix": "Add a revoke or cancel-invite control, reachable from project settings or the invite sent screen, that withdraws a pending invite before it expires.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the invite sent screen",
+      "severity": 2,
+      "violation": "NNG-H3-UNDO expects a reasonably reversible action to name its reversal path; a pending team invite is ordinarily revocable, and this artifact names none, only a passive 5-day expiry."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "\"An invite was sent to the address entered above\" refers to the email address without redisplaying it, and the screen's only exit, Back to project settings, does not return to a screen showing the value entered",
+      "fix": "Redisplay the entered email address on the invite sent screen instead of referring to it as \"the address entered above.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "the invite sent screen",
+      "severity": 2,
+      "violation": "NNG-H6-RECALL expects information the user needs at a step to be present at that step; confirming which address received the invite requires recalling a value entered on a screen the artifact provides no way back to."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T02:50:15Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "text reads: \"You can restore it at any time from the archived projects list.\" No section, heading, or link anywhere in the artifact defines an \"archived projects list.\"",
+      "fix": "Add an \"archived projects list\" state to the artifact with a control that reaches it (for example, a link from workspace-overview), or add a direct unarchive/restore control to the project-archived state itself.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"archive-confirm\" section, the \"archive-confirm-copy\" paragraph",
+      "severity": 3,
+      "violation": "NNG-H3-UNDO requires a stated reversal path that the user can actually reach. This reversal is named in copy, but the artifact defines no state, screen, or control called \"archived projects list\" anywhere, so a user who archives the project has no in-artifact path back."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "clicking the button#notification-settings-save-btn (type=submit, text \"Save\") has no message, state change, or redirect specified anywhere in the artifact.",
+      "fix": "Specify what the user sees after Save is clicked: a success message shown in place, or another visible change, before the click is considered complete.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "NNG-H1 requires a visible indication of the outcome for an action that changes state. This Save button commits the digest-frequency change, but the artifact specifies no confirmation of what happened, so a user cannot tell whether the change was saved."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "the button#project-settings-duplicate-btn (type=button, aria-label=\"Duplicate project\", no visible text) has no defined target, message, or resulting state anywhere in the artifact.",
+      "fix": "Specify the outcome of duplicating a project: where the new copy appears (for example, in the workspace-overview project list) and what confirms the duplication to the user.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "NNG-H1 requires a visible indication of what a state-changing action did. Duplicating a project creates a new project, but nothing in the artifact says what the user sees afterward: no new list entry, no confirmation, no navigation."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "clicking the button#project-settings-save-btn (type=submit, text \"Save\") has no message, state change, or redirect specified anywhere in the artifact.",
+      "fix": "Specify what the user sees after Save is clicked: a success message shown in place, or another visible change, before the click is considered complete.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "NNG-H1 requires a visible indication of the outcome for an action that changes state. This Save button commits the project name change, but the artifact specifies no confirmation of what happened, so a user cannot tell whether the rename succeeded."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H4-INTERNAL",
+      "evidence": "the invite-member form ends in a \"Save\" submit button, but the flow only reaches the \"Invite sent\" confirmation via the separate \"Continue\" link beside it. On project-settings and notification-settings, each screen's own \"Save\" button is the sole commit control for its form.",
+      "fix": "Either make \"Save\" the control that sends the invite and reaches \"Invite sent\" directly, or remove the Save button and keep only the control that actually sends the invite, so \"Save\" means one thing everywhere it appears.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button",
+      "severity": 2,
+      "violation": "NNG-H4-INTERNAL requires one recurring interaction pattern, here a form's Save submit button, to mean the same thing everywhere it appears. It commits and completes the task on two screens, but on this screen a separate Continue control is what actually advances the flow, and the artifact gives no cue that the pattern differs here."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "text reads: \"An invite was sent to the address entered above.\" without repeating the email address itself.",
+      "fix": "Show the entered email address directly in the invite-sent confirmation text, for example \"An invite was sent to {email}.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the \"invite-sent\" section",
+      "severity": 2,
+      "violation": "NNG-H6-RECALL requires the information a user needs at a step to be present at that step. Confirming which address received the invite requires recalling a value entered on the previous screen rather than seeing it here."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T03:44:16Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

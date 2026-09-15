@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-DEADEND",
+      "evidence": "the \"invite-sent\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+      "fix": "Add a control inside the \"invite-sent\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "the \"invite-sent\" section",
+      "severity": 3,
+      "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "the \"archive-confirm\" section's confirmation copy states: \"You can restore it at any time from the archived projects list,\" but no state, section, or link named an archived-projects list appears anywhere in the artifact, and the \"project-archived\" section itself offers only \"Back to your projects\" (to workspace-overview).",
+      "fix": "Add an archived-projects-list state reachable from workspace-overview (or from project-archived) with a restore control for each archived project, or remove the restore claim from the archive-confirm copy if no such path is intended.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"project-archived\" section",
+      "severity": 3,
+      "violation": "Archiving is treated as reversible by the artifact's own confirmation copy, but the restore path it names is never defined: no archived-projects list exists, and the terminal project-archived state provides no restore control of any kind. A user who archives a project has no path back to it within the design as specified, despite being told one exists."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "The digest-frequency form submits to \"notification-settings-save-btn\" (type=submit); no confirmation message or resulting state is named anywhere in the artifact for this action.",
+      "fix": "Specify a visible confirmation for this save action, such as an inline success message or a changed control state, shown on the same screen after submit.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "Saving the digest-frequency preference is a state-changing action whose trigger is specified but whose result feedback is not: the artifact names no confirmation of the save, so the user has no way to tell the new preference was stored."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "The form submits the project-name field to \"project-settings-save-btn\" (type=submit); no confirmation message, status indicator, or resulting state is named anywhere in the artifact for this action.",
+      "fix": "Specify a visible confirmation for this save action, such as an inline success message or a changed control state, shown on the same screen after submit.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "Saving the project name is a state-changing action whose trigger is specified but whose result feedback is not: nothing in the artifact tells the user the save succeeded, so the only evidence it worked is the unchanged screen."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H2-CONVENTIONS",
+      "evidence": "The form's \"Save\" button (type=submit) commits the email field, and a separate \"Continue\" link (to \"invite-sent\") is the control that actually triggers the invite. Both appear on the same screen with no stated relationship between them.",
+      "fix": "Collapse this into a single commit control that both stores the email and sends the invite, or, if two steps are genuinely needed, state on screen what each one does (for example, label them \"Save draft\" and \"Send invite\").",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"invite-member\" section",
+      "severity": 2,
+      "violation": "The real-world task here is a single action, inviting a teammate by email, but the artifact splits it into a form-level \"Save\" and a separate \"Continue\" step to actually send the invite, mirroring an internal save-then-advance process rather than the one-step task the user came to do. A user cannot tell from the screen whether \"Save\" alone sends the invite."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-LABELED",
+      "evidence": "<button> with no text content and no accessible-name attribute",
+      "fix": "Add visible text to this control, or an aria-label attribute naming what it does.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "This control has neither visible text nor an accessible-name attribute, so nothing on screen names what the control does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H8",
+      "evidence": "\"Invite 3 teammates this month to unlock the advanced reporting add-on.\" sits between the recent-projects list and the two functional links (\"Open project settings\", \"View last import result\"), ahead of both in document order.",
+      "fix": "Move the promotional banner below the \"Open project settings\" and \"View last import result\" links, or remove it from this screen, so the functional navigation precedes it.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "the \"workspace-overview\" section, the \"workspace-overview-promo-referral\" element",
+      "severity": 2,
+      "violation": "The primary task of workspace-overview is viewing your projects and reaching project settings or import status. A promotional referral banner serving neither task is placed in reading order ahead of the two links that lead to them, so it outranks the screen's own navigation for a reader's attention."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T02:05:43Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced last week.\" followed by a `<ul>` containing only 3 `<li>` items (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp)",
+      "fix": "Either update the count to \"3 projects,\" add the missing fourth project to the list, or relabel the list as \"Recent projects\" with a clarifying note that it isn't the complete set.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "workspace-overview section (intro paragraph and project list)",
+      "severity": 3,
+      "violation": "The stated project count (4) doesn't match the number of projects actually listed (3), and nothing indicates the list is a partial or \"recent\" subset."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"project-settings-name-input\" type=\"text\" value=\"Q3 Roadmap\">`",
+      "fix": "Either add \"Q3 Roadmap\" to the workspace overview list, link each project list item to its own settings, or change the settings page to reference one of the listed projects.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "project-settings section, name input",
+      "severity": 3,
+      "violation": "\"Q3 Roadmap\" doesn't match any of the three projects named on the workspace overview page, and the \"Open project settings\" link isn't tied to a specific project, so it's unclear which project is actually being edited."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible text content to the button (e.g., \"Duplicate\") consistent with the rest of the document's controls.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "project-settings section, duplicate button",
+      "severity": 3,
+      "violation": "Unlike every other control in the document (all of which have visible text like \"Save\" or link text), this button has no visible label and relies solely on aria-label, giving sighted users no indication of its purpose."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` immediately followed by `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>`",
+      "fix": "Consolidate into a single action - either make \"Continue\" the form's submit control or remove the separate \"Save\" button.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "invite-member section, form and Continue link",
+      "severity": 3,
+      "violation": "Two competing controls exist for finishing the invite (a form Save button and an unrelated Continue link that navigates regardless of form state), so it's ambiguous whether clicking Continue actually sends the invite."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An invite was sent to the address entered above.\"",
+      "fix": "Reference the submitted email explicitly (e.g., interpolate the address) instead of using a positional reference, and only allow navigation here after a valid submission.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "invite-sent section",
+      "severity": 3,
+      "violation": "This section is separate from invite-member, so \"above\" is a broken spatial reference with no visible address on this page, and since reaching this page doesn't require the email field to be filled in or Save to be clicked, the claim that an invite was sent may not be true."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\"",
+      "fix": "Add an archived-projects section/link (e.g., reachable from workspace-overview) or remove this claim from the copy.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "archive-confirm section",
+      "severity": 3,
+      "violation": "The document contains no \"archived projects list\" section or link anywhere, so this references a feature that doesn't exist in the mockup."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-09-15T03:46:09Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

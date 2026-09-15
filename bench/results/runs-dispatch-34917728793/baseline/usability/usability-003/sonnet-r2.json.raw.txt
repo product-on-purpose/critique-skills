@@ -1,0 +1,39 @@
+Location: `<p>` inside `#workspace-overview`
+Evidence: "This workspace holds 4 projects, synced this morning." followed by a list with only three `<li>` items (Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot)
+Problem: The stated project count (4) doesn't match the number of projects actually listed (3).
+Fix: Either add the missing fourth project to the list or change the copy to say "3 projects."
+
+Location: `#workspace-overview-recent` list and `#workspace-overview-projects-link`
+Evidence: Recent projects list shows "Beta Launch Plan", "Holiday Campaign Assets", "Partner Integration Pilot"; "Open project settings" leads to `#project-settings`, whose input value is "Vendor Onboarding"
+Problem: The project reachable via "Open project settings" ("Vendor Onboarding") never appears in the workspace's list of projects, so there's no visible link between what the user sees on the overview and what they land on.
+Fix: Either add "Vendor Onboarding" to the recent projects list and make the settings link originate from that item, or change the settings page to reflect one of the listed projects.
+
+Location: `#workspace-overview` intro text vs `#import-status-message`
+Evidence: "synced this morning" (workspace-overview) vs "Import failed. Error code IMP-500." (import-status)
+Problem: The overview implies the most recent sync succeeded, but the linked "last import result" shows a failure, which is contradictory.
+Fix: Align the two — either state the sync failed on the overview page too, or update the import status to reflect a successful sync.
+
+Location: `#project-settings-duplicate-btn`
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text or icon content and no href/navigation target, so it renders as an empty, non-functional control with no discoverable purpose or destination.
+Fix: Add visible label/icon content and link it to a real action or destination (e.g., a duplicate-confirmation state), or remove the button if duplication isn't in scope.
+
+Location: `#project-settings-save-btn`
+Evidence: `<button id="project-settings-save-btn" type="submit">Save</button>` with no following confirmation state or link
+Problem: Unlike the invite and archive flows, saving the project name has no resulting confirmation screen or feedback, so the action appears to go nowhere.
+Fix: Add a save-confirmation state (or inline message) analogous to `#invite-sent`/`#project-archived`, and link the Save action to it.
+
+Location: `#invite-member`
+Evidence: `<button id="invite-member-save-btn" type="submit">Save</button>` and separately `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>`
+Problem: "Continue" navigates straight to the "Invite sent" confirmation regardless of whether "Save" was clicked or an email was entered, so a user can reach "invite sent" without ever submitting an address.
+Fix: Make "Continue" depend on the form having a valid, saved email (e.g., disable it until Save succeeds, or merge Save and Continue into a single submit action).
+
+Location: `#invite-sent`
+Evidence: "An invite was sent to the address entered above."
+Problem: "Above" refers to the previous screen's input, but on this static page no email address is actually displayed, so the reference points to nothing visible.
+Fix: Carry the entered email into this screen and display it explicitly (e.g., "An invite was sent to jane@example.com"), similar to how `#archive-confirm-copy` names the actual project.
+
+Location: `#notification-settings-save-btn`
+Evidence: `<button id="notification-settings-save-btn" type="submit">Save</button>` with no following confirmation state or link
+Problem: As with project settings, saving notification preferences has no confirmation screen or feedback, inconsistent with the invite and archive flows that do confirm their actions.
+Fix: Add a confirmation state or inline success message after saving notification settings.

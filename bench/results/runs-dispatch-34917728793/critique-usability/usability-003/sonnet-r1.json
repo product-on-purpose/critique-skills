@@ -1,0 +1,93 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "\"Vendor Onboarding\" has been moved to archived projects. It no longer appears in the active projects list for anyone on the team., with its only control being <a id=\"project-archived-exit-link\" href=\"#workspace-overview\">Back to your projects</a>",
+      "fix": "Add a stated way back for an archived project, such as an archived-projects view with a restore or unarchive control, and link to it from the project-archived state.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"project-archived\" section",
+      "severity": 3,
+      "violation": "Archiving is reasonably reversible in this product, since the design's own copy describes it as removal from the active list rather than deletion, but the artifact names no reversal path anywhere: no unarchive control, no archived-projects view, and no restore action in any state it defines (NNG-H3-UNDO)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H5-PREVENT",
+      "evidence": "<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a> targets invite-sent unconditionally; the sibling <input id=\"invite-member-email-input\" type=\"email\"> carries no required attribute, and the form's own <button id=\"invite-member-save-btn\" type=\"submit\">Save</button> has no defined action linking it to this link's target",
+      "fix": "Make reaching invite-sent depend on the form actually being submitted with a valid email (for example, by making Continue the form's own submit control, or disabling it until the email field is valid), so the confirmation cannot be reached without the invite having been sent.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"invite-member\" section, the \"invite-member-continue-link\" link",
+      "severity": 3,
+      "violation": "The artifact lets the user reach the invite-sent confirmation, whose own text asserts an invite was sent to the address entered above, by a control with no dependency on the email field holding a value or on the form's Save button having been used, so the step order the design implies (enter email, submit, then confirm sent) is not one the design actually enforces (NNG-H5-PREVENT)."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "Import failed. Error code IMP-500. Contact support if this continues., followed only by <a id=\"import-status-exit-link\" href=\"#workspace-overview\">Back to your projects</a>",
+      "fix": "Add a retry control that re-attempts the import, or a link to a reachable support contact, directly from the import-status state.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"import-status\" section",
+      "severity": 3,
+      "violation": "The message tells the user to contact support but the artifact provides no support contact control or link, and names no retry action either, so the only next step actually reachable from this state is leaving it (NNG-H9-RECOVER)."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>, inside a <form> with no action attribute, followed by no message or changed state",
+      "fix": "Add a confirmation message or a visibly changed control state to the project-settings section once the save completes, or route the submit to a defined next state that reports the outcome.",
+      "id": "F-004",
+      "instances": [
+        {
+          "evidence": "<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button>, inside a <form> with no action attribute and no confirmation defined after it",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        },
+        {
+          "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>, with no href, no form, and no next state or message defined anywhere for this control",
+          "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button"
+        }
+      ],
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "This state-changing save action names its trigger but the artifact specifies no visible indication of what the system is doing or what the outcome was: no action target, no confirmation message, and no changed control state anywhere in the project-settings section (NNG-H1)."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-IDENTIFY",
+      "evidence": "Import failed. Error code IMP-500. Contact support if this continues.",
+      "fix": "Replace or supplement the raw error code with plain language naming what failed, such as which file or step of the import, keeping the code only as secondary detail for support.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"import-status\" section, the \"import-status-message\" paragraph",
+      "severity": 2,
+      "violation": "This failure message surfaces a raw internal error code and does not name which part of the import failed or which user action, file, or step caused it, so the user cannot tell what to check or change before retrying (NNG-H9-IDENTIFY)."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T02:43:41Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

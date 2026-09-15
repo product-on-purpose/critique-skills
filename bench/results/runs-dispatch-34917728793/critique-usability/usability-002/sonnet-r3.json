@@ -1,0 +1,118 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "The only place the artifact asserts archiving is reversible is the unreached \"archive-confirm\" copy: \"You can restore it at any time from the archived projects list.\" No screen or control named \"archived projects list\" is defined anywhere in the artifact, and the actual landing state, \"project-archived\", offers only a link back to the overview, with no restore or unarchive control.",
+      "fix": "Add a restore/unarchive control reachable from the \"project-archived\" state (or an \"archived projects\" list screen it links to), so the reversibility the design already claims is actually deliverable.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-archive-link\" link",
+      "severity": 3,
+      "violation": "Archiving is treated by the artifact's own wording as reasonably reversible, but no reversal path is defined or reachable anywhere in the design as specified, so an archived project has no way back in this artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H5-CONFIRM",
+      "evidence": "The \"Archive project\" control links directly to href=\"#project-archived\", not to the \"archive-confirm\" section. The artifact does define an \"archive-confirm\" state (\"Archive this project? ... will remove it from the active projects list for everyone on the team\"), but nothing in the artifact links into it: no other section's markup contains href=\"#archive-confirm\", so a user taking the actual \"Archive project\" control never sees it.",
+      "fix": "Point \"project-settings-archive-link\" at \"#archive-confirm\" instead of \"#project-archived\", so the archive control's own path reaches the confirmation before the action commits.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-archive-link\" link",
+      "severity": 3,
+      "violation": "Archiving a project is a costly, team-wide action (\"will remove it from the active projects list for everyone on the team\"), yet the control a user actually takes fires it on a single click with no confirmation naming the object or consequence. A confirmation screen exists in the artifact but is orphaned from every real path, so it does not count as gating this action."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "The form has no action attribute and the artifact defines no success message, redirect, or changed state for what happens after Save is clicked.",
+      "fix": "Specify what the user sees after Save: a success message in place, a changed control state, or a defined next state the artifact names.",
+      "id": "F-003",
+      "instances": [
+        {
+          "evidence": "The form submits with no action attribute and no defined outcome, and the same screen separately offers a \"Continue\" link to \"invite-sent\"; nothing in the artifact says whether Save or Continue is what actually sends the invite.",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "The form submits with no action attribute and no defined outcome or confirmation of the new digest frequency.",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        },
+        {
+          "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button> has no href, no form association, and no state or message the artifact defines for the result of duplicating.",
+          "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button"
+        }
+      ],
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "A state-changing action (saving the project name) is specified with no visible indication of what the system is doing or what the outcome was, so a user who clicks Save cannot tell whether the change took effect."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-EXIT",
+      "evidence": "\"Back to your projects\" leaves the project-name field's edited value (pre-filled \"Customer Migration\") without the artifact stating whether an in-progress, unsaved edit is kept or discarded. The same pattern recurs on the \"notification-settings\" section's \"Back to project settings\" link, which leaves a changed digest-frequency selection with no stated fate either.",
+      "fix": "State in place what happens to an unsaved edit when these \"Back to...\" links are used: warn before discarding, or say the edit is preserved. Applies to both the \"project-settings-back-link\" and \"notification-settings-back-link\" controls.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-back-link\" link",
+      "severity": 2,
+      "violation": "The exit from each of these forms is visible and predictably labeled, but the artifact never says what becomes of an edit already entered before the user takes it, unlike \"invite-member\"'s \"Cancel\" link, whose label itself predicts discarding."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H4-CONTROL-NAMING",
+      "evidence": "control labeled \"Save\"",
+      "fix": "Pick one label for this commit action, for example \"Save\", and use it everywhere the action appears.",
+      "id": "F-005",
+      "instances": [
+        {
+          "evidence": "control labeled \"Save\"",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "control labeled \"Submit\"",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "This artifact uses 2 different labels for what reads as the same commit action: \"Save\", \"Submit\". A user cannot tell from the label alone whether these controls perform the same action or different ones."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "\"The last import finished with 3 rows skipped: each referenced a project that does not exist in this workspace. Rows 63, 71, and 82 were skipped\" is followed only by an exit link, \"Back to your projects\".",
+      "fix": "Add a recovery action reachable from this state: a retry/re-import control, or a link to review and fix the 3 skipped rows.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the \"import-status\" section, the \"import-status-message\" paragraph",
+      "severity": 2,
+      "violation": "The message identifies exactly what went wrong and which rows, but names no next step: no retry, no link to fix or re-map the offending rows, nothing the user can do from this state to recover the 3 skipped rows."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T02:24:07Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
