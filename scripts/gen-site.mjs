@@ -549,9 +549,15 @@ export const METRICS = [
  */
 export function loadResults() {
   const data = readJson(join(ROOT, "bench", "results", "results.json"));
-  const entries = data.entries;
-  if (!Array.isArray(entries) || entries.length === 0) {
-    throw new Error("gen-site: bench/results/results.json carries no entries.");
+  // The site publishes the overall lane, which is the cut every published figure has always
+  // meant. Since results_version 1.2.0 the committed file carries three entries per cell, one
+  // per lane, and rendering all of them would triple every table on the receipts explorer with
+  // rows no published claim refers to. A file written before 1.2.0 has no lane field, so a
+  // missing lane reads as "overall" and this stays correct against both shapes.
+  const all = Array.isArray(data.entries) ? data.entries : [];
+  const entries = all.filter((entry) => (entry.lane ?? "overall") === "overall");
+  if (entries.length === 0) {
+    throw new Error("gen-site: bench/results/results.json carries no overall-lane entries.");
   }
   for (const entry of entries) {
     for (const field of ["skill", "skill_version", "model", "domain", "artifact_type"]) {

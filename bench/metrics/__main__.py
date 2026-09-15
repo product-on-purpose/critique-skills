@@ -115,6 +115,24 @@ def _consistency_value(mv: score.MetricValue, consistency_scores: list[score.Con
     }
 
 
+#: The lanes an entry can score. "overall" is every finding, and is the cut every published figure
+#: reports; the other two are the same envelopes with findings filtered before scoring. Emitting all
+#: three is what lets a reader read a lane column out of the committed file instead of reproducing it
+#: by monkeypatching the scorer, which is what bench/results/README.md used to have to document.
+LANES: tuple[str, ...] = ("overall", "judged", "scripted")
+
+
+def _envelope_for_lane(env: dict[str, Any], lane: str) -> dict[str, Any]:
+    """`env` unchanged for "overall"; a shallow copy with `findings` filtered otherwise.
+
+    Shallow is deliberate and sufficient: only `findings` is replaced, and the score primitives
+    are lane-agnostic and read the envelope without mutating it.
+    """
+    if lane == "overall":
+        return env
+    return {**env, "findings": [f for f in env.get("findings", []) if f.get("lane") == lane]}
+
+
 def build_results(
     corpus_dir: Path,
     runs_dir: Path,
@@ -144,9 +162,11 @@ def build_results(
             artifact_text_cache[sha] = _read_artifact_text(repo_root, m)
         return artifact_text_cache[sha]
 
-    recall_groups: dict[GroupKey, list[score.ArtifactScore]] = {}
-    location_recall_groups: dict[GroupKey, list[score.ArtifactScore]] = {}
-    consistency_envelope_groups: dict[tuple[str, str, str, str], list[dict[str, Any]]] = {}
+    # Every group key carries a lane. The "overall" pass is byte-for-byte the pre-1.2.0
+    # computation; the other two lanes run the identical primitives over filtered findings.
+    recall_groups: dict[tuple[Any, ...], list[score.ArtifactScore]] = {}
+    location_recall_groups: dict[tuple[Any, ...], list[score.ArtifactScore]] = {}
+    consistency_envelope_groups: dict[tuple[Any, ...], list[dict[str, Any]]] = {}
 
     for env in envelopes:
         run = env["run"]
@@ -154,24 +174,27 @@ def build_results(
         manifest = by_sha.get(sha)
         if manifest is None:
             continue  # no corpus artifact matches this envelope; not scorable
-        key: GroupKey = (run["skill"], run["skill_version"], run["model"], manifest["domain"])
         text = text_for(manifest)
-        recall_groups.setdefault(key, []).append(score.score_artifact(manifest, env, text))
-        location_recall_groups.setdefault(key, []).append(score.score_artifact_location(manifest, env, text))
+        for lane in LANES:
+            lane_env = _envelope_for_lane(env, lane)
+            key = (run["skill"], run["skill_version"], run["model"], manifest["domain"], lane)
+            recall_groups.setdefault(key, []).append(score.score_artifact(manifest, lane_env, text))
+            location_recall_groups.setdefault(key, []).append(
+                score.score_artifact_location(manifest, lane_env, text)
+            )
+            consistency_key = (run["skill"], run["skill_version"], run["model"], sha, lane)
+            consistency_envelope_groups.setdefault(consistency_key, []).append(lane_env)
 
-        consistency_key = (run["skill"], run["skill_version"], run["model"], sha)
-        consistency_envelope_groups.setdefault(consistency_key, []).append(env)
-
-    consistency_by_group: dict[GroupKey, list[score.ConsistencyScore]] = {}
-    for (skill, skill_version, model, sha), envs in consistency_envelope_groups.items():
+    consistency_by_group: dict[tuple[Any, ...], list[score.ConsistencyScore]] = {}
+    for (skill, skill_version, model, sha, lane), envs in consistency_envelope_groups.items():
         manifest = by_sha[sha]
         cscore = score.score_consistency(manifest, envs, text_for(manifest))
-        group_key: GroupKey = (skill, skill_version, model, manifest["domain"])
+        group_key = (skill, skill_version, model, manifest["domain"], lane)
         consistency_by_group.setdefault(group_key, []).append(cscore)
 
     entries = []
     for key in sorted(recall_groups):
-        skill, skill_version, model, domain = key
+        skill, skill_version, model, domain, lane = key
         artifact_scores = recall_groups[key]
         location_scores = location_recall_groups[key]
         consistency_scores = consistency_by_group.get(key, [])
@@ -181,6 +204,8 @@ def build_results(
                 "skill_version": skill_version,
                 "model": model,
                 "domain": domain,
+                "run_set": run_set,
+                "lane": lane,
                 "artifact_type": artifact_scores[0].artifact_type,
                 "artifacts_scored": len(artifact_scores),
                 "unresolvable_claims": sum(s.unresolvable_claims for s in artifact_scores),
@@ -197,7 +222,7 @@ def build_results(
         )
 
     results = {
-        "results_version": "1.1.0",
+        "results_version": "1.2.0",
         "run_set": run_set,
         "generated_at": generated_at,
         "entries": entries,

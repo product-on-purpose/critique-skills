@@ -27,11 +27,19 @@ carried from `ROADMAP.md`, so their warrant is already public. What this file ad
 gate verdict, the dependency each one actually has, and an honest note on which of them is blocked
 on infrastructure rather than on effort.
 
-**Sequencing, as ruled on 2026-09-11.** `ROADMAP.md` names all three skills under v0.2.0. The
-maintainer has since ruled v0.2.0 as Option A plus Option C in
-[the v0.2.0 shape options brief](../release-plans/v0.2.0-shape-options.md), which puts **N1
-(critique-deck) in v0.2.0**, leaves **N2 (critique-forms) in v0.3.0**, and moves **N3
-(critique-dataviz) out of any numbered release** until its generator dependency is scoped.
+**Sequencing, as it stands on 2026-09-14.** `ROADMAP.md` names all three skills under v0.2.0 and
+orders them deck, forms, dataviz. Two maintainer rulings have since changed that. v0.2.0 was ruled
+Option A plus Option C on 2026-09-11, and on 2026-09-14 the survey was deferred and **forms was
+prioritized ahead of deck**. The order is now:
+
+| | Skill | Release | Why |
+|---|---|---|---|
+| 1 | **N2 critique-forms** | **v0.2.0** | Reuses the shipped `html` artifact type and resolver; no new corpus machinery |
+| 2 | N1 critique-deck | v0.3.0 | Needs a new corpus module for a domain that does not exist |
+| 3 | N3 critique-dataviz | unscheduled | Needs a chart-spec generator mode that does not exist and is unscoped |
+
+`ROADMAP.md` still states the old order and is deliberately not edited here; see
+[the shape options brief](../release-plans/v0.2.0-shape-options.md).
 
 ---
 
@@ -55,13 +63,19 @@ maintainer has since ruled v0.2.0 as Option A plus Option C in
 - **Done looks like:** the skill and its references, a corpus module, joint-routing cases including
   edits to the six existing descriptions, golden examples, and k=5 measurement on both pinned tiers
   present in the README scoreboard.
-- **Size:** L. **Release:** v0.2.0.
-- **Ruling 2026-09-11:** the maintainer ruled v0.2.0 as Option A plus Option C, so this skill is
-  in scope for v0.2.0 rather than v0.3.0. It is the one new skill that release contains.
-- **Blocks:** N2 (critique-forms), per the sequence `ROADMAP.md` states.
-- **Depends on:** E30 (skill-template gaps) hard, E2 (sonnet unblock) for two-tier k=5, and a corpus
-  module. E44 (taxonomy survey) orders it but does not gate it: `ROADMAP.md:52` names deck
-  regardless of the survey's outcome.
+- **Size:** L. **Release:** v0.3.0.
+- **Ruling 2026-09-11, superseded:** brought into v0.2.0 as Option C's one new skill.
+- **DEPRIORITIZED 2026-09-14 by the maintainer, behind N2 (critique-forms).** Deck was sequenced
+  first because `ROADMAP.md:52` calls it the lowest-risk of the wave. That reasoning does not
+  survive inspection: deck needs a **new corpus module** for a domain that does not exist, while
+  forms reuses `critique-accessibility`'s shipped `html` artifact type and its element, CSS and id
+  resolver. On the measure that actually matters here, how much new infrastructure a skill needs,
+  **forms is the lower-risk starter and deck is not**. The swap is better sequencing, not a
+  concession.
+- **Blocks:** nothing. The `ROADMAP.md` sequence that had deck blocking forms was convention, not
+  a technical dependency, and is superseded.
+- **Depends on:** E30 (skill-template gaps) hard, E2 (sonnet unblock) for two-tier k=5, and a new
+  corpus module for the deck domain.
 - **Status:** backlog (recorded 2026-09-11).
 
 ## N2 - critique-forms (form usability, Wroblewski and Baymard)
@@ -81,10 +95,15 @@ maintainer has since ruled v0.2.0 as Option A plus Option C in
   reuse rather than new build.
 - **Evidence:** `ROADMAP.md:53`; `skills/` (no `critique-forms` directory).
 - **Done looks like:** the same bar as N1.
-- **Size:** L. **Release:** v0.3.0 (unchanged by the 2026-09-11 ruling; Option C brought only the
-  first skill of the wave into v0.2.0).
+- **Size:** L. **Release:** v0.2.0.
+- **PRIORITIZED 2026-09-14 by the maintainer, ahead of N1 (critique-deck).** Forms is now the one
+  new skill v0.2.0 contains. The dependency on N1 below was removed with it: it was the
+  `ROADMAP.md` sequence restated, not a technical constraint. Forms reuses the shipped `html`
+  artifact type and `critique-accessibility`'s resolver, so unlike deck it needs no new corpus
+  machinery, which makes it the cheaper skill to prove the template on.
 - **Blocks:** nothing directly.
-- **Depends on:** N1 per the stated sequence, plus E30 and E2.
+- **Depends on:** E30 (skill-template gaps) hard, and E2 (sonnet unblock) for two-tier k=5.
+  **No longer depends on N1.**
 - **Status:** backlog (recorded 2026-09-11).
 
 ## N3 - critique-dataviz (chart critique, Tufte and Cairo)

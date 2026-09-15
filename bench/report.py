@@ -261,7 +261,10 @@ def render_block(results: dict[str, Any]) -> str:
     `results.json`, markers included. An empty `entries[]` (no run set
     scored yet) renders a short placeholder rather than a "Run set
     `none`, generated 1970-01-01..." line built from filler values."""
-    entries = results.get("entries", [])
+    # Published tables report the overall lane, which is what every committed figure has always
+    # meant. Files written before results_version 1.2.0 carry no lane field at all; treating a
+    # missing lane as "overall" keeps this reader working against both shapes.
+    entries = [e for e in results.get("entries", []) if e.get("lane", "overall") == "overall"]
     if not entries:
         return "\n".join(
             [
@@ -453,7 +456,10 @@ def _summarize_verdicts(verdicts: dict[str, str], tiers: list[str]) -> str:
 
 def render_scoreboard_block(results: dict[str, Any], active: dict[str, str]) -> str:
     """The full marker-to-marker text a scoreboard target should hold."""
-    entries = results.get("entries", [])
+    # Published tables report the overall lane, which is what every committed figure has always
+    # meant. Files written before results_version 1.2.0 carry no lane field at all; treating a
+    # missing lane as "overall" keeps this reader working against both shapes.
+    entries = [e for e in results.get("entries", []) if e.get("lane", "overall") == "overall"]
     run_set = results.get("run_set", "")
     return "\n".join(
         [

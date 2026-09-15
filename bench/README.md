@@ -54,9 +54,10 @@ bench/
     corpus.lock.json            root seed, generator version, sha256 of every manifest
   results/
     runs/<skill>/<artifact>/*.json       contract-valid run envelopes, run set `p3-2026-07-31`
-                                          (plus `runs/steering/`, two probe envelopes excluded
-                                          from scoring)
     runs-cal1/<skill>/<artifact>/*.json  contract-valid run envelopes, run set `cal1-2026-08-01`
+    probes/<set>/<artifact>/*.json       probe envelopes: validated, scored nowhere. Outside the
+                                          `runs*` glob on purpose, so a probe cannot pool into a
+                                          scored cell
     results.json                         the computed numbers for every committed run set,
                                           machine-readable (see `bench/results/README.md`,
                                           "Reproduction", for the actual scoring commands: this
@@ -563,9 +564,10 @@ python -m bench.generator verify --corpus bench/corpus
 python -m bench.generator leak-check --corpus bench/corpus
 
 # 3. Score the committed envelopes against the corpus. Two run sets are committed
-#    (`bench/results/runs/`, excluding the two `runs/steering/` probe envelopes, and
-#    `bench/results/runs-cal1/`) and concatenated into one file; see `bench/results/README.md`,
-#    "Reproduction", for the full per-run-set command sequence.
+#    (`bench/results/runs/` and `bench/results/runs-cal1/`) and concatenated into one file; see
+#    `bench/results/README.md`, "Reproduction", for the full per-run-set command sequence. Both are
+#    scored in place: probe sets live under `bench/results/probes/`, outside the `runs*` glob, so
+#    there is nothing to exclude by hand.
 python -m bench.metrics score --corpus bench/corpus --runs bench/results/runs-cal1 \
     --out /tmp/results-cal1.json --run-set cal1-2026-08-01
 

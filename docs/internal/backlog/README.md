@@ -98,12 +98,11 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**32 items depend on nothing and can start today.** Derived from each item's own `Depends on`
-field rather than asserted, and regenerated whenever an item closes.
+**30 items depend on nothing and can start today.** Derived from each item's own
+`Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
 |---|---|---|---|
-| E7 | Move bench/results/runs/steering/ out of the runs* glob | S | v0.1.x |
 | E13 | Update ROADMAP.md's v0.1.x section: two of four verification items are met | S | v0.1.x |
 | E15 | Exercise the tag-guard's negative path from a scratch clone (S-07 AC-4) | S | v0.1.x |
 | E28 | Pin or record the Claude Code CLI version bench.yml installs | S | v0.1.x |
@@ -125,7 +124,6 @@ field rather than asserted, and regenerated whenever an item closes.
 | E52 | Decide who performs 'revise' in the automated revision loop before building it | S | v0.3.0 |
 | E59 | Verify what the marketplace consumes the homepage field for | S | unscheduled |
 | E61 | Rule the site lockfile version spread against the family baseline | S | v0.1.x |
-| E6 | Add per-entry run_set and a lane dimension to results.schema.json (v1.2.0) | M | v0.2.0 |
 | E10 | Rule how BYOR is measured under the measured-only exclusion | M | v0.2.0 |
 | E22 | Turn on severity_expected scoring | M | v0.2.0 |
 | E23 | Write methodology.md's location-level metrics section | M | v0.2.0 |
@@ -135,11 +133,6 @@ field rather than asserted, and regenerated whenever an item closes.
 | E53 | Harden --gate as a documented per-skill CI recipe for consumers | M | v0.3.0 |
 | E54 | Ship one documented cross-library composition workflow | M | v0.3.0 |
 | E25 | Rewrite verdicts.md as one current-state document | L | v0.2.0 |
-
-E15 (tag guard) and E16 (planted failures) have left this list: E16 is closed, and E15 is
-partially done with its remaining half blocked on token scope rather than on effort. With both
-of the conditions [ADR 0034](../decisions/0034-v0.1.x-exit-gate-declaration.md) names now met or
-nearly so, nothing on this list is a v0.1.x blocker.
 
 ## Critical paths
 

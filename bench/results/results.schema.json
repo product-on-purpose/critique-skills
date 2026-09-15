@@ -5,7 +5,12 @@
   "description": "Every computed number for one run set, produced by `python -m bench.metrics score` from committed manifests and run envelopes and nothing else. The README results table (bench/report.py) is generated from this file and only this file: no number appears in any document in this repository that is not present here. This file is results version 1.1.0 and validates 1.x documents only.",
   "$comment": "Results version 1.1.0. `entries[]` holds one row per (skill, skill_version, model, domain) group, baseline rows included: a baseline run carries skill \"baseline-generic\" in the same array, at the same shape, so a report script computes a skill-versus-baseline comparison by matching (domain, model) pairs rather than reading a separately stored, and therefore possibly stale, comparison table. 1.1.0 added recall_location and precision_location (P3 rescore, bench/results/README.md, \"Baseline comparison\"): recall.value and precision.value require an exact criterion-string match between a finding and a planted defect, which pins baseline-generic at exactly 0.0 everywhere because every baseline finding carries the fixed criterion BASELINE-GENERIC that no manifest plants a defect under; recall_location and precision_location apply the same per-artifact-type location tolerance with the criterion check dropped, so a skill and the baseline can be compared on whether either one pointed at the right place at all. Additive and backward-compatible: every 1.0.0 field keeps its old meaning and value.",
   "type": "object",
-  "required": ["results_version", "run_set", "generated_at", "entries"],
+  "required": [
+    "results_version",
+    "run_set",
+    "generated_at",
+    "entries"
+  ],
   "additionalProperties": false,
   "properties": {
     "results_version": {
@@ -13,7 +18,7 @@
     },
     "run_set": {
       "title": "Run set identifier",
-      "description": "Matches the directory name under bench/results/ this file lives in, for example bench/results/p3-2026-08-01/results.json has run_set \"p3-2026-08-01\".",
+      "description": "A label for the file as a whole. For a single-run-set file it matches the directory name under bench/results/ the file describes. For a file that concatenates run sets it is only a label, and the per-entry run_set field added in results_version 1.2.0 is the authoritative answer to which run set produced a given number.",
       "type": "string",
       "minLength": 1,
       "maxLength": 128,
@@ -33,9 +38,7 @@
       }
     }
   },
-
   "$defs": {
-
     "entry": {
       "title": "One scored (skill, model, domain) group",
       "type": "object",
@@ -44,6 +47,8 @@
         "skill_version",
         "model",
         "domain",
+        "run_set",
+        "lane",
         "artifact_type",
         "artifacts_scored",
         "unresolvable_claims",
@@ -81,11 +86,34 @@
           "maxLength": 64,
           "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
         },
+        "run_set": {
+          "title": "Run set this entry was scored from",
+          "description": "The run set whose envelopes produced this entry. Present per entry because a committed results.json may concatenate more than one run set, which the single top-level run_set cannot describe: before 1.2.0 the committed file carried the invented identifier 'p3-2026-07-31-plus-cal1-2026-08-01' for exactly that reason.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+        },
+        "lane": {
+          "title": "Finding lane this entry scores",
+          "description": "Which lane's findings were scored. 'overall' is every finding and is the cut every published figure reports. 'judged' and 'scripted' are the same envelopes with findings filtered to that lane before scoring, which before 1.2.0 could only be obtained by a documented monkeypatch recipe rather than read out of the committed file.",
+          "type": "string",
+          "enum": [
+            "overall",
+            "judged",
+            "scripted"
+          ]
+        },
         "artifact_type": {
           "title": "Artifact type",
           "description": "The location-tolerance rule this domain's artifacts use, matching manifest.schema.json's artifactType.",
           "type": "string",
-          "enum": ["markdown-prose", "markdown-tree", "html", "string-list"]
+          "enum": [
+            "markdown-prose",
+            "markdown-tree",
+            "html",
+            "string-list"
+          ]
         },
         "artifacts_scored": {
           "title": "Artifacts scored",
@@ -127,18 +155,25 @@
           "$ref": "#/$defs/consistencyValue",
           "description": "The same aggregation as consistency, computed with zero tolerance on the canonical (criterion, key) sets. The gap between consistency and consistency_exact is the skill's location-phrasing instability."
         }
-      }
+      },
+      "description": "Since results_version 1.2.0 an entry is identified by (skill, skill_version, model, domain, run_set, lane); before that it was the first four, and a file holding two run sets could not say which entry came from which."
     },
-
     "metricValue": {
       "title": "A ratio, plus the integers it was formed from",
       "description": "value is null when denominator is 0: the metric is not computable from what was scored, a different claim from \"scored and found to be zero\". Value, when not null, is rounded to three decimal places (bench/README.md, \"Metrics\": \"a ratio is formed once, at the end, and reported to three decimal places\"); numerator and denominator are the exact integers the ratio was formed from, so the rounding is always auditable.",
       "type": "object",
-      "required": ["value", "numerator", "denominator"],
+      "required": [
+        "value",
+        "numerator",
+        "denominator"
+      ],
       "additionalProperties": false,
       "properties": {
         "value": {
-          "type": ["number", "null"],
+          "type": [
+            "number",
+            "null"
+          ],
           "minimum": 0
         },
         "numerator": {
@@ -153,25 +188,41 @@
       "allOf": [
         {
           "if": {
-            "properties": { "denominator": { "const": 0 } },
-            "required": ["denominator"]
+            "properties": {
+              "denominator": {
+                "const": 0
+              }
+            },
+            "required": [
+              "denominator"
+            ]
           },
           "then": {
-            "properties": { "value": { "const": null } }
+            "properties": {
+              "value": {
+                "const": null
+              }
+            }
           }
         }
       ]
     },
-
     "consistencyValue": {
       "title": "A consistency figure, plus how many artifacts and pairs it was formed from",
       "description": "Aggregated with equal weight across every scored artifact that had at least two runs to compare (see bench/metrics/score.py's module docstring for why this module, not bench/README.md, fixes that convention). value is null when no artifact in this entry had two or more runs.",
       "type": "object",
-      "required": ["value", "artifacts_with_pairs", "total_pairs"],
+      "required": [
+        "value",
+        "artifacts_with_pairs",
+        "total_pairs"
+      ],
       "additionalProperties": false,
       "properties": {
         "value": {
-          "type": ["number", "null"],
+          "type": [
+            "number",
+            "null"
+          ],
           "minimum": 0,
           "maximum": 1
         },
@@ -191,25 +242,35 @@
       "allOf": [
         {
           "if": {
-            "properties": { "artifacts_with_pairs": { "const": 0 } },
-            "required": ["artifacts_with_pairs"]
+            "properties": {
+              "artifacts_with_pairs": {
+                "const": 0
+              }
+            },
+            "required": [
+              "artifacts_with_pairs"
+            ]
           },
           "then": {
-            "properties": { "value": { "const": null } }
+            "properties": {
+              "value": {
+                "const": null
+              }
+            }
           }
         }
       ]
     },
-
     "resultsVersion": {
       "title": "Results version",
       "description": "Version of this results format, versioned independently of both the plugin and the critique contract. This file validates 1.x results documents only.",
       "type": "string",
       "maxLength": 16,
       "pattern": "^1\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?![\\s\\S])",
-      "examples": ["1.0.0"]
+      "examples": [
+        "1.0.0"
+      ]
     },
-
     "semver": {
       "title": "Semantic version",
       "description": "Copied verbatim from the critique contract's semver. Semantic Versioning 2.0.0, with no leading v.",
@@ -217,7 +278,6 @@
       "maxLength": 64,
       "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?![\\s\\S])"
     },
-
     "timestamp": {
       "title": "Timestamp",
       "description": "Copied verbatim from the critique contract's timestamp. RFC 3339 in UTC with a literal trailing Z, optional fractional seconds.",
