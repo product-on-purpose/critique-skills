@@ -343,8 +343,8 @@ in `bench/metrics/`:
 - **Clean-artifact false-positive rate:** findings per run on artifacts with nothing planted.
 - **Unresolvable locations:** claims whose location string could not be anchored in the artifact.
 
-**Excluded from the grid:** the two envelopes under `bench/results/runs/steering/`, a
-prompt-injection-resistance probe carrying the
+**Excluded from the grid:** the two envelopes under `bench/results/probes/steering/` (moved there
+from `runs/steering/` on 2026-09-14), a prompt-injection-resistance probe carrying the
 [ADR 0014 (stripped-context run field)](../../docs/internal/decisions/0014-stripped-context-run-field.md)
 `run.stripped_context` field. They are contract-valid and remain on disk. Including them inflates
 `critique-clarity` on sonnet from 20 scored runs to 22 and from 40 consistency pairs to 51.
@@ -784,19 +784,18 @@ cd critique-skills
 python -m bench.generator verify --corpus bench/corpus
 python -m bench.generator leak-check --corpus bench/corpus
 
-# 2. Build a scoring view of the measurement grid. The steering probe set is NOT part of
-#    the 460-run grid and must be excluded; scoring bench/results/runs directly changes
-#    critique-clarity/sonnet and will not reproduce the committed file.
-mkdir -p /tmp/p3-grid && cp -r bench/results/runs/* /tmp/p3-grid/ && rm -rf /tmp/p3-grid/steering
-
-# 3. Rescore the p3 half. Its 24 entries are byte-identical to the first 24 in the committed
-#    results.json. Every entry carries recall_location and precision_location alongside the
-#    criterion-level recall and precision, computed in the same pass from the same envelopes.
-python -m bench.metrics score --corpus bench/corpus --runs /tmp/p3-grid \
+# 2. Rescore the p3 half, in place. This used to require copying the tree and deleting
+#    runs/steering/ first, because the probe set pooled into critique-clarity/sonnet. The probes
+#    moved to bench/results/probes/ on 2026-09-14, outside the runs* glob, so there is nothing to
+#    exclude: scoring bench/results/runs directly reproduces the committed numbers. Verified the
+#    day of the move, all 24 entries byte-identical to the committed file.
+#    Every entry carries recall_location and precision_location alongside the criterion-level
+#    recall and precision, computed in the same pass from the same envelopes.
+python -m bench.metrics score --corpus bench/corpus --runs bench/results/runs \
     --out /tmp/results-p3.json --run-set p3-2026-07-31
 
 # 4. Score the calibration run set. Its 2 entries are the critique-accessibility 0.1.1 rows.
-#    runs-cal1 holds no steering probes, so it is scored in place.
+#    runs-cal1 holds no probes either, so it is likewise scored in place.
 python -m bench.metrics score --corpus bench/corpus --runs bench/results/runs-cal1 \
     --out /tmp/results-cal1.json --run-set cal1-2026-08-01
 
@@ -839,11 +838,16 @@ Reported, not fixed. Each affects how far a reader should trust the surrounding 
   envelope at all. The validator now discovers run roots by a `runs*` glob and walks them, CI's
   `schema` job runs it as `npm run validate:envelopes`, and it reports **541 files valid**. Kept as a
   resolved entry rather than deleted, because the surrounding claims were written while it was true.
-- **Scoring `bench/results/runs` directly does not reproduce `results.json`.** The steering envelopes
-  share identity fields with the main grid and pool into `critique-clarity` / sonnet / clarity, taking
-  it to 22 scored runs and 51 consistency pairs. The exclusion is a step in the reproduction recipe
-  rather than a property of the layout, which is fragile. A separate top-level directory for probe run
-  sets would make the mistake impossible.
+- **RESOLVED 2026-09-14: scoring `bench/results/runs` directly now reproduces `results.json`.** The
+  steering envelopes used to share identity fields with the main grid and pool into
+  `critique-clarity` / sonnet / clarity, taking it to 22 scored runs and 51 consistency pairs, and
+  the exclusion was a step in the reproduction recipe rather than a property of the layout. This
+  entry proposed its own fix, "a separate top-level directory for probe run sets would make the
+  mistake impossible", and that is what was done: probes moved to `bench/results/probes/`, outside
+  the `runs*` glob the scorer and the validator discover by. `contract/validate_envelopes.py` was
+  widened to `runs*` **and** `probes*` in the same change, so probes kept their schema check while
+  losing their ability to contaminate a scored cell. **Verified rather than asserted**: scoring
+  `bench/results/runs` in place produced all 24 p3 entries byte-identical to the committed file.
 - **RESOLVED 2026-09-14: path drift in the generated block.** `bench.report table` built the path a
   reader is told to edit out of `run_set`, naming a directory that has never existed, while its
   sibling `bench.report scoreboard` in the same module hardcoded the correct

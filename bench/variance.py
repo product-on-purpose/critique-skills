@@ -17,11 +17,12 @@ Like `bench/metrics`, this computes from committed envelopes and manifests and f
 
 Three steps, in order, because the third is worthless if the second does not hold.
 
-1. **Scope.** Score the documented view: a run set minus any probe directories. `runs/steering/`
-   holds two prompt-injection-resistance probes that share identity fields with the measurement
-   grid and pool into `critique-clarity` / sonnet if included, which `bench/results/README.md`
-   records as a known layout fragility and excludes by hand in its reproduction recipe. Excluding
-   them here makes the recipe a default rather than a step someone must remember.
+1. **Scope.** Score the documented view: a run set minus any probe directories. The two
+   prompt-injection-resistance probes that share identity fields with the measurement grid moved to
+   `bench/results/probes/steering/` on 2026-09-14, outside the `runs*` glob, so a run set no longer
+   contains them and this exclusion is now belt-and-braces rather than load-bearing. It is kept
+   because the exclusion costs nothing and a future probe set placed in the wrong directory should
+   fail safe.
 
 2. **Decompose, and prove the decomposition.** A committed envelope's filename carries its
    repetition index (`haiku-r3.json`); no contract field records it, which is the `run_set` and
@@ -90,8 +91,10 @@ _VARIANCE_SCHEMA_PATH = Path(__file__).resolve().parent / "results" / "variance.
 DEFAULT_DRAWS = 20000
 DEFAULT_SEED = 20260815
 
-# Probe run sets that share identity fields with the measurement grid. See the module docstring and
-# bench/results/README.md, "Reproduction".
+# Probe run sets that share identity fields with the measurement grid. Since 2026-09-14 probes live
+# under bench/results/probes/, outside the runs* glob, so nothing under a run set should match this
+# any more; it is retained as a fail-safe for a probe set filed in the wrong place. See the module
+# docstring and bench/results/README.md, "Reproduction".
 DEFAULT_EXCLUDED_TOP_LEVEL = ("steering",)
 
 _REPETITION_RE = re.compile(r"^(?P<tier>[A-Za-z0-9.\-]+)-r(?P<repetition>\d+)$")

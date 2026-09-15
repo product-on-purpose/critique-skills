@@ -187,7 +187,20 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.1.x. **Category:** measurement. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** Nothing (independent of E6; both close the same footgun)
-- **Rank at intake:** 7 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-09-14.** The probe set moved to `bench/results/probes/steering/`, outside the
+  `runs*` glob that both the scorer and the validator discover by, which is the fix this repository's
+  own Known-issues entry proposed for itself. `contract/validate_envelopes.py` was widened to
+  `runs*` **and** `probes*` in the same change, so the probes kept their schema check while losing
+  their ability to contaminate a scored cell. 541 envelopes still validate.
+- **Proven, not asserted.** Scoring `bench/results/runs` in place now produces all 24 p3 entries
+  **byte-identical** to the committed `results.json`, compared by (skill, version, model, domain)
+  rather than by position. The reproduction recipe lost its copy-the-tree-and-delete step as a
+  result, which was the actual fragility: an exclusion somebody had to remember.
+- **One thing the change forced.** `scripts/check-readme-figures.mjs` counted `runs*` only, so the
+  move dropped its count to 539 against a published 541. The guard now discovers the same two
+  prefixes the validator does, because a guard and the validator holding different notions of "an
+  envelope" is the two-sources-of-truth defect that guard exists to prevent.
+- **Rank at intake:** 7 of 64. **Status:** CLOSED 2026-09-14.
 
 ## E8 - Retire methodology.md's stale 0.7 consistency-target placeholder
 
@@ -674,10 +687,14 @@ and the repository did not have.
 - **Why:** It sequences the skill wave, the v0.4.0+ domain waves and the v1.0 triage criterion, and its absence has left external recommendations with no institutional verdict for a month. The 2026-09-11 ruling brought it into v0.2.0.
 - **Evidence:** ROADMAP.md:48; docs/internal/research/ (confirmed absent in repo); _local/audit/2026-08-18_audit_gemini-pro-research_Review Critique Skills GitHub Repo.md:138-172 (the four Part 1 recommendations) and :179-238 (the five candidate skills); _local/_session-logs/2026-08-20_22-10_claude_readme-drafts-and-audit-review.md:99-103 ('treat the Gemini audit as survey input rather than a plan'); ROADMAP.md:44-114
 - **Derives from:** ROADMAP.md v0.2.0 E1 (Taxonomy survey regeneration); the 2026-08-20 audit-review decision
-- **Size:** L. **Release:** v0.2.0. **Category:** research. **Confidence:** verified.
-- **Ruling 2026-09-11:** the maintainer ruled v0.2.0 as Option A plus Option C (receipts
-  first, and the research spine). Moved from v0.3.0 into v0.2.0; the survey is Option C's
-  core and is now in scope for this release.
+- **Size:** L. **Release:** unscheduled. **Category:** research. **Confidence:** verified.
+- **Ruling 2026-09-11, superseded:** v0.2.0 was ruled Option A plus Option C, which brought the
+  survey into v0.2.0.
+- **DEFERRED 2026-09-14 by the maintainer.** Moved out of v0.2.0 and out of any numbered release.
+  **This drops the survey clause from the v0.2.0 exit gate**, which is the substantive consequence:
+  the gate no longer requires `docs/internal/research/critique-framework-survey.md` to exist.
+  Nothing technical blocks the survey; it is deferred by choice, and it still gates the wider
+  domain waves and the v1.0 candidate-triage criterion whenever it is taken up.
 - **Blocks:** Sequencing of N2 and N3; E58; E43 row 2
 - **Depends on:** E1
 - **Rank at intake:** 44 of 64. **Status:** backlog (recorded 2026-09-11).

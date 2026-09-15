@@ -55,19 +55,32 @@ from contract.validate import load_document, validate_document
 
 RESULTS_DIR = Path(__file__).resolve().parent.parent / "bench" / "results"
 RUNS_DIR = RESULTS_DIR / "runs"
-RUN_ROOT_GLOB = "runs*"
+# Two families of root, both validated and only one scored. "runs*" holds the measurement grid
+# and its calibration sets; "probes*" holds steering and diagnostic sets that must never pool
+# into a scored cell. Keeping probes OUT of "runs*" is what makes that separation structural
+# rather than a step somebody has to remember in a reproduction recipe; keeping them validated
+# here is what stops the separation costing them their schema check.
+RUN_ROOT_GLOBS = ("runs*", "probes*")
+RUN_ROOT_GLOB = RUN_ROOT_GLOBS[0]  # retained: referenced by the no-roots message below
 
 
 def discover_run_roots(results_dir: Path) -> list[Path]:
-    """Every run-set root directly under `results_dir` whose name matches `runs*`: the primary
-    `bench/results/runs/` set plus any calibration re-measurement set such as
-    `bench/results/runs-cal1/` (docs/internal/execution/P3-cal1-report.md). Sorted for
-    deterministic output. Empty list if `results_dir` does not exist yet, which is the normal
-    state before any bench run has landed.
+    """Every run-set root directly under `results_dir` matching `runs*` or `probes*`: the primary
+    `bench/results/runs/` set, any calibration re-measurement set such as
+    `bench/results/runs-cal1/` (docs/internal/execution/P3-cal1-report.md), and the probe sets under
+    `bench/results/probes/`. Sorted for deterministic output. Empty list if `results_dir` does not
+    exist yet, which is the normal state before any bench run has landed.
+
+    Probes are validated here and scored nowhere. That asymmetry is the point: a probe envelope is
+    still a contract-valid envelope and should be held to the schema, but pooling one into a scored
+    cell silently changes a published figure.
     """
     if not results_dir.is_dir():
         return []
-    return sorted(p for p in results_dir.glob(RUN_ROOT_GLOB) if p.is_dir())
+    roots: list[Path] = []
+    for pattern in RUN_ROOT_GLOBS:
+        roots.extend(p for p in results_dir.glob(pattern) if p.is_dir())
+    return sorted(set(roots))
 
 
 def find_envelope_files(runs_root: Path) -> list[Path]:

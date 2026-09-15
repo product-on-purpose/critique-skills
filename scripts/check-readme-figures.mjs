@@ -27,8 +27,14 @@ import { fileURLToPath } from "node:url";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "..");
 
-/** The run-root glob contract/validate_envelopes.py uses. Kept identical on purpose. */
-const RUN_ROOT_PREFIX = "runs";
+/**
+ * The run-root prefixes contract/validate_envelopes.py discovers. Kept identical on purpose:
+ * the published figure is checkable by running `npm run validate:envelopes`, so this guard and
+ * that validator must agree on what counts as a committed envelope. Two different notions of
+ * "an envelope" is the same two-sources-of-truth defect this guard exists to prevent.
+ * "runs*" is the scored measurement grid; "probes*" is validated and scored nowhere.
+ */
+const RUN_ROOT_PREFIXES = ["runs", "probes"];
 
 /**
  * Every shape the envelope count appears in across the front-door documents. Prose is the common
@@ -57,7 +63,7 @@ export function countEnvelopes(resultsDir = join(ROOT, "bench", "results")) {
   if (!existsSync(resultsDir)) return 0;
   let total = 0;
   for (const entry of readdirSync(resultsDir)) {
-    if (!entry.startsWith(RUN_ROOT_PREFIX)) continue;
+    if (!RUN_ROOT_PREFIXES.some((prefix) => entry.startsWith(prefix))) continue;
     const p = join(resultsDir, entry);
     if (statSync(p).isDirectory()) total += countJson(p);
   }
