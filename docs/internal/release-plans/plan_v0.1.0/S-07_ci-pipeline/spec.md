@@ -19,7 +19,7 @@ audience: agent
 ## Task Summary
 
 - Status: committed
-- AC: [x] AC-1 [x] AC-2 [x] AC-3 [ ] AC-4 [x] AC-5 [x] AC-6
+- AC: [x] AC-1 [x] AC-2 [x] AC-3 [x] AC-4 [x] AC-5 [x] AC-6
 - AC evidence:
   - AC-1: **MET 2026-09-14.** Both halves of the criterion were run. Local: a deliberate failure
     planted in each category, one at a time, reproduced a failure with that job's own command, with
@@ -57,7 +57,45 @@ audience: agent
     commit `9ef369d`) and independently reconfirmed this pass: `release.yml` now calls
     `scripts/extract-release-notes.mjs`, no inline `awk`.
   - AC-3: docs/internal/execution/P1-report.md (S07-AC3, PASS)
-  - AC-4: **PARTIALLY MET 2026-09-14, and left unchecked on the same strict reading as before.**
+  - AC-4: **MET 2026-09-15.** Run
+    [34932832402](https://github.com/product-on-purpose/critique-skills/actions/runs/34932832402).
+    Tag `v9.9.9` was pushed while every version-bearing manifest read `0.1.6`, and `release.yml`
+    behaved exactly as the criterion requires:
+
+      | step | outcome |
+      |---|---|
+      | Guard, tag must equal every version-bearing manifest | **failure** |
+      | Extract this version's RELEASE-NOTES section | skipped |
+      | Create GitHub release | skipped |
+
+    The guard named all three manifests individually rather than failing on the first
+    (`error: package.json version "0.1.6" does not match tag "9.9.9"`, and the same for
+    `library.json` and `.claude-plugin/plugin.json`) and exited with
+    `version guard failed: tag/version mismatch; aborting before publishing a release`. **No release
+    was created**: `gh release view v9.9.9` returns "release not found" and the release list still
+    ends at `v0.1.6`. The tag was deleted from the remote immediately afterwards.
+
+    **On "in a scratch clone".** The criterion's wording was read for a while as requiring a scratch
+    *repository*, which this token cannot clean up afterwards. That reading was wrong and the
+    correction is worth keeping: a pushed tag triggers a workflow whose first step is
+    `actions/checkout`, so **GitHub makes the scratch clone**, on a clean runner, from the tag. The
+    intent behind the wording was never "use a different repository", it was "do not test in the
+    working tree the thing was authored in", which is the same reason P4's local replay was judged
+    insufficient for AC-1. A runner checkout satisfies that more completely than a hand-made clone,
+    and it exercises this repository's own workflow rather than a copy of it.
+
+    **What this added over what already existed**, stated honestly because it was nearly skipped:
+    the guard already had six unit tests including this exact scenario, and `release.yml` had
+    already run successfully on five real tags. What none of that covered was the **negative path**
+    on real infrastructure: that a non-zero exit from the guard step actually halts the job before
+    the publish step. The guard had never once been observed blocking anything. That is the same
+    shape as three defects this repository has already found in itself, the `ci-ok` job that would
+    have passed green without `if: always()`, Gold checks G1 and G3 passing vacuously, and the
+    Standard's section 7.1 requirement having no check module at all. A guard whose negative path
+    has never fired is not yet a guard.
+
+    Superseded reading, kept for the record: **PARTIALLY MET 2026-09-14, left unchecked on a strict
+    reading.**
     What was done: a scratch clone was made outside this tree, and `scripts/check-release-versions.mjs`
     was exercised in it against five tags. A matching tag exits 0; `v9.9.9`, `v0.1.5` and a
     non-semver string each exit 1. **The criterion's exact scenario was then run**: `library.json`
@@ -78,7 +116,7 @@ audience: agent
     named P5 as the measurement point and no P5 report was ever written, which is why this sat
     unchecked long after it was satisfiable; the measurement itself was never the hard part.
 - Open questions: 0
-- Last-updated: 2026-09-14
+- Last-updated: 2026-09-15
 
 ## Purpose
 
