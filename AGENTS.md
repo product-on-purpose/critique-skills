@@ -69,8 +69,10 @@ Equivalent: `npm run gen`.
 ### CI (`.github/workflows/ci.yml`)
 
 Every push and pull request against `main` runs nine jobs, each a single command with zero
-validation logic in the workflow itself (Standard sec 4.1/4.4); every command below is exactly what
-the workflow runs and reproduces the same result locally. A tenth job, `ci-ok`, runs no command and
+validation logic in the workflow itself (Standard sec 4.1/4.4), except `audit`, which runs two:
+the root tree and the site tree are separate dependency graphs and only one of them was ever
+checked. Every command below is exactly what the workflow runs and reproduces the same result
+locally. A tenth job, `ci-ok`, runs no command and
 is described under the table. Node matrix: `22.12.0` and `24`. Python:
 `3.12`. See `docs/internal/release-plans/plan_v0.1.0/S-07_ci-pipeline/spec.md` for the acceptance
 criteria and `docs/internal/decisions/0011-gate-wiring-toolkit-wrapper.md` for the toolkit-checkout
