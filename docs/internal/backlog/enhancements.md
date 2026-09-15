@@ -407,7 +407,20 @@ and the repository did not have.
 - **Blocks:** E20 and E26; the 'every listed skill measured' exit-gate clause on the sonnet tier
 - **Depends on:** E2; CLAUDE_CODE_OAUTH_TOKEN current; wall-clock for 900s-class runs
 - **Review note:** The critic found this item's v0.2.0 tag is a version label, not a real dependency: once E2 (sonnet unblock) lands, nothing else gates it. Treat it as ready the moment E2 is done.
-- **Rank at intake:** 19 of 64. **Status:** backlog (recorded 2026-09-11).
+- **DISPATCHED 2026-09-14**, GitHub Actions run
+  [34917562578](https://github.com/product-on-purpose/critique-skills/actions/runs/34917562578):
+  `critique-clarity`, sonnet tier, k=5, 40 cells (20 skill, 20 baseline). Run through `bench.yml`
+  rather than locally, deliberately: the fidelity gate's whole claim is a reproduction on
+  infrastructure the maintainer does not control end to end, and a laptop run would not be that.
+  The workflow pushes its envelopes to a fresh `bench-results/*` branch for review as a diff; it
+  never writes to `main`.
+- **Remaining when it lands:** review the branch, commit the envelopes, and re-evaluate ADR 0031's
+  acceptance band on the sonnet tier. Expect roughly four hours of wall clock; the one sonnet cell
+  measured on 2026-09-13 took 639 seconds.
+- **Precedent worth knowing:** the 2026-08-17 haiku dispatch is recorded as a workflow FAILURE that
+  still produced 39 usable envelopes, because one cell failed and the job reported that. A red run
+  here does not necessarily mean no evidence.
+- **Rank at intake:** 19 of 64. **Status:** dispatched 2026-09-14, awaiting results.
 
 ## E20 - Re-measure critique-usability's Sonnet cell
 
@@ -419,7 +432,16 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.2.0. **Category:** measurement. **Confidence:** verified.
 - **Blocks:** Declaring critique-usability unconditionally shipped rather than 'qualified through Haiku'
 - **Depends on:** E2 and E19
-- **Rank at intake:** 20 of 64. **Status:** backlog (recorded 2026-09-11).
+- **DISPATCHED 2026-09-14**, GitHub Actions run
+  [34917728793](https://github.com/product-on-purpose/critique-skills/actions/runs/34917728793):
+  `critique-usability`, sonnet tier, k=5, 40 cells. This is the cell that does not qualify against
+  baseline on its own tier (location precision 0.169 against 0.181), and which the README's
+  Known-limitations bullet and `verdicts.md` both describe.
+- **Remaining when it lands:** review the branch, commit the envelopes, rescore, and update the
+  scoreboard, `verdicts.md` and the Known-limitations bullet **either way**. A re-measure that
+  confirms the cell still does not qualify is as publishable as one that clears it, and the item is
+  not done until whichever result it is has been written down.
+- **Rank at intake:** 20 of 64. **Status:** dispatched 2026-09-14, awaiting results.
 
 ## E21 - Backfill the missing fidelity-dispatch cell clarity-001/haiku-r1.json
 
@@ -431,7 +453,28 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.1.x. **Category:** measurement. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** GitHub Actions secret CLAUDE_CODE_OAUTH_TOKEN being current, per docs/explanation/the-benchmark-harness.md
-- **Rank at intake:** 21 of 64. **Status:** backlog (recorded 2026-09-11).
+- **ATTEMPTED 2026-09-14, and deliberately not completed as written.** The cell was run and it
+  succeeded: `critique-clarity` / `clarity-001` / haiku / r1, schema-valid. It was **not committed**,
+  and the reason is the point of this entry.
+- **Backfilling it would have laundered provenance.** The target directory is
+  `bench/results/runs-dispatch-31988100372/`, whose name asserts that its contents came from GitHub
+  Actions run `31988100372` on 2026-08-17. This envelope came from a laptop on 2026-09-14, through a
+  harness that has changed since (`--timeout` landed the same day). Dropping it in beside 39
+  envelopes of different origin would make the directory assert something false about one of its
+  twenty files, in the one repository whose entire argument is that a number can be traced to what
+  produced it.
+- **The premise is also weaker than it looks.** ADR 0031 did not paper over the gap: it rebuilt its
+  acceptance band over exactly the coverage obtained, which the ADR names as its own specified
+  remedy. The band is therefore already honest at 19 of 20. A month-late cell from a different
+  harness would not make it more so.
+- **The honest version of this item, if it is wanted:** a fresh `bench.yml` dispatch of
+  `critique-clarity` on haiku at k=5, committed as its own run set with its own run id, giving 20 of
+  20 from one provenance. That is roughly 40 cells rather than one, and it is a new measurement
+  rather than a repair. **Recommend closing this item as not-worth-doing** and keeping ADR 0031's
+  rebuilt band, unless a full-coverage haiku re-run is wanted for its own sake.
+- **Rank at intake:** 21 of 64. **Status:** attempted and deliberately left open 2026-09-14; needs a
+  maintainer ruling on whether to close as not-worth-doing.
+
 
 ## E22 - Turn on severity_expected scoring
 
@@ -491,7 +534,16 @@ and the repository did not have.
 - **Size:** L. **Release:** v0.2.0. **Category:** measurement. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** E2 and E19 (sonnet dispatches actually completing; wall-clock cost beyond session count)
-- **Rank at intake:** 26 of 64. **Status:** backlog (recorded 2026-09-11).
+- **BLOCKED on E19, 2026-09-14.** Calibrating a per-lane threshold needs sonnet-tier consistency
+  data from a single provenance, which is exactly what run 34917562578 is producing. Nothing else
+  gates it.
+- **Newly cheaper than it was.** `results_version` 1.2.0 (E6) now emits a `judged` and a `scripted`
+  entry per cell alongside `overall`, so per-lane consistency is a field to read rather than a
+  scorer to re-run. The first thing the lane split showed is directly relevant: on
+  `critique-clarity` / haiku the scripted lane scores 0.853 precision against the judged lane's
+  0.11. A single pooled floor across two lanes that behave that differently is the thing v2 exists
+  to replace.
+- **Rank at intake:** 26 of 64. **Status:** blocked on E19's dispatch, 2026-09-14.
 
 ## E27 - Isolate the bench harness from the working tree it measures
 
