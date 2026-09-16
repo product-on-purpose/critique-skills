@@ -13,7 +13,7 @@ import { writeFileSync, readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { tempDir } from "./helpers/tmp.mjs";
-import { checkReadmeLinks, readmeDoors, landingCardTitles } from "../check-readme-links.mjs";
+import { checkReadmeLinks, readmeDoors, landingCardTitles, escapeRegExp } from "../check-readme-links.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, "..", "..");
@@ -119,4 +119,16 @@ test("the real README and the real landing page currently agree", () => {
   assert.equal(checkReadmeLinks({}), 0);
   const landing = readFileSync(resolve(REPO_ROOT, "site", "src", "content", "docs", "index.mdx"), "utf8");
   assert.deepEqual(landingCardTitles(landing), DOORS);
+});
+
+test("the hostname pattern treats dots as literals, not wildcards", () => {
+  // Regression for the CodeQL finding js/incomplete-hostname-regexp, its first result on this
+  // repository. SITE_ORIGIN went into the scanning pattern unescaped, so every dot in
+  // the hostname was a wildcard and the guard matched lookalike hosts it was never meant to see.
+  // Asserting on escapeRegExp rather than on a crafted README aims the test at the real defect:
+  // the bug was in how the pattern gets built, not in anything the README says.
+  const lookalike = SITE.split(".").join("x");
+  assert.notEqual(lookalike, SITE);
+  assert.equal(new RegExp(escapeRegExp(SITE)).test(lookalike), false);
+  assert.equal(new RegExp(escapeRegExp(SITE)).test(SITE), true);
 });

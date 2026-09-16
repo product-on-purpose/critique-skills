@@ -25,6 +25,20 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export const SITE_ORIGIN = "https://product-on-purpose.github.io";
 
 /**
+ * Escape a literal string for safe interpolation into a RegExp.
+ *
+ * Found by CodeQL on its first run against this repository (js/incomplete-hostname-regexp).
+ * SITE_ORIGIN was interpolated raw into the pattern below, so every "." in the hostname was a
+ * regex wildcard rather than a literal dot, and the pattern matched hostnames it was never meant
+ * to match. The practical blast radius is a spurious failure rather than a missed one, because an
+ * over-matched link then fails the route check. That still makes it a guard that is wrong about
+ * what it is looking at, which is the class of defect this repository keeps finding in its checks.
+ */
+export function escapeRegExp(literal) {
+  return literal.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
  * The three doors, as the README's routing table lists them.
  * They are the leading bold cell of each row in the table under "Start here".
  */
@@ -78,7 +92,8 @@ export function checkReadmeLinks({ readme, manifest, landing } = {}) {
   const prefix = `${SITE_ORIGIN}${BASE}`;
   const seen = new Set();
   let checked = 0;
-  for (const match of readmeText.matchAll(new RegExp(`${prefix}([^\\s")\\]]*)`, "g"))) {
+  const prefixPattern = escapeRegExp(prefix);
+  for (const match of readmeText.matchAll(new RegExp(`${prefixPattern}([^\\s")\\]]*)`, "g"))) {
     const path = match[1] || "/";
     if (seen.has(path)) continue;
     seen.add(path);
