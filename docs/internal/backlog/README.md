@@ -3,7 +3,7 @@
 Local-first, version-controlled backlogs (Standard sec 7.1). Two files, plus this index:
 
 - **[enhancements.md](enhancements.md)** - features, fixes and refinements to components that already
-  exist. 61 items, `E1` through `E61`.
+  exist. 62 items, `E1` through `E62`.
 - **[new-components.md](new-components.md)** - proposals to ADD a skill, command, subagent, hook or
   chain. 4 items, `N1` through `N4`, each with a recorded why-gate verdict.
 
@@ -98,11 +98,12 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**28 items depend on nothing and can start today.** Derived from each item's own
+**29 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
 |---|---|---|---|
+| E62 | Rule the Standards-watch commitment, and the 0.12 pin it is measured against | S | v0.1.x |
 | E13 | Update ROADMAP.md's v0.1.x section: two of four verification items are met | S | v0.1.x |
 | E28 | Pin or record the Claude Code CLI version bench.yml installs | S | v0.1.x |
 | E29 | Make release.yml's re-run suite match what it claims to run | S | v0.1.x |

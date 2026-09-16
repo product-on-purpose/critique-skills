@@ -279,7 +279,62 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.2.0. **Category:** decision. **Confidence:** verified.
 - **Blocks:** E12; a defensible v0.2.0 exit-gate declaration
 - **Depends on:** E1
-- **Rank at intake:** 11 of 64. **Status:** backlog (recorded 2026-09-11).
+- **RULED 2026-09-15: adopt both**, on the maintainer's delegation, after the advisor was asked for
+  the final call on the CodeQL half.
+- **Ruling 1, `askit-*` authoring: ADOPT, scoped to two skills, in fallback mode.** The question that
+  looked like the blocker is not one. `askit-build-skill` is a 45-line SKILL.md plus a generic
+  authoring guide and craft rubric, aimed at Bronze conformance and description quality;
+  `docs/internal/skill-template.md` is **803 lines** covering `rubric_sources`, the lane manifest,
+  criterion tables, severity anchors, and the `scripts/checks.py` wiring that `skill-selftest.py`
+  cross-checks against `SKILL.md`. **They are layers, not rivals**, so adopting the mandate
+  displaces nothing that makes a critique skill a critique skill.
+- **Scope: `askit-build-skill` and `askit-evaluate`, not all six named in the clause.**
+  `askit-build-skill` is the one that gates, because once `critique-forms` is hand-built the
+  dogfooding commitment cannot be honored retroactively. `askit-evaluate` is on the forms path
+  anyway: the plan records that the trigger eval sets have never been run through a grader, and
+  forms adds joint-routing cases across all seven skills. `askit-build-samples`, `askit-migrate`,
+  `askit-release` and `askit-decision`/`askit-backlog` are deferred to their own item.
+- **Mode: fallback, and the ruling says so because the plan requires recording it.** The toolkit is
+  **not installed at user scope**; the marketplace cache holds only `pm-skills`. The 2026-08-02 plan
+  anticipated this and permits reading `SKILL.md` directly from the sibling checkout, while stating
+  that this mode cannot surface packaging or trigger-matching defects. Confirmed twice, by cache
+  listing and by a full grep.
+- **Two friction findings already exist and had not been filed.** Last session built the 61-item
+  backlog with ten custom agents while `askit-backlog` sat unused, and wrote ADR 0034 by hand rather
+  than through `askit-decision`. **The mandate has been broken every time since it was written, and
+  nobody noticed**, which is itself the most useful datum about the authoring half: it has not yet
+  made itself worth reaching for, even inside the family that wrote it. Both are being filed to the
+  toolkit's own backlog, as the clause requires.
+- **What the ruling is actually buying.** The validator half of the toolkit is adopted, load-bearing
+  and proven. The authoring half has **zero uses, ever**, in this repository. `critique-forms` is its
+  first real test, and the ruling treats it as one: build through the skill, file the friction, and
+  see whether the toolkit absorbs it. Friction that piles up unanswered is an answer too.
+- **Ruling 2, CodeQL: ADOPT, and shipped in this same change** as `.github/workflows/codeql.yml`.
+  Three of four siblings run CodeQL and this one did not, while carrying **the largest code surface
+  in the family**: roughly 33,000 lines of Python and 5,500 of Node, including the generators that
+  emit the deployed site's HTML. GitHub's built-in scanning was confirmed `not-configured`, so a
+  committed workflow is the path.
+- **A correction to the record, because the earlier framing of this ruling was wrong.** It was
+  reported that scanning Python would be a first for the family. It would not: **`writing-style-catalog`
+  already scans `javascript-typescript` and `python` in a matrix**, over 8,514 lines of Python. This
+  repository is following that sibling's shape, not extending the pattern. `pm-skills` and
+  `agent-skills-toolkit` scan JavaScript only, which is right for them; `pm-skills` has zero Python.
+- **Honest expectation, recorded so no one oversells it later.** CodeQL is built for code handling
+  untrusted input at runtime. This code runs at build time on maintainer-controlled inputs, so the
+  expected yield is low and some of it will be noise from the corpus and generated fixtures. **The
+  case for adopting is structural, not a predicted finding**: the one repository in the family
+  without static analysis should not be the one with ten times the code.
+- **Deliberately outside the gate.** `codeql.yml` is a separate workflow, so `ci-ok`'s `needs:` is
+  unchanged, the `# doc-check` guard does not see it, `AGENTS.md`'s nine-jobs claim stays true, and
+  it must never become a required status check. Verified rather than inferred: `npm run gen --check`
+  still reports 11 `ci.yml` commands and `ci-ok` gating all 9 jobs after the file landed.
+- **The sweep clause, run, and it found a third one.** The local plans were swept for other
+  v0.2.0-to-v0.4.0 commitments that failed the same transition. The v0.3.0 items (revision loop, gate
+  hardening, cross-library composition) and the Gold-tier and criterion-pruning tracks all survived
+  into `ROADMAP.md`. **`Standing tracks` -> `Standards watch` did not**: the local plan commits to
+  adopting new Standard minors within one release, `ROADMAP.md` says nothing about it, and the
+  commitment is currently unhonored. Recorded as E62 (Standards-watch commitment and the 0.12 pin).
+- **Rank at intake:** 11 of 64. **Status:** RULED 2026-09-15; ROADMAP wording is E12's job.
 
 ## E12 - Re-cut the v0.2.0 exit gate to match the shape ruling
 
@@ -290,8 +345,12 @@ and the repository did not have.
 - **Derives from:** Sub-task hanging off known decision 5
 - **Size:** S. **Release:** v0.2.0. **Category:** docs. **Confidence:** likely.
 - **Blocks:** Any tagging of v0.2.0
-- **Depends on:** E1 and E11
-- **Rank at intake:** 12 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Depends on:** E1 and E11. **Both discharged as of 2026-09-15**, E1 ruled 2026-09-11 and E11
+  ruled today, so this item is startable. It is absent from the README's ready-now list on
+  purpose: that list is derived literally from items whose `Depends on` reads Nothing, and
+  loosening the rule to mean "dependencies satisfied" would change what the list asserts without
+  saying so.
+- **Rank at intake:** 12 of 64. **Status:** unblocked 2026-09-15; the wording is the maintainer's.
 
 ## E13 - Update ROADMAP.md's v0.1.x section: two of four verification items are met
 
@@ -1064,3 +1123,36 @@ and the repository did not have.
   `npm run gen -- --check` reports `AGENTS.md` documenting all 11 `ci.yml` commands and `ci-ok`
   gating all 9 jobs.
 - **Rank at intake:** unranked (added 2026-09-11, after the 64-item pass). **Status:** CLOSED 2026-09-15.
+
+
+## E62 - Rule the Standards-watch commitment, and the 0.12 pin it is measured against
+
+- **Target:** `ROADMAP.md`, `library.json`, `.github/workflows/ci.yml` (`TOOLKIT_REF`)
+- **Change:** The local plan's `Standing tracks` section commits to a Standards watch: a pinned
+  `standard` version in `library.json`, and **adopting new Standard minors within one release**.
+  `ROADMAP.md` carries no mention of it, and no record cuts it, so it failed the local-plan to
+  public-ROADMAP transition the same way `askit-*` authoring and CodeQL did (E11). Done: an
+  adopt-or-drop ruling on the commitment, and if adopted, a decision on the two pins below.
+- **Why:** Unlike the other two vanished commitments, **this one is measurably unhonored right now.**
+  `library.json` declares `"standard": "0.12"`; the toolkit's `STANDARD.md` is at **0.16**, four
+  minor versions ahead. `ci.yml` pins `TOOLKIT_REF` at a commit from **2026-08-07, which is 168
+  commits and five weeks behind** the toolkit's head. The conformance badge reads Convergent, 0
+  errors, 0 warnings, and that is accurate about Standard 0.12; **any rule the Standard has gained
+  since is one this repository has never been checked against.**
+- **The pin is not obviously a defect, which is why this needs a ruling and not a fix.** `ci.yml`'s
+  own comment says the ref is pinned "for reproducibility; bump deliberately to adopt toolkit
+  changes", so a stale pin is the intended mechanism working. What is missing is any record of
+  whether five weeks and four minors is the intended distance or drift nobody tracked. Those are
+  different situations with the same appearance, and only the maintainer can say which this is.
+- **Evidence:** `_local/initial-plan/02-roadmap.md` `## Standing tracks` (the Standards-watch
+  bullet); `ROADMAP.md` (0 hits for "standards watch" or "Standard minor");
+  `library.json` (`"standard": "0.12"`); `agent-skills-toolkit/STANDARD.md` (`version 0.16`);
+  `.github/workflows/ci.yml:38` (`TOOLKIT_REF: cafe6b69...`, a 2026-08-07 commit); toolkit head
+  `4982300` of 2026-09-08, 168 commits ahead.
+- **Derives from:** E11's sweep clause, run 2026-09-15. It is the third vanished commitment the
+  sweep was written to find, after `askit-*` authoring and CodeQL.
+- **Size:** S. **Release:** v0.1.x. **Category:** decision. **Confidence:** verified.
+- **Blocks:** An honest conformance claim at any tier, since the claim is scoped to the pinned
+  Standard rather than the current one
+- **Depends on:** Nothing
+- **Rank at intake:** unranked (added 2026-09-15, by E11's sweep). **Status:** backlog.
