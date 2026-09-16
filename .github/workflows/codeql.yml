@@ -1,0 +1,54 @@
+name: CodeQL
+
+# Static analysis of this repository's own code, which is a different question from the one
+# ci.yml's `audit` job asks. `npm audit` checks whether other people's packages carry known
+# advisories; CodeQL traces data flow through the code in this tree. Both, or neither is covered.
+#
+# Scope: ~33k lines of Python (bench harness, generators, validators) and ~5.5k of Node (site and
+# repo tooling). Markdown content, skill references and committed run envelopes are not code and
+# are not analyzed.
+#
+# Advanced setup: this committed file is the configuration, not the repository Settings toggle,
+# which was confirmed "not-configured" before this landed. Shape follows writing-style-catalog,
+# the sibling that already scans both languages; SHA pinning follows this repository's own ci.yml.
+#
+# This workflow is deliberately NOT part of the `ci-ok` aggregate gate and must not become a
+# required status check (docs/internal/decisions/0033-aggregate-ci-gate.md). It reports to the
+# Security tab. A finding here is triage, not a broken build.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 3 * * 1'
+
+permissions:
+  contents: read
+  actions: read
+  security-events: write
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [javascript-typescript, python]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # No autobuild step: both languages here are interpreted, so there is nothing to compile.
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@4bd7200e1f146b1c937cae12d258b50f41a53cf8 # v4.38.0 pinned 2026-09-15
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@4bd7200e1f146b1c937cae12d258b50f41a53cf8 # v4.38.0 pinned 2026-09-15
+        with:
+          category: "/language:${{ matrix.language }}"
