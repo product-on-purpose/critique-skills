@@ -717,7 +717,18 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.1.x. **Category:** skills. **Confidence:** verified.
 - **Blocks:** A clean from-template build of N1 (critique-deck)
 - **Depends on:** Nothing
-- **Rank at intake:** 30 of 64. **Status:** backlog (recorded 2026-09-11).
+- **DONE 2026-09-25, and it found three more gaps than it named.** Both named gaps are fixed: the
+  folder `README.md` is in the directory shape and the checklist, and joint routing is a checklist
+  step stating its cost to the other six skills (new contested cases, boundary clauses in existing
+  descriptions, a hand-scored run on both tiers). The three found while fixing them were worse:
+  **the template had not been edited since 2026-07-31**, so its pass 4 still said to rank and bound
+  by hand (the assembler landed in v0.1.5 and was absent from the directory shape too), its
+  delegation stanza still omitted the skill directory (the v0.1.6 fix for the month in which no
+  delegated sonnet run completed), and `scripts/tests/test_delegation_contract.py` pins the skill
+  count at 6 and fails on a seventh skill exactly as the joint-routing test does. A skill copied from
+  the old text would have reintroduced two fixed defects. Also corrected: the six shipped skill
+  READMEs' inventories, which omitted `merge.py`.
+- **Rank at intake:** 30 of 64. **Status:** CLOSED 2026-09-25.
 
 ## E31 - Add criterion-table completeness to skill-selftest.py
 
