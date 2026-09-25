@@ -13,7 +13,7 @@ pages, cross-mode linking, and navigation-list length. Version 0.1.0.
 - `SKILL.md` - the skill's frontmatter, trigger description, and four-pass protocol instructions.
 - `references/` - `DIATAXIS.md` (the operationalized criteria, cited by ID) and
   `severity-anchors.md` (the domain's anchors on the shared 0-4 severity scale).
-- `scripts/` - `checks.py` (the scripted lane) and its `tests/` suite.
+- `scripts/` - `checks.py` (the scripted lane), `merge.py` (the pass 4 envelope assembler), and the `tests/` suite.
 - `evals/` - `triggers.eval.json`, the trigger-description eval cases.
 - `examples/` - golden and anti-pattern fixtures (`golden-*.json`, `anti-*.json`, and the
   `docs-golden-*.md` source artifacts they score), used by the scripted-lane tests and the

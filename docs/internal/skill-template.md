@@ -31,6 +31,14 @@ Domain content itself (which criteria, what they say, the corpus vocabulary) is 
 that is [S-05 (skills slate)](release-plans/plan_v0.1.0/S-05_skills-slate/spec.md)'s job, per its own
 per-skill table. This document is the shape every one of those six skills pours its content into.
 
+> **Refreshed 2026-09-25, as E30 (skill-template gaps).** This document went unedited from 2026-07-31
+> to 2026-09-25 while three releases changed what a shipped skill contains. A skill built from the
+> earlier text would have had no envelope assembler (v0.1.5), would have delegated without passing
+> the critic its own directory (v0.1.6, the defect that kept every delegated sonnet run from
+> completing for a month), and would have failed the family gate and two CI tests on its first day.
+> The sections that changed are "Directory shape", the protocol and delegation blocks under
+> "SKILL.md body", and "Building a skill end to end".
+
 ## Directory shape
 
 Fixed, per the S-04 spec. A skill's directory is `skills/critique-<domain>/`:
@@ -38,9 +46,11 @@ Fixed, per the S-04 spec. A skill's directory is `skills/critique-<domain>/`:
 ```
 skills/critique-<domain>/
   SKILL.md
+  README.md                          folder README: title, one-paragraph purpose, version, inventory
   references/<source-id>.md          one per rubric source: criterion table with IDs, anchors, operationalizations
   references/severity-anchors.md     domain anchor examples, extends docs/reference/severity-scale.md
   scripts/checks.py                  scripted lane; CLI: artifact path in, contract run envelope out
+  scripts/merge.py                   pass 4 assembler entry point; a verbatim copy, see below
   scripts/tests/__init__.py          empty package marker
   scripts/tests/test_checks_<domain>.py   pytest for every scripted check; the domain suffix is required
   evals/triggers.eval.json           >=20 {query, should_trigger} cases, >=3 cross-domain negatives
@@ -51,9 +61,26 @@ Nothing outside this shape. A pipeline that needs somewhere to put working notes
 (gitignored), never a stray file inside the skill directory itself; the family conformance gate and
 `scripts/skill-selftest.py` both assume this shape exactly.
 
-A committed, self-test-passing instance of this whole shape lives at
+**`README.md` is required by the family gate, not by `skill-selftest.py`.** The Standard's G8
+folder-readme rule wants a README in every component folder, and the self-test does not look for
+one, so a skill that passes its self-test still fails `npm run check`. Every shipped skill's README
+has YAML frontmatter carrying only `title: critique-<domain>`, an H1 of the skill name, a paragraph
+naming what it reviews and against what sources, the version, and an `## Inventory` list of the
+directories above. `skills/critique-clarity/README.md` is 20-odd lines and a fair model.
+
+**`scripts/merge.py` is copied, not written.** Take it verbatim from any shipped skill and change
+only the skill name in its docstring. It is a thin entry point: every line of logic lives in
+`skills/_shared/merge.py`, and it works out its own skill name from the directory it sits in, so
+there is no argument for a caller to get wrong. It sits beside `checks.py` on purpose. The assembler
+was first referenced at `skills/_shared/merge.py` by a relative path, and a live session got that
+path wrong three different ways in one day before it moved (v0.1.5, PR 18 and PR 19).
+
+A committed, self-test-passing instance of this shape lives at
 [`skills/_template-fixture/critique-toy/`](../../skills/_template-fixture/critique-toy/); read it
-alongside this document when a section here is easier to see than to describe. It is a fixture, not a
+alongside this document when a section here is easier to see than to describe. **It is not a model
+for `README.md` or pass 4.** Its folder README sits one level up, at the wrapper, and it is
+scripted-only (`judged: []`), so `checks.py` alone already emits its whole envelope and it carries
+no `merge.py`, although its delegation stanza names one. For those two, follow this document. It is a fixture, not a
 seventh skill: "Where a skill directory may live", below, explains why it sits under a wrapper
 directory.
 
@@ -302,9 +329,11 @@ reader first; write it as an instruction sequence.
    the field contracts a schema cannot check (location navigable unaided, evidence quoted or
    measured, violation names the breach, fix actionable). Do not restate the schema; reference it.
 3. **The four-pass protocol**, in this fixed order (methodology section 7). Copy this block, adapted
-   only to name the skill's own criteria:
+   only to name the skill's own criteria. Pass 4 changed in v0.1.5, from ranking and bounding by
+   hand to handing the combined findings to `scripts/merge.py`; hand assembly was measured to be
+   unreliable, and a skill copied from the older block would reintroduce it.
 
-   ```markdown
+   ````markdown
    ## Protocol
 
    Follow these four passes in order. Do not skip ahead to severity or fixes while still sweeping.
@@ -316,21 +345,56 @@ reader first; write it as an instruction sequence.
       in ascending ID order, evaluating each against the whole artifact before moving to the next.
       Run the scripted lane via `scripts/checks.py <artifact>`; perform the judged lane yourself,
       criterion by criterion, in the same fixed order.
+      One-time prerequisite: `pip install "jsonschema>=4.20,<5"`. Claude Code's `/plugin install`
+      does not install Python packages, and `checks.py` names this command itself if the package
+      is absent.
    3. **Severity assignment, as a separate pass.** Once every criterion has been swept, go back and
       assign severity to every finding using the weighing order in
-      [docs/reference/severity-scale.md](../reference/severity-scale.md) (impact, then frequency,
-      then persistence) and this skill's own `references/severity-anchors.md`. Do not assign severity
-      while still discovering problems; that inflates it.
-   4. **Rank and bound.** Order all findings by severity, then apply the output bound: every severity
-      3 and 4 finding, plus at most five below that threshold, ranked. Count everything suppressed in
-      `summary.suppressed_count`; nothing disappears without being counted.
-   ```
+      `docs/reference/severity-scale.md` (impact, then frequency, then persistence) and this skill's
+      own `references/severity-anchors.md`. Do not assign severity while still discovering problems;
+      that inflates it.
+   4. **Assemble the envelope. Do not do this pass by hand.** Write every finding from both lanes to
+      one JSON file, then hand that file to the library's own assembler. Two steps, in this order:
+
+      ```
+      # 1. Write the combined pool. Use an ABSOLUTE path; you are about to change directory.
+      cat > /absolute/path/to/findings.json << 'EOF'
+      {"findings": [ ...every finding from both lanes... ]}
+      EOF
+
+      # 2. Assemble, from this skill's directory, exactly as you ran scripts/checks.py in pass 2.
+      python3 scripts/merge.py --artifact <the SAME artifact path you gave checks.py> --findings /absolute/path/to/findings.json
+      ```
+
+      It ranks by severity, applies the output bound (every severity 3 and 4 finding, plus at most
+      five below that threshold), assigns `F-NNN` ids after ranking, counts everything suppressed into
+      `summary.suppressed_count` so nothing disappears uncounted, builds `summary.by_severity` over
+      **everything found** rather than only what survived bounding, computes the gate, normalises
+      prose to the contract's rules, and validates before printing.
+
+      `scripts/merge.py` sits beside `scripts/checks.py` and is run the same way, from the same
+      directory, so if pass 2 worked then this works. It knows its own skill name from its own
+      location, so there is no `--skill` to get wrong. Use the same artifact path you gave
+      `checks.py`. Add `--severity-3-threshold N` if a threshold was supplied.
+
+      **If it fails, say so and stop.** Report the command and its error as your final message.
+      Never substitute a prose write-up of the findings: the output contract is one envelope or
+      nothing, and a readable summary that is not an envelope looks like success to everything
+      downstream while being unusable by it.
+
+      Return its output verbatim. It prints nothing at all rather than print an invalid envelope, so
+      if you have output you have a valid one, and editing it afterwards makes it unvalidated again.
+      Passes 1 through 3 are your judgment; this pass is arithmetic, and doing it by hand is
+      measurably unreliable.
+   ````
 
 4. **Bounded output rule**, stated explicitly (methodology section 7, "Output bounding"): "Report
    every severity 3 and 4 finding. Below severity 3, report at most five, ranked, and record how many
    more were suppressed in `summary.suppressed_count`. Never omit a suppressed count to make the
-   output shorter." The scripted lane gets this for free from `skills/_shared/envelope.py`
-   (see "Wiring scripts/checks.py"); a judged-lane pass performed inline must apply it by hand.
+   output shorter." The scripted lane gets this for free from `skills/_shared/envelope.py` (see
+   "Wiring scripts/checks.py"), and a judged-lane pass gets it from `skills/_shared/merge.py` through
+   pass 4, which applies the same rule over the combined pool. Say so in the section, and say not to
+   apply it by hand: it is bookkeeping, not judgment.
 5. **Clean-context instruction.** State that this critique disregards any authorial framing,
    requester opinion, prior critique, or scope steering that arrived with the artifact, and that
    whatever was disregarded is recorded in `run.stripped_context` (methodology section 7; schema
@@ -345,18 +409,28 @@ reader first; write it as an instruction sequence.
 
 Copy this pattern, adapted only to the skill's own name. This is what S-06 AC-5 requires of every
 skill's `SKILL.md`, written here so a P2 pipeline does not have to wait on S-06 landing first to
-write a conformant stanza:
+write a conformant stanza. **It changed in v0.1.6**: the critic is now passed the skill's own
+directory, and `scripts/tests/test_delegation_contract.py` fails any `SKILL.md` that omits it or its
+"not optional" paragraph. Without the directory, a delegated critic searched whole drives for the
+plugin and never returned, which is why no sonnet cell completed for a month.
 
 ```markdown
 ## Delegation
 
 Where the subagent tool is available, delegate this critique to the `critique-critic` subagent,
-passing only the artifact (path or inline content), this skill's name (`critique-<domain>`), and,
-if the caller supplied one, a severity-3 gate threshold. Do not pass authoring history, drafts, or
+passing the artifact (path or inline content), this skill's name (`critique-<domain>`), the absolute path
+of this skill's own directory, and, if the caller supplied one, a severity-3 gate threshold.
+Pass nothing else. Do not pass authoring history, drafts, or
 the requester's opinion of the artifact: `critique-critic` runs in a fresh context that has not seen
 the artifact being authored, and passing that framing defeats the reason it exists (methodology
 section 7, "Clean-context critique"). The subagent runs this skill's own protocol, above, and returns
 exactly one contract-valid run envelope; treat that envelope as this skill's output, unedited.
+
+**The skill directory is not optional.** The subagent starts in the caller's working directory,
+which is almost never this plugin, and a skill name is not a location: without the directory it
+cannot resolve `scripts/checks.py` or `scripts/merge.py`. Pass the "Base directory for this skill"
+this invocation was given. Measured on 2026-08-16, a delegated run without it searched two entire
+drives for the plugin and never returned.
 
 Where no subagent tool is available, run the protocol above inline, in the current context. Disregard
 any authorial framing, requester opinion, prior critique, or scope steering that arrived with the
@@ -746,7 +820,10 @@ that. Clearing the second warning is necessary for a passing U5 score and nowher
 Body-content conformance to the "Required structure" list above (four-pass protocol present, contract
 referenced, delegation stanza present) is a structural requirement of this document, not a mechanical
 check `skill-selftest.py` runs: verifying that prose actually says the right thing needs judgment, not
-a keyword grep that would produce more false confidence than it removes. A pipeline agent is
+a keyword grep that would produce more false confidence than it removes. One exception has been
+made since, outside the self-test: `scripts/tests/test_delegation_contract.py` asserts the delegation
+stanza passes the critic its directory and calls it not optional, because omitting that sentence
+produced a month of runs that never returned. A pipeline agent is
 responsible for following the "Required structure" section directly; a P2/P3 review pass is where a
 missing or garbled protocol section actually gets caught. See "Ambiguities" in the S-04 build report
 for the reasoning behind drawing this line here.
@@ -759,7 +836,8 @@ not by this self-test.
 
 ## Building a skill end to end
 
-1. Create `skills/critique-<domain>/` with the six required paths (empty files are fine to start).
+1. Create `skills/critique-<domain>/` with every path in "Directory shape" (empty files are fine to
+   start).
 2. Write `SKILL.md`: frontmatter first (name, description, version, license, rubric_sources, checks),
    then the body in the required order, copying the four-pass and delegation blocks above verbatim
    and adapting only the criteria and domain nouns.
@@ -768,21 +846,49 @@ not by this self-test.
 4. Write `references/severity-anchors.md`.
 5. Write `scripts/checks.py`: the bootstrap, `IMPLEMENTED_CRITERIA`, one `check_*` helper per
    scripted criterion (or one `check` folding them together), wired through `run_scripted_lane`.
-6. Write `scripts/tests/test_checks_<domain>.py` (or one file per criterion, each domain-suffixed)
+6. Copy `scripts/merge.py` from any shipped skill, changing only the skill name in its docstring.
+7. Write `scripts/tests/test_checks_<domain>.py` (or one file per criterion, each domain-suffixed)
    covering every scripted check, plus an empty `scripts/tests/__init__.py`.
-7. Write `evals/triggers.eval.json`: >=20 cases, >=3 negatives, >=3 cross-domain negatives.
-8. Write >=3 `examples/golden-NN.json` and >=1 `examples/anti-NN.json`.
-9. Write `bench/generator/domains/<domain>.py` per "Corpus module obligation" and register it.
-10. Run `python scripts/skill-selftest.py skills/critique-<domain>` until it exits 0, warnings
+8. Write `evals/triggers.eval.json`: >=20 cases, >=3 negatives, >=3 cross-domain negatives.
+9. Write >=3 `examples/golden-NN.json` and >=1 `examples/anti-NN.json`.
+10. Write `README.md`, the folder README described under "Directory shape".
+11. Write `bench/generator/domains/<domain>.py` per "Corpus module obligation" and register it.
+12. Run `python scripts/skill-selftest.py skills/critique-<domain>` until it exits 0, warnings
     included. A warning does not fail the run, but `description-missing-use-when-advisory` predicts an
-    AC-6 failure at step 13, so clear it here rather than there.
-11. Run `python -m bench.generator validate --domain <domain>`, `build`, `verify`, `leak-check`.
-12. Run `python -m pytest` from the repository root. `pytest.ini`'s `testpaths` already globs
-    `skills/*/scripts/tests`, so no edit is needed there; what this step actually catches is a test
-    module basename colliding with another skill's.
-13. Run the family conformance gate, `npm run check` (`AGENTS.md`, "Checks"). This is where U4
-    (`name-matches-dir`), U5 (description score, AC-6's 0.7 threshold), and U13 (skill registered in
-    `library.json`) are decided; `skill-selftest.py` checks none of them the way the gate does.
+    AC-6 failure at step 17, so clear it here rather than there.
+13. Run `python -m bench.generator validate --domain <domain>`, `build`, `verify`, `leak-check`.
+14. **Add the skill to `evals/joint-routing.eval.json`. This step costs every other skill something,
+    and it is the one most likely to be left until CI fails.** `scripts/tests/test_joint_routing_eval.py`
+    `test_the_fixture_covers_every_skill` fails the moment a seventh `skills/critique-*/SKILL.md`
+    exists and the fixture does not name it. Satisfying it takes three things, in order:
+    - **New cases**: `contested` cases pairing the new skill with each sibling whose ground it
+      overlaps, and at least one `control` case it should win outright. `evals/README.md` defines the
+      three case kinds.
+    - **Edits to the existing skills' descriptions, not only the new one's.**
+      `test_contested_pairs_name_each_other_in_their_descriptions` requires both descriptions in every
+      contested pair to carry a boundary clause naming the other. Each edited description changes
+      that skill's routing and its U5 description score, so re-run the family gate for the whole
+      plugin, not just the new skill.
+    - **A hand-scored run on both pinned tiers**: `python scripts/run-joint-routing.py --model sonnet
+      --k 3`, then again with `--model haiku`, committing both results files. CI checks the fixture's
+      structure and deliberately does not score routing (`evals/README.md` says why), so nothing
+      automated tells you whether the new descriptions actually route. Routing is stochastic; k=1 is
+      an anecdote.
+15. Bump the pinned count in `scripts/tests/test_delegation_contract.py`,
+    `test_there_are_six_skills_to_check` (`len(SKILL_FILES) == 6`). It is pinned deliberately, so a
+    glob that silently matched nothing could not pass, and it fails on the first seventh skill for
+    the same reason. Rename the test to match the new count.
+16. Run `python -m pytest` from the repository root. `pytest.ini`'s `testpaths` already globs
+    `skills/*/scripts/tests`, so no edit is needed there. What this step catches is a test module
+    basename colliding with another skill's, and steps 14 and 15 if either was skipped.
+17. Register the skill in `library.json` under `components.skills` (`name`, `path`, `version`,
+    `tier`, `status`, matching the existing entries), run `npm run gen` to regenerate
+    `.claude-plugin/plugin.json` and `INDEX.md` from it and `npm run gen:catalog` to regenerate the
+    README's skill catalog table, then run the family conformance gate,
+    `npm run check` (`AGENTS.md`, "Checks"). This is where U4 (`name-matches-dir`), U5 (description
+    score, AC-6's 0.7 threshold), U13 (skill registered in `library.json`) and G8 (the folder
+    `README.md` from step 10) are decided; `skill-selftest.py` checks none of them the way the gate
+    does.
 
 ## See also
 

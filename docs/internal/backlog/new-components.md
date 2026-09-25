@@ -102,7 +102,8 @@ prioritized ahead of deck**. The order is now:
   artifact type and `critique-accessibility`'s resolver, so unlike deck it needs no new corpus
   machinery, which makes it the cheaper skill to prove the template on.
 - **Blocks:** nothing directly.
-- **Depends on:** E30 (skill-template gaps) hard, and E2 (sonnet unblock) for two-tier k=5.
+- **Depends on:** E30 (skill-template gaps) hard, and E2 (sonnet unblock) for two-tier k=5. **Both
+  closed** (E2 2026-09-13, E30 2026-09-25), so nothing listed here gates N2 any longer.
   **No longer depends on N1.**
 - **Status:** backlog (recorded 2026-09-11).
 

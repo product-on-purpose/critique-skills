@@ -98,7 +98,7 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**32 items depend on nothing and can start today.** Derived from each item's own
+**31 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
@@ -107,7 +107,6 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E13 | Update ROADMAP.md's v0.1.x section: two of four verification items are met | S | v0.1.x |
 | E28 | Pin or record the Claude Code CLI version bench.yml installs | S | v0.1.x |
 | E29 | Make release.yml's re-run suite match what it claims to run | S | v0.1.x |
-| E30 | Fix two gaps in skill-template.md before the next skill is built from it | S | v0.1.x |
 | E31 | Add criterion-table completeness to skill-selftest.py | S | v0.1.x |
 | E32 | Close S-03 AC-3: flip the checkbox and add a corpus-composition CI check | S | v0.1.x |
 | E33 | Correct ROADMAP's Gold-tier bullet (3 of 4 done) and decide the tier declaration | S | v0.1.x |
