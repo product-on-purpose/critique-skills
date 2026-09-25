@@ -22,7 +22,7 @@ sharper here than in the family default, because of what this project has commit
 4. **What does it cost across the catalog?** Every new skill edits the joint-routing eval and, in
    practice, the descriptions of the six skills it competes with for routing.
 
-All four proposals below entered on 2026-09-11 from the backlog-expansion intake, and all four are
+N1 to N4 entered on 2026-09-11 from the backlog-expansion intake (N5 followed on 2026-09-25, on the maintainer's proposal), and all four are
 carried from `ROADMAP.md`, so their warrant is already public. What this file adds is the recorded
 gate verdict, the dependency each one actually has, and an honest note on which of them is blocked
 on infrastructure rather than on effort.
@@ -37,6 +37,7 @@ prioritized ahead of deck**. The order is now:
 | 1 | **N2 critique-forms** | **v0.2.0** | Reuses the shipped `html` artifact type and resolver; no new corpus machinery |
 | 2 | N1 critique-deck | v0.3.0 | Needs a new corpus module for a domain that does not exist |
 | 3 | N3 critique-dataviz | unscheduled | Needs a chart-spec generator mode that does not exist and is unscoped |
+| 4 | N5 critique-checkout | unscheduled | Proposed 2026-09-25; builds on N2's field criteria and corpus module, so it follows forms |
 
 `ROADMAP.md` still states the old order and is deliberately not edited here; see
 [the shape options brief](../release-plans/v0.2.0-shape-options.md).
@@ -105,7 +106,24 @@ prioritized ahead of deck**. The order is now:
 - **Depends on:** E30 (skill-template gaps) hard, and E2 (sonnet unblock) for two-tier k=5. **Both
   closed** (E2 2026-09-13, E30 2026-09-25), so nothing listed here gates N2 any longer.
   **No longer depends on N1.**
-- **Status:** backlog (recorded 2026-09-11).
+- **CRITERION REGISTRY DRAFTED 2026-09-25**, for review before anything is scaffolded:
+  [criterion-registry-draft.md](../release-plans/_unassigned/N2_critique-forms/criterion-registry-draft.md).
+  17 proposed criteria (12 scripted, 5 judged) from 17 Baymard articles and 3 Wroblewski articles,
+  all read 2026-09-25. It also measures two things this entry assumed. "Reuse" removes new
+  infrastructure, not new work: the forms corpus module is a new build. And the why-gate's
+  not-a-duplicate test weighed only accessibility, when usability and microcopy already own label
+  presence, error content and validation timing. Six decisions are listed there for the maintainer.
+- **REVISION 2, 2026-09-25**, after the maintainer ruled all six decisions: rebuilt from 75 sources
+  and 470 verified findings (Wroblewski's book in full, Silver, GOV.UK, web.dev, NN/g, Baymard
+  benchmarks, peer-reviewed studies, A/B tests), with a committed
+  [bibliography](../release-plans/_unassigned/N2_critique-forms/sources.md). 25 proposed criteria,
+  18 scripted and 7 judged, each graded by its strongest evidence. Three decisions remain: the
+  namespace (reframed as a governance question), two expert-only criteria, and E67.
+- **ALL DECISIONS RULED 2026-09-25** (second round): namespace `FORMS` per
+  [ADR 0035](../decisions/0035-synthesized-rubric-namespace.md); the two scripted expert-only rules
+  kept and grouping deferred; accessibility expanded first (E67). The registry is 24 criteria, 18
+  scripted and 6 judged.
+- **Status:** registry ruled 2026-09-25; the next artifact is the effort's `spec.md`.
 
 ## N3 - critique-dataviz (chart critique, Tufte and Cairo)
 
@@ -168,3 +186,44 @@ prioritized ahead of deck**. The order is now:
 - **Blocks:** E55 (chain and hook evaluation coverage, Gold G1 and G3).
 - **Depends on:** E52 (rule who performs revise).
 - **Status:** backlog (recorded 2026-09-11).
+
+## N5 - critique-checkout (checkout flow critique, its own research base)
+
+- **Proposed name:** `critique-checkout`
+- **Component type:** skill.
+- **Target tier:** convergent (Silver).
+- **Agent-targets:** claude, codex.
+- **Rationale:** proposed by the maintainer on 2026-09-25 while ruling the N2 (critique-forms)
+  registry: checkout is important enough, and its research base large enough, to be a skill of its
+  own rather than a corner of forms. Checkout is where form friction costs money directly, and it is
+  the most heavily measured part of form design: Baymard's checkout benchmark, published field-count
+  and guest-checkout A/B tests, and form-analytics abandonment data.
+- **What it takes from forms.** The two card-specific criteria drafted for N2 move here: card-number
+  format and card-expiry format. Address line 2 and the phone-reason rule apply to any address or
+  phone field and stay with forms unless the maintainer rules otherwise.
+- **Why-gate verdict: PASSES on warrant and measurability, CONDITIONAL on duplication.**
+  Warranted: Baymard's free checkout research is the largest single source read for N2, and the
+  2026-09-25 research pass is tagging every checkout finding `scope: checkout` for this skill.
+  Measurable: a checkout page is `html`, the same artifact type as forms, so it needs a corpus
+  module but no new infrastructure. **Duplication is the open question**: a checkout page is a form,
+  so the boundary must be drawn before either skill ships. Forms owns field-level mechanics on any
+  form. Checkout owns what exists only in a purchase: payment fields, guest versus account
+  checkout, cost and delivery transparency before commitment, the order summary, and the flow
+  across steps.
+- **Cost across the catalog:** an eighth skill, contested for routing with forms first and with
+  usability and microcopy after. Every contested pair needs a boundary clause in both descriptions
+  (the E30 checklist step).
+- **Evidence:** the maintainer's ruling on N2 decision 3, 2026-09-25;
+  [the N2 registry draft](../release-plans/_unassigned/N2_critique-forms/criterion-registry-draft.md);
+  the local research record under `_local/research/critique-forms/` (gitignored; copies of
+  copyrighted sources are never committed).
+- **Done looks like:** the same bar as N1 and N2, preceded by its own criterion registry and a
+  research base the maintainer has reviewed.
+- **Size:** L. **Release:** unscheduled.
+- **Blocks:** nothing.
+- **Depends on:** N2 (critique-forms), whose field criteria and corpus module it builds on and
+  whose boundary it must respect.
+- **Seeded 2026-09-25:** 38 findings from the N2 research pass are tagged checkout-only, and the
+  main ones are listed in the N2 draft's "Seeds for N5" section. The maintainer asked for a large
+  research base of its own, so this proposal needs a checkout-specific pass before a registry.
+- **Status:** proposed 2026-09-25.

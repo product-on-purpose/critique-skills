@@ -1300,3 +1300,58 @@ and the repository did not have.
 - **Blocks:** Retiring the "measured through the old mechanism" caveat on every published figure
 - **Depends on:** Nothing
 - **Rank at intake:** unranked (added 2026-09-25). **Status:** backlog.
+
+## E67 - Expand critique-accessibility with the WCAG 2.2 AA criteria checkable from static markup
+
+- **Target:** `skills/critique-accessibility/` (SKILL.md lanes and scope statement, `references/WCAG.md`,
+  `scripts/checks.py` and tests), `bench/generator/domains/accessibility.py`, the README catalog
+- **Change:** filed 2026-09-25 as "two missing criteria", which **understated the gap about
+  fourteenfold**. Checked against the W3C text the same day: WCAG 2.2 has **55 Level A and AA
+  success criteria** (31 A, 24 AA). `critique-accessibility` implements **22**. Four are declared
+  out of reach in `references/WCAG.md` (No Keyboard Trap, Timing Adjustable, Pointer Gestures,
+  Dragging Movements, which need a live page). **The other 29 are never mentioned**, while
+  `SKILL.md` says the skill covers levels A and AA "required for AA conformance". Done: the
+  criteria among the 29 that are checkable from markup and declared CSS are added, as a new skill
+  version measured on both pinned tiers.
+- **Ruled 2026-09-25 by the maintainer: expand now (option b)**, adding at least **1.3.4
+  Orientation, 1.3.5 Identify Input Purpose, 2.4.7 Focus Visible, 2.5.8 Target Size (Minimum) and
+  4.1.3 Status Messages**, each confirmed Level AA from the W3C text. 1.3.5 and 2.5.8 come first
+  because they border N2 (critique-forms). **The re-measure is a paid dispatch, confirmed with the
+  maintainer before it runs**, even though the ruling anticipated it.
+- **A measurement-design question to settle in the spec, not here:** adding injectors to
+  `accessibility.py` changes the corpus artifacts, so their sha256 values change and the baseline
+  must be re-run on the new corpus. Adding new artifacts instead, and leaving
+  `accessibility-001` to `004` untouched, keeps the published comparison intact. The cal1
+  recalibration re-ran only the skill because its corpus did not change; this one would.
+- **Why:** the published scope claim is not true, and this repository's argument is that its claims
+  carry receipts. It also sets a deliberate overlap with N2: both skills will test `autocomplete`
+  (accessibility for conformance, forms for autofill and conversion) and touch-target size (24px
+  conformance minimum against forms' larger mobile-usability sizes). The library already carries
+  one such overlap, unrecorded (`WCAG-3.3.2` and `NNG-H6-LABELED` both test label presence); these
+  are recorded.
+- **Evidence:** the lane manifest in `skills/critique-accessibility/SKILL.md` (13 scripted, 9
+  judged); its scope paragraph and `references/WCAG.md`, "Scope"; the WCAG 2.2 Recommendation
+  at `https://www.w3.org/TR/WCAG22/`, read 2026-09-25.
+- **Derives from:** N2's revision-2 research pass; decision 8, ruled 2026-09-25.
+- **Size:** M to L (five criteria, their injectors and tests, a version bump, a corpus decision,
+  and a paid re-measure). **Release:** v0.2.0. **Category:** skills. **Confidence:** verified.
+- **Blocks:** E68.
+- **Depends on:** Nothing
+- **Rank at intake:** unranked (added 2026-09-25). **Status:** ruled 2026-09-25; needs a spec.
+
+## E68 - Narrow critique-accessibility's scope claim to the criteria it actually checks
+
+- **Target:** `skills/critique-accessibility/SKILL.md` (description and scope paragraph),
+  `references/WCAG.md` "Scope", `README.md`, `docs/reference/criterion-ids.md`
+- **Change:** after E67, roughly 24 of the 55 Level A and AA criteria will still be uncovered, most
+  because they need media files, a rendered page or live interaction. Done: the scope claim names
+  what the skill checks, and `references/WCAG.md` lists every uncovered criterion with a one-line
+  reason, the way it already does for the four live-interaction ones.
+- **Why:** the maintainer ruled to expand before narrowing (E67). Narrowing still has to follow,
+  because expansion alone leaves the claim false for the remainder.
+- **Evidence:** as E67.
+- **Derives from:** decision 8, ruled 2026-09-25.
+- **Size:** S. **Release:** v0.2.0. **Category:** docs. **Confidence:** verified.
+- **Blocks:** Nothing
+- **Depends on:** E67
+- **Rank at intake:** unranked (added 2026-09-25). **Status:** backlog.

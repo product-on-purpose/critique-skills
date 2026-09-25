@@ -3,9 +3,9 @@
 Local-first, version-controlled backlogs (Standard sec 7.1). Two files, plus this index:
 
 - **[enhancements.md](enhancements.md)** - features, fixes and refinements to components that already
-  exist. 66 items, `E1` through `E66`.
+  exist. 68 items, `E1` through `E68`.
 - **[new-components.md](new-components.md)** - proposals to ADD a skill, command, subagent, hook or
-  chain. 4 items, `N1` through `N4`, each with a recorded why-gate verdict.
+  chain. 5 items, `N1` through `N5`, each with a recorded why-gate verdict.
 
 This is committed maintainer governance, not published documentation. `docs/internal/` is never
 routed to the site by design, so nothing here appears at
@@ -98,7 +98,7 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**31 items depend on nothing and can start today.** Derived from each item's own
+**32 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
@@ -129,6 +129,7 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E24 | Add an automated evidence-quotes-not-characterizes check | M | v0.2.0 |
 | E27 | Isolate the bench harness from the working tree it measures | M | v0.2.0 |
 | E63 | Bring the dispatch run sets into results.json, or amend the rule they break | M | v0.2.0 |
+| E67 | Expand critique-accessibility with the WCAG 2.2 AA criteria checkable from static markup | M to L | v0.2.0 |
 | E49 | Write one real tutorial for the empty Diataxis Tutorials quadrant | M | v0.2.0 |
 | E53 | Harden --gate as a documented per-skill CI recipe for consumers | M | v0.3.0 |
 | E54 | Ship one documented cross-library composition workflow | M | v0.3.0 |
