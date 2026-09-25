@@ -549,7 +549,10 @@ and the repository did not have.
   2026-09-15 re-measure through the shipped harness confirmed it, trailing a re-run baseline on both
   location metrics by margins inside run-to-run spread. The skill ships qualified through Haiku, not
   unconditionally."
-- **Rank at intake:** 20 of 64. **Status:** re-measured and recorded 2026-09-24; the ROADMAP wording awaits the maintainer.
+- **ROADMAP wording applied 2026-09-25**, on the maintainer's delegation: the Known-limitations
+  bullet now records the re-measure. That bullet is a factual claim about a measurement, not an exit
+  gate or a promise, which is why it moved while E12 and E13 did not.
+- **Rank at intake:** 20 of 64. **Status:** CLOSED 2026-09-25.
 
 ## E21 - Backfill the missing fidelity-dispatch cell clarity-001/haiku-r1.json
 
@@ -1200,8 +1203,11 @@ and the repository did not have.
   entries sharing every field but `lane` on 2026-09-14. Adding them without the reader changes would
   repeat both.
 - **Evidence:** `bench/README.md` "Results"; `bench/results/README.md` "Known issues in the
-  measurement tooling"; the three `runs-dispatch-*` directories; `bench.yml`'s result branches, which
-  each rewrite `results.json` to hold one run set.
+  measurement tooling"; the three `runs-dispatch-*` directories; `bench/run_bench.py:1112`, which
+  defaults `--results-out` to `bench/results/results.json` and scores only the new run directory into
+  it, and `bench.yml`'s publish step (`git add bench/results`), which commits that overwrite to every
+  `bench-results/*` branch. The cheap half of this item is passing `--results-out` into the run
+  directory from `bench.yml`, so a result branch stops carrying a `results.json` nobody may merge.
 - **Derives from:** Landing E19 and E20's envelopes, 2026-09-24.
 - **Size:** M. **Release:** v0.2.0. **Category:** measurement. **Confidence:** verified.
 - **Blocks:** Any published table showing a re-run figure; `bench.yml` result branches merging cleanly
@@ -1227,7 +1233,12 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.1.x. **Category:** decision. **Confidence:** verified.
 - **Blocks:** Any claim that the shipped harness reproduces the published figures
 - **Depends on:** Nothing
-- **Rank at intake:** unranked (added 2026-09-24). **Status:** backlog.
+- **RULED 2026-09-25, on the maintainer's delegation: amend, do not reopen.** ADR 0030 carries
+  "Amendment, 2026-09-25" and a TL;DR line stating the fidelity condition is unmet, unqualified.
+  The lane stays for a separate reason: there is no faithful lane to return to, since the committed
+  figures came from a workflow rather than a harness and the API-prompt lane was deleted. Status stays
+  Accepted. The one route to figures the shipped harness reproduces is filed as E66.
+- **Rank at intake:** unranked (added 2026-09-24). **Status:** CLOSED 2026-09-25.
 
 ## E65 - Decide whether critique-clarity's critic should emit instances
 
@@ -1249,4 +1260,32 @@ and the repository did not have.
   verified for the measurement, hypothesis for the cause.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
-- **Rank at intake:** unranked (added 2026-09-24). **Status:** backlog.
+- **RULED 2026-09-25, on the maintainer's delegation: no change.** Only 1 of the 33 committed
+  instance claims matched a planted defect, the re-run's recall is higher without them, and the
+  contract makes `instances` optional, so asking for them would most likely buy precision loss and
+  nothing a user asked for. The cause stays an untested hypothesis and is recorded as one. Reopens if
+  a user-facing need for per-location instances appears, or if E66 re-measures and the question
+  becomes what the published figures should reward.
+- **Rank at intake:** unranked (added 2026-09-24). **Status:** CLOSED 2026-09-25, no change.
+
+## E66 - Decide whether to re-measure the full grid through the shipped harness
+
+- **Target:** `bench/results/`, `README.md` scoreboard, `ROADMAP.md`
+- **Change:** ADR 0030's fidelity condition is unmet on sonnet (E64), so the published v0.1.0 figures
+  describe the skills as measured through a mechanism that no longer exists, and the shipped harness
+  does not reproduce them within variance. Done: a ruling on whether to re-measure every active skill
+  on both pinned tiers at k=5 through `bench.yml`, with the baseline arm in the same run set, and
+  publish that as the new measurement of record; or to record that the v0.1.0 figures stand, caveated,
+  until a release that changes a skill forces a re-measure anyway.
+- **Why:** It is the only route to published figures a reader can reproduce with the committed
+  harness, which is the claim the receipts argument rests on. It is also expensive: ADR 0031 costed
+  230 skill cells before the baseline and rejected it on cost, and the one sonnet cell timed alone
+  took 639 seconds.
+- **Evidence:** ADR 0030, "Amendment, 2026-09-25"; ADR 0031, "Considered options" option 4 and
+  "The gate ran on sonnet, 2026-09-15"; the two sonnet dispatches, which completed 40 of 40 each.
+- **Derives from:** E64 (ADR 0030 after the sonnet gate), ruled 2026-09-25.
+- **Size:** S to decide, L to act on. **Release:** unscheduled. **Category:** decision.
+  **Confidence:** verified.
+- **Blocks:** Retiring the "measured through the old mechanism" caveat on every published figure
+- **Depends on:** Nothing
+- **Rank at intake:** unranked (added 2026-09-25). **Status:** backlog.

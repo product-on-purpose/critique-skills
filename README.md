@@ -183,7 +183,7 @@ _Location-level, shipped versions only, run set `p3-2026-07-31-plus-cal1-2026-08
 
 Recall is the flattering half. The floor is `critique-clarity` on Haiku at **0.309** run-to-run consistency, the lowest figure any core skill measured, with its judged lane alone at **0.150**. Among shipped skills precision falls to **0.169**, on `critique-usability` at Sonnet. Counting the retired `critique-accessibility` 0.1.0 it falls to **0.155**, which is the version [the failure below](#the-most-instructive-number-is-a-failure) is about. Both cuts are named because they are different questions: what you can install today, and what this library has ever measured.
 
-All 54 rows across three cuts, every per-run figure, and all 621 run envelopes: the [receipts explorer](https://product-on-purpose.github.io/critique-skills/receipts/), and [`bench/results/README.md`](bench/results/README.md) in the repo, unflattering numbers first. Nothing lives only on the site.
+Every measured cell, with the counts behind every ratio: the [receipts explorer](https://product-on-purpose.github.io/critique-skills/receipts/). Every per-run figure ([`variance.json`](bench/results/variance.json)) and all 621 run envelopes (`bench/results/runs*/`) live in the repo, read unflattering numbers first by [`bench/results/README.md`](bench/results/README.md). Nothing lives only on the site.
 
 ### The most instructive number is a failure
 
