@@ -5,7 +5,7 @@ Local-first, version-controlled backlogs (Standard sec 7.1). Two files, plus thi
 - **[enhancements.md](enhancements.md)** - features, fixes and refinements to components that already
   exist. 66 items, `E1` through `E66`.
 - **[new-components.md](new-components.md)** - proposals to ADD a skill, command, subagent, hook or
-  chain. 4 items, `N1` through `N4`, each with a recorded why-gate verdict.
+  chain. 5 items, `N1` through `N5`, each with a recorded why-gate verdict.
 
 This is committed maintainer governance, not published documentation. `docs/internal/` is never
 routed to the site by design, so nothing here appears at

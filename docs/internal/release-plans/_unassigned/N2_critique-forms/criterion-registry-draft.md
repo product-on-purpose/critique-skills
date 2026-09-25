@@ -190,6 +190,26 @@ that is the honest ceiling on "checkable from markup".
 
 ## Decisions for the maintainer
 
+**Rulings, 2026-09-25.** The maintainer answered all six the same day:
+
+| # | Ruling | Consequence for this draft |
+|---|---|---|
+| 1 | **Expand the research base**: read Wroblewski's book from the maintainer's library, add Adam Silver's *Form Design Patterns* and other local books, and search for current sources, with copies kept as a local record | A second research pass is under way (see "Research pass 2" below). The registry is revised from its results, not from this draft's 21 sources alone |
+| 2 | Leaning toward one `FORMS-` namespace, not firmly | Re-decided after pass 2. If most criteria end up backed by several sources, a namespace named after one source is arbitrary, which favours `FORMS-` with attribution carried in `rubric_sources` (the template allows a namespace that differs from the rubric id) |
+| 3 | **Checkout becomes its own skill** with its own large research base | Filed as [N5 (critique-checkout)](../../../backlog/new-components.md). The two card-specific criteria move there. Address line 2 and phone reason stay here, since they apply to any address or phone field |
+| 4 | **Keep `autocomplete` in forms (option B)**: autofill is tied to conversion, which is what form design is for | Added back, and pass 2 looks specifically for conversion and completion evidence on autofill |
+| 5 | **Try the Internet Archive, and broaden the sources**, favouring recent, mobile-first, and quantified work (large A/B tests and studies) | Pass 2 targets exactly that and grades every source's evidence |
+| 6 | **Keep both** `BAYMARD-FORMAT-TOLERANCE` and `NNG-H5-PREVENT` with the stated boundary | Settled: harmless variation is accepted and normalized; actually wrong input is prevented |
+
+**Research pass 2**, started 2026-09-25: five agents read Wroblewski's book, Silver's book and four
+saved articles, other mobile and UX books in the library, current mobile-first web guidance
+(web.dev, GOV.UK, NN/g, platform guidelines), and quantified studies (peer-reviewed papers,
+form-analytics benchmarks, A/B tests). Every figure must be copied verbatim from a saved copy.
+Copies live under `_local/research/critique-forms/` (gitignored), with a manifest recording each
+source's URL or ISBN, access date and checksum.
+
+The original decision text follows, kept as asked.
+
 1. **Wroblewski's book.** It is not cited because nobody read it, and the template's `accessed`
    field means read. What its contents would source is unknown, not assumed: from their titles alone,
    chapters 2 (Form Organization) and 4 to 6 (Labels, Input Fields, Actions) look relevant. The
