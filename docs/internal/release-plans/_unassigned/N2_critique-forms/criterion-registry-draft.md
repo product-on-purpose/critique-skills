@@ -7,7 +7,10 @@ date: 2026-09-25
 
 # critique-forms: criterion registry draft
 
-**Status: a draft for maintainer review, not a build.** Nothing under `skills/` exists yet. This
+**Status: a draft for maintainer review, not a build.** Nothing under `skills/` exists yet. It sits
+in `_unassigned/` by the `plab-spec` convention but is not a spec: once the decisions below are
+ruled, the ruled registry becomes this effort's `spec.md`, with acceptance criteria, and this file is
+its research record. This
 document supplies the thing every shipped skill had before its directory was scaffolded, a
 per-skill criterion table, which for the first six lived in
 [S-05 (skills slate)](../../plan_v0.1.0/S-05_skills-slate/spec.md) and for `critique-forms` lived
@@ -109,8 +112,12 @@ Nobody in this session has read it, and the template's `accessed` field means re
 here as decision 1, not cited below.
 
 **Figures are not trusted yet.** Several Baymard titles carry a percentage ("Only 14% Do So"). The
-fetches passed through a summarizer, and one article's figure came back three different ways. No
-criterion below depends on a figure. Any figure the build quotes must first be re-read verbatim.
+fetches passed through a summarizer, and one article's figure came back three different ways. Any
+figure the build quotes must first be re-read verbatim. One criterion below does use a number, and
+it was: `BAYMARD-CARD-NUMBER-FORMAT`'s 19 comes from the card-spaces article's own text, re-fetched
+raw on 2026-09-25, which lists card-number lengths up to 19 digits (Maestro 12 to 19, UnionPay 16 to
+19, Visa reserving 13 to 19). The article does not state a `maxlength` rule; deriving one from those
+lengths is this draft's step, and the row says so.
 
 **Not usable:** Baymard's article on confirming e-mail rather than password. Its URL now redirects
 to the research index, not the article (decision 5).
@@ -123,6 +130,14 @@ naming the source (decision 2). Both are `paraphrased` under
 is deliberate: forms is the domain N2 chose because much of it is checkable from markup, and the
 scripted lane is the part of every shipped skill that measures precisely.
 
+**What "scripted" rests on here, stated plainly.** Six of the twelve scripted rows (`INPUT-TYPE`,
+`SPLIT-ENTITY`, `CARD-NUMBER-FORMAT`, `EXPIRY-FORMAT`, `PHONE-REASON`, `ADDRESS-LINE-2`) first have to
+work out what a field is for, and they do it lexically, from its label, `name` or `id`. That is
+deterministic, so it belongs in the scripted lane, but it is a heuristic. The generated corpus will
+use vocabulary those heuristics recognise, so the benchmark will measure them favourably. **Their
+false-positive and miss rate on real-world forms, with idiosyncratic names, is unmeasured**, and
+that is the honest ceiling on "checkable from markup".
+
 | ID | Lane | What it flags | Source | Boundary with a shipped skill |
 |---|---|---|---|---|
 | `WROBLEWSKI-INPUT-TYPE` | scripted | A text input whose label, `name` or `id` says e-mail, phone, URL or number, but whose `type` or `inputmode` does not match, so a phone shows the wrong keyboard | lukew ?1000; Baymard input-fields | Not `NNG-H5-PREVENT`: this tests the keyboard and input mechanism, not whether a wrong value is ruled out |
@@ -130,7 +145,7 @@ scripted lane is the part of every shipped skill that measures precisely.
 | `BAYMARD-REQUIRED-OPTIONAL` | scripted | A form mixing required and optional fields that does not mark both kinds in visible label text, or marks them only in a placeholder or a page-level legend | Baymard required-optional | `WCAG-3.3.2` as operationalized checks only that a label exists, not how requiredness is shown |
 | `BAYMARD-PLACEHOLDER-INSTRUCTION` | scripted | A labelled field whose format instruction ("MM/YY", "name@example.com") exists only in its placeholder, which disappears once typing starts | Baymard inline-labels | `NNG-H6-LABELED` owns the field with no label at all; this is the labelled field whose instructions vanish |
 | `BAYMARD-FIELD-WIDTH` | scripted | A fixed-length field (postcode, card security code, expiry) whose `size`, `maxlength` or inline width is far from the input it expects | Baymard field-width | None |
-| `BAYMARD-CARD-NUMBER-FORMAT` | scripted | A card-number field whose `maxlength` is under 19 or whose `pattern` rejects spaces | Baymard card-spaces | None |
+| `BAYMARD-CARD-NUMBER-FORMAT` | scripted | A card-number field whose `pattern` rejects spaces, or whose `maxlength` cannot hold the longest card numbers the source lists (19 digits, plus separators where spaces are allowed; the threshold is derived, not stated by the source) | Baymard card-spaces | None |
 | `BAYMARD-EXPIRY-FORMAT` | scripted | A card-expiry control that does not follow the card's own MM/YY form: a four-digit year, or month names in place of numbers | Baymard expiry-date | None |
 | `BAYMARD-PASSWORD-RULES` | scripted | A password field whose `pattern` forces character-class composition, or whose `maxlength` is unnecessarily low | Baymard password-rules | None |
 | `BAYMARD-FORMAT-TOLERANCE` | scripted | A phone or similar field whose `pattern` rejects harmless formatting characters (spaces, dashes, parentheses) | Baymard input-masking; input-fields | **The one real tension**: `NNG-H5-PREVENT` asks for constraint. This flags rejecting input that carries no error, not the presence of constraint (decision 6) |
@@ -160,7 +175,10 @@ scripted lane is the part of every shipped skill that measures precisely.
 - **Routing, using the E30 checklist step.** Three contested pairs: forms with accessibility and
   with usability (same artifact type), and forms with microcopy (the same failure moments). Each
   needs a boundary clause in both descriptions, so three shipped skills' descriptions change, and
-  their U5 scores are re-run with them.
+  their U5 scores are re-run with them. The microcopy pair is contested even though forms stays out
+  of error content: a user holding a form full of validation errors could reasonably ask for either
+  skill, and the four `NNG-EM` criteria in the ownership table above are microcopy's. The two
+  descriptions have to route that request to one of them.
 - **The `askit-build-skill` mandate** ([E11](../../../backlog/enhancements.md)) is the outer loop
   of the build, in fallback mode, reading its `SKILL.md` from the sibling checkout. Its step 6
   grades with the sibling's `evaluate.mjs` against Standard 0.16, not the pinned 0.12 (E62), so
@@ -172,10 +190,12 @@ scripted lane is the part of every shipped skill that measures precisely.
 
 ## Decisions for the maintainer
 
-1. **Wroblewski's book.** Cite it only after someone reads the relevant chapters, as the template's
-   `accessed` field requires, or build from his free articles alone as drafted. The free articles
-   cover action hierarchy, label alignment and mobile input types. Without the book, form
-   organization and grouping have no source, which is why there is no grouping criterion.
+1. **Wroblewski's book.** It is not cited because nobody read it, and the template's `accessed`
+   field means read. What its contents would source is unknown, not assumed: from their titles alone,
+   chapters 2 (Form Organization) and 4 to 6 (Labels, Input Fields, Actions) look relevant. The
+   question is whether the maintainer has a copy and wants the ground those chapters may cover,
+   grouping in particular, which nothing read so far sources. Built from the free articles alone, as
+   drafted, the registry has no grouping criterion.
 2. **Namespaces.** `BAYMARD` and `WROBLEWSKI`, registered in `docs/reference/criterion-ids.md`, or
    shorter handles. IDs are permanent once shipped.
 3. **Registry size and scope.** 17 criteria, four of them payment-specific. Keeping the four pulls
