@@ -1,0 +1,104 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-DEADEND",
+      "evidence": "the \"invite-sent\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+      "fix": "Add a control inside the \"invite-sent\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "the \"invite-sent\" section",
+      "severity": 3,
+      "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "project-settings-save-btn is a submit button in a form with no action attribute and no destination state named anywhere in the artifact; clicking it is specified to have no confirmation message, no changed control state, and no next screen.",
+      "fix": "Specify what happens once this control completes: a confirmation message shown in place, a changed value on screen, or a named next state.",
+      "id": "F-002",
+      "instances": [
+        {
+          "evidence": "notification-settings-save-btn is a submit button in a form with no action attribute and no destination state named anywhere in the artifact.",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" control"
+        },
+        {
+          "evidence": "project-settings-duplicate-btn is a button with no defined destination state and no confirmation message named anywhere in the artifact.",
+          "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" control"
+        }
+      ],
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" control",
+      "severity": 2,
+      "violation": "This state-changing action (saving the edited project name) is specified with no visible indication of what happened once it runs: no confirmation message, no changed value on screen, and no next state named."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H4-INTERNAL",
+      "evidence": "The form's own submit control, invite-member-save-btn, is labeled \"Save\" and has no defined action or destination, while a separate control, invite-member-continue-link, labeled \"Continue\", is the one whose target names the next state (\"invite-sent\"). On project-settings and notification-settings, the equivalent \"Save\" submit button is by itself the complete and only commit action for that screen.",
+      "fix": "Give the invite screen one commit control that both saves and advances the flow, matching the pattern used on project-settings and notification-settings, or if two controls are intentional, label them so their distinct roles are clear in place.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"invite-member\" section",
+      "severity": 2,
+      "violation": "The recurring form-plus-Save-button pattern carries a different meaning here than everywhere else it appears in the artifact: elsewhere \"Save\" alone commits the screen's change, but on this screen \"Save\" is specified with no effect and a separate, unrelated-looking \"Continue\" control is the one that actually advances the invite. A user who has learned the pattern from the other two screens has no cue that this screen works differently, and can leave believing the invite was sent when clicking \"Save\" alone does nothing."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-LABELED",
+      "evidence": "<button> with no text content and no accessible-name attribute",
+      "fix": "Add visible text to this control, or an aria-label attribute naming what it does.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "This control has neither visible text nor an accessible-name attribute, so nothing on screen names what the control does."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "The confirmation copy reads \"An invite was sent to the address entered above,\" but the \"invite-sent\" section does not repeat, reference, or display the email address that was entered on the prior \"invite-member\" screen.",
+      "fix": "Show the entered email address on the invite-sent confirmation itself, for example \"An invite was sent to jane@example.com\" rather than \"the address entered above.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"invite-sent\" section",
+      "severity": 2,
+      "violation": "The one piece of information the user most needs to verify at this confirmation step, which address the invite went to, is held over from the previous screen rather than shown here, so a user cannot confirm they invited the right person without navigating back."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H8",
+      "evidence": "The promotional div \"Invite 3 teammates this month to unlock the advanced reporting add-on.\" sits between the recent-projects list and the section's two navigation links (\"Open project settings\", \"View last import result\") in reading order.",
+      "fix": "Move the promotional referral content below the navigation links, or to a location that does not sit between the project list and the controls that act on it.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the \"workspace-overview\" section, the \"workspace-overview-promo-referral\" element",
+      "severity": 2,
+      "violation": "This screen's task is viewing your projects and reaching project settings or import status; the referral promotion serves neither task, and it is placed ahead of both navigation links a user needs for that task, delaying the primary task without preventing it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T01:47:45Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

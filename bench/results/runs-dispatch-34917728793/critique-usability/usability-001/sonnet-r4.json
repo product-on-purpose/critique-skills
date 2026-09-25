@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-DEADEND",
+      "evidence": "the \"invite-sent\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+      "fix": "Add a control inside the \"invite-sent\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "the \"invite-sent\" section",
+      "severity": 3,
+      "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "archive-confirm's copy states \"You can restore it at any time from the archived projects list,\" and project-archived repeats \"It no longer appears in the active projects list for anyone on the team,\" but no state or section named an archived-projects list exists anywhere in the artifact, and project-archived's only control is \"Back to your projects,\" which targets workspace-overview, not an archive list.",
+      "fix": "Either add an archived-projects-list state reachable from workspace-overview with a restore control per project, or, if that is out of scope for this spec, remove the reversibility claim from the archive-confirm and project-archived copy.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"project-archived\" section, id=\"archive-confirm-copy\" carried into \"project-archived\"",
+      "severity": 3,
+      "violation": "Archiving is presented as reversible (\"restore it at any time\") but the artifact defines no restore control and no archived-projects-list state anywhere, so the reversal path the copy promises does not exist in the design as specified."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "project-settings-save-btn, invite-member-save-btn, and notification-settings-save-btn are all type=\"submit\" buttons inside forms with no action or method attributes, and none of the three sections defines what the user sees while the save runs or once it finishes: no confirmation message, no changed control state, no transition to another defined state.",
+      "fix": "For each of the three Save buttons, specify what the user sees immediately after saving: a confirmation message, a visibly updated control, or a defined next state.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"project-settings\", \"invite-member\", and \"notification-settings\" sections, their Save submit buttons",
+      "severity": 2,
+      "violation": "Three separate save actions in the artifact specify a trigger but no in-progress or result feedback, so a user who clicks Save on any of these three forms has no way to tell whether the change was applied."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H4-INTERNAL",
+      "evidence": "In project-settings and notification-settings, the form's \"Save\" button is the only commit-like control on the screen. In invite-member, \"Save\" is a type=\"submit\" button inside the form, but a separate \"Continue\" link outside the form is what actually leads to \"invite-sent\" (the screen that reports the invite as sent), and the artifact does not say what, if anything, the \"Save\" button in invite-member commits.",
+      "fix": "Either remove the separate \"Save\" button from invite-member and have the form's own submit lead to invite-sent, or rename the two controls so their distinct effects are clear, e.g. \"Save draft\" and \"Send invite.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"invite-member\" section's \"invite-member-save-btn\" button, compared with \"project-settings-save-btn\" and \"notification-settings-save-btn\"",
+      "severity": 2,
+      "violation": "The label \"Save\" means \"this commits the entered data, and that is the end of the interaction\" in two of the three forms it appears in, but in invite-member a further \"Continue\" step is needed to reach the state where the invite is reported sent, so the same label does not stand for the same thing everywhere it appears."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-LABELED",
+      "evidence": "<button> with no text content and no accessible-name attribute",
+      "fix": "Add visible text to this control, or an aria-label attribute naming what it does.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "This control has neither visible text nor an accessible-name attribute, so nothing on screen names what the control does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H7-ACCELERATORS",
+      "evidence": "workspace-overview-promo-referral reads \"Invite 3 teammates this month to unlock the advanced reporting add-on,\" but invite-member offers a single email field and a single Continue action per visit, with no way to enter more than one address or invite in bulk.",
+      "fix": "Add a way to invite more than one teammate per visit to invite-member, such as a repeatable email field, a comma-separated list, or an \"invite another\" action that stays on the same screen.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the \"workspace-overview\" section's promo text, and the \"invite-member\" section",
+      "severity": 2,
+      "violation": "The artifact's own copy treats inviting 3 teammates as the task at hand, but the only invite path defined requires navigating into invite-member, entering one address, continuing, and returning, three separate times, with no bulk or multi-address route offered."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H8",
+      "evidence": "workspace-overview-promo-referral (\"Invite 3 teammates this month to unlock the advanced reporting add-on\") sits between the recent-projects list and both primary navigation links (\"Open project settings\", \"View last import result\") in reading order.",
+      "fix": "Move the promotional banner below the primary navigation links, or elsewhere off this screen, so the two links a user comes to this screen for are not preceded by unrelated promotional content.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "the \"workspace-overview\" section, the \"workspace-overview-promo-referral\" div",
+      "severity": 2,
+      "violation": "This screen's task is seeing your projects and navigating to project settings or the last import result; the promotional add-on banner is not part of either task, yet it is placed ahead of both primary links in reading order, pushing them down."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T02:00:06Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

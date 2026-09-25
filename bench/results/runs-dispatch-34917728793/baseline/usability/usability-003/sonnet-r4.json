@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced this morning.\" followed by only three `<li>` items (Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot)",
+      "fix": "Either correct the text to \"3 projects\" or add the missing fourth project to the list (or clarify that the list shows only \"recent\" projects, not all of them).",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "workspace-overview section, intro paragraph and list",
+      "severity": 3,
+      "violation": "The stated project count (4) doesn't match the number of projects actually listed (3)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<li>Beta Launch Plan</li>`, `<li>Holiday Campaign Assets</li>`, `<li>Partner Integration Pilot</li>`",
+      "fix": "Wrap each project name in an anchor that routes to its own settings view, or otherwise connect these list items to the project-settings flow.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "workspace-overview section, `workspace-overview-recent` list",
+      "severity": 3,
+      "violation": "None of the three listed project names are links, so there is no way to navigate into any specific project from the overview; the only path into \"Project settings\" is a generic link unrelated to any listed project."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"project-settings-name-input\" type=\"text\" value=\"Vendor Onboarding\">`",
+      "fix": "Use one of the project names from the workspace-overview list (e.g., \"Beta Launch Plan\") consistently across project-settings, invite-member, invite-sent, archive-confirm, and project-archived.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "project-settings section, name input",
+      "severity": 3,
+      "violation": "\"Vendor Onboarding\" doesn't match any of the projects named in workspace-overview, so the settings/invite/archive flow appears to operate on a project that doesn't exist in the workspace list."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible button text (e.g., \"Duplicate\") and link it to a real destination, or remove it if it's out of scope for this mockup.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "project-settings section, duplicate button",
+      "severity": 3,
+      "violation": "The button has no visible text (only an aria-label) and no href or target, so it renders blank and leads nowhere in this clickable mockup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>` (same pattern for `invite-member-save-btn` and `notification-settings-save-btn`)",
+      "fix": "Route each Save action to a confirmation state (or back to the parent section), the way `archive-confirm-archive-link` and `invite-member-continue-link` do.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "project-settings, invite-member, and notification-settings forms - Save buttons",
+      "severity": 3,
+      "violation": "These submit buttons have no form action and no href, so clicking \"Save\" in the prototype leads nowhere and gives no confirmation that anything happened."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` and `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>` both present in the same form",
+      "fix": "Collapse into a single primary action (e.g., one \"Send invite\" control that navigates to invite-sent) and remove the redundant control.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "invite-member section",
+      "severity": 3,
+      "violation": "Two competing calls to action (Save vs. Continue) exist for sending the same invite, with nothing distinguishing their purposes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Import failed. Error code IMP-500. Contact support if this continues.\"",
+      "fix": "Add a mailto link or a link to a support/contact section.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "import-status section",
+      "severity": 3,
+      "violation": "The text instructs the user to \"Contact support\" but provides no link, email address, or other way to actually do so."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-09-15T03:05:04Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

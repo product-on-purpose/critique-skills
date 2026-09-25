@@ -1,0 +1,104 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-IDENTIFY",
+      "evidence": "\"Import failed. Error code IMP-500. Contact support if this continues.\"",
+      "fix": "Replace or supplement the code with plain language naming what failed (for example, which file or which step), keeping the code as secondary detail for support to use.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"import-status\" section, the \"import-status-message\" paragraph",
+      "severity": 3,
+      "violation": "The message reports only that the import failed and a raw error code; it names neither what about the import failed (which file, which step, which validation) nor which of the user's actions or entries caused it, so the user cannot tell what to fix or retry differently."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "the form's submit control is labeled \"Save\" (invite-member-save-btn, no described effect), and a separate link labeled \"Continue\" (invite-member-continue-link) navigates to \"invite-sent\", which states an invite was already sent",
+      "fix": "Either remove the separate Save control and let one action (for example, \"Send invite\") commit and transition to the sent state, or explicitly state what each control does, such as Save stores a draft and Continue sends it.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"invite-member\" section",
+      "severity": 2,
+      "violation": "The artifact never states what \"Save\" does relative to \"Continue\": whether clicking Save alone sends the invite, whether Continue is required afterward, or whether Save only stores a draft, so a user cannot tell which control actually commits the invite or whether both steps are needed."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>, with no href, no target state, and no described effect anywhere in the artifact",
+      "fix": "Specify the result of duplicating: where the new project appears (for example, added to \"Your projects\"), and what on screen confirms the duplication succeeded.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "Duplicating a project creates a new project, but the artifact never says what the user sees as a result: no new project appears in any list the artifact defines, no confirmation, no navigation, so nothing in the spec evidences that the action did anything at all."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\"> inside a <form> with no action attribute; the artifact specifies no success message, no visibly updated state, and no navigation target after submit",
+      "fix": "Specify what happens after each Save: a success message, a visibly updated field, or an explicit resulting state or navigation.",
+      "id": "F-004",
+      "instances": [
+        {
+          "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\"> inside a <form> with no action attribute; no described outcome anywhere in the artifact",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "<button id=\"notification-settings-save-btn\" type=\"submit\"> inside a <form> with no action attribute; no described outcome anywhere in the artifact",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "Each of these \"Save\" controls changes stored state (a project name, an invite draft, a notification preference), but the artifact never specifies what the user sees while the save happens or once it finishes: no confirmation message, no visible change, no stated resulting screen."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "the only control is \"Back to your projects\" (project-archived-exit-link); no restore or unarchive control appears anywhere in the artifact, though the preceding archive-confirm-copy text frames archiving as removal from the active list rather than deletion",
+      "fix": "Add a restore or unarchive control, either on the project-archived state or wherever archived projects would be listed.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"project-archived\" section",
+      "severity": 2,
+      "violation": "Archiving is treated as committed with no stated way back, though the product's own framing (\"remove it from the active projects list\", not delete it) implies archiving is meant to be reversible."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "the only control in this state is \"Back to your projects\" (import-status-exit-link); the message names no retry control, and \"Contact support\" is not a reachable link or control anywhere in the state",
+      "fix": "Add a retry or \"import again\" control to this state, and if \"Contact support\" is the recommended path, make it an actual link or control reachable from here.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the \"import-status\" section",
+      "severity": 2,
+      "violation": "The error state describes a failure and suggests contacting support, but offers no retry or re-import control and no reachable support link, so the only next step available in the artifact is to leave the state and reinitiate the import from the start."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T02:56:32Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

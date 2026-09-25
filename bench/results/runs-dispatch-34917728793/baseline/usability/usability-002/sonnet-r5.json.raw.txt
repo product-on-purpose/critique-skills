@@ -1,0 +1,29 @@
+Location: section#workspace-overview, paragraph before the project list
+Evidence: "This workspace holds 5 projects, synced last week." followed by a `<ul>` containing only four `<li>` items (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)
+Problem: The stated project count (5) does not match the number of projects actually listed (4).
+Fix: Either add the missing fifth project to the list or change the paragraph to say "4 projects."
+
+Location: `<form>` elements in #project-settings, #invite-member, and #notification-settings
+Evidence: `<form>` … `<button id="project-settings-save-btn" type="submit">Save</button>` — none of the three `<form>` tags in the document have an `action` attribute
+Problem: Clicking any of these submit buttons triggers a default browser form submission (GET request reloading the current document) instead of navigating to a result/confirmation state, breaking the fragment-link navigation pattern used consistently everywhere else in the mockup.
+Fix: Give each form an explicit action, or replace the submit buttons with anchor-style links to appropriate confirmation sections, matching how "Continue" and "Archive" already navigate via href.
+
+Location: section#project-settings, `<button id="project-settings-duplicate-btn">`
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text content (only an aria-label) and no href/target, so it renders as a blank, non-functional control unlike every other interactive element in the mockup.
+Fix: Add visible label text (e.g. "Duplicate") or an icon, and wire it to a destination state (e.g. a new project row or confirmation) consistent with the other buttons/links.
+
+Location: section#project-settings, `<a id="project-settings-archive-link">`, compared with section#archive-confirm
+Evidence: `<a id="project-settings-archive-link" href="#project-archived">Archive project</a>` while a separate `#archive-confirm` section exists with its own cancel/confirm links but is never linked to from anywhere in the document
+Problem: The confirmation dialog ("Archive this project?") is unreachable dead content; the actual archive link skips straight to the final archived state, bypassing the confirmation step the document was clearly designed to have.
+Fix: Change `project-settings-archive-link`'s href to `#archive-confirm` so the confirmation screen is reachable before archiving.
+
+Location: section#invite-member
+Evidence: The form contains `<button id="invite-member-save-btn" type="submit">Save</button>` and, immediately after the form, `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>`
+Problem: There are two competing controls for completing the same invite action (a form Save button and a separate Continue link) with no indication of how they differ, making the flow ambiguous.
+Fix: Remove the redundant Save button (or clarify its distinct purpose) so there is a single, clear control that sends the invite and advances to the "Invite sent" state.
+
+Location: section#notification-settings, `<button id="notification-settings-save-btn">`
+Evidence: `<button id="notification-settings-save-btn" type="submit">Submit</button>` versus `<button id="project-settings-save-btn" type="submit">Save</button>` and `<button id="invite-member-save-btn" type="submit">Save</button>`
+Problem: This save action uses the label "Submit" while equivalent save actions elsewhere in the document use "Save," an inconsistent terminology for the same kind of action.
+Fix: Rename the button to "Save" to match the labeling convention used on the other two forms.

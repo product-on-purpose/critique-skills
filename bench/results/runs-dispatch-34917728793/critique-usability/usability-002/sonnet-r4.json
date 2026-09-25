@@ -1,0 +1,104 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H5-CONFIRM",
+      "evidence": "<a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a> links straight to the \"project-archived\" section; the separately-authored \"archive-confirm\" section, whose copy reads \"Archiving \\\"Customer Migration\\\" will remove it from the active projects list for everyone on the team. You can restore it at any time from the archived projects list.\", has no incoming link anywhere in the document.",
+      "fix": "Point \"project-settings-archive-link\" at \"#archive-confirm\" instead of \"#project-archived\" so the existing confirmation copy sits on the path this control actually takes before the archive commits.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-archive-link\" control",
+      "severity": 3,
+      "violation": "The only reachable path for archiving a project commits on one click with no confirmation naming the consequence, even though the artifact separately authors a confirmation state that this control's own path never reaches."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button> inside the form, and separately <a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>, with the \"invite-sent\" section reading \"An invite was sent to the address entered above.\"",
+      "fix": "Remove the redundant control, or specify both: state what Save does (for example, validates the address) and gate Continue on a successful Save, so exactly one control is the one that sends the invite.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"invite-member\" section",
+      "severity": 2,
+      "violation": "Two different controls on this screen plausibly commit the invite: the form's own Save button, whose outcome is unspecified, and the separate Continue link, which is the one the artifact actually wires to \"an invite was sent\". The artifact never establishes what pressing Save does, or whether an invite can be sent without it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"notification-settings-save-btn\" type=\"submit\">Submit</button> sits in a <form> with no action attribute and no defined destination or confirmation state",
+      "fix": "Specify what the screen shows immediately after submit, such as an inline \"Saved\" confirmation, so the artifact commits to visible feedback for the save.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "Submitting this form is a state-changing save with no specified feedback: the artifact defines no confirmation message, no updated display, and no destination, so a user cannot tell whether the digest-frequency change was saved."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button> has no href, no form association, and nothing elsewhere in the document references a result of duplicating",
+      "fix": "Define what the artifact shows after duplication, such as a confirmation naming the new project or the new project appearing in \"Your projects\".",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "Duplicating a project is a state-changing action that creates a new project, but the artifact specifies no visible outcome at all: no new state, no confirmation, no change to the projects list, so a user pressing it has no way to tell whether anything happened."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button> sits in a <form> with no action attribute and no defined destination or confirmation state",
+      "fix": "Specify what the screen shows immediately after submit, such as an inline \"Saved\" confirmation, so the artifact commits to visible feedback for the save.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "Submitting this form is a state-changing save with no specified feedback: the artifact defines no confirmation message, no updated display, and no destination, so a user cannot tell whether the save happened, is pending, or failed."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H4-CONTROL-NAMING",
+      "evidence": "control labeled \"Save\"",
+      "fix": "Pick one label for this commit action, for example \"Save\", and use it everywhere the action appears.",
+      "id": "F-006",
+      "instances": [
+        {
+          "evidence": "control labeled \"Save\"",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "control labeled \"Submit\"",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "This artifact uses 2 different labels for what reads as the same commit action: \"Save\", \"Submit\". A user cannot tell from the label alone whether these controls perform the same action or different ones."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T02:30:39Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "the IT asset group tracks the equipment catalog on the first business day of the month [Program Overview] / The finance liaison publishes the equipment catalog at the start of the fiscal year [Special Cases] / The benefits team reviews the equipment catalog at the start of the fiscal year [Questions and Updates]",
+      "fix": "Name one accountable owner for the equipment catalog and state the monthly tracking, the fiscal-year publication, and the review as that owner's sequential responsibilities, or explicitly name each hand-off between the three teams so the three mentions read as one coherent account.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "## Program Overview, ## Special Cases, ## Questions and Updates",
+      "severity": 3,
+      "violation": "Three different named actors, the IT asset group, the finance liaison, and the benefits team, are each independently credited with maintaining the same equipment catalog, two of them on the identical stated cadence (start of the fiscal year), with no signal anywhere in the document that these are the same body under different names, a hand-off between related teams, or genuinely separate processes. The reader cannot determine who actually owns the catalog or which statement to rely on."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Completing the request begins with confirming eligibility, and uploading the receipt. [Request Steps] / Employees start a stipend request in the benefits portal. The portal walks through each step in order. ... Then, the employee reviews the confirmation summary before submitting the final request. [How to Apply]",
+      "fix": "Delete Request Steps and fold confirming eligibility and uploading the receipt into How to Apply's existing step list, in the order the employee actually performs them, so there is one authoritative walkthrough.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "## Request Steps (single sentence) versus ## How to Apply",
+      "severity": 3,
+      "violation": "PLAIN-ORGANIZE requires sections to follow the sequence the reader actually works through. How to Apply already walks the reader through the full application (start request, autosaved draft, review confirmation summary, submit) with no mention of confirming eligibility or uploading a receipt. Five sections later, after Approval Timeline, Required Documentation, Reimbursement Amounts, and Restrictions and Exceptions have already assumed the process is underway, Request Steps names a second, unreconciled account of completing the request. A reader who already completed How to Apply has no way to know whether these are additional required actions they missed."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "You must keep your equipment in good working condition and we may ask for a brief photo check once a year. [Restrictions and Exceptions] / You record the stipend item on the request form. ... you submit the request in the portal. [Terminology Notes] / Full-time employees who have completed 90 days of continuous service are eligible ... [Eligibility] / The manager reviews the request within two business days. [Approval Timeline]",
+      "fix": "Pick one addressing convention, direct second-person instructions to the employee throughout is clearest for this policy, and apply it consistently; replace the unattributed we with the specific team responsible for the photo check.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "## Restrictions and Exceptions and ## Terminology Notes, contrasted with ## Eligibility and ## Approval Timeline",
+      "severity": 2,
+      "violation": "Most of the document describes what employees and the manager do in the third person, but Restrictions and Exceptions and Terminology Notes abruptly switch to direct second-person address (you, your) plus an unattributed first-person-plural we, with no signal marking the shift and no earlier statement of who we is (not the finance office, benefits team, or IT asset group, none of which is ever called we). A reader cannot tell whether the document is describing the employee for a third party or instructing the employee directly, and cannot resolve who we refers to."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Completing the request begins with confirming eligibility, and uploading the receipt.",
+      "fix": "Rewrite with the employee as subject: The employee confirms eligibility and uploads the receipt to complete the request.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "## Request Steps",
+      "severity": 2,
+      "violation": "The sentence's grammatical subject, Completing the request, is a gerund-nominalization standing in for the real actor who confirms eligibility and uploads the receipt, presumably the employee. The sentence never names that actor."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review.",
+      "fix": "Make the hand-off explicit, for example: You record the stipend item on the request form. Finance then reconciles that item against the request log each month, and payroll releases the item's amount once that review is done.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "## Terminology Notes, first paragraph",
+      "severity": 2,
+      "violation": "Each of the three sentences opens with a new grammatical subject, You, Finance, Payroll, that the prior sentence gave no basis for; only the repeated object phrase the stipend item holds the paragraph together, forcing the reader to reconstruct the hand-off between the employee, Finance, and Payroll rather than being shown the sequence."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T03:15:36Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

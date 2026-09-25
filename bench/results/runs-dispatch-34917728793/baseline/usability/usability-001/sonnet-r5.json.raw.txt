@@ -1,0 +1,39 @@
+Location: <p> inside #workspace-overview
+Evidence: "This workspace holds 3 projects, synced last week." followed by a list containing only "Data Warehouse Cutover" and "Mobile App Revamp"
+Problem: The stated project count (3) doesn't match the number of projects actually listed (2), creating an unexplained discrepancy.
+Fix: Either add the missing third project to the list or change the count to "2 projects" (or clarify that the list shows only "recent" projects, not all of them).
+
+Location: #workspace-overview-promo-referral div
+Evidence: "Invite 3 teammates this month to unlock the advanced reporting add-on."
+Problem: This promotional call-to-action has no accompanying link or button to act on it, unlike every other actionable item in the workspace overview.
+Fix: Add a link/button (e.g., pointing to #invite-member) so the promo is actually actionable from this location.
+
+Location: #workspace-overview-projects-link and its target #project-settings
+Evidence: Link text "Open project settings" leads to a settings form pre-filled with value="Design System Refresh", a project name that appears nowhere in the "Your projects" list ("Data Warehouse Cutover", "Mobile App Revamp")
+Problem: The single "project settings" destination is themed around a project that isn't one of the projects shown in the overview, so it's unclear which project the settings link actually opens or how a user would reach settings for either listed project.
+Fix: Either make the project list items link to their own settings pages, or make "Design System Refresh" one of the listed recent projects so the link target is consistent with the overview.
+
+Location: #project-settings, `<button id="project-settings-duplicate-btn" type="button"></button>`
+Evidence: The button element has no text content and no aria-label.
+Problem: An unlabeled button is not usable or accessible — a user (or screen reader) has no way to know what it does.
+Fix: Add visible label text (e.g., "Duplicate project") or an aria-label attribute describing the action.
+
+Location: #project-settings and #notification-settings, `<button type="submit">Save</button>`
+Evidence: Both forms use `type="submit"` with no `action`/`method` attributes and there is no script in the document to intercept submission.
+Problem: Clicking "Save" will trigger a real HTML form submission (a GET reload of the page), rather than producing any visible confirmation of a saved change, unlike the invite flow which has a distinct "Continue" step to a confirmation screen.
+Fix: Make the Save interaction consistent with the invite flow (e.g., navigate to a confirmation state) or explicitly note in the mockup that these buttons are non-functional placeholders.
+
+Location: #invite-member section
+Evidence: The form has a "Save" submit button, and separately an "Continue" link (`#invite-member-continue-link`) pointing to `#invite-sent`
+Problem: Two competing calls-to-action exist for a single task (sending the invite) — it's unclear whether "Save" or "Continue" is what actually sends the invite, and "Save" doesn't match the wording of the outcome ("An invite was sent...").
+Fix: Consolidate into a single action, e.g., rename the submit button to "Send invite" and remove the separate "Continue" link, or have the form submission itself navigate to #invite-sent.
+
+Location: #archive-confirm, `<p id="archive-confirm-copy">`
+Evidence: "You can restore it at any time from the archived projects list."
+Problem: The document has no "archived projects list" page or link anywhere, so this refers to a feature that doesn't exist in the mockup, leaving the restore path undiscoverable.
+Fix: Add an "archived projects" section/link (and reference it from #project-archived as well), or remove the claim if restoring isn't in scope for this mockup.
+
+Location: #invite-sent section
+Evidence: The section contains only a heading and a paragraph — no links or buttons.
+Problem: Unlike every other terminal-style screen in the document (#project-archived, #import-status), this screen provides no way to navigate elsewhere, leaving the user stuck.
+Fix: Add a link back to #project-settings or #workspace-overview, matching the pattern used on the other confirmation screens.

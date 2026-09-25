@@ -1,0 +1,82 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "The form's submit button is <button id=\"invite-member-save-btn\" type=\"submit\">Save</button>, with no action attribute. Separately, outside the form, <a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a> is the only control that reaches the \"Invite sent\" state, whose text reads \"An invite was sent to the address entered above.\"",
+      "fix": "Collapse this to a single commit control (e.g. remove the separate Save button and have the form's own submit go to the sent-confirmation state), or, if two steps are intended, state explicitly what each one does (\"Save\" stores the draft invite; \"Continue\" sends it).",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Invite a team member > Save button (#invite-member-save-btn) and Continue link (#invite-member-continue-link)",
+      "severity": 3,
+      "violation": "NNG-H1 requires that the artifact make unambiguous what a state-changing action does and what its outcome is. Here the artifact defines two separate controls (Save and Continue) for what should be one commit action, and never states which one actually sends the invitation email. As specified, a user can reach \"Invite sent\" via Continue alone, so it is undefined whether Save does anything, whether it must be clicked first, or whether Continue alone triggers sending a real email to the entered address."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "\"Archiving \\\"Q3 Roadmap\\\" will remove it from the active projects list for everyone on the team. You can restore it at any time from the archived projects list.\" No section, link, or control named \"archived projects list\" (or equivalent) exists anywhere else in the artifact.",
+      "fix": "Add the archived-projects-list state the copy promises, with a control there that restores a project, and link to it from somewhere the user can reach (e.g. from the workspace overview or from the project-archived confirmation).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Archive this project? (#archive-confirm) > confirmation copy (#archive-confirm-copy)",
+      "severity": 3,
+      "violation": "NNG-H3-UNDO requires that a reasonably reversible committed action offer a stated way back. The archive action is described as reversible, and the copy names a specific reversal route, but that route (\"archived projects list\") is never defined as a reachable state or control anywhere in the artifact, so as specified there is no actual path back from archiving."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button> ... <button id=\"notification-settings-save-btn\" type=\"submit\">Save</button>, neither form has an action target and no adjacent text or state describes what happens after either is clicked.",
+      "fix": "Specify what the user sees immediately after each Save: an inline confirmation message (e.g. \"Project name saved\"), a transient success state on the button, or a defined destination screen.",
+      "id": "F-003",
+      "instances": [
+        {
+          "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button> with no form action and no confirmation text anywhere in the section.",
+          "location": "Project settings > Save button (#project-settings-save-btn)"
+        },
+        {
+          "evidence": "<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button> with no form action and no confirmation text anywhere in the section.",
+          "location": "Notifications > Save button (#notification-settings-save-btn)"
+        }
+      ],
+      "lane": "judged",
+      "location": "Project settings > Save button (#project-settings-save-btn); Notifications > Save button (#notification-settings-save-btn)",
+      "severity": 2,
+      "violation": "NNG-H1 requires that a state-changing action (saving a project name, saving a digest-frequency preference) specify a visible indication of what the system is doing and what the outcome was. Both Save buttons commit a form with no confirmation message, no changed control state, and no defined next screen."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "\"The last import finished with 4 rows skipped: each referenced a project that does not exist in this workspace. Rows 35, 71, 78, and 83 were skipped; every other row was imported.\" The only control on the screen is <a id=\"import-status-exit-link\" href=\"#workspace-overview\">Back to your projects</a>.",
+      "fix": "Add a recovery control on this screen: a link to create the missing projects, a way to re-run the import for just the skipped rows, or a downloadable list of the 4 rows so the user can fix and resubmit them.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Import status (#import-status) > status message (#import-status-message)",
+      "severity": 2,
+      "violation": "NNG-H9-RECOVER requires that error/failure text point to a next step reachable from where the message appears. The message correctly identifies which rows failed and why, but offers no path to act on it: no link to create the missing projects, retry the import, or view/download the skipped rows. The only available action leaves the flow entirely."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T03:15:29Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

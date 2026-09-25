@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced last week.\" followed by a `<ul>` containing only 3 `<li>` items",
+      "fix": "Add the missing 4th project to the list, or change the text to \"3 projects.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "workspace-overview section, \"Your projects\" paragraph and list",
+      "severity": 3,
+      "violation": "The stated project count doesn't match the number of projects actually listed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Workspace list shows \"Holiday Campaign Assets,\" \"Support Backlog Triage,\" \"Mobile App Revamp,\" but `<input id=\"project-settings-name-input\" type=\"text\" value=\"Q3 Roadmap\">`",
+      "fix": "Rename the settings example to match one of the listed projects, or add \"Q3 Roadmap\" to the workspace project list.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "workspace-overview list vs. project-settings-name-input",
+      "severity": 3,
+      "violation": "\"Open project settings\" is the only path into project settings, yet it leads to a project (\"Q3 Roadmap\") that never appears anywhere in the workspace's project list, making the mockup's data inconsistent across screens."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible text (e.g., \"Duplicate\") or an icon to the button's content.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "project-settings section, duplicate button",
+      "severity": 3,
+      "violation": "The button has no visible text or icon content, so sighted users see a blank control with no indication of its purpose; the aria-label only helps screen-reader users."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`project-settings-duplicate-btn` has no href, form association, or corresponding result section anywhere in the document",
+      "fix": "Link it to a new section demonstrating the duplicated project, or remove it from the mockup.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "project-settings section, duplicate button",
+      "severity": 3,
+      "violation": "Unlike every other action in the mockup, this button doesn't lead to any resulting state, making it a non-functional dead end."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form>` elements with `<button type=\"submit\">Save</button>` and no `action` attribute, while all other navigation in the document uses `<a href=\"#section\">` anchors",
+      "fix": "Give each Save control a defined next state consistent with the anchor-navigation pattern (e.g., navigate to a \"Saved\" confirmation section), or remove the `<form>`/submit semantics.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "project-settings, invite-member, and notification-settings forms",
+      "severity": 3,
+      "violation": "Submitting these forms triggers a real page reload/GET request instead of moving to a mockup state, breaking the anchor-based navigation pattern used everywhere else, and there is no confirmation screen for a successful save."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>` is separate from the `<form>` and unconnected to `invite-member-email-input`",
+      "fix": "Tie navigation to form submission and require a non-empty, valid email before allowing continuation.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "invite-member section, Continue link",
+      "severity": 3,
+      "violation": "Clicking \"Continue\" navigates straight to \"Invite sent\" regardless of whether an email address was entered, so an invite can appear sent with no recipient."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\"",
+      "fix": "Add an archived-projects-list section with a link from here (and from project-archived), or remove the reference.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "archive-confirm section",
+      "severity": 3,
+      "violation": "No \"archived projects list\" screen or link exists anywhere in the document, so this text refers to a destination that isn't part of the mockup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"archive-confirm-cancel-link\" href=\"#project-settings\">Cancel</a>` and `<a id=\"archive-confirm-archive-link\" href=\"#project-archived\">Archive</a>`, both plain unstyled anchors",
+      "fix": "Style the Archive action distinctly (e.g., as a warning button) to differentiate it from the safe Cancel option.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "archive-confirm section, Cancel/Archive links",
+      "severity": 3,
+      "violation": "The destructive \"Archive\" action is visually indistinguishable from \"Cancel,\" making an accidental archive easy to trigger."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "e.g. `<input id=\"project-settings-name-input\" type=\"text\" value=\"Q3 Roadmap\">` - none of the form controls have a `name` attribute",
+      "fix": "Add appropriate `name` attributes to each form control.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "project-settings-name-input, invite-member-email-input, notification-settings-digest-input",
+      "severity": 3,
+      "violation": "Without `name` attributes, these fields would not be included in an actual form submission, so \"Save\" could never function as real form data."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-09-15T03:17:20Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

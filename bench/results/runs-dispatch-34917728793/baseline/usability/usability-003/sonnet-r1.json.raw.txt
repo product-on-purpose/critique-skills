@@ -1,0 +1,49 @@
+Location: section#workspace-overview, div#workspace-overview-recent
+Evidence: "This workspace holds 4 projects, synced this morning." followed by a `<ul>` with only three `<li>` entries (Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot)
+Problem: The stated project count (4) does not match the number of projects actually listed (3), with no label indicating the list is partial.
+Fix: Either add the missing fourth project to the list or change the copy to clarify it's showing "3 of 4" / "recent" projects only.
+
+Location: section#project-settings, button#project-settings-save-btn
+Evidence: `<button id="project-settings-save-btn" type="submit">Save</button>` with no form action and no linked confirmation state
+Problem: Clicking Save has no defined destination or feedback, unlike the Invite and Archive flows which both navigate to explicit confirmation sections (#invite-sent, #project-archived).
+Fix: Add a "Settings saved" confirmation section/state (or at minimum a visible success message) that Save navigates to or displays.
+
+Location: section#project-settings, button#project-settings-duplicate-btn
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible label text (only an aria-label) and no href or target section, so sighted users see an empty control that appears to do nothing.
+Fix: Give the button visible text (e.g. "Duplicate") and wire it to a result state, such as a new "project-duplicated" section or a confirmation dialog.
+
+Location: section#project-settings, input#project-settings-name-input value; compare to section#workspace-overview list
+Evidence: Project name input value is "Vendor Onboarding", but the "Your projects" list in #workspace-overview-recent contains only Beta Launch Plan, Holiday Campaign Assets, and Partner Integration Pilot
+Problem: The project currently being edited/archived ("Vendor Onboarding") never appears in the workspace's project list, so its origin and relation to the "4 projects" count is unclear.
+Fix: Include "Vendor Onboarding" in the workspace-overview list (or explain in copy why it's absent, e.g. it's not "recent").
+
+Location: section#invite-member
+Evidence: A submit button `Save` inside the form, plus a separate `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>` outside the form
+Problem: Two competing controls (Save vs Continue) both appear to finalize the invite action, but their relationship is undefined — it's unclear whether Save must be clicked before Continue or whether Continue alone sends the invite.
+Fix: Consolidate into a single action (e.g. rename the submit button "Send invite" and remove the separate Continue link, or make Continue the only actionable control).
+
+Location: section#invite-member, input#invite-member-email-input
+Evidence: `<input id="invite-member-email-input" type="email">` has no `required` attribute, yet #invite-member-continue-link allows proceeding to #invite-sent regardless
+Problem: A user can reach the "Invite sent" confirmation without ever entering an email address, contradicting the confirmation page's claim that an invite was sent to "the address entered above."
+Fix: Mark the email input as required and block navigation to #invite-sent until a valid address is present.
+
+Location: section#invite-sent, paragraph
+Evidence: "An invite was sent to the address entered above. It expires in 5 days if not accepted."
+Problem: The confirmation text refers to "the address entered above," but that address is on a different section (#invite-member) and is never actually displayed or echoed on this page.
+Fix: Display the submitted email address directly on the invite-sent confirmation (e.g. "An invite was sent to jane@example.com").
+
+Location: section#archive-confirm and section#project-archived
+Evidence: "will remove it from the active projects list for everyone on the team" and "has been moved to archived projects"
+Problem: Both sections imply the existence of a separate "archived projects" list/view, but no such section or link exists anywhere in the document.
+Fix: Add an "archived projects" section with a link to it (e.g. from #workspace-overview or #project-archived), or remove the implication that one exists.
+
+Location: section#notification-settings, button#notification-settings-save-btn
+Evidence: `<button id="notification-settings-save-btn" type="submit">Save</button>` with no destination or confirmation
+Problem: As with the project-settings Save button, this control has no visible effect or confirmation state after being clicked, inconsistent with other completed actions in the document that show explicit confirmation screens.
+Fix: Provide a saved-confirmation state or inline success message after clicking Save.
+
+Location: section#archive-confirm paragraph id vs section#import-status paragraph id
+Evidence: `id="archive-confirm-copy"` versus `id="import-status-message"`
+Problem: Two paragraphs serving the same structural role (the section's main descriptive text) use inconsistent id-naming suffixes ("copy" vs "message"), breaking the naming convention used elsewhere in the document.
+Fix: Standardize on one suffix (e.g. always "-message") for descriptive paragraph ids across sections.

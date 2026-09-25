@@ -1,0 +1,114 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H5-CONFIRM",
+      "evidence": "<a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a> links directly to the \"project-archived\" section, while a separate \"archive-confirm\" section (\"Archive this project?\", with Cancel and Archive controls) exists in the artifact but is linked from nowhere else in the document.",
+      "fix": "Change the \"project-settings-archive-link\" href from \"#project-archived\" to \"#archive-confirm\", so the user reaches the \"Archive this project?\" confirmation before the action commits.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-archive-link\" link",
+      "severity": 3,
+      "violation": "NNG-H5-CONFIRM requires that the path a control actually takes reach a confirmation naming the object and consequence before the action commits; a confirmation state the artifact defines but this control's own path bypasses does not count. \"Archive project\" removes the project \"from the active projects list for everyone on the team\" (per the orphaned confirm screen's own copy) on a single click, with the confirmation screen it should reach unreachable from this control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button> has no defined target, resulting state, or message anywhere in the artifact.",
+      "fix": "Specify what the user sees after pressing \"Duplicate project\": either a new entry appearing in the \"Your projects\" list, or a confirmation message naming the duplicate.",
+      "id": "F-002",
+      "instances": [
+        {
+          "evidence": "<form> with no action attribute and a submit button labeled \"Save\"; no post-save state, message, or field change is specified.",
+          "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button"
+        },
+        {
+          "evidence": "<form> with no action attribute and a submit button labeled \"Submit\"; no post-save state or message is specified.",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "NNG-H1 requires that a state-changing action specify a visible indication of what the system is doing and what the outcome was. \"Duplicate project\" changes state (it creates a new project) but the artifact defines no resulting screen, list update, or confirmation message, so a user pressing it has no way to tell whether anything happened."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H4-CONTROL-NAMING",
+      "evidence": "control labeled \"Save\"",
+      "fix": "Pick one label for this commit action, for example \"Save\", and use it everywhere the action appears.",
+      "id": "F-003",
+      "instances": [
+        {
+          "evidence": "control labeled \"Save\"",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "control labeled \"Submit\"",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "This artifact uses 2 different labels for what reads as the same commit action: \"Save\", \"Submit\". A user cannot tell from the label alone whether these controls perform the same action or different ones."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H4-INTERNAL",
+      "evidence": "The form containing the email input ends in a submit button labeled \"Save\" (id \"invite-member-save-btn\"), and a separate link labeled \"Continue\" (id \"invite-member-continue-link\", href=\"#invite-sent\") sits immediately below it; the \"invite-sent\" section reached by \"Continue\" reads \"An invite was sent to the address entered above.\"",
+      "fix": "Collapse this to one control that sends the invite, or, if the two are deliberately distinct steps, label them so their relationship is explicit (for example \"Save draft\" and \"Send invite\") and state what \"Save\" alone does.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"invite-member\" section",
+      "severity": 2,
+      "violation": "NNG-H4-INTERNAL requires that one interaction pattern stand for exactly one thing. Two controls, \"Save\" and \"Continue\", both plausibly commit the one real-world action here (sending the invite), and the artifact gives no cue which one actually performs it or how the two relate."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "\"An invite was sent to the address entered above. It expires in 5 days if not accepted.\" The email address itself is not repeated anywhere in this section; the \"invite-member-email-input\" field on the previous screen carries no persisted value either.",
+      "fix": "Redisplay the actual email address on the \"invite-sent\" screen, for example \"An invite was sent to jane@example.com\", instead of referring back to \"the address entered above\".",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"invite-sent\" section",
+      "severity": 2,
+      "violation": "NNG-H6-RECALL requires that information the user needs at a step be present at that step rather than held over from an earlier screen. This confirmation refers to \"the address entered above\" instead of redisplaying it, so a user who wants to verify which address received the invite must recall it from memory rather than read it here."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "\"The last import finished with 3 rows skipped: each referenced a project that does not exist in this workspace. Rows 63, 71, and 82 were skipped; every other row was imported.\" The only control in this section is \"Back to your projects\".",
+      "fix": "Add a control on this screen that lets the user act on the skipped rows, for example \"Review skipped rows\" or \"Re-run import for skipped rows\", rather than only \"Back to your projects\".",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the \"import-status\" section, the \"import-status-message\" paragraph",
+      "severity": 2,
+      "violation": "NNG-H9-RECOVER requires that error text point to a next step the user can actually take, reachable from where the message appears. This message names the three skipped rows and the cause but offers no way to fix and re-import them, or to review them, from this screen."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T02:36:53Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

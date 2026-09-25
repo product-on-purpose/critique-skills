@@ -1,0 +1,149 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced this morning.\" followed by a `<ul>` with only three `<li>` entries (Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot)",
+      "fix": "Either add the missing fourth project to the list or correct the count in the paragraph text.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<section id=\"workspace-overview\">`, the `<p>` under \"Your projects\"",
+      "severity": 3,
+      "violation": "The stated project count (4) doesn't match the number of projects actually listed (3)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<li>Beta Launch Plan</li>`, `<li>Holiday Campaign Assets</li>`, `<li>Partner Integration Pilot</li>` are plain text with no `<a>` wrapper or href",
+      "fix": "Wrap each project name in an anchor linking to a project detail/settings view (or explicitly mark the list as non-interactive if that's intended).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<div id=\"workspace-overview-recent\">` list, `workspace-overview` section",
+      "severity": 3,
+      "violation": "Under a heading titled \"Your projects,\" these entries look like they should be openable, but there is no way to navigate from the list into any individual project."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "id is `workspace-overview-recent` but the enclosing heading is `<h2>Your projects</h2>` and the paragraph implies this is the complete set of projects (\"holds 4 projects\")",
+      "fix": "Rename the id to match its actual purpose (e.g. `workspace-overview-projects`) or clarify in the copy that this is a recent-activity subset distinct from the full project count.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`<div id=\"workspace-overview-recent\">`, `workspace-overview` section",
+      "severity": 3,
+      "violation": "The id implies this is a \"recent\" subset of projects, which contradicts the surrounding copy suggesting it's the full project list."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"project-settings-name-input\" type=\"text\" value=\"Vendor Onboarding\">` vs. the workspace list containing only \"Beta Launch Plan\", \"Holiday Campaign Assets\", \"Partner Integration Pilot\"",
+      "fix": "Either add \"Vendor Onboarding\" to the workspace-overview list (with a link into project-settings) or rename the settings example to match one of the listed projects.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, name input value, compared to `workspace-overview` project list",
+      "severity": 3,
+      "violation": "The project being edited/archived throughout the settings flow (\"Vendor Onboarding\") never appears in the workspace overview's project list, so there's no consistent path from the overview into this settings screen."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible label text or an icon with accessible markup, and link it to a confirmation or resulting state (e.g. a duplicated-project screen).",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, `project-settings-duplicate-btn`",
+      "severity": 3,
+      "violation": "The button has no visible text or icon content (only an aria-label), so sighted users see a blank/empty control, and it has no wired destination or resulting state."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>` with no follow-up section or confirmation state",
+      "fix": "Add a confirmation state (e.g. an inline success message or a \"Project saved\" screen) reachable from the Save action.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, form and `project-settings-save-btn`",
+      "severity": 3,
+      "violation": "Unlike the invite and archive flows (which lead to \"Invite sent\" / \"Project archived\" confirmation screens), saving the project name has no success or feedback state."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Form contains `invite-member-save-btn` (\"Save\") and separately `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>`",
+      "fix": "Consolidate into a single action (e.g. make \"Save\" the only submit action that leads to \"Invite sent\"), or make \"Continue\" depend on the email field being completed.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`<section id=\"invite-member\">`",
+      "severity": 3,
+      "violation": "There are two competing calls to action; \"Continue\" navigates straight to the \"Invite sent\" confirmation regardless of whether \"Save\" was ever clicked or the email field was filled in."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An invite was sent to the address entered above.\" while `invite-member-email-input` has no value and is reachable without submitting the form",
+      "fix": "Require a non-empty, validated email before allowing navigation to this screen, or make the confirmation text reference the actual submitted address.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "`<section id=\"invite-sent\">`",
+      "severity": 3,
+      "violation": "The confirmation text unconditionally claims an invite was sent, even though the flow allows reaching this screen with an empty/unvalidated email field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Archive this project?\" versus sibling headings like \"Project settings\", \"Invite a team member\", \"Invite sent\", \"Project archived\", \"Import status\", \"Notifications\"",
+      "fix": "Rephrase to match the document's convention, e.g. \"Archive project\".",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "`<section id=\"archive-confirm\">`, `<h2>`",
+      "severity": 3,
+      "violation": "This heading is phrased as a question while every other heading in the document is a noun phrase or statement, breaking the heading voice/tense convention."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"...synced this morning\" (workspace-overview) vs. \"Import failed. Error code IMP-500.\" (import-status), reached via the link labeled \"View last import result\"",
+      "fix": "Reconcile the two - either update the overview text to reflect the failed import (e.g. \"last sync failed\") or clarify that \"synced\" and \"import\" refer to different, unrelated operations.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "`<section id=\"workspace-overview\">` paragraph vs. `<section id=\"import-status\">` paragraph",
+      "severity": 3,
+      "violation": "The overview implies a successful sync happened this morning, while the only reachable import result for that period shows a failure, contradicting the overview text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button>` with no resulting confirmation state, only `notification-settings-back-link`",
+      "fix": "Add a confirmation state or inline success indicator after saving notification preferences.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "`<section id=\"notification-settings\">`, `notification-settings-save-btn`",
+      "severity": 3,
+      "violation": "Like the project-settings Save button, this action has no success/feedback state after saving."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-09-15T02:58:15Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 11,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

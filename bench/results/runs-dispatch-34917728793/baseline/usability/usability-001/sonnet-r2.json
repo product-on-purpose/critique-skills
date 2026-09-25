@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 3 projects, synced last week.\" followed by a `<ul>` with only two `<li>` items (\"Data Warehouse Cutover\", \"Mobile App Revamp\")",
+      "fix": "Either list all 3 projects, change the count to match the list, or add a label/affordance (e.g., \"recent\" heading, \"+1 more\" link) clarifying that the list is a subset.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<section id=\"workspace-overview\">`, the `<p>` and `<ul>` in \"Your projects\"",
+      "severity": 3,
+      "violation": "The stated project count (3) doesn't match the number of projects actually listed (2), with no indication that the list is partial."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div id=\"workspace-overview-promo-referral\">Invite 3 teammates this month to unlock the advanced reporting add-on.</div>`",
+      "fix": "Wrap the promo text in a link to `#invite-member` (or add a CTA button) so it's actually actionable.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<div id=\"workspace-overview-promo-referral\">`",
+      "severity": 3,
+      "violation": "This calls the user to action (\"Invite 3 teammates\") but is a plain `<div>` with no link or button, unlike every other actionable item in the section, which is an `<a>`."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\"></button>`",
+      "fix": "Add visible label text (e.g., \"Duplicate project\") or at minimum an `aria-label=\"Duplicate project\"`.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, `<button id=\"project-settings-duplicate-btn\">`",
+      "severity": 3,
+      "violation": "The button has no text content or accessible label, so users and screen readers can't tell what it does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Overview lists \"Data Warehouse Cutover\" and \"Mobile App Revamp\", but the project settings opened via `#workspace-overview-projects-link` shows `value=\"Design System Refresh\"`",
+      "fix": "Either add \"Design System Refresh\" to the overview's project list, or make the \"Open project settings\" link target a specific, listed project.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, `<input id=\"project-settings-name-input\">`",
+      "severity": 3,
+      "violation": "The project name shown in Project Settings doesn't correspond to either project listed on the workspace overview, so it's unclear which project \"Open project settings\" is supposed to open."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` and, separately, `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>`",
+      "fix": "Make \"Continue\" dependent on a successful save (e.g., disable it until the form is submitted, or remove the separate Continue link and navigate on submit), and mark the email input `required`.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`<section id=\"invite-member\">`",
+      "severity": 3,
+      "violation": "\"Continue\" navigates to the \"Invite sent\" confirmation regardless of whether \"Save\" was clicked or the email field was filled in, so a user can reach a page claiming \"An invite was sent to the address entered above\" without ever entering or submitting an address."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The section contains only an `<h2>` and a `<p>`, with no `<a>` or button anywhere in it",
+      "fix": "Add a link back to `#project-settings` or `#workspace-overview`.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`<section id=\"invite-sent\">`",
+      "severity": 3,
+      "violation": "This is a dead-end page with no way to navigate back to project settings or the workspace overview."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\"",
+      "fix": "Add an \"archived projects list\" section/link, or remove the claim if that feature isn't part of this mockup.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`<section id=\"archive-confirm\">`, `<p id=\"archive-confirm-copy\">`",
+      "severity": 3,
+      "violation": "The document has no \"archived projects list\" page or link anywhere, so this promised destination doesn't exist."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"archive-confirm-archive-link\" href=\"#project-archived\">Archive</a>` versus `<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>`",
+      "fix": "Implement \"Archive\" as a form submission/button rather than a navigational link.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "`<section id=\"archive-confirm\">`, `<a id=\"archive-confirm-archive-link\">`",
+      "severity": 3,
+      "violation": "A destructive, state-changing action (\"Archive\") is implemented as a plain anchor link while equally consequential actions elsewhere (Save) use a form button, an inconsistent and semantically incorrect pattern."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Daily</option><option>Weekly</option>` - neither option has a `selected` attribute",
+      "fix": "Add a `selected` attribute to whichever option matches the currently saved digest frequency.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "`<section id=\"notification-settings\">`, `<select id=\"notification-settings-digest-input\">`",
+      "severity": 3,
+      "violation": "Unlike the project name field, which is pre-filled with its current value (`value=\"Design System Refresh\"`), the digest select gives no indication of the team's actual current setting, so the user can't tell if \"Daily\" (the default-selected first option) reflects reality."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<title>Project workspace mockup</title>`",
+      "fix": "Change the title to a user-facing string, e.g., \"Project workspace\".",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "`<head>`, `<title>`",
+      "severity": 3,
+      "violation": "The internal/process word \"mockup\" is exposed in the user-facing page title, which would be visible in the browser tab of a real product."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-09-15T01:49:40Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

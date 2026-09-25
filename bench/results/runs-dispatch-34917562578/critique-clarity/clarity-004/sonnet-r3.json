@@ -1,0 +1,84 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Employees keep proof of purchase for every stipend item. ... You must keep your equipment in good working condition and we may ask for a brief photo check once a year. Similarly, the policy applies to one device per category per employee. ... You record the stipend item on the request form.",
+      "fix": "Standardize on a single term, such as equipment item, for the purchased item throughout Eligibility, Required Documentation, Restrictions and Exceptions, and Terminology Notes, and state explicitly whether the per-category cap covers every equipment type.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Required Documentation, Restrictions and Exceptions, and Terminology Notes sections",
+      "severity": 3,
+      "violation": "PLAIN-CONSISTENT-TERMS is breached by naming the physical purchased item equipment, device, and stipend item interchangeably across sections, so a reader cannot tell whether the one-device-per-category restriction covers every kind of equipment (for example furniture) or only a narrower class of devices."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "The stipend pays up to 500 dollars per benefit year. The finance office deposits the amount within one pay cycle. ... Once approved, the team schedules the reimbursement for the next pay cycle. ... You track its status there until the payment clears.",
+      "fix": "Pick one term, such as stipend payment, and use it everywhere the same event is meant; if reimbursement genuinely names a distinct step, define it once and keep it distinct throughout.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Reimbursement Amounts, Program Coordination, and Terminology Notes sections",
+      "severity": 2,
+      "violation": "PLAIN-CONSISTENT-TERMS is breached by naming the same payment concept stipend, reimbursement, the amount, and the payment across different sections with no stated equivalence, leaving a careful reader to work out whether reimbursement names the same event as the stipend payment or a separate later step."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "The IT asset group updates the reimbursement log at the start of the fiscal year. A copy of each update goes to the shared benefits folder the same day. Similarly, the IT asset group tracks the equipment catalog on the first business day of the month.",
+      "fix": "Move the Program Overview content to an appendix or a clearly labeled internal-process section near the end, and open the document with Eligibility.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Program Overview, both paragraphs, preceding the Eligibility section",
+      "severity": 2,
+      "violation": "PLAIN-ORGANIZE requires sections to follow the reader's actual task sequence. The document opens with internal recordkeeping detail (who updates which internal log, and when) that the applying employee does not act on, ahead of Eligibility, the fact a reader needs first to know whether the rest of the document applies to them at all."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Completing the request begins with confirming eligibility, and uploading the receipt.",
+      "fix": "Rewrite as: The employee confirms eligibility and uploads the receipt to start the request.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Request Steps section, its only sentence",
+      "severity": 2,
+      "violation": "WILLIAMS-CHARACTER-ACTION is breached because the sentence's subject is the abstraction completing the request rather than the employee who actually confirms eligibility and uploads the receipt, so the section never names who performs the step it describes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-STRESS",
+      "evidence": "The finance office reviews every stipend request over 200 dollars before it pays out.",
+      "fix": "Reorder so the threshold lands last: Before it pays out, the finance office reviews every stipend request over 200 dollars.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Review Responsibility, first sentence",
+      "severity": 2,
+      "violation": "WILLIAMS-STRESS is breached because the sentence's newest, decision-relevant element, the 200 dollar review threshold, sits mid-sentence, while the final position is occupied by before it pays out, information the reader already has from the surrounding sections about payout."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T03:30:04Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

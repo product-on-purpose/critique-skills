@@ -1,0 +1,93 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "archive-confirm copy: 'You can restore it at any time from the archived projects list.' The artifact defines no state or control named or resembling an archived projects list anywhere; project-archived's only control is the \"project-archived-exit-link\" (Back to your projects), and workspace-overview lists only active projects with no link to any archived view.",
+      "fix": "Either add an archived projects list state (reachable from workspace-overview) with a restore control that returns a project to project-settings, or, if no such view is planned, remove the restorability claim from the archive-confirm copy so the confirmation does not promise a recovery path the design does not provide.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"archive-confirm\" section, archive confirmation copy, and the \"project-archived\" section",
+      "severity": 3,
+      "violation": "NNG-H3-UNDO requires a stated way back for an action the artifact itself treats as reversible. Archiving is explicitly claimed to be reversible via a named mechanism, an archived projects list with a restore option, but that mechanism appears nowhere in the artifact's state graph, so as specified there is no path back."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H5-CONFIRM",
+      "evidence": "The form's own submit control, invite-member-save-btn (\"Save\"), names no target state or feedback at all. Advancing to \"invite-sent\", whose copy already reads in the past tense, 'An invite was sent to the address entered above,' happens instead through a plain link, invite-member-continue-link (\"Continue\"), with no confirmation screen or prompt naming the recipient in between.",
+      "fix": "Insert a confirmation state between the email entry and invite-sent that names the exact recipient address and what sending will do, and make the form's own \"Save\" control the one that leads there, so the control labeled as the commit action is the one that actually commits.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"invite-member\" section, the \"invite-member-continue-link\" control and the \"invite-member-save-btn\" control",
+      "severity": 3,
+      "violation": "NNG-H5-CONFIRM requires a costly, externally-visible action such as sending an invite to a recipient to be gated behind an explicit confirmation naming the object and consequence before it commits. Here the action fires on a single click of a control not even labeled as the commit action, with no confirmation step and no stated way to cancel or revoke the invite once sent."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "project-settings-save-btn (\"Save\", type submit) and project-settings-duplicate-btn (\"Duplicate project\", aria-label only) both name a state-changing action with no specified in-progress or result feedback: no success message, no changed control state, no target state named. The same pattern recurs at notification-settings-save-btn (\"Save\") in the \"notification-settings\" section.",
+      "fix": "Specify a visible confirmation for each of these actions, for example a brief inline success message after Save, and a named next state (or an in-place update showing the new duplicate) after Duplicate project.",
+      "id": "F-003",
+      "instances": [
+        {
+          "evidence": "project-settings-duplicate-btn has an aria-label of 'Duplicate project' but no visible text, no target state, and no described outcome.",
+          "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" control"
+        },
+        {
+          "evidence": "notification-settings-save-btn (\"Save\", type submit) names no target state or confirmation after the digest frequency is changed.",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" control"
+        }
+      ],
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" control",
+      "severity": 2,
+      "violation": "NNG-H1 requires that a state-changing action the artifact names also names what the user sees while it runs and once it finishes. All three of these controls specify a trigger with no specified outcome, so a user who clicks Save on a project name change, clicks Duplicate project, or changes a notification digest setting has no way to tell the action took effect."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "\"An invite was sent to the address entered above.\" The invite-sent state is a separate section from invite-member, where the address was typed, and the entered email value is never redisplayed on invite-sent.",
+      "fix": "Redisplay the entered email address on the invite-sent confirmation, for example \"An invite was sent to jane@example.com,\" so the user can verify what was actually sent.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"invite-sent\" section, paragraph below the \"Invite sent\" heading",
+      "severity": 2,
+      "violation": "NNG-H6-RECALL requires that information the user needs at a step be present at that step rather than held over from an earlier, now-departed screen. The confirmation asks the user to trust their recollection of an address that is never shown again, on an action, sending an invite, where a wrong address is hard to detect and already irreversible by the time this screen appears."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "\"The last import finished with 4 rows skipped: each referenced a project that does not exist in this workspace. Rows 35, 71, 78, and 83 were skipped; every other row was imported.\" The section's only control is import-status-exit-link (\"Back to your projects\"); no control or link addresses the skipped rows.",
+      "fix": "Add a control from this state such as \"Download skipped rows\" or \"Retry import\" so the user has a reachable next step for the specific rows named in the message.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"import-status\" section, paragraph with id \"import-status-message\"",
+      "severity": 2,
+      "violation": "NNG-H9-RECOVER requires that error text point to a next step the user can actually take from where the message appears. This message names the exact problem and rows but offers no way to fix the missing project references, re-run the import, or view the skipped rows, only an exit back to the overview."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T03:37:37Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

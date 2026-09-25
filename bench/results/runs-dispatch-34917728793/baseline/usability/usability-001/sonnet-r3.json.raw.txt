@@ -1,0 +1,39 @@
+Location: section#workspace-overview, <p> element
+Evidence: "This workspace holds 3 projects, synced last week." followed by a list containing only "Data Warehouse Cutover" and "Mobile App Revamp"
+Problem: The stated project count (3) doesn't match the number of items actually displayed (2), with nothing indicating the list is a partial/recent subset.
+Fix: Either correct the count to match the two listed projects, or label the list explicitly as partial (e.g., "2 of 3 recent projects") with a link to see all.
+
+Location: section#workspace-overview, <ul> inside #workspace-overview-recent
+Evidence: `<li>Data Warehouse Cutover</li>` and `<li>Mobile App Revamp</li>` are plain text, while the only settings link on the page ("Open project settings") routes to #project-settings, which edits "Design System Refresh" — a project not in this list
+Problem: The listed projects aren't linked to anything, and the single settings link goes to an unrelated project, so there's no way to reach settings for either listed project.
+Fix: Make each list item a link to its own project's settings, or otherwise clarify how "Open project settings" relates to the listed projects.
+
+Location: section#workspace-overview, #workspace-overview-promo-referral div
+Evidence: "Invite 3 teammates this month to unlock the advanced reporting add-on."
+Problem: The only invite mechanism in the document (Invite a team member) sends one invite at a time and shows no progress toward the "3 teammates" goal, so a user can't tell how close they are to unlocking the add-on.
+Fix: Add a progress indicator (e.g., "1 of 3 invited this month") near the promo or on the invite screen.
+
+Location: section#project-settings, duplicate button
+Evidence: `<button id="project-settings-duplicate-btn" type="button"></button>`
+Problem: The button has no visible text or accessible label, so users can't tell what it does.
+Fix: Add a label such as "Duplicate project" inside the button.
+
+Location: section#invite-member, form and continue link
+Evidence: `<button id="invite-member-save-btn" type="submit">Save</button>` alongside a separate `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>`
+Problem: It's unclear whether "Save" or "Continue" actually sends the invite, since both appear to advance/submit the same form and no other screen in the document has this redundant pair.
+Fix: Remove one of the two controls, or give them distinct, non-overlapping purposes with clearer labels.
+
+Location: section#invite-sent
+Evidence: Section contains only an `<h2>` and a `<p>`, with no `<a>` elements
+Problem: This screen is a dead end with no way to navigate back to project settings or the workspace overview.
+Fix: Add an exit link/button, e.g. "Back to project settings" or "Done".
+
+Location: section#archive-confirm, #archive-confirm-copy paragraph
+Evidence: "You can restore it at any time from the archived projects list."
+Problem: No "archived projects list" page or link exists anywhere in the document, so the restore path this text promises is unreachable.
+Fix: Add an archived-projects section/link, or remove this claim if that feature isn't part of this mockup.
+
+Location: section#project-archived, exit link
+Evidence: `<a id="project-archived-exit-link" href="#workspace-overview">Back to your projects</a>` with no change to #workspace-overview content
+Problem: After archiving "Design System Refresh," the workspace overview shows no confirmation and the "Open project settings" link would still lead back into that now-archived project's settings as if it were active, allowing re-archiving with no indication of its archived state.
+Fix: Reflect the archived state on the workspace overview (e.g., remove/disable the settings link or show an archived badge) after the archive action completes.

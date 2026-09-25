@@ -1,0 +1,44 @@
+Location: workspace-overview section, "Your projects" paragraph and list
+Evidence: "This workspace holds 4 projects, synced last week." followed by a `<ul>` containing only 3 `<li>` items
+Problem: The stated project count doesn't match the number of projects actually listed.
+Fix: Add the missing 4th project to the list, or change the text to "3 projects."
+
+Location: workspace-overview list vs. project-settings-name-input
+Evidence: Workspace list shows "Holiday Campaign Assets," "Support Backlog Triage," "Mobile App Revamp," but `<input id="project-settings-name-input" type="text" value="Q3 Roadmap">`
+Problem: "Open project settings" is the only path into project settings, yet it leads to a project ("Q3 Roadmap") that never appears anywhere in the workspace's project list, making the mockup's data inconsistent across screens.
+Fix: Rename the settings example to match one of the listed projects, or add "Q3 Roadmap" to the workspace project list.
+
+Location: project-settings section, duplicate button
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text or icon content, so sighted users see a blank control with no indication of its purpose; the aria-label only helps screen-reader users.
+Fix: Add visible text (e.g., "Duplicate") or an icon to the button's content.
+
+Location: project-settings section, duplicate button
+Evidence: `project-settings-duplicate-btn` has no href, form association, or corresponding result section anywhere in the document
+Problem: Unlike every other action in the mockup, this button doesn't lead to any resulting state, making it a non-functional dead end.
+Fix: Link it to a new section demonstrating the duplicated project, or remove it from the mockup.
+
+Location: project-settings, invite-member, and notification-settings forms
+Evidence: `<form>` elements with `<button type="submit">Save</button>` and no `action` attribute, while all other navigation in the document uses `<a href="#section">` anchors
+Problem: Submitting these forms triggers a real page reload/GET request instead of moving to a mockup state, breaking the anchor-based navigation pattern used everywhere else, and there is no confirmation screen for a successful save.
+Fix: Give each Save control a defined next state consistent with the anchor-navigation pattern (e.g., navigate to a "Saved" confirmation section), or remove the `<form>`/submit semantics.
+
+Location: invite-member section, Continue link
+Evidence: `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>` is separate from the `<form>` and unconnected to `invite-member-email-input`
+Problem: Clicking "Continue" navigates straight to "Invite sent" regardless of whether an email address was entered, so an invite can appear sent with no recipient.
+Fix: Tie navigation to form submission and require a non-empty, valid email before allowing continuation.
+
+Location: archive-confirm section
+Evidence: "You can restore it at any time from the archived projects list."
+Problem: No "archived projects list" screen or link exists anywhere in the document, so this text refers to a destination that isn't part of the mockup.
+Fix: Add an archived-projects-list section with a link from here (and from project-archived), or remove the reference.
+
+Location: archive-confirm section, Cancel/Archive links
+Evidence: `<a id="archive-confirm-cancel-link" href="#project-settings">Cancel</a>` and `<a id="archive-confirm-archive-link" href="#project-archived">Archive</a>`, both plain unstyled anchors
+Problem: The destructive "Archive" action is visually indistinguishable from "Cancel," making an accidental archive easy to trigger.
+Fix: Style the Archive action distinctly (e.g., as a warning button) to differentiate it from the safe Cancel option.
+
+Location: project-settings-name-input, invite-member-email-input, notification-settings-digest-input
+Evidence: e.g. `<input id="project-settings-name-input" type="text" value="Q3 Roadmap">` — none of the form controls have a `name` attribute
+Problem: Without `name` attributes, these fields would not be included in an actual form submission, so "Save" could never function as real form data.
+Fix: Add appropriate `name` attributes to each form control.

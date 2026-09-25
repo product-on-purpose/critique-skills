@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 5 projects, synced last week.\" followed by a `<ul>` containing only four `<li>` items (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)",
+      "fix": "Either add the missing fifth project to the list or change the paragraph to say \"4 projects.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "section#workspace-overview, paragraph before the project list",
+      "severity": 3,
+      "violation": "The stated project count (5) does not match the number of projects actually listed (4)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form>` … `<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>` - none of the three `<form>` tags in the document have an `action` attribute",
+      "fix": "Give each form an explicit action, or replace the submit buttons with anchor-style links to appropriate confirmation sections, matching how \"Continue\" and \"Archive\" already navigate via href.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<form>` elements in #project-settings, #invite-member, and #notification-settings",
+      "severity": 3,
+      "violation": "Clicking any of these submit buttons triggers a default browser form submission (GET request reloading the current document) instead of navigating to a result/confirmation state, breaking the fragment-link navigation pattern used consistently everywhere else in the mockup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible label text (e.g. \"Duplicate\") or an icon, and wire it to a destination state (e.g. a new project row or confirmation) consistent with the other buttons/links.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "section#project-settings, `<button id=\"project-settings-duplicate-btn\">`",
+      "severity": 3,
+      "violation": "The button has no visible text content (only an aria-label) and no href/target, so it renders as a blank, non-functional control unlike every other interactive element in the mockup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a>` while a separate `#archive-confirm` section exists with its own cancel/confirm links but is never linked to from anywhere in the document",
+      "fix": "Change `project-settings-archive-link`'s href to `#archive-confirm` so the confirmation screen is reachable before archiving.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "section#project-settings, `<a id=\"project-settings-archive-link\">`, compared with section#archive-confirm",
+      "severity": 3,
+      "violation": "The confirmation dialog (\"Archive this project?\") is unreachable dead content; the actual archive link skips straight to the final archived state, bypassing the confirmation step the document was clearly designed to have."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The form contains `<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` and, immediately after the form, `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>`",
+      "fix": "Remove the redundant Save button (or clarify its distinct purpose) so there is a single, clear control that sends the invite and advances to the \"Invite sent\" state.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "section#invite-member",
+      "severity": 3,
+      "violation": "There are two competing controls for completing the same invite action (a form Save button and a separate Continue link) with no indication of how they differ, making the flow ambiguous."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"notification-settings-save-btn\" type=\"submit\">Submit</button>` versus `<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>` and `<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>`",
+      "fix": "Rename the button to \"Save\" to match the labeling convention used on the other two forms.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "section#notification-settings, `<button id=\"notification-settings-save-btn\">`",
+      "severity": 3,
+      "violation": "This save action uses the label \"Submit\" while equivalent save actions elsewhere in the document use \"Save,\" an inconsistent terminology for the same kind of action."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-09-15T02:38:17Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

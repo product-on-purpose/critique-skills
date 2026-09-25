@@ -1,0 +1,34 @@
+Location: workspace-overview section, intro paragraph and list
+Evidence: "This workspace holds 4 projects, synced this morning." followed by only three `<li>` items (Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot)
+Problem: The stated project count (4) doesn't match the number of projects actually listed (3).
+Fix: Either correct the text to "3 projects" or add the missing fourth project to the list (or clarify that the list shows only "recent" projects, not all of them).
+
+Location: workspace-overview section, `workspace-overview-recent` list
+Evidence: `<li>Beta Launch Plan</li>`, `<li>Holiday Campaign Assets</li>`, `<li>Partner Integration Pilot</li>`
+Problem: None of the three listed project names are links, so there is no way to navigate into any specific project from the overview; the only path into "Project settings" is a generic link unrelated to any listed project.
+Fix: Wrap each project name in an anchor that routes to its own settings view, or otherwise connect these list items to the project-settings flow.
+
+Location: project-settings section, name input
+Evidence: `<input id="project-settings-name-input" type="text" value="Vendor Onboarding">`
+Problem: "Vendor Onboarding" doesn't match any of the projects named in workspace-overview, so the settings/invite/archive flow appears to operate on a project that doesn't exist in the workspace list.
+Fix: Use one of the project names from the workspace-overview list (e.g., "Beta Launch Plan") consistently across project-settings, invite-member, invite-sent, archive-confirm, and project-archived.
+
+Location: project-settings section, duplicate button
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text (only an aria-label) and no href or target, so it renders blank and leads nowhere in this clickable mockup.
+Fix: Add visible button text (e.g., "Duplicate") and link it to a real destination, or remove it if it's out of scope for this mockup.
+
+Location: project-settings, invite-member, and notification-settings forms — Save buttons
+Evidence: `<button id="project-settings-save-btn" type="submit">Save</button>` (same pattern for `invite-member-save-btn` and `notification-settings-save-btn`)
+Problem: These submit buttons have no form action and no href, so clicking "Save" in the prototype leads nowhere and gives no confirmation that anything happened.
+Fix: Route each Save action to a confirmation state (or back to the parent section), the way `archive-confirm-archive-link` and `invite-member-continue-link` do.
+
+Location: invite-member section
+Evidence: `<button id="invite-member-save-btn" type="submit">Save</button>` and `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>` both present in the same form
+Problem: Two competing calls to action (Save vs. Continue) exist for sending the same invite, with nothing distinguishing their purposes.
+Fix: Collapse into a single primary action (e.g., one "Send invite" control that navigates to invite-sent) and remove the redundant control.
+
+Location: import-status section
+Evidence: "Import failed. Error code IMP-500. Contact support if this continues."
+Problem: The text instructs the user to "Contact support" but provides no link, email address, or other way to actually do so.
+Fix: Add a mailto link or a link to a support/contact section.

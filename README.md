@@ -13,7 +13,7 @@ Every skill operationalizes a published external standard, cites a permanent cri
   <a href="https://product-on-purpose.github.io/critique-skills/contributing/"><img src="https://img.shields.io/badge/tier-convergent%20(Silver)-C0C0C0?style=flat-square" alt="Conformance tier: convergent (Silver)"></a>
   <a href="#-the-shelf"><img src="https://img.shields.io/badge/skills-6-brightgreen?style=flat-square" alt="Skills: 6"></a>
   <a href="https://product-on-purpose.github.io/critique-skills/reference/criteria/"><img src="https://img.shields.io/badge/criteria-96-brightgreen?style=flat-square" alt="Criteria: 96"></a>
-  <a href="#-the-scoreboard"><img src="https://img.shields.io/badge/run%20envelopes-541-purple?style=flat-square" alt="Run envelopes: 541"></a>
+  <a href="#-the-scoreboard"><img src="https://img.shields.io/badge/run%20envelopes-621-purple?style=flat-square" alt="Run envelopes: 621"></a>
   <a href="https://agentskills.io/specification"><img src="https://img.shields.io/badge/spec-agentskills.io-orange?style=flat-square" alt="Agent Skills Spec"></a>
 </p>
 
@@ -24,7 +24,7 @@ Every skill operationalizes a published external standard, cites a permanent cri
 | You want to | Start at | Then |
 |---|---|---|
 | **Use it on something** | [Install](#-install), then [the shelf](#-the-shelf): six skills, what each reviews, one prompt each | [`QUICKSTART.md`](QUICKSTART.md) for one run start to finish, [`examples/`](examples/) for a worked walkthrough per skill |
-| **Decide whether to believe it** | [The scoreboard](#-the-scoreboard): recall and precision per skill, both pinned model tiers | [The receipts explorer](https://product-on-purpose.github.io/critique-skills/receipts/) for all 54 rows and 541 run envelopes, [`bench/results/README.md`](bench/results/README.md) for the narrative, unflattering numbers first |
+| **Decide whether to believe it** | [The scoreboard](#-the-scoreboard): recall and precision per skill, both pinned model tiers | [The receipts explorer](https://product-on-purpose.github.io/critique-skills/receipts/) for all 54 rows and 621 run envelopes, [`bench/results/README.md`](bench/results/README.md) for the narrative, unflattering numbers first |
 | **Build on it or contribute** | [How a critique runs](#-how-a-critique-runs) and [where this stops](#-where-this-stops) | [The methodology](https://product-on-purpose.github.io/critique-skills/explanation/methodology/), the [Critique Contract](docs/reference/critique-contract.md), and [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 
 > [!NOTE]
@@ -183,7 +183,7 @@ _Location-level, shipped versions only, run set `p3-2026-07-31-plus-cal1-2026-08
 
 Recall is the flattering half. The floor is `critique-clarity` on Haiku at **0.309** run-to-run consistency, the lowest figure any core skill measured, with its judged lane alone at **0.150**. Among shipped skills precision falls to **0.169**, on `critique-usability` at Sonnet. Counting the retired `critique-accessibility` 0.1.0 it falls to **0.155**, which is the version [the failure below](#the-most-instructive-number-is-a-failure) is about. Both cuts are named because they are different questions: what you can install today, and what this library has ever measured.
 
-All 54 rows across three cuts, every per-run figure, and all 541 run envelopes: the [receipts explorer](https://product-on-purpose.github.io/critique-skills/receipts/), and [`bench/results/README.md`](bench/results/README.md) in the repo, unflattering numbers first. Nothing lives only on the site.
+All 54 rows across three cuts, every per-run figure, and all 621 run envelopes: the [receipts explorer](https://product-on-purpose.github.io/critique-skills/receipts/), and [`bench/results/README.md`](bench/results/README.md) in the repo, unflattering numbers first. Nothing lives only on the site.
 
 ### The most instructive number is a failure
 
@@ -297,7 +297,7 @@ Everything on the site is a rendering of something in this repo. Nothing lives o
 | **Criteria** | 96 (42 scripted, 54 judged), each with a permanent ID |
 | **Subagents** | 1 (`critique-critic`, clean-context) |
 | **Conformance** | convergent (Silver), 0 errors / 0 warnings; reproduce with `node scripts/check.mjs` |
-| **Measurement** | 541 committed run envelopes, k=5, two pinned model tiers, 23-artifact seeded corpus |
+| **Measurement** | 621 committed run envelopes, k=5, two pinned model tiers, 23-artifact seeded corpus |
 | **Tests** | 911 Python, 126 Node; reproduce with `python -m pytest -q` and `npm test` |
 | **License** | [Apache-2.0](LICENSE) (code) / CC-BY-4.0 (corpus) |
 

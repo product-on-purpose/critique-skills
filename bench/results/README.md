@@ -193,11 +193,18 @@ location-level recall was under 40 percent of the baseline's, on the domain's st
 **All five rows are 0.1.0 rows, and the four `critique-accessibility` ones are closed.** On
 re-measurement, `critique-accessibility`
 0.1.1 reads +0.612 and +0.189 on recall and +0.617 and +0.379 on precision against the same baseline
-figures. `critique-usability`'s sonnet precision cell is the one that stands: it was not re-measured,
-and [ADR 0026](../../docs/internal/decisions/0026-location-level-re-examination-of-baseline-gates.md)
-already showed that particular -0.012 to be an ancestor-window artifact that reverses under a stricter
-match. So one cell in this table remains open on a 0.012 margin that is probably not real, and the
-other four were fixed by naming elements properly.
+figures. `critique-usability`'s sonnet precision cell is the one that stands.
+[ADR 0026](../../docs/internal/decisions/0026-location-level-re-examination-of-baseline-gates.md)
+showed that particular -0.012 to be an ancestor-window artifact that reverses under a stricter match.
+
+**Re-measured 2026-09-15, and confirmed rather than retired.** Run `34917728793` re-ran both arms of
+the cell through the shipped harness at k=5. The skill reads **0.169 precision again, against a
+re-run baseline of 0.194**, and 0.800 recall against 0.857, so within that run set it trails the
+baseline on both location metrics. Both gaps are smaller than the spread either arm shows across its
+own five repetitions, and ADR 0026's stricter-match cut has not been re-applied to the new envelopes.
+The table above still shows the committed figures, because the re-run feeds no published number (see
+[Provenance](#provenance)). So one cell in this table remains open, and the other four were fixed by
+naming elements properly.
 
 **Clean-artifact cell.**
 
@@ -674,6 +681,25 @@ the other three clarity artifacts, and nothing about any published figure. It wa
 single-artifact scratch corpus outside this tree and is a diagnostic probe, not a measurement, so
 no run set here contains it and nothing in the tables below moves.
 
+**Two sonnet run directories followed on 2026-09-15, both at full coverage.** Workflow runs
+`34917562578` and `34917728793`, dispatched through `bench.yml`, measured `critique-clarity` and
+`critique-usability` on the pinned sonnet tier at k=5. They are committed as
+`bench/results/runs-dispatch-34917562578/` and `bench/results/runs-dispatch-34917728793/`, 40
+envelopes each, 20 skill and 20 baseline, with no failed step. Where the paragraph above could name
+one sonnet cell completed through `bench/run_bench.py`, there are now forty. Both were reviewed as a
+diff before committing, and only the envelope directories were taken from each result branch: the
+workflow also rewrites `results.json` to hold its own run set alone, which would have deleted the
+committed entries.
+
+**They feed no published number either, and one of them is a fidelity-gate failure.** The clarity
+run is the sonnet fidelity gate. It failed by the gate's own rule on `precision_location`, and most
+of the move traces to the judged lane no longer emitting `instances`. The full reading, with the
+counterfactual and the baseline's own movement, is in
+[ADR 0031](../../docs/internal/decisions/0031-fidelity-gate-acceptance-band.md), section "The gate ran
+on sonnet, 2026-09-15". The usability run landed inside its band on both gated figures and
+re-measured the one cell [section 2](#2-cells-where-a-skill-is-worse-than-the-generic-prompt) leaves
+open; what it found is recorded there.
+
 ## Limitations
 
 Stated so no reader has to infer them from an absence.
@@ -875,6 +901,18 @@ Reported, not fixed. Each affects how far a reader should trust the surrounding 
   told apart in this format at all. A per-entry `run_set` belongs in the v0.2 schema alongside the
   lane dimension that [ADR 0022](../../docs/internal/decisions/0022-consistency-floor-overall-lane-min-core.md)
   already flagged.
+- **Three committed run directories feed no entry in `results.json`, against a rule that says every
+  committed run set does.** `bench/README.md` states that `results.json` "carries every computed
+  number for every committed run set". `runs-dispatch-31988100372/` (haiku, 2026-08-17),
+  `runs-dispatch-34917562578/` and `runs-dispatch-34917728793/` (sonnet, 2026-09-15) are committed and
+  schema-checked on every CI run, and none of them is in it; their figures are quoted in prose in
+  [ADR 0031](../../docs/internal/decisions/0031-fidelity-gate-acceptance-band.md), this file and the
+  changelog instead. They stay out deliberately for now. Each shares `(skill, skill_version, model,
+  domain)` with a p3 entry, and the readers of this file key cells on that identity, so adding them
+  would put two entries on one key for the first time: the collision shape of the dropped-row entry
+  below. Closing it needs every reader to key on `run_set` as well, and a ruling on which run set a
+  published table shows. Tracked as
+  [E63 (dispatch run sets outside results.json)](../../docs/internal/backlog/enhancements.md).
 - **`bench/report.py` used to drop a row silently.** Its baseline-comparison tables keyed each
   `(domain, model)` cell by skill name alone, so two entries for the same skill at different versions
   collided and whichever was inserted first vanished from the comparison without any error. It was

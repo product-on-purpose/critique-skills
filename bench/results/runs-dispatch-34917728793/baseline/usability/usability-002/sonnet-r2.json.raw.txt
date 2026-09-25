@@ -1,0 +1,34 @@
+Location: `<section id="workspace-overview">`, `<p>` element
+Evidence: "This workspace holds 5 projects, synced last week." followed by a list with only four `<li>` items (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)
+Problem: The stated project count (5) does not match the number of projects actually listed (4).
+Fix: Either add the missing fifth project to the list or correct the count in the paragraph text to 4.
+
+Location: `<section id="workspace-overview">`, link `workspace-overview-projects-link`
+Evidence: `<a id="workspace-overview-projects-link" href="#project-settings">Open project settings</a>`
+Problem: The element's id says "projects-link" (suggesting it relates to the projects list) but it actually navigates to project settings, which is misleading for anyone maintaining or testing the markup.
+Fix: Rename the id to something like `workspace-overview-settings-link` to match its actual destination and label.
+
+Location: `<section id="project-settings">`, button `project-settings-duplicate-btn`
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text content and no icon, so sighted users have no visual indication of the control or what it does.
+Fix: Add visible label text (e.g., "Duplicate") or an icon with appropriate styling, keeping the aria-label for accessibility.
+
+Location: `<section id="project-settings">`, button `project-settings-duplicate-btn`
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>` has no `href` and is not linked to any subsequent section.
+Problem: Unlike every other interactive control in the document, this button leads nowhere and has no corresponding result screen (e.g., a "project duplicated" confirmation), leaving the flow a dead end.
+Fix: Either link/wire the button to a new "project duplicated" section showing the result, or remove the control if duplication isn't in scope for this mockup.
+
+Location: `<section id="project-settings">`, link `project-settings-archive-link`
+Evidence: `<a id="project-settings-archive-link" href="#project-archived">Archive project</a>`
+Problem: This link jumps directly to the "Project archived" result screen, bypassing the "Archive this project?" confirmation screen that exists elsewhere in the document for exactly this action.
+Fix: Change the href to `#archive-confirm` so the user sees the confirmation step before the project is archived.
+
+Location: `<section id="archive-confirm">`
+Evidence: The section defines a full confirmation UI ("Archive this project?" ... Cancel / Archive links), but no `href` anywhere in the document points to `#archive-confirm`.
+Problem: The section is unreachable/orphaned — there is no way to navigate into this screen through the defined flow.
+Fix: Point `project-settings-archive-link` (or another appropriate trigger) to `#archive-confirm` so the section becomes reachable.
+
+Location: `<section id="notification-settings">`, button `notification-settings-save-btn`
+Evidence: `<button id="notification-settings-save-btn" type="submit">Submit</button>` versus `project-settings-save-btn` and `invite-member-save-btn`, both labeled "Save"
+Problem: This is the only save-type button in the document labeled "Submit" instead of "Save," an inconsistent label for equivalent actions.
+Fix: Change the button text to "Save" to match the labeling convention used elsewhere in the document.

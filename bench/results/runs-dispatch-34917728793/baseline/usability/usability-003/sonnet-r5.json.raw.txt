@@ -1,0 +1,39 @@
+Location: `<section id="workspace-overview">`, the `<p>` element
+Evidence: "This workspace holds 4 projects, synced this morning." followed by a `<ul>` containing only 3 `<li>` items (Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot)
+Problem: The stated project count (4) does not match the number of projects actually listed (3), and there is no indication that the list is a partial/"recent" subset.
+Fix: Either add the missing 4th project to the list, correct the count in the paragraph to "3 projects", or add explicit text such as "showing 3 most recent" to clarify the list is not exhaustive.
+
+Location: `<div id="workspace-overview-recent">`, the `<ul>` of project names
+Evidence: `<li>Beta Launch Plan</li>`, `<li>Holiday Campaign Assets</li>`, `<li>Partner Integration Pilot</li>`
+Problem: The listed project names are plain text, not links, so there is no way to navigate into any specific project from the overview.
+Fix: Wrap each project name in an `<a>` linking to that project's settings (or a project detail view), or remove the list if it isn't meant to be interactive.
+
+Location: `<section id="workspace-overview">`, `<a id="workspace-overview-projects-link">`
+Evidence: `<a id="workspace-overview-projects-link" href="#project-settings">Open project settings</a>`
+Problem: This single generic link doesn't indicate which project's settings it opens, and it in fact opens settings for "Vendor Onboarding" (`project-settings-name-input` value), a project that never appears in the three-item recent list above — an unexplained inconsistency.
+Fix: Either scope the link per-project (e.g., one settings link per listed project) or make the target project name consistent with one of the projects shown in the overview list.
+
+Location: `<section id="project-settings">`, `<button id="project-settings-save-btn">`
+Evidence: `<button id="project-settings-save-btn" type="submit">Save</button>` with no subsequent confirmation section or link
+Problem: Saving project settings has no resulting confirmation state, unlike the analogous invite flow which leads to a dedicated "Invite sent" section — an inconsistent and dead-end interaction.
+Fix: Add a "settings saved" confirmation section/state (or toast equivalent) reachable after Save, matching the pattern used for invite-member.
+
+Location: `<section id="project-settings">`, `<button id="project-settings-duplicate-btn">`
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text content or icon, only an `aria-label`, so sighted users see an empty, unlabeled clickable element.
+Fix: Add visible text (e.g., "Duplicate") or an icon with accompanying visible label to the button.
+
+Location: `<section id="project-settings">`, `<button id="project-settings-duplicate-btn">`
+Evidence: The duplicate button exists with no corresponding confirmation step or resulting "project duplicated" section, whereas `archive-confirm`/`project-archived` provide both for the comparably consequential Archive action
+Problem: Duplicating a project (an action that creates new data) has no confirmation and no visible outcome anywhere in the document, making the flow incomplete relative to the similarly weighted Archive flow.
+Fix: Add a confirmation step and/or a result state (e.g., a "Project duplicated" section or redirect to the new project's settings) for the Duplicate action.
+
+Location: `<section id="invite-member">`, form and links
+Evidence: `<button id="invite-member-save-btn" type="submit">Save</button>` alongside `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>`
+Problem: It's unclear what "Save" does versus "Continue," since the invite is apparently sent only after clicking "Continue" (per the "Invite sent" copy), making "Save" a redundant or confusing control with no defined effect.
+Fix: Consolidate into a single "Send invite" action, or clearly differentiate the two (e.g., label the submit button "Send invite" and remove the separate "Continue" link, or explain what Save persists before sending).
+
+Location: `<section id="notification-settings">`, `<button id="notification-settings-save-btn">`
+Evidence: `<button id="notification-settings-save-btn" type="submit">Save</button>` with no confirmation section or link afterward
+Problem: As with project-settings, saving notification preferences has no resulting confirmation state, leaving the action a dead end.
+Fix: Add a confirmation state/section after saving notification settings, consistent with how other completed actions (invite, archive) confirm success.

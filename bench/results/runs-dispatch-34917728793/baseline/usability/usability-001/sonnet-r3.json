@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 3 projects, synced last week.\" followed by a list containing only \"Data Warehouse Cutover\" and \"Mobile App Revamp\"",
+      "fix": "Either correct the count to match the two listed projects, or label the list explicitly as partial (e.g., \"2 of 3 recent projects\") with a link to see all.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "section#workspace-overview, <p> element",
+      "severity": 3,
+      "violation": "The stated project count (3) doesn't match the number of items actually displayed (2), with nothing indicating the list is a partial/recent subset."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<li>Data Warehouse Cutover</li>` and `<li>Mobile App Revamp</li>` are plain text, while the only settings link on the page (\"Open project settings\") routes to #project-settings, which edits \"Design System Refresh\" - a project not in this list",
+      "fix": "Make each list item a link to its own project's settings, or otherwise clarify how \"Open project settings\" relates to the listed projects.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "section#workspace-overview, <ul> inside #workspace-overview-recent",
+      "severity": 3,
+      "violation": "The listed projects aren't linked to anything, and the single settings link goes to an unrelated project, so there's no way to reach settings for either listed project."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Invite 3 teammates this month to unlock the advanced reporting add-on.\"",
+      "fix": "Add a progress indicator (e.g., \"1 of 3 invited this month\") near the promo or on the invite screen.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "section#workspace-overview, #workspace-overview-promo-referral div",
+      "severity": 3,
+      "violation": "The only invite mechanism in the document (Invite a team member) sends one invite at a time and shows no progress toward the \"3 teammates\" goal, so a user can't tell how close they are to unlocking the add-on."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\"></button>`",
+      "fix": "Add a label such as \"Duplicate project\" inside the button.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "section#project-settings, duplicate button",
+      "severity": 3,
+      "violation": "The button has no visible text or accessible label, so users can't tell what it does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` alongside a separate `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>`",
+      "fix": "Remove one of the two controls, or give them distinct, non-overlapping purposes with clearer labels.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "section#invite-member, form and continue link",
+      "severity": 3,
+      "violation": "It's unclear whether \"Save\" or \"Continue\" actually sends the invite, since both appear to advance/submit the same form and no other screen in the document has this redundant pair."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Section contains only an `<h2>` and a `<p>`, with no `<a>` elements",
+      "fix": "Add an exit link/button, e.g. \"Back to project settings\" or \"Done\".",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "section#invite-sent",
+      "severity": 3,
+      "violation": "This screen is a dead end with no way to navigate back to project settings or the workspace overview."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\"",
+      "fix": "Add an archived-projects section/link, or remove this claim if that feature isn't part of this mockup.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "section#archive-confirm, #archive-confirm-copy paragraph",
+      "severity": 3,
+      "violation": "No \"archived projects list\" page or link exists anywhere in the document, so the restore path this text promises is unreachable."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"project-archived-exit-link\" href=\"#workspace-overview\">Back to your projects</a>` with no change to #workspace-overview content",
+      "fix": "Reflect the archived state on the workspace overview (e.g., remove/disable the settings link or show an archived badge) after the archive action completes.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "section#project-archived, exit link",
+      "severity": 3,
+      "violation": "After archiving \"Design System Refresh,\" the workspace overview shows no confirmation and the \"Open project settings\" link would still lead back into that now-archived project's settings as if it were active, allowing re-archiving with no indication of its archived state."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-09-15T01:55:39Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

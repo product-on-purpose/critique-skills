@@ -33,6 +33,17 @@ AC-7: each stretch skill carries a recorded verdict citing its numbers against t
 > and this amendment was kept deliberately short instead of discharging it, because rewriting the
 > stretch verdicts while ruling on a core skill would mix two unrelated changes in one pass.
 
+> **Noted 2026-09-24: `critique-usability`'s sonnet cell was re-measured, and it still does not
+> qualify.** Run `34917728793` (2026-09-15) re-ran both arms of the cell through the shipped harness
+> at k=5: location recall 0.800 against the baseline's 0.857, location precision 0.169 against 0.194.
+> Within that run set the skill now trails on both metrics, by gaps smaller than either arm's own
+> spread across its five repetitions. **Read it with one caveat:** the harness that produced it failed
+> the fidelity gate on the sibling `critique-clarity` cell the same night
+> ([ADR 0031](../../docs/internal/decisions/0031-fidelity-gate-acceptance-band.md), section "The gate
+> ran on sonnet, 2026-09-15"), although this cell's own figures landed inside their bands. No verdict
+> moves and the re-run feeds no published number. Folding this into one current-state document is
+> still [E25 (rewrite verdicts.md)](../../docs/internal/backlog/enhancements.md).
+
 ## The gate
 
 A stretch skill ships only if **both** conditions hold ([S-05](../../docs/internal/release-plans/plan_v0.1.0/S-05_skills-slate/spec.md), "Requirements"):
