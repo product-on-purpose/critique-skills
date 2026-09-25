@@ -113,7 +113,13 @@ prioritized ahead of deck**. The order is now:
   infrastructure, not new work: the forms corpus module is a new build. And the why-gate's
   not-a-duplicate test weighed only accessibility, when usability and microcopy already own label
   presence, error content and validation timing. Six decisions are listed there for the maintainer.
-- **Status:** registry drafted 2026-09-25; awaiting the maintainer's rulings before the build.
+- **REVISION 2, 2026-09-25**, after the maintainer ruled all six decisions: rebuilt from 75 sources
+  and 470 verified findings (Wroblewski's book in full, Silver, GOV.UK, web.dev, NN/g, Baymard
+  benchmarks, peer-reviewed studies, A/B tests), with a committed
+  [bibliography](../release-plans/_unassigned/N2_critique-forms/sources.md). 25 proposed criteria,
+  18 scripted and 7 judged, each graded by its strongest evidence. Three decisions remain: the
+  namespace (reframed as a governance question), two expert-only criteria, and E67.
+- **Status:** registry revision 2 drafted 2026-09-25; awaiting the three remaining rulings.
 
 ## N3 - critique-dataviz (chart critique, Tufte and Cairo)
 
@@ -213,4 +219,7 @@ prioritized ahead of deck**. The order is now:
 - **Blocks:** nothing.
 - **Depends on:** N2 (critique-forms), whose field criteria and corpus module it builds on and
   whose boundary it must respect.
+- **Seeded 2026-09-25:** 38 findings from the N2 research pass are tagged checkout-only, and the
+  main ones are listed in the N2 draft's "Seeds for N5" section. The maintainer asked for a large
+  research base of its own, so this proposal needs a checkout-specific pass before a registry.
 - **Status:** proposed 2026-09-25.

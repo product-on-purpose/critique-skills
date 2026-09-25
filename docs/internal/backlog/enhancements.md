@@ -1300,3 +1300,29 @@ and the repository did not have.
 - **Blocks:** Retiring the "measured through the old mechanism" caveat on every published figure
 - **Depends on:** Nothing
 - **Rank at intake:** unranked (added 2026-09-25). **Status:** backlog.
+
+## E67 - Add WCAG 2.2 SC 1.3.5 and 2.5.8 to critique-accessibility, which claims 2.2 AA without them
+
+- **Target:** `skills/critique-accessibility/` (SKILL.md lanes, `references/`, `scripts/checks.py`),
+  `bench/generator/domains/accessibility.py`, `README.md` catalog
+- **Change:** `critique-accessibility` describes itself as reviewing against WCAG 2.2 AA, and its 22
+  criteria include neither **SC 1.3.5 Identify Input Purpose** (AA: fields collecting information
+  about the user carry the matching `autocomplete` purpose) nor **SC 2.5.8 Target Size (Minimum)**
+  (AA, new in 2.2). Done: both added, or the skill's claim narrowed to the success criteria it
+  actually tests, with the omission stated.
+- **Why:** A conformance claim that silently skips two AA criteria is the kind of published claim
+  this repository has found and corrected in itself repeatedly. It also decides a boundary for N2
+  (critique-forms): forms checks the `autocomplete` token for its autofill and conversion effect,
+  and without this item the day accessibility adds 1.3.5 the two skills would report one missing
+  attribute twice.
+- **Evidence:** the accessibility skill's lane manifest (13 scripted, 9 judged; no `WCAG-1.3.5`, no
+  `WCAG-2.5.8`); `govuk-names-pattern` in the N2 bibliography, which names 1.3.5 as the reason to set
+  `autocomplete` on name fields;
+  [the N2 registry draft](../release-plans/_unassigned/N2_critique-forms/criterion-registry-draft.md),
+  "Ground other skills own".
+- **Derives from:** N2's revision-2 research pass, 2026-09-25.
+- **Size:** M (two criteria, two injectors, a version bump, and a paid re-measure of the
+  accessibility cell). **Release:** v0.2.0. **Category:** skills. **Confidence:** verified.
+- **Blocks:** a clean autocomplete boundary between accessibility and N2.
+- **Depends on:** Nothing
+- **Rank at intake:** unranked (added 2026-09-25). **Status:** backlog.
