@@ -119,7 +119,11 @@ prioritized ahead of deck**. The order is now:
   [bibliography](../release-plans/_unassigned/N2_critique-forms/sources.md). 25 proposed criteria,
   18 scripted and 7 judged, each graded by its strongest evidence. Three decisions remain: the
   namespace (reframed as a governance question), two expert-only criteria, and E67.
-- **Status:** registry revision 2 drafted 2026-09-25; awaiting the three remaining rulings.
+- **ALL DECISIONS RULED 2026-09-25** (second round): namespace `FORMS` per
+  [ADR 0035](../decisions/0035-synthesized-rubric-namespace.md); the two scripted expert-only rules
+  kept and grouping deferred; accessibility expanded first (E67). The registry is 24 criteria, 18
+  scripted and 6 judged.
+- **Status:** registry ruled 2026-09-25; the next artifact is the effort's `spec.md`.
 
 ## N3 - critique-dataviz (chart critique, Tufte and Cairo)
 

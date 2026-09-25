@@ -1,7 +1,7 @@
 ---
 title: critique-forms criterion registry, draft for maintainer review
 effort: N2 (critique-forms)
-status: draft, revision 2
+status: draft, revision 2, all decisions ruled
 date: 2026-09-25
 ---
 
@@ -40,7 +40,7 @@ evidence base. Revision 2 is rebuilt from that base:
 | # | Ruling | Where it stands in revision 2 |
 |---|---|---|
 | 1 | Expand the research base, including Wroblewski's book | **Done.** The book is read in full (146 findings, page-cited) and cited. It supplies the grouping criterion revision 1 could not source |
-| 2 | Leaning toward one `FORMS-` namespace, not firmly | **Reframed as the one open governance question**, below. Rows use `FORMS-` as a placeholder |
+| 2 | Leaning toward one `FORMS-` namespace, not firmly | **Ruled (A), second round:** `FORMS`, recorded in [ADR 0035](../../../decisions/0035-synthesized-rubric-namespace.md) |
 | 3 | Checkout becomes its own skill | **Done.** Filed as N5 (critique-checkout); the card-specific criteria and 12 checkout findings are seeded there, below |
 | 4 | Keep `autocomplete` in forms, sourced to the HTML standard | **Done.** `FORMS-AUTOCOMPLETE` checks tokens against the WHATWG autofill vocabulary, read today, with conversion evidence from Chrome and Zuko |
 | 5 | Try the Internet Archive; favour recent, mobile and quantified sources | **Done.** The archived Baymard article was read: it holds no data, and newer web.dev guidance contradicts it, so confirm-email stays out. Mobile findings: 112 of 470 |
@@ -72,7 +72,7 @@ does not test it again, because a duplicated criterion reports one defect twice.
 | One action, one label, across a flow | `NNG-H4-CONTROL-NAMING` | tests whether a submit label is specific, not whether it is consistent |
 | A radio or checkbox group's `fieldset` and `legend` | `WCAG-1.3.1`, structure exposed in markup | does not test it |
 | Colour as the only signal | `WCAG-1.4.1` | does not test it |
-| `autocomplete` as a WCAG conformance claim | **Nobody yet.** WCAG 2.2 SC 1.3.5 requires it, and `critique-accessibility` claims 2.2 AA without implementing 1.3.5 | tests the autofill outcome (a correct token is present). The conformance claim belongs to accessibility, filed as [E67](../../../backlog/enhancements.md) so the two never fire on one missing attribute |
+| `autocomplete` as a WCAG conformance claim | **Accessibility, once E67 lands.** WCAG 2.2 SC 1.3.5 requires it; the maintainer ruled on 2026-09-25 to add it to `critique-accessibility` ([E67](../../../backlog/enhancements.md)) | **tests the same attribute for a different reason, deliberately**, as `WCAG-3.3.2` and `NNG-H6-LABELED` both test label presence. Accessibility's finding cites conformance; forms' cites the autofill completion and conversion evidence (decision 4). Each skill's description points to the other for the other angle |
 
 ## How the evidence is graded
 
@@ -96,7 +96,8 @@ Three rules the table follows:
   and Chrome says so. They are quoted as correlations.
 - **Counter-evidence is shown beside the claim it counters**, not dropped. Two criteria carry it.
 - **A criterion needs at least two independent sources, or one controlled study with a stated
-  sample.** Three meet that bar only through expert sources, and say so (decision 7).
+  sample.** Two meet that bar only through expert sources, are kept by decision 7, and say so;
+  a third, grouping, is deferred by the same decision.
 
 Three grades the research agents assigned were corrected here: a 2023 principles book's application
 of Hick's and Fitts's laws to forms is EX, not PR (the laws are peer-reviewed; the application is
@@ -104,9 +105,9 @@ not); an Unbounce button-wording result with no stated sample is AN, not AB; and
 "over 10 percent higher" completion for top-aligned labels, reported without sample or period, is
 AN, not AB.
 
-## Proposed registry: 25 criteria, 18 scripted and 7 judged
+## Proposed registry: 24 criteria, 18 scripted and 6 judged
 
-`FORMS-` is a **placeholder prefix** pending decision 2. The scripted lane carries the markup-level
+The `FORMS` namespace is ruled (decision 2, [ADR 0035](../../../decisions/0035-synthesized-rubric-namespace.md)). The scripted lane carries the markup-level
 checks, most of them mobile, where the evidence is also strongest and most recent.
 
 | # | ID | Lane | Mobile | Flags | Best evidence |
@@ -122,8 +123,8 @@ checks, most of them mobile, where the evidence is also strongest and most recen
 | 9 | `FORMS-FORMAT-TOLERANCE` | scripted | yes | A restriction that rejects valid or harmless input: a `pattern` refusing spaces, dashes or brackets in a phone number, letters in a postcode, or non-Latin letters in a name; an email `maxlength` under 254 | OG |
 | 10 | `FORMS-PASSWORD-RULES` | scripted | no | A new-password field that forces composition through `pattern`, sets `minlength` below 8, or sets any `maxlength` | LS, OG |
 | 11 | `FORMS-CONFIRM-PASSWORD` | scripted | yes | A second "confirm password" field | OG |
-| 12 | `FORMS-ACTION-LABEL` | scripted | no | A primary submit labelled with a generic word from a fixed set (Submit, Send, OK, Go, Enter). "Continue" is excluded | EX (decision 7) |
-| 13 | `FORMS-RESET-BUTTON` | scripted | no | A reset or clear-all control in the form | EX |
+| 12 | `FORMS-ACTION-LABEL` | scripted | no | A primary submit labelled with a generic word from a fixed set (Submit, Send, OK, Go, Enter). "Continue" is excluded | EX, kept by decision 7 |
+| 13 | `FORMS-RESET-BUTTON` | scripted | no | A reset or clear-all control in the form | EX, kept by decision 7 |
 | 14 | `FORMS-INPUT-FONT-SIZE` | scripted | yes | A text input whose font size, where the artifact's CSS determines it, is below 16px, which makes iOS zoom the page on focus | OG |
 | 15 | `FORMS-OPTION-CONTROL` | scripted | yes | A single-choice `select` with fewer than five options, where visible radio buttons would show every choice | LS, AB |
 | 16 | `FORMS-DATE-SELECTS` | scripted | yes | A memorable date, such as a birth date, entered through three `select` dropdowns | OG, US |
@@ -134,8 +135,7 @@ checks, most of them mobile, where the evidence is also strongest and most recen
 | 21 | `FORMS-LABEL-POSITION` | judged | yes | Labels beside their fields on a mobile or short form, or label alignment mixed within one form | US, OG |
 | 22 | `FORMS-ACTION-HIERARCHY` | judged | no | A secondary action as prominent as the primary, actions placed away from the column of fields, or actions at the top of the form | US |
 | 23 | `FORMS-SELECTION-DEPENDENT` | judged | no | Conditional fields shown badly: every branch's fields exposed at once, or revealed far from the choice that triggers them | US |
-| 24 | `FORMS-GROUPING` | judged | no | A long form whose related fields are not grouped into labelled sections, or grouped by heavy decoration that adds noise | EX (decision 7) |
-| 25 | `FORMS-TOUCH-TARGET` | judged | yes | Tappable controls too small or too close together for a finger | OG |
+| 24 | `FORMS-TOUCH-TARGET` | judged | yes | Tappable controls too small or too close together for a finger | OG |
 
 ## Evidence per criterion
 
@@ -263,15 +263,13 @@ Figures are quoted exactly as their sources state them. Handles resolve in the
     exposing every branch's fields cost "a whopping 18 more fixations" than the best design, and that
     hiding irrelevant controls until chosen worked best (Wroblewski pp. 276 to 301). One source, a
     controlled study with a stated sample.
-24. **`FORMS-GROUPING`.** Expert sources only: organise questions into titled groups (Wroblewski
-    chapter 2, p. 42); use the least visual differentiation that works, since stacked separators
-    add "an additional 15 visual elements" (p. 52); group related fields
-    (`silver-form-ui-design-designlab`). No measured result found.
-25. **`FORMS-TOUCH-TARGET`.** OG: "the recommended target size for touchscreen objects is 7-10 mm",
+24. **`FORMS-TOUCH-TARGET`.** OG: "the recommended target size for touchscreen objects is 7-10 mm",
     Apple suggests 48x48 px, and "the W3C suggest at least 44x44 CSS pixels" (`webdev-signin-form`;
     web.dev's own dash, normalized here). EX: 44px (Silver p. 32).
-    Boundary: WCAG 2.2 SC 2.5.8 (target size) is also absent from `critique-accessibility`, noted in
-    E67. Judged because rendered size depends on styling the artifact may not contain.
+    Boundary: WCAG 2.2 SC 2.5.8 sets a conformance minimum of 24 by 24 CSS pixels and is being added
+    to `critique-accessibility` by E67. Forms tests the larger mobile-usability sizes above, a
+    different threshold for a different reason, the same deliberate overlap as `autocomplete`. Judged
+    because rendered size depends on styling the artifact may not contain.
 
 ## Left out, and why
 
@@ -280,6 +278,12 @@ Figures are quoted exactly as their sources state them. Handles resolve in the
   Designlab says always, one practitioner says short forms only.
 - Confirm-email: Baymard 2011 for it; web.dev and a Venture Harbour article against.
 - Validation timing: owned by microcopy, and contested (see the ownership table).
+
+**Deferred by decision 7:** `FORMS-GROUPING` (organise long forms into titled sections), backed
+by Wroblewski chapter 2 (p. 42, and p. 52's "an additional 15 visual elements" from stacked
+separators) and Designlab, with no measured result. It is a judged rule, and judged rules without a
+measured basis are the likeliest source of noisy findings in the lane where this library's precision
+is already weakest. It returns when a study is found.
 
 **Supported, but thin or single-sourced**, deferred to a v1.1 review: a multi-select list box
 (evidence from 2008 to 2009), help-text placement, smart defaults and pre-checked marketing opt-ins,
@@ -332,30 +336,12 @@ when the artifact itself carries the relevant CSS or attribute, and stay silent 
   filed to the toolkit's backlog.
 - **Measurement is a paid stop:** k=5 on both pinned tiers needs the maintainer's go-ahead.
 
-## Decisions still open
+## Decisions ruled, second round, 2026-09-25
 
-**2. The namespace, reframed.** The evidence settles one thing: most criteria here are stated
-independently by three to six publishers (the input-type rule by Baymard, Google, GOV.UK, Silver,
-NN/g and Wroblewski). Filing it as `BAYMARD-INPUT-TYPE` would credit a convergent finding to one of
-them, which is the misattribution
-[ADR 0019](../../../decisions/0019-clarity-two-namespaces-merged-duplicate-criteria.md) was written
-to avoid. But every existing namespace names a source, and `criterion-ids.md` reads IDs as
-`SOURCE-CRITERION`, so a rubric-named prefix is a governance change, not a draft-table choice.
+| # | Ruling | Consequence |
+|---|---|---|
+| 2 | **(a) A synthesized-rubric namespace, `FORMS`** | Recorded as [ADR 0035](../../../decisions/0035-synthesized-rubric-namespace.md), which also sets the conditions a future skill such as N5 (critique-checkout) must meet to do the same. `docs/reference/criterion-ids.md` gains the `FORMS` row when the skill ships, not before |
+| 7 | **(c) Keep the two scripted expert-only rules, defer grouping** | `FORMS-ACTION-LABEL` and `FORMS-RESET-BUTTON` stay, labelled as expert consensus. `FORMS-GROUPING` moves to "Left out" until a measured study is found. The registry is 24 criteria |
+| 8 | **(b) Expand `critique-accessibility` now** | Found while preparing this decision: the skill implements **22 of WCAG 2.2's 55 Level A and AA success criteria**. Four are declared out of reach, and 29 are never mentioned, while its scope statement claims A and AA "required for AA conformance". E67 now carries that corrected scope and the ruling: add the criteria checkable from static markup and CSS (1.3.4, 1.3.5, 2.4.7, 2.5.8, 4.1.3), as a new version with a paid re-measure, confirmed before dispatch. Narrowing the claim for what remains uncovered follows as E68 |
 
-- **(a) A synthesized-rubric namespace**, `FORMS` or `FORM`, recorded in a short ADR. The namespace
-  names this library's synthesized rubric, the way `TOULMIN` names a model rather than a person,
-  and `rubric_sources` lists every publisher, with each criterion's row citing its own. This is
-  permitted by the template, which says a `rubric_sources` id need not equal the namespace.
-- **(b) Primary-source namespaces under ADR 0019's merge rule**: each criterion filed under its
-  strongest source, the others cited in its row. That yields five or more namespaces (`BAYMARD`,
-  `GOVUK`, `WEBDEV`, `NNG`, `WROBLEWSKI`) and still credits convergent findings to one publisher.
-
-Recommendation: **(a)**, with the ADR, which matches the maintainer's lean and the evidence.
-
-**7. Criteria backed only by expert sources.** `FORMS-ACTION-LABEL`, `FORMS-RESET-BUTTON` and `FORMS-GROUPING`
-meet the two-source bar but have no measured result. Keep them, given how widely they are advised, or hold
-them to the same measured bar as the rest and move them to v1.1.
-
-**8. `autocomplete` and target size in `critique-accessibility`.** Filed as E67. WCAG 2.2 SC 1.3.5
-and 2.5.8 are both AA and both absent from a skill that claims 2.2 AA. That is a gap in a shipped
-skill, independent of forms, and ruling on it removes the one overlap forms would otherwise have.
+Nothing in this registry is still open. The next artifact is the effort's `spec.md`.
