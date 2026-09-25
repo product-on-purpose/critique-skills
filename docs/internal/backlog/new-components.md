@@ -105,7 +105,14 @@ prioritized ahead of deck**. The order is now:
 - **Depends on:** E30 (skill-template gaps) hard, and E2 (sonnet unblock) for two-tier k=5. **Both
   closed** (E2 2026-09-13, E30 2026-09-25), so nothing listed here gates N2 any longer.
   **No longer depends on N1.**
-- **Status:** backlog (recorded 2026-09-11).
+- **CRITERION REGISTRY DRAFTED 2026-09-25**, for review before anything is scaffolded:
+  [criterion-registry-draft.md](../release-plans/_unassigned/N2_critique-forms/criterion-registry-draft.md).
+  17 proposed criteria (12 scripted, 5 judged) from 17 Baymard articles and 3 Wroblewski articles,
+  all read 2026-09-25. It also measures two things this entry assumed. "Reuse" removes new
+  infrastructure, not new work: the forms corpus module is a new build. And the why-gate's
+  not-a-duplicate test weighed only accessibility, when usability and microcopy already own label
+  presence, error content and validation timing. Six decisions are listed there for the maintainer.
+- **Status:** registry drafted 2026-09-25; awaiting the maintainer's rulings before the build.
 
 ## N3 - critique-dataviz (chart critique, Tufte and Cairo)
 
