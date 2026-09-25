@@ -22,6 +22,10 @@
   long-lived token from a Claude subscription, so a CI run authenticates without an API key; and the
   acceptance gate ran and passed, producing a contract-valid envelope from the real skill through
   `claude --plugin-dir`. See "Mechanism, established" and "Acceptance gate" below.
+- **Fidelity condition: unmet (amended 2026-09-25).** The partial re-run this ADR named as its test
+  ran on both tiers and failed on sonnet by [ADR 0031](0031-fidelity-gate-acceptance-band.md)'s rule.
+  The lane stays because there is no faithful lane to return to, not because the miss is excused. See
+  "Amendment, 2026-09-25".
 
 - **Status:** Accepted
 - **Date:** 2026-08-06, accepted 2026-08-07
@@ -540,6 +544,49 @@ scheduled rather than discovered partway through one.
 Splitting it this way was deliberate: half one removes the API key completely and is small enough
 to verify in one live run, and half two changes what is measured and deserves its own scrutiny.
 
+### Amendment, 2026-09-25: the fidelity condition is unmet, and the lane stays anyway
+
+**The fidelity gate has now run on both pinned tiers, and this ADR's acceptance condition is not
+met.** Open question 2 set it: "a partial re-run whose figures land within measured run-to-run
+variance of the committed ones." [ADR 0031](0031-fidelity-gate-acceptance-band.md) made that
+threshold numeric before either run. On haiku (run `31988100372`, 2026-08-17) one gated figure
+missed by less than its band's width, which that ADR classes as investigation. On sonnet (run
+`34917562578`, 2026-09-15), at full coverage, `precision_location` read 0.541 against a published
+band of [0.403, 0.466]: **outside by more than the band's own width, which is a failure by the rule
+written in advance.** The sonnet tier is the one whose bands are narrow enough to fail, and it did.
+The committed figures are therefore **not reproduced within variance** by the lane this ADR put in
+place, on the tier able to test it. That sentence stands on its own and is not qualified by what
+follows.
+
+**Why the miss happened is measured, and it does not change the verdict.** ADR 0031's 2026-09-15
+section has the detail. Most of the move is the clarity judged lane no longer emitting `instances`,
+which the scorer counts as extra claims. Part is a scripted lane that became deterministic after
+`merge.py`. Part is shared with the `baseline-generic` arm, which does not run the skill at all.
+Understanding a miss does not make it a pass, and this amendment does not treat it as one.
+
+**Why the lane stays, which is a separate argument from whether it passed.** There is nothing
+faithful to return to. The committed figures were produced by a documented multi-agent workflow
+(`wf_217bbe66-cb0`), not by any committed harness. The API-key lane this ADR replaced assembled its
+own prompt from `SKILL.md` rather than running the skill, and it was deleted in half one and half
+two above. So the choice was never between a faithful lane and an unfaithful one. It is between a
+lane that runs the skill a user actually installs, through infrastructure the maintainer does not
+control, and no reproducible lane at all. The rewritten lane produces contract-valid envelopes at
+full coverage on both tiers (40 of 40 on each sonnet dispatch), which the old lane never did on
+sonnet.
+
+**What this means for the published figures.** They remain the measurement of record, and the caveat
+ADR 0031 attached to them on haiku now holds on both tiers: **they describe the skill as measured
+through the old mechanism, and the shipped harness does not reproduce them within variance.** A
+reader who needs figures the shipped harness reproduces has only one route: re-measure the grid
+through it, which ADR 0031 costed at 230 skill cells before the baseline and rejected on cost. That
+is now a decision rather than an assumption, tracked as
+[E66 (full-grid re-measure through the shipped harness)](../backlog/enhancements.md).
+
+**Status is unchanged: Accepted.** What was accepted is the mechanism: no API key, and the real skill
+run through `claude --plugin-dir`. Its fidelity condition is recorded here as unmet rather than
+quietly dropped. Ruled on the maintainer's delegation, 2026-09-25, as
+[E64 (ADR 0030 after the sonnet gate)](../backlog/enhancements.md).
+
 ## Open questions
 
 1. **Determinism and cost of the k=5 grid.** 460+ Claude Code invocations is a different cost and
@@ -547,7 +594,8 @@ to verify in one live run, and half two changes what is measured and deserves it
    run or the k=5 consistency metric is measuring something else.
 2. **What proves the replacement is faithful?** A partial re-run whose figures land within measured
    run-to-run variance of the committed ones. That is itself a paid run, so it is the acceptance
-   test for this ADR rather than a routine check.
+   test for this ADR rather than a routine check. **Answered 2026-09-25: it ran on both tiers, and on
+   sonnet the condition is unmet.** See "Amendment, 2026-09-25" above.
 
 ## Acceptance gate: run 2026-08-07, passed
 
