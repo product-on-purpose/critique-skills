@@ -60,7 +60,8 @@ control, and every control the corpus generates carries an `id`.
 
 Forms reviews the same `html` artifacts as `critique-accessibility` and `critique-usability`, and
 the same failure moments as `critique-microcopy`. Where one of them already tests something, forms
-does not test it again, because a duplicated criterion reports one defect twice.
+does not test it again, because a duplicated criterion reports one defect twice. There are two
+exceptions, both marked below and both ruled deliberately.
 
 | Ground | Owned by | So forms |
 |---|---|---|
@@ -72,7 +73,7 @@ does not test it again, because a duplicated criterion reports one defect twice.
 | One action, one label, across a flow | `NNG-H4-CONTROL-NAMING` | tests whether a submit label is specific, not whether it is consistent |
 | A radio or checkbox group's `fieldset` and `legend` | `WCAG-1.3.1`, structure exposed in markup | does not test it |
 | Colour as the only signal | `WCAG-1.4.1` | does not test it |
-| `autocomplete` as a WCAG conformance claim | **Accessibility, once E67 lands.** WCAG 2.2 SC 1.3.5 requires it; the maintainer ruled on 2026-09-25 to add it to `critique-accessibility` ([E67](../../../backlog/enhancements.md)) | **tests the same attribute for a different reason, deliberately**, as `WCAG-3.3.2` and `NNG-H6-LABELED` both test label presence. Accessibility's finding cites conformance; forms' cites the autofill completion and conversion evidence (decision 4). Each skill's description points to the other for the other angle |
+| `autocomplete` as a WCAG conformance claim | **Accessibility, once E67 lands.** WCAG 2.2 SC 1.3.5 requires it; the maintainer ruled on 2026-09-25 to add it to `critique-accessibility` ([E67](../../../backlog/enhancements.md)) | **tests the same attribute for a different reason, deliberately.** The library already carries one such overlap, unrecorded until now (`WCAG-3.3.2` and `NNG-H6-LABELED` both test label presence); this one is recorded. Accessibility's finding cites conformance; forms' cites the autofill completion and conversion evidence (decision 4). Each skill's description points to the other for the other angle |
 
 ## How the evidence is graded
 
@@ -268,7 +269,7 @@ Figures are quoted exactly as their sources state them. Handles resolve in the
     web.dev's own dash, normalized here). EX: 44px (Silver p. 32).
     Boundary: WCAG 2.2 SC 2.5.8 sets a conformance minimum of 24 by 24 CSS pixels and is being added
     to `critique-accessibility` by E67. Forms tests the larger mobile-usability sizes above, a
-    different threshold for a different reason, the same deliberate overlap as `autocomplete`. Judged
+    different threshold for a different reason, recorded as a deliberate overlap like `autocomplete`. Judged
     because rendered size depends on styling the artifact may not contain.
 
 ## Left out, and why

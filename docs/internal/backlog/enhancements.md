@@ -1326,8 +1326,9 @@ and the repository did not have.
 - **Why:** the published scope claim is not true, and this repository's argument is that its claims
   carry receipts. It also sets a deliberate overlap with N2: both skills will test `autocomplete`
   (accessibility for conformance, forms for autofill and conversion) and touch-target size (24px
-  conformance minimum against forms' larger mobile-usability sizes), as `WCAG-3.3.2` and
-  `NNG-H6-LABELED` already both test label presence.
+  conformance minimum against forms' larger mobile-usability sizes). The library already carries
+  one such overlap, unrecorded (`WCAG-3.3.2` and `NNG-H6-LABELED` both test label presence); these
+  are recorded.
 - **Evidence:** the lane manifest in `skills/critique-accessibility/SKILL.md` (13 scripted, 9
   judged); its scope paragraph and `references/WCAG.md`, "Scope"; the WCAG 2.2 Recommendation
   at `https://www.w3.org/TR/WCAG22/`, read 2026-09-25.

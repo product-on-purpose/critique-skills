@@ -79,6 +79,12 @@ A namespace may name a synthesized rubric when all of the following hold:
 
 ## Implementation sites
 
+- **Checked 2026-09-25: the contract accepts it with no change.** Validator rule 5 requires every
+  finding's namespace to appear in `run.rubrics`, and `run.rubrics` is never built from
+  `rubric_sources` ids. `skills/_shared/merge.py` (`_rubrics_for`) derives it from the namespaces the
+  findings actually cite, and each skill's `scripts/checks.py` passes its list explicitly (clarity
+  passes `["PLAIN", "WILLIAMS"]`). So `critique-forms`' `checks.py` passes `["FORMS"]`, and its
+  `rubric_sources` entries can name every publisher without touching validation.
 - `skills/critique-forms/SKILL.md` `rubric_sources` and `references/`, when N2 is built.
 - [`docs/reference/criterion-ids.md`](../../reference/criterion-ids.md) gains a `FORMS` row in its
   namespace registry, and one sentence under "Grammar" pointing here, **when `critique-forms`
