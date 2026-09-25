@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button> has no href, no form association, and no target naming another defined state; nothing else in the artifact describes what follows a click.",
+      "fix": "Specify what the artifact shows after Duplicate project is clicked: a status indication while the duplicate is created and either a resulting state (e.g. the new project's own settings) or a confirmation message naming the new project.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 3,
+      "violation": "Duplicating a project changes stored state (a new project is created), but the artifact names the trigger and specifies no in-progress indication, no result message, and no resulting state at all, so a user who clicks it cannot tell whether anything happened."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "The \"project-archived\" section reads: \"Vendor Onboarding has been moved to archived projects. It no longer appears in the active projects list for anyone on the team.\" No control or link anywhere in the artifact leads to an unarchive, restore, or reactivate action.",
+      "fix": "Add a restore or unarchive control reachable from the project-archived state or from an archived-projects list, and name it in the artifact.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"project-archived\" state",
+      "severity": 3,
+      "violation": "Archiving a project is presented as a move to a separate, still-existing collection (\"archived projects\"), which is reasonably reversible in this kind of product, but the artifact names no reversal path anywhere, so an accidental archive has no way back in the design as specified, and the effect is team-wide."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-IDENTIFY",
+      "evidence": "\"Import failed. Error code IMP-500. Contact support if this continues.\"",
+      "fix": "Name the specific cause in the message, e.g. which file or record failed and why, and drop or supplement the raw error code with a plain-language reason.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"import-status\" section, the \"import-status-message\" paragraph",
+      "severity": 3,
+      "violation": "The message reports only that the import failed and surfaces a raw internal error code, without naming which file, project, or step of the import caused the failure, so the user cannot tell what to check or fix."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "The only control in the section is <a id=\"import-status-exit-link\" href=\"#workspace-overview\">Back to your projects</a>. No retry control and no link for contacting support are defined anywhere in the artifact, and no state that triggers an import is defined either.",
+      "fix": "Add a retry control to the import-status state that re-runs the import, and a link or contact control for support, both reachable from this state.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"import-status\" section",
+      "severity": 3,
+      "violation": "The error message tells the user to retry or contact support but the state offers neither a retry control nor a way to reach support from where the message appears, and the artifact defines no import-trigger state to return to, so the only available action ends the task rather than continuing it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "The digest-frequency form's <button type=\"submit\"> has no defined action target, and no success message, redirect, or changed control state is specified anywhere in the section or elsewhere in the artifact.",
+      "fix": "Specify a visible confirmation after Save is clicked, such as a success message in place or a changed state of the field, so the user can tell the save completed.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "Saving the project name is a state-changing action whose trigger is specified but whose result feedback is not, so a user cannot tell whether the name was saved."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "The project name form's <button type=\"submit\"> has no defined action target, and no success message, redirect, or changed control state is specified anywhere in the section or elsewhere in the artifact.",
+      "fix": "Specify a visible confirmation after Save is clicked, such as a success message in place or a changed state of the field, so the user can tell the save completed.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "Saving the project name is a state-changing action whose trigger is specified but whose result feedback is not, so a user cannot tell whether the name was saved."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H4-INTERNAL",
+      "evidence": "The invite form's <button id=\"invite-member-save-btn\" type=\"submit\">Save</button> and the separate <a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a> are both present with no stated relationship between them.",
+      "fix": "Either merge Save and Continue into one control that both sends the invite and advances to the confirmation state, or state explicitly what each one does, e.g. label them \"Send invite\" and remove the redundant control.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "the \"invite-member\" section",
+      "severity": 2,
+      "violation": "Save and Continue both read as candidates for committing the invite, and the artifact gives no cue whether Save sends the invite and Continue merely views the result, whether Continue alone sends it, or whether the two are independent steps, so a user cannot tell whether the invite has already been sent after clicking Save."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "The section reads: \"An invite was sent to the address entered above. It expires in 5 days if not accepted.\" The email address itself, entered on the prior \"invite-member\" state, is not repeated anywhere in this state.",
+      "fix": "Repeat the entered email address in the invite-sent state's own text, e.g. \"An invite was sent to jane@example.com.\"",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "the \"invite-sent\" state",
+      "severity": 2,
+      "violation": "The confirmation step needs the entered email address to let the user verify it was sent to the right person, but the artifact only refers to it as \"entered above\" rather than repeating the value, and it is not retrievable in place on this state."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T03:03:42Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

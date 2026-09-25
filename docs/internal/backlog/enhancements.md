@@ -501,7 +501,15 @@ and the repository did not have.
 - **Remaining, and it is the next session's first task:** review the branch as a diff, commit the
   envelopes, rescore, and re-evaluate ADR 0031's acceptance band on this tier. Nothing here is
   blocked; it is unstarted.
-- **Rank at intake:** 19 of 64. **Status:** dispatch landed 2026-09-15; envelopes not yet reviewed or committed.
+- **DONE 2026-09-24, and the gate FAILED by its own rule.** Envelopes reviewed, schema-checked and
+  committed as `bench/results/runs-dispatch-34917562578/`; the workflow's rewritten `results.json`
+  was not taken. `recall_location` 0.920 sits exactly on its band's upper bound; `precision_location`
+  0.541 is outside [0.403, 0.466] by 0.075 on a band 0.063 wide, which ADR 0031 rules a failure.
+  Most of the move is the judged lane no longer emitting `instances`, and the baseline arm moved
+  outside its own precision band too. Full reading in ADR 0031, section "The gate ran on sonnet,
+  2026-09-15". Follow-ups are maintainer rulings, filed as E64 (ADR 0030 after the sonnet gate) and
+  E65 (clarity's critic and `instances`).
+- **Rank at intake:** 19 of 64. **Status:** CLOSED 2026-09-24; gate evaluated, verdict failure.
 
 ## E20 - Re-measure critique-usability's Sonnet cell
 
@@ -528,7 +536,20 @@ and the repository did not have.
   `verdicts.md` and the Known-limitations bullet **either way**. A re-measure confirming the cell
   still does not qualify is as publishable as one clearing it, and this item is not done until
   whichever result it is has been written down.
-- **Rank at intake:** 20 of 64. **Status:** dispatch landed 2026-09-15; envelopes not yet reviewed or committed.
+- **RECORDED 2026-09-24: still does not qualify.** Envelopes committed as
+  `bench/results/runs-dispatch-34917728793/`. Location precision 0.169 against a re-run baseline of
+  0.194, location recall 0.800 against 0.857: within its own run set the skill trails on both, by gaps
+  smaller than either arm's repetition spread. Written into `bench/results/README.md` section 2 and a
+  dated note in `verdicts.md`. The scoreboard is unchanged because the re-run feeds no published number
+  (E63 is why).
+- **Remaining, and it is the maintainer's:** the `ROADMAP.md` Known-limitations bullet. Its current
+  text says the sonnet tier "wins recall narrowly at a precision cost", which the re-measure no longer
+  supports. Proposed wording: "`critique-usability`'s non-qualifying Sonnet cell. Its Haiku tier beats
+  baseline outright. Its Sonnet tier did not qualify at v0.1.0 (recall +0.028, precision -0.012), and a
+  2026-09-15 re-measure through the shipped harness confirmed it, trailing a re-run baseline on both
+  location metrics by margins inside run-to-run spread. The skill ships qualified through Haiku, not
+  unconditionally."
+- **Rank at intake:** 20 of 64. **Status:** re-measured and recorded 2026-09-24; the ROADMAP wording awaits the maintainer.
 
 ## E21 - Backfill the missing fidelity-dispatch cell clarity-001/haiku-r1.json
 
@@ -629,7 +650,11 @@ and the repository did not have.
 - **Derives from:** ROADMAP.md v0.2.0 E5; retires the '0.309 consistency floor' known limitation
 - **Size:** L. **Release:** v0.2.0. **Category:** measurement. **Confidence:** verified.
 - **Blocks:** Nothing
-- **Depends on:** E2 and E19 (sonnet dispatches actually completing; wall-clock cost beyond session count)
+- **Depends on:** Nothing. Was E2 and E19 (sonnet dispatches actually completing); E2 closed
+  2026-09-13 and E19 closed 2026-09-24 with its envelopes committed.
+- **UNBLOCKED 2026-09-24.** Worth knowing before starting: on the sonnet clarity re-run the judged
+  lane's consistency is 0.277 against 0.418 committed, and the scripted lane's rose from 0.768 to
+  0.907, so the two lanes moved in opposite directions between run sets.
 - **BLOCKED on E19, 2026-09-14.** Calibrating a per-lane threshold needs sonnet-tier consistency
   data from a single provenance, which is exactly what run 34917562578 is producing. Nothing else
   gates it.
@@ -641,7 +666,7 @@ and the repository did not have.
   to replace.
 - **UNBLOCKED 2026-09-15.** E19's dispatch landed at 40 of 40, so the sonnet-tier consistency data
   this item needs now exists on `bench-results/34917562578` and only needs committing.
-- **Rank at intake:** 26 of 64. **Status:** unblocked 2026-09-15; awaiting E19's envelopes being committed.
+- **Rank at intake:** 26 of 64. **Status:** ready 2026-09-24; E19's envelopes are committed.
 
 ## E27 - Isolate the bench harness from the working tree it measures
 
@@ -1156,3 +1181,72 @@ and the repository did not have.
   Standard rather than the current one
 - **Depends on:** Nothing
 - **Rank at intake:** unranked (added 2026-09-15, by E11's sweep). **Status:** backlog.
+
+## E63 - Bring the dispatch run sets into results.json, or amend the rule they break
+
+- **Target:** `bench/results/results.json`, `bench/report.py`, `bench/variance.py`,
+  `scripts/gen-site.mjs`, `bench/README.md`
+- **Change:** `bench/README.md` says `results.json` "carries every computed number for every
+  committed run set". Three committed run directories are in no entry of it:
+  `runs-dispatch-31988100372/` (haiku, 2026-08-17), `runs-dispatch-34917562578/` and
+  `runs-dispatch-34917728793/` (sonnet, 2026-09-15). Their figures are quoted in prose instead, in
+  ADR 0031, `bench/results/README.md`, `verdicts.md` and the changelog. Done: either every reader of
+  `results.json` keys cells on `run_set` as well as `(skill, skill_version, model, domain)` and the
+  dispatch entries are added, with a ruling on which run set each published table shows; or the rule
+  is amended to say plainly that check runs are committed as evidence and scored in prose.
+- **Why:** Each dispatch entry would share its identity with a p3 entry, which has never happened in
+  this file. `bench/report.py` has dropped a row silently on exactly that shape before (the
+  dropped-row entry under "Known issues" in `bench/results/README.md`), and `variance.py` mis-indexed
+  entries sharing every field but `lane` on 2026-09-14. Adding them without the reader changes would
+  repeat both.
+- **Evidence:** `bench/README.md` "Results"; `bench/results/README.md` "Known issues in the
+  measurement tooling"; the three `runs-dispatch-*` directories; `bench.yml`'s result branches, which
+  each rewrite `results.json` to hold one run set.
+- **Derives from:** Landing E19 and E20's envelopes, 2026-09-24.
+- **Size:** M. **Release:** v0.2.0. **Category:** measurement. **Confidence:** verified.
+- **Blocks:** Any published table showing a re-run figure; `bench.yml` result branches merging cleanly
+- **Depends on:** Nothing
+- **Rank at intake:** unranked (added 2026-09-24). **Status:** backlog.
+
+## E64 - Rule on ADR 0030 now that the sonnet fidelity gate has failed
+
+- **Target:** `docs/internal/decisions/0030-replace-the-api-key-in-the-bench-harness.md`
+- **Change:** ADR 0030 accepted the rewritten judged lane on "a partial re-run whose figures land
+  within measured run-to-run variance of the committed ones", and ADR 0031 made that gate numeric. On
+  2026-09-15 it ran on sonnet and failed: `precision_location` 0.541 against [0.403, 0.466]. Done: a
+  maintainer ruling on whether ADR 0030 takes an amendment, and what it records.
+- **Why:** The ADR's acceptance condition is now known to be unmet on the tier able to test it, and
+  the ADR does not say so. Recommendation, not a decision: amend it to record the failure and its
+  measured mechanism rather than reopen the lane. The lane produces valid envelopes at full coverage on
+  both tiers; most of the difference is the judged lane no longer emitting `instances`, a question of
+  scoring unit rather than detection; and part of it is shared by the baseline arm, which the rewrite
+  never touched.
+- **Evidence:** ADR 0031, sections "The gate ran on sonnet, 2026-09-15" and "A correction to the haiku
+  reading"; `bench/results/runs-dispatch-34917562578/`.
+- **Derives from:** E19 (fidelity gate on sonnet), closed 2026-09-24.
+- **Size:** S. **Release:** v0.1.x. **Category:** decision. **Confidence:** verified.
+- **Blocks:** Any claim that the shipped harness reproduces the published figures
+- **Depends on:** Nothing
+- **Rank at intake:** unranked (added 2026-09-24). **Status:** backlog.
+
+## E65 - Decide whether critique-clarity's critic should emit instances
+
+- **Target:** `skills/critique-clarity/SKILL.md`, its references, `agents/critique-critic.md`
+- **Change:** The committed p3 run expressed recurring clarity breaches with `instances` (33 instance
+  claims on sonnet, 19 on haiku over the gate's 19 cells). Both re-runs through the shipped harness
+  emit none, and write the extra locations into one `location` string. Usability kept its instances
+  through the same shared assembler. The cause is untested; the likelier channel is that the critic
+  runs the scripted lane before its judged pass, and usability's scripted findings use `instances`
+  while clarity's never do. Done: a ruling on whether clarity should ask for them, and if so the
+  prompt change, a version bump and a measured re-dispatch.
+- **Why:** It is the largest single driver of the sonnet fidelity-gate failure, and it changes what a
+  user sees. It is not obviously an improvement to restore: only 1 of the 33 committed instance claims
+  matched a planted defect, so asking for instances would likely cost precision.
+- **Evidence:** ADR 0031, section "What moved on sonnet"; `agents/critique-critic.md` step 3 (the
+  critic runs the scripted lane itself); `bench/metrics/claims.py` (n instances score as n+1 claims).
+- **Derives from:** E19 (fidelity gate on sonnet), closed 2026-09-24.
+- **Size:** S to decide, M to act on. **Release:** v0.2.0. **Category:** decision. **Confidence:**
+  verified for the measurement, hypothesis for the cause.
+- **Blocks:** Nothing
+- **Depends on:** Nothing
+- **Rank at intake:** unranked (added 2026-09-24). **Status:** backlog.

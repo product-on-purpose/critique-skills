@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 5 projects, synced last week.\" followed by a `<ul>` with only 4 `<li>` items (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)",
+      "fix": "Either add the missing fifth project to the list or correct the paragraph to say \"4 projects\".",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "section#workspace-overview, paragraph and following list",
+      "severity": 3,
+      "violation": "The stated project count (5) doesn't match the number of projects actually listed (4)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>` has no corresponding confirmation section or feedback link",
+      "fix": "Add a confirmation state (e.g., a \"Saved\" message or section) after the save action, matching the pattern used elsewhere.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "section#project-settings, form save button",
+      "severity": 3,
+      "violation": "Unlike the invite flow (which links Save/Continue to a dedicated \"Invite sent\" confirmation section), saving the project name has no visible confirmation or next state."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Give the button visible text or an icon, and link/wire it to an actual duplicate action or a confirmation section.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "section#project-settings, duplicate button",
+      "severity": 3,
+      "violation": "The button has no visible text or icon content (relying only on an aria-label) and has no href or action wiring to any section, making it a blank, non-functional control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a>`",
+      "fix": "Change the href to \"#archive-confirm\" so the confirmation dialog is shown before the project is archived.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "section#project-settings, archive link",
+      "severity": 3,
+      "violation": "This bypasses the existing \"archive-confirm\" confirmation section (id=\"archive-confirm\") entirely - nothing in the document links to that section, so it is unreachable, and clicking \"Archive project\" archives immediately with no confirmation step."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"notification-settings-save-btn\" type=\"submit\">Submit</button>`",
+      "fix": "Change the label to \"Save\" for consistency, and add a confirmation state after the digest frequency is saved.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "section#notification-settings, submit button",
+      "severity": 3,
+      "violation": "The button's id follows the \"save-btn\" naming used elsewhere, but its visible label reads \"Submit\" instead of \"Save,\" inconsistent with project-settings-save-btn and invite-member-save-btn; it also has no confirmation/next state after submission."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-09-15T02:13:35Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

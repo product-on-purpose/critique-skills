@@ -1,0 +1,118 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H5-CONFIRM",
+      "evidence": "`<a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a>` targets \"#project-archived\" directly; the \"archive-confirm\" section (\"Archive this project?\", with Cancel and Archive controls, and copy naming the consequence) has no incoming link anywhere in the artifact.",
+      "fix": "Point \"project-settings-archive-link\"'s href at \"#archive-confirm\" instead of \"#project-archived\", so the click reaches the existing confirmation screen before the project archives.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-archive-link\" link",
+      "severity": 3,
+      "violation": "The artifact defines a confirmation state for archiving, naming the consequence (\"will remove it from the active projects list for everyone on the team\"), but the only control that triggers archiving bypasses it entirely and commits on one click, so no user who archives a project via this control ever sees a confirmation."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "`<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>` sits inside a `<form>` with no `action` attribute; the artifact names no next state, message, or changed control state for this submission.",
+      "fix": "Specify what the user sees after clicking Save: a success message in place, a changed field state, or a next screen the artifact defines.",
+      "id": "F-002",
+      "instances": [
+        {
+          "evidence": "`<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` submits with no defined outcome, and sits beside a separate `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>` that is the control which actually transitions to \"invite-sent\"; nothing in the artifact says what Save does or whether it is needed before Continue.",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "`<button id=\"notification-settings-save-btn\" type=\"submit\">Submit</button>` submits a form with no `action` attribute and no defined next state or message.",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        },
+        {
+          "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>` names a state-changing action with no defined outcome anywhere in the artifact: no confirmation, no new state, no message.",
+          "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button"
+        }
+      ],
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "This control commits a state-changing action (saving the project name) but the artifact specifies no in-progress or result feedback and no next state, so a user who clicks it has no way to tell whether the change took effect."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "The state a user actually reaches after archiving reads: `<p>\"Customer Migration\" has been moved to archived projects. It no longer appears in the active projects list for anyone on the team.</p>` followed only by a \"Back to your projects\" link to \"#workspace-overview\". No restore or unarchive control, and no \"archived projects list\" state, is defined anywhere in the artifact; the only mention of restoring (\"You can restore it at any time from the archived projects list\") sits in the \"archive-confirm\" section's copy, which no control in the artifact links to.",
+      "fix": "Add a restore or unarchive control to the \"project-archived\" state, or define the \"archived projects list\" state its own copy promises and link to it from there.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"project-archived\" section",
+      "severity": 2,
+      "violation": "Archiving is described elsewhere in the artifact as reversible, but the state the user actually lands on after archiving offers no reversal path at all, and the reversal the copy promises is not represented as a reachable state or control anywhere in the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H4-CONTROL-NAMING",
+      "evidence": "control labeled \"Save\"",
+      "fix": "Pick one label for this commit action, for example \"Save\", and use it everywhere the action appears.",
+      "id": "F-004",
+      "instances": [
+        {
+          "evidence": "control labeled \"Save\"",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "control labeled \"Submit\"",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "This artifact uses 2 different labels for what reads as the same commit action: \"Save\", \"Submit\". A user cannot tell from the label alone whether these controls perform the same action or different ones."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "`<p>An invite was sent to the address entered above. It expires in 5 days if not accepted.</p>` does not display the email address; \"above\" refers to the \"invite-member-email-input\" field on the previous state.",
+      "fix": "Interpolate the entered email address into the confirmation text, for example \"An invite was sent to jordan@example.com.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"invite-sent\" section",
+      "severity": 2,
+      "violation": "The confirmation asks the user to recall the address they entered on a screen they have already left, rather than restating the value in place, even though the artifact already has it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "`<p id=\"import-status-message\">The last import finished with 3 rows skipped: each referenced a project that does not exist in this workspace. Rows 63, 71, and 82 were skipped; every other row was imported.</p>` is followed only by `<a id=\"import-status-exit-link\" href=\"#workspace-overview\">Back to your projects</a>`.",
+      "fix": "Add a retry or re-import control for the skipped rows on the \"import-status\" state, or a link to correct the offending project references.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the \"import-status\" section",
+      "severity": 2,
+      "violation": "The message names exactly which rows failed and why, but the state offers no way to fix the references and retry, or to re-import just the skipped rows; the only control leaves the import result entirely."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T02:12:04Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

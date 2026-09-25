@@ -1,0 +1,34 @@
+Location: `<section id="workspace-overview">`, `<p>` text
+Evidence: "This workspace holds 4 projects, synced last week." followed by a list with only three `<li>` entries (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp)
+Problem: The stated project count (4) does not match the number of projects actually listed (3), with no indication that the list is partial.
+Fix: Either change the count to "3 projects" or add the missing fourth project to the list (and label the list as partial if it's meant to show only recent items).
+
+Location: `<section id="project-settings">`, `<input id="project-settings-name-input">`
+Evidence: `value="Q3 Roadmap"` inside Project settings, compared against the workspace overview list: "Holiday Campaign Assets", "Support Backlog Triage", "Mobile App Revamp"
+Problem: The project shown in Project settings ("Q3 Roadmap") is not one of the projects listed on the workspace overview page, so following "Open project settings" from the overview leads to an unrelated/unexplained project.
+Fix: Either add "Q3 Roadmap" to the workspace overview project list or change the settings form to reflect one of the listed projects, so the flow is internally consistent.
+
+Location: `<section id="project-settings">`, duplicate button
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text or icon content, so sighted users see an empty, unlabeled control, and it has no href/handler linking it to any resulting state in the document.
+Fix: Add visible label text or an icon element inside the button, and either link it to a resulting page/state (e.g., a duplicated-project confirmation) or remove it if duplication isn't in scope for this mockup.
+
+Location: `<section id="project-settings">`, form save button
+Evidence: `<button id="project-settings-save-btn" type="submit">Save</button>` with no `action` on the enclosing `<form>` and no link to any confirmation state
+Problem: Unlike other completion actions in the document (e.g., invite → "Invite sent", archive → "Project archived"), saving project settings has no resulting confirmation page, and as a bare form submit it would just reload the page rather than continue the mockup's anchor-based flow.
+Fix: Either add a confirmation state/section reachable after Save, or turn the button into an anchor consistent with the rest of the navigation pattern.
+
+Location: `<section id="invite-member">`
+Evidence: Both `<button id="invite-member-save-btn" type="submit">Save</button>` and `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>` appear in the same form/section
+Problem: Two different controls appear to complete the same action (sending the invite), but only "Continue" actually navigates to the "Invite sent" result — it's unclear what "Save" is supposed to do or why both exist.
+Fix: Remove the redundant control, or clarify their distinct purposes (e.g., "Save" persists a draft, "Continue" sends the invite) with distinct visible outcomes.
+
+Location: `<section id="archive-confirm">`, `<p id="archive-confirm-copy">`
+Evidence: "You can restore it at any time from the archived projects list."
+Problem: The document references an "archived projects list" as a destination, but no such page/section exists anywhere in the document, and no link leads to it (including from "Project archived").
+Fix: Add an "archived projects" section with a restore action, and link to it from both the archive confirmation copy and the post-archive confirmation page.
+
+Location: `<section id="notification-settings">`, form save button
+Evidence: `<button id="notification-settings-save-btn" type="submit">Save</button>` with no `action` on the form and no resulting confirmation link
+Problem: As with the project settings Save button, this submit button has no defined destination or confirmation state, breaking from the confirmation pattern used elsewhere (invite, archive) and from the anchor-link navigation style used throughout the rest of the document.
+Fix: Add a confirmation state after saving notification settings, or convert the control to an anchor link consistent with the rest of the mockup's navigation.

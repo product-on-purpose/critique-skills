@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced last week.\" followed by a list with only three `<li>` entries (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp)",
+      "fix": "Either change the count to \"3 projects\" or add the missing fourth project to the list (and label the list as partial if it's meant to show only recent items).",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<section id=\"workspace-overview\">`, `<p>` text",
+      "severity": 3,
+      "violation": "The stated project count (4) does not match the number of projects actually listed (3), with no indication that the list is partial."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`value=\"Q3 Roadmap\"` inside Project settings, compared against the workspace overview list: \"Holiday Campaign Assets\", \"Support Backlog Triage\", \"Mobile App Revamp\"",
+      "fix": "Either add \"Q3 Roadmap\" to the workspace overview project list or change the settings form to reflect one of the listed projects, so the flow is internally consistent.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, `<input id=\"project-settings-name-input\">`",
+      "severity": 3,
+      "violation": "The project shown in Project settings (\"Q3 Roadmap\") is not one of the projects listed on the workspace overview page, so following \"Open project settings\" from the overview leads to an unrelated/unexplained project."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible label text or an icon element inside the button, and either link it to a resulting page/state (e.g., a duplicated-project confirmation) or remove it if duplication isn't in scope for this mockup.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, duplicate button",
+      "severity": 3,
+      "violation": "The button has no visible text or icon content, so sighted users see an empty, unlabeled control, and it has no href/handler linking it to any resulting state in the document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>` with no `action` on the enclosing `<form>` and no link to any confirmation state",
+      "fix": "Either add a confirmation state/section reachable after Save, or turn the button into an anchor consistent with the rest of the navigation pattern.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, form save button",
+      "severity": 3,
+      "violation": "Unlike other completion actions in the document (e.g., invite → \"Invite sent\", archive → \"Project archived\"), saving project settings has no resulting confirmation page, and as a bare form submit it would just reload the page rather than continue the mockup's anchor-based flow."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Both `<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` and `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>` appear in the same form/section",
+      "fix": "Remove the redundant control, or clarify their distinct purposes (e.g., \"Save\" persists a draft, \"Continue\" sends the invite) with distinct visible outcomes.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`<section id=\"invite-member\">`",
+      "severity": 3,
+      "violation": "Two different controls appear to complete the same action (sending the invite), but only \"Continue\" actually navigates to the \"Invite sent\" result - it's unclear what \"Save\" is supposed to do or why both exist."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\"",
+      "fix": "Add an \"archived projects\" section with a restore action, and link to it from both the archive confirmation copy and the post-archive confirmation page.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`<section id=\"archive-confirm\">`, `<p id=\"archive-confirm-copy\">`",
+      "severity": 3,
+      "violation": "The document references an \"archived projects list\" as a destination, but no such page/section exists anywhere in the document, and no link leads to it (including from \"Project archived\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button>` with no `action` on the form and no resulting confirmation link",
+      "fix": "Add a confirmation state after saving notification settings, or convert the control to an anchor link consistent with the rest of the mockup's navigation.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`<section id=\"notification-settings\">`, form save button",
+      "severity": 3,
+      "violation": "As with the project settings Save button, this submit button has no defined destination or confirmation state, breaking from the confirmation pattern used elsewhere (invite, archive) and from the anchor-link navigation style used throughout the rest of the document."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-09-15T03:39:05Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,39 @@
+Location: `#workspace-overview` section, "Your projects" paragraph and list
+Evidence: "This workspace holds 3 projects, synced last week." followed by a `<ul>` with only two `<li>` items ("Data Warehouse Cutover", "Mobile App Revamp")
+Problem: The stated project count (3) does not match the number of projects actually listed (2).
+Fix: Either add the missing third project to the list or correct the count in the paragraph text.
+
+Location: `#workspace-overview` list vs `#project-settings` name input
+Evidence: Recent list shows "Data Warehouse Cutover" and "Mobile App Revamp"; the "Open project settings" link leads to a settings form with value "Design System Refresh"
+Problem: The project shown in Project Settings doesn't correspond to either project in the "Your projects" list, so the navigation implies editing a project that isn't listed anywhere.
+Fix: Make the listed projects and the settings page reference the same project (e.g., include "Design System Refresh" in the recent list, or link each listed project to its own settings).
+
+Location: `#workspace-overview-promo-referral`
+Evidence: `<div id="workspace-overview-promo-referral">Invite 3 teammates this month to unlock the advanced reporting add-on.</div>`
+Problem: The promo instructs the user to take an action but is plain text with no link or button to perform it.
+Fix: Wrap the promo in a link/button pointing to the invite flow (e.g., `#invite-member`).
+
+Location: `#project-settings-duplicate-btn`
+Evidence: `<button id="project-settings-duplicate-btn" type="button"></button>`
+Problem: The button has no visible text (or aria-label), so its purpose is invisible to users and it lacks an accessible name.
+Fix: Add visible label text, e.g. "Duplicate project".
+
+Location: `#invite-member` section
+Evidence: `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>` exists alongside a separate `Save` submit button, and the email `<input>` has no `required` attribute
+Problem: A user can click "Continue" and reach "Invite sent" without ever entering an email address or clicking Save, since Continue is an unconditional link rather than tied to form submission/validation.
+Fix: Require the email field and make "Continue" depend on a successful save/submit rather than being an independent link.
+
+Location: `#invite-sent` section
+Evidence: "An invite was sent to the address entered above."
+Problem: "Above" refers to the previous page's input field, which is not present on this section, making the message confusing since no address is actually shown here.
+Fix: Display the actual submitted email address on this page, e.g. "An invite was sent to {email}."
+
+Location: `#invite-sent` section
+Evidence: Section contains only an `<h2>` and a `<p>`, with no `<a>` elements
+Problem: This is a dead-end page with no way to navigate back to project settings or the workspace overview.
+Fix: Add a link back to `#project-settings` or `#workspace-overview`.
+
+Location: `#archive-confirm-copy` paragraph
+Evidence: "You can restore it at any time from the archived projects list."
+Problem: This references an "archived projects list" page/feature that does not exist anywhere in the document (no such section or link is provided).
+Fix: Add an archived-projects-list section with a link to it (e.g., from `#project-archived`), or remove the claim if that feature isn't part of this mockup.

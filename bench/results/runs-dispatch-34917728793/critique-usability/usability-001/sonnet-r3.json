@@ -1,0 +1,104 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-DEADEND",
+      "evidence": "the \"invite-sent\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+      "fix": "Add a control inside the \"invite-sent\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "the \"invite-sent\" section",
+      "severity": 3,
+      "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\"> ends a form with no action attribute, and no state elsewhere in the artifact defines what becomes visible after this control fires.",
+      "fix": "Specify what the artifact shows immediately after this control fires: a confirmation message in place, a changed control state, or a named next state.",
+      "id": "F-002",
+      "instances": [
+        {
+          "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\"> ends a form with no action attribute and no defined outcome; the only defined progression out of this screen is the separate \"Continue\" link.",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "<button id=\"notification-settings-save-btn\" type=\"submit\"> ends a form with no action attribute, and no state elsewhere in the artifact defines what becomes visible after this control fires.",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "This action commits a change to stored state but the artifact specifies no in-progress or result feedback: no confirmation message, no changed control state, no named next state, so a user who clicks this control cannot tell whether the change took effect."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "Sending the invite leads to \"invite-sent\" (\"An invite was sent to the address entered above. It expires in 5 days if not accepted.\"), and neither that state nor any other state in the artifact names a control to cancel or revoke the pending invite.",
+      "fix": "Add a revoke or cancel-invite control, reachable from \"invite-sent\" or from project settings, that withdraws a pending invitation before it is accepted.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"invite-member\" section, the \"invite-member-continue-link\" link",
+      "severity": 2,
+      "violation": "Sending a team invitation is reasonably reversible in this kind of product, but the artifact names no stated way back: no revoke or cancel-invite control appears anywhere, so an invite sent by mistake can only be undone by waiting out its 5-day expiry."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H4-INTERNAL",
+      "evidence": "The form's own \"Save\" button (type submit, no defined destination) and the separate \"Continue\" link (which leads to \"invite-sent\") sit on the same screen with no text distinguishing what each does.",
+      "fix": "Either remove the redundant control or make each control's own text say what it does differently, for example \"Save draft\" and \"Send invite.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"invite-member\" section",
+      "severity": 2,
+      "violation": "Two different controls, \"Save\" and \"Continue,\" both read as committing the invite, and the artifact gives no cue whether they are the same action, sequential steps, or different operations, so a user cannot tell which one to use."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-LABELED",
+      "evidence": "<button> with no text content and no accessible-name attribute",
+      "fix": "Add visible text to this control, or an aria-label attribute naming what it does.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "This control has neither visible text nor an accessible-name attribute, so nothing on screen names what the control does."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "\"An invite was sent to the address entered above.\" The address itself is not repeated in this section; it was entered on the \"invite-member\" screen.",
+      "fix": "Restate the email address on the \"invite-sent\" screen, for example \"An invite was sent to jane@example.com.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the \"invite-sent\" section",
+      "severity": 2,
+      "violation": "This confirmation depends on a value the user entered on an earlier screen without restating it, referencing its value, or making it retrievable in place, so the user cannot verify which address the invite went to without navigating back."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T01:53:44Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 1,
+      "2": 6,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 2
+  }
+}

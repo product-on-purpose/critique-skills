@@ -3,7 +3,7 @@
 Local-first, version-controlled backlogs (Standard sec 7.1). Two files, plus this index:
 
 - **[enhancements.md](enhancements.md)** - features, fixes and refinements to components that already
-  exist. 62 items, `E1` through `E62`.
+  exist. 65 items, `E1` through `E65`.
 - **[new-components.md](new-components.md)** - proposals to ADD a skill, command, subagent, hook or
   chain. 4 items, `N1` through `N4`, each with a recorded why-gate verdict.
 
@@ -98,12 +98,13 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**29 items depend on nothing and can start today.** Derived from each item's own
+**33 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
 |---|---|---|---|
 | E62 | Rule the Standards-watch commitment, and the 0.12 pin it is measured against | S | v0.1.x |
+| E64 | Rule on ADR 0030 now that the sonnet fidelity gate has failed | S | v0.1.x |
 | E13 | Update ROADMAP.md's v0.1.x section: two of four verification items are met | S | v0.1.x |
 | E28 | Pin or record the Claude Code CLI version bench.yml installs | S | v0.1.x |
 | E29 | Make release.yml's re-run suite match what it claims to run | S | v0.1.x |
@@ -116,6 +117,7 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E36 | Confirm or deprecate the reserved selector field per ADR 0012's own RC question | S | v0.1.x |
 | E37 | Run the TOULMIN-HEDGE-DENSITY false-positive check ADR 0017 named, and fix TOULMIN.md's future tense | S | v0.1.x |
 | E38 | Measure critique-accessibility's location fix on id-poor markup | S | v0.2.0 |
+| E65 | Decide whether critique-clarity's critic should emit instances | S | v0.2.0 |
 | E39 | Record the CLAUDE_CODE_OAUTH_TOKEN retention decision and a rotation procedure | S | v0.1.x |
 | E40 | Look at a Mermaid diagram in light and dark on the live site | S | v0.1.x |
 | E42 | Reconcile 'frozen with a JSON Schema' against 'freezes at v1.0' | S | unscheduled |
@@ -128,10 +130,12 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E23 | Write methodology.md's location-level metrics section | M | v0.2.0 |
 | E24 | Add an automated evidence-quotes-not-characterizes check | M | v0.2.0 |
 | E27 | Isolate the bench harness from the working tree it measures | M | v0.2.0 |
+| E63 | Bring the dispatch run sets into results.json, or amend the rule they break | M | v0.2.0 |
 | E49 | Write one real tutorial for the empty Diataxis Tutorials quadrant | M | v0.2.0 |
 | E53 | Harden --gate as a documented per-skill CI recipe for consumers | M | v0.3.0 |
 | E54 | Ship one documented cross-library composition workflow | M | v0.3.0 |
 | E25 | Rewrite verdicts.md as one current-state document | L | v0.2.0 |
+| E26 | Calibrate a per-lane consistency threshold (v2) | L | v0.2.0 |
 
 With S-07's AC-4 closed, every criterion in that spec passes and
 [ADR 0034](../decisions/0034-v0.1.x-exit-gate-declaration.md)'s two named conditions for calling
@@ -144,7 +148,9 @@ v0.1.x finished are both discharged.
   CodeQL ruling) gates E12 (exit-gate re-cut) gates any v0.2.0 tag.
 - **The sonnet chain, and the critical path inside the ruled shape.** E2 gates E19 (sonnet
   fidelity dispatch) gates E20 (usability re-measure) and E26 (consistency threshold v2). E2 also
-  gates two-tier k=5 measurement for N1, N2 and N3.
+  gates two-tier k=5 measurement for N1, N2 and N3. **Discharged 2026-09-24:** E2 and E19 are closed,
+  E20 is recorded with only its ROADMAP wording outstanding, and E26 is ready. The gate itself failed
+  on sonnet, which opened E64 (ADR 0030's ruling) and E65 (clarity and `instances`).
 - **The skill wave, the longest chain overall.** E1 gates E44 (taxonomy survey), which orders but
   does not gate N1 (critique-deck); N1's hard dependencies are E30, E2 and a corpus module. N1 gates
   N2, which gates N3, which additionally needs a chart-spec generator mode that does not exist.

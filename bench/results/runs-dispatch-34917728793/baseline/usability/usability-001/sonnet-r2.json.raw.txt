@@ -1,0 +1,49 @@
+Location: `<section id="workspace-overview">`, the `<p>` and `<ul>` in "Your projects"
+Evidence: "This workspace holds 3 projects, synced last week." followed by a `<ul>` with only two `<li>` items ("Data Warehouse Cutover", "Mobile App Revamp")
+Problem: The stated project count (3) doesn't match the number of projects actually listed (2), with no indication that the list is partial.
+Fix: Either list all 3 projects, change the count to match the list, or add a label/affordance (e.g., "recent" heading, "+1 more" link) clarifying that the list is a subset.
+
+Location: `<div id="workspace-overview-promo-referral">`
+Evidence: `<div id="workspace-overview-promo-referral">Invite 3 teammates this month to unlock the advanced reporting add-on.</div>`
+Problem: This calls the user to action ("Invite 3 teammates") but is a plain `<div>` with no link or button, unlike every other actionable item in the section, which is an `<a>`.
+Fix: Wrap the promo text in a link to `#invite-member` (or add a CTA button) so it's actually actionable.
+
+Location: `<section id="project-settings">`, `<button id="project-settings-duplicate-btn">`
+Evidence: `<button id="project-settings-duplicate-btn" type="button"></button>`
+Problem: The button has no text content or accessible label, so users and screen readers can't tell what it does.
+Fix: Add visible label text (e.g., "Duplicate project") or at minimum an `aria-label="Duplicate project"`.
+
+Location: `<section id="project-settings">`, `<input id="project-settings-name-input">`
+Evidence: Overview lists "Data Warehouse Cutover" and "Mobile App Revamp", but the project settings opened via `#workspace-overview-projects-link` shows `value="Design System Refresh"`
+Problem: The project name shown in Project Settings doesn't correspond to either project listed on the workspace overview, so it's unclear which project "Open project settings" is supposed to open.
+Fix: Either add "Design System Refresh" to the overview's project list, or make the "Open project settings" link target a specific, listed project.
+
+Location: `<section id="invite-member">`
+Evidence: `<button id="invite-member-save-btn" type="submit">Save</button>` and, separately, `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>`
+Problem: "Continue" navigates to the "Invite sent" confirmation regardless of whether "Save" was clicked or the email field was filled in, so a user can reach a page claiming "An invite was sent to the address entered above" without ever entering or submitting an address.
+Fix: Make "Continue" dependent on a successful save (e.g., disable it until the form is submitted, or remove the separate Continue link and navigate on submit), and mark the email input `required`.
+
+Location: `<section id="invite-sent">`
+Evidence: The section contains only an `<h2>` and a `<p>`, with no `<a>` or button anywhere in it
+Problem: This is a dead-end page with no way to navigate back to project settings or the workspace overview.
+Fix: Add a link back to `#project-settings` or `#workspace-overview`.
+
+Location: `<section id="archive-confirm">`, `<p id="archive-confirm-copy">`
+Evidence: "You can restore it at any time from the archived projects list."
+Problem: The document has no "archived projects list" page or link anywhere, so this promised destination doesn't exist.
+Fix: Add an "archived projects list" section/link, or remove the claim if that feature isn't part of this mockup.
+
+Location: `<section id="archive-confirm">`, `<a id="archive-confirm-archive-link">`
+Evidence: `<a id="archive-confirm-archive-link" href="#project-archived">Archive</a>` versus `<button id="project-settings-save-btn" type="submit">Save</button>`
+Problem: A destructive, state-changing action ("Archive") is implemented as a plain anchor link while equally consequential actions elsewhere (Save) use a form button, an inconsistent and semantically incorrect pattern.
+Fix: Implement "Archive" as a form submission/button rather than a navigational link.
+
+Location: `<section id="notification-settings">`, `<select id="notification-settings-digest-input">`
+Evidence: `<option>Daily</option><option>Weekly</option>` — neither option has a `selected` attribute
+Problem: Unlike the project name field, which is pre-filled with its current value (`value="Design System Refresh"`), the digest select gives no indication of the team's actual current setting, so the user can't tell if "Daily" (the default-selected first option) reflects reality.
+Fix: Add a `selected` attribute to whichever option matches the currently saved digest frequency.
+
+Location: `<head>`, `<title>`
+Evidence: `<title>Project workspace mockup</title>`
+Problem: The internal/process word "mockup" is exposed in the user-facing page title, which would be visible in the browser tab of a real product.
+Fix: Change the title to a user-facing string, e.g., "Project workspace".

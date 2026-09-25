@@ -1,0 +1,128 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Program Overview: 'The benefits team tracks the stipend budget at the start of the fiscal year.' Special Cases: 'The finance liaison reviews the stipend budget at the start of the fiscal year.' Questions and Updates: 'The people operations office tracks the stipend budget at the start of the fiscal year.'",
+      "fix": "Name the responsible team once, consistently, and delete the two redundant restatements, or explicitly state that the terms refer to the same team if they do.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Program Overview, paragraph 1; Special Cases, paragraph 1; Questions and Updates, paragraph 1",
+      "severity": 3,
+      "violation": "Three different actors (the benefits team, the finance liaison, the people operations office) are each named as performing the identical stipend-budget task at the identical time, in near-identical sentences repeated at three separated points in the document, with no signal that they name the same team, function, or event, so a reader who needs to know who owns the budget cannot tell whether this is one team described three ways or three distinct teams."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "evidence": "71-word sentence, 5 subordinate-clause markers: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "severity": 3,
+      "violation": "The sentence runs to 71 words with 5 subordinate-clause markers, longer than the reader can hold in mind on a single pass."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "The determination of stipend eligibility happens before any payment goes out. The escalation of repeat requests happens automatically within the same quarter.",
+      "fix": "Name the actor as the subject, for example: the benefits team determines stipend eligibility before any payment goes out, and the system escalates repeat requests automatically within the same quarter.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Review Responsibility, paragraph 1",
+      "severity": 3,
+      "violation": "Both sentences in this section run their action through an abstract noun (the determination, the escalation) as grammatical subject instead of naming the actor who determines eligibility or escalates requests, so a reader cannot tell who is responsible for either action."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-SHAPE",
+      "evidence": "71-word sentence: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "fix": "Move subordinate clauses and modifiers after the main clause, not between its subject and verb.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "severity": 3,
+      "violation": "At 71 words, with 0 comma-set-off clause(s) and 5 subordinate-clause marker(s), the sentence stacks interruptions between its subject and its main verb instead of holding the main clause together."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-LISTS",
+      "evidence": "Employees must submit the receipt, the manager's approval form, and the original purchase order before the review begins.",
+      "fix": "Reformat the inline items as a numbered or bulleted list.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence embeds three or more comma- or semicolon-separated parallel items inline rather than presenting them as a formatted list."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-MUST",
+      "evidence": "Additionally, employees shall retain receipts for one year after the purchase date.",
+      "fix": "Restate the requirement using must.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "Required Documentation, paragraph 2",
+      "severity": 2,
+      "violation": "The sentence states a binding requirement using shall or an indirect requirement phrasing instead of must."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-NOMINALIZATION",
+      "evidence": "The finance office conducts an evaluation of every submitted receipt before it approves the amount.",
+      "fix": "Restate the nominalized noun as the sentence's main verb.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Reimbursement Amounts, paragraph 1",
+      "severity": 2,
+      "violation": "The action is buried inside the noun 'evaluation', carried by a generic support verb, instead of stated as the sentence's own main verb."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Request Steps (ninth of thirteen sections, after Restrictions and Exceptions and Terminology Notes): 'Completing the request begins with confirming eligibility, and uploading the receipt.' How to Apply (third section): 'Employees must submit the receipt, the manager's approval form, and the original purchase order before the review begins.'",
+      "fix": "Move Request Steps next to How to Apply, or merge the two sections, so the reader encounters the starting steps before the later-stage sections.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Request Steps, paragraph 1",
+      "severity": 2,
+      "violation": "The section stating how the request 'begins' appears after Approval Timeline, Required Documentation, Reimbursement Amounts, and Restrictions and Exceptions, which describe later stages of the same process, so its position tracks the order the sections were drafted in rather than the sequence a reader actually works through the stipend request."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-PARAGRAPH",
+      "evidence": "165 words in one paragraph.",
+      "fix": "Split the paragraph so each part covers one topic.",
+      "id": "F-009",
+      "lane": "scripted",
+      "location": "Eligibility, paragraph 3",
+      "severity": 2,
+      "violation": "The paragraph exceeds the 150-word scannability threshold."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-002.md",
+    "artifact_sha256": "7fd910197f585ef10416cde2ed6b94fa48de539377a1082d82e29ccee509e6df",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T02:40:25Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 8,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 3
+  }
+}

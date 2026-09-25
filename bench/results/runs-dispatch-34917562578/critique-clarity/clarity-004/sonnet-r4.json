@@ -1,0 +1,84 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Program Overview: \"The IT asset group updates the reimbursement log at the start of the fiscal year.\" Terminology Notes: \"Finance reconciles the stipend item against the request log each month.\"",
+      "fix": "Pick one name for this record, state its single owner and single update cadence once, and use that same name every time the record is referenced elsewhere in the document.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Program Overview, paragraph 1; Terminology Notes, paragraph 1",
+      "severity": 3,
+      "violation": "Reimbursement log and request log are never stated to be the same record or different records, yet each is described with a different owner (IT asset group vs. Finance) and a different update cadence (start of fiscal year vs. every month). A reader cannot tell whether this is one log tracked by two teams on two schedules, or two separate logs, and the conflicting owner and cadence details make it impossible to resolve by inference."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Request Steps' entire content: \"Completing the request begins with confirming eligibility, and uploading the receipt.\" This appears after How to Apply, Approval Timeline, Required Documentation, Reimbursement Amounts, Restrictions and Exceptions, and Terminology Notes.",
+      "fix": "Merge Request Steps into How to Apply as that section's opening steps list, positioned right after the heading, and delete the separate late-document restatement.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Request Steps, paragraph 1 (ninth of thirteen sections); How to Apply, paragraphs 1-3 (second section)",
+      "severity": 3,
+      "violation": "The reader's actual first task question, what are the steps to make a request, is answered twice: in detail under How to Apply, the second section, and again, tersely, under Request Steps, the ninth section, positioned after Approval Timeline, Required Documentation, Reimbursement Amounts, Restrictions and Exceptions, and Terminology Notes, sections that only make sense once a request already exists. A reader trying to start a request has to read past five sections describing what happens after submission before reaching the section literally titled for the steps."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "Program Overview: \"the IT asset group tracks the equipment catalog on the first business day of the month.\" Special Cases: \"The finance liaison publishes the equipment catalog at the start of the fiscal year.\" Questions and Updates: \"The benefits team reviews the equipment catalog at the start of the fiscal year.\"",
+      "fix": "Consolidate the equipment-catalog maintenance facts into one place, name one owner and one cadence, and remove the other two restatements, or add an explicit note if they genuinely describe three distinct activities.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Program Overview, paragraph 2; Special Cases, paragraph 1; Questions and Updates, paragraph 1",
+      "severity": 3,
+      "violation": "Three separated sections each assign equipment-catalog maintenance to a different owner (IT asset group, finance liaison, benefits team) on two different cadences (monthly vs. start of fiscal year), with no cross-reference or signal tying the three statements together as one process. A reader who wants to know who maintains the catalog and when cannot resolve the three claims into one consistent picture, and nothing in the document says which one governs."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review.",
+      "fix": "Introduce Finance and Payroll before using them as subjects, or restructure as one sentence naming the sequence of actors explicitly, for example: \"You record the stipend item on the request form, which Finance reconciles against the request log each month before Payroll releases the item's amount.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Terminology Notes, paragraph 1",
+      "severity": 2,
+      "violation": "The grammatical subject changes in every one of the three sentences, You, then Finance, then Payroll, and neither Finance nor Payroll is introduced anywhere before it appears as a sentence's subject, so the reader must reorient to a new, unintroduced actor twice within three short sentences."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-STRESS",
+      "evidence": "The stipend pays up to 500 dollars per benefit year.",
+      "fix": "Reorder so the dollar amount lands at the sentence's end, for example: \"Each benefit year, the stipend pays up to 500 dollars.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Reimbursement Amounts, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence's newest, most important element, the 500-dollar cap, lands mid-sentence, while the sentence ends on \"per benefit year,\" a phrase already established under Eligibility (\"one claim per employee per benefit year\"). The reader's attention lands on the already-known unit of time rather than the new dollar figure this section exists to state."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T03:36:57Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

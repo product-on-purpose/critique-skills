@@ -1,0 +1,125 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>",
+      "fix": "Define what happens after \"project-settings-duplicate-btn\" is clicked: either a new state confirming the duplicate, or an update to the project list on \"workspace-overview\" that the artifact names as the visible result.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 3,
+      "violation": "NNG-H1 requires that a state-changing action specify a visible indication of what the system is doing and what the outcome was. This button names a state-changing action (duplicating a project) but has no href, no form, and no reference to any state or list change anywhere in the artifact: there is no indication the click was received, no resulting state, and no updated project list showing the duplicate anywhere in the document."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H5-CONFIRM",
+      "evidence": "<a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a>",
+      "fix": "Change \"project-settings-archive-link\"'s href from \"#project-archived\" to \"#archive-confirm\", so the confirmation state the artifact already wrote is actually reached before the archive commits.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-archive-link\" link",
+      "severity": 3,
+      "violation": "This control's own path goes directly to the \"project-archived\" state on a single click, never passing through the \"archive-confirm\" state (\"Archive this project? Archiving \\\"Customer Migration\\\" will remove it from the active projects list for everyone on the team.\") that the artifact defines. NNG-H5-CONFIRM states that a confirmation state the artifact defines but that this control's own path bypasses does not count, because a user taking that control never sees it, so as specified this costly, team-wide action fires on one click with no confirmation reaching the user who triggers it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button> inside a <form> with no action attribute and no defined next state",
+      "fix": "Name what the user sees after each Save or Submit button commits: either a defined next state, or an in-place confirmation message on the same screen.",
+      "id": "F-003",
+      "instances": [
+        {
+          "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>, distinct from the \"invite-member-continue-link\" that actually leads to \"invite-sent\"",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "<button id=\"notification-settings-save-btn\" type=\"submit\">Submit</button> inside a <form> with no action attribute and no defined next state",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "NNG-H1 requires visible indication of an action's outcome once it finishes. This submit button, and its counterparts on other screens, name a save trigger but the artifact names no resulting state, no success message, and no error path; the elsewhere-consistent convention of wiring transitions with href=\"#target\" is not used here, so the outcome of saving is entirely unspecified."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "\"'Customer Migration' has been moved to archived projects. It no longer appears in the active projects list for anyone on the team.\" with only the \"project-archived-exit-link\" (\"Back to your projects\") as an onward control",
+      "fix": "Add an \"archived projects list\" state to the artifact with a restore control, and link to it from \"project-archived\", or from \"workspace-overview\", so the restore path the copy promises actually exists.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"project-archived\" section",
+      "severity": 2,
+      "violation": "NNG-H3-UNDO requires that a reasonably reversible action name a stated way back. The artifact's own \"archive-confirm\" copy claims the action is reversible (\"You can restore it at any time from the archived projects list\"), but no \"archived projects list\" state or link to one exists anywhere in the artifact, and the \"project-archived\" screen a user actually lands on offers no restore control at all, so the reversal this product claims to support has no path in the design as specified."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H4-CONTROL-NAMING",
+      "evidence": "control labeled \"Save\"",
+      "fix": "Pick one label for this commit action, for example \"Save\", and use it everywhere the action appears.",
+      "id": "F-005",
+      "instances": [
+        {
+          "evidence": "control labeled \"Save\"",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "control labeled \"Submit\"",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "This artifact uses 2 different labels for what reads as the same commit action: \"Save\", \"Submit\". A user cannot tell from the label alone whether these controls perform the same action or different ones."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "\"The last import finished with 3 rows skipped: each referenced a project that does not exist in this workspace. Rows 63, 71, and 82 were skipped; every other row was imported.\" with only the \"import-status-exit-link\" (\"Back to your projects\") as an onward control",
+      "fix": "Add a control on \"import-status\" that lets the user address the 3 skipped rows in place, for example a link to re-map or re-import rows 63, 71, and 82, rather than only a link back to the project list.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the \"import-status\" section",
+      "severity": 2,
+      "violation": "NNG-H9-RECOVER requires that error text point to a next step reachable from the error state itself. This message identifies which rows failed and why, but offers no way to fix the offending references and retry those three rows; the only control leaves the import result entirely."
+    },
+    {
+      "confidence": "low",
+      "criterion": "NNG-H3-EXIT",
+      "evidence": "<a id=\"invite-member-cancel-link\" href=\"#project-settings\">Cancel</a>, with no statement about the entered \"invite-member-email-input\" value",
+      "fix": "State in place, near the Cancel control or in the flow description, that cancelling discards the entered email address.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "the \"invite-member\" section, the \"invite-member-cancel-link\" link",
+      "severity": 1,
+      "violation": "NNG-H3-EXIT requires that the artifact say what becomes of work already entered when a flow's exit is taken. \"Cancel\" is visible and predictably labeled, but the artifact never states whether the entered email address is discarded or retained if the user returns."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T02:18:38Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 1,
+      "2": 4,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

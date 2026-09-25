@@ -15,6 +15,10 @@
   no new model runs, by regrouping them on the repetition index in their filenames.
 - **The finding that changes the run:** **haiku's bands are 2.3x wider than sonnet's** (median width
   0.145 against 0.063). The cheap tier is the weak test, which reverses the obvious budget choice.
+- **The gate has run twice.** Haiku, 2026-08-17: one gated figure outside by less than its band's
+  width, so investigation. **Sonnet, 2026-09-15: `precision_location` outside by more than its band's
+  width, so a failure by the gate's own rule**, most of it traced to the judged lane no longer
+  emitting `instances`. See the two dated sections below.
 - **Status:** Accepted (2026-08-15).
 
 - **Status:** Accepted
@@ -209,6 +213,141 @@ statistically indistinguishable from the committed figures and precision better 
 nothing about the other five skills, and nothing at all about sonnet, which still cannot complete a
 cell. The published v0.1.0 figures stand as the measurement of record, now with the added and
 recorded caveat that they describe the pre-assembler skill measured through the old lane.
+
+## The gate ran on sonnet, 2026-09-15: a failure by its own rule, and most of the move is output shape
+
+Run `34917562578`, `critique-clarity` on sonnet (`claude-sonnet-5`), k=5, dispatched through
+`bench.yml`. It is the cell the "Recommended re-run" paragraph under Consequences named before the
+2026-08-16 correction withdrew it as unavailable; a sonnet cell completing on 2026-09-13 put it back.
+**Coverage is complete, 20 of 20 skill cells and 20 of 20 baseline cells with no failed step**, so
+the published band applies as published and nothing was rebuilt. The envelopes are committed as
+`bench/results/runs-dispatch-34917562578/` and scored with
+`python -m bench.metrics score --corpus bench/corpus --runs bench/results/runs-dispatch-34917562578`.
+
+| metric | committed | re-run | published band | verdict |
+|---|---|---|---|---|
+| `recall_location` | 0.890 (89/100) | 0.920 (92/100) | [0.860, 0.920] | **on the upper bound** (gated) |
+| `precision_location` | 0.434 (89/205) | **0.541 (92/170)** | [0.403, 0.466] | **outside** (gated) |
+| `recall` | 0.770 | 0.800 | [0.730, 0.810] | inside (reported) |
+| `precision` | 0.376 | 0.471 | [0.344, 0.411] | outside (reported) |
+
+**`precision_location` is outside by 0.075 against a band 0.063 wide.** The rule under "The gate" is
+that a miss wider than the band's own width is a failure. **This is a failure, not an
+investigation.** Nor is it marginal at the repetition level: the lowest of the five re-run
+repetitions, 0.471, is above the band's upper edge.
+
+**`recall_location` lands exactly on its bound.** 92 of 100 is 0.92, and the unrounded 97.5th
+percentile of the committed bootstrap is also exactly 0.92, recomputed from seed 20260815 with
+`variance.json` reproduced entry for entry. Read as a closed interval it is inside. It is not counted
+as a second miss, and the verdict does not depend on it.
+
+**This is the result finding 2 under Consequences predicted.** On haiku the same cell moved +0.138
+on `precision_location` and the verdict was investigation, because haiku's band is 0.168 wide. On
+sonnet it moved +0.107, the same direction and a similar size, against a band of 0.063. **The tier
+that can fail the gate failed it.**
+
+### What moved on sonnet
+
+| | committed, 2026-07-31 | re-run, 2026-09-15 |
+|---|---|---|
+| scripted findings | 64 | 70 |
+| judged findings | 108 | 100 |
+| judged findings carrying `instances` | 15 | **0** |
+| instance claims | 33 | **0** |
+| claims scored, the precision denominator | 205 | 170 |
+| claims matched to a planted defect | 89 | 92 |
+| suppressed by bounding | 42 | 42 |
+
+**Nearly all of the denominator's fall is one change: the judged lane stopped using `instances`.**
+`bench/metrics/claims.py` scores a finding with n instances as n+1 claims, one per location. The
+committed run expressed recurring breaches that way, 13 of its 15 instance-bearing findings on
+`PLAIN-CONSISTENT-TERMS`. The re-run raises that criterion about as often, 28 findings against 31,
+and writes every location into the one `location` string instead ("Program Overview, paragraph 1 and
+Overview, paragraph 1"). Only 1 of the 33 committed instance claims matched a planted defect, so they
+were almost entirely precision cost.
+
+**The counterfactual, offered as mechanism and not as a verdict.** Stripping `instances` from the
+committed envelopes and rescoring gives `precision_location` 0.512 (88/172) and `recall_location`
+0.880. Roughly 0.078 of the 0.107 move is therefore how recurring breaches are written down, and the
+residual 0.029 is under half the band's width. **This does not change the verdict and is not offered
+as a reason to.** Re-cutting the band over a view chosen after seeing the result is the failure mode
+the decision drivers above rule out, and the rebuild remedy under "The gate" is for coverage gaps, of
+which there are none.
+
+**Not the assembler.** Both skills call the same `skills/_shared/merge.py`, and
+`critique-usability`'s judged lane, dispatched alongside this one as run `34917728793`, kept 33
+instance claims against its committed 32 through it. The difference is upstream of assembly, and
+**its cause is not established.** What differs is exposure. Clarity's `SKILL.md`, its references and
+`agents/critique-critic.md` never mention the field. Usability's references do, though only in two
+scripted criteria's rows, and all 33 of its judged instance claims sit on `NNG-H1`, whose row does
+not. The more likely channel is that the critic runs the scripted lane itself before the judged pass
+(`agents/critique-critic.md`, step 3), and usability's scripted findings use `instances` while
+clarity's never do, so one critic sees the field in use and the other never has. **Both are readings
+of the prompts, and neither is tested.**
+
+**The scripted lane is not the clean control it was on haiku.** It matched 70 of 100 planted defects
+against 62 committed, at precision 1.000 both times, and its consistency rose from 0.768 to 0.907.
+Per criterion the committed run fired the same check on some repetitions and not others
+(`PLAIN-ACTIVE` on `clarity-001` in two of five, against five of five now), which is the unreliable
+hand assembly this ADR's second haiku cause names, corrected since by `merge.py`. That is a real
+improvement, and it also means this run cannot hold one lane still to isolate the other.
+
+**The baseline moved too, which weakens any attribution to ADR 0030's change.** `baseline-generic`
+on the same four artifacts:
+
+| metric | committed | re-run | published band | |
+|---|---|---|---|---|
+| `recall_location` | 0.880 | 0.950 | [0.810, 0.950] | on the upper bound |
+| `precision_location` | 0.335 (88/263) | 0.268 (95/355) | [0.314, 0.355] | **outside by 0.046, band 0.041 wide** |
+
+The baseline does not run the skill, so none of that movement is the rewritten lane. It is the things
+the gate's last paragraph says the band does not cover: a different production mechanism for the
+committed set (the documented multi-agent workflow, not `bench/run_bench.py`), a different transport,
+and six weeks elapsed on the same model ID. On haiku the baseline's precision stayed inside its band,
+0.329 to 0.352, though its recall did not, 0.540 to 0.620 against [0.490, 0.580]. **Some part of the
+skill's movement is shared with the baseline, and this run cannot assign it to ADR 0030's change.**
+
+### The companion cell passed
+
+`critique-usability` on sonnet was dispatched the same night, run `34917728793` at 40 of 40, for E20
+(the usability sonnet re-measure) rather than as the gate cell. Its band was published with every
+other cell's before either run. Both gated figures land inside: `recall_location` 0.800 against
+[0.771, 0.943], and `precision_location` 0.169 against [0.153, 0.183], the narrowest non-degenerate
+band in the grid. It is reported beside the verdict, not in place of it. It shows the rewritten lane
+reproducing a sonnet cell within variance when the skill's output shape did not change, which is
+consistent with the reading above and does not prove it.
+
+### A correction to the haiku reading, 2026-09-24
+
+The 2026-08-17 section attributes the haiku move to the judged lane emitting a third fewer findings,
+and names two causes. **It missed a third, measurable one: the same loss of `instances`.** Over the
+same 19 cells the committed haiku envelopes carried 19 instance claims across 5 judged findings, and
+the dispatch carried none. Stripping them from the committed envelopes moves `precision_location` from
+0.413 to 0.463, so about 0.050 of the 0.138 move is output shape. That section is left as written,
+because it is a dated record of what was measured and believed that day.
+
+### What the sonnet run licenses, and what it does not
+
+**The rewritten lane does not reproduce the committed `critique-clarity` sonnet figures within
+measured variance.** On the gated metric where it misses, the difference is mostly a change in how
+recurring breaches are written down, partly a scripted lane that became deterministic, and partly
+movement the baseline shares. None of it is the skill finding fewer defects: overall location recall
+and criterion-level recall are both above the committed figures.
+
+**The published v0.1.0 figures remain the measurement of record**, and the caveat recorded on haiku
+now holds on both tiers: they describe the skill as measured through the old mechanism. The re-run's
+envelopes are committed as evidence and, like the haiku dispatch's, feed no published number.
+
+**Two decisions this hands to the maintainer, recommended and not taken:**
+
+1. **ADR 0030 accepted the rewritten lane on this gate, and the gate has now failed on the tier able
+   to fail it.** Whether ADR 0030 takes an amendment is a ruling. The recommendation is to amend it to
+   record the failure and its measured mechanism rather than to reopen the lane: the lane produces
+   valid envelopes at full coverage on both tiers, and the measured difference is mostly a question of
+   scoring unit, not of detection.
+2. **Whether clarity's critic should be asked for `instances`.** That is a skill change, a version
+   bump, and a paid re-dispatch to measure. It is not obviously an improvement: it would make clarity
+   emit more claims, and the committed run shows nearly all such claims landing on no planted defect.
 
 ## Consequences
 

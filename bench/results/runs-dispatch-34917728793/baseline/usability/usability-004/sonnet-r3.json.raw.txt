@@ -1,0 +1,34 @@
+Location: workspace-overview section, "Your projects" intro paragraph and the project list
+Evidence: "This workspace holds 4 projects, synced last week." is followed by a `<ul>` containing only three `<li>` entries (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp)
+Problem: The stated project count (4) does not match the number of projects actually listed (3), leaving it unclear whether a project is missing or the count is wrong.
+Fix: Either add the fourth project (e.g. "Q3 Roadmap," which appears later in project-settings) to the list, or correct the copy to say "3 projects."
+
+Location: overall document structure (no `<style>` or `<script>` anywhere, applies to all `<section>` elements linked via `href="#..."`)
+Evidence: Links such as `href="#invite-member"`, `href="#archive-confirm"`, `href="#invite-sent"` target sibling `<section>` elements, but the document has no CSS (e.g. `:target` rules) or script to hide non-active sections.
+Problem: The anchors imply a step-by-step "screen" flow (Save → Continue → confirmation, Cancel/Archive, etc.), but with nothing to hide inactive sections, every section renders simultaneously on one long page, defeating the intended wizard-style navigation.
+Fix: Add CSS such as `section:not(:target){display:none}` (with the initial screen shown by default) or equivalent JS show/hide logic so only one section is visible at a time.
+
+Location: project-settings, invite-member, and notification-settings form controls
+Evidence: `<input id="project-settings-name-input" type="text" value="Q3 Roadmap">`, `<input id="invite-member-email-input" type="email">`, and `<select id="notification-settings-digest-input">` — none carry a `name` attribute.
+Problem: Without `name` attributes, none of the form controls would submit identifiable data even if the forms were properly wired to a backend.
+Fix: Add appropriate `name` attributes, e.g. `name="project_name"`, `name="email"`, `name="digest_frequency"`.
+
+Location: project-settings, invite-member, and notification-settings `<form>` elements
+Evidence: `<form>` ... `<button id="project-settings-save-btn" type="submit">Save</button>` — none of the three `<form>` tags specify an `action` or `method` attribute.
+Problem: Clicking any "Save" button will trigger a real form submission (GET to the current URL) since nothing intercepts it, reloading the page and discarding the current fragment/screen state instead of performing an inline save.
+Fix: Add real `action`/`method` attributes, or add a submit handler (e.g. `onsubmit="return false"`) if this is intended to remain a client-only mockup.
+
+Location: project-settings section, duplicate button
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text or icon content, only an `aria-label`, so sighted users see a blank, unlabeled button with no indication of its purpose.
+Fix: Add visible label text (e.g. "Duplicate") or an icon plus visually-hidden text alongside the `aria-label`.
+
+Location: invite-member section
+Evidence: `<button id="invite-member-save-btn" type="submit">Save</button>` next to `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>`
+Problem: It's ambiguous which control actually sends the invite — "Save" looks like the primary action but has no defined effect, while the separate, vaguely-labeled "Continue" link is what actually advances to the "Invite sent" confirmation screen.
+Fix: Collapse this into a single control (e.g. one "Send invite" button/link that both saves and navigates to `#invite-sent`), removing the redundant, ambiguous pairing.
+
+Location: archive-confirm section, confirmation copy
+Evidence: "You can restore it at any time from the archived projects list."
+Problem: The document has no "archived projects list" screen or link anywhere, so this promised destination doesn't exist within the mockup.
+Fix: Either add an "archived projects list" section reachable from the workspace overview, or remove/rewrite the sentence so it doesn't reference a nonexistent feature.

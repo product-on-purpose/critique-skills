@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<meta charset=\"utf-8\">` is the only meta tag present; no `<meta name=\"viewport\" ...>` is included",
+      "fix": "Add `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">` to the head.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<head>` element",
+      "severity": 3,
+      "violation": "Without a viewport meta tag, this workspace UI mockup will render at desktop scale on mobile browsers, defeating the purpose of a UI mockup meant to be viewed/tested across devices."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced last week.\" followed by a `<ul>` with only three `<li>` entries (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp)",
+      "fix": "Either add the missing fourth project to the list or correct the count in the paragraph to 3.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`#workspace-overview`, intro paragraph and list",
+      "severity": 3,
+      "violation": "The stated project count (4) doesn't match the number of projects actually listed (3), an internal inconsistency."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div id=\"workspace-overview-recent\">` sits directly under the \"Your projects\" heading with no label indicating it's a partial/recent subset, despite the div's own id containing \"recent\"",
+      "fix": "Add a visible heading (e.g., \"Recent projects\") above the list, or rename the div if it is meant to be the full list.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`#workspace-overview-recent` div",
+      "severity": 3,
+      "violation": "A reader has no way to tell whether this list is meant to be the complete project list or just a \"recent\" subset, since no heading or caption communicates that distinction."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible text (e.g., \"Duplicate\") or an icon with the aria-label retained for accessibility.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`#project-settings`, duplicate button",
+      "severity": 3,
+      "violation": "The button has no visible text content or icon, so sighted users have no indication of its purpose or even that it's a distinct control - only screen reader users get the aria-label."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"project-settings-name-input\" type=\"text\" value=\"Q3 Roadmap\">`, `<input id=\"invite-member-email-input\" type=\"email\">`, `<select id=\"notification-settings-digest-input\">` - none have a `name` attribute",
+      "fix": "Add appropriate `name` attributes to each form control.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`#project-settings-name-input`, `#invite-member-email-input`, `#notification-settings-digest-input`",
+      "severity": 3,
+      "violation": "Without `name` attributes, these fields would not be included in form submission data if this mockup were wired to a real backend."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The form has a `<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` and, separately, `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>`",
+      "fix": "Remove the redundant control - e.g., have the Save button itself navigate to `#invite-sent` on success, and drop the separate Continue link.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`#invite-member` section",
+      "severity": 3,
+      "violation": "It's unclear whether clicking \"Save\" or \"Continue\" is what actually sends the invite; having both a submit button and a separate forward-navigation link for the same form creates ambiguous, overlapping affordances."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\"",
+      "fix": "Either add an archived-projects-list section/link or remove the reference to restoring from it.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`#archive-confirm`, `archive-confirm-copy` paragraph",
+      "severity": 3,
+      "violation": "The mockup has no page, section, or link anywhere for an \"archived projects list,\" so this refers to a destination that doesn't exist in the document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Both are `type=\"submit\"` buttons inside forms with no `action` attribute and no associated confirmation section or forward link, unlike the invite flow (`#invite-sent`) and archive flow (`#project-archived`) which both lead to explicit confirmation screens",
+      "fix": "Add a confirmation state/section (or at least a success message) reached after saving, matching the pattern used for invites and archiving.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "`#project-settings-save-btn` and `#notification-settings-save-btn`",
+      "severity": 3,
+      "violation": "Saving project settings or notification settings has no defined outcome or user feedback in the mockup, inconsistent with the confirmation pattern used elsewhere for state-changing actions."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-09-15T03:23:59Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

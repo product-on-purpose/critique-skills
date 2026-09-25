@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced this morning.\" followed by a `<ul>` containing only 3 `<li>` items (Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot)",
+      "fix": "Either add the missing 4th project to the list, correct the count in the paragraph to \"3 projects\", or add explicit text such as \"showing 3 most recent\" to clarify the list is not exhaustive.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<section id=\"workspace-overview\">`, the `<p>` element",
+      "severity": 3,
+      "violation": "The stated project count (4) does not match the number of projects actually listed (3), and there is no indication that the list is a partial/\"recent\" subset."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<li>Beta Launch Plan</li>`, `<li>Holiday Campaign Assets</li>`, `<li>Partner Integration Pilot</li>`",
+      "fix": "Wrap each project name in an `<a>` linking to that project's settings (or a project detail view), or remove the list if it isn't meant to be interactive.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<div id=\"workspace-overview-recent\">`, the `<ul>` of project names",
+      "severity": 3,
+      "violation": "The listed project names are plain text, not links, so there is no way to navigate into any specific project from the overview."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"workspace-overview-projects-link\" href=\"#project-settings\">Open project settings</a>`",
+      "fix": "Either scope the link per-project (e.g., one settings link per listed project) or make the target project name consistent with one of the projects shown in the overview list.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`<section id=\"workspace-overview\">`, `<a id=\"workspace-overview-projects-link\">`",
+      "severity": 3,
+      "violation": "This single generic link doesn't indicate which project's settings it opens, and it in fact opens settings for \"Vendor Onboarding\" (`project-settings-name-input` value), a project that never appears in the three-item recent list above - an unexplained inconsistency."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>` with no subsequent confirmation section or link",
+      "fix": "Add a \"settings saved\" confirmation section/state (or toast equivalent) reachable after Save, matching the pattern used for invite-member.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, `<button id=\"project-settings-save-btn\">`",
+      "severity": 3,
+      "violation": "Saving project settings has no resulting confirmation state, unlike the analogous invite flow which leads to a dedicated \"Invite sent\" section - an inconsistent and dead-end interaction."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible text (e.g., \"Duplicate\") or an icon with accompanying visible label to the button.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, `<button id=\"project-settings-duplicate-btn\">`",
+      "severity": 3,
+      "violation": "The button has no visible text content or icon, only an `aria-label`, so sighted users see an empty, unlabeled clickable element."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The duplicate button exists with no corresponding confirmation step or resulting \"project duplicated\" section, whereas `archive-confirm`/`project-archived` provide both for the comparably consequential Archive action",
+      "fix": "Add a confirmation step and/or a result state (e.g., a \"Project duplicated\" section or redirect to the new project's settings) for the Duplicate action.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, `<button id=\"project-settings-duplicate-btn\">`",
+      "severity": 3,
+      "violation": "Duplicating a project (an action that creates new data) has no confirmation and no visible outcome anywhere in the document, making the flow incomplete relative to the similarly weighted Archive flow."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` alongside `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>`",
+      "fix": "Consolidate into a single \"Send invite\" action, or clearly differentiate the two (e.g., label the submit button \"Send invite\" and remove the separate \"Continue\" link, or explain what Save persists before sending).",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`<section id=\"invite-member\">`, form and links",
+      "severity": 3,
+      "violation": "It's unclear what \"Save\" does versus \"Continue,\" since the invite is apparently sent only after clicking \"Continue\" (per the \"Invite sent\" copy), making \"Save\" a redundant or confusing control with no defined effect."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button>` with no confirmation section or link afterward",
+      "fix": "Add a confirmation state/section after saving notification settings, consistent with how other completed actions (invite, archive) confirm success.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "`<section id=\"notification-settings\">`, `<button id=\"notification-settings-save-btn\">`",
+      "severity": 3,
+      "violation": "As with project-settings, saving notification preferences has no resulting confirmation state, leaving the action a dead end."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-09-15T03:11:41Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

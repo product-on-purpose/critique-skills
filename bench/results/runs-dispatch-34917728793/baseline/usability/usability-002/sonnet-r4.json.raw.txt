@@ -1,0 +1,29 @@
+Location: `<section id="workspace-overview">`, the intro paragraph and the following list
+Evidence: "This workspace holds 5 projects, synced last week." followed by a `<ul>` containing only 4 `<li>` items (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)
+Problem: The stated project count (5) doesn't match the number of projects actually listed (4), and nothing in the visible text indicates the list is a partial/"recent" subset.
+Fix: Either add the missing fifth project to the list, correct the count to "4 projects," or add a visible label/link (e.g., "recent projects, view all") clarifying that the list is not exhaustive.
+
+Location: `<section id="project-settings">`, the form's submit button
+Evidence: `<form>...<button id="project-settings-save-btn" type="submit">Save</button></form>` with no `action` attribute on the `<form>`
+Problem: Clicking "Save" submits the form with no target action and no in-mockup navigation or confirmation, so the user gets no feedback that the rename succeeded, unlike other flows in the document that navigate to a confirmation view.
+Fix: Wire the Save button to navigate to a confirmation state (or at least add visible save-confirmation text), consistent with how other actions (e.g., invite, archive) provide feedback.
+
+Location: `<section id="project-settings">`, `project-settings-duplicate-btn`
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text content and no href/handler wiring anywhere in the document, so it renders with no visible label and does nothing when activated — a dead control inconsistent with every other interactive element in the mockup.
+Fix: Add visible button text (e.g., "Duplicate") or an icon plus link to a duplicate-confirmation section, matching the pattern used by other actions.
+
+Location: `<section id="project-settings">`, `project-settings-archive-link`
+Evidence: `<a id="project-settings-archive-link" href="#project-archived">Archive project</a>`
+Problem: This link jumps straight to the "Project archived" result screen, bypassing the dedicated `#archive-confirm` confirmation section that exists elsewhere in the document for exactly this destructive action.
+Fix: Change the href to `#archive-confirm` so the confirmation step is shown before the project is archived.
+
+Location: `<section id="archive-confirm">`
+Evidence: `<h2>Archive this project?</h2>` — no `href` anywhere in the document points to `#archive-confirm`
+Problem: This confirmation section is unreachable; no link in the document navigates to it, making it dead/orphaned content.
+Fix: Point `project-settings-archive-link` (or another appropriate trigger) at `#archive-confirm` so the section is actually reachable.
+
+Location: `<section id="notification-settings">`, form submit button
+Evidence: `<button id="notification-settings-save-btn" type="submit">Submit</button>`
+Problem: Every other save action in the document is labeled "Save" (project settings, invite member); this one is labeled "Submit," an inconsistent label for the same kind of action.
+Fix: Change the button text to "Save" for consistency with the rest of the document.

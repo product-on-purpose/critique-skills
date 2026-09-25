@@ -1,0 +1,39 @@
+Location: `<section id="workspace-overview">` paragraph
+Evidence: "This workspace holds 5 projects, synced last week." followed by a list containing only 4 `<li>` items
+Problem: The stated project count doesn't match the number of items actually shown in the list, and nothing indicates the list is a partial/recent subset.
+Fix: Either change the count to "4 projects" or add a fifth list item / label the list as "Recent projects" with a "view all" affordance.
+
+Location: `<div id="workspace-overview-recent">` list items
+Evidence: `<li>Support Backlog Triage</li>` (plain text, no anchor or link element)
+Problem: The project names in the list are not clickable, so there is no way to navigate from the overview to a specific project's settings.
+Fix: Wrap each `<li>` project name in an anchor linking to that project's settings (or a project detail view).
+
+Location: `#workspace-overview-projects-link`
+Evidence: `<a id="workspace-overview-projects-link" href="#project-settings">Open project settings</a>` leads to a form pre-filled with `value="Customer Migration"`
+Problem: "Customer Migration" is not one of the projects listed in "Your projects" (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp), so the generic settings link opens an unrelated/unlisted project.
+Fix: Either add "Customer Migration" to the projects list or make the settings link project-specific so it matches a listed project.
+
+Location: `#project-settings-duplicate-btn`
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text or icon content, so sighted users see a blank, unlabeled control even though it has an aria-label for screen readers.
+Fix: Add visible text (e.g., "Duplicate") or an icon element inside the button so its purpose is visible, not just accessible.
+
+Location: `<section id="invite-member">`
+Evidence: `<button id="invite-member-save-btn" type="submit">Save</button>` and `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>` both present in the same flow
+Problem: There are two different controls (a form submit "Save" and a separate "Continue" link) that both appear to trigger sending the invite, creating ambiguity about which one actually performs the action.
+Fix: Remove one of the two controls, or make "Continue" the form's actual submit button instead of a separate link.
+
+Location: `#project-settings-archive-link`
+Evidence: `<a id="project-settings-archive-link" href="#project-archived">Archive project</a>`
+Problem: This link jumps straight to the "Project archived" confirmation, bypassing the "Archive this project?" confirmation screen (`#archive-confirm`), which as a result has no inbound link anywhere in the document and is unreachable.
+Fix: Change the href to `#archive-confirm` so the confirmation step is shown before archiving.
+
+Location: `#archive-confirm-copy`
+Evidence: "You can restore it at any time from the archived projects list."
+Problem: The document has no "archived projects list" section or link anywhere, so this references a feature that doesn't exist in the mockup.
+Fix: Add an "Archived projects" section/link, or remove the restore claim from this copy.
+
+Location: `#notification-settings-save-btn`
+Evidence: `<button id="notification-settings-save-btn" type="submit">Submit</button>` versus `<button id="project-settings-save-btn" type="submit">Save</button>` and `<button id="invite-member-save-btn" type="submit">Save</button>`
+Problem: The same save action is labeled "Submit" here but "Save" in the other two forms, an inconsistent label for equivalent actions.
+Fix: Rename this button to "Save" to match the labeling convention used elsewhere.

@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 5 projects, synced last week.\" followed by a list with only four `<li>` items (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)",
+      "fix": "Either add the missing fifth project to the list or correct the count in the paragraph text to 4.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<section id=\"workspace-overview\">`, `<p>` element",
+      "severity": 3,
+      "violation": "The stated project count (5) does not match the number of projects actually listed (4)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"workspace-overview-projects-link\" href=\"#project-settings\">Open project settings</a>`",
+      "fix": "Rename the id to something like `workspace-overview-settings-link` to match its actual destination and label.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<section id=\"workspace-overview\">`, link `workspace-overview-projects-link`",
+      "severity": 3,
+      "violation": "The element's id says \"projects-link\" (suggesting it relates to the projects list) but it actually navigates to project settings, which is misleading for anyone maintaining or testing the markup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible label text (e.g., \"Duplicate\") or an icon with appropriate styling, keeping the aria-label for accessibility.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, button `project-settings-duplicate-btn`",
+      "severity": 3,
+      "violation": "The button has no visible text content and no icon, so sighted users have no visual indication of the control or what it does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>` has no `href` and is not linked to any subsequent section.",
+      "fix": "Either link/wire the button to a new \"project duplicated\" section showing the result, or remove the control if duplication isn't in scope for this mockup.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, button `project-settings-duplicate-btn`",
+      "severity": 3,
+      "violation": "Unlike every other interactive control in the document, this button leads nowhere and has no corresponding result screen (e.g., a \"project duplicated\" confirmation), leaving the flow a dead end."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a>`",
+      "fix": "Change the href to `#archive-confirm` so the user sees the confirmation step before the project is archived.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, link `project-settings-archive-link`",
+      "severity": 3,
+      "violation": "This link jumps directly to the \"Project archived\" result screen, bypassing the \"Archive this project?\" confirmation screen that exists elsewhere in the document for exactly this action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The section defines a full confirmation UI (\"Archive this project?\" ... Cancel / Archive links), but no `href` anywhere in the document points to `#archive-confirm`.",
+      "fix": "Point `project-settings-archive-link` (or another appropriate trigger) to `#archive-confirm` so the section becomes reachable.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`<section id=\"archive-confirm\">`",
+      "severity": 3,
+      "violation": "The section is unreachable/orphaned - there is no way to navigate into this screen through the defined flow."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"notification-settings-save-btn\" type=\"submit\">Submit</button>` versus `project-settings-save-btn` and `invite-member-save-btn`, both labeled \"Save\"",
+      "fix": "Change the button text to \"Save\" to match the labeling convention used elsewhere in the document.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`<section id=\"notification-settings\">`, button `notification-settings-save-btn`",
+      "severity": 3,
+      "violation": "This is the only save-type button in the document labeled \"Submit\" instead of \"Save,\" an inconsistent label for equivalent actions."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-09-15T02:19:44Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

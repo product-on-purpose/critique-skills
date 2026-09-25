@@ -1,0 +1,97 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "the \"project-settings-save-btn\" button submits the project-name form with no confirmation, success indication, or destination state named anywhere in the artifact",
+      "fix": "Specify a visible confirmation or status indication for each of these actions: an inline success message, a changed control state, or an explicit destination screen naming the result.",
+      "id": "F-001",
+      "instances": [
+        {
+          "evidence": "the \"invite-member-save-btn\" button submits the invite-email form with no confirmation, success indication, or destination state named; the section's separate \"Continue\" link is the only control that leads anywhere",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "the \"notification-settings-save-btn\" button submits the digest-frequency form with no confirmation or destination state named anywhere in the artifact",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        },
+        {
+          "evidence": "the \"project-settings-duplicate-btn\" button (aria-label \"Duplicate project\") names no destination state, confirmation, or any indication of what happens once it is clicked",
+          "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button"
+        }
+      ],
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "This action changes stored state or creates new state (a project-name save, a digest-frequency save, an invite save, or a project duplication) but the artifact specifies no visible indication, on this screen or elsewhere, of whether the action succeeded, so a user cannot tell it took effect."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "the \"archive-confirm\" section states \"You can restore it at any time from the archived projects list,\" but no state or control named an \"archived projects list\" (or anything reaching one) is defined anywhere in the artifact",
+      "fix": "Add a state for the archived projects list and a control reaching it (for example, from workspace-overview), or link directly to it from the archive-confirm and project-archived states.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"archive-confirm\" section",
+      "severity": 2,
+      "violation": "The design commits to a stated reversal path for archiving (an archived projects list a user can restore from) but defines no control or state anywhere in the artifact that reaches it, so the promised recovery is not actually reachable within the design as specified."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H4-INTERNAL",
+      "evidence": "the \"invite-member\" section shows a form with a \"Save\" submit button beside a separate \"Continue\" link to \"invite-sent\"; the artifact never says which of the two actually sends the invite, or how they relate",
+      "fix": "Replace the two controls with one commit action (for example a single \"Send invite\" button), or, if they are genuinely different steps, state in place what each one does and why both exist.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button and the \"invite-member-continue-link\" link",
+      "severity": 2,
+      "violation": "Two controls appear to serve the same \"send the invite\" action (Save and Continue) with no cue in the artifact distinguishing what each does or how they relate, so a user cannot tell which one is required, or what clicking the other one does."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "the \"invite-sent\" section reads \"An invite was sent to the address entered above,\" but the email address itself, entered on the prior \"invite-member\" screen, is not shown or repeated anywhere on this screen",
+      "fix": "Repeat the entered email address in the invite-sent confirmation text itself, instead of referring to it as entered \"above.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"invite-sent\" section",
+      "severity": 2,
+      "violation": "This confirmation step needs the email address the user entered to be readable in place; instead it refers to \"above,\" a value that lived on the previous screen and is not visible from here, so the user must recall it or go back to verify it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "the \"import-status\" section names the exact rows that failed (\"Rows 35, 71, 78, and 83 were skipped\") but the only control on the screen is \"Back to your projects\"; no control or link lets the user view, fix, or retry those specific rows",
+      "fix": "Add a control on the import-status screen that lets the user act on the failure, such as a link to review or re-import the skipped rows, or to the projects they needed to reference.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"import-status\" section",
+      "severity": 2,
+      "violation": "This message identifies the problem precisely but names no next step reachable from the error state itself: a user who wants to correct the 4 skipped rows has no path in the artifact to do so from here."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-09-15T03:29:49Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 5 projects, synced last week.\" followed by a list containing only 4 `<li>` items",
+      "fix": "Either change the count to \"4 projects\" or add a fifth list item / label the list as \"Recent projects\" with a \"view all\" affordance.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<section id=\"workspace-overview\">` paragraph",
+      "severity": 3,
+      "violation": "The stated project count doesn't match the number of items actually shown in the list, and nothing indicates the list is a partial/recent subset."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<li>Support Backlog Triage</li>` (plain text, no anchor or link element)",
+      "fix": "Wrap each `<li>` project name in an anchor linking to that project's settings (or a project detail view).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<div id=\"workspace-overview-recent\">` list items",
+      "severity": 3,
+      "violation": "The project names in the list are not clickable, so there is no way to navigate from the overview to a specific project's settings."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"workspace-overview-projects-link\" href=\"#project-settings\">Open project settings</a>` leads to a form pre-filled with `value=\"Customer Migration\"`",
+      "fix": "Either add \"Customer Migration\" to the projects list or make the settings link project-specific so it matches a listed project.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`#workspace-overview-projects-link`",
+      "severity": 3,
+      "violation": "\"Customer Migration\" is not one of the projects listed in \"Your projects\" (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp), so the generic settings link opens an unrelated/unlisted project."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible text (e.g., \"Duplicate\") or an icon element inside the button so its purpose is visible, not just accessible.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`#project-settings-duplicate-btn`",
+      "severity": 3,
+      "violation": "The button has no visible text or icon content, so sighted users see a blank, unlabeled control even though it has an aria-label for screen readers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` and `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>` both present in the same flow",
+      "fix": "Remove one of the two controls, or make \"Continue\" the form's actual submit button instead of a separate link.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`<section id=\"invite-member\">`",
+      "severity": 3,
+      "violation": "There are two different controls (a form submit \"Save\" and a separate \"Continue\" link) that both appear to trigger sending the invite, creating ambiguity about which one actually performs the action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a>`",
+      "fix": "Change the href to `#archive-confirm` so the confirmation step is shown before archiving.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`#project-settings-archive-link`",
+      "severity": 3,
+      "violation": "This link jumps straight to the \"Project archived\" confirmation, bypassing the \"Archive this project?\" confirmation screen (`#archive-confirm`), which as a result has no inbound link anywhere in the document and is unreachable."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\"",
+      "fix": "Add an \"Archived projects\" section/link, or remove the restore claim from this copy.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`#archive-confirm-copy`",
+      "severity": 3,
+      "violation": "The document has no \"archived projects list\" section or link anywhere, so this references a feature that doesn't exist in the mockup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"notification-settings-save-btn\" type=\"submit\">Submit</button>` versus `<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>` and `<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>`",
+      "fix": "Rename this button to \"Save\" to match the labeling convention used elsewhere.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "`#notification-settings-save-btn`",
+      "severity": 3,
+      "violation": "The same save action is labeled \"Submit\" here but \"Save\" in the other two forms, an inconsistent label for equivalent actions."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-09-15T02:25:23Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

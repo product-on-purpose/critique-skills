@@ -1,0 +1,39 @@
+Location: `<p>` inside `#workspace-overview`
+Evidence: "This workspace holds 3 projects, synced last week." followed by a list (`#workspace-overview-recent`) containing only "Data Warehouse Cutover" and "Mobile App Revamp"
+Problem: The stated project count (3) does not match the number of projects actually listed (2), and nothing marks the list as partial (e.g., "recent" only), so the discrepancy reads as an error rather than an intentional subset.
+Fix: Either update the count to match the visible list, or add a visible label such as "Recently viewed" plus a link to see all 3 projects.
+
+Location: `#workspace-overview-promo-referral`
+Evidence: "Invite 3 teammates this month to unlock the advanced reporting add-on."
+Problem: The workspace overview gives no way to see progress toward this goal (e.g., "1 of 3 invited"), and the invite flow only supports sending one invite at a time with no counter, so the user can't track whether they're close to unlocking the add-on.
+Fix: Add a progress indicator near the promo text (e.g., "1/3 invited this month") that updates as invites are sent.
+
+Location: `#workspace-overview-projects-link`
+Evidence: `<a id="workspace-overview-projects-link" href="#project-settings">Open project settings</a>`, which leads to a settings form pre-filled with `value="Design System Refresh"`
+Problem: The link is a single generic "Open project settings" action with no indication of which project it opens, and it resolves to a project ("Design System Refresh") that isn't even one of the two projects shown in the list above it, making the navigation feel disconnected from the list.
+Fix: Make each project list item a link to its own settings page, or rename the generic link to name the specific project it opens (e.g., "Open settings for Design System Refresh").
+
+Location: `#project-settings`, duplicate button
+Evidence: `<button id="project-settings-duplicate-btn" type="button"></button>`
+Problem: The button has no visible text or accessible label, so users (and screen readers) can't tell what it does.
+Fix: Add label text to the button, e.g. "Duplicate project".
+
+Location: `#invite-member`
+Evidence: A submit `Save` button inside the form, plus a separate `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>` outside the form
+Problem: There are two competing ways to proceed — a Save button that submits the form but has no visible effect, and a Continue link that navigates to the "invite sent" confirmation regardless of whether Save was clicked — making it unclear whether the invite is actually sent by Save, Continue, or both.
+Fix: Collapse this into a single action (e.g., make the Save button itself navigate to `#invite-sent` on success) and remove the redundant Continue link.
+
+Location: `#invite-sent`
+Evidence: `<h2>Invite sent</h2><p>An invite was sent to the address entered above...</p>` with no other links or buttons in the section
+Problem: This is a dead end — there is no link back to project settings or the workspace overview, so the user has no way to continue after reaching this page.
+Fix: Add a link such as "Back to project settings" or "Back to your projects," consistent with other confirmation-style sections like `#project-archived`.
+
+Location: `#invite-sent`
+Evidence: "An invite was sent to the address entered above."
+Problem: "above" refers to the email input on the previous page (`#invite-member`), which is not visible on this page, so the reference is confusing out of context.
+Fix: Reword to something that doesn't depend on layout position, e.g. "An invite was sent to the email address you entered."
+
+Location: `#archive-confirm-copy`
+Evidence: "You can restore it at any time from the archived projects list."
+Problem: No "archived projects list" page or link exists anywhere in the document, so this promises a feature the mockup doesn't provide, leaving users unable to act on it.
+Fix: Either add an archived-projects section/link reachable from the workspace overview, or remove the claim from the copy.
