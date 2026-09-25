@@ -43,7 +43,7 @@ evidence base. Revision 2 is rebuilt from that base:
 | 2 | Leaning toward one `FORMS-` namespace, not firmly | **Reframed as the one open governance question**, below. Rows use `FORMS-` as a placeholder |
 | 3 | Checkout becomes its own skill | **Done.** Filed as N5 (critique-checkout); the card-specific criteria and 12 checkout findings are seeded there, below |
 | 4 | Keep `autocomplete` in forms, sourced to the HTML standard | **Done.** `FORMS-AUTOCOMPLETE` checks tokens against the WHATWG autofill vocabulary, read today, with conversion evidence from Chrome and Zuko |
-| 5 | Try the Internet Archive; favour recent, mobile and quantified sources | **Done.** The archived Baymard article was read: it holds no data, and it contradicts newer sources, so confirm-email stays out. Mobile findings: 112 of 470 |
+| 5 | Try the Internet Archive; favour recent, mobile and quantified sources | **Done.** The archived Baymard article was read: it holds no data, and newer web.dev guidance contradicts it, so confirm-email stays out. Mobile findings: 112 of 470 |
 | 6 | Keep both `FORMAT-TOLERANCE` and `NNG-H5-PREVENT` with a stated boundary | **Applied.** Harmless or valid input is accepted and normalized; actually wrong input is prevented |
 
 ## The reuse surface
@@ -96,7 +96,7 @@ Three rules the table follows:
   and Chrome says so. They are quoted as correlations.
 - **Counter-evidence is shown beside the claim it counters**, not dropped. Two criteria carry it.
 - **A criterion needs at least two independent sources, or one controlled study with a stated
-  sample.** Two meet that bar only through expert sources, and say so (decision 7).
+  sample.** Three meet that bar only through expert sources, and say so (decision 7).
 
 Three grades the research agents assigned were corrected here: a 2023 principles book's application
 of Hick's and Fitts's laws to forms is EX, not PR (the laws are peer-reviewed; the application is
@@ -112,7 +112,7 @@ checks, most of them mobile, where the evidence is also strongest and most recen
 | # | ID | Lane | Mobile | Flags | Best evidence |
 |---|---|---|---|---|---|
 | 1 | `FORMS-INPUT-TYPE` | scripted | yes | An email, telephone, URL or search field whose `type` does not match its purpose | LS |
-| 2 | `FORMS-NUMERIC-INPUTMODE` | scripted | yes | A digit string that is not a quantity (a code, an account number, a date part) using `type="number"`, or plain text without `inputmode="numeric"` | LS, OG |
+| 2 | `FORMS-NUMERIC-INPUTMODE` | scripted | yes | A digit string that is not a quantity (a one-time code, an account or reference number, a card-like string) using `type="number"`, or plain text without `inputmode="numeric"` | LS, OG |
 | 3 | `FORMS-AUTOCOMPLETE` | scripted | yes | A personal, contact, address or credential field with no `autocomplete` token, a token outside the WHATWG vocabulary, or `autocomplete="off"` on data that is not one-time | LS |
 | 4 | `FORMS-AUTOCORRECT` | scripted | yes | A name, email, username or address field left with autocorrect, auto-capitalization or spellcheck on | LS, PR |
 | 5 | `FORMS-PLACEHOLDER-INSTRUCTION` | scripted | yes | A labelled field whose format instruction or example exists only in its placeholder | US, OG |
@@ -123,7 +123,7 @@ checks, most of them mobile, where the evidence is also strongest and most recen
 | 10 | `FORMS-PASSWORD-RULES` | scripted | no | A new-password field that forces composition through `pattern`, sets `minlength` below 8, or sets any `maxlength` | LS, OG |
 | 11 | `FORMS-CONFIRM-PASSWORD` | scripted | yes | A second "confirm password" field | OG |
 | 12 | `FORMS-ACTION-LABEL` | scripted | no | A primary submit labelled with a generic word from a fixed set (Submit, Send, OK, Go, Enter). "Continue" is excluded | EX (decision 7) |
-| 13 | `FORMS-RESET-BUTTON` | scripted | no | A reset or clear-all control in the form | US |
+| 13 | `FORMS-RESET-BUTTON` | scripted | no | A reset or clear-all control in the form | EX |
 | 14 | `FORMS-INPUT-FONT-SIZE` | scripted | yes | A text input whose font size, where the artifact's CSS determines it, is below 16px, which makes iOS zoom the page on focus | OG |
 | 15 | `FORMS-OPTION-CONTROL` | scripted | yes | A single-choice `select` with fewer than five options, where visible radio buttons would show every choice | LS, AB |
 | 16 | `FORMS-DATE-SELECTS` | scripted | yes | A memorable date, such as a birth date, entered through three `select` dropdowns | OG, US |
@@ -151,7 +151,8 @@ Figures are quoted exactly as their sources state them. Handles resolve in the
    NVDA (`govuk-blog-number-input-type`). OG: `webdev-payment-address-form`, `webdev-signin-form`;
    Silver p. 100 cites the HTML specification's own advice. LS: on an iPhone 6S the numeric
    keyboard's keys are "521% larger" in hit area than the standard keyboard's
-   (`baymard-mobile-touch-keyboards`).
+   (`baymard-mobile-touch-keyboards`). Date parts are deliberately not in scope: the same GOV.UK post
+   lists dates among the genuinely incrementable numbers where `type="number"` is acceptable.
 3. **`FORMS-AUTOCOMPLETE`.** LS, correlational: "users abandon forms 75% less frequently when they
    use autofill", and time spent filling forms is "approximately 35% lower"
    (`chrome-autofill-insights-2024`, which states the study is correlational). LS: across 215 forms,
@@ -202,7 +203,9 @@ Figures are quoted exactly as their sources state them. Handles resolve in the
     adds work and breaks with autofill). EX: Silver p. 39 (a reveal toggle instead). AN: a vendor
     case study reports "a 56% increase in conversions" from removing the field
     (`zuko-field-ux-problems`). **Confirm-email is excluded**: Baymard's archived 2011 article
-    recommends it, and newer web.dev and Silver guidance recommends against it.
+    recommends it, while web.dev (`webdev-signup-form`, `webdev-signin-form`) and
+    `silver-58-form-design-ux-best-practices` recommend against it. Silver's book addresses only the
+    password case.
 12. **`FORMS-ACTION-LABEL`.** Expert sources only: `baymard-button-design`, Wroblewski p. 78,
     `silver-form-ui-design-designlab`. The one wording result found (Unbounce, via a listicle) is
     AN. "Continue" is excluded because Wroblewski recommends it for steps of a multi-page form.
@@ -210,15 +213,17 @@ Figures are quoted exactly as their sources state them. Handles resolve in the
     Wroblewski p. 141, all on the risk of wiping entered data by accident. The closest measured
     evidence is an analogy, not a test of reset controls: in the Etre study behind Wroblewski's
     chapter 6 (six layouts, 23 participants), "26 percent of the people tested mistakenly clicked the
-    Cancel button" in the worst layout (pp. 147 to 148). Graded US on that basis, which is generous.
+    Cancel button" in the worst layout (pp. 147 to 148). Graded EX, because the analogy is not a
+    measurement of the thing the criterion flags.
 14. **`FORMS-INPUT-FONT-SIZE`.** OG: mobile text needs to be larger than desktop, "20px is about
     right on mobile" (`webdev-signin-form`). EX: "a font size of at least 16 pixels" (Silver p. 32),
     and iOS zooms the page on focus below 16px (`silver-58-form-design-ux-best-practices`,
     `silver-design-a-better-form`). Scripted only where the artifact's own CSS sets the size.
 15. **`FORMS-OPTION-CONTROL`.** LS: "55% of users across our testing were observed to open a
-    drop-down, just to see what it contained" and close it again; Baymard advises against
-    drop-downs under five options (`baymard-dropdown-usability`), which is where the threshold
-    comes from. AB: radio buttons were completed "2.5 seconds faster" than a multi-select control,
+    drop-down, just to see what it contained" and close it again, and "Drop-downs are generally a
+    poor choice for offering fewer than 5 or more than 10 options" (`baymard-dropdown-usability`),
+    which is where the threshold comes from, verbatim. The article scopes its findings to checkout
+    flows and says other contexts may deviate, so the threshold carries that caveat into forms. AB: radio buttons were completed "2.5 seconds faster" than a multi-select control,
     n = 354 per arm (`silver-form-design-principles-cxl`). EX: Silver p. 125.
 16. **`FORMS-DATE-SELECTS`.** OG with research: three text inputs, and a live service's errors
     dropped once the month field accepted names (`govuk-date-input-component`). EX: avoid three
@@ -264,7 +269,7 @@ Figures are quoted exactly as their sources state them. Handles resolve in the
     (`silver-form-ui-design-designlab`). No measured result found.
 25. **`FORMS-TOUCH-TARGET`.** OG: "the recommended target size for touchscreen objects is 7-10 mm",
     Apple suggests 48x48 px, and "the W3C suggest at least 44x44 CSS pixels" (`webdev-signin-form`;
-    web.dev's own dash, normalized here). EX: 44px (Silver p. 32), 10mm (`hoober-berkman-mobile-interfaces-2011`).
+    web.dev's own dash, normalized here). EX: 44px (Silver p. 32).
     Boundary: WCAG 2.2 SC 2.5.8 (target size) is also absent from `critique-accessibility`, noted in
     E67. Judged because rendered size depends on styling the artifact may not contain.
 
@@ -273,7 +278,7 @@ Figures are quoted exactly as their sources state them. Handles resolve in the
 **Contested by the sources themselves**, so not a criterion until the evidence settles:
 - Disabling the submit button until the form is valid: Silver and Wroblewski (p. 153) say never,
   Designlab says always, one practitioner says short forms only.
-- Confirm-email: Baymard 2011 for it, web.dev and Silver against.
+- Confirm-email: Baymard 2011 for it; web.dev and a Venture Harbour article against.
 - Validation timing: owned by microcopy, and contested (see the ownership table).
 
 **Supported, but thin or single-sourced**, deferred to a v1.1 review: a multi-select list box
@@ -347,8 +352,8 @@ to avoid. But every existing namespace names a source, and `criterion-ids.md` re
 
 Recommendation: **(a)**, with the ADR, which matches the maintainer's lean and the evidence.
 
-**7. Criteria backed only by expert sources.** `FORMS-ACTION-LABEL` and `FORMS-GROUPING` meet the
-two-source bar but have no measured result. Keep them, given how widely they are advised, or hold
+**7. Criteria backed only by expert sources.** `FORMS-ACTION-LABEL`, `FORMS-RESET-BUTTON` and `FORMS-GROUPING`
+meet the two-source bar but have no measured result. Keep them, given how widely they are advised, or hold
 them to the same measured bar as the rest and move them to v1.1.
 
 **8. `autocomplete` and target size in `critique-accessibility`.** Filed as E67. WCAG 2.2 SC 1.3.5

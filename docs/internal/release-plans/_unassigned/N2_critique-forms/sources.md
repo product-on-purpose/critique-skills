@@ -24,11 +24,11 @@ the registry, not per source, because one source can hold both a measured result
 |---|---|---|---|---|---|---|
 | `ciotti-conversion-psychology` | Conversion Psychology | Gregory Ciotti | n.d. | none: a self-published ebook (SparringMind.com) with no ISBN or stable URL, so it cannot be cited under the URL-or-ISBN rule; nothing in the registry rests on it | 2026-09-25 |  |
 | `colborne-simple-usable-2010` | Simple and Usable Web, Mobile, and Interaction Design | Giles Colborne, New Riders Press | 2011 (copyright page) | ISBN 978-0-321-70354-5 | 2026-09-25 |  |
-| `hoober-berkman-mobile-interfaces-2011` | Designing Mobile Interfaces | Steven Hoober; Eric Berkman, O'Reilly | 2011 | no ISBN printed in this copy; O'Reilly catalog 0636920013716. Verify the ISBN before citing | 2026-09-25 |  |
+| `hoober-berkman-mobile-interfaces-2011` | Designing Mobile Interfaces | Steven Hoober; Eric Berkman, O'Reilly | 2011 | no ISBN printed in this copy (O'Reilly catalog 0636920013716), so it fails the URL-or-ISBN rule and the registry does not cite it | 2026-09-25 |  |
 | `jarrett-surveys-that-work` | Surveys That Work: A Practical Guide to Creating Better Surveys | Caroline Jarrett, Rosenfeld Media | n.d. | ISBN 978-1-933820-53-8 | 2026-09-25 |  |
 | `silver-form-design-patterns` | Form Design Patterns | Adam Silver, Smashing Media AG | 2018 | ISBN 978-3-945749-73-9 | 2026-09-25 |  |
 | `universal-principles-ux-2023` | Universal Principles of UX: 100 Timeless Strategies to Create Positive Interactions between People and Technology | William Lidwell; Kritina Holden; Jill Butler | 2023 | ISBN 978-0-7603-7804-5 | 2026-09-25 |  |
-| `wroblewski-web-form-design` | Web Form Design: Filling in the Blanks | Luke Wroblewski, Rosenfeld Media | 2008 | ISBN 978-1-933820-25-5 | 2026-09-25 |  |
+| `wroblewski-web-form-design` | Web Form Design: Filling in the Blanks | Luke Wroblewski, Rosenfeld Media | 2008 | ISBN 978-1-933820-25-5 (the PDF edition read; every page number in the registry is from it). Paperback: ISBN 978-1-933820-24-8 | 2026-09-25 |  |
 
 ## Peer-reviewed papers and study reports
 
@@ -68,8 +68,8 @@ the registry, not per source, because one source can hold both a measured result
 |---|---|---|---|---|---|---|
 | `baymard-cart-abandonment-list` | 50 Cart Abandonment Rate Statistics 2026 | Baymard Institute | 2026 | https://baymard.com/lists/cart-abandonment-rate | 2026-09-25 | 64403b2071fe |
 | `baymard-dropdown-usability` | Drop-Down Usability: When You Should (and Shouldn't) Use Them | Lars Söderlund, Baymard Institute | 2025-01-28 | https://baymard.com/blog/drop-down-usability | 2026-09-25 | 624d4b0192be |
-| `baymard-mobile-touch-keyboards (also baymard-mobile-touch-keyboards-blog)` | 'Touch Keyboard' Implementations Have Improved Just 9% Since 2013 (60% Still Get it Wrong) | Christian Holst, Baymard Institute | 2015-12-15 | https://baymard.com/blog/mobile-touch-keyboards | 2026-09-25 | 5356829cb26b |
-| `baymard-touch-keyboard-cheatsheet (also baymard-touch-keyboard-types)` | Touch Keyboard Types 'Cheat Sheet' | Baymard Institute | 2019-09-09 | https://baymard.com/labs/touch-keyboard-types | 2026-09-25 | 659a6da17790 |
+| `baymard-mobile-touch-keyboards` (also `baymard-mobile-touch-keyboards-blog`) | 'Touch Keyboard' Implementations Have Improved Just 9% Since 2013 (60% Still Get it Wrong) | Christian Holst, Baymard Institute | 2015-12-15 | https://baymard.com/blog/mobile-touch-keyboards | 2026-09-25 | 5356829cb26b |
+| `baymard-touch-keyboard-cheatsheet` (also `baymard-touch-keyboard-types`) | Touch Keyboard Types 'Cheat Sheet' | Baymard Institute | 2019-09-09 | https://baymard.com/labs/touch-keyboard-types | 2026-09-25 | 659a6da17790 |
 | `chrome-autofill-insights-2024` | Autofill in action: real-world insights | Maud Nalpas, Chrome for Developers (Google) | 2024-12-17 | https://developer.chrome.com/blog/autofill-insights-2024 | 2026-09-25 | 8240b8d25aca |
 | `google-blog-chrome-autofill-2024` | How Chrome's Autofill can drive more conversions at checkout | Lokesh Khurana, Google (The Keyword / blog.google) | 2024-12-20 | https://blog.google/products/chrome/chrome-autofill/ | 2026-09-25 | 8d1f51f693f0 |
 | `zuko-25-conversion-stats` | 25 Conversion Rate Statistics you need in 2026 | Zuko Analytics | 2026 | https://www.zuko.io/blog/25-conversion-rate-statistics-you-need | 2026-09-25 | bc11bbab0d87 |
