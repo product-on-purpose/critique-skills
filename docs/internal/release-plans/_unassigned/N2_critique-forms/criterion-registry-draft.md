@@ -7,7 +7,8 @@ date: 2026-09-25
 
 # critique-forms: criterion registry draft
 
-**Status: a draft for maintainer review, not a build.** Nothing under `skills/` exists yet. This
+**Status: the research record behind [the effort's spec](spec.md), all decisions ruled.** Nothing
+under `skills/` exists yet. This
 document supplies the thing every shipped skill had before its directory was scaffolded, a
 per-skill criterion table, which for the first six lived in
 [S-05 (skills slate)](../../plan_v0.1.0/S-05_skills-slate/spec.md) and for `critique-forms` lived

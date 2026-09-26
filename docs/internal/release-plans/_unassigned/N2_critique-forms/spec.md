@@ -28,7 +28,7 @@ target-release: v0.2.0
 ### Acceptance Criteria Fulfillment
 
 - [ ] **AC-1** - `checks` and `references/` declare exactly the 24 ruled IDs, each in its ruled lane
-- [ ] **AC-2** - Every criterion row cites its sources by handle, and every handle resolves in the bibliography
+- [ ] **AC-2** - Every criterion row cites its registry sources by handle and grade, all resolving in the bibliography
 - [ ] **AC-3** - No criterion's operational test flags ground another skill owns
 - [ ] **AC-4** - The two overlap rows each name the accessibility criterion they overlap and why forms differs
 - [ ] **AC-5** - A merged envelope with scripted and judged `FORMS` findings validates with `run.rubrics` `["FORMS"]`
@@ -144,7 +144,8 @@ built skill must meet. The registry and bibliography remain its research record.
 
 5. The namespace is `FORMS`, a synthesized rubric admitted under ADR 0035's four conditions [S4].
    `rubric_sources` in `SKILL.md` lists every publisher the rubric draws on, and each criterion's
-   row names the sources that state it, by the handles the bibliography uses [S4, S3]. `checks.py`
+   row names the sources that state it, graded by strength of evidence, by the handles the
+   bibliography uses [S4, S3]. `checks.py`
    passes `["FORMS"]` as its rubric list [S4].
 6. No figure the registry lists as untraceable to a primary source is cited as measured, anywhere in
    the skill [S2].
@@ -196,8 +197,9 @@ built skill must meet. The registry and bibliography remain its research record.
 AC-1: `SKILL.md`'s `checks.scripted` and `checks.judged`, and the rows of the skill's `references/`
 criterion tables, declare exactly the 24 IDs in Requirements 1, each in the lane shown there. [S2, S5]
 
-AC-2: Every criterion row in `references/` names its sources by bibliography handle, and every handle
-it names resolves to a row of the committed bibliography. [S3, S4]
+AC-2: Every criterion row in `references/` cites the sources the registry lists for it, by
+bibliography handle and with the registry's evidence grade, and every handle resolves to a row of the
+committed bibliography. [S2, S3, S4]
 
 AC-3: No criterion's operational test in `references/` flags ground listed in Requirements 7. [S2]
 
@@ -259,7 +261,18 @@ submit button labelled "Submit". Forms reports `FORMS-ACTION-LABEL` on the butto
 about the missing label (`WCAG-3.3.2` and `NNG-H6-LABELED` own it) or the error text (the `NNG-EM`
 set owns it).
 
-### Example 3: a routing contest (AC-8)
+### Example 3: where a row's sources go (AC-2)
+
+The template says the Operationalization column cites its source by `rubric_sources.id`, and the
+shipped skills do, for example "(NNG-HEURISTICS, heuristic 1)" [S6]. ADR 0035 moves `FORMS`
+attribution to the row at source level [S4], so a forms row cites article-level handles instead,
+for example `FORMS-INPUT-TYPE` citing `baymard-mobile-touch-keyboards` (LS) and
+`webdev-signin-form` (OG), while `rubric_sources` lists the publishers behind those handles. The
+self-test checks neither granularity: it validates each `rubric_sources` entry's fields and the
+Operationalization column's quotation marks, not the citations themselves (checked 2026-09-25), so
+AC-2 is verified by review or by a script over the rows and the bibliography.
+
+### Example 4: a routing contest (AC-8)
 
 "Can you review the usability of this sign-up form?" is contested between `critique-forms`
 and `critique-usability`. Each description's boundary clause names the other, and the joint-routing
@@ -340,8 +353,9 @@ prose [S2], which paraphrases those notes a second time.
 - **Method:** a separate checker located each line's quoted passage in the saved copy (web pages
   as saved, books and PDFs through their text conversions), read the surrounding passage, and
   judged meaning, strength and scope.
-- **Result: 41 of 41 faithful.** Every quote was found at its locator. Three lines strengthen their
-  source mildly, and the checker judged each within tolerance. A `webdev-signin-form` line drops
+- **Result: 41 of 41 within tolerance (38 exact, 3 mildly strengthened).** Every quote was found
+  at its locator. The checker judged the three strengthenings faithful; they are listed here so the
+  reader can judge them too. A `webdev-signin-form` line drops
   the source's "probably" from its advice to put labels above inputs. A Wroblewski line turns
   the book's observation that list boxes are rarely used into advice to avoid them. A second
   Wroblewski line adds disabling the button as an example of preventing a duplicate submission.
