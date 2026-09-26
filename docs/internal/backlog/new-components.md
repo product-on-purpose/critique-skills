@@ -123,7 +123,10 @@ prioritized ahead of deck**. The order is now:
   [ADR 0035](../decisions/0035-synthesized-rubric-namespace.md); the two scripted expert-only rules
   kept and grouping deferred; accessibility expanded first (E67). The registry is 24 criteria, 18
   scripted and 6 judged.
-- **Status:** registry ruled 2026-09-25; the next artifact is the effort's `spec.md`.
+- **Status:** registry ruled 2026-09-25. **Spec drafted 2026-09-25**:
+  [spec.md](../release-plans/_unassigned/N2_critique-forms/spec.md), 12 acceptance criteria and three
+  open questions for the maintainer (D1 real-forms threshold, D2 consistency gate for a v0.2.0 skill,
+  D3 keep `FORMS-AUTOCOMPLETE`). The build follows once the spec is committed.
 
 ## N3 - critique-dataviz (chart critique, Tufte and Cairo)
 

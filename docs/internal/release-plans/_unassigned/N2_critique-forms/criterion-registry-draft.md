@@ -1,7 +1,7 @@
 ---
 title: critique-forms criterion registry, draft for maintainer review
 effort: N2 (critique-forms)
-status: draft, revision 2, all decisions ruled
+status: research record behind spec.md; revision 2, all decisions ruled
 date: 2026-09-25
 ---
 
@@ -15,6 +15,10 @@ nowhere. It sits in `_unassigned/` by the `plab-spec` convention but is not a sp
 decisions are ruled, the ruled registry becomes this effort's `spec.md`, with acceptance criteria,
 and this file becomes its research record. Every source is listed in the
 [bibliography](sources.md).
+
+**That has now happened: [the effort's spec](spec.md) was drafted on 2026-09-25** and holds the
+acceptance criteria. It restates the 24 IDs and their lanes so its criteria do not move when this
+file does; the evidence for each criterion stays here.
 
 ## What revision 2 is
 
@@ -345,4 +349,4 @@ when the artifact itself carries the relevant CSS or attribute, and stay silent 
 | 7 | **(c) Keep the two scripted expert-only rules, defer grouping** | `FORMS-ACTION-LABEL` and `FORMS-RESET-BUTTON` stay, labelled as expert consensus. `FORMS-GROUPING` moves to "Left out" until a measured study is found. The registry is 24 criteria |
 | 8 | **(b) Expand `critique-accessibility` now** | Found while preparing this decision: the skill implements **22 of WCAG 2.2's 55 Level A and AA success criteria**. Four are declared out of reach, and 29 are never mentioned, while its scope statement claims A and AA "required for AA conformance". E67 now carries that corrected scope and the ruling: add the criteria checkable from static markup and CSS (1.3.4, 1.3.5, 2.4.7, 2.5.8, 4.1.3), as a new version with a paid re-measure, confirmed before dispatch. Narrowing the claim for what remains uncovered follows as E68 |
 
-Nothing in this registry is still open. The next artifact is the effort's `spec.md`.
+Nothing in this registry is still open. The effort's spec is [spec.md](spec.md).
