@@ -13,15 +13,17 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- **`critique-forms` has a spec: 12 acceptance criteria that decide when the skill is done.**
+- **`critique-forms` has a spec: 13 acceptance criteria that decide when the skill is done.**
   [N2 (critique-forms)](docs/internal/backlog/new-components.md) now has
   [spec.md](docs/internal/release-plans/_unassigned/N2_critique-forms/spec.md), drafted with
   `plab-spec` from the ruled registry. It follows S-05 (skills slate): the spec restates the 24 IDs
   and lanes once and gates on them, rather than turning each criterion into an acceptance
   criterion. Two criteria are new: a scripted-lane check on at least 10 real production forms
   before any paid run, because the registry records that lane's real-world error rate as
-  unmeasured, and a ship or hold verdict against the baseline and the consistency floor. Three
-  questions are left open for the maintainer. A seeded 10% sample of the research paraphrases
+  unmeasured, and a ship or hold verdict against the baseline and the consistency floor. The
+  maintainer ruled the real-forms bar the same day: a scripted criterion with more false alarms
+  than correct findings on real forms is fixed or handed to the judged lane before the paid run
+  (AC-13). Two questions remain open. A seeded 10% sample of the research paraphrases
   behind the registry (41 of 408) was checked against the saved sources for the first time: all
   41 were within tolerance, three of them mildly strengthened, and none of those affects a criterion.
 

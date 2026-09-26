@@ -8,8 +8,8 @@ updated: 2026-09-25
 linked-effort: docs/internal/backlog/new-components.md
 linked-plan: null
 linked-release: null
-ac-count: 12
-source-count: 14
+ac-count: 13
+source-count: 15
 requires-human-review: true
 spec-dependencies: [S-04, S-05]
 target-release: v0.2.0
@@ -22,8 +22,8 @@ target-release: v0.2.0
 **Status:** draft
 **Last updated:** 2026-09-26 00:45 (UTC) by plab-spec
 **Linked plan:** not yet planned
-**Open questions:** 3 (see Open Questions section)
-**Revisions:** 0 (see Revisions section)
+**Open questions:** 2 (see Open Questions section)
+**Revisions:** 1 (see Revisions section)
 
 ### Acceptance Criteria Fulfillment
 
@@ -39,6 +39,7 @@ target-release: v0.2.0
 - [ ] **AC-10** - A committed real-forms report classifies the scripted lane's findings on at least 10 forms
 - [ ] **AC-11** - The README scoreboard shows forms and baseline at k=5 on both tiers from one run set
 - [ ] **AC-12** - A recorded ship or hold verdict cites the figures against the baseline and the consistency floor
+- [ ] **AC-13** - No scripted criterion firing 3+ times on real forms has more false alarms than correct findings
 
 ### Currently In Progress
 
@@ -182,7 +183,11 @@ built skill must meet. The registry and bibliography remain its research record.
 11. Before any paid run, the scripted lane is checked against real production forms, because
     Requirement 3 leaves its real-world error rate unmeasured [S2]. The number of forms (at least 10)
     is a judgment [model-inference]. Copies of third-party forms are kept locally and never
-    committed, the same rule the research record follows [S3].
+    committed, the same rule the research record follows [S3]. The check is a gate, ruled before
+    any result exists: a scripted criterion whose false alarms outnumber its correct findings on
+    the real forms is fixed or moved to the judged lane before the paid run, and a criterion that
+    fires fewer than three times across the set is reported as inconclusive rather than failed
+    [S15].
 12. Forms and the frozen baseline are measured at k=5 on both pinned tiers, through the shipped
     harness, in one run set [S9, S12]. ADR 0031 found that the shipped harness's sonnet figures do
     not reproduce the committed p3 figures. Measuring both arms in one run set keeps the comparison
@@ -243,6 +248,9 @@ AC-12: A recorded ship or hold verdict cites `critique-forms`' measured figures 
 consistency floor in force when it was measured. On a hold, the skill stays in the tree marked
 `incubating`, with its numbers published. [S7, S5, S8, model-inference]
 
+AC-13: Before any paid dispatch, no scripted criterion that fired three or more times across the
+real-forms set has more false alarms than correct findings on it. [S15, S2]
+
 ## Behavior / Examples
 
 ### Example 1: a scripted finding and its overlap (AC-1, AC-4)
@@ -292,6 +300,7 @@ fixture records the expected winner and the sibling it is contested with.
 | Date | Author | Type | Description |
 |------|--------|------|-------------|
 | 2026-09-25 | Claude (plab-spec) | added | Initial draft from the ruled criterion registry, revision 2 |
+| 2026-09-25 | Claude (plab-spec) | added | D1 (real-forms threshold) ruled Option A: Requirements 11 extended, AC-13 added |
 
 ## Sources & Evidence
 
@@ -324,6 +333,8 @@ fixture records the expected winner and the sibling it is contested with.
 - **[S13]** Eval fixtures, including joint-routing case kinds and hand-scoring - `evals/README.md` -
   class A
 - **[S14]** Agent navigation entrypoint, CI job table and bench run rules - `AGENTS.md` - class A
+- **[S15]** Maintainer ruling on D1 (real-forms threshold), 2026-09-25 - this spec, Open Questions,
+  D1 - class A
 
 ### Unverified Claims
 
@@ -368,11 +379,11 @@ prose [S2], which paraphrases those notes a second time.
 
 | ID | Title | Resolution | Status | Updated |
 |----|-------|------------|--------|---------|
-| D1 | Real-forms threshold | (none) | Open | (none) |
+| D1 | Real-forms threshold | Option A, with a three-firing minimum | Decided | 2026-09-25 |
 | D2 | Consistency gate for a v0.2.0 skill | (none) | Open | (none) |
 | D3 | Keep `FORMS-AUTOCOMPLETE` | (none) | Open | (none) |
 
-### D1: Real-forms threshold (Open)
+### D1: Real-forms threshold (Decided)
 
 **Summary.** What result from the real-forms report (AC-10) blocks the paid dispatch?
 
@@ -396,12 +407,13 @@ as inconclusive rather than gated.
 
 ---
 
-> **Maintainer decision:** _(pending)_
+> **Maintainer decision:** Option A
 >
-> * **Status:** Open
-> * **Choice:** (none)
-> * **Reasoning:** (none)
-> * **Decided by / date:** (none)
+> * **Status:** Decided
+> * **Choice:** Option A. A criterion that fires fewer than three times across the set is reported
+>   as inconclusive rather than failed.
+> * **Reasoning:** Agreed with the recommendation.
+> * **Decided by / date:** Jonathan Prisant, 2026-09-25
 
 ### D2: Consistency gate for a v0.2.0 skill (Open)
 
