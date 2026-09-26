@@ -13,6 +13,22 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **`critique-forms` has a spec: 13 acceptance criteria that decide when the skill is done.**
+  [N2 (critique-forms)](docs/internal/backlog/new-components.md) now has
+  [spec.md](docs/internal/release-plans/_unassigned/N2_critique-forms/spec.md), drafted with
+  `plab-spec` from the ruled registry. It follows S-05 (skills slate): the spec restates the 24 IDs
+  and lanes once and gates on them, rather than turning each criterion into an acceptance
+  criterion. Two criteria are new: a scripted-lane check on at least 10 real production forms
+  before any paid run, because the registry records that lane's real-world error rate as
+  unmeasured, and a ship or hold verdict against the baseline and the consistency floor. The
+  maintainer ruled the real-forms bar the same day: a scripted criterion with more false alarms
+  than correct findings on real forms is fixed or handed to the judged lane before the paid run
+  (AC-13). The other two were ruled the same day: the consistency gate is whichever rule is in
+  force on the day the paid run is approved, with the judged-lane figure published but not
+  gating, and `FORMS-AUTOCOMPLETE` stays, graded by what happens to autofill. A seeded 10% sample of the research paraphrases
+  behind the registry (41 of 408) was checked against the saved sources for the first time: all
+  41 were within tolerance, three of them mildly strengthened, and none of those affects a criterion.
+
 - **`critique-forms` has a ruled criterion registry, and a namespace convention to hold it.** [N2 (critique-forms)](docs/internal/backlog/new-components.md) had a why-gate verdict and no criteria. It now has 24: 18 scripted and 6 judged, most of them mobile-first. They were rebuilt from 75 sources and 470 findings, and every one of the 135 figures in the research record was re-verified against a saved copy of its source. The draft and a committed [bibliography](docs/internal/release-plans/_unassigned/N2_critique-forms/sources.md) live under `docs/internal/release-plans/_unassigned/N2_critique-forms/`. Copies of the sources stay in the maintainer's gitignored `_local/`, so no copyrighted text is committed. The maintainer ruled all nine decisions in two rounds on 2026-09-25. **[ADR 0035](docs/internal/decisions/0035-synthesized-rubric-namespace.md)** records the most structural one: a namespace may name a rubric this library synthesized from several publishers, `FORMS`, when most of its rules are stated independently by more than one of them. Naming one of six publishers would have credited the other five's finding to it, which is the misattribution ADR 0019 exists to prevent. Checkout became its own proposed skill, N5.
 
 - **`critique-accessibility` checks 22 of WCAG 2.2's 55 Level A and AA criteria, while its scope statement claims A and AA "required for AA conformance".** This was found while preparing an N2 decision, and checked against the W3C text: 31 A and 24 AA. Four criteria are declared out of reach (they need a live page), and the other 29 are never mentioned. It was first filed as "two missing criteria", which understated the gap about fourteenfold. The maintainer ruled to expand first, as [E67](docs/internal/backlog/enhancements.md), adding the criteria checkable from static markup (1.3.4, 1.3.5, 2.4.7, 2.5.8, 4.1.3) in a new version with a paid re-measure. Narrowing the claim for the remainder follows as E68.
