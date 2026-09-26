@@ -124,9 +124,9 @@ prioritized ahead of deck**. The order is now:
   kept and grouping deferred; accessibility expanded first (E67). The registry is 24 criteria, 18
   scripted and 6 judged.
 - **Status:** registry ruled 2026-09-25. **Spec drafted 2026-09-25**:
-  [spec.md](../release-plans/_unassigned/N2_critique-forms/spec.md), 13 acceptance criteria. D1
-  (real-forms threshold) ruled the same day; two questions remain open for the maintainer (D2
-  consistency gate for a v0.2.0 skill, D3 keep `FORMS-AUTOCOMPLETE`). The build follows once the spec is committed.
+  [spec.md](../release-plans/_unassigned/N2_critique-forms/spec.md), 13 acceptance criteria. All three
+  open questions were ruled the same day: D1 (real-forms threshold), D2 (consistency gate for a
+  v0.2.0 skill) and D3 (keep `FORMS-AUTOCOMPLETE`). The build follows once the spec is committed.
 
 ## N3 - critique-dataviz (chart critique, Tufte and Cairo)
 

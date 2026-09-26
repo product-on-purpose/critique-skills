@@ -23,7 +23,9 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   unmeasured, and a ship or hold verdict against the baseline and the consistency floor. The
   maintainer ruled the real-forms bar the same day: a scripted criterion with more false alarms
   than correct findings on real forms is fixed or handed to the judged lane before the paid run
-  (AC-13). Two questions remain open. A seeded 10% sample of the research paraphrases
+  (AC-13). The other two were ruled the same day: the consistency gate is whichever rule is in
+  force on the day the paid run is approved, with the judged-lane figure published but not
+  gating, and `FORMS-AUTOCOMPLETE` stays, graded by what happens to autofill. A seeded 10% sample of the research paraphrases
   behind the registry (41 of 408) was checked against the saved sources for the first time: all
   41 were within tolerance, three of them mildly strengthened, and none of those affects a criterion.
 

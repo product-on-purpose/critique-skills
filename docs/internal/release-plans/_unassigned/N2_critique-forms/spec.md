@@ -9,7 +9,7 @@ linked-effort: docs/internal/backlog/new-components.md
 linked-plan: null
 linked-release: null
 ac-count: 13
-source-count: 15
+source-count: 17
 requires-human-review: true
 spec-dependencies: [S-04, S-05]
 target-release: v0.2.0
@@ -22,8 +22,8 @@ target-release: v0.2.0
 **Status:** draft
 **Last updated:** 2026-09-26 00:45 (UTC) by plab-spec
 **Linked plan:** not yet planned
-**Open questions:** 2 (see Open Questions section)
-**Revisions:** 1 (see Revisions section)
+**Open questions:** 0 (see Open Questions section)
+**Revisions:** 2 (see Revisions section)
 
 ### Acceptance Criteria Fulfillment
 
@@ -170,7 +170,11 @@ built skill must meet. The registry and bibliography remain its research record.
    mobile-usability sizes than its 24 by 24 CSS pixel minimum. E67 adds both WCAG criteria to
    accessibility. In each pair, accessibility cites conformance and forms cites the autofill and
    mobile-usability evidence. Each skill's description points to the other for the other angle
-   [S2].
+   [S2]. Forms grades its autocomplete finding by what happens to autofill, which accessibility's
+   pass-or-fail conformance finding cannot: a personal field with no token is severity 2, because
+   the browser falls back to guessing and may still fill it; a token outside the standard's
+   vocabulary, or `autocomplete="off"` on address or credential data, is severity 3, because
+   autofill is certainly broken [S3, S17].
 9. Forms borders three siblings. Each pair (forms with accessibility, usability and microcopy) needs
    a boundary clause in both skills' descriptions and contested cases in the joint-routing fixture
    [S2, S6, S13].
@@ -192,9 +196,15 @@ built skill must meet. The registry and bibliography remain its research record.
     harness, in one run set [S9, S12]. ADR 0031 found that the shipped harness's sonnet figures do
     not reproduce the committed p3 figures. Measuring both arms in one run set keeps the comparison
     inside one harness [model-inference, drawn from S12].
-13. A skill that does not beat the baseline does not ship [S7]. The consistency floor is 0.309,
-    read on the overall lane cut [S8]. ADR 0022 set that floor for v0.1.0 stretch skills. Applying it
-    to a v0.2.0 skill is an inference this spec makes, pending Open Question D2 [model-inference].
+13. A skill that does not beat the baseline does not ship [S7]. The consistency gate is the rule
+    in force on the day the maintainer approves the paid k=5 dispatch: ADR 0022's floor of 0.309
+    on the overall lane cut [S8], or E26's per-lane threshold if E26 has replaced it by then [S16].
+    Forms' judged-lane consistency is published beside it and does not gate, as ADR 0022 does for
+    the judged cut [S16, S8]. Clearing the floor is weak evidence for this skill: 18 of its 24
+    criteria are scripted and repeat exactly, so it clears a pooled floor almost by construction,
+    and the floor was set on a different run set and harness from the one forms is measured
+    through. A pass is not evidence that the judged lane is steady. The comparison that can fail
+    forms is AC-12's, against the baseline inside one run set [S16, S12].
 14. Every paid dispatch needs the maintainer's go-ahead before it runs [S2].
 
 ## Acceptance Criteria
@@ -245,8 +255,8 @@ tiers, from one run set produced by the shipped harness. [S9, S12]
 
 AC-12: A recorded ship or hold verdict cites `critique-forms`' measured figures against the baseline
 (seeded recall at equal or better precision, on at least one pinned tier) and against the
-consistency floor in force when it was measured. On a hold, the skill stays in the tree marked
-`incubating`, with its numbers published. [S7, S5, S8, model-inference]
+consistency gate in force on the day the paid dispatch was approved. On a hold, the skill stays
+in the tree marked `incubating`, with its numbers published. [S7, S5, S8, S16]
 
 AC-13: Before any paid dispatch, no scripted criterion that fired three or more times across the
 real-forms set has more false alarms than correct findings on it. [S15, S2]
@@ -261,6 +271,13 @@ A sign-up form has `<input id="email" name="email" type="text">`. The scripted l
 `FORMS-AUTOCOMPLETE` fires too, citing the autofill completion evidence. Once E67 lands,
 `critique-accessibility` reports the missing token as a WCAG 1.3.5 conformance failure. The two
 findings name the same attribute for different reasons, which is the recorded overlap.
+
+A valid `autocomplete` value is not always one word. The HTML standard's grammar allows an
+optional `section-` group, an optional `shipping` or `billing` token, a contact type such as
+`work` or `mobile` before a telephone or email field, the field name itself, and an optional
+trailing `webauthn` [S3]. So `section-blue shipping street-address` and `work tel` are both
+valid, and `FORMS-AUTOCOMPLETE` judges a value against that grammar, not against a flat list of
+field names. A flat-list check would flag valid values and fail the real-forms gate (AC-13).
 
 ### Example 2: ground forms leaves alone (AC-3)
 
@@ -301,6 +318,7 @@ fixture records the expected winner and the sibling it is contested with.
 |------|--------|------|-------------|
 | 2026-09-25 | Claude (plab-spec) | added | Initial draft from the ruled criterion registry, revision 2 |
 | 2026-09-25 | Claude (plab-spec) | added | D1 (real-forms threshold) ruled Option A: Requirements 11 extended, AC-13 added |
+| 2026-09-25 | Claude (plab-spec) | clarified | D2 (consistency gate) and D3 (keep `FORMS-AUTOCOMPLETE`) ruled Option A: Requirements 13 rewritten from the D2 ruling and AC-12 names the gate in force on the dispatch approval day; Requirements 8 gains the D3 severity grading; Example 1 gains the autofill grammar note |
 
 ## Sources & Evidence
 
@@ -335,14 +353,16 @@ fixture records the expected winner and the sibling it is contested with.
 - **[S14]** Agent navigation entrypoint, CI job table and bench run rules - `AGENTS.md` - class A
 - **[S15]** Maintainer ruling on D1 (real-forms threshold), 2026-09-25 - this spec, Open Questions,
   D1 - class A
+- **[S16]** Maintainer ruling on D2 (consistency gate for a v0.2.0 skill), 2026-09-25 - this spec,
+  Open Questions, D2 - class A
+- **[S17]** Maintainer ruling on D3 (keep `FORMS-AUTOCOMPLETE`, graded by effect on autofill),
+  2026-09-25 - this spec, Open Questions, D3 - class A
 
 ### Unverified Claims
 
 - "The number of forms (at least 10) is a judgment" - appears in Requirements 11 and AC-10
 - "Measuring both arms in one run set keeps the comparison inside one harness" - appears in
   Requirements 12
-- "Applying it to a v0.2.0 skill is an inference this spec makes" - appears in Requirements 13 and
-  AC-12
 
 ### Gaps
 
@@ -380,8 +400,8 @@ prose [S2], which paraphrases those notes a second time.
 | ID | Title | Resolution | Status | Updated |
 |----|-------|------------|--------|---------|
 | D1 | Real-forms threshold | Option A, with a three-firing minimum | Decided | 2026-09-25 |
-| D2 | Consistency gate for a v0.2.0 skill | (none) | Open | (none) |
-| D3 | Keep `FORMS-AUTOCOMPLETE` | (none) | Open | (none) |
+| D2 | Consistency gate for a v0.2.0 skill | Option A, gate fixed on the dispatch approval day | Decided | 2026-09-25 |
+| D3 | Keep `FORMS-AUTOCOMPLETE` | Option A, severity graded by effect on autofill | Decided | 2026-09-25 |
 
 ### D1: Real-forms threshold (Decided)
 
@@ -415,7 +435,7 @@ as inconclusive rather than gated.
 > * **Reasoning:** Agreed with the recommendation.
 > * **Decided by / date:** Jonathan Prisant, 2026-09-25
 
-### D2: Consistency gate for a v0.2.0 skill (Open)
+### D2: Consistency gate for a v0.2.0 skill (Decided)
 
 **Summary.** Does ADR 0022's 0.309 overall-lane floor gate `critique-forms`?
 
@@ -436,14 +456,20 @@ to E26 without reopening this spec.
 
 ---
 
-> **Maintainer decision:** _(pending)_
+> **Maintainer decision:** Option A
 >
-> * **Status:** Open
-> * **Choice:** (none)
-> * **Reasoning:** (none)
-> * **Decided by / date:** (none)
+> * **Status:** Decided
+> * **Choice:** Option A. The gate is whichever rule is in force on the day the maintainer
+>   approves the paid k=5 dispatch: 0.309 on the overall lane cut, or E26's threshold if it has
+>   landed. Forms' judged-lane consistency is published beside it and does not gate.
+> * **Reasoning:** Agreed with the recommendation, sharpened on review. A 75% scripted skill
+>   clears a pooled floor almost by construction, and the floor comes from a different run set
+>   and harness, so a pass must not be read as evidence the judged lane is steady. AC-12's
+>   baseline comparison is the test that can fail forms. The only judged-lane floor on record,
+>   0.090, is one ADR 0022 itself calls no gate, so the judged figure is published, not gated.
+> * **Decided by / date:** Jonathan Prisant, 2026-09-25
 
-### D3: Keep `FORMS-AUTOCOMPLETE` (Open)
+### D3: Keep `FORMS-AUTOCOMPLETE` (Decided)
 
 **Summary.** Keep `FORMS-AUTOCOMPLETE` as a deliberate overlap, or leave `autocomplete` to
 `critique-accessibility` alone?
@@ -464,9 +490,13 @@ reversal as reversible at spec time [S2]. Once this spec is committed, dropping 
 
 ---
 
-> **Maintainer decision:** _(pending)_
+> **Maintainer decision:** Option A
 >
-> * **Status:** Open
-> * **Choice:** (none)
-> * **Reasoning:** (none)
-> * **Decided by / date:** (none)
+> * **Status:** Decided
+> * **Choice:** Option A. Keep the criterion, with severity graded by its effect on autofill:
+>   a missing token is severity 2, a token outside the standard or `off` on address or
+>   credential data is severity 3.
+> * **Reasoning:** Agreed with the recommendation. The grading is what forms adds that
+>   accessibility's pass-or-fail conformance finding cannot, which makes the overlap two
+>   findings rather than one found twice.
+> * **Decided by / date:** Jonathan Prisant, 2026-09-25
