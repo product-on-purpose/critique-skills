@@ -126,7 +126,8 @@ prioritized ahead of deck**. The order is now:
 - **Status:** registry ruled 2026-09-25. **Spec drafted 2026-09-25**:
   [spec.md](../release-plans/_unassigned/N2_critique-forms/spec.md), 13 acceptance criteria. All three
   open questions were ruled the same day: D1 (real-forms threshold), D2 (consistency gate for a
-  v0.2.0 skill) and D3 (keep `FORMS-AUTOCOMPLETE`). The build follows once the spec is committed.
+  v0.2.0 skill) and D3 (keep `FORMS-AUTOCOMPLETE`). **Committed 2026-09-27** (PR 54, `8249f61`);
+  the build is next, stopping before the paid k=5 dispatch.
 
 ## N3 - critique-dataviz (chart critique, Tufte and Cairo)
 

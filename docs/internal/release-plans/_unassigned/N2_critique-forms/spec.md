@@ -2,9 +2,9 @@
 id: N2
 title: "critique-forms, a form-usability critique skill"
 type: spec
-status: draft
+status: committed
 created: 2026-09-25
-updated: 2026-09-25
+updated: 2026-09-27
 linked-effort: docs/internal/backlog/new-components.md
 linked-plan: null
 linked-release: null
@@ -19,11 +19,11 @@ target-release: v0.2.0
 
 ## Task Summary
 
-**Status:** draft
-**Last updated:** 2026-09-26 00:45 (UTC) by plab-spec
+**Status:** committed
+**Last updated:** 2026-09-28 00:09 (UTC) by Claude, recording the maintainer's merge
 **Linked plan:** not yet planned
 **Open questions:** 0 (see Open Questions section)
-**Revisions:** 2 (see Revisions section)
+**Revisions:** 3 (see Revisions section)
 
 ### Acceptance Criteria Fulfillment
 
@@ -319,6 +319,7 @@ fixture records the expected winner and the sibling it is contested with.
 | 2026-09-25 | Claude (plab-spec) | added | Initial draft from the ruled criterion registry, revision 2 |
 | 2026-09-25 | Claude (plab-spec) | added | D1 (real-forms threshold) ruled Option A: Requirements 11 extended, AC-13 added |
 | 2026-09-25 | Claude (plab-spec) | clarified | D2 (consistency gate) and D3 (keep `FORMS-AUTOCOMPLETE`) ruled Option A: Requirements 13 rewritten from the D2 ruling and AC-12 names the gate in force on the dispatch approval day; Requirements 8 gains the D3 severity grading; Example 1 gains the autofill grammar note |
+| 2026-09-27 | Jonathan Prisant | closed | Status draft to committed: PR 54 merged as `8249f61`. The acceptance criteria are now contract; later changes follow the append-only revision rule |
 
 ## Sources & Evidence
 
