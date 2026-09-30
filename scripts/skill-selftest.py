@@ -297,10 +297,26 @@ def check_frontmatter(skill_dir: Path) -> tuple[dict[str, Any] | None, list[Issu
     except FrontmatterError as exc:
         return None, [Issue("frontmatter-unparseable", str(skill_md), str(exc))]
 
-    required = ("name", "description", "version", "license", "rubric_sources", "checks")
+    required = ("name", "description", "license", "rubric_sources", "checks")
     for key in required:
         if key not in fm or fm[key] in (None, ""):
             issues.append(Issue("frontmatter-missing-field", key, f"frontmatter is missing '{key}'"))
+
+    # The version is `metadata.version` (Standard sec 3.7; the toolkit's U16 makes a top-level one an
+    # error from Standard 0.14). A top-level `version` is reported as misplaced rather than as missing,
+    # so an author following an old template is told where it went.
+    metadata = fm.get("metadata")
+    version = metadata.get("version") if isinstance(metadata, dict) else None
+    if "version" in fm:
+        issues.append(
+            Issue(
+                "frontmatter-version-misplaced",
+                "version",
+                "version is declared at the top level; Standard sec 3.7 places it under metadata, as metadata.version",
+            )
+        )
+    elif version in (None, ""):
+        issues.append(Issue("frontmatter-missing-field", "metadata.version", "frontmatter is missing 'metadata.version'"))
 
     name = fm.get("name")
     if isinstance(name, str) and name:
@@ -317,9 +333,10 @@ def check_frontmatter(skill_dir: Path) -> tuple[dict[str, Any] | None, list[Issu
                 Issue("frontmatter-name-invalid", "name", f"'{name}' does not match 'critique-<domain>'")
             )
 
-    version = fm.get("version")
     if isinstance(version, str) and version and not SEMVER_RE.match(version):
-        issues.append(Issue("frontmatter-version-invalid", "version", f"'{version}' is not semantic-version-shaped"))
+        issues.append(
+            Issue("frontmatter-version-invalid", "metadata.version", f"'{version}' is not semantic-version-shaped")
+        )
 
     description = fm.get("description")
     if isinstance(description, str) and description and len(description) < 40:

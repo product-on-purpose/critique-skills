@@ -1,7 +1,8 @@
 ---
 name: critique-toy
 description: "Reviews short markdown field-operations notices, memos, and similar prose documents against the toy TOY-* grammar, covering a passive-voice recast that deletes the actor, a hedging phrase stacked ahead of an otherwise direct statement, and a subheading left with no body before the next heading of equal or higher level. Use when the user asks for a review, feedback, a second opinion, a red-line pass, or a quality check on one of this fixture's worked-example documents. This is the skill template's own committed fixture, not a shipped critique-family skill, and it is never registered in library.json."
-version: 0.1.0
+metadata:
+  version: 0.1.0
 license: Apache-2.0
 rubric_sources:
   - id: TOY

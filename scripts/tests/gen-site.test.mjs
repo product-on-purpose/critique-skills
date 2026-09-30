@@ -312,7 +312,8 @@ function buildGuardFixture(t) {
       "---",
       "name: critique-fixture",
       'description: "Reviews fixtures. Use when testing."',
-      "version: 0.1.0",
+      "metadata:",
+      "  version: 0.1.0",
       "license: Apache-2.0",
       "rubric_sources:",
       "  - id: OPENSTD",
@@ -446,7 +447,8 @@ const FIXTURE_SKILL = [
   "---",
   "name: critique-fixture",
   'description: "Reviews fixtures. Use when testing. See critique-sibling for the other half."',
-  "version: 0.2.0",
+  "metadata:",
+  "  version: 0.2.0",
   "license: Apache-2.0",
   "rubric_sources:",
   "  - id: OPENSTD",
@@ -512,6 +514,19 @@ test("parseSkill throws on a missing frontmatter block and on a missing scalar",
     () => parseSkill(["---", "name: x", "---", "", "body"].join("\n"), "x/SKILL.md"),
     /no description/,
   );
+});
+
+test("parseSkill reads the version from metadata only, and names a top-level one as misplaced", () => {
+  // Standard sec 3.7 puts it under metadata (toolkit U16, an error from Standard 0.14).
+  const topLevel = FIXTURE_SKILL.replace("metadata:\n  version: 0.2.0", "version: 0.2.0");
+  assert.notEqual(topLevel, FIXTURE_SKILL);
+  assert.throws(() => parseSkill(topLevel, "x/SKILL.md"), /top level; Standard sec 3\.7/);
+  const absent = FIXTURE_SKILL.replace("metadata:\n  version: 0.2.0\n", "");
+  assert.notEqual(absent, FIXTURE_SKILL);
+  assert.throws(() => parseSkill(absent, "x/SKILL.md"), /no metadata\.version/);
+  // A deeper key named version under metadata is not the skill's version.
+  const nested = FIXTURE_SKILL.replace("  version: 0.2.0", "  source:\n    version: 9.9.9");
+  assert.throws(() => parseSkill(nested, "x/SKILL.md"), /no metadata\.version/);
 });
 
 test("extractIntro keeps the prose above the first H2 and drops the protocol below it", () => {

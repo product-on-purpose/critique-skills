@@ -78,6 +78,7 @@ from contract.validate import validate_document  # noqa: E402
 # Only CONTRACT_VERSION: since ADR 0030's fidelity half the skill does its own ranking, bounding
 # and summarising, and the harness no longer keeps a second copy of that logic.
 from skills._shared.envelope import CONTRACT_VERSION  # noqa: E402
+from skills._shared.merge import read_skill_version  # noqa: E402
 
 LIBRARY_JSON = ROOT / "library.json"
 DEFAULT_CORPUS_DIR = ROOT / "bench" / "corpus"
@@ -131,7 +132,6 @@ def resolve_filter(skills: list[str], raw_filter: str) -> list[str]:
 _FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
 _SCRIPTED_BLOCK_RE = re.compile(r"^  scripted:\n((?:    - .+\n?)+)", re.MULTILINE)
 _JUDGED_BLOCK_RE = re.compile(r"^  judged:\n((?:    - .+\n?)+)", re.MULTILINE)
-_VERSION_RE = re.compile(r"^version:\s*(\S+)\s*$", re.MULTILINE)
 
 
 def _extract_list_block(body: str, pattern: re.Pattern[str]) -> list[str]:
@@ -145,7 +145,7 @@ def parse_skill_frontmatter(skill_md_text: str) -> dict[str, Any]:
     """A restricted parser for this repository's own SKILL.md frontmatter shape
     (docs/internal/skill-template.md): a YAML block delimited by '---' lines, with
     'checks: scripted: / judged:' as two-space-indented keys and their criterion ids as
-    four-space '- ID' items, and a top-level 'version:' scalar. Not a general YAML parser; every
+    four-space '- ID' items, and the version under 'metadata:'. Not a general YAML parser; every
     SKILL.md in this repository is hand-written to exactly this shape (verified against all six
     launch skills), and this function raises rather than guess at a different one.
 
@@ -162,8 +162,10 @@ def parse_skill_frontmatter(skill_md_text: str) -> dict[str, Any]:
     body = match.group(1)
     scripted = _extract_list_block(body, _SCRIPTED_BLOCK_RE)
     judged = _extract_list_block(body, _JUDGED_BLOCK_RE)
-    version_match = _VERSION_RE.search(body)
-    version = version_match.group(1) if version_match else "0.1.0"
+    # No default: `skill_version` is part of every result's identity key, so a guessed "0.1.0"
+    # would file a 0.1.1 skill's cells under the wrong version without a word. read_skill_version
+    # raises ValueError instead, which run_grid records as the cell's failure before any model call.
+    version = read_skill_version(skill_md_text)
     rubrics = sorted({criterion.split("-", 1)[0] for criterion in scripted + judged})
     return {"scripted": scripted, "judged": judged, "rubrics": rubrics, "version": version}
 

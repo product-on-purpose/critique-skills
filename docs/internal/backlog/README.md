@@ -98,12 +98,11 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**32 items depend on nothing and can start today.** Derived from each item's own
+**30 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
 |---|---|---|---|
-| E62 | Rule the Standards-watch commitment, and the 0.12 pin it is measured against | S | v0.1.x |
 | E13 | Update ROADMAP.md's v0.1.x section: two of four verification items are met | S | v0.1.x |
 | E28 | Pin or record the Claude Code CLI version bench.yml installs | S | v0.1.x |
 | E29 | Make release.yml's re-run suite match what it claims to run | S | v0.1.x |
@@ -122,7 +121,6 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E51 | Give the precision and corpus-provenance limitations a retirement path or an explicit 'accepted' | S | unscheduled |
 | E52 | Decide who performs 'revise' in the automated revision loop before building it | S | v0.3.0 |
 | E59 | Verify what the marketplace consumes the homepage field for | S | unscheduled |
-| E66 | Decide whether to re-measure the full grid through the shipped harness | S | unscheduled |
 | E10 | Rule how BYOR is measured under the measured-only exclusion | M | v0.2.0 |
 | E22 | Turn on severity_expected scoring | M | v0.2.0 |
 | E23 | Write methodology.md's location-level metrics section | M | v0.2.0 |
