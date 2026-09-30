@@ -1390,3 +1390,30 @@ and the repository did not have.
 - **Blocks:** Nothing
 - **Depends on:** E67
 - **Rank at intake:** unranked (added 2026-09-25). **Status:** backlog.
+
+## E69 - Revisit ADR 0011's npm option now that the toolkit ships on npm
+
+- **Target:** `docs/internal/decisions/0011-gate-wiring-toolkit-wrapper.md`, `scripts/check.mjs`,
+  `scripts/gen-plugin-manifest.mjs`, `scripts/gen-index.mjs`, and `TOOLKIT_REF` in
+  `.github/workflows/ci.yml` and `release.yml`
+- **Change:** ADR 0011 set aside its second option, depending on `agent-skills-toolkit` as an npm
+  package, because "the toolkit does not currently ship as a versioned npm package for this
+  purpose". It now does: `npx agent-skills-toolkit@1.19.0 .` graded this repository Convergent, 0
+  errors, 0 warnings on 2026-09-30. Done: either a recorded decision to move the gate to a pinned
+  npm version, or a dated note in ADR 0011 saying why the checkout wrapper stays.
+- **Why:** The wrapper needs a toolkit checkout beside the repository and pins an untagged commit.
+  A pinned npm version would be a tagged release that `npm audit` and dependency tooling can see.
+  Against moving now: npm `1.19.0` ships Standard 0.16, while this repository declares 0.17 from
+  `a2a54fa`, so switching today would grade against an older edition. The wrapper also adds this
+  repository's own site guards, and the generators reach the toolkit through the same checkout.
+- **Evidence:** ADR 0011 "Considered options" item 2; `npm view agent-skills-toolkit version` read
+  `1.19.0` on 2026-09-30; the npx run above. The same adoption surfaced two toolkit findings, filed
+  as the toolkit's E76 (`selfValidation` has no wrapper value) and E77 (an older grader is silent
+  about a newer declared Standard) in agent-skills-toolkit PR 352.
+- **Derives from:** E62 (Standard version pin), closed 2026-09-30.
+- **Size:** S to decide. **Release:** unscheduled. **Category:** decision. **Confidence:** verified
+  for the premise, inference for the trade-off.
+- **Blocks:** Nothing
+- **Depends on:** Nothing. The natural moment is the toolkit's first npm release that carries
+  Standard 0.17.
+- **Rank at intake:** unranked (added 2026-09-30). **Status:** backlog.
