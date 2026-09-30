@@ -131,7 +131,8 @@ def _write_fake_skill(repo_root: Path, skill: str, *, scripted: list[str], judge
     skill_md = (
         "---\n"
         f"name: {skill}\n"
-        f"version: {version}\n"
+        "metadata:\n"
+        f"  version: {version}\n"
         "checks:\n"
         "  scripted:\n"
         f"{scripted_lines}\n"
@@ -249,7 +250,8 @@ def test_parse_skill_frontmatter_reads_judged_criteria_and_derives_rubrics_by_na
     text = (
         "---\n"
         "name: critique-toy\n"
-        "version: 0.1.0\n"
+        "metadata:\n"
+        "  version: 0.1.0\n"
         "checks:\n"
         "  scripted:\n"
         "    - TOY-ALPHA\n"
@@ -271,7 +273,8 @@ def test_parse_skill_frontmatter_derives_rubrics_from_criterion_namespace_not_ru
     text = (
         "---\n"
         "name: critique-microcopy\n"
-        "version: 0.1.0\n"
+        "metadata:\n"
+        "  version: 0.1.0\n"
         "rubric_sources:\n"
         "  - id: NNG-EM\n"
         "checks:\n"
@@ -283,6 +286,18 @@ def test_parse_skill_frontmatter_derives_rubrics_from_criterion_namespace_not_ru
     )
     frontmatter = parse_skill_frontmatter(text)
     assert frontmatter["rubrics"] == ["NNG"]
+
+
+def test_parse_skill_frontmatter_without_a_version_raises_rather_than_guessing() -> None:
+    """It used to default a missing version to "0.1.0". `skill_version` is part of every result's
+    identity key, so after the move to metadata.version that default would have filed
+    critique-accessibility 0.1.1's cells under 0.1.0 without an error."""
+    base = "---\nname: critique-toy\n{version}checks:\n  scripted:\n    - TOY-ALPHA\n  judged:\n    - TOY-BETA\n---\n"
+    with pytest.raises(ValueError, match="no metadata.version"):
+        parse_skill_frontmatter(base.format(version=""))
+    with pytest.raises(ValueError, match="top level"):
+        parse_skill_frontmatter(base.format(version="version: 0.1.1\n"))
+    assert parse_skill_frontmatter(base.format(version="metadata:\n  version: 0.1.1\n"))["version"] == "0.1.1"
 
 
 def test_parse_skill_frontmatter_missing_block_raises() -> None:

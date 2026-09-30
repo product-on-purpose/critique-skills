@@ -1194,7 +1194,30 @@ and the repository did not have.
 - **Blocks:** An honest conformance claim at any tier, since the claim is scoped to the pinned
   Standard rather than the current one
 - **Depends on:** Nothing
-- **Rank at intake:** unranked (added 2026-09-15, by E11's sweep). **Status:** backlog.
+- **RULED 2026-09-30 by the maintainer: adopt, and move now, before `critique-forms` is built.**
+  `TOOLKIT_REF` moves to `a2a54fa` (Standard 0.17, amended 2026-09-20), 297 commits past
+  `cafe6b6`, and `library.json` declares `standard` `0.17`. The figures above were measured
+  2026-09-15; by the ruling the distance had grown to five minors and seven weeks. Graded against
+  0.17 before the move, the gate reported exactly six errors and nothing else, all U16: each skill
+  declared `version` at the top level of its frontmatter, and Standard sec 3.7 places it under
+  `metadata`.
+- **Why it had to precede forms.** The move is not one line per skill. `skills/_shared/merge.py`
+  and `bench/run_bench.py` read the version with an unindented `^version:` pattern. After the move,
+  merge.py would have failed for every skill, and run_bench.py would have silently recorded its
+  default, `0.1.0`, as the `skill_version` that keys every result. A forms skill written from the
+  old template would also have been born failing the current Standard. Both readers now share
+  `read_skill_version()`, which refuses a top-level `version` by name and has no default.
+- **One consequence of the bump.** `INDEX.md`'s self-validating line now reads
+  `npx agent-skills-toolkit .`. The toolkit's `selfValidation` field (Standard 0.13) makes an absent
+  value mean `npx`, which the Standard calls correct for a plugin that consumes the toolkit rather
+  than vendoring it. That describes this repository ([ADR 0011](../decisions/0011-gate-wiring-toolkit-wrapper.md)),
+  so declaring `"vendored"` to keep the old line would have been false. `node scripts/check.mjs`
+  remains the gate `AGENTS.md` names.
+- **Not decided by this ruling:** the standing commitment to adopt new Standard minors within one
+  release. It is a public promise, so it goes to the maintainer with E12 and E13 (the ROADMAP
+  re-cut). `a2a54fa` is untagged, as `cafe6b6` was; re-pin to the toolkit's v1.20.0 tag once it is
+  cut.
+- **Rank at intake:** unranked (added 2026-09-15, by E11's sweep). **Status:** CLOSED 2026-09-30.
 
 ## E63 - Bring the dispatch run sets into results.json, or amend the rule they break
 
@@ -1299,7 +1322,13 @@ and the repository did not have.
   **Confidence:** verified.
 - **Blocks:** Retiring the "measured through the old mechanism" caveat on every published figure
 - **Depends on:** Nothing
-- **Rank at intake:** unranked (added 2026-09-25). **Status:** backlog.
+- **RULED 2026-09-30 by the maintainer: do not re-measure the grid now.** The v0.1.0 figures
+  stand as the measurement of record, with the caveat ADR 0030's 2026-09-25 amendment already
+  carries. Each skill is re-measured through the shipped harness when a release changes that skill.
+  The first harness-native figures arrive with `critique-forms` at no extra cost: its spec's AC-12
+  measures forms and the baseline arm in one run set through `bench.yml`. E67 (accessibility
+  expansion) changes `critique-accessibility` and so forces the second.
+- **Rank at intake:** unranked (added 2026-09-25). **Status:** CLOSED 2026-09-30.
 
 ## E67 - Expand critique-accessibility with the WCAG 2.2 AA criteria checkable from static markup
 

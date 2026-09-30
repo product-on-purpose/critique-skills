@@ -365,9 +365,32 @@ export function parseSkill(content, sourcePath) {
 
   // Read the required scalars before anything nested, so a SKILL.md missing its description
   // reports that rather than reporting whichever deeper structure happened to be checked first.
+  // The version is `metadata.version` (Standard sec 3.7; the toolkit's U16 makes a top-level one an
+  // error from Standard 0.14). A top-level `version` is named as the old placement rather than
+  // reported as missing, and only direct children of `metadata:` are read.
+  const metadataVersion = () => {
+    if (/^version:/m.test(fm)) {
+      throw new Error(
+        `gen-site: ${sourcePath} declares version at the top level; Standard sec 3.7 (U16) places it under metadata.`,
+      );
+    }
+    const lines = fm.split(/\r?\n/);
+    const start = lines.findIndex((line) => /^metadata:\s*$/.test(line));
+    let childIndent = null;
+    for (const line of start === -1 ? [] : lines.slice(start + 1)) {
+      if (line.trim() === "") continue;
+      if (/^\S/.test(line)) break;
+      const indent = line.match(/^\s+/)[0];
+      childIndent ??= indent;
+      const hit = line.match(/^(\s+)version:\s*(.+)$/);
+      if (hit && hit[1] === childIndent) return hit[2].trim().replace(/^"/, "").replace(/"$/, "").trim();
+    }
+    throw new Error(`gen-site: ${sourcePath} frontmatter has no metadata.version.`);
+  };
+
   const name = scalar("name");
   const description = scalar("description");
-  const version = scalar("version");
+  const version = metadataVersion();
   const license = scalar("license");
 
   // rubric_sources: a list of objects, walked line by line for the same reason the lanes are.

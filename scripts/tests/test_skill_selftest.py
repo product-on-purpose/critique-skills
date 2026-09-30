@@ -58,7 +58,8 @@ SKILL_NAME = "critique-toy"
 SKILL_MD = """---
 name: critique-toy
 description: Reviews a prose document against a fixture rubric. Use when the user asks for a review, feedback, a second opinion, a red-line pass, or a quality check on a draft.
-version: 0.1.0
+metadata:
+  version: 0.1.0
 license: Apache-2.0
 rubric_sources:
   - id: TOY
@@ -534,6 +535,32 @@ def test_name_directory_mismatch_fails(tmp_path):
     _fm, errors = selftest.check_frontmatter(renamed)
 
     assert "frontmatter-name-mismatch" in rule_names(errors)
+
+
+def test_top_level_version_is_reported_as_misplaced_not_missing(tmp_path):
+    """Standard sec 3.7 puts the version under metadata (toolkit U16, an error from Standard 0.14).
+    An author following a pre-0.14 template should be told where it went, not that it is absent."""
+    skill_dir = write_valid_skill(tmp_path)
+    moved_back = SKILL_MD.replace("metadata:\n  version: 0.1.0\n", "version: 0.1.0\n")
+    assert moved_back != SKILL_MD
+    (skill_dir / "SKILL.md").write_text(moved_back, encoding="utf-8")
+
+    _fm, errors = selftest.check_frontmatter(skill_dir)
+
+    names = rule_names(errors)
+    assert "frontmatter-version-misplaced" in names
+    assert not any(e.rule == "frontmatter-missing-field" and e.path == "metadata.version" for e in errors)
+
+
+def test_missing_metadata_version_fails(tmp_path):
+    skill_dir = write_valid_skill(tmp_path)
+    removed = SKILL_MD.replace("metadata:\n  version: 0.1.0\n", "")
+    assert removed != SKILL_MD
+    (skill_dir / "SKILL.md").write_text(removed, encoding="utf-8")
+
+    _fm, errors = selftest.check_frontmatter(skill_dir)
+
+    assert any(e.rule == "frontmatter-missing-field" and e.path == "metadata.version" for e in errors)
 
 
 def test_missing_checks_py_fails(tmp_path):

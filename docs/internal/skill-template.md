@@ -181,14 +181,36 @@ checks:
 |---|---|---|
 | `name` | string | `critique-<domain>`, equals the directory name exactly. |
 | `description` | string, >=40 chars | Pushy trigger surface. See "Writing the description" below. |
-| `version` | string | Semantic version, no leading `v` (`0.1.0`). |
+| `metadata.version` | string, inside a `metadata:` mapping | Semantic version, no leading `v` (`0.1.0`). See "Where the version goes" below. |
 | `license` | string | `Apache-2.0`, matching the repository license ([ADR 0005](decisions/0005-licensing-apache-and-cc-by.md)). Skills are code and documentation, not bench-corpus content, so the CC-BY-4.0 corpus license does not apply here. |
 | `rubric_sources` | sequence of mappings | One entry per source. See "rubric_sources" below. |
 | `checks` | mapping | `scripted` and `judged`, each a sequence of criterion IDs. See "Lane manifest" below. |
 
 `scripts/skill-selftest.py` fails distinctly (its own `rule` name) on a missing required field, an
-unparseable frontmatter block, a `name` that does not match the directory, an invalid `version`, and
-every failure mode named below; see "Self-test" for the full list.
+unparseable frontmatter block, a `name` that does not match the directory, a missing, misplaced or
+invalid `metadata.version`, and every failure mode named below; see "Self-test" for the full list.
+
+### Where the version goes
+
+The version sits under `metadata`, directly after `description`, the same shape as
+`agents/critique-critic.md`:
+
+```yaml
+name: critique-toy
+description: "Reviews ... Use when ..."
+metadata:
+  version: 0.1.0
+license: Apache-2.0
+```
+
+Standard sec 3.7 places it there, and the toolkit's U16 check makes a top-level `version` an error
+from Standard 0.14 onwards. This repository moved to that placement when it adopted Standard 0.17
+([E62 (Standard version pin)](backlog/enhancements.md)). A top-level `version` is not ignored
+anywhere in this repository: `skill-selftest.py` reports it as `frontmatter-version-misplaced`, and
+`skills/_shared/merge.py`'s `read_skill_version()`, which both the critic's envelope assembly and
+`bench/run_bench.py` use, refuses it by name. The same number is written twice more, as the
+`library.json` entry and as `scripts/checks.py`'s `skill_version=` argument, and a version bump
+changes all three: `skills/_shared/tests/test_read_skill_version.py` fails when they disagree.
 
 ### Writing the description
 
@@ -787,7 +809,7 @@ message).
 | Check | What it verifies | Failure `rule`(s), representative |
 |---|---|---|
 | Frontmatter parses | The block is readable in this document's restricted dialect. A block-scalar indicator (`>-`, `\|`) is reported separately, because the generic parse error names the continuation line rather than the indicator that caused it. | `frontmatter-block-scalar-unsupported`, `frontmatter-unparseable` |
-| Frontmatter contract | Every required field present and shaped correctly; `name` matches the directory and the `critique-<domain>` pattern; `rubric_sources` entries complete with a valid `operationalization`. | `frontmatter-missing-field`, `frontmatter-name-mismatch`, `frontmatter-name-invalid`, `frontmatter-version-invalid`, `frontmatter-rubric-source-invalid` |
+| Frontmatter contract | Every required field present and shaped correctly; `name` matches the directory and the `critique-<domain>` pattern; `rubric_sources` entries complete with a valid `operationalization`. | `frontmatter-missing-field`, `frontmatter-name-mismatch`, `frontmatter-name-invalid`, `frontmatter-version-misplaced`, `frontmatter-version-invalid`, `frontmatter-rubric-source-invalid` |
 | Lane declaration | `checks.scripted` and `checks.judged` are both present. | `frontmatter-checks-lane-missing` (AC-2: "missing lane declaration") |
 | Lane shape | A declared lane holds a list of criterion IDs, or is empty. A lane holding a scalar is a different defect from an absent lane and reports separately. | `frontmatter-checks-lane-invalid`, `frontmatter-criterion-id-invalid` |
 | Lane overlap | No criterion ID appears in both lanes. | `lane-overlap` (AC-2: "criterion in both lanes") |
@@ -838,7 +860,7 @@ not by this self-test.
 
 1. Create `skills/critique-<domain>/` with every path in "Directory shape" (empty files are fine to
    start).
-2. Write `SKILL.md`: frontmatter first (name, description, version, license, rubric_sources, checks),
+2. Write `SKILL.md`: frontmatter first (name, description, `metadata.version`, license, rubric_sources, checks),
    then the body in the required order, copying the four-pass and delegation blocks above verbatim
    and adapting only the criteria and domain nouns.
 3. Write `references/<source-id>.md` per rubric source: the seven-column criterion table, one row per

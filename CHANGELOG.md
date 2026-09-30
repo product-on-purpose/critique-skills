@@ -95,6 +95,27 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - **The fidelity gate's own receipts were not in the repository, while the figures computed from them were.** Run `31988100372`'s 39 envelopes had sat on an unmerged branch since 2026-08-17 while `CHANGELOG.md`, [ADR 0031](docs/internal/decisions/0031-fidelity-gate-acceptance-band.md) and the published site all carried the numbers derived from them. They land as `bench/results/runs-dispatch-31988100372/`, the third run-set root after `runs/` and `runs-cal1/`. `contract/validate_envelopes` discovers run sets by globbing `runs*`, so they went from unvalidated-on-a-branch to checked on every CI run with no wiring change: **541 valid, up from 502.** The set is 39 rather than 40 because `critique-clarity/clarity-001/haiku-r1.json` never landed, which is the same 19-of-20 coverage gap ADR 0031 rebuilt its acceptance band over. **They feed no published number and structurally cannot**: `results.json` carries a single top-level `run_set` that this dispatch is not in, and ADR 0031 treats the run as a check against the measurement of record rather than a replacement for it. The `## Provenance` section of `bench/results/README.md` had ended by naming exactly what would close its open mechanism question, "a re-measurement through a committed harness with its output committed alongside a log, which is what the first live `bench.yml` dispatch would establish"; that dispatch is now committed, and the new text is equally explicit about the half it does not close, which is `runs-cal1/`'s accessibility comparison, the five other skills, and sonnet.
 
+### Changed
+
+- **The repository now follows Standard 0.17, and every skill declares its version under
+  `metadata`.** [E62 (Standard version pin)](docs/internal/backlog/enhancements.md) was ruled on
+  2026-09-30. `library.json` declares Standard `0.17` instead of `0.12`, and CI's `TOOLKIT_REF`
+  moves from `cafe6b6` to `a2a54fa`, 297 toolkit commits later. Graded against 0.17, the gate
+  reported six errors and nothing else. All six were U16: each `SKILL.md` declared `version` at the
+  top level, where Standard sec 3.7 says nothing reads it. The six skills and the template fixture
+  now declare it under `metadata`, as `agents/critique-critic.md` already did, and no version number
+  changed. The move was not one line per skill, because two readers matched only an unindented
+  `version:`. `skills/_shared/merge.py` would have failed for every skill. `bench/run_bench.py`
+  would have silently recorded its default, `0.1.0`, as the `skill_version` that files every result.
+  Both now call one shared `read_skill_version()`. It reads the frontmatter block only, refuses a
+  top-level `version` by name, and has no default. `gen-site.mjs` and `skill-selftest.py` apply the
+  same rule, the second under a new rule name, `frontmatter-version-misplaced`, and the skill
+  template teaches the new placement. A new test also holds `checks.py`'s `skill_version=` equal to
+  `SKILL.md`, a third copy of the number that nothing compared before. `INDEX.md` now names
+  `npx agent-skills-toolkit .` as its self-validating command, which is the Standard's form for a
+  plugin that consumes the toolkit rather than vendoring it. `node scripts/check.mjs` remains this
+  repository's gate.
+
 ### Fixed
 
 - **S-07 AC-4 is met, and the blocker that held it was self-inflicted.** Tag `v9.9.9` was pushed against manifests all reading `0.1.6`, and `release.yml` did exactly what the criterion requires: the guard step **failed**, and the RELEASE-NOTES extract and Create-GitHub-release steps were both **skipped**. The guard named all three manifests individually rather than failing on the first, and no release was created. The tag was deleted from the remote immediately after. That closes the last unchecked criterion in the S-07 spec: all six now pass. **The blocker is worth recording because it was a misreading, not a permission.** The criterion says "in a scratch clone", which was read as "in a scratch repository" and therefore as needing a `delete_repo` token scope to clean up after. A pushed tag makes GitHub check out a clean clone on a runner, so the criterion was satisfiable all along, in this repository, with the token already in hand. The intent behind the wording was never "use a different repository", it was "do not test in the working tree the thing was authored in", which is the same reason P4's local replay was judged insufficient for AC-1. **What the test added over what already existed** is worth stating, because it was nearly skipped as ceremony: the guard already had six unit tests covering this exact scenario and `release.yml` had already succeeded on five real tags, but none of that covered the negative path on real infrastructure. The guard had never once been observed blocking anything, which is the same shape as three defects this repository has already found in itself: the `ci-ok` job that would have passed green without `if: always()`, Gold checks G1 and G3 passing vacuously, and the Standard's section 7.1 requirement having no check module at all.

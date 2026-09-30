@@ -66,7 +66,52 @@ _WHITESPACE_RE = re.compile(r"\s+")
 # contract/critique-contract.schema.json: $defs/locationText, and $defs/finding's own properties.
 _PROSE_FIELD_MAX_LENGTH = {"location": 400, "evidence": 2000, "violation": 1000, "fix": 1000}
 
-_VERSION_RE = re.compile(r"^version:\s*(\S+)\s*$", re.MULTILINE)
+# The skill version is `metadata.version` (Standard sec 3.7; the toolkit's U16 makes a top-level
+# `version` an error from Standard 0.14). A top-level one is the pre-0.14 placement, reported as
+# that rather than as a missing field, so an author following an old template learns where it went.
+_TOP_LEVEL_VERSION_RE = re.compile(r"^version:")
+_NESTED_KEY_RE = re.compile(r"^(\s+)version:\s*(\S+)\s*$")
+
+
+def read_skill_version(skill_md_text: str) -> str:
+    """Return `metadata.version` from a SKILL.md's frontmatter, or raise ValueError.
+
+    Reads the frontmatter block only, so a body line that happens to start with `version:` is never
+    mistaken for the declaration, and reads only direct children of `metadata:`. Raises with a
+    distinct message for a missing block, a top-level `version`, and an absent `metadata.version`.
+    Shared with `bench/run_bench.py`, which once defaulted a missing version to "0.1.0" and so
+    would have recorded every moved skill under the wrong `skill_version` without an error.
+    """
+    lines = skill_md_text.lstrip("﻿").splitlines()
+    if not lines or lines[0].strip() != "---":
+        raise ValueError("SKILL.md has no '---' delimited frontmatter block")
+    close = next((i for i in range(1, len(lines)) if lines[i].strip() == "---"), None)
+    if close is None:
+        raise ValueError("SKILL.md frontmatter has no closing '---' delimiter")
+    frontmatter = lines[1:close]
+    if any(_TOP_LEVEL_VERSION_RE.match(line) for line in frontmatter):
+        raise ValueError(
+            "SKILL.md declares version at the top level of its frontmatter; Standard sec 3.7 places it "
+            "under metadata (toolkit check U16, an error from Standard 0.14), as metadata.version"
+        )
+    in_metadata = False
+    child_indent: str | None = None
+    for line in frontmatter:
+        if not line.strip():
+            continue
+        if not line[0].isspace():
+            in_metadata = line.rstrip() == "metadata:"
+            child_indent = None
+            continue
+        if not in_metadata:
+            continue
+        indent = line[: len(line) - len(line.lstrip())]
+        if child_indent is None:
+            child_indent = indent
+        match = _NESTED_KEY_RE.match(line)
+        if match and match.group(1) == child_indent:
+            return match.group(2).strip("\"'")
+    raise ValueError("SKILL.md frontmatter declares no metadata.version")
 
 
 class MergeError(RuntimeError):
@@ -165,10 +210,10 @@ def _skill_version(skill: str, *, repo_root: Path) -> str:
     skill_md = repo_root / "skills" / skill / "SKILL.md"
     if not skill_md.is_file():
         raise MergeError(f"{skill_md} does not exist; is --skill spelled correctly?")
-    match = _VERSION_RE.search(skill_md.read_text(encoding="utf-8"))
-    if not match:
-        raise MergeError(f"{skill_md} declares no version: in its frontmatter")
-    return match.group(1)
+    try:
+        return read_skill_version(skill_md.read_text(encoding="utf-8"))
+    except ValueError as exc:
+        raise MergeError(f"{skill_md}: {exc}") from exc
 
 
 def assemble(

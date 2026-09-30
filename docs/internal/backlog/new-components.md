@@ -128,6 +128,12 @@ prioritized ahead of deck**. The order is now:
   open questions were ruled the same day: D1 (real-forms threshold), D2 (consistency gate for a
   v0.2.0 skill) and D3 (keep `FORMS-AUTOCOMPLETE`). **Committed 2026-09-27** (PR 54, `8249f61`);
   the build is next, stopping before the paid k=5 dispatch.
+- **Build decisions, ruled 2026-09-30 by the maintainer.** The build runs through
+  `askit-build-skill` in fallback mode, as E11 (askit adoption) ruled. It wraps the template's 17
+  steps and runs askit's toolkit steps against the pinned toolkit. The AC-8 joint-routing runs are
+  pre-approved: local `claude -p` calls, k=3, on sonnet and haiku. The paid k=5 dispatch still needs
+  its own approval. E62 (Standard version pin) moved first, so forms is written with
+  `metadata.version`.
 
 ## N3 - critique-dataviz (chart critique, Tufte and Cairo)
 
