@@ -30,44 +30,63 @@ Patch-scope only: bug reports on scripted checks, contract schema errata, severi
 
 The largest piece of this version is a verification pass that was structurally impossible before the first push to a public remote, because it depends on things that do not exist in a private, unpushed repository:
 
-- **Live Actions planted-failure checks.** Each CI job that is supposed to fail on a bad input needs to actually run on GitHub's infrastructure and actually fail, not just look correct on inspection.
-- **Tag-guard end to end, from a scratch clone.** `release.yml`'s version guard has to be exercised against a fresh clone rather than the working tree it was authored in.
-- **CI runtime measurement**, targeted under 4 minutes, which can only be measured once CI is running on real infrastructure instead of being reasoned about from the workflow YAML.
-- **The first live `bench.yml` dispatch**, to confirm the reproduction harness reproduces the numbers that were generated during the agentic build run, on infrastructure the maintainer does not control end to end.
+- **Live Actions planted-failure checks.** Each CI job that is supposed to fail on a bad input needs to actually run on GitHub's infrastructure and actually fail, not just look correct on inspection. **(Met 2026-09-14.)**
+- **Tag-guard end to end, from a scratch clone.** `release.yml`'s version guard has to be exercised against a fresh clone rather than the working tree it was authored in. **(Met 2026-09-15.)**
+- **CI runtime measurement**, targeted under 4 minutes, which can only be measured once CI is running on real infrastructure instead of being reasoned about from the workflow YAML. **(Met 2026-09-14: 31, 41 and 67 seconds across three `main` runs.)**
+- **The first live `bench.yml` dispatch**, to confirm the reproduction harness reproduces the numbers that were generated during the agentic build run, on infrastructure the maintainer does not control end to end. **(Run 2026-08-17 on Haiku and 2026-09-15 on Sonnet. The answer was no.)** On Sonnet, the rewritten harness does not reproduce the published figures within their measured run-to-run spread. The published v0.1.0 figures therefore stand as the measurement of record, with that caveat stated beside them ([ADR 0030](docs/internal/decisions/0030-replace-the-api-key-in-the-bench-harness.md), amended 2026-09-25). Each skill is re-measured through the current harness when a release changes it, starting with `critique-forms` in v0.2.0.
 
 Carried alongside that pass: any fix-list items still open from the v0.1.0 run that did not rise to release-blocking.
 
-**Exit gate:** two consecutive weeks with no open contract or check defect.
+**Exit gate:** two consecutive weeks with no open contract or check defect. **(Declared met 2026-09-13, [ADR 0034](docs/internal/decisions/0034-v0.1.x-exit-gate-declaration.md).)**
 
 ---
 
 ## Then: v0.2.0
 
-Widening the skill base and regenerating the research spine underneath the catalog, roughly in this order:
+**Re-cut on 2026-09-14.** This section used to promise a wider catalog on a regenerated research spine: the taxonomy survey, three new skills, BYOR, telemetry and a samples corpus, all in one version. Its exit gate required every one of them, including a chart-critique skill blocked on a generator nobody had scoped, so the version could not close. v0.2.0 now does two things. It makes every receipt the project already publishes whole, and it adds one skill. Everything that moved is listed under "Moved out of v0.2.0" below, with where it went.
 
-**1. Taxonomy survey regeneration.** The library currently makes no public claim about how many critique frameworks exist or how many domains they span, because no such survey has actually been run. This version runs a real research pass across candidate critique frameworks, records a gate verdict per candidate against the Two-Part Gate, and publishes it as `docs/internal/research/critique-framework-survey.md`. This gates the survey-scale claim: until the survey exists, the library does not make it.
+**1. Measurement debt from the v0.1.0 run**, closed here rather than carried further:
 
-**2. Second skill wave**, 2-3 skills, sequenced by the survey's findings but expected to run:
+   - ~~Per-entry `run_set` and a lane dimension added to the results schema~~ **(done 2026-09-14)**.
+   - ~~`critique-usability`'s Sonnet cell re-measured~~ **(done 2026-09-25)**. It still does not qualify against baseline on that tier; see "Known limitations" below.
+   - The methodology's location-level metrics section written up properly.
+   - `verdicts.md` rewritten as one document instead of a layered amendment trail.
+   - An automated check for the evidence-quotes-not-characterizes field contract.
+   - `severity_expected` scoring turned on.
+   - The example and golden envelopes carry only real model values or a documented sentinel, not run metadata written by hand.
+   - The benchmark harness isolated from the working tree it measures, and the Claude Code CLI version it installs pinned or recorded.
 
-   - `critique-deck` first: assertion-evidence presentation critique. Markdown decks are a scriptable artifact format and the corpus work is straightforward, so it is the lowest-risk next skill.
-   - `critique-forms` second: Wroblewski- and Baymard-sourced form-usability critique. HTML forms have a strong scriptable share and the skill reuses accessibility's existing HTML tooling rather than building new infrastructure.
-   - `critique-dataviz` third: Tufte- and Cairo-sourced chart critique. This has the strongest demand signal of the three but the hardest corpus problem, because chart-spec artifacts need a new generator mode that does not exist yet. It goes last because it is the only one that is blocked on new infrastructure rather than reuse.
+**2. Consistency threshold v2.** The 0.309 floor below is a provisional number measured once, on one run set. This version replaces it with a calibrated per-lane threshold, published with its method rather than asserted.
 
-**3. BYOR mode** (bring your own rubric) on one flagship skill, as the pattern-setter for every skill after it. This is what lets a user hand the library a rubric it did not ship with, using the `rubric_source: byor` finding marker already defined in the methodology.
+**3. `critique-forms`**: form-usability critique sourced to Wroblewski, Baymard's research, GOV.UK, web.dev and others. Its specification is committed: 24 criteria, 18 checked by script and 6 by judgment. It comes before `critique-deck` because it reuses the shipped HTML artifact type and `critique-accessibility`'s element resolver, while a deck skill needs a corpus module for an artifact type this project has never built. Its published figures will be the first to come from the current benchmark harness, with the generic baseline measured beside it in the same run.
 
-**4. Measurement debt from the v0.1.0 run**, closed here rather than carried further: per-entry `run_set` and a lane dimension added to the results schema; the methodology's location-level metrics section written up properly; `verdicts.md` rewritten as one document instead of a layered amendment trail; an automated check for the evidence-quotes-not-characterizes field contract; `severity_expected` scoring turned on; and `critique-usability`'s Sonnet cell re-measured, the one precision cell that still does not qualify against baseline on its own tier.
+**4. Astro docs site. This item's sequence position was overtaken on 2026-08-18, and the site shipped on 2026-08-22, ahead of the samples corpus.** The original order put it after the samples on the reasoning that they are the content which gives a site an information architecture worth designing, and that a site built before that content exists is just a nicer-looking README. That reasoning still holds for the site's *content*, and it is not what moved the item. What moved it was a decision that the README is the project's front door, which makes the site a prerequisite for fixing the README rather than a reward for finishing the samples. **None of the three trigger conditions this item named actually fired**: the README was 517 lines when the item was pulled, against the roughly 600 named here, the marketplace listing had produced no traffic worth calling real, and no public essay had shipped. The item was pulled early for a reason it did not anticipate, and saying so is more useful than retrofitting a trigger.
 
-**5. Consistency threshold v2.** The 0.309 floor below is a provisional number measured once, on one run set. This version replaces it with a calibrated per-lane threshold, published with its method rather than asserted.
+**The site is live as of 2026-08-22** at `https://product-on-purpose.github.io/critique-skills/`, serving 50 pages: the six skill pages, an explorer for all 96 criterion IDs, an explorer for every measured benchmark cell, the four Diataxis quadrants, and the worked examples. It is generated from this repository's own sources at build time and nothing lives only there. The old exit gate named the site as one of its conditions, and the site met it; the re-cut gate below does not repeat a condition that is already met.
 
-**6. Disposition telemetry begins.** Acceptance-rate-per-criterion data from real use starts feeding the first criterion pruning pass.
+**Exit gate** (re-cut 2026-09-14):
 
-**7. Samples corpus.** Worked, narrative samples distinct from the benchmark: multiple skills applied across a small set of running example threads, each following the same scenario-to-disposition shape, with machine-validated envelopes checked in CI and provenance honestly labeled as illustrative single runs, never conflated with k=5 measurement. Samples never enter `bench/` and never carry ground-truth manifests; that boundary is what keeps a compelling example from being mistaken for a measured claim.
+- Every entry in `bench/results/results.json` carries `run_set` and `lane` **(met 2026-09-14)**, and `bench.report` drift-checks the judged and scripted columns.
+- At least one Sonnet envelope per skill is committed through the shipped harness, and the fidelity-gate verdict is re-evaluated on that tier. The verdict was re-evaluated on 2026-09-15 and came back a failure (see v0.1.x above); two of the six skills have Sonnet envelopes through the shipped harness so far.
+- Consistency threshold v2 is published with its method.
+- No `run.model` value outside the two pinned tiers appears under `skills/` or `examples/`, unless it is a documented sentinel, and a check enforces that.
+- `bench/results/verdicts.md` is one current-state document.
+- `severity_expected` is scored in the results table.
+- The evidence-quotes check runs in CI.
+- ~~`bench/results/runs/steering/` no longer sits inside the `runs*` glob~~ **(met 2026-09-14)**.
+- ~~A recorded ruling exists on `askit-*` authoring and CodeQL~~ **(met 2026-09-15: both adopted, CodeQL shipped)**.
+- `critique-forms` is measured at k=5 on both pinned tiers and appears in the README scoreboard.
 
-**8. Astro docs site. This item's sequence position was overtaken on 2026-08-18 and the site is being built now, ahead of the samples corpus.** The original order put it after the samples on the reasoning that they are the content which gives a site an information architecture worth designing, and that a site built before that content exists is just a nicer-looking README. That reasoning still holds for the site's *content*, and it is not what moved the item. What moved it was a decision that the README is the project's front door, which makes the site a prerequisite for fixing the README rather than a reward for finishing the samples. **None of the three trigger conditions this item named actually fired**: the README was 517 lines when the item was pulled, against the roughly 600 named here, the marketplace listing had produced no traffic worth calling real, and no public essay had shipped. The item was pulled early for a reason it did not anticipate, and saying so is more useful than retrofitting a trigger.
+### Moved out of v0.2.0
 
-**The site is live as of 2026-08-22** at `https://product-on-purpose.github.io/critique-skills/`, serving 50 pages: the six skill pages, an explorer for all 96 criterion IDs, an explorer for every measured benchmark cell, the four Diataxis quadrants, and the worked examples. It is generated from this repository's own sources at build time and nothing lives only there. **That satisfies one of the five conditions in the exit gate below**, and only that one; the survey, BYOR, and the per-component measurement bar are all still open.
-
-**Exit gate:** survey published; every listed skill measured; BYOR pattern documented and shipped on one skill; ~~docs site deployed~~ **(met 2026-08-22)**; every new component in this version built and measured to the same bar as v0.1.0.
+| Item | Now | Why |
+|---|---|---|
+| Taxonomy survey regeneration | Unscheduled | Deferred on 2026-09-14. The library still makes no claim about how many critique frameworks exist, and will not until the survey runs. |
+| `critique-deck` | v0.3.0 | Deprioritized behind `critique-forms`, which needs no new corpus machinery. |
+| `critique-dataviz` | Unscheduled | It depends on a chart-spec corpus generator that has not been scoped, and dating a skill before its blocker is sized would be a guess. |
+| BYOR mode | v0.3.0 | Unchanged in substance; it moves with the skill wave. |
+| Disposition telemetry | v0.3.0 | Unchanged in substance. |
+| Samples corpus | v0.4.0+ | Unchanged in substance. |
 
 ---
 
@@ -75,6 +94,9 @@ Widening the skill base and regenerating the research spine underneath the catal
 
 ### v0.3.0
 
+- **`critique-deck`**: assertion-evidence presentation critique. Markdown decks are a scriptable artifact format, but the benchmark needs a corpus module for a domain that does not exist yet, which is why it follows `critique-forms`.
+- **BYOR mode** (bring your own rubric) on one flagship skill, as the pattern-setter for every skill after it. This is what lets a user hand the library a rubric it did not ship with, using the `rubric_source: byor` finding marker already defined in the methodology.
+- **Disposition telemetry begins.** Acceptance-rate-per-criterion data from real use starts feeding the first criterion pruning pass.
 - **Revision loop as a first-class chain.** The critique, disposition, revise, re-critique loop exists today as a documented recipe (`examples/recipes/revision-loop.md`); this version makes it a real, invokable chain with a defined convergence rule.
 - **Gate hardening.** `--gate` exit codes exercised and documented across every shipped skill as a CI recipe for consumer repositories, not just this one.
 - **Cross-library composition.** One documented workflow where a sibling library's output is critiqued by this one, as the concrete proof of the family's think-make-judge value chain rather than an assertion about it.
@@ -82,11 +104,19 @@ Widening the skill base and regenerating the research spine underneath the catal
 
 ### v0.4.0+
 
-Priority among these is set by what telemetry from v0.2.0 and v0.3.0 says is actually pulling demand, not by the order listed here:
+Priority among these is set by what telemetry from v0.3.0 onward says is actually pulling demand, not by the order listed here:
 
+- **Samples corpus.** Worked, narrative samples distinct from the benchmark: multiple skills applied across a small set of running example threads, each following the same scenario-to-disposition shape, with machine-validated envelopes checked in CI and provenance honestly labeled as illustrative single runs, never conflated with k=5 measurement. Samples never enter `bench/` and never carry ground-truth manifests; that boundary is what keeps a compelling example from being mistaken for a measured claim.
 - **Benchmark harness as a standalone asset.** Publishing the corpus generator and grading harness so third-party skill authors can measure their own skills against the same discipline this library holds itself to.
-- **Remaining domain waves**, drawn from whatever the v0.2.0 survey admits: visual design, naming and terminology, and any newcomer the survey surfaces.
+- **Remaining domain waves**, drawn from whatever the taxonomy survey admits once it runs: visual design, naming and terminology, and any newcomer the survey surfaces.
 - **Further domain and Gold-tier work**, continued from v0.3.0 as coverage and telemetry justify it.
+
+### Unscheduled
+
+Accepted, but deliberately not given a version, because what they depend on has not been sized:
+
+- **Taxonomy survey regeneration.** A real research pass across candidate critique frameworks, with a gate verdict per candidate against the Two-Part Gate, published as `docs/internal/research/critique-framework-survey.md`. Until it exists, the library makes no survey-scale claim.
+- **`critique-dataviz`**: Tufte- and Cairo-sourced chart critique. It has the strongest demand signal of the planned skills and the hardest corpus problem, because chart-spec artifacts need a generator mode that does not exist yet.
 
 ---
 
@@ -121,7 +151,7 @@ Stated plainly rather than left for the results tables to surface on their own:
 - **The 0.309 consistency floor.** Run-to-run agreement on `critique-clarity`'s Haiku cell calibrated to 0.309, well below the 0.7 figure proposed before any data existed. It is the floor because it is the lowest any core skill measured, not because it is a comfortable number.
 - **`critique-usability`'s non-qualifying Sonnet cell.** Its Haiku tier beats baseline outright. At v0.1.0 its Sonnet tier won recall narrowly at a precision cost that did not clear the bar on that tier alone, and a 2026-09-15 re-measure through the shipped harness confirmed it: the skill now trails a re-run baseline on both location metrics, by margins inside run-to-run spread. The skill ships qualified through Haiku, not unconditionally.
 - **Precision is the weak axis across the board.** Recall numbers are consistently the stronger of the two measured metrics; precision is where most of the remaining gap to a clean win sits, cell by cell.
-- **No human acceptance data yet.** Every number published so far comes from the benchmark's seeded-defect corpus, not from real users disposing real findings. Disposition telemetry, which is what closes that gap, does not begin until v0.2.0.
+- **No human acceptance data yet.** Every number published so far comes from the benchmark's seeded-defect corpus, not from real users disposing real findings. Disposition telemetry, which is what closes that gap, does not begin until v0.3.0.
 - **The benchmark corpus is agent-generated.** The seeded defects, and the clean artifacts they are seeded into, were produced by the same class of system being measured, not hand-authored by an independent party. That is a known limitation of the measurement, not a hidden one.
 
 <p align="right">(<a href="#roadmap-top">back to top</a>)</p>
