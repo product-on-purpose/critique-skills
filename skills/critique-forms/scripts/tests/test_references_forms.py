@@ -21,7 +21,9 @@ moves (a release plan promotes it out of `_unassigned/`), this module's
 
 from __future__ import annotations
 
+import importlib.util
 import re
+import sys
 from pathlib import Path
 
 import pytest
@@ -235,3 +237,31 @@ def test_each_citation_carries_the_grade_its_registry_paragraph_states(rows, bib
 def test_the_two_overlap_rows_name_their_wcag_criterion(rows):
     assert "WCAG 1.3.5" in rows["FORMS-AUTOCOMPLETE"][2]
     assert "WCAG 2.5.8" in rows["FORMS-TOUCH-TARGET"][2]
+
+
+def _cue_table() -> list[tuple[str, tuple[str, ...]]]:
+    """The purpose and cue-word rows of FORMS.md's "How a field's purpose
+    is read" table, in the order the table lists them."""
+    text = FORMS_MD.read_text(encoding="utf-8")
+    section = text.split("## How a field's purpose is read", 1)[1].split("\n## ", 1)[0]
+    pairs = []
+    for line in section.splitlines():
+        if not line.startswith("| ") or line.startswith("| Purpose |"):
+            continue
+        purpose, cues = (cell.strip() for cell in line.strip().strip("|").split("|"))
+        pairs.append((purpose, tuple(cue.strip() for cue in cues.split(","))))
+    return pairs
+
+
+def _load_checks():
+    spec = importlib.util.spec_from_file_location("forms_checks_for_references", SKILL_DIR / "scripts" / "checks.py")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_the_purpose_cue_table_is_the_vocabulary_checks_py_matches():
+    # The table states both the vocabulary and its precedence ("the one
+    # higher in the table wins"), so the order is compared as well.
+    assert _cue_table() == [(purpose, tuple(cues)) for purpose, cues in _load_checks().PURPOSE_CUES]
