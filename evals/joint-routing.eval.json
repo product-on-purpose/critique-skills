@@ -7,12 +7,13 @@
       "critique-argument",
       "critique-clarity",
       "critique-docs",
+      "critique-forms",
       "critique-microcopy",
       "critique-usability"
     ],
-    "note": "The Standard's G3 library-regression check documents covers.skill as a single name ({ \"skill\": \"<name>\" }). This eval is about discrimination BETWEEN skills, so no single name is honest and the value is an array of all six. G3 presence-checks the key without constraining its type, so this passes today; the shape gap is worth raising upstream rather than misdeclaring a single owner."
+    "note": "The Standard's G3 library-regression check documents covers.skill as a single name ({ \"skill\": \"<name>\" }). This eval is about discrimination BETWEEN skills, so no single name is honest and the value is an array of all seven. G3 presence-checks the key without constraining its type, so this passes today; the shape gap is worth raising upstream rather than misdeclaring a single owner."
   },
-  "purpose": "Measure which of the six critique skills fires when all six descriptions are in context at once. Every skill's own evals/triggers.eval.json validates that skill in isolation, so nothing in the pipeline tests discrimination between siblings. Six skills in one namespace, all about critique, is exactly where that gap bites.",
+  "purpose": "Measure which of the seven critique skills fires when all seven descriptions are in context at once. Every skill's own evals/triggers.eval.json validates that skill in isolation, so nothing in the pipeline tests discrimination between siblings. Seven skills in one namespace, all about critique, is exactly where that gap bites.",
   "provenance": {
     "found_by": "external skill review, 2026-08-04",
     "finding": "check_trigger_evals in scripts/skill-selftest.py validates only the shape of each skill's own fixture: case count, negative count, cross_domain tag count, well-formed query/should_trigger pairs. It never executes a query against a model and never puts more than one skill's description in view at once. The U5 description scorer it defers to is likewise per-skill and mechanical. Neither instrument has a term for 'is this description distinguishable from its five siblings'."
@@ -20,8 +21,8 @@
   "scoring": {
     "mechanism": "model",
     "status": "scored",
-    "why_not_deterministic": "Routing is a model decision over descriptions in context. A lexical proxy scored in CI would measure string overlap, not routing, and this library does not publish numbers produced by a mechanism other than the one being described. Scoring this fixture requires putting all six descriptions plus one query to a pinned model tier and recording which skill it selects, the same discipline bench/ uses.",
-    "procedure": "For each case, present the six skill descriptions verbatim (from each SKILL.md frontmatter) plus the query, ask which single skill should handle it or whether the request is ambiguous, and record the answer. Score contested cases against expected; score ambiguous cases as correct if the answer is in acceptable or is an explicit request for clarification.",
+    "why_not_deterministic": "Routing is a model decision over descriptions in context. A lexical proxy scored in CI would measure string overlap, not routing, and this library does not publish numbers produced by a mechanism other than the one being described. Scoring this fixture requires putting all seven descriptions plus one query to a pinned model tier and recording which skill it selects, the same discipline bench/ uses.",
+    "procedure": "For each case, present the seven skill descriptions verbatim (from each SKILL.md frontmatter) plus the query, ask which single skill should handle it or whether the request is ambiguous, and record the answer. Score contested cases against expected; score ambiguous cases as correct if the answer is in acceptable or is an explicit request for clarification.",
     "what_is_enforced_today": "scripts/tests/test_joint_routing_eval.py validates this fixture's shape and asserts that every contested pair carries a boundary clause in both siblings' descriptions naming the other. That is a structural guard against regression. The measurement itself is scripts/run-joint-routing.py, run by hand, because it calls a live model.",
     "runs": [
       "evals/joint-routing.results-sonnet.json",
@@ -35,6 +36,7 @@
     "critique-argument",
     "critique-clarity",
     "critique-docs",
+    "critique-forms",
     "critique-microcopy",
     "critique-usability"
   ],
@@ -68,6 +70,30 @@
       ],
       "collision": "Both accept HTML and markdown UI artifacts. usability's description disclaimed microcopy but not accessibility, and accessibility's did not mention usability at all.",
       "found_by": "the 2026-08-07 scoring run, on a case this fixture had labelled unambiguous"
+    },
+    {
+      "pair": [
+        "critique-accessibility",
+        "critique-forms"
+      ],
+      "collision": "Both review HTML forms, and two forms criteria deliberately overlap WCAG success criteria: FORMS-AUTOCOMPLETE with 1.3.5 and FORMS-TOUCH-TARGET with 2.5.8. Accessibility reports a conformance failure; forms reports what the same property costs a person filling the form in.",
+      "found_by": "the N2 (critique-forms) spec, before the skill shipped"
+    },
+    {
+      "pair": [
+        "critique-forms",
+        "critique-usability"
+      ],
+      "collision": "Both judge how easy an interface is to use, and a form is an interface. Usability judges a flow or an interface spec against Nielsen's heuristics; forms judges one form's fields by the work of filling them in.",
+      "found_by": "the N2 (critique-forms) spec, before the skill shipped"
+    },
+    {
+      "pair": [
+        "critique-forms",
+        "critique-microcopy"
+      ],
+      "collision": "Both review a form at the moment of entry, and microcopy's description names form validation messages. Microcopy owns the wording of those messages; forms owns field types, autofill, required-field marking and layout, and never tests error content.",
+      "found_by": "the N2 (critique-forms) spec, before the skill shipped"
     }
   ],
   "cases": [
@@ -225,6 +251,66 @@
       "kind": "control",
       "expected": "critique-clarity",
       "rationale": "Unambiguous: passive voice is named only by clarity."
+    },
+    {
+      "query": "Can you review the usability of this sign-up form?",
+      "kind": "contested",
+      "expected": "critique-forms",
+      "contested_with": [
+        "critique-usability"
+      ],
+      "rationale": "The N2 spec's own routing example. The word usability pulls toward critique-usability, but the artifact is one form, and how easy a form is to complete is exactly forms' claim; usability's description disclaims a form's field-level completion cost."
+    },
+    {
+      "query": "Walk our five-step checkout flow against Nielsen's heuristics: can people tell where they are, and go back a step without losing what they typed?",
+      "kind": "contested",
+      "expected": "critique-usability",
+      "contested_with": [
+        "critique-forms"
+      ],
+      "rationale": "Checkout steps are forms, but the question is navigation and status across a flow, judged against named heuristics. Forms judges the cost of each form's fields, not movement between steps."
+    },
+    {
+      "query": "Check this sign-up form's fields: are the autocomplete tokens and input types right for people filling it in on a phone?",
+      "kind": "contested",
+      "expected": "critique-forms",
+      "contested_with": [
+        "critique-accessibility"
+      ],
+      "rationale": "Autocomplete tokens are also WCAG 1.3.5's subject, but the query asks about filling the form in on a phone, which is the completion-cost angle forms takes, not conformance."
+    },
+    {
+      "query": "Audit this sign-up form for WCAG 2.2 AA: are the labels programmatically associated, and is the error text announced to screen readers?",
+      "kind": "contested",
+      "expected": "critique-accessibility",
+      "contested_with": [
+        "critique-forms"
+      ],
+      "rationale": "A form is forms' artifact, but the query names WCAG conformance and screen-reader access, which accessibility claims and forms' description disclaims."
+    },
+    {
+      "query": "Review the error messages on this registration form. Do they say what went wrong and how to fix it?",
+      "kind": "contested",
+      "expected": "critique-microcopy",
+      "contested_with": [
+        "critique-forms"
+      ],
+      "rationale": "A registration form is forms' artifact, but the query is about the wording of its error messages, which microcopy owns and forms' description disclaims."
+    },
+    {
+      "query": "Our registration form marks some fields with an asterisk, asks for the password twice, and ends in a Submit button. Review the form.",
+      "kind": "contested",
+      "expected": "critique-forms",
+      "contested_with": [
+        "critique-microcopy"
+      ],
+      "rationale": "Asterisks and button text are short UI strings, which pulls toward microcopy, but required-field marking, a confirmation field and a generic submit label are forms criteria about the work of completing the form, and nothing in the query asks about message wording."
+    },
+    {
+      "query": "Should the phone field on this contact form be type=tel, and does the postcode field need an autocomplete token?",
+      "kind": "control",
+      "expected": "critique-forms",
+      "rationale": "Unambiguous: input types and autofill tokens for a form's fields are named only by forms."
     }
   ]
 }
