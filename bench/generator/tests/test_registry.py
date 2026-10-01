@@ -18,15 +18,16 @@ def test_domain_modules_is_an_explicit_tuple():
         "bench.generator.domains.usability",
         "bench.generator.domains.accessibility",
         "bench.generator.domains.clarity",
+        "bench.generator.domains.forms",
     )
 
 
 def test_load_domains_returns_domain_instances():
     domains = load_domains()
-    assert len(domains) == 7
+    assert len(domains) == 8
     assert all(isinstance(d, Domain) for d in domains)
     assert [d.name for d in domains] == [
-        "toy", "argument", "docs", "microcopy", "usability", "accessibility", "clarity",
+        "toy", "argument", "docs", "microcopy", "usability", "accessibility", "clarity", "forms",
     ]
 
 
