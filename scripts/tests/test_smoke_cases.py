@@ -1,15 +1,11 @@
-"""Tests that the install smoke check exercises every skill a user installs.
-
-what-it-is:   a coverage guard for scripts/smoke.py's CASES table
-what-it-does: asserts the table names exactly the skills on disk, each with an
-              artifact that exists
-why:          `/plugin install` delivers every skills/critique-*/ directory,
-              whatever library.json says about its status, so a skill missing
-              from CASES ships untested for the fresh-install defect the CI
-              `smoke` job exists for. critique-forms was missing from the
-              hand-kept table until 2026-09-30, and the job still passed.
-used-by:      `python -m pytest`
-"""
+# what-it-is:   a coverage guard for scripts/smoke.py's CASES table
+# what-it-does: asserts the table names exactly the skills on disk, each with an artifact that exists
+# why:          `/plugin install` delivers every skills/critique-*/ directory, whatever library.json
+#               says about its status, so a skill missing from CASES ships untested for the
+#               fresh-install defect the CI `smoke` job exists for. critique-forms was missing from
+#               the hand-kept table until 2026-09-30, and the job still passed.
+# used-by:      python -m pytest (the CI unit-python job)
+"""Tests that the install smoke check exercises every skill a user installs."""
 
 from __future__ import annotations
 
