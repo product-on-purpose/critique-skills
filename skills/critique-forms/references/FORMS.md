@@ -95,10 +95,10 @@ in order of precedence, are:
 | one-time code | one-time code, verification code, security code, otp, passcode |
 | account number | account number, reference number, membership number, customer number, policy number |
 | birth date | birth, date of birth, dob, born, birthday |
+| search | search, query, q |
 | email | email, e-mail, email address |
 | phone | phone, telephone, tel, mobile, cell, phone number, mobile number, telephone number |
 | web address | website, url, homepage, web address |
-| search | search, query, q |
 | username | username, user name, login, user id |
 | street address | address, street, address line |
 | city | city, town |
@@ -110,7 +110,8 @@ in order of precedence, are:
 | name | first name, last name, surname, given name, family name, full name, forename, middle name, your name |
 
 Where two purposes match one signal, the one higher in the table wins: house number before street
-address, and username before name, so that a field called user name reads as a username. The bare
+address; search before email and phone, so that a box called mobile search reads as a search; and
+username before name, so that a field called user name reads as a username. The bare
 word name reads as a person's name only when it is the whole of a signal, so that a field labelled
 Name does and one labelled Company name or Event name does not.
 
@@ -131,6 +132,17 @@ A form's **primary submit** is its first `button` with no `type` or with `type=s
 `input` with `type=submit`. Its label is the button's text, or the input's `value`.
 
 A field is **required** when it carries the `required` attribute or `aria-required=true`.
+
+No criterion reads a control a person cannot see or use. A control is skipped when it is
+`disabled` or `type=hidden`, or when it or an ancestor carries the `hidden` attribute,
+`aria-hidden=true`, or a class named hidden, hide or d-none, or ending in -hidden or _hidden. It is
+also skipped when the artifact's own CSS hides it or an ancestor: `display: none`, `visibility:
+hidden`, `opacity: 0`, a width and height of 0, or a `left` or `top` of -1000 pixels or less. A
+control whose label tells a person to leave it blank or to ignore it is skipped too. Anti-spam
+honeypots use every one of these devices, and on the real-forms check they caused nine of the first
+run's eleven false alarms, because the person a criterion protects never meets a honeypot. The rule
+costs misses where a page hides real fields until a choice reveals them, which is
+`FORMS-SELECTION-DEPENDENT`'s ground, not a scripted criterion's.
 
 ## Ground other skills own
 

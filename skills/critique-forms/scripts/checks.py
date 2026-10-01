@@ -373,18 +373,65 @@ def _attr_lower(node, name):
     return _attr(node, name).lower()
 
 
-def _is_hidden(node):
+# Class names that say an element is hidden: Bootstrap's d-none, a bare
+# hidden or hide, and any name ending -hidden or _hidden (bz_default_hidden,
+# visually-hidden). Read on the control itself only: on a field it marks a
+# decoy, while on a container it usually marks a panel a click reveals, such
+# as a header login or a conditional question, whose fields are real.
+_HIDDEN_CLASS_RE = re.compile(r"^(?:hidden|hide|d-none|is-hidden|honeypot|hp|.+[-_]hidden)$", re.I)
+# Words a honeypot's own label uses to warn a person off it.
+_HONEYPOT_LABEL_RE = re.compile(
+    r"\bleave (?:this|it)(?: field)? (?:blank|empty)\b|\bif you are (?:a )?human\b|\bignore this field\b"
+    r"|\bdo not fill\b|\bdon't fill\b",
+    re.I,
+)
+# A position this far off the page puts an element where no one can see it.
+_OFF_SCREEN_PX = -1000
+
+
+def _hidden_by_declarations(node, rules):
+    """Whether this element's own declared CSS hides it: inline or from a
+    compound-selector rule, read through the same cascade as font size."""
+
+    def value(prop):
+        found, _source = _declared(node, prop, rules)
+        return (found or "").strip().lower().replace("!important", "").strip()
+
+    if value("display") == "none" or value("visibility") == "hidden":
+        return True
+    if value("opacity") in ("0", "0.0"):
+        return True
+    zero = ("0", "0px")
+    if value("width") in zero and value("height") in zero:
+        return True
+    for prop in ("left", "top"):
+        length = _parse_length(value(prop))
+        if length is not None and length[1] == "px" and length[0] <= _OFF_SCREEN_PX:
+            return True
+    return False
+
+
+def _is_hidden(node, rules=()):
+    """Whether a person cannot see this control: it carries a class that
+    says hidden, or it or an ancestor carries the hidden attribute,
+    aria-hidden, or declared CSS that removes it, makes it transparent,
+    shrinks it to nothing or moves it off the page. Anti-spam honeypots use
+    every one of these, and a honeypot is a trap for bots, not a field
+    anyone fills in."""
+    if any(_HIDDEN_CLASS_RE.match(token) for token in (node.attrs.get("class") or "").split()):
+        return True
     n = node
-    while n is not None:
+    while n is not None and n.tag != "#root":
         if "hidden" in n.attrs or _attr_lower(n, "aria-hidden") == "true":
             return True
-        inline = _parse_declarations(n.attrs.get("style") or "")
-        if (inline.get("display") or "").strip().lower() == "none":
-            return True
-        if (inline.get("visibility") or "").strip().lower() == "hidden":
+        if _hidden_by_declarations(n, rules):
             return True
         n = n.parent
     return False
+
+
+def _is_honeypot_label(control, labels):
+    return bool(_HONEYPOT_LABEL_RE.search(labels.text(control) or _attr(control, "aria-label")))
 
 
 def _severity_for_count(count):
@@ -453,7 +500,7 @@ def _nearest(node, tag):
     return None
 
 
-def _collect_forms(tree):
+def _collect_forms(tree, rules=(), labels=None):
     forms, loose = {}, Form(tree)
     order = []
     for node in tree.iter():
@@ -461,7 +508,9 @@ def _collect_forms(tree):
             continue
         if node.tag == "input" and _input_type(node) == "hidden":
             continue
-        if "disabled" in node.attrs or _is_hidden(node):
+        if "disabled" in node.attrs or _is_hidden(node, rules):
+            continue
+        if labels is not None and _is_honeypot_label(node, labels):
             continue
         form_node = _nearest(node, "form")
         if form_node is None:
@@ -546,10 +595,10 @@ PURPOSE_CUES = (
     ("one-time code", ("one-time code", "verification code", "security code", "otp", "passcode")),
     ("account number", ("account number", "reference number", "membership number", "customer number", "policy number")),
     ("birth date", BIRTH_CUES),
+    ("search", ("search", "query", "q")),
     ("email", ("email", "e-mail", "email address")),
     ("phone", ("phone", "telephone", "tel", "mobile", "cell", "phone number", "mobile number", "telephone number")),
     ("web address", ("website", "url", "homepage", "web address")),
-    ("search", ("search", "query", "q")),
     ("username", ("username", "user name", "login", "user id")),
     ("street address", ("address", "street", "address line")),
     ("city", ("city", "town")),
@@ -1475,7 +1524,7 @@ def check(artifact):
     rules = _build_stylesheet(tree)
     labels = Labels(tree)
     findings = []
-    for form in _collect_forms(tree):
+    for form in _collect_forms(tree, rules, labels):
         findings.extend(_check_action_label(form, labels))
         findings.extend(_check_address_format(form, labels))
         findings.extend(_check_autocomplete(form, labels))

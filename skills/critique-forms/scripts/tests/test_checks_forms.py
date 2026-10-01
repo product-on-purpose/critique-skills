@@ -1316,8 +1316,76 @@ def test_split_entity_two_runs_escalate_to_severity_3():
 
 
 # ---------------------------------------------------------------------------
+# Controls no criterion reads: references/FORMS.md, "How a field's purpose
+# is read", the paragraph on skipped controls. Each fixture is a honeypot
+# pattern met on the real-forms check (AC-10): without the skip, the email
+# field below raises FORMS-INPUT-TYPE and FORMS-REQUIRED-OPTIONAL fires on
+# the honeypot as the form's one optional field.
+# ---------------------------------------------------------------------------
+
+_REAL_FIELDS = (
+    '<label for="hp-user">Username</label><input id="hp-user" name="username" autocomplete="username"'
+    ' autocorrect="off" spellcheck="false" autocapitalize="none" required>'
+)
+
+
+def _honeypot_findings(trap):
+    html = f"<form>{_REAL_FIELDS}{trap}<button>Create account</button></form>"
+    return checks.check(_artifact(html))
+
+
+def test_a_honeypot_moved_off_screen_by_a_stylesheet_class_is_skipped():
+    trap = (
+        '<style>.trap_123 { position: absolute; top: -9999px; left: -9999px; }</style>'
+        '<div class="trap_123"><label for="hp1">Email</label><input id="hp1" name="email" type="text"></div>'
+    )
+    assert _honeypot_findings(trap) == []
+
+
+def test_a_honeypot_made_transparent_and_zero_sized_inline_is_skipped():
+    trap = (
+        '<div style="opacity:0; position:absolute; height:0; width:0;">'
+        '<label for="hp2">Email</label><input id="hp2" name="email" type="text"></div>'
+    )
+    assert _honeypot_findings(trap) == []
+
+
+def test_a_control_carrying_a_hidden_class_is_skipped():
+    trap = '<label for="hp3">Email</label><input id="hp3" name="email" type="text" class="field bz_default_hidden">'
+    assert _honeypot_findings(trap) == []
+
+
+def test_a_control_whose_label_warns_people_off_is_skipped():
+    trap = '<label for="hp4">If you are human, please ignore this field.</label><input id="hp4" name="email" type="text">'
+    assert _honeypot_findings(trap) == []
+
+
+def test_a_hidden_class_on_a_container_does_not_hide_its_fields():
+    # A panel a click reveals, such as a header login or a conditional question, holds real fields.
+    html = (
+        '<form><div class="panel govuk-radios__conditional--hidden">'
+        '<label for="cr1">Email</label><input id="cr1" name="email" type="text"></div></form>'
+    )
+    findings = _by_criterion(checks.check(_artifact(html)), "FORMS-INPUT-TYPE")
+    assert len(findings) == 1
+
+
+def test_text_indent_alone_does_not_hide_a_button():
+    # Image-replacement buttons push their text off-screen with text-indent; the button stays visible.
+    html = '<form><button type="reset" style="text-indent: -9999px;">Reset</button><button>Send</button></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "FORMS-RESET-BUTTON")
+    assert len(findings) == 1
+
+
+# ---------------------------------------------------------------------------
 # Purpose heuristic: references/FORMS.md, "How a field's purpose is read"
 # ---------------------------------------------------------------------------
+
+
+def test_purpose_search_outranks_phone():
+    # The real-forms check met id="mobile-search", a phone-layout search box, read as a phone field.
+    html = '<form><label for="mobile-search">Search the site</label><input id="mobile-search" name="q"></form>'
+    assert _control_purpose(html, "mobile-search") == "search"
 
 
 def test_purpose_bare_name_label_reads_as_name():
