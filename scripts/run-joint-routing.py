@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # what-it-is:   the scorer for evals/joint-routing.eval.json
-# what-it-does: puts each fixture query to a pinned model with all six skill descriptions loaded,
+# what-it-does: puts each fixture query to a pinned model with every skill description loaded,
 #               records which skill it selects, and scores the answers against the fixture
-# why:          six sibling skills in one namespace collide on triggering, and nothing else in this
+# why:          sibling skills in one namespace collide on triggering, and nothing else in this
 #               repository measures whether the right one is actually selected
 # used-by:      run by hand; not wired into CI, because it costs money and calls a live model
 """Score the joint-routing eval by asking a real model, with the real descriptions loaded.
 
 Routing is a model decision over descriptions in context. This script makes
 that decision observable: it loads this repository as a plugin with
-``claude --plugin-dir``, so all six skill descriptions are in context exactly
+``claude --plugin-dir``, so every skill description is in context exactly
 as they would be for a user, then puts one query at a time and records which
 skill comes back.
 
