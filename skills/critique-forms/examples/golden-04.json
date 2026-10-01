@@ -1,0 +1,77 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-forms/examples/artifacts/golden-04.html",
+  "expected_envelope": {
+    "findings": [
+      {
+        "confidence": "high",
+        "criterion": "FORMS-DATE-SELECTS",
+        "evidence": "<select id=\"dob-day\" name=\"dob_day\" autocomplete=\"bday-day\" required> <select id=\"dob-month\" name=\"dob_month\" autocomplete=\"bday-month\" required> <select id=\"dob-year\" name=\"dob_year\" autocomplete=\"bday-year\" required>",
+        "fix": "Use three short text fields for day, month and year, with the numeric input mode.",
+        "id": "F-001",
+        "lane": "scripted",
+        "location": "#dob-day, <select> field, label 'Day', line 31",
+        "severity": 3,
+        "violation": "A date the person knows by heart is picked from three drop-downs, the year from 40 options."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-INPUT-TYPE",
+        "evidence": "<input id=\"mobile\" name=\"mobile\" type=\"text\" autocomplete=\"tel\" required>",
+        "fix": "Set type=tel on the field.",
+        "id": "F-002",
+        "lane": "scripted",
+        "location": "#mobile, <input> field, label 'Mobile number', line 21",
+        "severity": 3,
+        "violation": "This phone field is type text, so a phone does not show the keyboard built for it."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-INPUT-TYPE",
+        "evidence": "<input id=\"website\" name=\"website\" type=\"text\" required>",
+        "fix": "Set type=url on the field.",
+        "id": "F-003",
+        "lane": "scripted",
+        "location": "#website, <input> field, label 'Website', line 26",
+        "severity": 3,
+        "violation": "This web address field is type text, so a phone does not show the keyboard built for it."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-SPLIT-ENTITY",
+        "evidence": "<input id=\"given\" name=\"given_name\" autocomplete=\"given-name\" autocorrect=\"off\" spellcheck=\"false\" required> <input id=\"family\" name=\"family_name\" autocomplete=\"family-name\" autocorrect=\"off\" spellcheck=\"false\" required>",
+        "fix": "Collect the name in one field.",
+        "id": "F-004",
+        "lane": "scripted",
+        "location": "#given, <input> field, label 'First name', line 13",
+        "severity": 2,
+        "violation": "One name is split across 2 fields, so the person moves between boxes for a single value."
+      }
+    ],
+    "run": {
+      "artifact": "skills/critique-forms/examples/artifacts/golden-04.html",
+      "artifact_sha256": "10928e9a3fb9325285ca6f547aaa0b25497287c8084b4cbe321bc521937a440e",
+      "contract_version": "1.0.0",
+      "model": "none",
+      "rubrics": [
+        "FORMS"
+      ],
+      "skill": "critique-forms",
+      "skill_version": "0.1.0",
+      "timestamp": "2026-10-01T03:38:50Z"
+    },
+    "summary": {
+      "by_severity": {
+        "0": 0,
+        "1": 0,
+        "2": 1,
+        "3": 3,
+        "4": 0
+      },
+      "gate": "fail",
+      "severity_3_threshold": 0,
+      "suppressed_count": 0
+    }
+  },
+  "note": "golden-04.html is a profile form showing recurrence and the date-of-birth picker. The mobile and website fields both declare the text type, and two flagged fields in one form make every one of them severity 3 (FORMS-INPUT-TYPE). The date of birth is picked from three drop-downs whose year list offers 40 real options, more than the 30 that only a date far in the past needs, so FORMS-DATE-SELECTS is 3. First and last name fields split one name (FORMS-SPLIT-ENTITY, one split value, 2). The required mobile field says beside it that it is used only to text about bookings, which is why FORMS-PHONE-REASON stays silent here."
+}
