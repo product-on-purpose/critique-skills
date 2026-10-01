@@ -50,6 +50,7 @@ CASES: list[tuple[str, str]] = [
     ("critique-argument", "skills/critique-argument/examples/argument-golden-01-warrant-gap.md"),
     ("critique-clarity", "skills/critique-clarity/examples/clarity-golden-01-passive-and-nominalization.md"),
     ("critique-docs", "skills/critique-docs/examples/docs-golden-01-heading-and-nav.md"),
+    ("critique-forms", "skills/critique-forms/examples/artifacts/golden-01.html"),
     ("critique-microcopy", "skills/critique-microcopy/examples/microcopy-golden-01-signup-checkout.md"),
     ("critique-usability", "skills/critique-usability/examples/artifacts/golden-01-settings.html"),
 ]

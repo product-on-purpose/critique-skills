@@ -85,3 +85,5 @@ Python half.
 - `__init__.py` - package marker so `scripts/tests/` resolves against the repository root.
 - `test_skill_selftest.py`, `test_skills_conformance.py` - pytest suite for `skill-selftest.py` and
   the plugin's conformance surface.
+- `test_smoke_cases.py` - asserts `smoke.py`'s CASES table names every installed skill, each with an
+  artifact on disk, so a new skill cannot ship outside the CI `smoke` job.
