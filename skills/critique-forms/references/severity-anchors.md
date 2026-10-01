@@ -87,15 +87,17 @@ judged-lane reviewer re-deriving a severity by hand grades the same defect the w
   - `FORMS-NUMERIC-INPUTMODE`: a text field without the numeric input mode is 2; the number type is
     3.
   - `FORMS-PASSWORD-RULES`: a minimum length below 8 is 2; a pattern or any maximum length is 3.
+  - `FORMS-PHONE-REASON`: an unexplained required phone field is 2 when it is the form's only
+    contact field, and 3 when the form also asks for an email address.
   - `FORMS-PLACEHOLDER-INSTRUCTION`: an example only in the placeholder is 2; a rule only in the
     placeholder is 3.
   - `FORMS-REQUIRED-OPTIONAL`: an unexplained asterisk, or a marker only in a placeholder, is 2; no
     marking at all is 3.
   - `FORMS-RESET-BUTTON`: a reset control elsewhere in the form is 2; one next to the primary
     submit is 3.
-- **Fixed at severity 2** (`FORMS-ACTION-LABEL`, `FORMS-CONFIRM-PASSWORD`, `FORMS-PHONE-REASON`):
-  each defect costs work or trust but never blocks completion, and none has a greater form that
-  does. Their severity 3 anchor cells say so rather than invent an example.
+- **Fixed at severity 2** (`FORMS-ACTION-LABEL`, `FORMS-CONFIRM-PASSWORD`): each defect costs
+  work but never blocks completion, and neither has a greater form that does. Their severity 3
+  anchor cells say so rather than invent an example.
 
 A judged-lane finding has no equivalent list, by construction. Its severity comes from the weighing
 order applied to its criterion's own two anchor rows, with `FORMS-SINGLE-COLUMN` capped at 2.
