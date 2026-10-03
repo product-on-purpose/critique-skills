@@ -10,7 +10,7 @@ several skills are considered together.
 
 There is exactly one such fixture today, and it exists because of a gap an external review found:
 every skill's own `evals/triggers.eval.json` is validated in isolation, so nothing in the pipeline
-ever compares one skill's description against another's. Six sibling skills in one namespace, all
+ever compares one skill's description against another's. Seven sibling skills in one namespace, all
 of them about critique, is precisely where that matters.
 
 **These fixtures are not scored in CI, and the distinction is deliberate.** Which skill fires is a
@@ -26,8 +26,8 @@ whose `status` is `not-yet-run` publishes no results, and a test enforces that.
 
 ## Inventory
 
-- `joint-routing.eval.json` - ambiguous and control queries with an expected winner among the six
-  skills, for scoring with all six descriptions in view at once. Distinguishes three case kinds:
+- `joint-routing.eval.json` - ambiguous and control queries with an expected winner among the seven
+  skills, for scoring with all seven descriptions in view at once. Distinguishes three case kinds:
   `contested` (a defensible single winner, plus the sibling it is contested with), `ambiguous` (no
   correct single winner, where asking for clarification is the right behavior), and `control`
   (unambiguous, present so a scoring run that fails these has a wiring problem rather than a

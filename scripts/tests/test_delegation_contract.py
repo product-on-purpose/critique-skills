@@ -48,9 +48,9 @@ def fenced_blocks(text: str) -> list[str]:
     return re.findall(r"```[a-z]*\n(.*?)```", text, re.DOTALL)
 
 
-def test_there_are_six_skills_to_check() -> None:
+def test_there_are_seven_skills_to_check() -> None:
     """Guards the glob: a test that silently checked nothing would pass forever."""
-    assert len(SKILL_FILES) == 6, [p.parent.name for p in SKILL_FILES]
+    assert len(SKILL_FILES) == 7, [p.parent.name for p in SKILL_FILES]
 
 
 # ---------------------------------------------------------------------------

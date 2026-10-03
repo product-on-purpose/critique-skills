@@ -26,7 +26,10 @@ freeform opinion. See `library.json` for the authoritative name, version, and ti
 
 - **Skills:** `critique-accessibility` (v0.1.1, calibrated after P3 measurement; see ADR 0027 and
   ADR 0028), `critique-argument`, `critique-clarity`, `critique-docs`, `critique-microcopy`,
-  `critique-usability` (v0.1.0 each) (all `skills/critique-*`, `active`). The toy fixture at
+  `critique-usability` (v0.1.0 each) (all `skills/critique-*`, `active`). `critique-forms` (v0.1.0)
+  is built and registered as `experimental`: it installs with the plugin, but the README catalog and
+  the site leave it out until its ship verdict (the N2 spec's AC-12; see
+  [ADR 0036](docs/internal/decisions/0036-experimental-status-until-ship-verdict.md)). The toy fixture at
   `skills/_template-fixture` is a scaffolding sample, not a shipped skill, and is deliberately not
   registered in `library.json`.
 - **Subagents:** `critique-critic` (`agents/critique-critic.md`, v0.1.0, `active`, Claude-only) - the

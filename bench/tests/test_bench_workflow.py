@@ -93,6 +93,13 @@ def test_the_out_dir_stays_under_bench_results() -> None:
     assert "git add bench/results" in text
 
 
+def test_a_dispatch_scores_into_its_own_run_directory() -> None:
+    """run_bench.py defaults --results-out to bench/results/results.json, the file every published
+    figure is recomputed from. A dispatch that took the default committed an overwrite of it to its
+    results branch, which nobody may merge (E63, the cheap half)."""
+    assert '--results-out "$BENCH_OUT_DIR/results.json"' in _harness_command()
+
+
 def test_the_fallback_is_not_a_committed_run_set() -> None:
     """`runs` and `runs-cal1` are the two committed run sets; a dispatch must target neither."""
     command_and_env = _workflow_text()

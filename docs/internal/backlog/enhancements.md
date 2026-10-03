@@ -1246,6 +1246,10 @@ and the repository did not have.
 - **Size:** M. **Release:** v0.2.0. **Category:** measurement. **Confidence:** verified.
 - **Blocks:** Any published table showing a re-run figure; `bench.yml` result branches merging cleanly
 - **Depends on:** Nothing
+- **Cheap half done 2026-09-30,** on the N2 (critique-forms) build branch, because N2's paid run
+  needed it first: `bench.yml` passes `--results-out "$BENCH_OUT_DIR/results.json"`, and
+  `bench/tests/test_bench_workflow.py` holds it. The rest of the item (readers keyed on `run_set`,
+  or the amended rule) is still open.
 - **Rank at intake:** unranked (added 2026-09-24). **Status:** backlog.
 
 ## E64 - Rule on ADR 0030 now that the sonnet fidelity gate has failed

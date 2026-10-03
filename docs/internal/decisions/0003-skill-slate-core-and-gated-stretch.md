@@ -5,7 +5,7 @@
 - **Why:** Locks in a defensible core slate while letting the harder, judged-heavier domains earn their place with evidence instead of assumption, so a bad number becomes a documented hold rather than a shipped weak skill.
 - **Status:** Accepted (2026-07-31).
 
-- **Status:** Accepted
+- **Status:** Accepted, amended in part by [0036](0036-experimental-status-until-ship-verdict.md): a held skill stays in `library.json` as `experimental`, not `incubating`
 - **Date:** 2026-07-31
 - **Deciders:** Jonathan Prisant, planning session with Claude
 
