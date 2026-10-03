@@ -3,7 +3,7 @@
 Local-first, version-controlled backlogs (Standard sec 7.1). Two files, plus this index:
 
 - **[enhancements.md](enhancements.md)** - features, fixes and refinements to components that already
-  exist. 69 items, `E1` through `E69`.
+  exist. 72 items, `E1` through `E72`.
 - **[new-components.md](new-components.md)** - proposals to ADD a skill, command, subagent, hook or
   chain. 5 items, `N1` through `N5`, each with a recorded why-gate verdict.
 
@@ -98,7 +98,7 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**31 items depend on nothing and can start today.** Derived from each item's own
+**34 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
@@ -122,6 +122,9 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E52 | Decide who performs 'revise' in the automated revision loop before building it | S | v0.3.0 |
 | E59 | Verify what the marketplace consumes the homepage field for | S | unscheduled |
 | E69 | Revisit ADR 0011's npm option now that the toolkit ships on npm | S | unscheduled |
+| E70 | Teach the skill template how a synthesized rubric lays out its references and anchors | S | unscheduled |
+| E71 | Let a skill keep a bibliography in references/ without a criterion table | S | unscheduled |
+| E72 | Fix the site's rubric attribution for a synthesized namespace before critique-forms goes active | S to M | v0.2.0 |
 | E10 | Rule how BYOR is measured under the measured-only exclusion | M | v0.2.0 |
 | E22 | Turn on severity_expected scoring | M | v0.2.0 |
 | E23 | Write methodology.md's location-level metrics section | M | v0.2.0 |

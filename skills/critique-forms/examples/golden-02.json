@@ -1,0 +1,121 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-forms/examples/artifacts/golden-02.html",
+  "expected_envelope": {
+    "findings": [
+      {
+        "confidence": "high",
+        "criterion": "FORMS-ADDRESS-FORMAT",
+        "evidence": "<input id=\"house-number\" name=\"house_number\" required>",
+        "fix": "Collect the house number and street together in one address-line field.",
+        "id": "F-001",
+        "lane": "scripted",
+        "location": "#house-number, <input> field, label 'House number', line 25",
+        "severity": 3,
+        "violation": "The house number has its own field separate from the street, and it is required, so an address with no number cannot be entered."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-AUTOCOMPLETE",
+        "evidence": "<input id=\"postcode\" name=\"postcode\" autocomplete=\"off\" required>",
+        "fix": "Remove autocomplete=off and give the field its standard autofill token.",
+        "id": "F-002",
+        "lane": "scripted",
+        "location": "#postcode, <input> field, label 'Postcode', line 41",
+        "severity": 3,
+        "violation": "Autofill is switched off on this postal code field, data a person enters often and a browser could fill."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-FORMAT-TOLERANCE",
+        "evidence": "pattern=[0-9]+",
+        "fix": "Loosen the pattern to accept every valid way of writing the value, and normalise it after submission.",
+        "id": "F-003",
+        "lane": "scripted",
+        "location": "#phone, <input> field, label 'Phone', line 21",
+        "severity": 3,
+        "violation": "The pattern on this phone field rejects valid values such as +44 20 7946 0958; 020 7946 0958."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-PHONE-REASON",
+        "evidence": "<input id=\"phone\" name=\"phone\" type=\"tel\" autocomplete=\"tel\" pattern=\"[0-9]+\" required>",
+        "fix": "Say beside the field what the number is used for, or make it optional.",
+        "id": "F-004",
+        "lane": "scripted",
+        "location": "#phone, <input> field, label 'Phone', line 21",
+        "severity": 3,
+        "violation": "A phone number is required with no word beside the field on why it is needed, though the form already asks for an email address."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-RESET-BUTTON",
+        "evidence": "<button type=\"reset\">",
+        "fix": "Remove the reset control.",
+        "id": "F-005",
+        "lane": "scripted",
+        "location": "\"html > body > main > form > div:nth-of-type(9) > button:nth-of-type(1)\", <button> button, text 'Reset', line 44",
+        "severity": 3,
+        "violation": "A control that clears everything entered sits directly beside the submit button."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-ADDRESS-FORMAT",
+        "evidence": "<input id=\"county\" name=\"county\" required>",
+        "fix": "Make the county field optional, or remove it.",
+        "id": "F-006",
+        "lane": "scripted",
+        "location": "#county, <input> field, label 'County', line 37",
+        "severity": 2,
+        "violation": "A county is required, though postal delivery does not need one, so a person without one must invent a value."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-AUTOCOMPLETE",
+        "evidence": "<input id=\"city\" name=\"city\" required>",
+        "fix": "Add the autocomplete token the HTML standard defines for this field, for example address-level2.",
+        "id": "F-007",
+        "lane": "scripted",
+        "location": "#city, <input> field, label 'Town or city', line 33",
+        "severity": 2,
+        "violation": "This city field carries no autofill token, so the browser must guess what it holds and may not fill it."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-AUTOCOMPLETE",
+        "evidence": "<input id=\"county\" name=\"county\" required>",
+        "fix": "Add the autocomplete token the HTML standard defines for this field, for example address-level2 or address-level1.",
+        "id": "F-008",
+        "lane": "scripted",
+        "location": "#county, <input> field, label 'County', line 37",
+        "severity": 2,
+        "violation": "This county field carries no autofill token, so the browser must guess what it holds and may not fill it."
+      }
+    ],
+    "run": {
+      "artifact": "skills/critique-forms/examples/artifacts/golden-02.html",
+      "artifact_sha256": "bd5e3dbd242faf65996a5ef830852298bb9e6a95d61db755c69d57ea08f6dcba",
+      "contract_version": "1.0.0",
+      "model": "none",
+      "rubrics": [
+        "FORMS"
+      ],
+      "skill": "critique-forms",
+      "skill_version": "0.1.0",
+      "timestamp": "2026-10-01T03:38:50Z"
+    },
+    "summary": {
+      "by_severity": {
+        "0": 0,
+        "1": 0,
+        "2": 3,
+        "3": 5,
+        "4": 0
+      },
+      "gate": "fail",
+      "severity_3_threshold": 0,
+      "suppressed_count": 0
+    }
+  },
+  "note": "golden-02.html is a delivery-address form and the example for the criteria graded by which branch of their condition fired. The required House number field beside a street field is severity 3, because an address with no number cannot be entered, and the required County field is the lesser branch at 2 (FORMS-ADDRESS-FORMAT). Autocomplete switched off on the postcode is 3, address data, while the city and county fields that only lack a token are 2 (FORMS-AUTOCOMPLETE, the ruled scale). The phone pattern accepts digits only and rejects a number written with spaces or a leading plus (FORMS-FORMAT-TOLERANCE, 3). That required phone field gives no reason while the form also asks for an email address, so it is the greater branch at 3 (FORMS-PHONE-REASON). The Reset button sits directly beside the submit button, so it is 3 (FORMS-RESET-BUTTON)."
+}

@@ -79,7 +79,16 @@ jobs:
           # Keyed on the run id so two dispatches can never collide, and kept under bench/results/
           # because the publish step below stages exactly that path.
           BENCH_OUT_DIR: ${{ inputs.out_dir || format('bench/results/runs-dispatch-{0}', github.run_id) }}
-        run: python bench/run_bench.py --skills "${{ inputs.skills }}" --k "${{ inputs.k }}" --tiers "${{ inputs.tiers }}" --out-dir "$BENCH_OUT_DIR" ${{ inputs.dry_run && '--dry-run' || '' }}
+        # --results-out keeps the scored results.json inside the run directory. run_bench.py
+        # defaults it to bench/results/results.json, the file every published figure comes from,
+        # so without it each results branch carried an overwrite of that file nobody may merge
+        # (E63, the cheap half).
+        #
+        # `timeout 330m` stops the harness 30 minutes inside GitHub's 360-minute job limit. A job
+        # that reaches that limit is marked cancelled, so the `!cancelled()` publish step below
+        # would be skipped and every envelope the run paid for discarded. Stopped by `timeout`
+        # instead, this step simply fails, and the publish step still runs.
+        run: timeout --kill-after=2m 330m python bench/run_bench.py --skills "${{ inputs.skills }}" --k "${{ inputs.k }}" --tiers "${{ inputs.tiers }}" --out-dir "$BENCH_OUT_DIR" --results-out "$BENCH_OUT_DIR/results.json" ${{ inputs.dry_run && '--dry-run' || '' }}
 
       # `!cancelled()` rather than a bare condition, because a partial failure is the case where
       # publishing matters most. On 2026-08-17 a 40-cell dispatch produced 37 valid envelopes over

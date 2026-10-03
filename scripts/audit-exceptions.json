@@ -1,0 +1,14 @@
+{
+  "$comment": "Read by scripts/audit.mjs. Each entry excuses one advisory until its expiry date, after which the advisory gates again. Add one only with a reason the advisory cannot apply here, and remove it once no tree reports the advisory.",
+  "exceptions": [
+    {
+      "id": "GHSA-ch52-4w7c-c8xp",
+      "package": "http-cache-semantics",
+      "tree": "site",
+      "reason": "No fixed version exists (every version through 4.2.0, the latest, is affected). The flaw lets a shared HTTP cache serving many users hand one user's cached response, including Set-Cookie, to another. Here the package runs only inside Astro's build (astro/dist/assets/build/remote.js, caching remote images), which serves no users and holds no cookies, and the deployed site is static files.",
+      "added": "2026-10-02",
+      "expires": "2026-11-02",
+      "approved-by": "maintainer, 2026-10-02"
+    }
+  ]
+}

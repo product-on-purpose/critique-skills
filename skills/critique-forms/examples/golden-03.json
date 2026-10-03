@@ -1,0 +1,120 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-forms/examples/artifacts/golden-03.html",
+  "expected_envelope": {
+    "findings": [
+      {
+        "confidence": "high",
+        "criterion": "FORMS-FIELD-WIDTH",
+        "evidence": "<input id=\"email\" class=\"entry\" name=\"email\" type=\"email\" autocomplete=\"email\" size=\"15\"> (size=15)",
+        "fix": "Size the field to show at least 20 characters.",
+        "id": "F-001",
+        "lane": "scripted",
+        "location": "#email, <input> field, label 'Email for reminders', line 23",
+        "severity": 3,
+        "violation": "This email field shows 15 characters, too few to show a typical value whole while it is typed and checked."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-PLACEHOLDER-INSTRUCTION",
+        "evidence": "placeholder=Must be 10 digits",
+        "fix": "Move the rule into hint text beside the field, linked with aria-describedby.",
+        "id": "F-002",
+        "lane": "scripted",
+        "location": "#card, <input> field, label 'Library card number *', line 19",
+        "severity": 3,
+        "violation": "A format rule appears only in the placeholder, which disappears as soon as typing starts."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-AUTOCORRECT",
+        "evidence": "<input id=\"username\" class=\"entry\" name=\"username\" autocomplete=\"username\" required>",
+        "fix": "Add autocorrect=off and spellcheck=false, and autocapitalize=none.",
+        "id": "F-003",
+        "lane": "scripted",
+        "location": "#username, <input> field, label 'Username *', line 15",
+        "severity": 2,
+        "violation": "On this username field, autocorrection and spellchecking stay on and auto-capitalization stays on, so a phone keyboard can change a value it does not know."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-INPUT-FONT-SIZE",
+        "evidence": "font-size: 14px declared by the rule .entry",
+        "fix": "Set the field's font size to at least 16 pixels.",
+        "id": "F-004",
+        "instances": [
+          {
+            "evidence": "<input id=\"card\" class=\"entry\" name=\"membership_number\" placeholder=\"Must be 10 digits\" required>",
+            "location": "#card, <input> field, label 'Library card number *', line 19"
+          },
+          {
+            "evidence": "<input id=\"email\" class=\"entry\" name=\"email\" type=\"email\" autocomplete=\"email\" size=\"15\">",
+            "location": "#email, <input> field, label 'Email for reminders', line 23"
+          }
+        ],
+        "lane": "scripted",
+        "location": "#username, <input> field, label 'Username *', line 15",
+        "severity": 2,
+        "violation": "The text in this field is 14 pixels, below the 16 pixels at which a phone stops zooming the page on focus."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-NUMERIC-INPUTMODE",
+        "evidence": "<input id=\"card\" class=\"entry\" name=\"membership_number\" placeholder=\"Must be 10 digits\" required>",
+        "fix": "Add inputmode=numeric.",
+        "id": "F-005",
+        "lane": "scripted",
+        "location": "#card, <input> field, label 'Library card number *', line 19",
+        "severity": 2,
+        "violation": "This account number is a text field without the numeric input mode, so a phone shows the full keyboard for digits."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-REQUIRED-OPTIONAL",
+        "evidence": "<input id=\"username\" class=\"entry\" name=\"username\" autocomplete=\"username\" required>",
+        "fix": "Explain the asterisk in text before the first field, or mark optional fields in words instead.",
+        "id": "F-006",
+        "lane": "scripted",
+        "location": "#username, <input> field, label 'Username *', line 15",
+        "severity": 2,
+        "violation": "Labels carry an asterisk, but nothing in the form says what the asterisk means."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-SPLIT-ENTITY",
+        "evidence": "<input id=\"code-1\" name=\"code_1\" maxlength=\"1\" inputmode=\"numeric\" aria-label=\"Code digit 1\"> <input id=\"code-2\" name=\"code_2\" maxlength=\"1\" inputmode=\"numeric\" aria-label=\"Code digit 2\"> <input id=\"code-3\" name=\"code_3\" maxlength=\"1\" inputmode=\"numeric\" aria-label=\"Code digit 3\"> <input id=\"code...",
+        "fix": "Collect the one-time code in one field.",
+        "id": "F-007",
+        "lane": "scripted",
+        "location": "#code-1, <input> field, label 'Code digit 1', line 27",
+        "severity": 2,
+        "violation": "One one-time code is split across 4 fields, so the person moves between boxes for a single value."
+      }
+    ],
+    "run": {
+      "artifact": "skills/critique-forms/examples/artifacts/golden-03.html",
+      "artifact_sha256": "9335ec70fa2af08c80ed0d94280cf6a56f0ae3eed179ec8e62f245ebcafcd9fb",
+      "contract_version": "1.0.0",
+      "model": "none",
+      "rubrics": [
+        "FORMS"
+      ],
+      "skill": "critique-forms",
+      "skill_version": "0.1.0",
+      "timestamp": "2026-10-01T03:38:50Z"
+    },
+    "summary": {
+      "by_severity": {
+        "0": 0,
+        "1": 0,
+        "2": 5,
+        "3": 2,
+        "4": 0
+      },
+      "gate": "fail",
+      "severity_3_threshold": 0,
+      "suppressed_count": 0
+    }
+  },
+  "note": "golden-03.html is a library sign-in form exercising the CSS-reading criteria and an instance list. One stylesheet rule sizes three inputs at 14 pixels, so FORMS-INPUT-FONT-SIZE reports one finding with the other two fields as instances, at severity 2 because 14 is not below 12. The email field declares size 15, under the 20 an email needs, so FORMS-FIELD-WIDTH is the narrow branch at 3. The library card number is a text field without the numeric input mode (FORMS-NUMERIC-INPUTMODE, 2), and its rule Must be 10 digits lives only in the placeholder (FORMS-PLACEHOLDER-INSTRUCTION, the rule branch at 3). Labels carry an asterisk nothing explains (FORMS-REQUIRED-OPTIONAL, 2). The username leaves autocorrect and auto-capitalization on (FORMS-AUTOCORRECT, one field, 2). Four one-character boxes split the code (FORMS-SPLIT-ENTITY, one split value, 2)."
+}

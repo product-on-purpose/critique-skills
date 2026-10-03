@@ -23,6 +23,11 @@ shared library.
   `npm run gen` and its `--check` drift mode, so it is rarely invoked standalone.
 - `check-release-versions.mjs` - the release tag-vs-manifest version guard; the CI "release" job's
   entry point.
+- `audit.mjs` - the CI "audit" job's entry point: `npm audit` at high severity for one tree (the root,
+  or `--prefix site`), except advisories `audit-exceptions.json` excuses with a reason and an expiry
+  date. An exception that has expired gates again.
+- `audit-exceptions.json` - the dated exceptions `audit.mjs` reads: each names one advisory by GHSA
+  id, the tree it applies to, why it cannot apply here, and when it expires (at most 31 days on).
 - `extract-release-notes.mjs` - pulls one version's section out of `RELEASE-NOTES.md` for the GitHub
   release body.
 - `skill-selftest.py` - validates one `skills/critique-<domain>/` directory against the S-04 skill

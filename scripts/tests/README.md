@@ -13,6 +13,9 @@ Python half.
 
 ## Inventory (Node, `*.test.mjs`)
 
+- `audit.test.mjs` - the dependency audit's dated exceptions: an unexcused high advisory fails, an
+  exception excuses only the advisory it names and gates again on its expiry date, a dependent
+  package is not counted as a second advisory, and every committed exception lasts at most 31 days.
 - `check-release-versions.test.mjs` - the release tag-vs-manifest version guard: passes when every
   manifest agrees with the tag, fails (and still reports every file) when one disagrees, fails
   clearly when a listed file is missing, and the usage/`GITHUB_REF_NAME`-fallback paths.
@@ -85,3 +88,5 @@ Python half.
 - `__init__.py` - package marker so `scripts/tests/` resolves against the repository root.
 - `test_skill_selftest.py`, `test_skills_conformance.py` - pytest suite for `skill-selftest.py` and
   the plugin's conformance surface.
+- `test_smoke_cases.py` - asserts `smoke.py`'s CASES table names every installed skill, each with an
+  artifact on disk, so a new skill cannot ship outside the CI `smoke` job.

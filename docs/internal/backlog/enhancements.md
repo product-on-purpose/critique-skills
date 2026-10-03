@@ -1252,6 +1252,10 @@ and the repository did not have.
 - **Size:** M. **Release:** v0.2.0. **Category:** measurement. **Confidence:** verified.
 - **Blocks:** Any published table showing a re-run figure; `bench.yml` result branches merging cleanly
 - **Depends on:** Nothing
+- **Cheap half done 2026-09-30,** on the N2 (critique-forms) build branch, because N2's paid run
+  needed it first: `bench.yml` passes `--results-out "$BENCH_OUT_DIR/results.json"`, and
+  `bench/tests/test_bench_workflow.py` holds it. The rest of the item (readers keyed on `run_set`,
+  or the amended rule) is still open.
 - **Rank at intake:** unranked (added 2026-09-24). **Status:** backlog.
 
 ## E64 - Rule on ADR 0030 now that the sonnet fidelity gate has failed
@@ -1417,3 +1421,69 @@ and the repository did not have.
 - **Depends on:** Nothing. The natural moment is the toolkit's first npm release that carries
   Standard 0.17.
 - **Rank at intake:** unranked (added 2026-09-30). **Status:** backlog.
+
+## E70 - Teach the skill template how a synthesized rubric lays out its references and anchors
+
+- **Target:** `docs/internal/skill-template.md`, the layout block (line 50) and "Criterion tables
+  (`references/<source-id>.md`, one per rubric source)" (line 487)
+- **Change:** Two template rules do not fit a rubric synthesized under ADR 0035 (synthesized rubric
+  namespace). First, "one per rubric source" would split each FORMS row across every publisher it
+  cites, so `critique-forms` keeps one `references/FORMS.md`, named for the namespace. Second, the
+  column contract asks for one severity-3 anchor per criterion and has no way to say a criterion
+  never reaches severity 3. Three FORMS rows write "Not assigned" in that cell:
+  FORMS-SINGLE-COLUMN, capped by ruling, and FORMS-ACTION-LABEL and FORMS-CONFIRM-PASSWORD, which
+  never block completion. Done: the template names the one-file-per-namespace layout for a
+  synthesized rubric, and names a sanctioned value for a criterion with no severity-3 case.
+- **Why:** Both were improvised during the N2 (critique-forms) build, and neither is visible to a
+  reader of the template. N5 (critique-checkout) is expected to take a synthesized namespace too, so
+  it will meet the same two gaps.
+- **Evidence:** `skills/critique-forms/references/FORMS.md`; PR 60 question 12.
+- **Derives from:** N2 (critique-forms), built in PR 60.
+- **Size:** S. **Release:** unscheduled. **Category:** docs. **Confidence:** verified.
+- **Blocks:** Nothing
+- **Depends on:** Nothing
+- **Rank at intake:** unranked (added 2026-10-02, filed on the maintainer's delegation). **Status:**
+  backlog.
+
+## E71 - Let a skill keep a bibliography in references/ without a criterion table
+
+- **Target:** `scripts/skill-selftest.py`, the references check (`references-criterion-table-missing`,
+  near line 802)
+- **Change:** The self-test requires a table with an Operationalization column in every
+  `references/*.md` except `severity-anchors.md`. So a skill cannot keep its bibliography beside
+  its criteria. `critique-forms` links to the N2 effort's committed `sources.md` instead, under
+  `docs/internal/release-plans/_unassigned/`, which moves when the effort is promoted; the craft
+  review flagged those links. Done: an exemption for one named bibliography file with a minimal
+  check of its own, or a recorded decision that a bibliography stays outside `references/`.
+- **Why:** ADR 0035's fourth condition requires a synthesized rubric's bibliography to be
+  committed. Today the only place it fits is a release-plan folder whose path is not stable.
+- **Evidence:** `scripts/skill-selftest.py` lines 798 to 808;
+  `docs/internal/release-plans/_unassigned/N2_critique-forms/craft-review.md`.
+- **Derives from:** N2 (critique-forms), built in PR 60.
+- **Size:** S. **Release:** unscheduled. **Category:** tooling. **Confidence:** verified.
+- **Blocks:** Nothing
+- **Depends on:** Nothing
+- **Rank at intake:** unranked (added 2026-10-02, filed on the maintainer's delegation). **Status:**
+  backlog.
+
+## E72 - Fix the site's rubric attribution for a synthesized namespace before critique-forms goes active
+
+- **Target:** `scripts/gen-site.mjs`, `generateCriteriaExplorer` (from line 1025)
+- **Change:** The criteria page assumes a `rubric_sources` id equals a criterion namespace. No
+  `critique-forms` source has the id `FORMS`, so the fallback near line 1070 credits every FORMS
+  criterion to `rubricSources[0]`, which is `BAYMARD`. The same page heads its sources table
+  "Namespace", keeps one source per id across all skills, joins a skill's sources with "and", and
+  says its figures come from "the six `SKILL.md` frontmatters". Done: the page attributes a
+  synthesized namespace's criteria to the rubric and points to the criterion rows for sources, the
+  skill count is computed, and a test in `scripts/tests/gen-site.test.mjs` covers both.
+- **Why:** ADR 0035 moved attribution from the ID to the row, and the site still reads it from the
+  ID. It does not bite while the skill is `experimental`, because the site renders only `active`
+  skills (ADR 0036). It would publish a misattribution the moment the status changes.
+- **Evidence:** `scripts/gen-site.mjs` lines 1028 to 1072, read 2026-10-02; PR 60 question 11.
+- **Derives from:** N2 (critique-forms), built in PR 60.
+- **Size:** S to M. **Release:** v0.2.0. **Category:** fix. **Confidence:** verified by reading the
+  code; not reproduced by a site build with the skill active.
+- **Blocks:** `critique-forms` moving to `active` (ADR 0036, decision 3).
+- **Depends on:** Nothing
+- **Rank at intake:** unranked (added 2026-10-02, filed on the maintainer's delegation). **Status:**
+  backlog.

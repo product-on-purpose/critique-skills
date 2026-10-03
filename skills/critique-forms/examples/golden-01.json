@@ -1,0 +1,88 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-forms/examples/artifacts/golden-01.html",
+  "expected_envelope": {
+    "findings": [
+      {
+        "confidence": "high",
+        "criterion": "FORMS-ACTION-LABEL",
+        "evidence": "<button type=\"submit\">",
+        "fix": "Label the button with the action it performs, such as Create account or Send message.",
+        "id": "F-001",
+        "lane": "scripted",
+        "location": "\"html > body > main > form > button\", <button> button, text 'Submit', line 36",
+        "severity": 2,
+        "violation": "The form's primary button is labelled Submit, a generic word that says nothing about what pressing it does."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-CONFIRM-PASSWORD",
+        "evidence": "<input id=\"password-again\" name=\"password_again\" type=\"password\" autocomplete=\"new-password\" required>",
+        "fix": "Remove the confirmation field and offer a control that shows the password as typed.",
+        "id": "F-002",
+        "lane": "scripted",
+        "location": "#password-again, <input> field, label 'Confirm password', line 34",
+        "severity": 2,
+        "violation": "The form asks for the new password a second time to confirm it, doubling the typing for every person."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-INPUT-TYPE",
+        "evidence": "<input id=\"email\" name=\"email\" type=\"text\" autocomplete=\"email\" autocorrect=\"off\" spellcheck=\"false\" autocapitalize=\"none\" required>",
+        "fix": "Set type=email on the field.",
+        "id": "F-003",
+        "lane": "scripted",
+        "location": "#email, <input> field, label 'Email address', line 17",
+        "severity": 2,
+        "violation": "This email field is type text, so a phone does not show the keyboard built for it."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-OPTION-CONTROL",
+        "evidence": "<select id=\"squad\" name=\"squad\" required>",
+        "fix": "Offer the options as visible radio buttons.",
+        "id": "F-004",
+        "lane": "scripted",
+        "location": "#squad, <select> field, label 'Squad', line 21",
+        "severity": 2,
+        "violation": "A single choice among 3 options sits in a drop-down, so the person must open it to see them."
+      },
+      {
+        "confidence": "high",
+        "criterion": "FORMS-PASSWORD-RULES",
+        "evidence": "<input id=\"password\" name=\"password\" type=\"password\" autocomplete=\"new-password\" minlength=\"6\" required>",
+        "fix": "Require at least eight characters and remove the pattern and any maximum length.",
+        "id": "F-005",
+        "lane": "scripted",
+        "location": "#password, <input> field, label 'Create a password', line 30",
+        "severity": 2,
+        "violation": "On this new-password field, the minimum length is only 6."
+      }
+    ],
+    "run": {
+      "artifact": "skills/critique-forms/examples/artifacts/golden-01.html",
+      "artifact_sha256": "3d776047c70de841e8579b4916ae3dde68447474c47a70df0c6a27d6e82b3338",
+      "contract_version": "1.0.0",
+      "model": "none",
+      "rubrics": [
+        "FORMS"
+      ],
+      "skill": "critique-forms",
+      "skill_version": "0.1.0",
+      "timestamp": "2026-10-01T03:38:49Z"
+    },
+    "summary": {
+      "by_severity": {
+        "0": 0,
+        "1": 0,
+        "2": 5,
+        "3": 0,
+        "4": 0
+      },
+      "gate": "pass",
+      "severity_3_threshold": 0,
+      "suppressed_count": 0
+    }
+  },
+  "note": "golden-01.html is a club sign-up form that plants five single-occurrence defects, each graded at severity 2 because each adds work without blocking completion. The email field declares the text type, so a phone opens the full keyboard (FORMS-INPUT-TYPE, one field, so the lesser recurrence grade). The squad choice offers three real options in a drop-down, not counting its empty-valued prompt (FORMS-OPTION-CONTROL). The new password allows six characters, below the eight the operational test sets (FORMS-PASSWORD-RULES, the minlength branch). A Confirm password field repeats it (FORMS-CONFIRM-PASSWORD, fixed at 2). The only button reads Submit (FORMS-ACTION-LABEL, fixed at 2). Every other field carries its autofill token and switches autocorrect off, so no other criterion fires."
+}

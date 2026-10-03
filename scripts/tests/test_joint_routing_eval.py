@@ -111,6 +111,11 @@ def test_every_contested_case_maps_to_a_declared_boundary_pair(eval_data: dict) 
         # page" to critique-usability. Both take HTML and markdown UI artifacts; usability disclaimed
         # microcopy but not accessibility, and accessibility did not mention usability at all.
         ("critique-accessibility", "critique-usability"),
+        # Added with critique-forms (N2), which borders all three skills whose ground a form
+        # review could stray into: WCAG conformance, a flow's heuristics, and error-message wording.
+        ("critique-accessibility", "critique-forms"),
+        ("critique-forms", "critique-usability"),
+        ("critique-forms", "critique-microcopy"),
     ],
     ids=lambda p: f"{p[0]}-vs-{p[1]}",
 )

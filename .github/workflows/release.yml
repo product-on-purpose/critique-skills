@@ -79,7 +79,7 @@ jobs:
         run: npm run gen -- --check
 
       - name: Audit npm dependencies
-        run: npm audit --audit-level=high
+        run: node scripts/audit.mjs
 
       - name: Guard - tag must equal every version-bearing manifest
         run: node scripts/check-release-versions.mjs "${GITHUB_REF_NAME}"
