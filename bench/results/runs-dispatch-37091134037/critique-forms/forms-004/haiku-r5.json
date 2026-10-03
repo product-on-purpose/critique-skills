@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "Row 1: Full name field with id='name-input' name='full_name'. Row 12: Your name field with id='legalname-input' name='legal_name'. Both use autocomplete='name' and collect the same personal name data.",
+      "fix": "Remove the duplicate 'Your name' field, or if both are needed for different purposes (e.g., one for display, one for legal), clarify the distinction in the labels.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "#legalname-input, <input> field, label 'Your name'",
+      "severity": 3,
+      "violation": "The form asks for 'Full name' (#name-input) at the start and then asks for 'Your name' (#legalname-input) again later, requesting the same information twice."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "Secondary button: style=\"padding:12px 20px;font-size:16px\". Primary button: no styling declared.",
+      "fix": "Either remove the explicit styling from the 'View details' button or add more prominent styling to the 'Create account' button to ensure the primary action is visually most prominent.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "#viewdetails-btn, <button> element, secondary action",
+      "severity": 2,
+      "violation": "The secondary 'View details' button is styled with explicit padding (12px 20px) and font-size (16px), while the primary 'Create account' submit button has no declared styling, making the secondary action as prominent or more prominent than the primary action."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "The field is marked required='' but serves to collect a preference that could be asked in a profile update or preferences screen after the account is created.",
+      "fix": "Either make this field optional or move it to a post-signup preferences screen so account creation is not blocked by this preference.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "#contacttime-input, <input> field, label 'Preferred contact time'",
+      "severity": 2,
+      "violation": "The 'Preferred contact time' field is required but does not appear necessary for initial account creation; it could be collected after account setup in a separate step."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-TOUCH-TARGET",
+      "evidence": "style=\"padding:12px 20px;font-size:16px\" results in: top/bottom padding (24px) + text height at 16px with standard 1.2 line-height (~19px) = ~43px total.",
+      "fix": "Increase padding or font size on the button to ensure the target is at least 44 pixels in the shortest dimension, or increase line-height to increase text height.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "#viewdetails-btn, <button> element, 'View details'",
+      "severity": 2,
+      "violation": "The 'View details' button renders at approximately 43 pixels in height (12px padding top + 12px padding bottom + ~19px text at 16px font with default line-height), which is below the recommended 44-pixel minimum for a mobile fingertip target."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-10-03T05:23:01Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

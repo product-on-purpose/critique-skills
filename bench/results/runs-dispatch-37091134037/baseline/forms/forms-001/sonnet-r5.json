@@ -1,0 +1,204 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"form\">` has no `action` or `method` attribute",
+      "fix": "Add `method=\"post\"` and an `action` pointing to the registration endpoint.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<form id=\"form\">` opening tag",
+      "severity": 3,
+      "violation": "Without `method=\"post\"`, the form defaults to GET, so the password and password-confirmation fields would be submitted as plaintext query-string parameters, exposing them in browser history, server logs, and the Referer header."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`autocomplete=\"e-mail\"`",
+      "fix": "Change `autocomplete=\"e-mail\"` to `autocomplete=\"email\"`.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "row-email, `email-input`",
+      "severity": 3,
+      "violation": "`e-mail` is not a valid HTML autocomplete token (the correct value is `email`), so browsers will not reliably autofill this field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"confirm-password-input\" name=\"password_again\" type=\"password\" autocomplete=\"new-password\" required=\"\">` with no script anywhere in the document",
+      "fix": "Add `minlength=\"8\"` to the confirm field and add JavaScript (or a `pattern`-based workaround) to validate that the two password values match before submit.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-confirm-password, `confirm-password-input`",
+      "severity": 3,
+      "violation": "There is no `minlength` on this field (inconsistent with the primary password field) and no client-side mechanism at all to verify the two password fields match, since the document contains no `<script>`."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"phone-input\" ...><p>We will text you about delivery updates.</p>`",
+      "fix": "Give the `<p>` an `id` and reference it from the input via `aria-describedby`.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-phone, `phone-input` and its helper `<p>`",
+      "severity": 3,
+      "violation": "The explanatory text is not programmatically associated with the input, so screen reader users won't know it relates to the phone field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"housenumber-input\" name=\"house_number\" type=\"text\" required=\"\">` (no `autocomplete` attribute), compared with the following `street-input` which has `autocomplete=\"address-line1\"`",
+      "fix": "Add an appropriate autocomplete value (e.g. combine house number into `address-line1`/`address-line2` or add `autocomplete=\"address-line2\"`).",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "row-housenumber, `housenumber-input`",
+      "severity": 3,
+      "violation": "The missing autocomplete token breaks address autofill continuity between house number and street address."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label ...>Company website</label><input ... name=\"website\" type=\"url\" required=\"\">`",
+      "fix": "Remove this field or make it optional and clarify why a personal shopper would need to provide a company website.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "row-website, `website-input`",
+      "severity": 3,
+      "violation": "A required company website field is out of place and creates unnecessary friction on a consumer apparel retailer's personal account signup form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no `pattern` or `maxlength` attribute",
+      "fix": "Add `pattern=\"\\d{8}\"` and `maxlength=\"8\"`, and move the format hint into persistent visible helper text.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "row-member, `member-input`",
+      "severity": 3,
+      "violation": "The 8-digit format requirement is communicated only via placeholder text, which disappears once the user types and provides no enforced validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"acctnum-label\" for=\"acctnum-input\">Account number</label><input ... name=\"account_number\" type=\"text\" inputmode=\"numeric\" required=\"\">`",
+      "fix": "Either remove the redundant field or add clear, distinct helper text explaining how account number differs from membership number.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "row-acctnum, `acctnum-input`",
+      "severity": 3,
+      "violation": "This required field's purpose overlaps with the adjacent \"Membership number\" field with no distinguishing help text, confusing users about what to enter."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Overnight</option><option>Next-day</option><option>International</option>`",
+      "fix": "Remove the duplicate overnight/next-day option and move \"International\" to a separate shipping-destination field.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "row-shipspeed, `shipspeed-select` options",
+      "severity": 3,
+      "violation": "\"Overnight\" and \"Next-day\" describe the same shipping speed, and \"International\" is a destination, not a speed, so the option set conflates two different categories."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">` with `<option>Standard</option>` listed first and no blank/placeholder option",
+      "fix": "Add a disabled, selected placeholder option (e.g. \"Select shipping speed\") so `required` actually forces a deliberate choice.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "row-shipspeed, `shipspeed-select`",
+      "severity": 3,
+      "violation": "Because the first option is selected by default and is a valid value, the `required` attribute has no practical effect - the user can submit without ever making a choice."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"legalname-label\" for=\"legalname-input\">Your name</label><input ... name=\"legal_name\" type=\"text\" autocomplete=\"name\" ... required=\"\">`",
+      "fix": "Remove one of the two name fields, or clearly differentiate their purposes (e.g. \"legal name\" vs. \"display name\") with distinct labeling and autocomplete tokens.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "row-legalname, `legalname-input`",
+      "severity": 3,
+      "violation": "This duplicates the \"Full name\" field collected earlier (`name-input`), using the same `autocomplete=\"name\"` token, which will confuse users and autofill behavior by asking for the same information twice under different labels."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required=\"\">`",
+      "fix": "Remove the organization field (or make it optional) and move `font-size: 16px` into a shared CSS rule applied to all text inputs.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "row-org, `org-input`",
+      "severity": 3,
+      "violation": "A required organization name field is scope creep for a personal retail account, and the one-off inline `style` attribute suggests ad hoc patching rather than a consistent stylesheet rule (other text inputs lack it despite presumably needing the same iOS zoom fix)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"contacttime-label\" for=\"contacttime-input\" style=\"display:block\">Preferred contact time</label><input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Replace the free-text input with a `<select>` or `<input type=\"time\">`/range picker, and move the display style into CSS.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "row-contacttime, `contacttime-label`",
+      "severity": 3,
+      "violation": "The field is a required free-text input with no format guidance (e.g. \"10am - 12pm\" vs \"morning\"), making responses inconsistent and hard to process; the inline `display:block` style is another one-off patch rather than a stylesheet rule."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>`",
+      "fix": "Either remove the button or wire it to a specific action/disclosure with appropriate ARIA attributes describing what it reveals.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "`viewdetails-btn`",
+      "severity": 3,
+      "violation": "The button has no visible target, `aria-controls`/`aria-expanded`, or accompanying script, so its purpose and behavior are undefined within the document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"hear-select\" required=\"\">` with `<option>Search engine</option>` listed first and no blank/placeholder option",
+      "fix": "Add a disabled, selected placeholder option so the field cannot be submitted without an intentional selection.",
+      "id": "F-015",
+      "lane": "judged",
+      "location": "row-hear, `hear-select`",
+      "severity": 3,
+      "violation": "As with the shipping-speed select, the pre-selected first option makes the `required` attribute ineffective at forcing an actual choice."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<meta charset=\"utf-8\"><title>Create your Meridian Outfitters account</title>` (no viewport meta tag)",
+      "fix": "Add `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">` to the `<head>`.",
+      "id": "F-016",
+      "lane": "judged",
+      "location": "`<head>` section",
+      "severity": 3,
+      "violation": "The document has no `<meta name=\"viewport\">` tag, so on mobile devices this form (which includes phone, address, and password fields) will render at desktop scale and be hard to use."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-001.html",
+    "artifact_sha256": "531c999912c0ab6c8224cbeb2347e7644d493a84e3a9461a434deaf5f2f09cdd",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T03:36:41Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 16,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

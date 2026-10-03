@@ -1,0 +1,59 @@
+Location: Line 33
+Evidence: `pattern="[0-9]+"`
+Problem: Pattern allows unlimited consecutive digits without format constraints, inappropriate for a phone number.
+Fix: Use a more restrictive pattern like `"[0-9\+\-\(\) ]{10,15}"` or remove pattern validation if not enforcing format.
+
+Location: Line 37
+Evidence: `<input id="website-input" name="website" required="" type="text">`
+Problem: Should be type="url" to provide proper browser validation and semantic meaning for website input.
+Fix: Change type="text" to type="url".
+
+Location: Line 41
+Evidence: Label says "(8 digits)" but input is `type="text" inputmode="numeric"` with no pattern attribute.
+Problem: No validation pattern to enforce the 8-digit requirement stated in the label.
+Fix: Add `pattern="[0-9]{8}"` to the input element.
+
+Location: Line 49
+Evidence: `size="3"`
+Problem: Size attribute creates field too narrow for any postal code format (US ZIP is 5 digits minimum, many are longer).
+Fix: Remove the size attribute entirely.
+
+Location: Line 53
+Evidence: `<select id="shipspeed-select" required="">` has no name attribute.
+Problem: Select element lacks a name attribute, so it will not be submitted with the form.
+Fix: Add `name="shipping_speed"` (or an appropriate name) to the select element.
+
+Location: Lines 12 and 63
+Evidence: "Full name" field (line 12) and "Your name" field (line 63) with different field names (full_name vs legal_name).
+Problem: Two similar name input fields with confusing labels creates ambiguity about which should be filled.
+Fix: Remove the redundant field or clarify the labels to distinguish purpose (e.g., "Legal Full Name" vs "Preferred Name").
+
+Location: Line 67
+Evidence: `style="font-size:13px"`
+Problem: Inline style should be defined in CSS, not embedded in HTML.
+Fix: Move style to a CSS class or stylesheet.
+
+Location: Line 70
+Evidence: `style="display:inline-block;float:left;width:140px"`
+Problem: Inline styles should be in CSS; float-based layout is outdated and may cause layout issues.
+Fix: Move styles to a CSS class and use modern layout methods (flexbox or grid).
+
+Location: Line 71
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: Should be type="time" for proper time input handling rather than generic text.
+Fix: Change type="text" to type="time".
+
+Location: Line 77
+Evidence: `<select id="dob-day-select" autocomplete="bday-day" required="">` has no name attribute.
+Problem: Select element lacks a name attribute, so it will not be submitted with the form.
+Fix: Add `name="birth_day"` (or an appropriate name) to the select element.
+
+Location: Line 112
+Evidence: `<select id="dob-month-select" autocomplete="bday-month" required="">` has no name attribute.
+Problem: Select element lacks a name attribute, so it will not be submitted with the form.
+Fix: Add `name="birth_month"` (or an appropriate name) to the select element.
+
+Location: Line 127 and Line 189
+Evidence: Year select ranges from 1950 to 2009; last option is `<option>2009</option>`.
+Problem: Year range does not include anyone born after 2009, making the form impossible to complete for anyone under 17 years old.
+Fix: Extend year options to include current year and recent years (at least through 2025).

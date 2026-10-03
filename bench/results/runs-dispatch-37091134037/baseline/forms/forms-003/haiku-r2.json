@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"form\">`",
+      "fix": "Add an action and method attribute: `<form id=\"form\" action=\"/signup\" method=\"POST\">`",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Form element at the beginning of the body",
+      "severity": 3,
+      "violation": "The form is missing an action attribute, so there is no specified destination for the form submission. Without an action, the form will submit to the current page via GET, which is incorrect for account registration with sensitive data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<p>Thanks for signing up.</p>`",
+      "fix": "Remove this paragraph; display the success message only after the form successfully submits via JavaScript or page redirect.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Inside the row-phone div",
+      "severity": 3,
+      "violation": "A success message appears in the middle of the form while users are still filling it out, creating a misleading impression that registration is already complete."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\" required=\"\"`",
+      "fix": "Add constraints to the input: `<input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" maxlength=\"8\" pattern=\"[0-9]{8}\" required=\"\">`",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-member div",
+      "severity": 3,
+      "violation": "The placeholder text states the field must contain 8 digits, but there is no maxlength or pattern attribute to enforce this requirement, allowing users to enter any length or non-numeric characters."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">`",
+      "fix": "Add a name attribute: `<select id=\"shipspeed-select\" name=\"shipspeed\" required=\"\">`",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-shipspeed select element",
+      "severity": 3,
+      "violation": "The select element is missing a name attribute, so the shipping speed selection will not be submitted as part of the form data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Standard</option>` `<option>Express</option>` `<option>Overnight</option>`",
+      "fix": "Add value attributes to each option: `<option value=\"standard\">Standard</option>`, `<option value=\"express\">Express</option>`, `<option value=\"overnight\">Overnight</option>`",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "The three option elements in row-shipspeed",
+      "severity": 3,
+      "violation": "The option elements are missing explicit value attributes; they should specify what value gets submitted for each choice."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"name-input\" name=\"full_name\"...>` in row-name and `<input id=\"given-input\" name=\"given_name\"...>` plus `<input id=\"family-input\" name=\"family_name\"...>` in row-legalname",
+      "fix": "Remove either the \"Full name\" field or the separate \"First name\"/\"Last name\" fields; choose one consistent approach.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "row-name div contains \"Full name\" and row-legalname div contains \"First name\" and \"Last name\"",
+      "severity": 3,
+      "violation": "The form collects the user's name in two redundant ways - as a single \"Full name\" field and separately as \"First name\" and \"Last name\" - creating confusion about which fields should be used."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Change the input type to `<input id=\"contacttime-input\" name=\"contact_time\" type=\"time\" required=\"\">`",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "row-contacttime div",
+      "severity": 3,
+      "violation": "The \"Preferred contact time\" field uses type=\"text\", making it difficult for users (especially on mobile) to select a time and not providing a proper time picker interface."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-003.html",
+    "artifact_sha256": "df62d7b38659529bf26df03102d3e7969a1c47b7c66e72bc8d3cf208f082bc1f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T04:25:19Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

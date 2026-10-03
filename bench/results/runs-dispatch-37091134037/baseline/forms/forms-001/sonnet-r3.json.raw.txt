@@ -1,0 +1,69 @@
+Location: `<head>` section
+Evidence: no `<meta name="viewport">` tag is present
+Problem: Without a viewport meta tag, mobile browsers will render the page at desktop width and scale it down, which defeats the apparent mobile-friendly intent signaled elsewhere (e.g., the 16px font-size used on `org-input` and `viewdetails-btn` to avoid iOS auto-zoom).
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to `<head>`.
+
+Location: `row-email` div, `email-input`
+Evidence: `autocomplete="e-mail"`
+Problem: "e-mail" is not a valid WHATWG autofill token (the correct token is "email"), so browsers will not reliably autofill this field.
+Fix: Change `autocomplete="e-mail"` to `autocomplete="email"`.
+
+Location: `row-confirm-password` div, `confirm-password-input`
+Evidence: `<input id="confirm-password-input" name="password_again" type="password" autocomplete="new-password" required="">` (no `minlength`)
+Problem: `password-input` enforces `minlength="8"` but the confirm field does not, so a short, non-matching confirm value could pass its own length validation before any match check runs.
+Fix: Add `minlength="8"` to `confirm-password-input` for consistent validation.
+
+Location: `row-housenumber` div, `housenumber-input`
+Evidence: `<input id="housenumber-input" name="house_number" type="text" required="">`
+Problem: Unlike the adjacent street field (`autocomplete="address-line1"`), the house number input has no autocomplete attribute, breaking address autofill continuity between the two related fields.
+Fix: Add an appropriate autocomplete token (e.g., fold house number into `address-line1`/`address-line2`, or at minimum set a consistent token) so autofill fills both fields together.
+
+Location: `row-website` div
+Evidence: `<label id="website-label" for="website-input">Company website</label> ... <input ... name="website" type="url" required="">`
+Problem: A required "Company website" field is out of place on a consumer retail account signup (Meridian Outfitters, with delivery texts and shipping speed options), and will block ordinary customers from completing registration.
+Fix: Remove this field or make it optional, unless this form is specifically for B2B accounts.
+
+Location: `row-member` div, `member-input`
+Evidence: `placeholder="Must be 8 digits"` with no `pattern` or `maxlength` attribute
+Problem: The 8-digit format requirement is communicated only via placeholder text, which disappears once the user types and is not announced by all screen readers; there's also no `pattern`/`maxlength` to actually enforce the format.
+Fix: Add persistent helper text (not just a placeholder) and enforce the format with `pattern="\d{8}"` and `maxlength="8"`.
+
+Location: `row-acctnum` div
+Evidence: `<label id="acctnum-label" for="acctnum-input">Account number</label> ... <input ... name="account_number" type="text" inputmode="numeric" required="">`
+Problem: Requiring a pre-existing "Account number" on a form for creating a new account is self-contradictory, and no format/length guidance is given.
+Fix: Remove the field if it doesn't apply to new signups, or clarify its purpose and add format guidance if it's a legacy/migration account number.
+
+Location: `row-shipspeed` div, `shipspeed-select`
+Evidence: `<option>Overnight</option> <option>Next-day</option>`
+Problem: "Overnight" and "Next-day" describe the same delivery speed, so the select presents two overlapping/ambiguous choices.
+Fix: Remove the duplicate option and keep a single, clearly distinct label (e.g., "Overnight").
+
+Location: `row-legalname` div
+Evidence: `<label id="legalname-label" for="legalname-input">Your name</label> ... <input ... name="legal_name" type="text" autocomplete="name" ... required="">`
+Problem: This duplicates the "Full name" field in `row-name` (same `autocomplete="name"` token), forcing users to enter their name twice with no explanation of why two separate name fields exist.
+Fix: Remove this redundant field, or rename/clarify it (e.g., "Legal name, if different from full name") and make it optional.
+
+Location: `row-org` div
+Evidence: `<label id="org-label" for="org-input">Organization name</label> ... <input ... name="organization" type="text" style="font-size:16px" required="">`
+Problem: A required "Organization name" field doesn't fit a consumer retail signup, and it is styled with an ad-hoc inline `style` attribute even though no stylesheet is linked anywhere in the document (the same scattershot inline styling recurs on `contacttime-label` and `viewdetails-btn`).
+Fix: Remove or make this field optional if it doesn't apply to individual customers, and move the inline styles into a shared stylesheet/class for consistency.
+
+Location: `row-contacttime` div
+Evidence: `<label id="contacttime-label" for="contacttime-input" style="display:block">Preferred contact time</label> <input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: "Preferred contact time" is collected as unstructured free text with no format hint, making responses inconsistent and hard to process (e.g., "mornings" vs "9am" vs "ASAP").
+Fix: Use a `<select>` with defined time-window options or an `<input type="time">`/range picker instead of free text.
+
+Location: `viewdetails-btn`
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>` placed between the contact-time and "how did you hear about us" fields
+Problem: The button has no visible association with any field or section, no indication of what "details" it reveals, and (as static markup) no attached behavior, making it a confusing, apparently non-functional element in the middle of the form.
+Fix: Either remove the button or give it a clear label/context (e.g., "View shipping details") and wire it to a defined action.
+
+Location: `row-hear` div, `hear-select`
+Evidence: `<select id="hear-select" required="">`
+Problem: Making an optional marketing-attribution question ("How did you hear about us?") required forces users to pick an answer just to complete signup, which is poor UX for non-essential data.
+Fix: Remove `required=""` from `hear-select`, or add a neutral "Prefer not to say" option.
+
+Location: `<form id="form">` opening tag
+Evidence: `<form id="form">` (no `action` or `method` attributes)
+Problem: The form has no declared `action`/`method`, so as plain markup submission behavior is undefined and would simply reload the current page.
+Fix: Add `action` and `method` attributes (or document that submission is handled entirely via JavaScript, if intentional).

@@ -1,0 +1,160 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<meta charset=\"utf-8\">` followed directly by `<title>` with no viewport meta tag",
+      "fix": "Add `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">` to the `<head>`.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<head>` section",
+      "severity": 3,
+      "violation": "There is no `<meta name=\"viewport\">` tag, so on mobile devices (which this form clearly targets, given the phone/delivery-text field) the page will render at desktop width and require manual zooming/panning."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"password-input\" name=\"password\" type=\"password\" autocomplete=\"new-password\" minlength=\"8\" required=\"\">`",
+      "fix": "Add helper text under the field (e.g. \"At least 8 characters\") similar to the note under the phone input.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`row-password` div",
+      "severity": 3,
+      "violation": "The password has a minimum-length constraint but no visible instructions telling the user the requirement before they submit and hit a validation error; unlike the phone field, there's no helper text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "both `phone-input` and `phone2-input` use `autocomplete=\"tel\"`",
+      "fix": "Differentiate the tokens, e.g. keep `tel` on the primary and use `autocomplete=\"off\"` (or a distinguishing hint) on the secondary field.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`row-phone` and `row-phone2` divs",
+      "severity": 3,
+      "violation": "Using the identical autocomplete token for two different phone fields will cause browsers to autofill the same stored number into both the primary and \"secondary\" phone fields."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"website-label\" for=\"website-input\">Company website</label> ... required=\"\"`",
+      "fix": "Remove the field or make it optional and scoped to business/wholesale accounts only.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`row-website` div",
+      "severity": 3,
+      "violation": "This is a personal shopping account signup (\"Meridian Outfitters account\"), yet a company website is a mandatory field - an irrelevant requirement that will block individual consumers from completing signup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"member-input\" ... placeholder=\"Must be 8 digits\" required=\"\">`",
+      "fix": "Add `pattern=\"\\d{8}\"` and `maxlength=\"8\"`, and move the format requirement into persistent helper text rather than relying solely on the placeholder.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`row-member` div",
+      "severity": 3,
+      "violation": "The \"8 digits\" constraint is communicated only via placeholder text (which disappears once the user types) and is not actually enforced - there is no `pattern` or `maxlength` attribute, so any non-numeric or wrong-length value can be submitted."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"acctnum-label\" for=\"acctnum-input\">Account number</label>` with no explanatory text, directly following the membership number field",
+      "fix": "Add explanatory helper text clarifying the distinct purpose of each field, or merge them if they refer to the same identifier.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`row-acctnum` div",
+      "severity": 3,
+      "violation": "It's unclear how \"account number\" differs from the \"membership number\" field just above it - two similarly-purposed numeric ID fields with no distinguishing description will confuse users about which number to enter where."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Overnight</option> <option>Next-day</option>`",
+      "fix": "Remove the duplicate option, keeping a single clearly-named option for next-day/overnight delivery.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`row-shipspeed` select options",
+      "severity": 3,
+      "violation": "\"Overnight\" and \"Next-day\" shipping are effectively the same service and listing both as distinct options will confuse users about what to pick."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"legalname-label\" for=\"legalname-input\">Your name</label>` vs. earlier `<label id=\"name-label\" for=\"name-input\">Full name</label>`",
+      "fix": "Remove the redundant field, or if a distinct \"legal name\" is truly needed, rename the label to clarify how it differs from \"Full name\" and explain why both are required.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "`row-legalname` div",
+      "severity": 3,
+      "violation": "This field duplicates the \"Full name\" field collected earlier in the form under a different, vaguer label, forcing the user to enter their name twice."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required=\"\">`",
+      "fix": "Make the field optional or remove it from the standard consumer signup flow.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "`row-org` div",
+      "severity": 3,
+      "violation": "Like the website field, a required organization name is inappropriate for an individual consumer retail account signup and will block personal customers from completing the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Replace with a `<select>` of defined time-of-day ranges or a `type=\"time\"` input, and/or add a placeholder showing the expected format.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "`row-contacttime` div",
+      "severity": 3,
+      "violation": "\"Preferred contact time\" is captured as free-form text with no format guidance, placeholder, or structured control, so submitted values will be inconsistent and hard to parse (e.g. \"morning\" vs \"9am\" vs \"afternoons\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>`",
+      "fix": "Either implement the intended behavior with a script, or remove the button if it serves no purpose.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "`viewdetails-btn` button",
+      "severity": 3,
+      "violation": "This button has `type=\"button\"` (so it won't submit the form) but the document contains no `<script>` wiring up any click handler, making it a non-functional dead control sitting right next to the submit button."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"font-size:16px\"`, `style=\"display:block\"`, `style=\"padding:12px 20px;font-size:16px\"`",
+      "fix": "Move styling into a shared stylesheet or `<style>` block applied consistently across all form rows instead of one-off inline styles.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "throughout the form (`org-input`, `contacttime-label`, `viewdetails-btn`)",
+      "severity": 3,
+      "violation": "Inline styles are applied ad hoc to only three elements while the rest of the form has no styling at all (no `<style>` or stylesheet link), producing inconsistent presentation."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T05:47:51Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 12,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

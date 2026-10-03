@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<p>Thanks for signing up.</p>`",
+      "fix": "Remove this paragraph element, or display it only after successful form submission using JavaScript.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Inside row-phone div (between phone input and row-phone2)",
+      "severity": 3,
+      "violation": "A success message appears in the middle of the form before submission."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no validation constraints on the input",
+      "fix": "Add `pattern=\"^\\d{8}$\"` and `minlength=\"8\" maxlength=\"8\"` attributes to the input.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "row-member input field",
+      "severity": 3,
+      "violation": "The field claims \"Must be 8 digits\" but has no pattern, minlength, or maxlength attribute to enforce this requirement."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">` with no name attribute",
+      "fix": "Add `name=\"shipping_speed\"` (or an appropriate name) to the select element.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-shipspeed select element",
+      "severity": 3,
+      "violation": "The select element lacks a name attribute, so the selected shipping speed will not be included in the form submission."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Full name\" field at row-name and separate \"First name\"/\"Last name\" fields at row-legalname both collect name data",
+      "fix": "Remove either the \"Full name\" field or the separate \"First name\"/\"Last name\" fields, depending on business requirements.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-name and row-legalname",
+      "severity": 3,
+      "violation": "The form collects the same information twice in different formats, creating redundancy and user confusion."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"font-size:16px\"`",
+      "fix": "Remove the inline style and apply consistent CSS styling through a stylesheet.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "row-org input element",
+      "severity": 3,
+      "violation": "This inline style is inconsistent with other form fields and makes styling difficult to maintain centrally."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"display:block\"`",
+      "fix": "Remove the inline style; labels do not need display:block to function correctly.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "row-contacttime label element",
+      "severity": 3,
+      "violation": "This unnecessary inline style is inconsistent with other labels that don't require it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`type=\"text\"` for a \"Preferred contact time\" field",
+      "fix": "Change `type=\"text\"` to `type=\"time\"`.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "row-contacttime input element",
+      "severity": 3,
+      "violation": "The field should use type=\"time\" to provide a time picker interface and proper time format validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"padding:1px 2px;font-size:11px\"`",
+      "fix": "Remove the inline style and apply consistent CSS styling to all buttons through a stylesheet.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "viewdetails-btn button",
+      "severity": 3,
+      "violation": "This inline styling creates inconsistency with other buttons and uses unusually small font and padding sizes."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-003.html",
+    "artifact_sha256": "df62d7b38659529bf26df03102d3e7969a1c47b7c66e72bc8d3cf208f082bc1f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T04:32:06Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

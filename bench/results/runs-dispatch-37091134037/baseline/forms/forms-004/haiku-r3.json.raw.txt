@@ -1,0 +1,34 @@
+Location: form element
+Evidence: `<form id="form">` has no method attribute
+Problem: The form defaults to GET method, which sends form data as URL parameters. This creates a security vulnerability where the password and other sensitive fields would appear in the URL and browser history.
+Fix: Add method="post" to the form element.
+
+Location: membership_number input (id="member-input")
+Evidence: placeholder="Must be 8 digits" with type="text"
+Problem: The input has no pattern validation, minlength, or maxlength to enforce the stated 8-digit requirement.
+Fix: Add pattern="[0-9]{8}" or minlength="8" maxlength="8" to the input element.
+
+Location: shipping speed select (id="shipspeed-select")
+Evidence: `<select id="shipspeed-select" required="">` with no name attribute
+Problem: The select element is missing the name attribute, so this field's value will not be submitted with the form data.
+Fix: Add name="shipping_speed" (or similar) to the select element.
+
+Location: legal name field (id="legalname-label")
+Evidence: `<label id="legalname-label" for="legalname-input">Your name</label>`
+Problem: The label says "Your name" but there's already a "Full name" field earlier, making it unclear which field is which.
+Fix: Change the label to "Legal name" to match the field name and clarify the distinction from the full name field.
+
+Location: contact time label (id="contacttime-label")
+Evidence: `<label id="contacttime-label" for="contacttime-input" style="display:block">`
+Problem: The inline style="display:block" is unnecessary and redundant, as labels are already block-level elements. Styling should be in a stylesheet.
+Fix: Remove the style attribute and define label styling in a CSS stylesheet instead.
+
+Location: contact time input (id="contacttime-input")
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: Uses type="text" for a time preference field, which doesn't provide appropriate input semantics or user controls.
+Fix: Change type="text" to type="time".
+
+Location: view details button (id="viewdetails-btn")
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>`
+Problem: The button has no onclick handler or apparent purpose, making it unclear what action it performs.
+Fix: Either add an onclick handler to implement the intended functionality or remove the button if it is not needed.

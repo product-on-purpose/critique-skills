@@ -1,0 +1,64 @@
+Location: row-postal, postal-input element
+Evidence: size="3"
+Problem: Postal codes vary widely in length; US ZIP codes are 5–9 digits and Canadian postal codes are 6 characters. A size of 3 is too restrictive.
+Fix: Remove the size attribute or increase it to 10 or more to accommodate all valid postal code formats.
+
+Location: row-shipspeed, shipspeed-select element
+Evidence: <select id="shipspeed-select" required="">
+Problem: The select element is missing a name attribute, so the selected shipping speed will not be submitted with the form.
+Fix: Add name="shipspeed" to the select element.
+
+Location: row-shipspeed, option elements within shipspeed-select
+Evidence: <option>Standard</option>, <option>Express</option>, etc.
+Problem: Option elements lack value attributes, so the display text (e.g., "Standard") will be submitted instead of a standardized code.
+Fix: Add value attributes to each option, e.g., <option value="standard">Standard</option>.
+
+Location: row-org, organization input
+Evidence: style="font-size:13px"
+Problem: Inline style mixes presentation into HTML markup instead of using a stylesheet.
+Fix: Remove the inline style and define the font size via a CSS class.
+
+Location: row-contacttime, contacttime-label and contacttime-input
+Evidence: label with style="display:inline-block;float:left;width:140px" and <input ... type="text">
+Problem: Layout is done with inline styles, and the text input provides no indication of the expected time format.
+Fix: Move the layout styles to a CSS class and change the input type to "time" or add a placeholder to clarify the expected format (e.g., "9:00 AM").
+
+Location: viewdetails-btn
+Evidence: <button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>
+Problem: The button is type="button" with no onclick handler or visible purpose, and it contains inline styles. The button appears incomplete or forgotten.
+Fix: Either remove the button if it is unused, or add a handler and move the styles to a CSS class.
+
+Location: row-dob, dob-day-select element
+Evidence: <select id="dob-day-select" autocomplete="bday-day" required="">
+Problem: The select element is missing a name attribute, so the selected day will not be submitted with the form.
+Fix: Add name="bday-day" to the select element.
+
+Location: row-dob, dob-month-select element and options
+Evidence: <select id="dob-month-select" autocomplete="bday-month" required=""> with <option>January</option>, <option>February</option>, etc.
+Problem: The select is missing a name attribute and the options lack value attributes. Month names will be submitted instead of numeric values.
+Fix: Add name="bday-month" to the select, and add value attributes like <option value="01">January</option> for each month.
+
+Location: row-dob, dob-year-select element
+Evidence: <select id="dob-year-select" autocomplete="bday-year" required="">
+Problem: The select element is missing a name attribute, so the selected year will not be submitted with the form.
+Fix: Add name="bday-year" to the select element.
+
+Location: row-website, website-input
+Evidence: <input id="website-input" name="website" required="" type="text">
+Problem: The input type is "text" instead of "url", so the browser will not validate the URL format.
+Fix: Change type="text" to type="url".
+
+Location: row-member, member-input
+Evidence: <input id="member-input" name="membership_number" type="text" inputmode="numeric" placeholder="Must be 8 digits" required="">
+Problem: The placeholder states "Must be 8 digits" but there is no pattern attribute to enforce this validation.
+Fix: Add pattern="[0-9]{8}" to enforce exactly 8 numeric digits.
+
+Location: row-acctnum, acctnum-input
+Evidence: <input id="acctnum-input" name="account_number" type="text" inputmode="numeric" required="">
+Problem: The input is marked as numeric but has no pattern attribute to validate the format or length.
+Fix: Add a pattern attribute such as pattern="[0-9]+" or provide specific format requirements.
+
+Location: row-name and row-legalname
+Evidence: row-name label "Full name" with name="full_name" and row-legalname label "Your name" with name="legal_name"
+Problem: Two separate fields both ask for a person's name but with different labels ("Full name" vs. "Your name"), creating confusion about whether they are the same or different information.
+Fix: Remove one of the duplicate name fields, or if both are needed, clarify their purposes (e.g., rename one to "Legal Name for Documentation").

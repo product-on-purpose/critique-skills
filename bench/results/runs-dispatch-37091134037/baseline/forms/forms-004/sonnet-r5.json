@@ -1,0 +1,171 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<meta charset=\"utf-8\"><title>Create your Meridian Outfitters account</title>` - no viewport meta tag follows",
+      "fix": "Add `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">` to the `<head>`.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<head>` section",
+      "severity": 3,
+      "violation": "There is no `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">` tag, so on mobile browsers this form (which collects a phone number and promises SMS updates, implying mobile use) will render at desktop scale and be hard to use."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`name=\"street_address\"` and `name=\"postal_code\"` are the only address fields present",
+      "fix": "Add a city field (`autocomplete=\"address-level2\"`) and a state/region field (`autocomplete=\"address-level1\"`).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`row-street` / `row-postal` fields",
+      "severity": 3,
+      "violation": "The address block has a street address and postal code but no city or state/region field, making it impossible to specify a complete shipping address."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "both `phone-input` and `phone2-input` use `autocomplete=\"tel\"`",
+      "fix": "Remove `autocomplete=\"tel\"` from the secondary phone input (or there is no distinguishing token available, so omit autocomplete entirely on that field).",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`row-phone2`, `<input id=\"phone2-input\" name=\"phone_secondary\" type=\"tel\" autocomplete=\"tel\">`",
+      "severity": 3,
+      "violation": "Using the same autocomplete token for two different phone fields causes browsers to autofill the same stored number into both, defeating the purpose of a distinct \"secondary phone\" field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"website-input\" name=\"website\" type=\"url\" required=\"\">`",
+      "fix": "Remove this field, or make it optional and relevant only to a business-account variant of the form.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`row-website`, `<label id=\"website-label\" for=\"website-input\">Company website</label>`",
+      "severity": 3,
+      "violation": "Requiring a company website to create a personal retail account is out of place and will block individual consumers who have no company site from completing signup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no `pattern` or `maxlength` attribute",
+      "fix": "Add `pattern=\"[0-9]{8}\"` and `maxlength=\"8\"` to enforce the format, and keep the placeholder only as a supplementary hint.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`row-member`, `<label id=\"member-label\" for=\"member-input\">Membership number (8 digits)</label>`",
+      "severity": 3,
+      "violation": "The 8-digit format is communicated only via placeholder text, which disappears once the user starts typing and is not enforced by validation, so non-conforming values will pass silently."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required=\"\">`",
+      "fix": "Either remove this field if it duplicates membership number, or add label text/placeholder clarifying its distinct purpose and expected format.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`row-acctnum`, `<label id=\"acctnum-label\" for=\"acctnum-input\">Account number</label>`",
+      "severity": 3,
+      "violation": "It's unclear how this required \"account number\" differs from the adjacent required \"membership number,\" and no guidance (format, length, where to find it) is given, which will confuse new users who don't have an existing account yet."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`row-street` is the 4th field group while `row-postal` is the 9th, separated by phone, secondary phone, website, membership number, and account number",
+      "fix": "Move the postal code field immediately after the street address field (and any added city/state fields).",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`row-postal`, relative to `row-street`",
+      "severity": 3,
+      "violation": "Splitting street address and postal code far apart in the DOM breaks the logical address grouping and can interfere with browser address-autofill heuristics."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "first `<option>` is `Standard` with no blank/disabled placeholder option",
+      "fix": "Add a disabled, selected placeholder option (e.g. `<option value=\"\" disabled selected>Select shipping speed</option>`) so `required` actually forces a choice.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "`row-shipspeed`, `<select id=\"shipspeed-select\" required=\"\">`",
+      "severity": 3,
+      "violation": "Since the first option is selected by default and there's no empty placeholder option, `required` has no effect - the field always has a valid value (\"Standard\") even if the user never interacts with it, silently defaulting their shipping preference."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Overnight</option>` and `<option>Next-day</option>`",
+      "fix": "Merge into a single option (e.g. \"Overnight / Next-day\") or clarify how they differ if they are genuinely distinct service tiers.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "`row-shipspeed` options list",
+      "severity": 3,
+      "violation": "\"Overnight\" and \"Next-day\" shipping are generally the same service described two different ways, so offering both as separate options will confuse users about what distinguishes them."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"legalname-input\" name=\"legal_name\" type=\"text\" autocomplete=\"name\" ...>` vs. earlier `<input id=\"name-input\" name=\"full_name\" type=\"text\" autocomplete=\"name\" ...>`",
+      "fix": "Remove the duplicate field if they're meant to be the same value, or clearly differentiate the labels/purpose and give the legal-name field a non-conflicting autocomplete token (or omit autocomplete on it).",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "`row-legalname`, `<label id=\"legalname-label\" for=\"legalname-input\">Your name</label>`",
+      "severity": 3,
+      "violation": "There are two separate \"name\" fields (full name and legal name) both using `autocomplete=\"name\"`, which is redundant, confusing to the user about why they must enter their name twice, and will cause browsers to autofill the same value into both."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required=\"\">`",
+      "fix": "Remove the field or make it optional/conditional on an account type being \"business.\"",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "`row-org`, `<label id=\"org-label\" for=\"org-input\">Organization name</label>`",
+      "severity": 3,
+      "violation": "Like the company website field, requiring an organization name is inappropriate for an individual consumer creating a retail account and will block users with no organization."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Replace with a `<select>` of defined time ranges, or a `type=\"time\"` input, or add a placeholder/pattern specifying the expected format.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "`row-contacttime`, `<label id=\"contacttime-label\" for=\"contacttime-input\" style=\"display:block\">Preferred contact time</label>`",
+      "severity": 3,
+      "violation": "A free-text required field for preferred contact time has no format constraints or examples, so submitted values will be inconsistent (e.g., \"morning,\" \"9am,\" \"after 5\") and hard to use programmatically."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "button text is just \"View details\" with no surrounding text explaining what details it reveals",
+      "fix": "Give the button a more specific label (e.g., \"View membership benefits\") or add adjacent text/aria-describedby explaining what it does.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "`viewdetails-btn`, `<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>`",
+      "severity": 3,
+      "violation": "The button's purpose is ambiguous - it's unclear what \"details\" it shows (account terms? pricing? membership info?), leaving users unsure whether to click it before submitting."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T05:55:22Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 13,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

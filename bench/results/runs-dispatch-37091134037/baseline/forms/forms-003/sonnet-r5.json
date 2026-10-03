@@ -1,0 +1,182 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<meta charset=\"utf-8\">` followed directly by `<title>` with no viewport meta tag",
+      "fix": "Add a viewport meta tag in the `<head>`.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<head>` section",
+      "severity": 3,
+      "violation": "There is no `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">`, so on mobile browsers the form will render at desktop scale and may trigger unwanted zoom-on-focus for inputs."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"form\">`",
+      "fix": "Add an explicit `method=\"post\"` (and appropriate `action`) to the form.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<form id=\"form\">` opening tag",
+      "severity": 3,
+      "violation": "The form has no `action` or `method` attribute, so it will submit via the default GET method to the current URL - meaning the password field's value would be appended to the URL as a query parameter, exposing it in browser history, server logs, and referrer headers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`minlength=\"6\"`",
+      "fix": "Raise `minlength` to at least 8 and consider adding complexity guidance.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`row-password` div",
+      "severity": 3,
+      "violation": "A 6-character minimum is a weak password policy by current standards."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<p>Thanks for signing up.</p>` nested inside the phone-number field's div, before the form has been submitted",
+      "fix": "Remove this paragraph from the phone row and show the thank-you message only after successful submission.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`row-phone` div",
+      "severity": 3,
+      "violation": "A post-submission thank-you message is displayed in the middle of the still-unsubmitted form, which is confusing and appears to be stray/leftover markup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "both `<input ... name=\"phone\" ... autocomplete=\"tel\">` and `<input ... name=\"phone_secondary\" ... autocomplete=\"tel\">`",
+      "fix": "Differentiate the tokens, e.g. use `tel` for the primary and omit/alter autocomplete (or use a non-standard but distinguishing value) for the secondary field.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`row-phone` and `row-phone2` divs",
+      "severity": 3,
+      "violation": "Both phone inputs share the identical `autocomplete=\"tel\"` token, so browser autofill cannot distinguish them and may fill the same number into both fields."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"website-input\" ... name=\"website\" type=\"url\" required=\"\">`",
+      "fix": "Make this field optional, or remove it unless the form is specifically for business accounts.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`row-website` div",
+      "severity": 3,
+      "violation": "A required company website is inconsistent with the rest of the form, which otherwise reads as an individual consumer membership signup (full name, personal address, phone); not every signing-up person has a company website."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no `pattern`, `minlength`, or `maxlength` attribute",
+      "fix": "Add `pattern=\"\\d{8}\"` and `maxlength=\"8\"` (or equivalent) so the constraint is enforced, and show the hint outside the placeholder so it remains visible while typing.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`row-member` div",
+      "severity": 3,
+      "violation": "The 8-digit requirement is only communicated via placeholder text (which disappears once the user types) and is never actually enforced by validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label ...>Account number</label><input id=\"acctnum-input\" name=\"account_number\" type=\"text\" required=\"\">`",
+      "fix": "Clarify the distinct purpose of this field in a label/help text, or remove it if redundant with membership number.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "`row-acctnum` div",
+      "severity": 3,
+      "violation": "It's unclear why a brand-new signup already has an \"account number\" distinct from the \"membership number\" collected two fields later; this looks like a duplicate/confusing field with no explanation of its purpose."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">` with options `Standard`, `Express`, `Overnight` and no blank/placeholder option",
+      "fix": "Add a disabled, selected placeholder option (e.g. \"Select shipping speed\") so the required validation has an empty state to enforce.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "`row-shipspeed` div",
+      "severity": 3,
+      "violation": "Because there is no empty option, the select always has a valid value (\"Standard\") selected by default, making `required` meaningless and letting users submit a choice they never actively made."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`given_name`/`family_name` inputs for \"First name\" / \"Last name\", compared to `row-name`'s `full_name` input for \"Full name\"",
+      "fix": "Remove one of the two name representations - keep either the single full-name field or the split given/family-name fields, not both.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "`row-legalname` div",
+      "severity": 3,
+      "violation": "The form collects the user's name twice in two different shapes (one combined \"Full name\" field and separate \"First name\"/\"Last name\" fields), which is redundant and will likely produce inconsistent data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required=\"\">`",
+      "fix": "Make this field optional or remove it for a consumer-facing signup.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "`row-org` div",
+      "severity": 3,
+      "violation": "A required \"Organization name,\" like the required website field, is inconsistent with what otherwise looks like an individual consumer signup, and forces non-business users to invent a value."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Replace with a `<select>` of defined time ranges or a `type=\"time\"` input, and make it optional.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "`row-contacttime` div",
+      "severity": 3,
+      "violation": "\"Preferred contact time\" is a freeform required text field with no format guidance, which will produce inconsistent, hard-to-parse data (e.g. \"mornings\" vs \"9am\" vs \"after 5\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:1px 2px;font-size:11px\">View details</button>`",
+      "fix": "Give the button adequately sized padding and font (e.g. ≥16px font, comfortable padding/min 44px target), and wire up its intended behavior or remove it if unimplemented.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "`viewdetails-btn`",
+      "severity": 3,
+      "violation": "The button's tiny padding and 11px font create a very small touch target and hard-to-read text, failing accessible target-size/readability guidelines; additionally, with no script in the document, the button has no handler and does nothing when clicked."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"reset-btn\" type=\"reset\">Clear form</button>`",
+      "fix": "Remove the reset button, or require a confirmation step before clearing the form.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "`reset-btn`",
+      "severity": 3,
+      "violation": "A reset button on a long multi-field signup form risks accidentally discarding all entered data with a single misclick and no confirmation."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-003.html",
+    "artifact_sha256": "df62d7b38659529bf26df03102d3e7969a1c47b7c66e72bc8d3cf208f082bc1f",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T05:09:56Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 14,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

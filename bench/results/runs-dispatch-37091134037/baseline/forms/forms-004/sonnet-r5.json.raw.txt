@@ -1,0 +1,64 @@
+Location: `<head>` section
+Evidence: `<meta charset="utf-8"><title>Create your Meridian Outfitters account</title>` — no viewport meta tag follows
+Problem: There is no `<meta name="viewport" content="width=device-width, initial-scale=1">` tag, so on mobile browsers this form (which collects a phone number and promises SMS updates, implying mobile use) will render at desktop scale and be hard to use.
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to the `<head>`.
+
+Location: `row-street` / `row-postal` fields
+Evidence: `name="street_address"` and `name="postal_code"` are the only address fields present
+Problem: The address block has a street address and postal code but no city or state/region field, making it impossible to specify a complete shipping address.
+Fix: Add a city field (`autocomplete="address-level2"`) and a state/region field (`autocomplete="address-level1"`).
+
+Location: `row-phone2`, `<input id="phone2-input" name="phone_secondary" type="tel" autocomplete="tel">`
+Evidence: both `phone-input` and `phone2-input` use `autocomplete="tel"`
+Problem: Using the same autocomplete token for two different phone fields causes browsers to autofill the same stored number into both, defeating the purpose of a distinct "secondary phone" field.
+Fix: Remove `autocomplete="tel"` from the secondary phone input (or there is no distinguishing token available, so omit autocomplete entirely on that field).
+
+Location: `row-website`, `<label id="website-label" for="website-input">Company website</label>`
+Evidence: `<input id="website-input" name="website" type="url" required="">`
+Problem: Requiring a company website to create a personal retail account is out of place and will block individual consumers who have no company site from completing signup.
+Fix: Remove this field, or make it optional and relevant only to a business-account variant of the form.
+
+Location: `row-member`, `<label id="member-label" for="member-input">Membership number (8 digits)</label>`
+Evidence: `placeholder="Must be 8 digits"` with no `pattern` or `maxlength` attribute
+Problem: The 8-digit format is communicated only via placeholder text, which disappears once the user starts typing and is not enforced by validation, so non-conforming values will pass silently.
+Fix: Add `pattern="[0-9]{8}"` and `maxlength="8"` to enforce the format, and keep the placeholder only as a supplementary hint.
+
+Location: `row-acctnum`, `<label id="acctnum-label" for="acctnum-input">Account number</label>`
+Evidence: `<input id="acctnum-input" name="account_number" type="text" inputmode="numeric" required="">`
+Problem: It's unclear how this required "account number" differs from the adjacent required "membership number," and no guidance (format, length, where to find it) is given, which will confuse new users who don't have an existing account yet.
+Fix: Either remove this field if it duplicates membership number, or add label text/placeholder clarifying its distinct purpose and expected format.
+
+Location: `row-postal`, relative to `row-street`
+Evidence: `row-street` is the 4th field group while `row-postal` is the 9th, separated by phone, secondary phone, website, membership number, and account number
+Problem: Splitting street address and postal code far apart in the DOM breaks the logical address grouping and can interfere with browser address-autofill heuristics.
+Fix: Move the postal code field immediately after the street address field (and any added city/state fields).
+
+Location: `row-shipspeed`, `<select id="shipspeed-select" required="">`
+Evidence: first `<option>` is `Standard` with no blank/disabled placeholder option
+Problem: Since the first option is selected by default and there's no empty placeholder option, `required` has no effect — the field always has a valid value ("Standard") even if the user never interacts with it, silently defaulting their shipping preference.
+Fix: Add a disabled, selected placeholder option (e.g. `<option value="" disabled selected>Select shipping speed</option>`) so `required` actually forces a choice.
+
+Location: `row-shipspeed` options list
+Evidence: `<option>Overnight</option>` and `<option>Next-day</option>`
+Problem: "Overnight" and "Next-day" shipping are generally the same service described two different ways, so offering both as separate options will confuse users about what distinguishes them.
+Fix: Merge into a single option (e.g. "Overnight / Next-day") or clarify how they differ if they are genuinely distinct service tiers.
+
+Location: `row-legalname`, `<label id="legalname-label" for="legalname-input">Your name</label>`
+Evidence: `<input id="legalname-input" name="legal_name" type="text" autocomplete="name" ...>` vs. earlier `<input id="name-input" name="full_name" type="text" autocomplete="name" ...>`
+Problem: There are two separate "name" fields (full name and legal name) both using `autocomplete="name"`, which is redundant, confusing to the user about why they must enter their name twice, and will cause browsers to autofill the same value into both.
+Fix: Remove the duplicate field if they're meant to be the same value, or clearly differentiate the labels/purpose and give the legal-name field a non-conflicting autocomplete token (or omit autocomplete on it).
+
+Location: `row-org`, `<label id="org-label" for="org-input">Organization name</label>`
+Evidence: `<input id="org-input" name="organization" type="text" style="font-size:16px" required="">`
+Problem: Like the company website field, requiring an organization name is inappropriate for an individual consumer creating a retail account and will block users with no organization.
+Fix: Remove the field or make it optional/conditional on an account type being "business."
+
+Location: `row-contacttime`, `<label id="contacttime-label" for="contacttime-input" style="display:block">Preferred contact time</label>`
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: A free-text required field for preferred contact time has no format constraints or examples, so submitted values will be inconsistent (e.g., "morning," "9am," "after 5") and hard to use programmatically.
+Fix: Replace with a `<select>` of defined time ranges, or a `type="time"` input, or add a placeholder/pattern specifying the expected format.
+
+Location: `viewdetails-btn`, `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>`
+Evidence: button text is just "View details" with no surrounding text explaining what details it reveals
+Problem: The button's purpose is ambiguous — it's unclear what "details" it shows (account terms? pricing? membership info?), leaving users unsure whether to click it before submitting.
+Fix: Give the button a more specific label (e.g., "View membership benefits") or add adjacent text/aria-describedby explaining what it does.

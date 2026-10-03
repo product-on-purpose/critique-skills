@@ -1,0 +1,193 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "no `<meta name=\"viewport\" ...>` tag is present",
+      "fix": "Add `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">` to the `<head>`.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<head>` section",
+      "severity": 3,
+      "violation": "Without a viewport meta tag, mobile browsers will render the page at desktop width and scale it down, making the form hard to use on phones (and defeating the apparent mobile-zoom workaround applied elsewhere in the form)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`minlength=\"6\"`",
+      "fix": "Raise `minlength` to at least 8-10 and pair it with server-side strength validation rather than relying on `minlength` alone.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`#row-password` → `password-input`",
+      "severity": 3,
+      "violation": "A 6-character minimum is a weak password policy by current standards, giving a false sense of security without any complexity requirement."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<p>Thanks for signing up.</p>` appears inside the phone-number field's row, before the form has been submitted",
+      "fix": "Remove the paragraph from the form, or move it to a post-submit confirmation view that only renders after successful submission.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`#row-phone`",
+      "severity": 3,
+      "violation": "A post-signup thank-you message is embedded mid-form, which is either leftover/misplaced markup or will confuse users into thinking they've already completed signup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "both inputs use `autocomplete=\"tel\"`",
+      "fix": "Differentiate the tokens, e.g. keep `autocomplete=\"tel\"` on the primary and use `autocomplete=\"tel-national\"` or omit/override autofill grouping for the secondary field.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`#row-phone` and `#row-phone2`",
+      "severity": 3,
+      "violation": "Using the identical autocomplete token for two different phone fields means browsers can't distinguish \"phone\" from \"secondary phone\" and will likely autofill the same number into both."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"website-input\" name=\"website\" type=\"url\" required=\"\">` on an individual account signup form titled \"Set up your account\"",
+      "fix": "Make the website field optional (drop `required`) unless this signup is specifically for business/organization accounts.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`#row-website` → `website-input`",
+      "severity": 3,
+      "violation": "Requiring a company website to create a personal account is an overly restrictive and likely unintended business rule."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no `pattern` or `maxlength` attribute",
+      "fix": "Add `pattern=\"\\d{8}\"` and `maxlength=\"8\"`, and surface the format requirement as visible helper text rather than only a placeholder.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`#row-member` → `member-input`",
+      "severity": 3,
+      "violation": "The 8-digit constraint is only communicated via placeholder text, which disappears on focus, isn't reliably announced by screen readers, and isn't enforced by validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" required=\"\">` on a \"Join / Set up your account\" form",
+      "fix": "Remove this field if it's redundant with \"Membership number,\" or clarify its distinct purpose and add appropriate autocomplete/format constraints if it refers to an existing external account.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`#row-acctnum` → `acctnum-input`",
+      "severity": 3,
+      "violation": "Requiring an \"account number\" before the account has been created is a logical contradiction, and the field has no autocomplete token or format hint, duplicating the purpose of the membership number field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">`",
+      "fix": "Add `name=\"shipping_speed\"` to the select element.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "`#row-shipspeed` → `shipspeed-select`",
+      "severity": 3,
+      "violation": "The `<select>` element has no `name` attribute, so the chosen shipping speed will not be included in the submitted form data at all."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`name=\"full_name\"` (single \"Full name\" field) alongside separate `given_name`/`family_name` (\"First name\"/\"Last name\") fields",
+      "fix": "Remove one of the two name-collection approaches - keep either the single full-name field or the first/last-name pair, not both.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "`#row-name` vs `#row-legalname`",
+      "severity": 3,
+      "violation": "The form collects a person's name twice in incompatible formats, creating redundant and potentially conflicting data for the backend to reconcile."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"font-size:16px\"` applied only to this input",
+      "fix": "Move font-size rules into a shared stylesheet applied uniformly to all inputs rather than as a one-off inline style.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "`#row-org` → `org-input`",
+      "severity": 3,
+      "violation": "This is the only input with an inline font-size override, producing inconsistent sizing/behavior (e.g., iOS auto-zoom-on-focus prevention) compared to every other text input in the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"display:block\"` applied only to this label",
+      "fix": "Move this layout rule into shared CSS applied consistently to all label elements, or remove it if block layout isn't actually needed.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "`#row-contacttime` → `contacttime-label`",
+      "severity": 3,
+      "violation": "This is the only label with an inline display override, causing inconsistent layout for this row compared to all other label/input rows."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Use `type=\"time\"` or a `<select>` with defined time-window options instead of unconstrained free text.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "`#row-contacttime` → `contacttime-input`",
+      "severity": 3,
+      "violation": "A free-text input for \"preferred contact time\" gives users no guidance on expected format, making the collected data inconsistent and hard to process."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"padding:1px 2px;font-size:11px\"`",
+      "fix": "Increase padding/font-size to accessible levels and clarify or document what the button does (or remove it if unused).",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "`#viewdetails-btn`",
+      "severity": 3,
+      "violation": "This button's tap target and text are far below accessible minimums (WCAG recommends ~44px touch targets and readable text sizes), and its purpose is unclear since no associated behavior is described in the document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"form\">` has no `action` or `method` attribute",
+      "fix": "Add `method=\"post\"` (and an appropriate `action`) to the form tag.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "`<form id=\"form\">` opening tag",
+      "severity": 3,
+      "violation": "Without an explicit `method=\"post\"`, the form defaults to GET submission, which would place the password and other sensitive fields into the URL query string, browser history, and server logs."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"submit-btn\" type=\"submit\">Create account</button>` immediately followed by `<button id=\"reset-btn\" type=\"reset\">Clear form</button>`",
+      "fix": "Remove the reset button, or visually separate/de-emphasize it and require confirmation before clearing the form.",
+      "id": "F-015",
+      "lane": "judged",
+      "location": "form button row",
+      "severity": 3,
+      "violation": "Placing a destructive \"Clear form\" reset button directly adjacent to the primary submit button risks accidental data loss from misclicks."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-003.html",
+    "artifact_sha256": "df62d7b38659529bf26df03102d3e7969a1c47b7c66e72bc8d3cf208f082bc1f",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T04:40:32Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 15,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
