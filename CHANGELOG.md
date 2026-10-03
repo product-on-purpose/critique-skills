@@ -133,7 +133,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   v0.3.0, samples to v0.4.0+, and the survey and `critique-dataviz` to a new "Unscheduled" list.
   [E13 (v0.1.x verification items)](docs/internal/backlog/enhancements.md) marks all four v0.1.x
   verification items with the dates they were met. It also states plainly that the live
-  benchmark dispatch answered its question in the negative.
+  benchmark dispatch answered its question in the negative. On 2026-10-03 the page was brought up
+  to date with the `critique-forms` build: it now says the skill is built and registered
+  `experimental`, and the exit gate puts it in the README scoreboard only on a ship verdict
+  ([ADR 0036](docs/internal/decisions/0036-experimental-status-until-ship-verdict.md)).
 
 ### Fixed
 

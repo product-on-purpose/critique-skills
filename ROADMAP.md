@@ -58,7 +58,7 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 
 **2. Consistency threshold v2.** The 0.309 floor below is a provisional number measured once, on one run set. This version replaces it with a calibrated per-lane threshold, published with its method rather than asserted.
 
-**3. `critique-forms`**: form-usability critique sourced to Wroblewski, Baymard's research, GOV.UK, web.dev and others. Its specification is committed: 24 criteria, 18 checked by script and 6 by judgment. It comes before `critique-deck` because it reuses the shipped HTML artifact type and `critique-accessibility`'s element resolver, while a deck skill needs a corpus module for an artifact type this project has never built. Its published figures will be the first to come from the current benchmark harness, with the generic baseline measured beside it in the same run.
+**3. `critique-forms`**: form-usability critique sourced to Wroblewski, Baymard's research, GOV.UK, web.dev and others. It is built and registered `experimental` (PR 60): 24 criteria, 18 checked by script and 6 by judgment. It installs with the plugin, but the README catalog and the site leave it out until its ship verdict ([ADR 0036](docs/internal/decisions/0036-experimental-status-until-ship-verdict.md)). It comes before `critique-deck` because it reuses the shipped HTML artifact type and `critique-accessibility`'s element resolver, while a deck skill needs a corpus module for an artifact type this project has never built. Its published figures will be the first to come from the current benchmark harness, with the generic baseline measured beside it in the same run.
 
 **4. Astro docs site. This item's sequence position was overtaken on 2026-08-18, and the site shipped on 2026-08-22, ahead of the samples corpus.** The original order put it after the samples on the reasoning that they are the content which gives a site an information architecture worth designing, and that a site built before that content exists is just a nicer-looking README. That reasoning still holds for the site's *content*, and it is not what moved the item. What moved it was a decision that the README is the project's front door, which makes the site a prerequisite for fixing the README rather than a reward for finishing the samples. **None of the three trigger conditions this item named actually fired**: the README was 517 lines when the item was pulled, against the roughly 600 named here, the marketplace listing had produced no traffic worth calling real, and no public essay had shipped. The item was pulled early for a reason it did not anticipate, and saying so is more useful than retrofitting a trigger.
 
@@ -75,7 +75,7 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 - The evidence-quotes check runs in CI.
 - ~~`bench/results/runs/steering/` no longer sits inside the `runs*` glob~~ **(met 2026-09-14)**.
 - ~~A recorded ruling exists on `askit-*` authoring and CodeQL~~ **(met 2026-09-15: both adopted, CodeQL shipped)**.
-- `critique-forms` is measured at k=5 on both pinned tiers and appears in the README scoreboard.
+- `critique-forms` is measured at k=5 on both pinned tiers, and a recorded ship or hold verdict cites the figures. On a ship verdict it appears in the README scoreboard; on a hold it stays `experimental`, with its figures published in the full results table.
 
 ### Moved out of v0.2.0
 
