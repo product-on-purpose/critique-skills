@@ -131,6 +131,26 @@ def test_results_are_published_even_when_the_run_partly_failed() -> None:
     )
 
 
+def test_the_harness_stops_before_the_job_limit_would_cancel_it() -> None:
+    """A job that reaches GitHub's job limit (360 minutes unless `timeout-minutes` says otherwise)
+    is marked cancelled, and `!cancelled()` then skips the publish step, so a long run that ran out
+    of time would lose everything it produced. The shell's `timeout` ends the harness first, as an
+    ordinary step failure, with time left for publishing.
+
+    Added 2026-10-02 before the first 80-cell dispatch (critique-forms, k=5, both tiers), estimated
+    at about 3.5 hours from two 40-cell dispatches that took 77 minutes on haiku and 2 hours 15
+    minutes on sonnet.
+    """
+    command = _harness_command()
+    match = re.search(r"run:\s*timeout\s+(?:--kill-after=\S+\s+)?(\d+)m\s+python bench/run_bench\.py", command)
+    assert match, "the harness is not wrapped in `timeout <N>m`, so a slow run can reach the job limit"
+    job_limit = 360
+    job_override = re.search(r"^\s{4}timeout-minutes:\s*(\d+)", _workflow_text(), re.MULTILINE)
+    if job_override:
+        job_limit = int(job_override.group(1))
+    assert int(match.group(1)) <= job_limit - 15, "leave at least 15 minutes for the publish step"
+
+
 def test_dry_run_still_needs_no_fresh_directory() -> None:
     """A dry run writes nothing, so it returns before the guard. That ordering is correct, and it
     is also why the one dispatch on record passed while the live path was broken. Asserted so a
