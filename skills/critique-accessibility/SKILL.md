@@ -65,9 +65,6 @@ in this order of preference:
    p"`. Keep it to tag, `#id`, `.class`, descendant, child, and `:nth-of-type`. The double quotes
    are part of the rule, not decoration: a bare `div.wizard-steps` dropped into a sentence reads as
    prose, and a reader following it by hand has to guess which one was meant.
-   One-time prerequisite: `pip install "jsonschema>=4.20,<5"`. Claude Code's `/plugin install`
-   does not install Python packages, and `checks.py` names this command itself if the package
-   is absent.
 3. **The element's own text in double quotes**, at least eight characters and unique on the page,
    when the markup offers neither of the above: `"Reset your password"`.
 
@@ -93,6 +90,9 @@ Follow these four passes in order. Do not skip ahead to severity or fixes while 
    in ascending ID order, evaluating each against the whole artifact before moving to the next.
    Run the scripted lane via `scripts/checks.py <artifact>`; perform the judged lane yourself,
    criterion by criterion, in the same fixed order.
+   One-time prerequisite: `pip install "jsonschema>=4.20,<5"`. Claude Code's `/plugin install`
+   does not install Python packages, and `checks.py` names this command itself if the package
+   is absent.
 
    Sweep each judged criterion against every element it governs, not against the first one that
    looks wrong: every custom control for WCAG-4.1.2, every label, state marker, and error message
