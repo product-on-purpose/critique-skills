@@ -89,7 +89,7 @@ prerequisite `npm run check` and `npm run gen -- --check` share.
 | schema | `npm run validate:envelopes` |
 | corpus | `python -m bench.generator verify --corpus bench/corpus` |
 | drift | `npm run gen -- --check` |
-| audit | `npm audit --audit-level=high`, then `npm audit --audit-level=high --prefix site` |
+| audit | `node scripts/audit.mjs`, then `node scripts/audit.mjs --prefix site` |
 | smoke | `python scripts/smoke.py --expect no-deps`, then `python scripts/smoke.py --expect ready` |
 | build-site | `node scripts/check-site.mjs` |
 
@@ -105,6 +105,14 @@ than decorative, and `npm run gen -- --check` fails if either lapses: it must de
 `if: always()`, since without it GitHub skips the job when a dependency fails and branch protection
 counts a skipped check as a passing one. See
 [ADR 0033](docs/internal/decisions/0033-aggregate-ci-gate.md).
+
+**`audit` is `npm audit --audit-level=high` with one addition: a dated exception list.**
+`scripts/audit.mjs` fails on every high or critical advisory except one that
+`scripts/audit-exceptions.json` names with a reason and an expiry date, and it fails again on that
+date. It exists because an advisory with no fixed version anywhere (GHSA-ch52-4w7c-c8xp, in a
+package Astro uses only at build time) failed every branch on 2026-10-02, and plain `npm audit` can
+only be passed or failed as a whole. An exception lasts at most 31 days, which
+`scripts/tests/audit.test.mjs` enforces, so keeping one longer takes a deliberate renewal.
 
 **`build-site` builds the documentation site and runs its guards without deploying anything.** It
 runs the same recipe as `deploy-pages.yml` so a green pull request predicts a green deploy, which it
