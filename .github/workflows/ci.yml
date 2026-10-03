@@ -231,14 +231,17 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      # scripts/audit.mjs is `npm audit --audit-level=high` plus a dated exception list
+      # (scripts/audit-exceptions.json), because npm audit cannot excuse one advisory that has no
+      # fixed version anywhere, and without that every branch fails until upstream ships one.
       - name: Audit npm dependencies
-        run: npm audit --audit-level=high # doc-check
+        run: node scripts/audit.mjs # doc-check
 
       # The root audit passed green on every run while site/ carried one critical and three high
       # advisories, because nothing ever audited the tree that actually gets deployed. npm audit
       # reads package-lock.json directly, so this needs no install step of its own.
       - name: Audit the site's dependencies
-        run: npm audit --audit-level=high --prefix site # doc-check
+        run: node scripts/audit.mjs --prefix site # doc-check
 
   build-site:
     name: build-site (Node from .nvmrc)
