@@ -37,7 +37,7 @@ target-release: v0.2.0
 - [ ] **AC-8** - Hand-scored k=3 joint-routing results on both tiers cover the three contested pairs
 - [ ] **AC-9** - Every `ci.yml` job passes on the change that registers the skill
 - [ ] **AC-10** - A committed real-forms report classifies the scripted lane's findings on at least 10 forms
-- [ ] **AC-11** - The README scoreboard shows forms and baseline at k=5 on both tiers from one run set
+- [ ] **AC-11** - Forms and baseline figures at k=5 on both tiers, from one run set, are published; the README scoreboard shows them once forms is `active`
 - [ ] **AC-12** - A recorded ship or hold verdict cites the figures against the baseline and the consistency floor
 - [ ] **AC-13** - No scripted criterion firing 3+ times on real forms has more false alarms than correct findings
 
@@ -250,13 +250,14 @@ by hand review listed per criterion. [S2, model-inference]
   Then: the report lists, per criterion, correct findings, false alarms and misses, and records each
   form by URL and hash with no copy of the form committed
 
-AC-11: The README scoreboard shows `critique-forms` and baseline figures at k=5 on both pinned
-tiers, from one run set produced by the shipped harness. [S9, S12]
+AC-11: `critique-forms` and baseline figures at k=5 on both pinned
+tiers, from one run set produced by the shipped harness, are published in the full results table;
+the README scoreboard shows them once `critique-forms` is `active` (ADR 0036). [S9, S12]
 
 AC-12: A recorded ship or hold verdict cites `critique-forms`' measured figures against the baseline
 (seeded recall at equal or better precision, on at least one pinned tier) and against the
 consistency gate in force on the day the paid dispatch was approved. On a hold, the skill stays
-in the tree marked `incubating`, with its numbers published. [S7, S5, S8, S16]
+in the tree registered `experimental` ([ADR 0036](../../../decisions/0036-experimental-status-until-ship-verdict.md)), with its numbers published. [S7, S5, S8, S16]
 
 AC-13: Before any paid dispatch, no scripted criterion that fired three or more times across the
 real-forms set has more false alarms than correct findings on it. [S15, S2]
@@ -319,6 +320,7 @@ fixture records the expected winner and the sibling it is contested with.
 | 2026-09-25 | Claude (plab-spec) | added | Initial draft from the ruled criterion registry, revision 2 |
 | 2026-09-25 | Claude (plab-spec) | added | D1 (real-forms threshold) ruled Option A: Requirements 11 extended, AC-13 added |
 | 2026-09-25 | Claude (plab-spec) | clarified | D2 (consistency gate) and D3 (keep `FORMS-AUTOCOMPLETE`) ruled Option A: Requirements 13 rewritten from the D2 ruling and AC-12 names the gate in force on the dispatch approval day; Requirements 8 gains the D3 severity grading; Example 1 gains the autofill grammar note |
+| 2026-10-03 | Jonathan Prisant | amended | AC-11 and AC-12 reworded on the maintainer's ruling (PR 60 question 13): the README scoreboard renders only `active` skills (`bench/report.py`, `_active_versions`), so it shows `critique-forms` only after a ship verdict, and the figures publish in the full results table either way; a held skill is registered `experimental`, not `incubating`, which the Standard's G6 check rejects (ADR 0036). See "Build-time rulings" below |
 | 2026-09-27 | Jonathan Prisant | closed | Status draft to committed: PR 54 merged as `8249f61`. The acceptance criteria are now contract; later changes follow the append-only revision rule |
 
 ## Sources & Evidence
@@ -403,6 +405,26 @@ prose [S2], which paraphrases those notes a second time.
 | D1 | Real-forms threshold | Option A, with a three-firing minimum | Decided | 2026-09-25 |
 | D2 | Consistency gate for a v0.2.0 skill | Option A, gate fixed on the dispatch approval day | Decided | 2026-09-25 |
 | D3 | Keep `FORMS-AUTOCOMPLETE` | Option A, severity graded by effect on autofill | Decided | 2026-09-25 |
+
+### Build-time rulings (2026-10-02 and 2026-10-03)
+
+The build raised 13 questions in PR 60. The maintainer ruled every one:
+
+| # | Question | Ruling |
+|---|---|---|
+| 1 | `autocomplete=off` on a name, email or phone field | Severity 2, as built |
+| 2 | Five registry grades the source text disputes | Corrected in the registry and `references/FORMS.md` |
+| 3 | Three fidelity findings | Accepted as recorded in the rows |
+| 4 | `FORMS-PHONE-REASON` severity branch | 3 with an email field, 2 without, as built |
+| 5 | Thresholds of the skill's own | Kept as built |
+| 6 | Operational-test refinements made while coding | Accepted |
+| 7 | The purpose heuristic's false alarms | Accepted (1 in 85 on real forms) |
+| 8 | Joint routing on haiku, 22 of 25 | Accepted as measured; re-run when a description changes |
+| 9 | `FORMS-REQUIRED-OPTIONAL` lane | Stays scripted |
+| 10 | Craft review | LABEL-POSITION reports nothing without declared CSS (PR 65); a sibling-boundary anti-example added (`anti-03.json`); a judged golden example to follow, built from the paid run's own envelopes; the repeated SINGLE-COLUMN cap stays |
+| 11 | Site rubric attribution | Filed as E72; blocks the move to `active` |
+| 12 | Skill-template friction | Filed as E70 and E71 |
+| 13 | AC-11 and the scoreboard | AC-11 and AC-12 reworded (Revisions, 2026-10-03) |
 
 ### D1: Real-forms threshold (Decided)
 
