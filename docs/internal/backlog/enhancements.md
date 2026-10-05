@@ -1481,3 +1481,30 @@ and the repository did not have.
 - **Depends on:** Nothing
 - **Rank at intake:** unranked (added 2026-10-02, filed on the maintainer's delegation). **Status:**
   backlog.
+
+## E73 - Make the merge step run the scripted lane itself, instead of trusting the model's copy
+
+- **Target:** `skills/_shared/merge.py` (`_to_raw`, line 143), every `skills/critique-*/scripts/merge.py`
+  entry point, and each `SKILL.md`'s assembly step
+- **Change:** The merge step takes one findings file the model writes, holding both lanes, and
+  trusts it. A finding with no `lane` defaults to `"scripted"`. So a model can drop a script
+  finding, or label a judged finding as scripted, and the envelope records it as the script's
+  output. Done: `merge.py` runs `checks.py` on `--artifact` itself, takes the scripted lane only
+  from that output, and assigns each model finding's lane from `SKILL.md`'s `checks.scripted` and
+  `checks.judged` lists. A test per skill shows a dropped and a mislabeled finding are both
+  corrected.
+- **Why:** The scripted lane is the part of every verdict that needs no trust in a model, because
+  it is meant to be byte-reproducible from committed code. In the forms paid run it was not. Sonnet
+  dropped 11 script claims in 6 of 20 runs, which cost 11 of 90 scripted-seeded instances at
+  criterion level. Haiku labeled 10 judged-criterion findings "scripted" in 3 of 20 runs.
+- **Evidence:** `skills/_shared/merge.py:143` (`lane = str(finding.get("lane", "scripted"))`);
+  ADR 0037 (the critique-forms ship verdict), check 6, drafted 2026-10-05 and unmerged until the
+  run set is published; ADR 0028, which found one cal1 accessibility envelope whose scripted finding's `fix`
+  differed from `checks.py`, the same family of defect.
+- **Derives from:** The N2 (critique-forms) paid run `37091134037`, analysed 2026-10-03 and
+  2026-10-05.
+- **Size:** M. **Release:** v0.2.0. **Category:** fix. **Confidence:** the symptoms are verified
+  by comparing envelopes with `checks.py`; the cause is inferred from the code and not reproduced.
+- **Blocks:** Nothing directly. Every future paid run inherits the defect until it lands.
+- **Depends on:** Nothing. It changes every skill's protocol, so it wants a spec before a build.
+- **Rank at intake:** unranked (added 2026-10-05). **Status:** backlog.
