@@ -17,7 +17,8 @@
   tier, and all four are one criterion.
 - **Where it is weakest:** sonnet precision is a near-tie at the committed tolerance. Forms wins it
   in 3 of 5 repetitions. Under ADR 0026's exact-node cut, forms wins it in all 5.
-- **Not mergeable yet:** every figure here comes from a run folder that is not on `main`. See
+- **Awaiting the ruling only:** every figure here is read from the run folder PR 69 committed. The
+  figures join the top-level `results.json` in the change that acts on the ruling. See
   "Publication: two steps".
 
 - **Status:** Proposed
@@ -62,8 +63,9 @@ replaced it. E26 has not landed as of 2026-10-05, so the gate is 0.309 whichever
 
 ## The numbers
 
-Every figure in this table is read from `bench/results/runs-dispatch-37091134037/results.json`,
-at commit `c51eed8` on branch `bench-results/37091134037`. Overall lane throughout.
+Every figure in this table is read from
+[`bench/results/runs-dispatch-37091134037/results.json`](../../../bench/results/runs-dispatch-37091134037/results.json),
+which PR 69 copied byte for byte from result commit `c51eed8`. Overall lane throughout.
 
 | Cut | Tier | critique-forms 0.1.0 | baseline-generic (frozen) |
 |---|---|---|---|
@@ -176,8 +178,9 @@ equals haiku's. The drops therefore explain the whole criterion-level gap betwee
 
 The cause is inferred, not reproduced. `skills/_shared/merge.py` line 143 defaults a finding with
 no `lane` to `"scripted"`. The assembler also takes the model's list of script findings rather
-than running `checks.py` itself. Every skill that uses the shared assembler is exposed. E73
-(assembler hardening) records the fix.
+than running `checks.py` itself. Every skill that uses the shared assembler is exposed.
+[E73 (make the merge step run the scripted lane itself)](../backlog/enhancements.md) records the
+fix.
 
 ## Proposed ruling
 
@@ -218,19 +221,17 @@ site's rubric attribution) is fixed.
 ## Publication: two steps
 
 `bench/README.md` states that no number appears in a document unless a committed `results.json`
-carries it. Every figure above lives only on branch `bench-results/37091134037`, so this ADR cannot
-merge as it stands. E63 (dispatch run sets in `results.json`) records how the repository has
-handled this before. Three dispatch folders sit on `main` as committed evidence, quoted in prose,
+carries it. E63 (dispatch run sets in `results.json`) records how the repository has handled a
+dispatch run before. Three dispatch folders sit on `main` as committed evidence, quoted in prose,
 with no `results.json` entry (PRs 38 and 50). That precedent splits publication into two steps.
-Their order is the maintainer's to choose.
 
-1. **Commit the run folder to `main` as evidence.** That is
+1. **Commit the run folder to `main` as evidence. Done in PR 69.** That is
    `bench/results/runs-dispatch-37091134037/`: 80 envelopes, the run's own `results.json`, and 40
-   baseline `.json.raw.txt` files. All three earlier dispatch folders kept their baseline raw-text
-   files. This step lets this ADR cite committed files and merge. It changes no published table
-   and nothing on the site.
-2. **Add the run set's entries to `bench/results/results.json`.** This step meets AC-11, and ADR
-   0036 decision 4 requires it on a hold as well as a ship. Three facts bear on it:
+   baseline `.json.raw.txt` files, as all three earlier dispatch folders kept theirs. It is the
+   committed `results.json` this ADR cites. It changed no published table and nothing on the site.
+2. **Add the run set's entries to `bench/results/results.json`, in the change that acts on the
+   ruling.** This step meets AC-11, and ADR 0036 decision 4 requires it on a hold as well as a
+   ship. Three facts bear on it:
    - **The forms entries cannot collide.** E63's concern is a dispatch entry sharing `(skill,
      skill_version, model, domain)` with a p3 entry. No committed entry is in the `forms` domain,
      so all 12 forms entries are new keys.
@@ -238,9 +239,10 @@ Their order is the maintainer's to choose.
      overall-lane entry on the receipts page and does not read `status`. ADR 0036's table of
      status readers does not list it. Taking this step before a ship ruling shows forms' figures
      on the site while the skill is `experimental`.
-   - **The variance command may need the new folder.** `bench/variance.py --committed` checks its
-     pooling against `results.json`. Whether forms entries without a matching `--runs` pair make
-     it refuse was not checked.
+   - **The variance command still verifies.** `bench/variance.py --committed` checks only the
+     cells its `--runs` folders produce. Run against a scratch `results.json` holding the forms
+     entries, the `AGENTS.md` command verified 104 of 104 cell-metrics and wrote an identical
+     `variance.json`. Forms gets no band until its folder is added to that command.
 
 ## Consequences
 
@@ -259,8 +261,8 @@ publication step, not here.
 
 ## Open items
 
-- **E73 (assembler hardening):** run `checks.py` inside the merge step and assign lanes from
-  `SKILL.md`'s `checks.scripted` list.
+- **E73 (make the merge step run the scripted lane itself),** filed in PR 67: run `checks.py`
+  inside the merge step and assign lanes from `SKILL.md`'s `checks.scripted` list.
 - **A judged-lane corpus addition.** Three judged seeds cannot measure a judged lane. More judged
   seeds, on an artifact without element ids, would test both weaknesses named above.
 - **`golden-05`** (PR 60 question 10b), built from this run's judged findings.
@@ -268,8 +270,8 @@ publication step, not here.
 
 ## Reproducing the derived figures
 
-Extract `bench/results/runs-dispatch-37091134037/` from commit `c51eed8` into a scratch directory.
-Then, from the repository root:
+Every check reads the committed `bench/results/runs-dispatch-37091134037/`. From the repository
+root:
 
 - **Check 1:** call `bench.metrics.__main__.build_results` on that directory and `bench/corpus`,
   with the run set and timestamp from the extracted `results.json`, and compare entries.
