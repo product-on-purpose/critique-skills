@@ -700,6 +700,36 @@ on sonnet, 2026-09-15". The usability run landed inside its band on both gated f
 re-measured the one cell [section 2](#2-cells-where-a-skill-is-worse-than-the-generic-prompt) leaves
 open; what it found is recorded there.
 
+**A fourth run directory followed on 2026-10-03, and it measures a skill no earlier run set saw.**
+Workflow run `37091134037`, dispatched through `bench.yml` on commit `c442ba8`, measured
+`critique-forms` 0.1.0 and the frozen baseline on both pinned tiers at k=5, in one run set. It is
+committed as `bench/results/runs-dispatch-37091134037/`: 80 envelopes, 40 per arm, with no failed
+cell, plus the baseline arm's 40 `.json.raw.txt` companions. Only the run directory was taken from
+the result branch, as before.
+
+**It is the first run directory to carry its own `results.json`.** Since the cheap half of
+[E63 (dispatch run sets outside results.json)](../../docs/internal/backlog/enhancements.md) landed,
+`bench.yml` writes a run's scores inside its run directory instead of over the committed file. This
+one holds 12 entries under run set `bench-2026-10-03`. Rebuilding it from the 80 envelopes with
+`build_results` reproduces every entry field for field. `contract/validate_envelopes.py` and the
+scorer's envelope discovery both skip it by name.
+
+**Its figures are not in the top-level `results.json` yet, on purpose.** The run measured a skill
+registered `experimental`. The documentation site's receipts page renders every entry in
+`results.json` and does not read a skill's status, so adding these entries would show the skill
+there before any verdict. The entries join `results.json` in the change that rules on the skill,
+which the N2 spec's AC-11 and
+[ADR 0036](../../docs/internal/decisions/0036-experimental-status-until-ship-verdict.md) require
+whichever way the ruling goes. The verdict that reads this run is drafted as ADR 0037 and follows
+this change.
+
+**One fidelity finding travels with it.** In 10 of the 40 `critique-forms` envelopes, the scripted
+lane differs from what `checks.py` emits for the same artifact. Sonnet dropped script findings in 6
+runs. Haiku labeled judged-criterion findings as scripted in 3 runs, all on the clean form. Haiku
+also HTML-escaped its location strings in 1 run, which no score notices. The likely cause and the
+fix are
+[E73 (make the merge step run the scripted lane itself)](../../docs/internal/backlog/enhancements.md).
+
 ## Limitations
 
 Stated so no reader has to infer them from an absence.
@@ -913,6 +943,9 @@ Reported, not fixed. Each affects how far a reader should trust the surrounding 
   below. Closing it needs every reader to key on `run_set` as well, and a ruling on which run set a
   published table shows. Tracked as
   [E63 (dispatch run sets outside results.json)](../../docs/internal/backlog/enhancements.md).
+  A fourth directory, `runs-dispatch-37091134037/` (both tiers, 2026-10-03), is also outside it,
+  for a different reason. No committed entry is in the `forms` domain, so its entries collide with
+  nothing. They wait on the `critique-forms` verdict instead, as "Provenance" explains.
 - **`bench/report.py` used to drop a row silently.** Its baseline-comparison tables keyed each
   `(domain, model)` cell by skill name alone, so two entries for the same skill at different versions
   collided and whichever was inserted first vanished from the comparison without any error. It was

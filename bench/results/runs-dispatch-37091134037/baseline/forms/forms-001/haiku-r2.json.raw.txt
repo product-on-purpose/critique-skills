@@ -1,0 +1,39 @@
+Location: Line 8 (form tag)
+Evidence: `<form id="form">`
+Problem: The form is missing action and method attributes, so it cannot submit data to a server.
+Fix: Add `action` attribute pointing to the submission endpoint and `method="POST"` (or appropriate method).
+
+Location: Line 13 (email input)
+Evidence: `autocomplete="e-mail"`
+Problem: The autocomplete attribute value should be "email", not "e-mail".
+Fix: Change `autocomplete="e-mail"` to `autocomplete="email"`.
+
+Location: Line 18 (confirm password input)
+Evidence: `<input id="confirm-password-input" name="password_again" type="password" autocomplete="new-password" required="">`
+Problem: The confirm password field is missing the minlength="8" constraint that the password field has, creating inconsistent validation.
+Fix: Add `minlength="8"` to the confirm password input.
+
+Location: Line 34 (membership number input)
+Evidence: `placeholder="Must be 8 digits" required=""` with no minlength or pattern
+Problem: The label and placeholder both specify "8 digits" but the field has no validation to enforce this requirement.
+Fix: Add `minlength="8" maxlength="8" pattern="[0-9]{8}"` to the membership number input.
+
+Location: Line 38 (account number input)
+Evidence: `type="text" inputmode="numeric" required=""`
+Problem: The account number field indicates numeric input with inputmode but has no length or pattern validation constraints.
+Fix: Add validation attributes like `minlength="1" pattern="[0-9]+"` depending on the expected account number format.
+
+Location: Lines 10 and 48 (full name and legal name fields)
+Evidence: `<label id="name-label" for="name-input">Full name</label>` and `<label id="legalname-label" for="legalname-input">Your name</label>`
+Problem: The form contains two distinct name fields asking for essentially the same information, creating confusion about which to fill and why they're separate.
+Fix: Remove one of the duplicate name fields, or clarify their different purposes if both are genuinely needed.
+
+Location: Line 56 (contact time input)
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: A field labeled "Preferred contact time" should use `type="time"` to provide appropriate user input, not a plain text field.
+Fix: Change `type="text"` to `type="time"`.
+
+Location: Line 59 (view details button)
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>`
+Problem: This button has no onclick handler or associated functionality defined, making it non-functional.
+Fix: Either remove the button or add an onclick handler with JavaScript to define what "View details" should do.

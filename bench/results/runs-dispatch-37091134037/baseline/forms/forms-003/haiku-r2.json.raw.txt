@@ -1,0 +1,34 @@
+Location: Form element at the beginning of the body
+Evidence: `<form id="form">`
+Problem: The form is missing an action attribute, so there is no specified destination for the form submission. Without an action, the form will submit to the current page via GET, which is incorrect for account registration with sensitive data.
+Fix: Add an action and method attribute: `<form id="form" action="/signup" method="POST">`
+
+Location: Inside the row-phone div
+Evidence: `<p>Thanks for signing up.</p>`
+Problem: A success message appears in the middle of the form while users are still filling it out, creating a misleading impression that registration is already complete.
+Fix: Remove this paragraph; display the success message only after the form successfully submits via JavaScript or page redirect.
+
+Location: row-member div
+Evidence: `placeholder="Must be 8 digits" required=""`
+Problem: The placeholder text states the field must contain 8 digits, but there is no maxlength or pattern attribute to enforce this requirement, allowing users to enter any length or non-numeric characters.
+Fix: Add constraints to the input: `<input id="member-input" name="membership_number" type="text" inputmode="numeric" placeholder="Must be 8 digits" maxlength="8" pattern="[0-9]{8}" required="">`
+
+Location: row-shipspeed select element
+Evidence: `<select id="shipspeed-select" required="">`
+Problem: The select element is missing a name attribute, so the shipping speed selection will not be submitted as part of the form data.
+Fix: Add a name attribute: `<select id="shipspeed-select" name="shipspeed" required="">`
+
+Location: The three option elements in row-shipspeed
+Evidence: `<option>Standard</option>` `<option>Express</option>` `<option>Overnight</option>`
+Problem: The option elements are missing explicit value attributes; they should specify what value gets submitted for each choice.
+Fix: Add value attributes to each option: `<option value="standard">Standard</option>`, `<option value="express">Express</option>`, `<option value="overnight">Overnight</option>`
+
+Location: row-name div contains "Full name" and row-legalname div contains "First name" and "Last name"
+Evidence: `<input id="name-input" name="full_name"...>` in row-name and `<input id="given-input" name="given_name"...>` plus `<input id="family-input" name="family_name"...>` in row-legalname
+Problem: The form collects the user's name in two redundant ways—as a single "Full name" field and separately as "First name" and "Last name"—creating confusion about which fields should be used.
+Fix: Remove either the "Full name" field or the separate "First name"/"Last name" fields; choose one consistent approach.
+
+Location: row-contacttime div
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: The "Preferred contact time" field uses type="text", making it difficult for users (especially on mobile) to select a time and not providing a proper time picker interface.
+Fix: Change the input type to `<input id="contacttime-input" name="contact_time" type="time" required="">`

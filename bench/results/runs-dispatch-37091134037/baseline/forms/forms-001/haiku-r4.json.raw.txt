@@ -1,0 +1,49 @@
+Location: Email address input field
+Evidence: `autocomplete="e-mail"`
+Problem: The autocomplete value "e-mail" is deprecated; the standard value is "email".
+Fix: Change `autocomplete="e-mail"` to `autocomplete="email"`.
+
+Location: Confirm password input field
+Evidence: `<input id="confirm-password-input" name="password_again" type="password" autocomplete="new-password" required="">`
+Problem: The password field specifies `minlength="8"` but the confirm password field does not, allowing a mismatch between what the user can enter in each field.
+Fix: Add `minlength="8"` to the confirm password input.
+
+Location: Phone number input field
+Evidence: `<input id="phone-input" name="phone" type="tel" autocomplete="tel" required="">`
+Problem: The field is required but lacks a pattern or minlength attribute to validate the phone number format.
+Fix: Add a pattern attribute such as `pattern="[0-9\-\+\s\(\)]{7,}"` to enforce format validation.
+
+Location: Company website input field
+Evidence: `<input id="website-input" name="website" type="url" required="">`
+Problem: Requiring a company website may not be appropriate for all account types, such as personal accounts.
+Fix: Remove the `required=""` attribute or make it conditional.
+
+Location: Membership number input field
+Evidence: `<input id="member-input" name="membership_number" type="text" inputmode="numeric" placeholder="Must be 8 digits" required="">`
+Problem: The placeholder specifies "Must be 8 digits" but no pattern or minlength attribute enforces this constraint.
+Fix: Add `pattern="[0-9]{8}"` and `minlength="8"` to validate the input.
+
+Location: Preferred shipping speed select element
+Evidence: `<select id="shipspeed-select" required="">`
+Problem: The select element lacks a `name` attribute, so its value will not be included when the form is submitted.
+Fix: Add `name="shipping_speed"` to the select element.
+
+Location: Full name and Your name fields
+Evidence: Two separate fields: `name="full_name"` and `name="legal_name"` with different labels "Full name" and "Your name".
+Problem: The form asks for the user's name twice with different field names, creating confusion about whether these serve different purposes.
+Fix: Remove one of the duplicate fields or clarify the distinct purpose of each with more specific labels.
+
+Location: Preferred contact time input field
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: The field is labeled "Preferred contact time" but uses `type="text"`, which does not provide a time picker.
+Fix: Change `type="text"` to `type="time"`.
+
+Location: How did you hear about us select element
+Evidence: `<select id="hear-select" required="">`
+Problem: The select element lacks a `name` attribute, so its value will not be included when the form is submitted.
+Fix: Add `name="hear_about"` to the select element.
+
+Location: Option elements in select fields
+Evidence: `<option>Standard</option>`, `<option>Search engine</option>`, etc.
+Problem: Option elements lack explicit `value` attributes, so the full display text will be submitted as the value instead of a shorter identifier.
+Fix: Add `value` attributes to each option, for example `<option value="standard">Standard</option>`.

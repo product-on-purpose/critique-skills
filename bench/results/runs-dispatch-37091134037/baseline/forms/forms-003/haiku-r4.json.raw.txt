@@ -1,0 +1,39 @@
+Location: Inside row-phone div (between phone input and row-phone2)
+Evidence: `<p>Thanks for signing up.</p>`
+Problem: A success message appears in the middle of the form before submission.
+Fix: Remove this paragraph element, or display it only after successful form submission using JavaScript.
+
+Location: row-member input field
+Evidence: `placeholder="Must be 8 digits"` with no validation constraints on the input
+Problem: The field claims "Must be 8 digits" but has no pattern, minlength, or maxlength attribute to enforce this requirement.
+Fix: Add `pattern="^\d{8}$"` and `minlength="8" maxlength="8"` attributes to the input.
+
+Location: row-shipspeed select element
+Evidence: `<select id="shipspeed-select" required="">` with no name attribute
+Problem: The select element lacks a name attribute, so the selected shipping speed will not be included in the form submission.
+Fix: Add `name="shipping_speed"` (or an appropriate name) to the select element.
+
+Location: row-name and row-legalname
+Evidence: "Full name" field at row-name and separate "First name"/"Last name" fields at row-legalname both collect name data
+Problem: The form collects the same information twice in different formats, creating redundancy and user confusion.
+Fix: Remove either the "Full name" field or the separate "First name"/"Last name" fields, depending on business requirements.
+
+Location: row-org input element
+Evidence: `style="font-size:16px"`
+Problem: This inline style is inconsistent with other form fields and makes styling difficult to maintain centrally.
+Fix: Remove the inline style and apply consistent CSS styling through a stylesheet.
+
+Location: row-contacttime label element
+Evidence: `style="display:block"`
+Problem: This unnecessary inline style is inconsistent with other labels that don't require it.
+Fix: Remove the inline style; labels do not need display:block to function correctly.
+
+Location: row-contacttime input element
+Evidence: `type="text"` for a "Preferred contact time" field
+Problem: The field should use type="time" to provide a time picker interface and proper time format validation.
+Fix: Change `type="text"` to `type="time"`.
+
+Location: viewdetails-btn button
+Evidence: `style="padding:1px 2px;font-size:11px"`
+Problem: This inline styling creates inconsistency with other buttons and uses unusually small font and padding sizes.
+Fix: Remove the inline style and apply consistent CSS styling to all buttons through a stylesheet.

@@ -1,0 +1,232 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" required=\"\"> and <input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required=\"\">",
+      "fix": "Remove the Account number and Membership number fields from account creation. If the form is meant to let an existing loyalty-card holder link a pre-issued membership number, say so beside the field and make it optional, since a brand-new member has none.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#acctnum-input, <input> field, label 'Account number', line 45",
+      "severity": 4,
+      "violation": "The form's task, named by its heading 'Set up your account' and its submit label 'Create account', is to create a new account, but it requires an Account number and a Membership number before the account exists. Nobody signing up for the first time has either value yet, so the task cannot use the answer it demands: there is no valid account number for an account that does not yet exist."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"website-input\" name=\"website\" type=\"url\" required=\"\">",
+      "fix": "Remove Company website, Preferred shipping speed, Organization name, and Preferred contact time from account sign-up, or make them optional and ask at the point each is actually used (checkout for shipping speed, a support flow for contact time).",
+      "id": "F-002",
+      "instances": [
+        {
+          "evidence": "<select id=\"shipspeed-select\" required=\"\">",
+          "location": "#shipspeed-select, <select> field, label 'Preferred shipping speed', line 53"
+        },
+        {
+          "evidence": "<input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required=\"\">",
+          "location": "#org-input, <input> field, label 'Organization name', line 67"
+        },
+        {
+          "evidence": "<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">",
+          "location": "#contacttime-input, <input> field, label 'Preferred contact time', line 71"
+        }
+      ],
+      "lane": "judged",
+      "location": "#website-input, <input> field, label 'Company website', line 37",
+      "severity": 3,
+      "violation": "Creating a personal account at Meridian Outfitters does not need a company website, a shipping-speed preference, an organization name, or a preferred contact time; none of these serves the stated task of creating the account, and the ones tied to an order (shipping speed) or a later conversation (contact time) could be asked when they are actually used. All four are marked required, so nobody can create an account without supplying values the task has no use for."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-PHONE-REASON",
+      "evidence": "<input id=\"phone-input\" name=\"phone\" type=\"tel\" autocomplete=\"tel\" required=\"\">",
+      "fix": "Say beside the field what the number is used for, or make it optional.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "#phone-input, <input> field, label 'Phone number', line 28",
+      "severity": 3,
+      "violation": "A phone number is required with no word beside the field on why it is needed, though the form already asks for an email address."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-PLACEHOLDER-INSTRUCTION",
+      "evidence": "placeholder=Must be 8 digits",
+      "fix": "Move the rule into hint text beside the field, linked with aria-describedby.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "#member-input, <input> field, label 'Membership number', line 41",
+      "severity": 3,
+      "violation": "A format rule appears only in the placeholder, which disappears as soon as typing starts."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-REQUIRED-OPTIONAL",
+      "evidence": "<input id=\"phone2-input\" name=\"phone_secondary\" type=\"tel\" autocomplete=\"tel\">",
+      "fix": "Mark the optional fields with the word optional in their labels, or mark the required ones and explain the mark.",
+      "id": "F-005",
+      "instances": [
+        {
+          "evidence": "<input id=\"name-input\" name=\"full_name\" type=\"text\" autocomplete=\"name\" autocorrect=\"off\" spellcheck=\"false\" required=\"\">",
+          "location": "#name-input, <input> field, label 'Full name', line 12"
+        },
+        {
+          "evidence": "<input id=\"email-input\" name=\"email\" type=\"email\" autocomplete=\"email\" required=\"\">",
+          "location": "#email-input, <input> field, label 'Email address', line 16"
+        },
+        {
+          "evidence": "<input id=\"password-input\" name=\"password\" type=\"password\" autocomplete=\"new-password\" required=\"\" minlength=\"6\">",
+          "location": "#password-input, <input> field, label 'Create a password', line 20"
+        },
+        {
+          "evidence": "<input id=\"street-input\" name=\"street_address\" type=\"text\" autocomplete=\"address-line1\" autocorrect=\"off\" spellcheck=\"false\" required=\"\">",
+          "location": "#street-input, <input> field, label 'Street address', line 24"
+        },
+        {
+          "evidence": "<input id=\"phone-input\" name=\"phone\" type=\"tel\" autocomplete=\"tel\" required=\"\">",
+          "location": "#phone-input, <input> field, label 'Phone number', line 28"
+        },
+        {
+          "evidence": "<input id=\"website-input\" name=\"website\" type=\"url\" required=\"\">",
+          "location": "#website-input, <input> field, label 'Company website', line 37"
+        },
+        {
+          "evidence": "<input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required=\"\">",
+          "location": "#member-input, <input> field, label 'Membership number', line 41"
+        },
+        {
+          "evidence": "<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" required=\"\">",
+          "location": "#acctnum-input, <input> field, label 'Account number', line 45"
+        },
+        {
+          "evidence": "<input id=\"postal-input\" name=\"postal_code\" type=\"text\" autocomplete=\"postal-code\" required=\"\">",
+          "location": "#postal-input, <input> field, label 'Postal code', line 49"
+        },
+        {
+          "evidence": "<select id=\"shipspeed-select\" required=\"\">",
+          "location": "#shipspeed-select, <select> field, label 'Preferred shipping speed', line 53"
+        },
+        {
+          "evidence": "<input id=\"given-input\" name=\"given_name\" type=\"text\" autocomplete=\"given-name\" autocorrect=\"off\" spellcheck=\"false\" required=\"\">",
+          "location": "#given-input, <input> field, label 'First name', line 61"
+        },
+        {
+          "evidence": "<input id=\"family-input\" name=\"family_name\" type=\"text\" autocomplete=\"family-name\" autocorrect=\"off\" spellcheck=\"false\" required=\"\">",
+          "location": "#family-input, <input> field, label 'Last name', line 63"
+        },
+        {
+          "evidence": "<input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required=\"\">",
+          "location": "#org-input, <input> field, label 'Organization name', line 67"
+        },
+        {
+          "evidence": "<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">",
+          "location": "#contacttime-input, <input> field, label 'Preferred contact time', line 71"
+        }
+      ],
+      "lane": "scripted",
+      "location": "#phone2-input, <input> field, label 'Secondary phone', line 33",
+      "severity": 3,
+      "violation": "The form mixes 14 required and 1 optional fields and marks none of them, so the person cannot tell which may be left empty."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-RESET-BUTTON",
+      "evidence": "<button id=\"reset-btn\" type=\"reset\">",
+      "fix": "Remove the reset control.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "#reset-btn, <button> button, text 'Clear form', line 75",
+      "severity": 3,
+      "violation": "A control that clears everything entered sits directly beside the submit button."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-TOUCH-TARGET",
+      "evidence": "<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:1px 2px;font-size:11px\">View details</button>",
+      "fix": "Raise the button's font size to at least 16 pixels and its padding so the rendered target is at least 44 by 44 CSS pixels.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> button, text 'View details', line 73",
+      "severity": 3,
+      "violation": "The declared CSS sets this button's font size to 11 pixels with only 1 to 2 pixels of padding, giving an estimated rendered height around 15 to 19 pixels, far below the roughly 44-pixel target mobile-usability guidance recommends and comparable to the criterion's own severity-3 anchor of a 16-pixel control, so a fingertip is unlikely to land on it reliably."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"name-input\" name=\"full_name\" type=\"text\" autocomplete=\"name\" required=\"\"> (line 12), then <input id=\"given-input\" name=\"given_name\" ... required=\"\"> and <input id=\"family-input\" name=\"family_name\" ... required=\"\"> (lines 61 and 63)",
+      "fix": "Keep one name field. If the system needs given and family name separately, collect the name only that way and remove the earlier Full name field.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "#given-input, <input> field, label 'First name', line 61",
+      "severity": 2,
+      "violation": "The form already asked for the person's name once, as a single Full name field, then asks again later as separate First name and Last name fields, duplicating an answer it already has."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-NUMERIC-INPUTMODE",
+      "evidence": "<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" required=\"\">",
+      "fix": "Add inputmode=numeric.",
+      "id": "F-009",
+      "lane": "scripted",
+      "location": "#acctnum-input, <input> field, label 'Account number', line 45",
+      "severity": 2,
+      "violation": "This account number is a text field without the numeric input mode, so a phone shows the full keyboard for digits."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-OPTION-CONTROL",
+      "evidence": "<select id=\"shipspeed-select\" required=\"\">",
+      "fix": "Offer the options as visible radio buttons.",
+      "id": "F-010",
+      "lane": "scripted",
+      "location": "#shipspeed-select, <select> field, label 'Preferred shipping speed', line 53",
+      "severity": 2,
+      "violation": "A single choice among 3 options sits in a drop-down, so the person must open it to see them."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-PASSWORD-RULES",
+      "evidence": "<input id=\"password-input\" name=\"password\" type=\"password\" autocomplete=\"new-password\" required=\"\" minlength=\"6\">",
+      "fix": "Require at least eight characters and remove the pattern and any maximum length.",
+      "id": "F-011",
+      "lane": "scripted",
+      "location": "#password-input, <input> field, label 'Create a password', line 20",
+      "severity": 2,
+      "violation": "On this new-password field, the minimum length is only 6."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-SINGLE-COLUMN",
+      "evidence": "<div id=\"row-legalname\"><label ...>First name</label><input id=\"given-input\" ...><label ...>Last name</label><input id=\"family-input\" ...></div>",
+      "fix": "Wrap First name and Last name in separate rows like every other field, each on its own line, or confirm with a declared block or grid-row rule that both stack vertically.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "#row-legalname, <div> row holding #given-input and #family-input, line 59",
+      "severity": 2,
+      "violation": "Unlike every other field in the form, which each sit in their own div and so stack one per row, the First name and Last name fields share one div with no block-level wrapper between them, so by default inline flow the two label-and-field pairs run side by side on one line. This breaks the single-column pattern the rest of the form establishes, so a person scanning straight down the form could read across this row instead of down it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-003.html",
+    "artifact_sha256": "df62d7b38659529bf26df03102d3e7969a1c47b7c66e72bc8d3cf208f082bc1f",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-10-03T04:39:17Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 6,
+      "4": 1
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

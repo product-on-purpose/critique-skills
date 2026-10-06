@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "The secondary action #viewdetails-btn has explicit styling (padding: 12px 20px; font-size: 16px) while the primary submit button #submit-btn at line 74 has no explicit styling, reversing the prominence hierarchy.",
+      "fix": "Remove explicit styling from #viewdetails-btn or apply more prominent styling to #submit-btn to make the primary action visibly the most prominent. Rearrange the buttons so the primary submit button appears first or last with greater emphasis.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> element, line 73",
+      "severity": 3,
+      "violation": "Secondary action is more prominently styled than the primary action, making it unclear which button is the main action."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "The form already asks for 'Full name' at #name-input on line 11, making this field redundant within the same form.",
+      "fix": "Remove the #legalname-input field entirely and reuse the full name already collected at #name-input. If a legal name different from the display name is needed, ask once with a clear explanation of why.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label 'Your name', line 62",
+      "severity": 3,
+      "violation": "The same information is requested twice in one form, duplicating the person's work."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "The form's task is to create an account. Preferred contact time can be set later in account settings and is not needed during account creation.",
+      "fix": "Remove the Preferred contact time field from the account-creation form and ask for it in a separate profile-preferences step after the account is created.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#contacttime-input, <input> field, label 'Preferred contact time', line 71",
+      "severity": 2,
+      "violation": "The form asks for information that could wait until after the account is created."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "The form's task is to create an account. Organization name is not required for personal account creation.",
+      "fix": "Remove the Organization name field from the account-creation form, or defer it to a profile-completion step after the account is created.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#org-input, <input> field, label 'Organization name', line 66",
+      "severity": 2,
+      "violation": "The form asks for information that the account-creation task does not need."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "The form's task is to create an account for Meridian Outfitters. A company website URL is not required to create a personal user account.",
+      "fix": "Remove the Company website field from the account-creation form, or defer it to a profile-completion step after the account is created.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#website-input, <input> field, label 'Company website', line 36",
+      "severity": 2,
+      "violation": "The form asks for information that the account-creation task does not need."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-TOUCH-TARGET",
+      "evidence": "The button declares padding of 12px 20px and font-size of 16px, estimating to approximately 40 CSS pixels in height, below the recommended 44-48 pixels for touch targets.",
+      "fix": "Increase the button's padding or height to reach approximately 44-48 CSS pixels. For example, change padding from '12px 20px' to '16px 20px' or add additional padding/margin to enlarge the tappable area.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> element with padding and font-size styling, line 73",
+      "severity": 2,
+      "violation": "The touch target is smaller than mobile-usability guidance recommends, making it harder to tap accurately."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-10-03T05:17:16Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

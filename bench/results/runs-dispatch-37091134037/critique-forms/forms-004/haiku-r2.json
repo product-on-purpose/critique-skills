@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "Artifact line 12: #name-input with label 'Full name' and autocomplete=\"name\". Artifact line 63: #legalname-input with label 'Your name' and autocomplete=\"name\". Both fields ask for the user's name with the same autocomplete token, which is redundant.",
+      "fix": "Remove one of the duplicate name fields. The form should ask for the user's name once. If both a full name and a legal name are needed, the form should clarify the distinction and ask for each with a specific label explaining why both are necessary.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "#legalname-input, <input> field, label 'Your name'",
+      "severity": 3,
+      "violation": "The form asks for the same information twice. Field #name-input (Full name) and field #legalname-input (Your name) both use autocomplete=\"name\", indicating they capture identical information. This violates the requirement that forms ask only for what the task needs once."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "Artifact line 73: #viewdetails-btn has style=\"padding:12px 20px;font-size:16px\". Artifact line 74: #submit-btn has no style attribute. When a secondary action is styled as prominently as the primary, users may not recognize which action is the intended completion step.",
+      "fix": "Remove explicit styling from the secondary action or apply less prominent styling to it, ensuring the primary submit button is visibly the most prominent control. The secondary action should use default styling or lighter visual treatment than the primary action.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "#viewdetails-btn, <button> secondary action",
+      "severity": 2,
+      "violation": "The secondary action (View details) is styled more prominently than the primary submit action. The View details button has explicit padding (12px 20px) and font-size (16px) declarations, while the Create account primary submit button has no explicit styling, making the secondary action appear equally or more prominent."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-TOUCH-TARGET",
+      "evidence": "Artifact line 73: #viewdetails-btn has style=\"padding:12px 20px;font-size:16px\". Button height calculation: 12px (top padding) + 12px (bottom padding) + ~16px (font/line height) = approximately 40 pixels. FORMS-TOUCH-TARGET recommends 44-48 CSS pixels for mobile usability.",
+      "fix": "Increase the button's padding or add explicit height styling to reach at least 44 CSS pixels. For example, increase vertical padding to 14-16 pixels, or add height declaration of 44-48 pixels.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "#viewdetails-btn, <button> secondary action",
+      "severity": 2,
+      "violation": "The secondary action button is sized below the recommended 44-48 CSS pixel target for mobile fingertip interaction. The View details button declares padding:12px 20px and font-size:16px, resulting in approximately 40 pixels of height, which is below the recommended size for reliable finger targeting on mobile devices."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-10-03T05:13:56Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

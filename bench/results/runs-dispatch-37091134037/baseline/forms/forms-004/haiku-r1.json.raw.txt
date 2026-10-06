@@ -1,0 +1,14 @@
+Location: Line with `<select id="shipspeed-select">` and its options
+Evidence: `<option>Standard</option>` (and similar) with no value attributes
+Problem: Options will submit their text content as values instead of explicit, code-safe values; "Standard" is also pre-selected by default instead of forcing the user to explicitly choose.
+Fix: Add value attributes to each option and prepend an empty placeholder: `<option value="">Select a shipping speed</option><option value="standard">Standard</option><option value="express">Express</option>` (and so on).
+
+Location: Line with `<label id="member-label">` and the membership number input
+Evidence: Label says "(8 digits)" and placeholder says "Must be 8 digits", but the input has no pattern or length validation
+Problem: The 8-digit requirement is documented only in text; there is no validation enforcement in the input attributes.
+Fix: Add `pattern="[0-9]{8}"` and `maxlength="8"` to the membership number input.
+
+Location: Line with `<input id="contacttime-input">`
+Evidence: `type="text"` for a field labeled "Preferred contact time"
+Problem: A time field should use semantic HTML with `type="time"` for proper time selection UI and validation, not free-text input.
+Fix: Change `type="text"` to `type="time"`.

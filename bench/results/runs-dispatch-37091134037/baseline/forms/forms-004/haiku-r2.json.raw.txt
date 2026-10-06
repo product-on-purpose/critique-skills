@@ -1,0 +1,54 @@
+Location: Full name input (id="name-input")
+Evidence: `autocorrect="off"`
+Problem: The autocorrect attribute is not a standard HTML5 attribute and will be ignored by browsers.
+Fix: Remove `autocorrect="off"` and keep only `spellcheck="false"`.
+
+Location: Password input (id="password-input")
+Evidence: Single password field with no confirmation field
+Problem: Users cannot verify they've entered their password correctly before submitting, risking an incorrect password being saved.
+Fix: Add a second password input with id="password-confirm-input" and label "Confirm password".
+
+Location: Street address input (id="street-input")
+Evidence: `autocorrect="off"`
+Problem: The autocorrect attribute is not standard HTML5.
+Fix: Remove `autocorrect="off"`.
+
+Location: Membership number input (id="member-input")
+Evidence: Label says "(8 digits)", placeholder says "Must be 8 digits", but no pattern or maxlength attribute
+Problem: The form will accept any input (letters, wrong length) despite promising to validate 8-digit format.
+Fix: Add `pattern="\d{8}"` and `maxlength="8"` attributes to enforce exactly 8 numeric digits.
+
+Location: Shipping speed select (id="shipspeed-select")
+Evidence: Option elements lack value attributes: `<option>Standard</option>`
+Problem: Options should have explicit value attributes to ensure predictable form submission data.
+Fix: Add value attributes to each option: `<option value="standard">Standard</option>`, `<option value="express">Express</option>`, etc.
+
+Location: Shipping speed select (id="shipspeed-select")
+Evidence: Options include both "Overnight" and "Next-day"
+Problem: Both options refer to the same shipping service, creating confusion about which to select.
+Fix: Remove one option (recommend removing "Next-day" to keep only "Overnight").
+
+Location: Legal name input (id="legalname-input")
+Evidence: `autocorrect="off"`
+Problem: The autocorrect attribute is not standard HTML5.
+Fix: Remove `autocorrect="off"`.
+
+Location: Form contains both Full name (id="row-name") and Your name / Legal name (id="row-legalname") fields
+Evidence: Two separate name inputs with names="full_name" and name="legal_name"
+Problem: The form asks for the user's name twice with unclear distinction, making it ambiguous whether they should differ or if one is redundant.
+Fix: Consolidate to a single name field or clarify labels as "Full Name" and "Full Legal Name (as on ID)".
+
+Location: Organization name input (id="org-input")
+Evidence: `style="font-size:16px"`
+Problem: Inline styles should be managed in a stylesheet, not embedded in HTML.
+Fix: Remove the inline style and define font-size in an external or internal CSS stylesheet.
+
+Location: Preferred contact time label (id="contacttime-label")
+Evidence: `style="display:block"`
+Problem: Inline styles should be managed in a stylesheet.
+Fix: Remove the inline style and manage layout in a stylesheet.
+
+Location: Preferred contact time input (id="contacttime-input")
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: The input type is "text" with no guidance on expected format, leaving it ambiguous whether users should enter a time of day, time range, or something else.
+Fix: Change to `type="time"` if a specific time is needed, or add `placeholder="e.g., 9am-5pm"` to clarify the expected format.

@@ -1,0 +1,171 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "size=\"3\"",
+      "fix": "Remove the size attribute or increase it to 10 or more to accommodate all valid postal code formats.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "row-postal, postal-input element",
+      "severity": 3,
+      "violation": "Postal codes vary widely in length; US ZIP codes are 5 - 9 digits and Canadian postal codes are 6 characters. A size of 3 is too restrictive."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<select id=\"shipspeed-select\" required=\"\">",
+      "fix": "Add name=\"shipspeed\" to the select element.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "row-shipspeed, shipspeed-select element",
+      "severity": 3,
+      "violation": "The select element is missing a name attribute, so the selected shipping speed will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<option>Standard</option>, <option>Express</option>, etc.",
+      "fix": "Add value attributes to each option, e.g., <option value=\"standard\">Standard</option>.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-shipspeed, option elements within shipspeed-select",
+      "severity": 3,
+      "violation": "Option elements lack value attributes, so the display text (e.g., \"Standard\") will be submitted instead of a standardized code."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "style=\"font-size:13px\"",
+      "fix": "Remove the inline style and define the font size via a CSS class.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-org, organization input",
+      "severity": 3,
+      "violation": "Inline style mixes presentation into HTML markup instead of using a stylesheet."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "label with style=\"display:inline-block;float:left;width:140px\" and <input ... type=\"text\">",
+      "fix": "Move the layout styles to a CSS class and change the input type to \"time\" or add a placeholder to clarify the expected format (e.g., \"9:00 AM\").",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "row-contacttime, contacttime-label and contacttime-input",
+      "severity": 3,
+      "violation": "Layout is done with inline styles, and the text input provides no indication of the expected time format."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>",
+      "fix": "Either remove the button if it is unused, or add a handler and move the styles to a CSS class.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "viewdetails-btn",
+      "severity": 3,
+      "violation": "The button is type=\"button\" with no onclick handler or visible purpose, and it contains inline styles. The button appears incomplete or forgotten."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<select id=\"dob-day-select\" autocomplete=\"bday-day\" required=\"\">",
+      "fix": "Add name=\"bday-day\" to the select element.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "row-dob, dob-day-select element",
+      "severity": 3,
+      "violation": "The select element is missing a name attribute, so the selected day will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<select id=\"dob-month-select\" autocomplete=\"bday-month\" required=\"\"> with <option>January</option>, <option>February</option>, etc.",
+      "fix": "Add name=\"bday-month\" to the select, and add value attributes like <option value=\"01\">January</option> for each month.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "row-dob, dob-month-select element and options",
+      "severity": 3,
+      "violation": "The select is missing a name attribute and the options lack value attributes. Month names will be submitted instead of numeric values."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<select id=\"dob-year-select\" autocomplete=\"bday-year\" required=\"\">",
+      "fix": "Add name=\"bday-year\" to the select element.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "row-dob, dob-year-select element",
+      "severity": 3,
+      "violation": "The select element is missing a name attribute, so the selected year will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"website-input\" name=\"website\" required=\"\" type=\"text\">",
+      "fix": "Change type=\"text\" to type=\"url\".",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "row-website, website-input",
+      "severity": 3,
+      "violation": "The input type is \"text\" instead of \"url\", so the browser will not validate the URL format."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required=\"\">",
+      "fix": "Add pattern=\"[0-9]{8}\" to enforce exactly 8 numeric digits.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "row-member, member-input",
+      "severity": 3,
+      "violation": "The placeholder states \"Must be 8 digits\" but there is no pattern attribute to enforce this validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required=\"\">",
+      "fix": "Add a pattern attribute such as pattern=\"[0-9]+\" or provide specific format requirements.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "row-acctnum, acctnum-input",
+      "severity": 3,
+      "violation": "The input is marked as numeric but has no pattern attribute to validate the format or length."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "row-name label \"Full name\" with name=\"full_name\" and row-legalname label \"Your name\" with name=\"legal_name\"",
+      "fix": "Remove one of the duplicate name fields, or if both are needed, clarify their purposes (e.g., rename one to \"Legal Name for Documentation\").",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "row-name and row-legalname",
+      "severity": 3,
+      "violation": "Two separate fields both ask for a person's name but with different labels (\"Full name\" vs. \"Your name\"), creating confusion about whether they are the same or different information."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-002.html",
+    "artifact_sha256": "e39d0a6e9175987711e114d2ce5edd568205f5aecafb2d271246e6036a16457f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T03:39:01Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 13,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

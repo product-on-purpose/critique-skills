@@ -47,13 +47,23 @@ const FIGURES = [
   /Run envelopes:\s*(\d[\d,]*)/gi, //                       the badge's alt text
 ];
 
-/** Recursively count `*.json` files under one run root, excluding `.raw.txt` sidecars. */
+/**
+ * Whether a file inside a run root is an envelope. Mirrors `find_envelope_files` in
+ * contract/validate_envelopes.py, which excludes a `results.json` or `*.schema.json` inside a run
+ * root. That exclusion went unexercised until a dispatch run directory carried its own
+ * `results.json`, and then this guard counted it as an envelope the validator does not.
+ */
+function isEnvelope(name) {
+  return name.endsWith(".json") && name !== "results.json" && !name.endsWith(".schema.json");
+}
+
+/** Recursively count envelopes under one run root. `.raw.txt` sidecars never end in `.json`. */
 function countJson(dir) {
   let n = 0;
   for (const entry of readdirSync(dir)) {
     const p = join(dir, entry);
     if (statSync(p).isDirectory()) n += countJson(p);
-    else if (entry.endsWith(".json")) n += 1;
+    else if (isEnvelope(entry)) n += 1;
   }
   return n;
 }

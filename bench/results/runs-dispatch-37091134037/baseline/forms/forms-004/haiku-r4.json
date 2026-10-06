@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with `type=\"text\"` and no pattern or maxlength attribute",
+      "fix": "Add `pattern=\"[0-9]{8}\" maxlength=\"8\"` to the input element.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "row-member input element",
+      "severity": 3,
+      "violation": "The placeholder promises 8-digit validation but the field doesn't enforce it; users can enter any text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Standard</option>` and similar options lack value attributes",
+      "fix": "Add explicit value attributes to each option, e.g., `<option value=\"standard\">Standard</option>`.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "row-shipspeed select option elements",
+      "severity": 3,
+      "violation": "Without value attributes, the form will submit the option's text content (e.g., \"Standard\") instead of a controlled value."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Full name\" field with name=\"full_name\" and \"Your name\" field with name=\"legal_name\"",
+      "fix": "Remove one field or clarify the distinction in the labels (e.g., \"Full name\" vs. \"Legal name for contracts\").",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-name and row-legalname fields",
+      "severity": 3,
+      "violation": "Both fields ask for a person's name with different field names and no clear distinction, creating confusion about which one is required."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Change to `type=\"time\"` or add a placeholder like `placeholder=\"e.g., 9am-5pm\"` to clarify the expected format.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-contacttime input element",
+      "severity": 3,
+      "violation": "type=\"text\" is too vague for a contact time preference; the expected format is unclear to users."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>`",
+      "fix": "Either add an onclick handler with functionality or remove the button if it's not needed.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "viewdetails-btn button element",
+      "severity": 3,
+      "violation": "The button has no onclick handler or apparent integration with the form, making it non-functional."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T05:21:17Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

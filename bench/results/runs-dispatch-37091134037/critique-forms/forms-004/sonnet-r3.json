@@ -1,0 +1,120 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"acctnum-label\" for=\"acctnum-input\">Account number</label> <input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required>",
+      "fix": "Remove the account-number field from account creation. Assign and show the account number after the account is created, or move this question to wherever an existing account number is genuinely needed.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#acctnum-input, <input> field, label 'Account number', line 45",
+      "severity": 3,
+      "violation": "A required 'Account number' field is collected before the account exists, so the create-account task has no answer to use it for; an account being created cannot already have a number assigned to it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"legalname-label\" for=\"legalname-input\">Your name</label> <input id=\"legalname-input\" name=\"legal_name\" type=\"text\" autocomplete=\"name\" required> appears after #name-input, label 'Full name', name=\"full_name\", also required",
+      "fix": "Remove the duplicate 'Your name' field and use the single full-name field already collected (#name-input) wherever a legal name is needed, or merge the two into one clearly-labelled name field.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label 'Your name', line 63",
+      "severity": 3,
+      "violation": "A second required field, 'Your name' (legal_name), asks again for the same full-name value the form already collects at #name-input ('Full name', full_name). The account-creation task gains nothing from asking twice, and the two answers can conflict."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "Required fields beyond name/email/password: #street-input (Street address), #phone-input (Phone number, 'We will text you about delivery updates'), #website-input (Company website), #postal-input (Postal code), #shipspeed-select (Preferred shipping speed), #org-input (Organization name), #contacttime-input (Preferred contact time)",
+      "fix": "Collect only full name, email and password to create the account. Move address, phone, shipping-speed, organization and contact-time questions to a post-signup profile step or the first order, where the answers are actually used.",
+      "id": "F-003",
+      "instances": [
+        {
+          "evidence": "<input id=\"phone-input\" name=\"phone\" type=\"tel\" autocomplete=\"tel\" required>, with sibling text 'We will text you about delivery updates.'",
+          "location": "#phone-input, <input> field, label 'Phone number', line 28"
+        },
+        {
+          "evidence": "<input id=\"website-input\" name=\"website\" type=\"url\" required>",
+          "location": "#website-input, <input> field, label 'Company website', line 37"
+        },
+        {
+          "evidence": "<input id=\"postal-input\" name=\"postal_code\" type=\"text\" autocomplete=\"postal-code\" required>",
+          "location": "#postal-input, <input> field, label 'Postal code', line 49"
+        },
+        {
+          "evidence": "<select id=\"shipspeed-select\" required>...5 options...</select>",
+          "location": "#shipspeed-select, <select> field, label 'Preferred shipping speed', line 53"
+        },
+        {
+          "evidence": "<input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required>",
+          "location": "#org-input, <input> field, label 'Organization name', line 67"
+        },
+        {
+          "evidence": "<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required>",
+          "location": "#contacttime-input, <input> field, label 'Preferred contact time', line 71"
+        }
+      ],
+      "lane": "judged",
+      "location": "#street-input, <input> field, label 'Street address', line 24",
+      "severity": 3,
+      "violation": "Street address, postal code, phone number, company website, organization name, preferred shipping speed and preferred contact time are all required to create an account, though the task of creating an account does not use any of them; each is information a later step, such as placing or shipping an order, would need and could ask for then."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button> next to <button id=\"submit-btn\" type=\"submit\">Create account</button>, which declares no style",
+      "fix": "Give the primary 'Create account' button equal or greater visual weight than 'View details' (for example a filled background, larger padding, or a bigger font size), or strip the secondary button's bespoke styling so it reads as clearly lesser.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> element, text 'View details', line 73",
+      "severity": 2,
+      "violation": "The secondary action 'View details' carries explicit padding and font-size styling while the primary submit 'Create account' declares no style at all, so nothing in the markup or CSS makes the primary action the more visually prominent control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"phone2-label\" for=\"phone2-input\">Secondary phone (optional)</label> <input id=\"phone2-input\" name=\"phone_secondary\" type=\"tel\" autocomplete=\"tel\">",
+      "fix": "Remove the secondary-phone field from account creation, or move it to a profile page the person can fill in after the account exists.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#phone2-input, <input> field, label 'Secondary phone (optional)', line 33",
+      "severity": 2,
+      "violation": "An optional second phone number is asked for at account creation, though the account-creation task does not use it and a secondary contact number, if ever needed, could be collected later."
+    },
+    {
+      "confidence": "low",
+      "criterion": "FORMS-TOUCH-TARGET",
+      "evidence": "style=\"padding:12px 20px;font-size:16px\" with no explicit height or line-height declared",
+      "fix": "Set an explicit min-height of 44px (or increase vertical padding further) on the button so its tappable height reliably clears the recommended size.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> element, text 'View details', line 73",
+      "severity": 2,
+      "violation": "The declared 16px font-size plus 12px top and bottom padding puts this button's estimated rendered height at roughly 42 to 45 CSS pixels, at or below the approximately 44-pixel fingertip target mobile-usability guidance recommends, while its sibling submit button declares no size at all for comparison."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-10-03T05:40:32Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
