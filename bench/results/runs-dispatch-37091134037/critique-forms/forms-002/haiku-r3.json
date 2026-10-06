@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "FORMS-DATE-SELECTS",
+      "evidence": "&lt;select id=\"dob-day-select\" autocomplete=\"bday-day\" required=\"\"&gt; &lt;select id=\"dob-month-select\" autocomplete=\"bday-month\" required=\"\"&gt; &lt;select id=\"dob-year-select\" autocomplete=\"bday-year\" required=\"\"&gt;",
+      "fix": "Use three short text fields for day, month and year, with the numeric input mode.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "#dob-day-select, &lt;select&gt; field, label 'Day', line 77",
+      "severity": 3,
+      "violation": "A date the person knows by heart is picked from three drop-downs, the year from 60 options."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "Both fields have autocomplete='name', both are type='text', and both are labeled as a person's name. The form does not indicate why two separate name fields are needed.",
+      "fix": "Remove the duplicate name field, or clarify why two separate name entries are needed.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#name-input, &lt;input&gt; field, label 'Full name', line 12",
+      "severity": 3,
+      "violation": "The form asks for 'Full name' (#name-input, line 12) and then again asks for 'Your name' (#legalname-input, line 63), appearing to request the same information twice."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-WIDTH",
+      "evidence": "&lt;input id=\"postal-input\" name=\"postal_code\" type=\"text\" autocomplete=\"postal-code\" required=\"\" size=\"3\"&gt; (size=3)",
+      "fix": "Size the field to show at least 5 characters.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "#postal-input, &lt;input&gt; field, label 'Postal code', line 49",
+      "severity": 3,
+      "violation": "This postal code field shows 3 characters, too few to show a typical value whole while it is typed and checked."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FORMAT-TOLERANCE",
+      "evidence": "pattern=[0-9]+",
+      "fix": "Loosen the pattern to accept every valid way of writing the value, and normalise it after submission.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "#phone2-input, &lt;input&gt; field, label 'Secondary phone (optional)', line 33",
+      "severity": 3,
+      "violation": "The pattern on this phone field rejects valid values such as +44 20 7946 0958; 020 7946 0958."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "The button appears at line 73, before the final fieldset and before the primary submit button. The form's fields flow from line 10-72, then the secondary button at 73, then more fields at 74-188, then the primary submit at 189.",
+      "fix": "Move the secondary action button to the bottom of the form, immediately before or after the primary submit button, and style it as visibly lesser.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#viewdetails-btn, &lt;button&gt; element, text 'View details', line 73",
+      "severity": 2,
+      "violation": "The secondary action 'View details' is placed above the date-of-birth section (line 74-188), interrupting the column of fields before the primary submit button."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-INPUT-FONT-SIZE",
+      "evidence": "font-size: 13px declared by its inline style",
+      "fix": "Set the field's font size to at least 16 pixels.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "#org-input, &lt;input&gt; field, label 'Organization name', line 67",
+      "severity": 2,
+      "violation": "The text in this field is 13 pixels, below the 16 pixels at which a phone stops zooming the page on focus."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-INPUT-TYPE",
+      "evidence": "&lt;input id=\"website-input\" name=\"website\" required=\"\" type=\"text\"&gt;",
+      "fix": "Set type=url on the field.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "#website-input, &lt;input&gt; field, label 'Company website', line 37",
+      "severity": 2,
+      "violation": "This web address field is type text, so a phone does not show the keyboard built for it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-LABEL-POSITION",
+      "evidence": "The label at line 70 carries style='display:inline-block;float:left;width:140px', placing it beside the field. All other labels in the form use the default block layout, positioning them above their fields.",
+      "fix": "Remove the inline styles from the label to position it above the field, or apply the same left-aligned positioning to all labels consistently.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "#contacttime-label, &lt;label&gt; element, text 'Preferred contact time', line 70",
+      "severity": 2,
+      "violation": "The label for 'Preferred contact time' is positioned to the left of its field using float:left and width:140px, while every other label in the form sits above its field."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-002.html",
+    "artifact_sha256": "e39d0a6e9175987711e114d2ce5edd568205f5aecafb2d271246e6036a16457f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-10-03T03:43:05Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

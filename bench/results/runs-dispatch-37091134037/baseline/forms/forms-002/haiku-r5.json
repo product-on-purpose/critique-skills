@@ -1,0 +1,171 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`pattern=\"[0-9]+\"`",
+      "fix": "Remove the pattern attribute or change it to `pattern=\"[0-9\\s\\-\\+]*\"` to allow formatted numbers.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "row-phone2, secondary phone input",
+      "severity": 3,
+      "violation": "The pattern allows only digits, which excludes common phone number formatting like spaces, dashes, or international plus signs."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"website-input\" name=\"website\" required=\"\" type=\"text\">`",
+      "fix": "Change `type=\"text\"` to `type=\"url\"`.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "row-website, website input field",
+      "severity": 3,
+      "violation": "The field uses type=\"text\" instead of type=\"url\", so the browser won't validate the URL format."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Label says \"(8 digits)\" but the input has no validation pattern",
+      "fix": "Add `pattern=\"[0-9]{8}\"` to the input element.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-member, membership number input",
+      "severity": 3,
+      "violation": "There is no pattern validation to enforce the documented 8-digit requirement."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required=\"\">`",
+      "fix": "Add validation such as `pattern=\"[0-9]+\"` or appropriate minlength/maxlength attributes.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-acctnum, account number input",
+      "severity": 3,
+      "violation": "The account number field has no validation constraints despite likely needing a specific format."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`size=\"3\"`",
+      "fix": "Remove the `size=\"3\"` attribute.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "row-postal, postal code input",
+      "severity": 3,
+      "violation": "The size attribute is too restrictive since postal codes vary by country (5-10+ characters), and size doesn't actually constrain input length."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">`",
+      "fix": "Add `name=\"shipping_speed\"` to the select element.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "row-shipspeed, shipping speed select",
+      "severity": 3,
+      "violation": "The select element has no name attribute, so the selected value won't be submitted with the form data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Two fields labeled \"Full name\" (name=\"full_name\") and \"Your name\" (name=\"legal_name\")",
+      "fix": "Remove one of the duplicate name fields or clarify why both are needed.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "row-legalname, legal name input field",
+      "severity": 3,
+      "violation": "The form collects the user's name twice with different field names, which is confusing and redundant."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"font-size:13px\"`",
+      "fix": "Move inline styles to a `<style>` block in the head or external stylesheet.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "row-org, organization name input",
+      "severity": 3,
+      "violation": "Inline styles are scattered throughout the document instead of being in a style block or external CSS."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">` with label having `style=\"display:inline-block;float:left;width:140px\"`",
+      "fix": "Change `type=\"text\"` to `type=\"time\"` and move the label's style to a stylesheet.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "row-contacttime, preferred contact time",
+      "severity": 3,
+      "violation": "The field uses type=\"text\" instead of type=\"time\", and the label has inline styles instead of being in a stylesheet."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>`",
+      "fix": "Either remove the button if unused, or add an onclick handler and move the styles to a stylesheet.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "viewdetails-btn, button element",
+      "severity": 3,
+      "violation": "The button has inline styles and type=\"button\" but no onclick handler or purpose, making it non-functional."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Three select elements with `id=\"dob-day-select\"`, `id=\"dob-month-select\"`, `id=\"dob-year-select\"` but no name attributes",
+      "fix": "Add name attributes to each select: `name=\"dob_day\"`, `name=\"dob_month\"`, and `name=\"dob_year\"`.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "row-dob fieldset, date of birth selects",
+      "severity": 3,
+      "violation": "The date selects lack name attributes, so the date of birth data won't be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Day dropdown allows 1-31, all 12 months, and years 1950-2009 without dependency",
+      "fix": "Use `<input type=\"date\">` instead, or implement JavaScript validation to enforce valid date combinations.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "row-dob fieldset, date of birth options",
+      "severity": 3,
+      "violation": "Users can select invalid dates such as February 31st or June 31st because the dropdowns have no interdependency."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"form\">`",
+      "fix": "Add `action=\"/submit\"` (or appropriate endpoint) and `method=\"post\"` attributes to the form element.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "form element opening tag",
+      "severity": 3,
+      "violation": "The form has no action attribute specifying where to submit, and no method attribute (defaults to GET)."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-002.html",
+    "artifact_sha256": "e39d0a6e9175987711e114d2ce5edd568205f5aecafb2d271246e6036a16457f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T03:48:13Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 13,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

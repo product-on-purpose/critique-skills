@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "The secondary button #viewdetails-btn has declared inline CSS styling (padding:12px 20px;font-size:16px) that makes it visually prominent, while the primary submit button #submit-btn has no declared styling. Comparing the markup and declared CSS, the secondary action appears as prominent as or more prominent than the primary.",
+      "fix": "Remove styling from the secondary button or ensure the primary submit button has more prominent styling (e.g., background color, larger padding, heavier font weight)",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "#viewdetails-btn, <button> element, line 73",
+      "severity": 3,
+      "violation": "Secondary action styled as prominently as the primary submit button"
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "The form contains two fields asking for the person's name: #name-input with label 'Full name' at line 11 and #legalname-input with label 'Your name' at line 62. Both declare autocomplete='name', indicating they are asking for the same data. The task is 'Set up your account' per the page heading; a single name field is sufficient for account creation.",
+      "fix": "Remove one of the duplicate name fields. If the form genuinely needs both a legal name and a display name, clarify each field's purpose in its label (e.g., 'Display name' and 'Legal name for billing').",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "#name-input, <input> field, label 'Full name', line 11; also #legalname-input, <input> field, label 'Your name', line 62",
+      "severity": 3,
+      "violation": "Form asks for the same information twice (person's name)"
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-TOUCH-TARGET",
+      "evidence": "Button #viewdetails-btn declares style='padding:12px 20px;font-size:16px'. Resolving the declared size: 16px font size + 12px top padding + 12px bottom padding = 40 CSS pixels height. The recommended touch target size for mobile is 44-48 CSS pixels.",
+      "fix": "Increase padding or font size of the button to reach at least 44 pixels in height. For example, use padding:14px 20px or padding:12px 20px with font-size:18px",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "#viewdetails-btn, <button> element, line 73",
+      "severity": 2,
+      "violation": "Touch target is 40 pixels tall, smaller than the recommended 44-48 CSS pixels"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-10-03T05:11:51Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

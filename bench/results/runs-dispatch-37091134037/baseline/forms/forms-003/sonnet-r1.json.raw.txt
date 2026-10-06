@@ -1,0 +1,74 @@
+Location: `<head>` section
+Evidence: no `<meta name="viewport" ...>` tag is present
+Problem: Without a viewport meta tag, mobile browsers will render the page at desktop width and scale it down, making the form hard to use on phones (and defeating the apparent mobile-zoom workaround applied elsewhere in the form).
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to the `<head>`.
+
+Location: `#row-password` → `password-input`
+Evidence: `minlength="6"`
+Problem: A 6-character minimum is a weak password policy by current standards, giving a false sense of security without any complexity requirement.
+Fix: Raise `minlength` to at least 8-10 and pair it with server-side strength validation rather than relying on `minlength` alone.
+
+Location: `#row-phone`
+Evidence: `<p>Thanks for signing up.</p>` appears inside the phone-number field's row, before the form has been submitted
+Problem: A post-signup thank-you message is embedded mid-form, which is either leftover/misplaced markup or will confuse users into thinking they've already completed signup.
+Fix: Remove the paragraph from the form, or move it to a post-submit confirmation view that only renders after successful submission.
+
+Location: `#row-phone` and `#row-phone2`
+Evidence: both inputs use `autocomplete="tel"`
+Problem: Using the identical autocomplete token for two different phone fields means browsers can't distinguish "phone" from "secondary phone" and will likely autofill the same number into both.
+Fix: Differentiate the tokens, e.g. keep `autocomplete="tel"` on the primary and use `autocomplete="tel-national"` or omit/override autofill grouping for the secondary field.
+
+Location: `#row-website` → `website-input`
+Evidence: `<input id="website-input" name="website" type="url" required="">` on an individual account signup form titled "Set up your account"
+Problem: Requiring a company website to create a personal account is an overly restrictive and likely unintended business rule.
+Fix: Make the website field optional (drop `required`) unless this signup is specifically for business/organization accounts.
+
+Location: `#row-member` → `member-input`
+Evidence: `placeholder="Must be 8 digits"` with no `pattern` or `maxlength` attribute
+Problem: The 8-digit constraint is only communicated via placeholder text, which disappears on focus, isn't reliably announced by screen readers, and isn't enforced by validation.
+Fix: Add `pattern="\d{8}"` and `maxlength="8"`, and surface the format requirement as visible helper text rather than only a placeholder.
+
+Location: `#row-acctnum` → `acctnum-input`
+Evidence: `<input id="acctnum-input" name="account_number" type="text" required="">` on a "Join / Set up your account" form
+Problem: Requiring an "account number" before the account has been created is a logical contradiction, and the field has no autocomplete token or format hint, duplicating the purpose of the membership number field.
+Fix: Remove this field if it's redundant with "Membership number," or clarify its distinct purpose and add appropriate autocomplete/format constraints if it refers to an existing external account.
+
+Location: `#row-shipspeed` → `shipspeed-select`
+Evidence: `<select id="shipspeed-select" required="">`
+Problem: The `<select>` element has no `name` attribute, so the chosen shipping speed will not be included in the submitted form data at all.
+Fix: Add `name="shipping_speed"` to the select element.
+
+Location: `#row-name` vs `#row-legalname`
+Evidence: `name="full_name"` (single "Full name" field) alongside separate `given_name`/`family_name` ("First name"/"Last name") fields
+Problem: The form collects a person's name twice in incompatible formats, creating redundant and potentially conflicting data for the backend to reconcile.
+Fix: Remove one of the two name-collection approaches — keep either the single full-name field or the first/last-name pair, not both.
+
+Location: `#row-org` → `org-input`
+Evidence: `style="font-size:16px"` applied only to this input
+Problem: This is the only input with an inline font-size override, producing inconsistent sizing/behavior (e.g., iOS auto-zoom-on-focus prevention) compared to every other text input in the form.
+Fix: Move font-size rules into a shared stylesheet applied uniformly to all inputs rather than as a one-off inline style.
+
+Location: `#row-contacttime` → `contacttime-label`
+Evidence: `style="display:block"` applied only to this label
+Problem: This is the only label with an inline display override, causing inconsistent layout for this row compared to all other label/input rows.
+Fix: Move this layout rule into shared CSS applied consistently to all label elements, or remove it if block layout isn't actually needed.
+
+Location: `#row-contacttime` → `contacttime-input`
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: A free-text input for "preferred contact time" gives users no guidance on expected format, making the collected data inconsistent and hard to process.
+Fix: Use `type="time"` or a `<select>` with defined time-window options instead of unconstrained free text.
+
+Location: `#viewdetails-btn`
+Evidence: `style="padding:1px 2px;font-size:11px"`
+Problem: This button's tap target and text are far below accessible minimums (WCAG recommends ~44px touch targets and readable text sizes), and its purpose is unclear since no associated behavior is described in the document.
+Fix: Increase padding/font-size to accessible levels and clarify or document what the button does (or remove it if unused).
+
+Location: `<form id="form">` opening tag
+Evidence: `<form id="form">` has no `action` or `method` attribute
+Problem: Without an explicit `method="post"`, the form defaults to GET submission, which would place the password and other sensitive fields into the URL query string, browser history, and server logs.
+Fix: Add `method="post"` (and an appropriate `action`) to the form tag.
+
+Location: form button row
+Evidence: `<button id="submit-btn" type="submit">Create account</button>` immediately followed by `<button id="reset-btn" type="reset">Clear form</button>`
+Problem: Placing a destructive "Clear form" reset button directly adjacent to the primary submit button risks accidental data loss from misclicks.
+Fix: Remove the reset button, or visually separate/de-emphasize it and require confirmation before clearing the form.

@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "type=\"text\"",
+      "fix": "Change type=\"text\" to type=\"url\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "row-website input",
+      "severity": 3,
+      "violation": "URL field should use type=\"url\" instead of type=\"text\" for proper validation"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "placeholder=\"Must be 8 digits\" with no pattern or maxlength",
+      "fix": "Add pattern=\"[0-9]{8}\" and maxlength=\"8\" attributes",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "row-member input",
+      "severity": 3,
+      "violation": "Membership number field requires exactly 8 digits but has no validation to enforce this constraint"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "size=\"3\"",
+      "fix": "Remove the size attribute or increase to size=\"10\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-postal input",
+      "severity": 3,
+      "violation": "Postal code field width of 3 characters is too small; most postal codes (US ZIP, UK postcodes) require 5-8+ characters"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<select id=\"shipspeed-select\" required=\"\">",
+      "fix": "Add name=\"shipping_speed\" (or similar) to the select element",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-shipspeed select",
+      "severity": 3,
+      "violation": "The select element is missing a name attribute, so the selection won't be included in form submission data"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Both contain name-type inputs: \"Full name\" in row-name and \"Your name\" in row-legalname",
+      "fix": "Remove one field, or update labels to distinguish their purposes (e.g., \"Your name\" vs \"Legal name for billing\")",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "row-name and row-legalname inputs",
+      "severity": 3,
+      "violation": "Form has two redundant name fields serving the same apparent purpose, creating unclear intent"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "type=\"text\" required=\"\"",
+      "fix": "Change to type=\"time\" or add placeholder=\"HH:MM (e.g., 09:00)\" with pattern=\"[0-9]{2}:[0-9]{2}\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "row-contacttime input",
+      "severity": 3,
+      "violation": "Contact time field lacks format guidance; unclear whether user should enter time as 12-hour, 24-hour, with/without AM/PM, etc."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<option>January</option>, <option>February</option>, ... <option>December</option>",
+      "fix": "Add value attributes: <option value=\"01\">January</option>, <option value=\"02\">February</option>, etc.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "row-dob month select",
+      "severity": 3,
+      "violation": "Month options contain text values instead of numeric values; form will submit \"January\" instead of \"01\", requiring backend conversion"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "All three selects have id attributes but no name attributes",
+      "fix": "Add name attributes to each select: name=\"dob_day\", name=\"dob_month\", name=\"dob_year\"",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "row-dob fieldset (dob-day-select, dob-month-select, dob-year-select)",
+      "severity": 3,
+      "violation": "Date-of-birth select elements lack name attributes; these fields won't be included in form submission data"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-002.html",
+    "artifact_sha256": "e39d0a6e9175987711e114d2ce5edd568205f5aecafb2d271246e6036a16457f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T03:46:01Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

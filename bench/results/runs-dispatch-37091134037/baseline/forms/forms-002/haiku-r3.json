@@ -1,0 +1,160 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`pattern=\"[0-9]+\"`",
+      "fix": "Use a more restrictive pattern like `\"[0-9\\+\\-\\(\\) ]{10,15}\"` or remove pattern validation if not enforcing format.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Line 33",
+      "severity": 3,
+      "violation": "Pattern allows unlimited consecutive digits without format constraints, inappropriate for a phone number."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"website-input\" name=\"website\" required=\"\" type=\"text\">`",
+      "fix": "Change type=\"text\" to type=\"url\".",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Line 37",
+      "severity": 3,
+      "violation": "Should be type=\"url\" to provide proper browser validation and semantic meaning for website input."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Label says \"(8 digits)\" but input is `type=\"text\" inputmode=\"numeric\"` with no pattern attribute.",
+      "fix": "Add `pattern=\"[0-9]{8}\"` to the input element.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Line 41",
+      "severity": 3,
+      "violation": "No validation pattern to enforce the 8-digit requirement stated in the label."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`size=\"3\"`",
+      "fix": "Remove the size attribute entirely.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Line 49",
+      "severity": 3,
+      "violation": "Size attribute creates field too narrow for any postal code format (US ZIP is 5 digits minimum, many are longer)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">` has no name attribute.",
+      "fix": "Add `name=\"shipping_speed\"` (or an appropriate name) to the select element.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Line 53",
+      "severity": 3,
+      "violation": "Select element lacks a name attribute, so it will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Full name\" field (line 12) and \"Your name\" field (line 63) with different field names (full_name vs legal_name).",
+      "fix": "Remove the redundant field or clarify the labels to distinguish purpose (e.g., \"Legal Full Name\" vs \"Preferred Name\").",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Lines 12 and 63",
+      "severity": 3,
+      "violation": "Two similar name input fields with confusing labels creates ambiguity about which should be filled."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"font-size:13px\"`",
+      "fix": "Move style to a CSS class or stylesheet.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Line 67",
+      "severity": 3,
+      "violation": "Inline style should be defined in CSS, not embedded in HTML."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"display:inline-block;float:left;width:140px\"`",
+      "fix": "Move styles to a CSS class and use modern layout methods (flexbox or grid).",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Line 70",
+      "severity": 3,
+      "violation": "Inline styles should be in CSS; float-based layout is outdated and may cause layout issues."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Change type=\"text\" to type=\"time\".",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Line 71",
+      "severity": 3,
+      "violation": "Should be type=\"time\" for proper time input handling rather than generic text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"dob-day-select\" autocomplete=\"bday-day\" required=\"\">` has no name attribute.",
+      "fix": "Add `name=\"birth_day\"` (or an appropriate name) to the select element.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Line 77",
+      "severity": 3,
+      "violation": "Select element lacks a name attribute, so it will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"dob-month-select\" autocomplete=\"bday-month\" required=\"\">` has no name attribute.",
+      "fix": "Add `name=\"birth_month\"` (or an appropriate name) to the select element.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Line 112",
+      "severity": 3,
+      "violation": "Select element lacks a name attribute, so it will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Year select ranges from 1950 to 2009; last option is `<option>2009</option>`.",
+      "fix": "Extend year options to include current year and recent years (at least through 2025).",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "Line 127 and Line 189",
+      "severity": 3,
+      "violation": "Year range does not include anyone born after 2009, making the form impossible to complete for anyone under 17 years old."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-002.html",
+    "artifact_sha256": "e39d0a6e9175987711e114d2ce5edd568205f5aecafb2d271246e6036a16457f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T03:44:23Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 12,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

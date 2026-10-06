@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<p>Thanks for signing up.</p>`",
+      "fix": "Remove this paragraph from the form entirely; display it only after successful form submission.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Inside `<div id=\"row-phone\">`, after the phone input",
+      "severity": 3,
+      "violation": "A success message appears in the middle of an active form, confusing users about whether signup is complete before they finish filling it out."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Select element has no `name` attribute",
+      "fix": "Add `name=\"preferred_shipping_speed\"` (or similar) to the select element.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<select id=\"shipspeed-select\" required=\"\">`",
+      "severity": 3,
+      "violation": "Without a name attribute, the selected shipping speed won't be submitted with the form data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Standard</option>` (and other options without value attributes)",
+      "fix": "Add value attributes to each option: `<option value=\"standard\">Standard</option>`, etc.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`<select id=\"shipspeed-select\">` option elements",
+      "severity": 3,
+      "violation": "Options lack explicit value attributes, relying on text content as values, which is fragile and unclear."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Full name input with `name=\"full_name\"` followed later by separate First name `name=\"given_name\"` and Last name `name=\"family_name\"` fields",
+      "fix": "Remove either the \"Full name\" field or the \"First name\"/\"Last name\" field pair; keep only one approach.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`<div id=\"row-name\">` and `<div id=\"row-legalname\">`",
+      "severity": 3,
+      "violation": "The form asks for the user's name twice in different formats, creating confusion and redundant data collection."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "No validation pattern despite placeholder stating \"Must be 8 digits\"",
+      "fix": "Add `pattern=\"[0-9]{8}\"` to enforce validation of exactly 8 digits.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`<input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\">`",
+      "severity": 3,
+      "violation": "The membership number field accepts any text despite requiring exactly 8 digits; the placeholder alone doesn't enforce the requirement."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`type=\"text\"` for a contact time field",
+      "fix": "Change to `type=\"time\"` for proper time input with browser-native controls.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\">`",
+      "severity": 3,
+      "violation": "Using text input for time data makes it easy to enter invalid values and doesn't provide user-friendly time selection."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"padding:1px 2px;font-size:11px\"`",
+      "fix": "Increase font-size to at least 14px and padding to at least 8px 12px, or use a standard button style class.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:1px 2px;font-size:11px\">`",
+      "severity": 3,
+      "violation": "The button is nearly impossible to read and click due to 11px font size and minimal padding."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-003.html",
+    "artifact_sha256": "df62d7b38659529bf26df03102d3e7969a1c47b7c66e72bc8d3cf208f082bc1f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T04:28:16Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`autocomplete=\"e-mail\"`",
+      "fix": "Change to `autocomplete=\"email\"`",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Email input (row-email)",
+      "severity": 3,
+      "violation": "The autocomplete attribute value should be \"email\" without a hyphen per HTML specification."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Input lacks `minlength` attribute, while password input has `minlength=\"8\"`",
+      "fix": "Add `minlength=\"8\"` to the confirm password input.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Confirm password input (row-confirm-password)",
+      "severity": 3,
+      "violation": "The password and confirm-password fields have inconsistent validation constraints."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">`",
+      "fix": "Add `name=\"preferred_shipping_speed\"` to the select element.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Shipping speed select (row-shipspeed)",
+      "severity": 3,
+      "violation": "The select element is missing a `name` attribute, so its value won't be included in form submission."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Two required name inputs with labels \"Full name\" (name-input) and \"Your name\" (legalname-input)",
+      "fix": "Either consolidate into a single name field or clarify the distinction with labels like \"Full name\" and \"Legal name\".",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Form name fields",
+      "severity": 3,
+      "violation": "The form contains two fields asking for a person's name with ambiguous labels, creating confusion about which field to fill."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"hear-select\" required=\"\">`",
+      "fix": "Add `name=\"hear_about_us\"` to the select element.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "How did you hear about us select (row-hear)",
+      "severity": 3,
+      "violation": "The select element is missing a `name` attribute, so its value won't be included in form submission."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"form\">` with no action or method attributes",
+      "fix": "Add `action` and `method` attributes, such as `action=\"/account/create\"` and `method=\"POST\"`.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Form element",
+      "severity": 3,
+      "violation": "The form lacks `action` and `method` attributes required for server-side form submission."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-001.html",
+    "artifact_sha256": "531c999912c0ab6c8224cbeb2347e7644d493a84e3a9461a434deaf5f2f09cdd",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T02:59:22Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

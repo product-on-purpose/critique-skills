@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "FORMS-DATE-SELECTS",
+      "evidence": "<select id=\"dob-day-select\" autocomplete=\"bday-day\" required=\"\"> <select id=\"dob-month-select\" autocomplete=\"bday-month\" required=\"\"> <select id=\"dob-year-select\" autocomplete=\"bday-year\" required=\"\">",
+      "fix": "Use three short text fields for day, month and year, with the numeric input mode.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "#dob-day-select, <select> field, label 'Day', line 77",
+      "severity": 3,
+      "violation": "A date the person knows by heart is picked from three drop-downs, the year from 60 options."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"legalname-label\" for=\"legalname-input\">Your name</label> <input id=\"legalname-input\" name=\"legal_name\" type=\"text\" required>, after <label id=\"name-label\" for=\"name-input\">Full name</label> <input id=\"name-input\" name=\"full_name\" required> earlier in the same form (line 11)",
+      "fix": "Remove the second name field, or if a legal name can differ from a preferred name, label both fields to say so and explain why the form needs both.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label 'Your name', line 63",
+      "severity": 3,
+      "violation": "The form asks for the person's name twice, as 'Full name' and again as 'Your name', so the person must either repeat what they already typed or guess why a second name field exists."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-WIDTH",
+      "evidence": "<input id=\"postal-input\" name=\"postal_code\" type=\"text\" autocomplete=\"postal-code\" required=\"\" size=\"3\"> (size=3)",
+      "fix": "Size the field to show at least 5 characters.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "#postal-input, <input> field, label 'Postal code', line 49",
+      "severity": 3,
+      "violation": "This postal code field shows 3 characters, too few to show a typical value whole while it is typed and checked."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FORMAT-TOLERANCE",
+      "evidence": "pattern=[0-9]+",
+      "fix": "Loosen the pattern to accept every valid way of writing the value, and normalise it after submission.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "#phone2-input, <input> field, label 'Secondary phone (optional)', line 33",
+      "severity": 3,
+      "violation": "The pattern on this phone field rejects valid values such as +44 20 7946 0958; 020 7946 0958."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>, placed after the 'Preferred contact time' field (line 71) and before the required Date of birth fieldset (lines 74 to 188); the primary submit carries no style at all: <button id=\"submit-btn\" type=\"submit\">Create account</button>",
+      "fix": "Style the primary submit (#submit-btn) as the most prominent control on the form, style 'View details' less prominently than it, and move any non-submit action so it never sits ahead of fields still to be filled in.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> field, line 73",
+      "severity": 2,
+      "violation": "This secondary action is styled more prominently, with padding and a set font size, than the entirely unstyled primary submit button, and it sits before the form's last required fields (date of birth), so a person reaching it may read it as where to continue or finish rather than as subordinate to the plainer button three fields later."
+    },
+    {
+      "confidence": "low",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"acctnum-label\" for=\"acctnum-input\">Account number</label> <input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required>, two fields after <label id=\"member-label\" for=\"member-input\">Membership number (8 digits)</label> (line 40)",
+      "fix": "Remove the account-number field, or if it serves a real purpose, such as linking an existing loyalty account, make it optional and say in the label what number it expects and why.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#acctnum-input, <input> field, label 'Account number', line 45",
+      "severity": 2,
+      "violation": "This is a sign-up form creating a new account, so no account number can yet exist to enter, and the form already collected an identifying number as 'Membership number' a few fields earlier; requiring a second, differently named identifying number the task cannot use forces the person to guess what to type or abandon the field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"contacttime-label\" for=\"contacttime-input\" style=\"display:inline-block;float:left;width:140px\">Preferred contact time</label> <input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required>",
+      "fix": "Drop this field from account creation and ask it only at the point a contact is actually being scheduled, such as during a support request.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "#contacttime-input, <input> field, label 'Preferred contact time', line 71",
+      "severity": 2,
+      "violation": "Creating an account does not need to know when to call the person; a preferred contact time matters only once there is a reason to make contact, so requiring it here forces an answer the task cannot yet use."
+    },
+    {
+      "confidence": "low",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<fieldset id=\"row-dob\"><legend>Date of birth</legend> ... three required selects for day, month and year (lines 74 to 188)",
+      "fix": "Remove the date-of-birth requirement unless an age limit applies, and if one does, say so next to the field and ask for only what the limit needs, such as a yes/no confirmation of being over the required age.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "#row-dob, <fieldset> 'Date of birth', first field #dob-day-select, line 77",
+      "severity": 2,
+      "violation": "Nothing on the form states why creating an account needs a date of birth, so the task named by the heading and submit button cannot be shown to use this answer, and three required drop-downs must still be completed to satisfy it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-INPUT-FONT-SIZE",
+      "evidence": "font-size: 13px declared by its inline style",
+      "fix": "Set the field's font size to at least 16 pixels.",
+      "id": "F-009",
+      "lane": "scripted",
+      "location": "#org-input, <input> field, label 'Organization name', line 67",
+      "severity": 2,
+      "violation": "The text in this field is 13 pixels, below the 16 pixels at which a phone stops zooming the page on focus."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-002.html",
+    "artifact_sha256": "e39d0a6e9175987711e114d2ce5edd568205f5aecafb2d271246e6036a16457f",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-10-03T03:59:35Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 7,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 2
+  }
+}

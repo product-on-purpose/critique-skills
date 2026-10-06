@@ -1,0 +1,84 @@
+Location: `<input id="password-input" ...>` in `#row-password`
+Evidence: `<input id="password-input" name="password" type="password" autocomplete="new-password" minlength="8" required="">`
+Problem: There is no password-confirmation field, so a typo in the password can't be caught at signup and will lock the user out later.
+Fix: Add a second "Confirm password" input and validate client-side (and server-side) that it matches.
+
+Location: `#row-phone`
+Evidence: `<p>We will text you about delivery updates.</p>` with no accompanying checkbox
+Problem: The form states SMS messages will be sent but collects no explicit opt-in consent for texting, which is required in many jurisdictions (e.g., TCPA) and is a UX best practice regardless.
+Fix: Add a required or optional checkbox (e.g., "I agree to receive SMS delivery updates") tied to the phone field.
+
+Location: `#row-phone2`, `<input id="phone2-input" ...>`
+Evidence: `pattern="[0-9]+"`
+Problem: The pattern rejects common, valid phone formatting characters like `+`, `-`, spaces, and parentheses, so many legitimately formatted secondary numbers will fail validation.
+Fix: Remove the restrictive pattern (rely on `type="tel"`) or use a pattern that tolerates standard phone punctuation, e.g. `pattern="[0-9+\-() ]+"`.
+
+Location: `#row-website`, `<input id="website-input" ...>`
+Evidence: `<input id="website-input" name="website" required="" type="text">`
+Problem: The field is `type="text"` instead of `type="url"` (losing built-in URL validation/keyboard), and it's marked `required` on a consumer account-creation form where most individual signups won't have a company website.
+Fix: Change `type="text"` to `type="url"`, add `autocomplete="url"`, and make the field optional unless a business website is genuinely mandatory.
+
+Location: `#row-member`, `<input id="member-input" ...>`
+Evidence: `placeholder="Must be 8 digits"` with no `pattern` or `maxlength`
+Problem: The 8-digit requirement is communicated only via placeholder text with no actual constraint, so the browser will accept any length or non-numeric input.
+Fix: Add `pattern="[0-9]{8}"` and `maxlength="8"` to enforce the stated format.
+
+Location: `#row-acctnum` and `#row-member`
+Evidence: `<label id="acctnum-label" ...>Account number</label>` and `<label id="member-label" ...>Membership number (8 digits)</label>`, both `required`, on a form titled "Create your account"
+Problem: This is a new-account signup form, yet it requires a membership number and an account number that a brand-new user would not yet possess, and it's unclear how the two fields differ.
+Fix: Remove these fields from the signup form (assign them after account creation) or clearly explain what each number is and where to find it, making them optional if not truly required at signup.
+
+Location: `#row-postal`, `<input id="postal-input" ...>`
+Evidence: `size="3"`
+Problem: A visible width of 3 characters is too narrow for most postal codes (US ZIP+4, Canadian, or UK formats), truncating the visible input as the user types.
+Fix: Remove the `size` attribute or set it to at least 8-10.
+
+Location: `#row-shipspeed`, `<select id="shipspeed-select" ...>`
+Evidence: `<select id="shipspeed-select" required=""><option>Standard</option>...`
+Problem: The select has no neutral placeholder option, so "Standard" is selected by default and the `required` attribute never blocks submission even if the user never touches the field, allowing an unintended shipping choice to be submitted silently.
+Fix: Add a disabled, selected placeholder option (e.g., `<option value="" disabled selected>Select shipping speed</option>`).
+
+Location: `#row-shipspeed` options
+Evidence: `<option>Express</option><option>Overnight</option><option>Next-day</option><option>International</option>`
+Problem: "Overnight" and "Next-day" are overlapping/ambiguous speed options, and "International" describes a destination rather than a shipping speed, conflating two different concepts in one control.
+Fix: Pick one term for next-day delivery (drop the duplicate) and move "International" to a separate destination/region field, not the speed selector.
+
+Location: `#row-legalname`
+Evidence: `<label id="legalname-label" for="legalname-input">Your name</label>` and `name="legal_name" autocomplete="name"`
+Problem: This duplicates the "Full name" field collected earlier in `#row-name`, asking the user for their name twice with no explanation of why they differ.
+Fix: Remove the duplicate field, or if a separate legal name is genuinely needed, relabel it to clarify the distinction (e.g., "Legal name, if different from above") and make it optional.
+
+Location: `#row-org`, `<input id="org-input" ...>`
+Evidence: `style="font-size:13px"` and `required=""`
+Problem: The field uses an inline style to shrink its text below the rest of the form, hurting readability/consistency, and is required even though organization name is likely irrelevant for an individual consumer signup.
+Fix: Remove the inline `font-size` style and make the field optional unless a business account type is being created.
+
+Location: `#row-contacttime`
+Evidence: `<label id="contacttime-label" ... style="display:inline-block;float:left;width:140px">` and `<input id="contacttime-input" ... type="text" required="">`
+Problem: Preferred contact time is collected as unconstrained free text with no format hint or input type, and the label is positioned with ad hoc inline CSS (float/width) that's inconsistent with the rest of the form's markup.
+Fix: Use a `<select>` of time ranges or a `type="time"` input with a clear format, and move the layout styling into a stylesheet/class rather than inline attributes.
+
+Location: `<button id="viewdetails-btn" ...>` (between `#row-contacttime` and `#row-dob`)
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>`
+Problem: The button has `type="button"` but no script in the document wires up any click handler, so it does nothing and its purpose inside the signup form is unexplained.
+Fix: Either remove the button or implement its intended behavior (e.g., open a details modal) with an associated event handler.
+
+Location: `#row-dob`, `dob-year-select` options
+Evidence: Year options run `<option>1950</option>` … `<option>2009</option>`
+Problem: As of 2026 this range only covers ages roughly 17-76, excluding legitimate younger (18+) and older customers from being able to enter a correct birth year.
+Fix: Generate the year range dynamically (e.g., current year minus 100 through current year minus 13) instead of a hardcoded 1950-2009 list.
+
+Location: `#row-dob` fieldset
+Evidence: Day/Month/Year selects all `required` with first options `1`, `January`, `1950` and no placeholder
+Problem: Like the shipping-speed select, these three required dropdowns default to a concrete value (Jan 1, 1950) and will pass validation even if the user never interacts with them, risking silent submission of a false birth date.
+Fix: Add a disabled, selected empty/placeholder option to each of the day, month, and year selects.
+
+Location: `<head>`
+Evidence: `<meta charset="utf-8"><title>Join Meridian Outfitters</title>` with no other meta tags
+Problem: There is no `<meta name="viewport">` tag, so the form will render at desktop scale and be hard to use on mobile devices.
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to the `<head>`.
+
+Location: Address fields (`#row-street`, `#row-postal`) compared to `#row-shipspeed`
+Evidence: Only `street_address` and `postal_code` are collected; no city, state/region, or country field exists, yet shipping speed offers `<option>International</option>`
+Problem: Without a country (and city/state) field, an address is incomplete for shipping, and the "International" shipping option can't be reconciled with a destination that was never captured.
+Fix: Add city, state/region, and country fields to the address section.

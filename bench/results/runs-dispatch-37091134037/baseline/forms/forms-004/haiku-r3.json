@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"form\">` has no method attribute",
+      "fix": "Add method=\"post\" to the form element.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "form element",
+      "severity": 3,
+      "violation": "The form defaults to GET method, which sends form data as URL parameters. This creates a security vulnerability where the password and other sensitive fields would appear in the URL and browser history."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "placeholder=\"Must be 8 digits\" with type=\"text\"",
+      "fix": "Add pattern=\"[0-9]{8}\" or minlength=\"8\" maxlength=\"8\" to the input element.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "membership_number input (id=\"member-input\")",
+      "severity": 3,
+      "violation": "The input has no pattern validation, minlength, or maxlength to enforce the stated 8-digit requirement."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">` with no name attribute",
+      "fix": "Add name=\"shipping_speed\" (or similar) to the select element.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "shipping speed select (id=\"shipspeed-select\")",
+      "severity": 3,
+      "violation": "The select element is missing the name attribute, so this field's value will not be submitted with the form data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"legalname-label\" for=\"legalname-input\">Your name</label>`",
+      "fix": "Change the label to \"Legal name\" to match the field name and clarify the distinction from the full name field.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "legal name field (id=\"legalname-label\")",
+      "severity": 3,
+      "violation": "The label says \"Your name\" but there's already a \"Full name\" field earlier, making it unclear which field is which."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"contacttime-label\" for=\"contacttime-input\" style=\"display:block\">`",
+      "fix": "Remove the style attribute and define label styling in a CSS stylesheet instead.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "contact time label (id=\"contacttime-label\")",
+      "severity": 3,
+      "violation": "The inline style=\"display:block\" is unnecessary and redundant, as labels are already block-level elements. Styling should be in a stylesheet."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Change type=\"text\" to type=\"time\".",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "contact time input (id=\"contacttime-input\")",
+      "severity": 3,
+      "violation": "Uses type=\"text\" for a time preference field, which doesn't provide appropriate input semantics or user controls."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>`",
+      "fix": "Either add an onclick handler to implement the intended functionality or remove the button if it is not needed.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "view details button (id=\"viewdetails-btn\")",
+      "severity": 3,
+      "violation": "The button has no onclick handler or apparent purpose, making it unclear what action it performs."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T05:18:26Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

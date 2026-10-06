@@ -1,0 +1,74 @@
+Location: `<form id="form">` opening tag
+Evidence: `<form id="form">` has no `action` or `method` attribute
+Problem: Without an action/method, the form will submit via GET to the current URL, which means the submission destination and HTTP verb are undefined/incorrect for a real signup flow (and sensitive fields like password would be exposed in the URL).
+Fix: Add explicit `action="/signup"` and `method="post"` (or wire up a JS submit handler) to the form element.
+
+Location: `row-password` div, password input
+Evidence: `minlength="6"`
+Problem: A 6-character minimum is weak by current password-security standards and offers little protection against brute-forcing.
+Fix: Raise `minlength` to at least 8-10 and consider adding complexity guidance or a strength meter.
+
+Location: `row-phone` div
+Evidence: `<p>Thanks for signing up.</p>` placed directly inside the phone-number field row, before the form has been submitted
+Problem: A "thanks for signing up" message appearing mid-form, attached to the phone field, is misplaced content that will confuse users who haven't submitted anything yet.
+Fix: Remove this paragraph from the phone row, or move it to a post-submit confirmation view.
+
+Location: `row-phone2` div
+Evidence: Both `row-phone` and `row-phone2` inputs use `autocomplete="tel"`
+Problem: Two separate phone fields sharing the identical autocomplete token can cause browsers to autofill the same stored number into both fields, defeating the purpose of a distinct "secondary phone."
+Fix: Differentiate the tokens, e.g. use `autocomplete="tel"` for the primary and omit/alter it (or use `tel-national`/a custom non-conflicting value) for the secondary field.
+
+Location: `row-website` div
+Evidence: `<input id="website-input" name="website" type="url" required="">`
+Problem: Requiring a company website for a personal account signup is an unnecessary barrier, and there's no placeholder/example showing the expected format (e.g. `https://...`).
+Fix: Make the field optional unless business accounts are mandatory, and add a placeholder like `https://example.com`.
+
+Location: `row-member` div
+Evidence: `placeholder="Must be 8 digits"` with no `pattern` or `maxlength`/`minlength` attribute
+Problem: The 8-digit requirement is communicated only through placeholder text (which disappears once the user types and isn't reliably read by all assistive tech) and isn't actually enforced by any validation attribute, so shorter/longer or non-numeric values will pass.
+Fix: Add `pattern="\d{8}"` and `maxlength="8"`, and move the instruction into visible helper text instead of relying solely on the placeholder.
+
+Location: `row-acctnum` div
+Evidence: `<input id="acctnum-input" name="account_number" type="text" required="">`
+Problem: There's no autocomplete hint, no format guidance, and its purpose is unclear/overlaps with the membership number field collected just above, creating redundant and confusing data collection.
+Fix: Clarify how account number differs from membership number (or remove one), and add appropriate `autocomplete`/`pattern` attributes.
+
+Location: `row-legalname` div
+Evidence: Contains `given-input` ("First name") and `family-input` ("Last name") fields, in addition to `name-input` ("Full name") earlier in the form
+Problem: The form asks for a full name early on and then separately asks for first/last name later, forcing the user to enter overlapping identity data twice with no indication of why both are needed.
+Fix: Collect name once — either a single "Full name" field or split first/last name fields — and remove the duplicate.
+
+Location: `row-legalname` div
+Evidence: Two `<label>`/`<input>` pairs are placed in a single div, unlike every other row which wraps one label/input pair per div
+Problem: This breaks the structural consistency of the form (one field per row div), which is confusing for styling and for screen-reader users expecting consistent grouping.
+Fix: Split into two separate divs (e.g. `row-given`, `row-family`), matching the pattern used elsewhere.
+
+Location: `row-org` div
+Evidence: `<input id="org-input" name="organization" type="text" style="font-size:16px" required="">`
+Problem: This is the only input with an inline `font-size` style; no other field specifies a font size, so the organization field will render inconsistently with the rest of the form.
+Fix: Remove the inline style and control font sizing via a shared stylesheet/CSS class applied to all inputs.
+
+Location: `row-contacttime` div
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: "Preferred contact time" is captured as unconstrained free text with no format hint, which will produce inconsistent, hard-to-parse data (e.g. "mornings" vs "9am" vs "ASAP").
+Fix: Use a `<select>` of time ranges or a `type="time"` input, or add a `pattern`/placeholder specifying the expected format.
+
+Location: `viewdetails-btn`
+Evidence: `style="padding:1px 2px;font-size:11px"`
+Problem: An 11px font and 1-2px padding produce a tiny tap target and hard-to-read text, failing basic accessibility/touch-target guidance, and the button's purpose ("View details") is unexplained.
+Fix: Increase padding/font size to match normal button sizing (e.g. 14px+ font, adequate padding), and clarify what the button does or remove it if non-functional.
+
+Location: `reset-btn`
+Evidence: `<button id="reset-btn" type="reset">Clear form</button>`
+Problem: A reset button lets users accidentally wipe every field they've filled in with one misclick and no confirmation, a known UX anti-pattern for long forms.
+Fix: Remove the reset button, or require a confirmation dialog before clearing the form.
+
+Location: Overall form structure (all `row-*` divs)
+Evidence: Fields are grouped only by `div id` naming (e.g. `row-name`, `row-street`, `row-phone`) with no `<fieldset>`/`<legend>` elements
+Problem: Logically related groups (identity, address, account/membership, contact) aren't exposed as semantic groups, making it harder for screen-reader users to understand section boundaries.
+Fix: Wrap related rows in `<fieldset>` elements with descriptive `<legend>` text (e.g. "Personal information", "Address", "Account details").
+
+Location: `row-street` and `row-postal` divs
+Evidence: Only `street_address` and `postal_code` fields are collected (`autocomplete="address-line1"`, `autocomplete="postal-code"`)
+Problem: The address is incomplete without city, state/region, and country fields, which will make the collected address unusable for shipping/verification.
+Fix: Add city, state/province, and country fields with matching `autocomplete` tokens (`address-level2`, `address-level1`, `country`).
