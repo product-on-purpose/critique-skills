@@ -3,7 +3,7 @@
 Local-first, version-controlled backlogs (Standard sec 7.1). Two files, plus this index:
 
 - **[enhancements.md](enhancements.md)** - features, fixes and refinements to components that already
-  exist. 72 items, `E1` through `E72`.
+  exist. 73 items, `E1` through `E73`.
 - **[new-components.md](new-components.md)** - proposals to ADD a skill, command, subagent, hook or
   chain. 5 items, `N1` through `N5`, each with a recorded why-gate verdict.
 
@@ -131,6 +131,7 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E24 | Add an automated evidence-quotes-not-characterizes check | M | v0.2.0 |
 | E27 | Isolate the bench harness from the working tree it measures | M | v0.2.0 |
 | E63 | Bring the dispatch run sets into results.json, or amend the rule they break | M | v0.2.0 |
+| E73 | Make the merge step run the scripted lane itself, instead of trusting the model's copy | M | v0.2.0 |
 | E67 | Expand critique-accessibility with the WCAG 2.2 AA criteria checkable from static markup | M to L | v0.2.0 |
 | E49 | Write one real tutorial for the empty Diataxis Tutorials quadrant | M | v0.2.0 |
 | E53 | Harden --gate as a documented per-skill CI recipe for consumers | M | v0.3.0 |
