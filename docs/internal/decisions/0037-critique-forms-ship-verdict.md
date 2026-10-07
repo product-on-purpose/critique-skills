@@ -231,7 +231,7 @@ with no `results.json` entry (PRs 38 and 50). That precedent splits publication 
    baseline `.json.raw.txt` files, as all three earlier dispatch folders kept theirs. It is the
    committed `results.json` this ADR cites. It changed no published table and nothing on the site.
 2. **Add the run set's entries to `bench/results/results.json`, in the change that acts on the
-   ruling.** This step meets AC-11, and ADR 0036 decision 4 requires it on a hold as well as a
+   ruling. Done on 2026-10-06, in the change that moved the skill to `active`.** This step meets AC-11, and ADR 0036 decision 4 requires it on a hold as well as a
    ship. Three facts bear on it:
    - **The forms entries cannot collide.** E63's concern is a dispatch entry sharing `(skill,
      skill_version, model, domain)` with a p3 entry. No committed entry is in the `forms` domain,
@@ -268,7 +268,8 @@ publication step, not here.
 - **A judged-lane corpus addition.** Three judged seeds cannot measure a judged lane. More judged
   seeds, on an artifact without element ids, would test both weaknesses named above.
 - **`golden-05`** (PR 60 question 10b), built from this run's judged findings.
-- **ADR 0036's reader table** should gain `loadResults`, whichever way E63 is ruled.
+- **ADR 0036's reader table** should gain `loadResults`, whichever way E63 is ruled. Done in the
+  activation change.
 
 ## Reproducing the derived figures
 

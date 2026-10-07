@@ -134,6 +134,16 @@ prioritized ahead of deck**. The order is now:
   pre-approved: local `claude -p` calls, k=3, on sonnet and haiku. The paid k=5 dispatch still needs
   its own approval. E62 (Standard version pin) moved first, so forms is written with
   `metadata.version`.
+- **BUILT 2026-10-03** in PR 60 (`11c4a65`), registered `experimental` under
+  [ADR 0036](../decisions/0036-experimental-status-until-ship-verdict.md). The maintainer approved
+  one paid k=5 dispatch, and run `37091134037` measured the skill and the frozen baseline on both
+  tiers on 2026-10-03; its run directory landed in PR 69.
+- **SHIPPED 2026-10-06.** The maintainer ruled SHIP on AC-12 in
+  [ADR 0037](../decisions/0037-critique-forms-ship-verdict.md) (PR 70). The activation change moved
+  the skill to `active` and published its 12 entries in `bench/results/results.json`, which meets
+  AC-11. The spec is fulfilled. It goes out with v0.2.0. Follow-ups: E73 (make the merge step run
+  the scripted lane itself), `golden-05` from this run's judged findings, more judged seeds in the
+  `forms` corpus, and a worked walkthrough in `examples/`.
 
 ## N3 - critique-dataviz (chart critique, Tufte and Cairo)
 
