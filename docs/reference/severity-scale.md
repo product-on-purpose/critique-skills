@@ -33,7 +33,7 @@ Impact sets the level first. A single occurrence of something that blocks recove
 
 ## Domain anchors
 
-The examples below are original, illustrative anchors, not the six skills' criterion catalogs. Each skill's own `references/` directory, once built, carries the authoritative criterion registry and its own anchor examples per criterion; these anchors exist to calibrate levels 2 and 3 consistently across domains before any skill ships. Level 2 and level 3 are anchored here because they are where reviewers most often disagree; 0, 1, and 4 rarely need debate.
+The examples below are original, illustrative anchors, not the skills' criterion catalogs. Each skill's own `references/` directory, once built, carries the authoritative criterion registry and its own anchor examples per criterion; these anchors exist to calibrate levels 2 and 3 consistently across domains before any skill ships. Level 2 and level 3 are anchored here because they are where reviewers most often disagree; 0, 1, and 4 rarely need debate.
 
 ### Usability (critique-usability)
 

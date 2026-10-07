@@ -70,7 +70,8 @@ determinism check on the next CI run, which is the intended behaviour.
 
 ## Corpus design
 
-23 scored artifacts across the six launch domains, plus 3 unscored `toy` fixtures.
+27 scored artifacts: 23 across the six launch domains and 4 in the `forms` domain, added for
+`critique-forms` (N2), plus 3 unscored `toy` fixtures.
 
 | Domain | Skill | Status | Artifacts | Clean | Artifact type | Namespaces |
 |---|---|---|---|---|---|---|
@@ -80,6 +81,7 @@ determinism check on the next CI run, which is the intended behaviour.
 | docs | critique-docs | stretch | 4 | 1 | `markdown-tree` | `DIATAXIS` |
 | microcopy | critique-microcopy | stretch | 4 | 1 | `markdown-prose` | `NNG` |
 | argument | critique-argument | stretch | 3 | 1 | `markdown-prose` | `TOULMIN` |
+| forms | critique-forms | N2 (v0.2.0) | 4 | 1 | `html` | `FORMS` |
 | toy | none | fixture | 3 | 1 | `markdown-prose` | `TOY` |
 
 This satisfies S-03 AC-3 (at least 20 artifacts, at least 3 per core domain, at least 1 clean per
