@@ -1479,8 +1479,15 @@ and the repository did not have.
   code; not reproduced by a site build with the skill active.
 - **Blocks:** `critique-forms` moving to `active` (ADR 0036, decision 3).
 - **Depends on:** Nothing
+- **CLOSED 2026-10-06.** `criterionRubric()` in `scripts/gen-site.mjs` credits a criterion to the
+  source whose id prefixes it, then to a source sharing its first segment, and otherwise to the
+  synthesized rubric its namespace names, never to the first listed source. The criteria page says
+  `FORMS` is synthesized and links each such skill's `references/` file, heads the sources table
+  "Source", and computes its skill count. The skill page gains one sentence naming the synthesized
+  rubric. Seven tests in `scripts/tests/gen-site.test.mjs` cover it, and the six shipped skills'
+  pages are byte-identical except that one header.
 - **Rank at intake:** unranked (added 2026-10-02, filed on the maintainer's delegation). **Status:**
-  backlog.
+  CLOSED 2026-10-06.
 
 ## E73 - Make the merge step run the scripted lane itself, instead of trusting the model's copy
 
