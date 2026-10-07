@@ -50,6 +50,10 @@ import {
   buildRouteMap,
   resolveLink,
   rewriteLinks,
+  countWord,
+  criterionRubric,
+  synthesizedRubrics,
+  criteriaExplorerLines,
 } from "../gen-site.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -603,6 +607,89 @@ test("every shipped rubric source has a citation, and a url only when one exists
       if (src.url) assert.match(src.url, /^https:\/\//, `${skill.name}/${src.id} url`);
     }
   }
+});
+
+// --- criteria explorer attribution (E72) ------------------------------------------------
+
+test("criterionRubric credits each shipped ID shape to the rubric that owns it", () => {
+  assert.deepEqual(criterionRubric("WCAG-1.4.3", [{ id: "WCAG" }]), { id: "WCAG", synthesized: false });
+  assert.deepEqual(criterionRubric("NNG-EM-TIMING", [{ id: "NNG-EM" }]), { id: "NNG-EM", synthesized: false });
+  // critique-usability: no source id prefixes NNG-H3-..., so the source sharing its first segment does.
+  assert.deepEqual(criterionRubric("NNG-H3-DEADEND", [{ id: "NNG-HEURISTICS" }, { id: "NNG-SEVERITY" }]), {
+    id: "NNG-HEURISTICS",
+    synthesized: false,
+  });
+});
+
+test("criterionRubric prefers the longest source id that prefixes the criterion", () => {
+  assert.equal(criterionRubric("NNG-EM-TIMING", [{ id: "NNG" }, { id: "NNG-EM" }]).id, "NNG-EM");
+});
+
+test("criterionRubric credits a synthesized namespace to its rubric, never to the first listed source", () => {
+  // The E72 defect: this used to return BAYMARD, the first of critique-forms' sixteen sources.
+  assert.deepEqual(criterionRubric("FORMS-INPUT-TYPE", [{ id: "BAYMARD" }, { id: "GOOGLE" }]), {
+    id: "FORMS",
+    synthesized: true,
+  });
+});
+
+test("every critique-forms criterion resolves to FORMS, and no other skill's to a synthesized rubric", () => {
+  const forms = parseSkill(
+    readFileSync(resolve(REPO_ROOT, "skills", "critique-forms", "SKILL.md"), "utf8"),
+    "skills/critique-forms/SKILL.md",
+  );
+  for (const id of [...forms.scripted, ...forms.judged]) {
+    assert.deepEqual(criterionRubric(id, forms.rubricSources), { id: "FORMS", synthesized: true }, id);
+  }
+  assert.deepEqual(synthesizedRubrics(forms), ["FORMS"]);
+  for (const skill of loadSkills().filter((s) => s.name !== "critique-forms")) {
+    assert.deepEqual(synthesizedRubrics(skill), [], skill.name);
+  }
+});
+
+test("the criteria explorer names a synthesized rubric, points to its rows, and counts its skills", () => {
+  const plain = {
+    name: "critique-plain",
+    route: "/skills/critique-plain/",
+    dir: "skills/critique-plain",
+    version: "0.1.0",
+    scripted: ["SRC-ONE"],
+    judged: [],
+    rubricSources: [{ id: "SRC", citation: "A source.", url: "", accessed: "2026-01-01", operationalization: "verbatim" }],
+  };
+  const synth = {
+    name: "critique-synth",
+    route: "/skills/critique-synth/",
+    dir: "skills/critique-synth",
+    version: "0.1.0",
+    scripted: ["SYN-A"],
+    judged: ["SYN-B"],
+    rubricSources: ["PUB1", "PUB2", "PUB3"].map((id) => ({
+      id,
+      citation: `${id} citation.`,
+      url: "",
+      accessed: "2026-01-01",
+      operationalization: "paraphrased",
+    })),
+  };
+  const text = criteriaExplorerLines([plain, synth]).join("\n");
+  assert.match(text, /counted from the two `SKILL\.md` frontmatters/);
+  assert.match(text, /\| `SYN-A` \| scripted \| `SYN` \|/);
+  assert.match(text, /\| `SYN-B` \| judged \| `SYN` \|/);
+  assert.doesNotMatch(text, /\| `SYN-[AB]` \| \w+ \| `PUB1` \|/);
+  assert.match(text, /`SYN`, synthesized from 3 sources/);
+  assert.match(text, /\[`references\/SYN\.md`\]\(https:\/\/github\.com\/[^)]+\/skills\/critique-synth\/references\/SYN\.md\)/);
+  assert.match(text, /`SYN` is not a source\./);
+  // The single-source skill reads exactly as before.
+  assert.match(text, /1 criteria, from `SRC`\. \[Skill page\]/);
+  assert.match(text, /\| `SRC-ONE` \| scripted \| `SRC` \|/);
+  assert.match(text, /^\| Source \| Citation \| Operationalization \|$/m);
+});
+
+test("countWord spells small counts and falls back to digits", () => {
+  assert.equal(countWord(6), "six");
+  assert.equal(countWord(7), "seven");
+  assert.equal(countWord(13), "13");
 });
 
 test("the route map routes every shipped skill and the critic subagent", () => {
