@@ -4,7 +4,25 @@ Curated, user-facing highlights. For the full technical history, see `CHANGELOG.
 
 ## Unreleased
 
-Nothing yet.
+### A seventh skill: `critique-forms`
+
+**`critique-forms` reviews HTML forms for how easy they are to fill in, especially on a phone.** It
+checks input types and the keyboards they bring up, autofill, field widths, how required and optional
+fields are marked, password rules, button labels, and layout. Try it with something like "check how
+easy this sign-up form is to fill in on a phone". For WCAG conformance, use `critique-accessibility`.
+For the wording of error messages, use `critique-microcopy`.
+
+Its 24 criteria share one namespace, `FORMS`. Most of them were stated independently by two or more of
+the 16 sources behind the skill, so the library wrote one rubric rather than crediting each finding to
+a single publisher. Each criterion still names its own sources.
+
+**Its numbers, including the weak ones.** On the benchmark's seeded forms, it found 98 of 105 planted
+defects on haiku, where the generic baseline prompt found 46. On sonnet it found 95, where the baseline
+found 86. Most of that comes from deterministic checks that need no model, which find 18 of the 21
+planted defects on their own. The part that needs judgment is weak: the model named 4 of 15 judged
+instances on each tier. On sonnet, its precision beats the baseline's only narrowly, 0.317 against
+0.303. The verdict and the checks behind it are in
+[ADR 0037](docs/internal/decisions/0037-critique-forms-ship-verdict.md).
 
 ## 0.1.6 - 2026-08-16
 

@@ -44,7 +44,8 @@ accessibility figure without a version, it is the 0.1.0 figure and is marked.
 two pinned tiers at k=5. It used the four-artifact `forms` domain, which no launch skill was measured
 on. Forms beats the baseline on both tiers at location level: recall **0.933 against 0.438** on haiku
 and **0.905 against 0.819** on sonnet, and precision **0.458 against 0.287** and **0.317 against
-0.303**. The scripted lane carries that result. The judged lane names 4 of its 15 seeded instances on
+0.303**. The sonnet precision win is a near-tie: forms takes it in 3 of 5 repetitions, and in all
+5 under ADR 0026's exact-node cut. The scripted lane carries the result. The judged lane names 4 of its 15 seeded instances on
 each tier, and all four are one criterion. [ADR 0037 (the critique-forms ship verdict)](../../docs/internal/decisions/0037-critique-forms-ship-verdict.md)
 records the SHIP ruling, the six checks behind it, and what it does not establish. The run's 12
 entries are in [`results.json`](results.json) beside the p3 and cal1 entries. The sections below were
@@ -863,17 +864,17 @@ python -m bench.generator leak-check --corpus bench/corpus
 python -m bench.metrics score --corpus bench/corpus --runs bench/results/runs \
     --out /tmp/results-p3.json --run-set p3-2026-07-31
 
-# 4. Score the calibration run set. Its 2 entries are the critique-accessibility 0.1.1 rows.
+# 3. Score the calibration run set. Its 2 entries are the critique-accessibility 0.1.1 rows.
 #    runs-cal1 holds no probes either, so it is likewise scored in place.
 python -m bench.metrics score --corpus bench/corpus --runs bench/results/runs-cal1 \
     --out /tmp/results-cal1.json --run-set cal1-2026-08-01
 
-# 5. Score the critique-forms run set. Its 12 entries are the forms domain, both arms, both tiers.
+# 4. Score the critique-forms run set. Its 12 entries are the forms domain, both arms, both tiers.
 #    The directory also holds the run's own results.json, which the scorer skips by name.
 python -m bench.metrics score --corpus bench/corpus --runs bench/results/runs-dispatch-37091134037 \
     --out /tmp/results-forms.json --run-set bench-2026-10-03
 
-# 6. The committed results.json is the three entry arrays concatenated and sorted by
+# 5. The committed results.json is the three entry arrays concatenated and sorted by
 #    (skill, skill_version, model, domain), which is the order build_results itself emits, with
 #    run_set "p3-2026-07-31-plus-cal1-2026-08-01-plus-bench-2026-10-03". All three run sets are held
 #    in one file because the repository's rule is that no number appears anywhere that is not in a
@@ -885,7 +886,7 @@ python -m bench.metrics score --corpus bench/corpus --runs bench/results/runs-di
 #    entries committed before 2026-10-06 list them overall, judged, scripted. Checked 2026-10-06:
 #    all 90 entries are equal by that key.
 
-# 7. Confirm the published tables have not drifted from the committed numbers.
+# 6. Confirm the published tables have not drifted from the committed numbers.
 python -m bench.report table --results bench/results/results.json --check
 ```
 

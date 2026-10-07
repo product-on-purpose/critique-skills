@@ -20,7 +20,7 @@ sharper here than in the family default, because of what this project has commit
    not ship, regardless of how well its rubric reads. A proposal must name the artifact type it
    would be seeded into and confirm the corpus generator can actually produce it.
 4. **What does it cost across the catalog?** Every new skill edits the joint-routing eval and, in
-   practice, the descriptions of the six skills it competes with for routing.
+   practice, the descriptions of the shipped skills it competes with for routing.
 
 N1 to N4 entered on 2026-09-11 from the backlog-expansion intake (N5 followed on 2026-09-25, on the maintainer's proposal), and all four are
 carried from `ROADMAP.md`, so their warrant is already public. What this file adds is the recorded

@@ -7,7 +7,7 @@ level: intermediate
 
 # Severity scale
 
-Every critique-skills finding carries one severity value on one 0-4 scale, defined as `$defs/severity` in [`contract/critique-contract.schema.json`](../../contract/critique-contract.schema.json). The scale does not vary by domain: the six launch skills share it so a severity 3 in a clarity critique and a severity 3 in an accessibility critique carry the same weight. Severity must be a JSON integer literal (`3`, not `3.0`); the contract rejects the float form even though JSON Schema's `integer` type would otherwise accept it.
+Every critique-skills finding carries one severity value on one 0-4 scale, defined as `$defs/severity` in [`contract/critique-contract.schema.json`](../../contract/critique-contract.schema.json). The scale does not vary by domain: every skill shares it so a severity 3 in a clarity critique and a severity 3 in an accessibility critique carry the same weight. Severity must be a JSON integer literal (`3`, not `3.0`); the contract rejects the float form even though JSON Schema's `integer` type would otherwise accept it.
 
 ## The scale
 

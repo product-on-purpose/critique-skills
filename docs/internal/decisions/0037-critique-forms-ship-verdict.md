@@ -259,7 +259,9 @@ ADR 0036 decision 4 requires.
 
 **Either way:** `bench/results/verdicts.md` is titled for the v0.1.0 stretch skills, and ADR 0026
 said it would not survive another layer. Where readers find this verdict is decided at the
-publication step, not here.
+publication step, not here. Decided there on 2026-10-06: readers find it through the scope note and
+link list at the top of `bench/results/README.md`, the CHANGELOG, and `RELEASE-NOTES.md`.
+`verdicts.md` is left to E25 (rewrite verdicts.md as one current-state document).
 
 ## Open items
 
