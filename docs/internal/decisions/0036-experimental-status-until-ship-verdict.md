@@ -11,7 +11,9 @@
 - **What it changes:** where [ADR 0003](0003-skill-slate-core-and-gated-stretch.md) says a held
   skill is marked `incubating` and left out of `library.json`, read `experimental` in
   `library.json`. `incubating` is not a status the Standard accepts.
-- **Status:** Proposed, accepted when PR 60 (the `critique-forms` build) merges
+- **Status:** Accepted. Proposed 2026-10-01 and accepted when PR 60 (the `critique-forms` build)
+  merged at 01:28 UTC on 2026-10-03. Applied for the first time on 2026-10-06, when
+  [ADR 0037](0037-critique-forms-ship-verdict.md)'s SHIP ruling moved `critique-forms` to `active` (PR 73)
 - **Date:** 2026-10-01
 - **Deciders:** Jonathan Prisant; proposed by Claude during the N2 (critique-forms) build
 - **Supersedes in part:** [ADR 0003](0003-skill-slate-core-and-gated-stretch.md), only its
@@ -55,6 +57,13 @@ Meanwhile, `active` would advertise the skill before any evidence existed. Three
 Three other readers ignore `status`. `scripts/gen-index.mjs` lists every skill in `INDEX.md`.
 `bench/run_bench.py` plans every skill. And `python -m bench.report table` renders every measured
 skill in the full grid in `bench/README.md`.
+
+A fourth reader that ignores `status` was missed when this ADR was written, and found while
+drafting ADR 0037 (amended 2026-10-06). `loadResults` in `scripts/gen-site.mjs` renders every
+overall-lane entry in `bench/results/results.json` on the site's receipts page. So a skill's
+figures reach the site the moment they enter `results.json`, whatever its status. That is why the
+forms run set joined `results.json` in the same change that moved the skill to `active`, not
+before it.
 
 ## Considered options
 
@@ -102,9 +111,10 @@ skill in the full grid in `bench/README.md`.
 
 ## Implementation sites
 
-- `library.json`: `critique-forms` is registered with `"status": "experimental"` (PR 60).
-- `AGENTS.md`, "Components": names `critique-forms` as `experimental`, says what that hides, and
-  links here.
+- `library.json`: `critique-forms` was registered with `"status": "experimental"` (PR 60), and
+  moved to `"active"` on 2026-10-06 after ADR 0037's SHIP ruling (PR 73).
+- `AGENTS.md`, "Components": named `critique-forms` as `experimental` and said what that hid. Since
+  the move, it lists the skill as `active` and links here and to ADR 0037.
 - [ADR 0003](0003-skill-slate-core-and-gated-stretch.md): its Status line points here.
 - The N2 spec's AC-12 still says `incubating`. This ADR does not edit the spec, because its wording
   is the maintainer's. Read the word as `experimental`.

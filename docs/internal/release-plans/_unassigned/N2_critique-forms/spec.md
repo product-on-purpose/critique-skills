@@ -2,9 +2,9 @@
 id: N2
 title: "critique-forms, a form-usability critique skill"
 type: spec
-status: committed
+status: fulfilled
 created: 2026-09-25
-updated: 2026-09-27
+updated: 2026-10-06
 linked-effort: docs/internal/backlog/new-components.md
 linked-plan: null
 linked-release: null
@@ -19,27 +19,27 @@ target-release: v0.2.0
 
 ## Task Summary
 
-**Status:** committed
-**Last updated:** 2026-09-28 00:09 (UTC) by Claude, recording the maintainer's merge
+**Status:** fulfilled
+**Last updated:** 2026-10-06 by Claude, recording the SHIP ruling and the move to `active`
 **Linked plan:** not yet planned
 **Open questions:** 0 (see Open Questions section)
-**Revisions:** 3 (see Revisions section)
+**Revisions:** 6 (see Revisions section)
 
 ### Acceptance Criteria Fulfillment
 
-- [ ] **AC-1** - `checks` and `references/` declare exactly the 24 ruled IDs, each in its ruled lane
-- [ ] **AC-2** - Every criterion row cites its registry sources by handle and grade, all resolving in the bibliography
-- [ ] **AC-3** - No criterion's operational test flags ground another skill owns
-- [ ] **AC-4** - The two overlap rows each name the accessibility criterion they overlap and why forms differs
-- [ ] **AC-5** - A merged envelope with scripted and judged `FORMS` findings validates with `run.rubrics` `["FORMS"]`
-- [ ] **AC-6** - Two scripted-lane runs over the full forms corpus produce identical output
-- [ ] **AC-7** - The corpus seeds all 18 scripted and at least 3 judged criteria across at least 3 artifacts, 1 clean
-- [ ] **AC-8** - Hand-scored k=3 joint-routing results on both tiers cover the three contested pairs
-- [ ] **AC-9** - Every `ci.yml` job passes on the change that registers the skill
-- [ ] **AC-10** - A committed real-forms report classifies the scripted lane's findings on at least 10 forms
-- [ ] **AC-11** - Forms and baseline figures at k=5 on both tiers, from one run set, are published; the README scoreboard shows them once forms is `active`
-- [ ] **AC-12** - A recorded ship or hold verdict cites the figures against the baseline and the consistency floor
-- [ ] **AC-13** - No scripted criterion firing 3+ times on real forms has more false alarms than correct findings
+- [x] **AC-1** - `checks` and `references/` declare exactly the 24 ruled IDs, each in its ruled lane (met in PR 60 (`11c4a65`), per its acceptance table)
+- [x] **AC-2** - Every criterion row cites its registry sources by handle and grade, all resolving in the bibliography (met in PR 60 (`11c4a65`), per its acceptance table)
+- [x] **AC-3** - No criterion's operational test flags ground another skill owns (met in PR 60 (`11c4a65`), per its acceptance table)
+- [x] **AC-4** - The two overlap rows each name the accessibility criterion they overlap and why forms differs (met in PR 60 (`11c4a65`), per its acceptance table)
+- [x] **AC-5** - A merged envelope with scripted and judged `FORMS` findings validates with `run.rubrics` `["FORMS"]` (met in PR 60 (`11c4a65`), per its acceptance table)
+- [x] **AC-6** - Two scripted-lane runs over the full forms corpus produce identical output (met in PR 60 (`11c4a65`), per its acceptance table)
+- [x] **AC-7** - The corpus seeds all 18 scripted and at least 3 judged criteria across at least 3 artifacts, 1 clean (met in PR 60 (`11c4a65`), per its acceptance table)
+- [x] **AC-8** - Hand-scored k=3 joint-routing results on both tiers cover the three contested pairs (met in PR 60 (`11c4a65`), per its acceptance table)
+- [x] **AC-9** - Every `ci.yml` job passes on the change that registers the skill (met in PR 60 (`11c4a65`): `ci-ok` passed on its merge head)
+- [x] **AC-10** - A committed real-forms report classifies the scripted lane's findings on at least 10 forms (met in PR 60 (`11c4a65`), per its acceptance table)
+- [x] **AC-11** - Forms and baseline figures at k=5 on both tiers, from one run set, are published; the README scoreboard shows them once forms is `active` (met by the activation change, PR 73: the run set (`bench-2026-10-03`) is in `bench/results/results.json` and forms is on the README scoreboard)
+- [x] **AC-12** - A recorded ship or hold verdict cites the figures against the baseline and the consistency floor (met by [ADR 0037](../../../decisions/0037-critique-forms-ship-verdict.md) (PR 70): SHIP, ruled 2026-10-06)
+- [x] **AC-13** - No scripted criterion firing 3+ times on real forms has more false alarms than correct findings (met in PR 60 (`11c4a65`), per its acceptance table)
 
 ### Currently In Progress
 
@@ -322,6 +322,7 @@ fixture records the expected winner and the sibling it is contested with.
 | 2026-09-25 | Claude (plab-spec) | clarified | D2 (consistency gate) and D3 (keep `FORMS-AUTOCOMPLETE`) ruled Option A: Requirements 13 rewritten from the D2 ruling and AC-12 names the gate in force on the dispatch approval day; Requirements 8 gains the D3 severity grading; Example 1 gains the autofill grammar note |
 | 2026-10-03 | Jonathan Prisant | amended | AC-11 and AC-12 reworded on the maintainer's ruling (PR 60 question 13): the README scoreboard renders only `active` skills (`bench/report.py`, `_active_versions`), so it shows `critique-forms` only after a ship verdict, and the figures publish in the full results table either way; a held skill is registered `experimental`, not `incubating`, which the Standard's G6 check rejects (ADR 0036). See "Build-time rulings" below |
 | 2026-09-27 | Jonathan Prisant | closed | Status draft to committed: PR 54 merged as `8249f61`. The acceptance criteria are now contract; later changes follow the append-only revision rule |
+| 2026-10-06 | Claude | fulfilled | Every acceptance criterion met. AC-1 to AC-10 and AC-13 in PR 60 (`11c4a65`); AC-12 by ADR 0037 (PR 70), SHIP as ruled by the maintainer on 2026-10-06; AC-11 by the activation change (PR 73), which publishes the run set in `results.json` and puts `critique-forms` on the README scoreboard. Status moves to fulfilled |
 
 ## Sources & Evidence
 

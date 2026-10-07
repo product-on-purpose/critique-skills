@@ -44,7 +44,7 @@ That cross-reference imposes a bound the criterion grammar does not state: **a n
 
 ## Namespace registry
 
-The namespace each launch skill draws its criterion IDs from, per [S-05 (skills slate)](../internal/release-plans/plan_v0.1.0/S-05_skills-slate/spec.md):
+The namespace each skill draws its criterion IDs from, per [S-05 (skills slate)](../internal/release-plans/plan_v0.1.0/S-05_skills-slate/spec.md) for the six launch skills and the [N2 (critique-forms) spec](../internal/release-plans/_unassigned/N2_critique-forms/spec.md) for `critique-forms`:
 
 | Skill | Status | Namespace(s) | Rubric source |
 |---|---|---|---|
@@ -54,12 +54,14 @@ The namespace each launch skill draws its criterion IDs from, per [S-05 (skills 
 | critique-docs | stretch | `DIATAXIS` | Diataxis (open standard) |
 | critique-microcopy | stretch | `NNG` | NN/g error-message guidelines (paraphrased) |
 | critique-argument | stretch | `TOULMIN` | Toulmin model (paraphrased) |
+| critique-forms | v0.2.0 (N2) | `FORMS` | Synthesized by this library from 16 sources' convergent form-usability research (paraphrased); each criterion's row in `skills/critique-forms/references/FORMS.md` cites its own |
 | BYOR | opt-in, any skill | `BYOR` | Rubric supplied by the requester at run time |
 
-Two notes on this table:
+Three notes on this table:
 
 - **`NNG` is shared by two skills on purpose.** critique-usability's Nielsen heuristics (`NNG-H1` through `NNG-H10`) and critique-microcopy's NN/g error-message guidelines (`NNG-EM-*`) are different, unrelated rubrics that both trace to the Nielsen Norman Group, so they share a source letter. No individual ID is reused: `NNG-H4` and `NNG-EM-CONSTRUCTIVE` never collide. A reader who wants to know which of the two rubrics a run actually drew on has to look at the full criterion IDs, not just `run.rubrics`, since the namespace array records the same string `NNG` either way.
 - **`PLAIN` and `WILLIAMS` stay separate, and two criterion pairs merged.** S-05 (skills slate) OQ-1 left open whether `WILLIAMS-*` criteria fold into `PLAIN-*` so clarity's registry stays single-sourced. The critique-clarity pipeline resolved it in [ADR 0019 (clarity: two namespaces, merged duplicate criteria)](../internal/decisions/0019-clarity-two-namespaces-merged-duplicate-criteria.md): both namespaces ship, because six of Williams' criteria have no PLAIN equivalent and renaming them would misattribute them to an open standard that never stated them; the two pairs that tested the identical construction across both sources merged into one ID each, `PLAIN-NOMINALIZATION` and `PLAIN-CONCISE`, so no finding can double-cite one flaw. `WILLIAMS-NOMINALIZATION` and `WILLIAMS-CONCISION` were never published and are not reserved. The table above already reflects the outcome.
+- **`FORMS` names a rubric, not a source.** Every other namespace here names one source, because each of those rubrics is one source's. `FORMS` names a rubric this library synthesized, because most of its 24 criteria are stated independently by two or more publishers, and filing one under a single publisher would credit a convergent finding to one of several. [ADR 0035 (synthesized rubric namespace)](../internal/decisions/0035-synthesized-rubric-namespace.md) allows this when the criteria are convergent, and moves attribution from the ID to the criterion's row: `skills/critique-forms/references/FORMS.md` cites each criterion's own sources.
 
 `BYOR-*` is a reserved namespace, not a skill: any skill running against a user-supplied rubric marks every resulting finding `rubric_source: byor`, which the schema forces whenever `criterion` matches `^BYOR-`.
 

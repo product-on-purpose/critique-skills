@@ -46,9 +46,9 @@ Python half.
   parser (both rubric sources including one with `url: null`, both criterion lanes, intro
   extraction, and the loud failures on a missing frontmatter block or scalar). Live checks against
   the real repository: `buildRouteMap()` routes nothing from `docs/internal/`, the shipped skills
-  carry exactly **42 scripted and 54 judged criteria**, every criterion ID is unique and matches the
+  carry exactly **60 scripted and 60 judged criteria**, every criterion ID is unique and matches the
   grammar read from the frozen contract schema, and every skill version agrees with `library.json`.
-  The 42/54/96 figures are hard-coded on purpose: a criterion moves only by a deliberate, versioned
+  The 60/60/120 figures are hard-coded on purpose: a criterion moves only by a deliberate, versioned
   change, so a break there is the correct alarm that the README's hand-typed lane-split sentence has
   gone stale. Plus `check-generated-untracked.mjs` exercised against an isolated temp git
   repository in all three states: not ignored, ignored, and force-tracked. Also the benchmark

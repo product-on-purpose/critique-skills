@@ -231,7 +231,7 @@ with no `results.json` entry (PRs 38 and 50). That precedent splits publication 
    baseline `.json.raw.txt` files, as all three earlier dispatch folders kept theirs. It is the
    committed `results.json` this ADR cites. It changed no published table and nothing on the site.
 2. **Add the run set's entries to `bench/results/results.json`, in the change that acts on the
-   ruling.** This step meets AC-11, and ADR 0036 decision 4 requires it on a hold as well as a
+   ruling. Done on 2026-10-06 in PR 73, the change that moved the skill to `active`.** This step meets AC-11, and ADR 0036 decision 4 requires it on a hold as well as a
    ship. Three facts bear on it:
    - **The forms entries cannot collide.** E63's concern is a dispatch entry sharing `(skill,
      skill_version, model, domain)` with a p3 entry. No committed entry is in the `forms` domain,
@@ -259,7 +259,9 @@ ADR 0036 decision 4 requires.
 
 **Either way:** `bench/results/verdicts.md` is titled for the v0.1.0 stretch skills, and ADR 0026
 said it would not survive another layer. Where readers find this verdict is decided at the
-publication step, not here.
+publication step, not here. Decided there on 2026-10-06: readers find it through the scope note and
+link list at the top of `bench/results/README.md`, the CHANGELOG, and `RELEASE-NOTES.md`.
+`verdicts.md` is left to E25 (rewrite verdicts.md as one current-state document).
 
 ## Open items
 
@@ -268,7 +270,8 @@ publication step, not here.
 - **A judged-lane corpus addition.** Three judged seeds cannot measure a judged lane. More judged
   seeds, on an artifact without element ids, would test both weaknesses named above.
 - **`golden-05`** (PR 60 question 10b), built from this run's judged findings.
-- **ADR 0036's reader table** should gain `loadResults`, whichever way E63 is ruled.
+- **ADR 0036's reader table** should gain `loadResults`, whichever way E63 is ruled. Done in the
+  activation change, PR 73.
 
 ## Reproducing the derived figures
 
@@ -289,7 +292,7 @@ root:
 ## Implementation sites
 
 - This ADR changes no file. The run folder landed in PR 69, and E72's fix in PR 71.
-- The activation change carries out the ruling: `critique-forms` to `active` in `library.json`,
+- The activation change, PR 73, carries out the ruling: `critique-forms` to `active` in `library.json`,
   the 12 entries into `bench/results/results.json`, the FORMS row in
   `docs/reference/criterion-ids.md`, every generator that reads `status` re-run, and ADR 0036's
   status line and reader table.
