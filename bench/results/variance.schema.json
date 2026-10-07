@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/product-on-purpose/critique-skills/main/bench/results/variance.schema.json",
   "title": "Bench run-to-run variance and acceptance bands",
-  "description": "The run-to-run spread of every published figure, and the acceptance band derived from it, produced by `python -m bench.variance` from committed manifests and run envelopes and nothing else. This exists because results.json pools every k=5 repetition into one cell figure, so the published numbers carry no recorded spread, and ADR 0030's fidelity gate (\"figures within measured run-to-run variance of the committed ones\") had no threshold behind it and could not be failed. This file is variance version 1.0.0 and validates 1.x documents only.",
+  "description": "The run-to-run spread of every published figure, and the acceptance band derived from it, produced by `python -m bench.variance` from committed manifests and run envelopes and nothing else. This exists because results.json pools every k=5 repetition into one cell figure, so the published numbers carry no recorded spread, and ADR 0030's fidelity gate (\"figures within measured run-to-run variance of the committed ones\") had no threshold behind it and could not be failed. This file is variance version 1.1.0 and validates 1.x documents only.",
   "$comment": "Two design points differ deliberately from results.schema.json. First, every entry carries its own `run_set`: results.json records one run_set on a file holding two concatenated run sets, which ROADMAP.md lists as v0.2.0 measurement debt, and there was no reason to repeat it here. Second, `entries[]` is keyed by (run_set, skill, skill_version, model, domain, metric) rather than one row per group, because a band is a property of a single metric and the four metrics of one cell have genuinely different widths. Consistency and clean_fp_rate are absent on purpose and not by oversight: score_consistency compares pairs of envelopes and is undefined for a single repetition, so no band for it can be produced by this method, and the published consistency floor therefore carries no uncertainty estimate at all.",
   "type": "object",
   "required": ["variance_version", "run_sets", "generated_at", "method", "verification", "envelopes_scored", "entries"],
@@ -42,6 +42,11 @@
         "seed": {
           "description": "Fixed so the published band is reproducible byte for byte.",
           "type": "integer"
+        },
+        "seeding": {
+          "description": "How the seed becomes a random stream. Since variance version 1.1.0 each cell-metric draws from its own stream, derived from the seed and that cell-metric's identity key, so adding or removing a run set cannot move another cell's band. Absent from 1.0.0 documents, which drew every cell from one stream shared in sorted cell order; there, adding a run set whose label sorted first shifted the bands of cells it never touched.",
+          "type": "string",
+          "minLength": 1
         },
         "repetition_index_source": {
           "description": "The repetition index is parsed from the envelope filename because no contract field records it. When that schema debt is paid, this string and bench/variance.py's parse_repetition_index change together.",
