@@ -1,9 +1,9 @@
 # 0037 - Ship verdict for critique-forms 0.1.0: the measured case, and what it rests on
 
 ## TL;DR
-- **Proposed verdict:** SHIP. On run set `bench-2026-10-03`, `critique-forms` 0.1.0 meets the N2
-  spec's AC-12 (a recorded ship or hold verdict) literally on both pinned tiers. The ruling is the
-  maintainer's. This ADR stays Proposed until the maintainer makes it.
+- **Verdict:** SHIP, ruled by the maintainer on 2026-10-06. On run set `bench-2026-10-03`,
+  `critique-forms` 0.1.0 meets the N2 spec's AC-12 (a recorded ship or hold verdict) literally on
+  both pinned tiers. The judged-lane weakness below is published beside the pass.
 - **The test:** higher seeded recall than the frozen `baseline-generic` prompt, at equal or better
   precision, on at least one pinned tier. The skill must also clear the consistency gate in force
   when the paid run was approved. Following [ADR 0026](0026-location-level-re-examination-of-baseline-gates.md),
@@ -17,13 +17,13 @@
   tier, and all four are one criterion.
 - **Where it is weakest:** sonnet precision is a near-tie at the committed tolerance. Forms wins it
   in 3 of 5 repetitions. Under ADR 0026's exact-node cut, forms wins it in all 5.
-- **Awaiting the ruling only:** every figure here is read from the run folder PR 69 committed. The
-  figures join the top-level `results.json` in the change that acts on the ruling. See
+- **Where the figures live:** every figure here is read from the run folder PR 69 committed. They
+  join the top-level `results.json` in the change that moves the skill to `active`. See
   "Publication: two steps".
 
-- **Status:** Proposed
-- **Date:** 2026-10-05
-- **Deciders:** Jonathan Prisant (the ruling). Drafted by Claude from run `37091134037`'s 80
+- **Status:** Accepted (2026-10-06)
+- **Date:** drafted 2026-10-05, ruled 2026-10-06
+- **Deciders:** Jonathan Prisant (the ruling: SHIP). Drafted by Claude from run `37091134037`'s 80
   envelopes.
 
 ## Builds on
@@ -182,14 +182,15 @@ than running `checks.py` itself. Every skill that uses the shared assembler is e
 [E73 (make the merge step run the scripted lane itself)](../backlog/enhancements.md) records the
 fix.
 
-## Proposed ruling
+## Ruling
 
-**SHIP.** AC-12's baseline test is met literally on both pinned tiers, decisively on haiku. The
-result survives the harshest match the repository can express. It reproduces from the envelopes.
-The consistency floor is cleared on both tiers.
+**SHIP**, ruled by the maintainer on 2026-10-06 on the analysis in this ADR. AC-12's baseline test
+is met literally on both pinned tiers, decisively on haiku. The result survives the harshest match
+the repository can express. It reproduces from the envelopes. The consistency floor is cleared on
+both tiers.
 
-On a ship ruling, the skill moves to `active` as ADR 0036 decision 3 sets out, after E72 (the
-site's rubric attribution) is fixed.
+The skill moves to `active` as ADR 0036 decision 3 sets out. E72 (the site's rubric attribution),
+the precondition, was fixed first in PR 71.
 
 ## What this does not establish
 
@@ -207,15 +208,15 @@ site's rubric attribution) is fixed.
 
 ## Considered options
 
-1. **SHIP on this evidence, with the judged-lane weakness published (recommended).** The stated
+1. **SHIP on this evidence, with the judged-lane weakness published (chosen).** The stated
    test is met, and ADR 0028 established publishing a weakness beside a pass.
 2. **HOLD until the judged lane improves.** This is the closest call. It reads AC-12 as a test of
    the skill's judgment, which the spec does not say. Requirements 13 already warned that the
    consistency gate would not test the judged lane either. A hold on these numbers would add a
    test after the result is known.
-3. **SHIP, but claim the haiku tier only.** Not recommended. AC-12 needs one tier, and both pass
+3. **SHIP, but claim the haiku tier only.** Rejected. AC-12 needs one tier, and both pass
    literally. Publishing the sonnet thinness serves a reader better than omitting the tier.
-4. **Fix the assembler, then re-measure before ruling.** Not recommended. It needs a new paid
+4. **Fix the assembler, then re-measure before ruling.** Rejected. It needs a new paid
    dispatch, and check 6 shows the defect cannot change either tier's outcome.
 
 ## Publication: two steps
@@ -246,14 +247,15 @@ with no `results.json` entry (PRs 38 and 50). That precedent splits publication 
 
 ## Consequences
 
-**On a SHIP ruling:** fix E72, then set `critique-forms` to `active` in `library.json` and re-run
-every generator that reads `status`. Add the FORMS row to `docs/reference/criterion-ids.md`. Mark
-this ADR Accepted. ADR 0036's status line still reads "Proposed, accepted when PR 60 (the
-`critique-forms` build) merges". PR 60 merged at 01:28 UTC on 2026-10-03, so update that line in
-the same change.
+**On the SHIP ruling, which was made:** fix E72, then set `critique-forms` to `active` in
+`library.json` and re-run every generator that reads `status`. Add the FORMS row to
+`docs/reference/criterion-ids.md`. This ADR was accepted on the ruling itself. ADR 0036's status
+line still reads "Proposed, accepted when PR 60 (the `critique-forms` build) merges". PR 60 merged
+at 01:28 UTC on 2026-10-03, so update that line in the activation change.
 
-**On a HOLD ruling:** the status stays `experimental`. The figures publish in the full grid, and
-the hold is recorded in `RELEASE-NOTES.md`, as ADR 0036 decision 4 requires.
+**Had the ruling been HOLD:** the status would have stayed `experimental`. The figures would still
+have published in the full grid, and the hold would have been recorded in `RELEASE-NOTES.md`, as
+ADR 0036 decision 4 requires.
 
 **Either way:** `bench/results/verdicts.md` is titled for the v0.1.0 stretch skills, and ADR 0026
 said it would not survive another layer. Where readers find this verdict is decided at the
@@ -286,5 +288,8 @@ root:
 
 ## Implementation sites
 
-- None until the ruling and the publication step. `library.json`, `bench/results/` and
-  `docs/reference/criterion-ids.md` are **not changed** by this draft.
+- This ADR changes no file. The run folder landed in PR 69, and E72's fix in PR 71.
+- The activation change carries out the ruling: `critique-forms` to `active` in `library.json`,
+  the 12 entries into `bench/results/results.json`, the FORMS row in
+  `docs/reference/criterion-ids.md`, every generator that reads `status` re-run, and ADR 0036's
+  status line and reader table.
