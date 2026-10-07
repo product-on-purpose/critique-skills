@@ -139,7 +139,7 @@ prioritized ahead of deck**. The order is now:
   one paid k=5 dispatch, and run `37091134037` measured the skill and the frozen baseline on both
   tiers on 2026-10-03; its run directory landed in PR 69.
 - **SHIPPED 2026-10-06.** The maintainer ruled SHIP on AC-12 in
-  [ADR 0037](../decisions/0037-critique-forms-ship-verdict.md) (PR 70). The activation change moved
+  [ADR 0037](../decisions/0037-critique-forms-ship-verdict.md) (PR 70). The activation change, PR 73, moved
   the skill to `active` and published its 12 entries in `bench/results/results.json`, which meets
   AC-11. The spec is fulfilled. It goes out with v0.2.0. Follow-ups: E73 (make the merge step run
   the scripted lane itself), `golden-05` from this run's judged findings, more judged seeds in the

@@ -13,7 +13,7 @@
   `library.json`. `incubating` is not a status the Standard accepts.
 - **Status:** Accepted. Proposed 2026-10-01 and accepted when PR 60 (the `critique-forms` build)
   merged at 01:28 UTC on 2026-10-03. Applied for the first time on 2026-10-06, when
-  [ADR 0037](0037-critique-forms-ship-verdict.md)'s SHIP ruling moved `critique-forms` to `active`
+  [ADR 0037](0037-critique-forms-ship-verdict.md)'s SHIP ruling moved `critique-forms` to `active` (PR 73)
 - **Date:** 2026-10-01
 - **Deciders:** Jonathan Prisant; proposed by Claude during the N2 (critique-forms) build
 - **Supersedes in part:** [ADR 0003](0003-skill-slate-core-and-gated-stretch.md), only its
@@ -112,7 +112,7 @@ before it.
 ## Implementation sites
 
 - `library.json`: `critique-forms` was registered with `"status": "experimental"` (PR 60), and
-  moved to `"active"` on 2026-10-06 after ADR 0037's SHIP ruling.
+  moved to `"active"` on 2026-10-06 after ADR 0037's SHIP ruling (PR 73).
 - `AGENTS.md`, "Components": named `critique-forms` as `experimental` and said what that hid. Since
   the move, it lists the skill as `active` and links here and to ADR 0037.
 - [ADR 0003](0003-skill-slate-core-and-gated-stretch.md): its Status line points here.
