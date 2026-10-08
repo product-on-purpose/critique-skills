@@ -134,6 +134,20 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   plugin that consumes the toolkit rather than vendoring it. `node scripts/check.mjs` remains this
   repository's gate.
 
+- **`ROADMAP.md` now describes the v0.2.0 that was actually decided.** The public page still
+  promised the taxonomy survey, three skills with `critique-deck` first, BYOR, telemetry and a
+  samples corpus, and its exit gate required all of them. The maintainer re-cut v0.2.0 on
+  2026-09-11 and amended it on 2026-09-14: measurement debt plus one skill, `critique-forms`.
+  [E12 (exit-gate re-cut)](docs/internal/backlog/enhancements.md) rewrites the section and its gate
+  to that shape. A new table records where each overtaken item went: deck, BYOR and telemetry to
+  v0.3.0, samples to v0.4.0+, and the survey and `critique-dataviz` to a new "Unscheduled" list.
+  [E13 (v0.1.x verification items)](docs/internal/backlog/enhancements.md) marks all four v0.1.x
+  verification items with the dates they were met. It also states plainly that the live
+  benchmark dispatch answered its question in the negative. On 2026-10-03 the page was brought up
+  to date with the `critique-forms` build: it now says the skill is built and registered
+  `experimental`, and the exit gate puts it in the README scoreboard only on a ship verdict
+  ([ADR 0036](docs/internal/decisions/0036-experimental-status-until-ship-verdict.md)).
+
 ### Fixed
 
 - **S-07 AC-4 is met, and the blocker that held it was self-inflicted.** Tag `v9.9.9` was pushed against manifests all reading `0.1.6`, and `release.yml` did exactly what the criterion requires: the guard step **failed**, and the RELEASE-NOTES extract and Create-GitHub-release steps were both **skipped**. The guard named all three manifests individually rather than failing on the first, and no release was created. The tag was deleted from the remote immediately after. That closes the last unchecked criterion in the S-07 spec: all six now pass. **The blocker is worth recording because it was a misreading, not a permission.** The criterion says "in a scratch clone", which was read as "in a scratch repository" and therefore as needing a `delete_repo` token scope to clean up after. A pushed tag makes GitHub check out a clean clone on a runner, so the criterion was satisfiable all along, in this repository, with the token already in hand. The intent behind the wording was never "use a different repository", it was "do not test in the working tree the thing was authored in", which is the same reason P4's local replay was judged insufficient for AC-1. **What the test added over what already existed** is worth stating, because it was nearly skipped as ceremony: the guard already had six unit tests covering this exact scenario and `release.yml` had already succeeded on five real tags, but none of that covered the negative path on real infrastructure. The guard had never once been observed blocking anything, which is the same shape as three defects this repository has already found in itself: the `ci-ok` job that would have passed green without `if: always()`, Gold checks G1 and G3 passing vacuously, and the Standard's section 7.1 requirement having no check module at all.
