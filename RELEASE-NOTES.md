@@ -21,7 +21,7 @@ defects on haiku, where the generic baseline prompt found 46. On sonnet it found
 found 86. Most of that comes from deterministic checks that need no model, which find 18 of the 21
 planted defects on their own. The part that needs judgment is weak: the model named 4 of 15 judged
 instances on each tier. On sonnet, its precision beats the baseline's only narrowly, 0.317 against
-0.303. The verdict and the checks behind it are in
+0.303, and that margin is smaller than the variation between repeated runs. The verdict and the checks behind it are in
 [ADR 0037](docs/internal/decisions/0037-critique-forms-ship-verdict.md).
 
 ## 0.1.6 - 2026-08-16

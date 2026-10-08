@@ -41,6 +41,12 @@ Three steps, in order, because the third is worthless if the second does not hol
    repetitions rather than individual artifact scores, because that is what preserves both the
    ratio-of-sums structure and the within-repetition correlation across artifacts.
 
+   **Each cell-metric draws from its own random stream**, derived from the seed and that
+   cell-metric's identity (see `cell_rng`). Variance version 1.0.0 drew every cell from one shared
+   stream in sorted cell order, so adding a run set whose label sorted early moved the bands of
+   cells it never touched. A band is published before the run it judges, so it has to be a
+   function of its own cell's evidence and nothing else in the file.
+
 ## What the band does not cover
 
 Stated here as well as in the ADR, because a number is easier to over-read than to re-derive.
@@ -58,6 +64,7 @@ from __future__ import annotations
 
 import argparse
 import functools
+import hashlib
 import json
 import random
 import re
@@ -84,7 +91,7 @@ from bench.metrics.__main__ import (
     _read_artifact_text,
 )
 
-VARIANCE_VERSION = "1.0.0"
+VARIANCE_VERSION = "1.1.0"
 
 _VARIANCE_SCHEMA_PATH = Path(__file__).resolve().parent / "results" / "variance.schema.json"
 
@@ -148,6 +155,16 @@ def scoring_view(runs_dir: Path, *, exclude_top: tuple[str, ...]) -> tuple[list[
         top = path.relative_to(runs_dir).parts[0]
         (excluded if top in exclude_top else scored).append(path)
     return scored, excluded
+
+
+def cell_rng(seed: int, key: CellKey, metric: str) -> random.Random:
+    """The random stream for one cell-metric's bootstrap, independent of every other cell.
+
+    Derived through SHA-256 of the seed and the full identity key rather than through Python's own
+    string seeding, so the scheme is stated in one line and reproducible outside Python.
+    """
+    material = "|".join((str(seed), *key, metric)).encode("utf-8")
+    return random.Random(int.from_bytes(hashlib.sha256(material).digest(), "big"))
 
 
 def _percentile(sorted_values: list[float], fraction: float) -> float:
@@ -307,7 +324,6 @@ def build_variance(
             )
         verification = {"performed": True, "cell_metrics_checked": checked, "cell_metrics_matched": matched}
 
-    rng = random.Random(seed)
     entries: list[dict[str, Any]] = []
     for key in sorted(cells):
         run_set, skill, skill_version, model, domain = key
@@ -317,7 +333,7 @@ def build_variance(
             totals = {r: _totals(aggregator(per_repetition[r])) for r in repetitions}
             values = [n / d if d else 0.0 for n, d in totals.values()]
             pooled = aggregator([s for r in repetitions for s in per_repetition[r]])
-            low, high, sd = bootstrap_band(totals, draws=draws, rng=rng)
+            low, high, sd = bootstrap_band(totals, draws=draws, rng=cell_rng(seed, key, name))
             entries.append(
                 {
                     "run_set": run_set,
@@ -348,6 +364,7 @@ def build_variance(
             "interval": "2.5th to 97.5th percentile",
             "draws": draws,
             "seed": seed,
+            "seeding": "one stream per cell-metric, seeded with SHA-256 of 'seed|run_set|skill|skill_version|model|domain|metric', so no cell's band depends on any other cell in the file",
             "repetition_index_source": "envelope filename, '<tier>-r<n>.json'; no contract field records it",
             "covers": "within-run-set repetition variance only, not transport, date, staging or isolation",
             "not_banded": "consistency and clean_fp_rate; score_consistency compares pairs and is undefined for one repetition",

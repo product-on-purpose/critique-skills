@@ -45,7 +45,9 @@ two pinned tiers at k=5. It used the four-artifact `forms` domain, which no laun
 on. Forms beats the baseline on both tiers at location level: recall **0.933 against 0.438** on haiku
 and **0.905 against 0.819** on sonnet, and precision **0.458 against 0.287** and **0.317 against
 0.303**. The sonnet precision win is a near-tie: forms takes it in 3 of 5 repetitions, and in all
-5 under ADR 0026's exact-node cut. The scripted lane carries the result. The judged lane names 4 of its 15 seeded instances on
+5 under ADR 0026's exact-node cut. Its 95 percent band in [`variance.json`](variance.json),
+[0.288, 0.346], overlaps the baseline's, [0.280, 0.322], so that margin is inside repetition noise.
+On haiku the two bands are disjoint on both location metrics. The scripted lane carries the result. The judged lane names 4 of its 15 seeded instances on
 each tier, and all four are one criterion. [ADR 0037 (the critique-forms ship verdict)](../../docs/internal/decisions/0037-critique-forms-ship-verdict.md)
 records the SHIP ruling, the six checks behind it, and what it does not establish. The run's 12
 entries are in [`results.json`](results.json) beside the p3 and cal1 entries. The sections below were
@@ -375,11 +377,12 @@ figure suggests.** [`variance.json`](variance.json) publishes the spread: for ea
 what each single repetition would have reported on its own, and a 95 percent band on the pooled
 statistic. It is computed by `python -m bench.variance` from these same committed envelopes, with no
 new runs, and it refuses to emit anything unless pooling the repetitions back together reproduces
-the numbers on this page exactly (currently 104 of 104 cell-metrics).
+the numbers on this page exactly (currently 120 of 120 cell-metrics, across all three run sets).
 
 Read it before reading any single figure here as precise. `critique-accessibility` 0.1.0 on sonnet
 publishes a location recall of **0.306** from five runs that measured **0.529, 0.294, 0.353, 0.118
-and 0.235**. The median band width across the skill cells is 0.082 and the widest is 0.247. Two
+and 0.235**. Across the launch skills' location-level cells, the median band width is 0.081 and
+the widest is 0.235. Two
 things follow that are not obvious from the tables: **haiku's bands are 2.3x wider than sonnet's**,
 so the cheaper tier is also the less reliable one, and **consistency has no band at all**, because
 it compares pairs of envelopes and is undefined for a single repetition, so the 0.309 floor below
