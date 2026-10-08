@@ -21,7 +21,7 @@
   emitting `instances`. See the two dated sections below.
 - **The seeding changed on 2026-10-07 (variance 1.1.0).** Each cell-metric now draws from its own
   random stream, so adding a run set cannot move another cell's band. The switch moved 71 older
-  bands once, by 0.011 at most, and no gate verdict changed. See the third dated section.
+  bands once, by 0.011 at most, and no gate verdict changed. See the section dated 2026-10-07.
 - **Status:** Accepted (2026-08-15).
 
 - **Status:** Accepted
