@@ -16,7 +16,8 @@
   defects, with no model involved. The judged lane names 4 of its 15 seeded instances on each
   tier, and all four are one criterion.
 - **Where it is weakest:** sonnet precision is a near-tie at the committed tolerance. Forms wins it
-  in 3 of 5 repetitions. Under ADR 0026's exact-node cut, forms wins it in all 5.
+  in 3 of 5 repetitions. Under ADR 0026's exact-node cut, forms wins it in all 5. Its variance band,
+  measured on 2026-10-07, overlaps the baseline's, so that margin is inside repetition noise.
 - **Where the figures live:** every figure here is read from the run folder PR 69 committed. They
   join the top-level `results.json` in the change that moves the skill to `active`. See
   "Publication: two steps".
@@ -205,6 +206,12 @@ the precondition, was fixed first in PR 71.
   lane's false alarms on real forms. It did not measure recall.
 - **How large the sonnet margin is beyond noise.** ADR 0031 (the fidelity gate's acceptance band)
   measured no band for forms. Check 3 is the only spread this run set offers.
+  **Measured on 2026-10-07: the sonnet precision margin is inside noise.** `bench/results/variance.json`
+  now bands this run set. On sonnet, forms' location-precision band is [0.288, 0.346] and the
+  baseline's is [0.280, 0.322]. They overlap, and each pooled figure lies inside the other's band.
+  Location recall's bands, [0.876, 0.933] and [0.743, 0.876], touch at 0.876. On haiku, the bands
+  are disjoint on both location metrics. The verdict does not change. AC-12 needs one tier, and
+  haiku clears it with no overlap. The sonnet half should be read as a tie on precision, not a win.
 
 ## Considered options
 
@@ -244,6 +251,10 @@ with no `results.json` entry (PRs 38 and 50). That precedent splits publication 
      cells its `--runs` folders produce. Run against a scratch `results.json` holding the forms
      entries, the `AGENTS.md` command verified 104 of 104 cell-metrics and wrote an identical
      `variance.json`. Forms gets no band until its folder is added to that command.
+     **Resolved on 2026-10-07:** the folder was added as run set `bench-2026-10-03`, and 120 of 120
+     cell-metrics verified. Adding it exposed that variance 1.0.0's shared random stream moved 71
+     of the 104 existing bands. Variance 1.1.0 seeds each cell-metric separately, and ADR 0031's
+     dated section of the same day records the change.
 
 ## Consequences
 

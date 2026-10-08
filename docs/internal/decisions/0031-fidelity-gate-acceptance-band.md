@@ -19,6 +19,9 @@
   width, so investigation. **Sonnet, 2026-09-15: `precision_location` outside by more than its band's
   width, so a failure by the gate's own rule**, most of it traced to the judged lane no longer
   emitting `instances`. See the two dated sections below.
+- **The seeding changed on 2026-10-07 (variance 1.1.0).** Each cell-metric now draws from its own
+  random stream, so adding a run set cannot move another cell's band. The switch moved 71 older
+  bands once, by 0.011 at most, and no gate verdict changed. See the third dated section.
 - **Status:** Accepted (2026-08-15).
 
 - **Status:** Accepted
@@ -348,6 +351,45 @@ envelopes are committed as evidence and, like the haiku dispatch's, feed no publ
 2. **Whether clarity's critic should be asked for `instances`.** That is a skill change, a version
    bump, and a paid re-dispatch to measure. It is not obviously an improvement: it would make clarity
    emit more claims, and the committed run shows nearly all such claims landing on no planted defect.
+
+## The seeding changed, 2026-10-07: the bands re-baselined once, and no verdict moved
+
+Adding run set `bench-2026-10-03` (`critique-forms` and its baseline) to the command exposed a
+defect in the method above. Variance version 1.0.0 drew every cell's bootstrap from one random
+stream, consumed in sorted cell order. The new label sorts before `cal1` and `p3`, so its 16
+cell-metrics took the start of the stream, and every later cell drew different numbers.
+**Regenerating under 1.0.0 moved 71 of the 104 published bands although none of their evidence
+changed**, and the file's `method` block would have shown no change. A band is published before the
+run it judges, so it has to depend on its own cell and on nothing else in the file.
+
+**Variance 1.1.0 seeds each cell-metric from its own identity.** The stream is seeded with SHA-256
+of `seed|run_set|skill|skill_version|model|domain|metric`, and `method.seeding` in the file records
+that. The seed and the draw count are unchanged, at 20260815 and 20000. A test in
+`bench/tests/test_variance.py` holds the property: it fails on the shared stream and passes on the
+new one. In the regenerated file, the 104 older entries are identical with and without the forms
+run set.
+
+**The switch re-baselined the older bands once.** 71 of the 104 entries moved, 3 of them by more
+than 0.005 and the largest by 0.011. Every band figure this ADR's gate sections cite was recomputed
+under 1.1.0. The haiku matched band was rebuilt over the same 19 envelopes, and the 1.0.0 rebuild
+reproduced the 2026-08-17 table exactly before the comparison was made.
+
+| Figure cited above | Under 1.0.0 | Under 1.1.0 | Verdict |
+|---|---|---|---|
+| Haiku matched band, all four metrics | as tabled 2026-08-17 | identical | unchanged: investigation |
+| Sonnet clarity `recall_location` | [0.860, 0.920] | [0.860, 0.920]; the bound is still exactly 0.92 unrounded | unchanged: on the bound |
+| Sonnet clarity `precision_location` | [0.403, 0.466], 0.063 wide | [0.404, 0.468], 0.064 wide | unchanged: failure, outside by 0.073 against 0.064 |
+| Sonnet clarity `recall` (reported) | [0.730, 0.810] | [0.730, 0.820] | unchanged: 0.800 is inside |
+| Sonnet clarity `precision` (reported) | [0.344, 0.411] | identical | unchanged: outside |
+| Sonnet baseline `precision_location` | [0.314, 0.355], 0.041 wide | [0.314, 0.354], 0.040 wide | unchanged: outside by 0.046 |
+| Usability companion, both gated metrics | as cited | identical | unchanged: pass |
+
+Two summary figures under "Consequences" moved. Across the 28 location-level skill cell-metrics, the
+median band width is now 0.081 rather than 0.082. The widest band is now 0.235 rather than 0.247,
+and it is the same cell. Gate power therefore varies 7.6x rather than 8x. The tier medians, 0.145
+and 0.063, and the 2.3x ratio are unchanged. Those paragraphs are left as written, because they record
+what the 1.0.0 file said. That file is recoverable from git at `c4183e8`, and `bench/results/README.md`
+carries the current figures.
 
 ## Consequences
 

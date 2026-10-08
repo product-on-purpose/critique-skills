@@ -182,12 +182,16 @@ number carries a spread. `bench/results/variance.json` supplies it, and with it 
 needs to be failable at all. Regenerate it from committed evidence, calling no model:
 
 ```
-python -m bench.variance --corpus bench/corpus --runs bench/results/runs --run-set p3-2026-07-31 --runs bench/results/runs-cal1 --run-set cal1-2026-08-01 --committed bench/results/results.json --out bench/results/variance.json
+python -m bench.variance --corpus bench/corpus --runs bench/results/runs --run-set p3-2026-07-31 --runs bench/results/runs-cal1 --run-set cal1-2026-08-01 --runs bench/results/runs-dispatch-37091134037 --run-set bench-2026-10-03 --committed bench/results/results.json --out bench/results/variance.json
 ```
 
 `--committed` is what makes the output trustworthy: the command refuses to emit a band unless
 pooling every repetition reproduces `results.json` exactly, and refuses equally if no cell matched
 anything at all. Omitting it produces an unverified file and says so.
+
+Add a run set to this command when its entries join `results.json`. Since variance version 1.1.0,
+each cell-metric draws from its own seeded random stream, so adding a run set adds bands and moves
+no existing one.
 
 The gate specification, the measured bands, and what they do not cover are in
 [ADR 0031](docs/internal/decisions/0031-fidelity-gate-acceptance-band.md). Two results worth knowing
