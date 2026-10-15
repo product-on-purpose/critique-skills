@@ -44,6 +44,11 @@ class ArtifactScore:
     claims_total: int
     claims_matched: int
     unresolvable_claims: int
+    #: Matched (defect, claim) pairs whose defect records a `severity_expected`, and how many of
+    #: those claims carry exactly that severity. Every planted defect in the committed corpus
+    #: records one, so in practice the first equals `defects_matched`.
+    severity_pairs: int = 0
+    severity_agreements: int = 0
 
 
 def _score_artifact(manifest: dict, envelope: dict, artifact_text: str, *, ignore_criterion: bool) -> ArtifactScore:
@@ -63,9 +68,14 @@ def _score_artifact(manifest: dict, envelope: dict, artifact_text: str, *, ignor
     ]
     unresolvable = sum(1 for r in resolved if not r.resolvable)
 
-    matched_defects, matched_claims = match.match_claims_to_defects(
-        parsed, artifact_type, claim_list, resolved, defects, ignore_criterion=ignore_criterion
-    )
+    pairs = match.match_pairs(parsed, artifact_type, claim_list, resolved, defects, ignore_criterion=ignore_criterion)
+    matched_defects = {defect_index for defect_index, _ in pairs}
+    matched_claims = {claim_index for _, claim_index in pairs}
+    severity_pairs = [
+        (defects[d]["severity_expected"], claim_list[c].severity)
+        for d, c in pairs
+        if defects[d].get("severity_expected") is not None
+    ]
 
     return ArtifactScore(
         artifact=manifest["artifact"],
@@ -77,6 +87,8 @@ def _score_artifact(manifest: dict, envelope: dict, artifact_text: str, *, ignor
         claims_total=len(claim_list),
         claims_matched=len(matched_claims),
         unresolvable_claims=unresolvable,
+        severity_pairs=len(severity_pairs),
+        severity_agreements=sum(1 for expected, emitted in severity_pairs if expected == emitted),
     )
 
 
@@ -152,6 +164,17 @@ def aggregate_precision(scores: list[ArtifactScore]) -> MetricValue:
     """`precision = claims matched to a planted defect / all claims
     emitted`, over every artifact, clean ones included."""
     return _ratio(sum(s.claims_matched for s in scores), sum(s.claims_total for s in scores))
+
+
+def aggregate_severity_agreement(scores: list[ArtifactScore]) -> MetricValue:
+    """`severity_agreement = matched claims whose severity equals their
+    defect's severity_expected / matched pairs`, exact agreement on the
+    1-to-4 scale. It reads only matched pairs, so it says nothing about
+    defects the skill missed or claims that matched nothing: recall and
+    precision already measure those. A skill that matched nothing has no
+    computable agreement (`None`), which is distinct from agreeing on
+    nothing."""
+    return _ratio(sum(s.severity_agreements for s in scores), sum(s.severity_pairs for s in scores))
 
 
 def aggregate_clean_fp_rate(scores: list[ArtifactScore]) -> MetricValue:

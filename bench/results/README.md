@@ -818,7 +818,11 @@ Stated so no reader has to infer them from an absence.
 - **Small defect counts in three domains.** docs 6 planted defects, usability 7, argument 8. A recall of
   1.000 on docs/sonnet means 6 defect types found in all 5 runs, not 30 independent successes.
 - **Severity agreement is not scored.** `severity_expected` is recorded in every manifest and read by
-  nothing in v0.1.
+  nothing in v0.1. **Update, 2026-10-14:** results version 1.3.0 scores it as `severity_agreement`
+  on matched pairs, with no new runs and no other figure moved. On the judged lane, the one that
+  measures a model, haiku agrees less often than sonnet in every skill where they differ (for example
+  `critique-argument`, 0.714 against 0.952). The scripted lane agrees at 1.000 everywhere by
+  design. Both are in the per-lane table in [`../README.md`](../README.md).
 - **Evidence quality is not scored.** Whether `evidence` quotes the artifact rather than characterizing
   it is a contract field obligation no metric checks.
 - **Two tiers, one model family, one date.** Nothing here says how these skills behave on a frontier

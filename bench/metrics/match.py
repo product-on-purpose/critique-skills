@@ -39,13 +39,32 @@ def match_claims_to_defects(
     *,
     ignore_criterion: bool = False,
 ) -> tuple[set[int], set[int]]:
+    """`(matched_defect_indices, matched_claim_indices)`: the two sides of
+    `match_pairs`, for callers that need only which defects and which
+    claims were matched, not to each other."""
+    pairs = match_pairs(parsed, artifact_type, claims, resolved, defects, ignore_criterion=ignore_criterion)
+    return {defect_index for defect_index, _ in pairs}, {claim_index for _, claim_index in pairs}
+
+
+def match_pairs(
+    parsed: locate.ParsedArtifact,
+    artifact_type: str,
+    claims: list[Claim],
+    resolved: list,
+    defects: list[dict],
+    *,
+    ignore_criterion: bool = False,
+) -> list[tuple[int, int]]:
     """Greedy assignment over every (claim, defect) pair that is a HIT
     under `locate.is_hit`, restricted to matching criterion (exact string
     equality) unless `ignore_criterion` is set. Candidates are sorted by
     `(criterion, truth_anchor_key, claim_anchor_key, finding_id)` and
     taken when both sides are still unclaimed, per bench/README.md.
-    Returns `(matched_defect_indices, matched_claim_indices)`, indices
-    into `defects` and `claims` respectively.
+    Returns the assignment as `(defect_index, claim_index)` pairs, in the
+    order they were taken, indices into `defects` and `claims`
+    respectively. Keeping the pairing, not only the two matched sets, is
+    what lets `bench/metrics/score.py` compare a matched claim's severity
+    with the severity its defect was planted at (E22).
 
     `ignore_criterion=True` is the location-level match mode
     (`bench/metrics/score.py`'s `score_artifact_location`): a claim can
@@ -81,12 +100,14 @@ def match_claims_to_defects(
 
     claimed_defects: set[int] = set()
     claimed_claims: set[int] = set()
+    pairs: list[tuple[int, int]] = []
     for _criterion, _truth_key, _claim_key, _finding_id, defect_index, claim_index in candidates:
         if defect_index in claimed_defects or claim_index in claimed_claims:
             continue
         claimed_defects.add(defect_index)
         claimed_claims.add(claim_index)
-    return claimed_defects, claimed_claims
+        pairs.append((defect_index, claim_index))
+    return pairs
 
 
 def match_claims_symmetric(

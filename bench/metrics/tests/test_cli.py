@@ -65,7 +65,7 @@ def test_build_results_end_to_end(tmp_path: Path) -> None:
         corpus_dir, runs_dir, run_set="test-run-set", generated_at="2026-07-31T00:00:00Z", repo_root=repo_root
     )
 
-    assert results["results_version"] == "1.2.0"
+    assert results["results_version"] == "1.3.0"
     assert results["run_set"] == "test-run-set"
     # Three entries per cell since 1.2.0: one per lane. The overall lane is the pre-1.2.0 figure.
     assert len(results["entries"]) == 3
@@ -90,6 +90,10 @@ def test_build_results_end_to_end(tmp_path: Path) -> None:
     assert entry["precision"]["value"] == 0.75
 
     assert entry["clean_fp_rate"] == {"value": None, "numerator": 0, "denominator": 0}
+
+    # Severity agreement (results_version 1.3.0) over the three matched pairs: every fixture
+    # defect is planted at severity 2 and every fixture finding is emitted at 2.
+    assert entry["severity_agreement"] == {"value": 1.0, "numerator": 3, "denominator": 3}
 
     # Consistency over the k=2 runs: one shared claim (TOY-ACTIVE, para 2)
     # out of three distinct claims total -> J = 1 / (2 + 2 - 1) = 1/3.

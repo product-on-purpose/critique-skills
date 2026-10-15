@@ -218,11 +218,14 @@ def build_results(
                 "consistency_exact": _consistency_value(
                     score.aggregate_consistency_exact(consistency_scores), consistency_scores
                 ),
+                # Criterion-level, like recall: severity is a rubric judgment, so it is read on the
+                # matches where the skill named the defect under the rubric's own criterion.
+                "severity_agreement": _metric_value(score.aggregate_severity_agreement(artifact_scores)),
             }
         )
 
     results = {
-        "results_version": "1.2.0",
+        "results_version": "1.3.0",
         "run_set": run_set,
         "generated_at": generated_at,
         "entries": entries,
