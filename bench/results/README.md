@@ -415,7 +415,9 @@ row are generated into [`../README.md`](../README.md).
 | critique-argument (stretch) | haiku | 0.775 | 0.544 | 0.371 | 0.286 | 1.200 | 0 of 57 |
 | critique-argument (stretch) | sonnet | 0.775 | 0.470 | 0.737 | 0.463 | 2.600 | 0 of 66 |
 
-Judged lane only. **Derived cut, not carried in `results.json`** (see
+Judged lane only. When this table was written it was a **derived cut, not carried in
+`results.json`**. It is now carried there and generated with a drift check, for every run set, in the
+per-lane table in [`../README.md`](../README.md) (see
 [Judged-lane figures](#judged-lane-figures-are-derived)). This is the instrument reading for the part
 of each skill that needs a model; the scripted lane is deterministic and sits at or near 1.000
 consistency everywhere it exists.
@@ -829,6 +831,16 @@ Stated so no reader has to infer them from an absence.
   for invalidity. This is the one place the run set has nothing to disclose.
 
 ## Judged-lane figures are derived
+
+**No longer derived, as of 2026-10-14.** Results version 1.2.0 (2026-09-14) gave every entry a
+`lane`, so `results.json` now carries a `judged` and a `scripted` entry beside each `overall` one,
+and the judged and scripted figures in "The numbers" are fields in the committed file. Since
+2026-10-14, `python -m bench.report table` also renders them, for every skill cell in every run
+set, as the per-lane table in [`../README.md`](../README.md), and the `unit-python` CI job holds that
+table to `results.json` with the same drift check as every other generated number. The hand-typed
+table in "The numbers" is the P3 snapshot of those same entries: all 12 of its rows matched them
+exactly when the generated table was added. The rest of this section is the history, kept as
+written.
 
 [`results.json`](results.json) carries one recall, precision, and consistency per
 (skill, skill_version, model, domain) group, computed over **all** findings. Its schema fixes

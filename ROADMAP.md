@@ -72,7 +72,7 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 
 **Exit gate** (re-cut 2026-09-14):
 
-- Every entry in `bench/results/results.json` carries `run_set` and `lane` **(met 2026-09-14)**, and `bench.report` drift-checks the judged and scripted columns.
+- Every entry in `bench/results/results.json` carries `run_set` and `lane` **(met 2026-09-14)**, and `bench.report` drift-checks the judged and scripted columns **(met 2026-10-14)**.
 - At least one Sonnet envelope per skill is committed through the shipped harness, and the fidelity-gate verdict is re-evaluated on that tier. The verdict was re-evaluated on 2026-09-15 and came back a failure (see v0.1.x above); three of the seven skills (`critique-clarity`, `critique-usability` and `critique-forms`) have Sonnet envelopes through the shipped harness so far.
 - Consistency threshold v2 is published with its method.
 - No `run.model` value outside the two pinned tiers appears under `skills/` or `examples/`, unless it is a documented sentinel, and a check enforces that.
