@@ -57,7 +57,7 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
    - ~~`critique-usability`'s Sonnet cell re-measured~~ **(done 2026-09-25)**. It still does not qualify against baseline on that tier; see "Known limitations" below.
    - The methodology's location-level metrics section written up properly.
    - `verdicts.md` rewritten as one document instead of a layered amendment trail.
-   - An automated check for the evidence-quotes-not-characterizes field contract.
+   - ~~An automated check for the evidence-quotes-not-characterizes field contract~~ **(done 2026-10-14)**.
    - ~~`severity_expected` scoring turned on~~ **(done 2026-10-14)**.
    - The example and golden envelopes carry only real model values or a documented sentinel, not run metadata written by hand.
    - The benchmark harness isolated from the working tree it measures, and the Claude Code CLI version it installs pinned or recorded.
@@ -78,7 +78,7 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 - No `run.model` value outside the two pinned tiers appears under `skills/` or `examples/`, unless it is a documented sentinel, and a check enforces that.
 - `bench/results/verdicts.md` is one current-state document.
 - `severity_expected` is scored in the results table **(met 2026-10-14)**.
-- The evidence-quotes check runs in CI.
+- The evidence-quotes check runs in CI **(met 2026-10-14)**.
 - ~~`bench/results/runs/steering/` no longer sits inside the `runs*` glob~~ **(met 2026-09-14)**.
 - ~~A recorded ruling exists on `askit-*` authoring and CodeQL~~ **(met 2026-09-15: both adopted, CodeQL shipped)**.
 - `critique-forms` is measured at k=5 on both pinned tiers, and a recorded ship or hold verdict cites the figures. On a ship verdict it appears in the README scoreboard; on a hold it stays `experimental`, with its figures published in the full results table. **(Met 2026-10-06: shipped, [ADR 0037](docs/internal/decisions/0037-critique-forms-ship-verdict.md).)**
