@@ -1,0 +1,44 @@
+Location: Two-factor setup, verification code — first message block ("Verification codes are 6 digits long...")
+Evidence: "Check the message again and enter all six."
+Problem: The remediation assumes the only cause of a 5-digit entry is misreading the original SMS/email, but a short entry is just as likely caused by a dropped keystroke, autofill truncation, or a copy-paste error in the field itself — the instruction doesn't match all realistic causes.
+Fix: Reword to cover the field itself, e.g. "Enter all 6 digits of the code. If you're not sure you have the right code, check the message again."
+
+Location: Two-factor setup, verification code — first message block
+Evidence: "Predictable mistake: yes" paired with "Suggested fix: none"
+Problem: A mistake already classified as predictable (users entering too few digits) is given no preventive fix, even though the entry is exactly the kind of case design intervention should target (e.g., constraining input length).
+Fix: Add a preventive fix, such as limiting the input field to 6 characters or auto-advancing/validating as digits are typed, so the error condition can't occur.
+
+Location: Two-factor setup, verification code — second message block ("This verification code expired...")
+Evidence: "This verification code expired 10 minutes after it was sent, which stops an intercepted code from being reused later. Request a new code and enter it here."
+Problem: The one actionable instruction (request a new code) is buried inside a longer sentence explaining security rationale, adding reading burden during a time-sensitive task.
+Fix: Lead with the instruction and demote the rationale, e.g. "This code expired. Request a new one." with the security explanation moved to secondary/help text if it's needed at all.
+
+Location: Two-factor setup, verification code — second message block, "Suggested fix" field
+Evidence: "Suggested fix: selectable, offers a resend code button in place of the message"
+Problem: "Selectable" has no clear referent — it isn't stated whether the message text, an icon, or something else becomes selectable — leaving the suggested fix ambiguous to implement.
+Fix: Rewrite as a complete instruction, e.g. "Replace the message with a resend-code button the user can select."
+
+Location: Two-factor setup, verification code — second message block, "Input on resubmission" field
+Evidence: "Request a new code and enter it here." / "Input on resubmission: preserved"
+Problem: Preserving the expired code's value in the field contradicts the instruction to enter a newly requested code — the user must notice and manually clear stale input, and resubmitting without doing so just reproduces the same error.
+Fix: Clear the field automatically once the code is flagged as expired (or once a new code is sent), instead of preserving the invalid value.
+
+Location: Billing, promo code — first message block ("This promo code ended on 30 June...")
+Evidence: "This promo code ended on 30 June."
+Problem: The date omits a year, so the message is ambiguous about which expiration date it refers to, especially around year boundaries or if read well after the fact.
+Fix: Include the year, e.g. "This promo code ended on 30 June 2026."
+
+Location: Compare Two-factor setup, verification code — second message block ("Fires: on-submit") with Billing, promo code — first message block ("Fires: on-blur")
+Evidence: "Fires: on-submit" vs "Fires: on-blur"
+Problem: Both messages report an expiration condition, yet one is surfaced immediately on leaving the field and the other only after submission, with no stated reason for the differing timing — inconsistent behavior for logically parallel cases.
+Fix: Align the timing for both expiration checks, or document the specific reason for the difference (e.g., security concerns with validating a verification code before submit).
+
+Location: Billing, promo code — second message block ("This promo code applies to annual plans...")
+Evidence: "Predictable mistake: yes" paired with "Suggested fix: none"
+Problem: As with the verification-code length error, a mistake already identified as predictable (entering a plan-specific code on the wrong plan) is left without any preventive fix.
+Fix: Add a preventive fix, such as disabling/flagging incompatible promo codes as soon as the plan selection is known, or filtering which codes are offered based on the selected plan.
+
+Location: "Signal" field across all four message blocks
+Evidence: "Signal: bold text set larger than the field label, icon" is repeated identically in every one of the four entries
+Problem: A simple format error, a security-driven expiration, and two business-rule mismatches all receive identical visual weight, giving users no way to distinguish severity or urgency between error types.
+Fix: Vary signal strength (e.g., weight, icon type) by severity, or explicitly note in the document why uniform treatment across all four cases is intentional.

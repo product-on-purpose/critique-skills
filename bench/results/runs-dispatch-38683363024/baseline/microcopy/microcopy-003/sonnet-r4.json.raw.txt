@@ -1,0 +1,54 @@
+Location: Section heading "## Search results, no matches"
+Evidence: "Message: This request timed out before it could finish." (the first entry under this heading)
+Problem: The heading promises coverage of the "no matches" state, but the first message documented is a request-timeout/failure state, not a zero-results state. The heading doesn't describe the content that follows it.
+Fix: Split into two headings (e.g., "Search results, request failed" and "Search results, no matches") or rename the section heading to cover both states it documents.
+
+Location: Section "Search results, no matches," first entry, Message field
+Evidence: "This request timed out before it could finish."
+Problem: The message reports what happened but gives the user no guidance on what to do next (e.g., retry, check connection), unlike the second entry in the same section which tells the user exactly what to do.
+Fix: Reword to include a next step, e.g., "This request timed out before it could finish. Try your search again."
+
+Location: Section "Search results, no matches," first entry, Signal field
+Evidence: "bold heading text where the first result would sit, text-label"
+Problem: The signal has no error-specific styling (no icon, no distinguishing color/treatment), so a timeout could be mistaken for a legitimate results heading — the same category of flaw the document explicitly calls out for the very next entry ("no visual cue that this one demands action"), but leaves unflagged here.
+Fix: Add an error icon or distinct visual treatment to the Signal so the timeout state is visually distinguishable from a normal results heading.
+
+Location: Section "Search results, no matches," first entry, Input on resubmission field
+Evidence: "Input on resubmission: not-applicable"
+Problem: Since this state "Fires: on-submit," a search query and/or filters were submitted; whether those values persist after a timeout is directly relevant to the user and shouldn't be dismissed as not-applicable.
+Fix: Specify whether the search term and filters are retained after the timeout (they should be), rather than marking the field not-applicable.
+
+Location: Section "Search results, no matches," first entry, Suggested fix field
+Evidence: "Suggested fix: none"
+Problem: A timeout is a recoverable, transient failure, yet no retry action is suggested, leaving the user with no way to recover other than guessing to resubmit manually.
+Fix: Add a suggested fix such as a "Try again" button that resubmits the same query/filters.
+
+Location: Section "Search results, no matches," second entry, Signal field
+Evidence: "styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action"
+Problem: The entry identifies a real styling flaw (the message looks passive/informational despite requiring action), but the paired Suggested fix only adds a button beside the message — it does not change the Signal/styling, so the identified flaw remains unaddressed.
+Fix: Either update the Signal to use an action-oriented treatment (e.g., warning color or icon) or note in the Suggested fix that the styling itself is being changed, not just adding a button.
+
+Location: Section "Search results, no matches," second entry, Input on resubmission field
+Evidence: "Input on resubmission: not-applicable"
+Problem: As with the first entry, this state fires on-submit of a date range/filter form, so whether the selected date range and filters persist on screen is applicable and important, not "not-applicable" — especially since the Suggested fix assumes the filters are still visible/actionable ("clear filters button").
+Fix: State explicitly that the previously selected date range and filters are retained, rather than marking the field not-applicable.
+
+Location: Section "Notification center, sync status," entry, Message field
+Evidence: "Sync is paused while this device is on a metered connection, so syncing does not spend a data allowance. Select resume to sync now."
+Problem: The message justifies pausing specifically to avoid consuming the metered data allowance, then immediately invites the user to resume, which would consume that same data allowance, without any warning — the two sentences work against each other.
+Fix: Add a caveat to the resume instruction, e.g., "Select resume to sync now using your data allowance," or require confirmation before resuming on metered data.
+
+Location: Section "Notification center, sync status," entry, Placement vs. Signal fields
+Evidence: Placement: "directly under the sync status row" / Signal: "bold text at the top of the notification list"
+Problem: These two fields describe contradictory locations for the same message — "directly under the sync status row" (which may not be at the top of the list) versus "at the top of the notification list."
+Fix: Reconcile the two fields into one consistent location, e.g., confirm whether the sync status row is always first in the list, or correct Signal to reference the sync status row rather than "the top of the notification list."
+
+Location: Section "Notification center, sync status," entry, Message vs. Suggested fix fields
+Evidence: Message: "Select resume to sync now." / Suggested fix: "offers a resume now action"
+Problem: The control is referred to inconsistently — "resume" in the message versus "resume now" in the suggested fix — leaving the actual button label ambiguous.
+Fix: Use the same label in both fields, e.g., settle on "Resume" or "Resume now" and use it consistently.
+
+Location: Section "Notification center, sync status," entry, Fires field
+Evidence: "Fires: on-focus"
+Problem: Triggering only "on-focus" means that if the notification panel is already focused/open when sync pauses, the message will never appear, defeating its purpose as an alert about a state change.
+Fix: Change the trigger to fire on the sync-paused state change itself (in addition to or instead of on-focus), so the user is notified regardless of when the panel is focused.

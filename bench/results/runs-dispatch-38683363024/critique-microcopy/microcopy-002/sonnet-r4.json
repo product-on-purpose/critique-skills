@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-GRACE",
+      "evidence": "The last changes were not saved and cannot be recovered. Contact support for assistance.",
+      "fix": "Add a brief, sincere acknowledgment of the loss before the referral to support, for example naming what was lost and that it is being looked into, rather than stating the loss and the referral as a flat technical notice.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Account settings, username, message 1",
+      "severity": 3,
+      "violation": "The failure is total and unrecoverable in the moment (Suggested fix is none, no other message block on this screen offers a way forward, and the message itself reports a completed, unrecoverable loss), yet the wording is a bare technical notice with no acknowledgment of what the loss means for the reader, only a generic deflection to support."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-SEVERITY-CONTAINER",
+      "evidence": "This reset link expired an hour after it was sent, so nobody can reuse it from an old message. Request a new link and check the inbox again. (Container: toast)",
+      "fix": "Present this message in a container that stays on screen until the reader acts on it, such as the dialog the Placement field already describes, rather than a self-clearing toast.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Password reset, new password, message 2",
+      "severity": 3,
+      "violation": "The failure fully blocks the reader from continuing the password reset with this link, a reset is only possible by requesting a new one, yet the message is presented in a self-clearing toast rather than a container that stays on screen until acknowledged, so a reader who looks away misses the one message explaining why the step cannot proceed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-EXPLAIN",
+      "evidence": "This field takes a maximum of 30 characters. Shorten the entry and save again.",
+      "fix": "Add a brief reason for the limit, for example what the field is used for or stored as, so the restriction reads as explained rather than arbitrary.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Checkout form, shipping address, message 1",
+      "severity": 2,
+      "violation": "The message states a limit the product itself sets, one the reader will meet again on this or another field, with no reason attached, where stating the reason (why 30 characters) would help the reader understand and accept the restriction rather than only comply with it blindly."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-PLAIN-LANGUAGE",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "fix": "Replace the code or jargon term with a plain-language sentence a non-technical reader can act on.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "Checkout form, shipping address, message 2",
+      "severity": 2,
+      "violation": "The message text carries an internal error code, a code-style token, or an engineering-jargon term standing in for a plain-language explanation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-PREVENT",
+      "evidence": "Receipts upload as PDF or PNG only, the two formats the expense system can read. Change this file to one of those formats and upload it again, or select a different receipt.",
+      "fix": "Validate the file's format as soon as it is selected, before submission, and warn the reader then instead of waiting until they submit.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "File upload, receipts, message 2",
+      "severity": 2,
+      "violation": "The predictable mistake of attaching an unsupported file format is reported only on-submit, even though the file's format is already known the moment it is selected and could be checked then, before the reader commits the upload."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-PROXIMITY",
+      "evidence": "This message is placed at the top of a long form, requiring the reader to scroll up to see it, though the field it concerns stays visible on the page.",
+      "fix": "Move the message to sit directly beside or below the password field it concerns, rather than at the top of the form.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Password reset, new password, message 1",
+      "severity": 2,
+      "violation": "The message sits at the top of the form rather than directly beside or below the field it concerns, requiring the reader to scroll to find it even though the field itself stays on screen."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-SELECTABLE-FIX",
+      "evidence": "This receipt is over the 10 MB limit, which keeps uploads quick on slow connections. Reduce the file size and upload it again.",
+      "fix": "Offer the described alternative as a selectable action, for example a button that applies it directly, rather than describing it in prose for the reader to carry out manually.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "File upload, receipts, message 1",
+      "severity": 2,
+      "violation": "The block's Suggested fix is described rather than selectable, and it names the one available alternative, yet requires the reader to enter or apply that alternative by hand rather than offering it as something they can pick directly."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-10-15T05:43:57Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

@@ -1,0 +1,49 @@
+Location: Signup form, email field — first message block ("The connection dropped before this finished."), "Predictable mistake" field
+Evidence: Message: "The connection dropped before this finished." / Predictable mistake: yes
+Problem: A dropped network connection is a system/infrastructure failure, not something the user did wrong, so classifying it as a "predictable mistake" mischaracterizes the error.
+Fix: Change "Predictable mistake" to "no" for this entry, or add a separate category for system/transport failures distinct from user-input mistakes.
+
+Location: Signup form, email field — first message block, "Fires" field
+Evidence: "Fires: on-blur"
+Problem: A connection dropping is a transport/submission failure that would surface when data is sent over the network, not simply when the user leaves the field; "on-blur" doesn't match how this failure could be detected.
+Fix: Change "Fires" to "on-submit" (or "on async request") to reflect when a network failure would actually occur.
+
+Location: Signup form, email field — first message block, Message text
+Evidence: "The connection dropped before this finished."
+Problem: "this" has no clear antecedent, so the user can't tell what operation was interrupted (submission, verification, availability check), making the message less actionable.
+Fix: Name the specific operation, e.g., "The connection dropped before we could verify your email address. Try again."
+
+Location: Signup form, email field — both messages, "Signal" field
+Evidence: first message signal ends "...the field label, icon"; second message signal ends "...the field label, none"
+Problem: The two error states on the same field use inconsistent visual signaling (icon present vs. absent) with no stated rationale, so users can't rely on a consistent error signal for this field.
+Fix: Standardize icon usage across both error states for the email field, or document why the severity differs.
+
+Location: Checkout form, payment method — first message block ("Something went wrong..."), "Container" and "Placement" fields
+Evidence: Placement: "in a banner directly above the payment method selector, staying on screen until another method is chosen" / Container: "inline"
+Problem: The placement describes a persistent top-of-section banner, but the Container field labels it "inline," which is self-contradictory.
+Fix: Change Container to "banner" (or the correct discrete container type) to match the described placement.
+
+Location: Checkout form, payment method — first message block, Message and Placement fields
+Evidence: Message: "Something went wrong. Contact support if this continues." / Placement dismisses only "until another method is chosen"
+Problem: The only way to clear the error is to choose a different payment method, but the message never tells the user to do that — it only suggests contacting support, hiding the actual recovery path.
+Fix: State the real recovery action in the message, e.g., "This payment method couldn't be used. Choose a different payment method, or contact support if this continues."
+
+Location: Checkout form, payment method — first message block, Message field
+Evidence: "Something went wrong."
+Problem: The generic wording gives no information about what actually failed (declined card, processor timeout, etc.), so the user can't judge whether to retry, switch methods, or contact support.
+Fix: Surface the specific failure reason when known (e.g., "Your card was declined") and reserve the generic text only for truly unknown failures.
+
+Location: Checkout form, payment method — second message block ("The expiry date on this card has passed..."), "Fires" field
+Evidence: "Fires: mid-keystroke"
+Problem: Validating expiry against "has passed" while the user is still typing will flag the field as expired before a complete date has even been entered, producing false-positive errors mid-entry.
+Fix: Change "Fires" to "on-blur" (or on-submit) so validation runs only after the full date is entered.
+
+Location: Profile settings, phone number — first message block ("You keep entering the wrong value..."), Message field
+Evidence: "You keep entering the wrong value. Re-enter it to continue." with Predictable mistake: yes
+Problem: Despite being marked a predictable mistake, the message never says what's wrong with the value (format, length, etc.), and its phrasing reads as blaming the user rather than helping them fix it.
+Fix: Replace with a specific, neutral description of the expected format, e.g., "Enter a phone number with 10 digits, for example (555) 123-4567."
+
+Location: Profile settings, phone number — second message block ("This phone number is already on another account..."), "Input on resubmission" field
+Evidence: "Input on resubmission: cleared"
+Problem: Every other message in the document preserves user input on resubmission; clearing a correctly-formatted phone number here forces the user to retype it for no evident reason, since the value itself wasn't invalid.
+Fix: Set "Input on resubmission" to "preserved" so the user doesn't have to re-enter the phone number after this error.

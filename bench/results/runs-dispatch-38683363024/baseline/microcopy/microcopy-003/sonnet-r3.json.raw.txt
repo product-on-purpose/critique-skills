@@ -1,0 +1,44 @@
+Location: "Search results, no matches" heading, first message entry
+Evidence: Heading reads "Search results, no matches" but the first message is "This request timed out before it could finish."
+Problem: A timeout is not a "no matches" outcome — the search never completed, so the match count is unknown — and grouping it under this heading mislabels the scenario.
+Fix: Move the timeout message to its own section (e.g., "Search results, request failed") or broaden the heading to cover both failure types.
+
+Location: "Search results, no matches" section, first entry, Fires field
+Evidence: "Fires: on-submit"
+Problem: A timeout happens after a delay following submission, not at the moment of submission, so "on-submit" misrepresents when this message actually appears.
+Fix: Change the trigger to something like "on-timeout" or "after-response-delay".
+
+Location: "Search results, no matches" section, first entry, Suggested fix field
+Evidence: "Suggested fix: none"
+Problem: Unlike the other two entries (which offer "clear filters" and "resume now" actions), the timeout entry leaves the user with no recovery path even though retrying is the obvious remedy.
+Fix: Add a suggested fix offering a retry/"Try again" action.
+
+Location: "Search results, no matches" section, second entry, Predictable mistake field
+Evidence: "Predictable mistake: no" next to the message "No orders fall inside the selected date range."
+Problem: The message itself anticipates that overly narrow filters are the likely cause, which is a predictable user configuration mistake, contradicting the "no" classification.
+Fix: Mark this "yes," or clarify the field's definition so the "no" classification can be justified.
+
+Location: "Search results, no matches" section, second entry, Signal and Suggested fix fields
+Evidence: Signal: "...with no visual cue that this one demands action..." / Suggested fix: "selectable, offers a clear filters button beside the message"
+Problem: The deficiency named in Signal is the lack of a visual cue that this message demands action, but the suggested fix only adds a button and never addresses that styling gap.
+Fix: Extend the suggested fix to also restyle the message (distinct color/icon) so it visually signals urgency, not just add a button.
+
+Location: "Search results, no matches" section, second entry, Input on resubmission field
+Evidence: "Input on resubmission: not-applicable" alongside "Suggested fix: selectable, offers a clear filters button beside the message"
+Problem: The suggested fix directly invites the user to clear filters and resubmit, so resubmission is clearly applicable here; marking it "not-applicable" contradicts the fix proposed for the same entry.
+Fix: Describe what happens to the filters/query on resubmission (e.g., "filters reset, search resubmitted automatically") instead of "not-applicable".
+
+Location: "Search results, no matches" section, Placement field across both entries
+Evidence: Entry 1: "in place of the results list" vs Entry 2: "directly under the filter bar it concerns"
+Problem: Both entries describe an empty-results state in the same panel, but use inconsistent placement conventions with no explanation, leaving it unclear whether an empty results list still renders beneath the second message.
+Fix: Standardize placement for empty-state messages in this panel, or add a note explaining why the two cases are placed differently.
+
+Location: "Notification center, sync status" section, Placement vs Signal fields
+Evidence: Placement: "directly under the sync status row" / Signal: "bold text at the top of the notification list"
+Problem: These descriptions conflict unless the sync status row is guaranteed to always be the first row in the list, which is never stated, making the message's actual position contradictory.
+Fix: Reconcile the fields — either state that the sync status row is always first, or change Signal to "directly below the sync status row."
+
+Location: "Notification center, sync status" section, Fires field
+Evidence: "Fires: on-focus"
+Problem: Sync pausing on a metered connection is a state change driven by connectivity, not by the user focusing the notification, so firing only "on-focus" could delay the user learning sync is paused until they happen to open the notification list.
+Fix: Change the trigger to fire when the metered-connection state is detected (e.g., "on-state-change") rather than on focus.

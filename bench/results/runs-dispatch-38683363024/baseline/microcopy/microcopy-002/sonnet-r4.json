@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" paired with \"Suggested fix: none\"",
+      "fix": "Either add a suggested fix (e.g., live character counter or input truncation) or justify why predictable mistakes sometimes get no fix.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - first message block (30-character field limit)",
+      "severity": 3,
+      "violation": "The entry itself flags this as a predictable mistake, which by the document's own logic (see later entries with \"selectable\"/\"described\" fixes) should warrant a preventive or corrective suggestion, yet none is offered."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Placement: \"directly below the shipping address block\" vs. Signal: \"bold text set above the address block at a larger size than its labels, icon\"",
+      "fix": "Correct one of the two fields so Placement and Signal agree on the message's actual position.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - second message block (Error code: 502)",
+      "severity": 3,
+      "violation": "Placement states the message sits below the address block, but Signal describes the same message as positioned above it - a direct contradiction about where the message appears."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Please correct the highlighted field. Error code: 502.\" / \"Predictable mistake: yes\"",
+      "fix": "Rewrite the message to describe the actual server error and offer a retry action, and mark \"Predictable mistake\" as no.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - second message block (Error code: 502)",
+      "severity": 3,
+      "violation": "HTTP 502 is a server/gateway failure, not a user input error, so telling the user to \"correct the highlighted field\" misattributes a backend problem to their input, and marking it a \"predictable mistake\" is inconsistent with it being a system failure."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "10 MB message fires \"after-field-complete\" with suggested fix \"requires the reader to enter it by hand\"; format message fires \"on-submit\" with suggested fix \"offers a convert and retry action\"",
+      "fix": "Align the timing (validate both at selection/after-field-complete) and offer the same level of actionable remediation for both.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "File upload, receipts - comparison of the 10 MB message and the PDF/PNG format message",
+      "severity": 3,
+      "violation": "Two closely related validations on the same control (size and format) are checked at different points in the flow and given inconsistent remediation quality, so a user can learn about a size problem immediately but not discover a format problem until final submission."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Choose a password of at least 8 characters, long enough that a guessing attack cannot work through every combination.\"",
+      "fix": "Remove or correct the security claim, or require a longer minimum consistent with the stated rationale.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Password reset, new password - first message block (8-character minimum)",
+      "severity": 3,
+      "violation": "The stated rationale is factually misleading - 8 characters is not long enough to make exhaustive/guessing attacks infeasible against modern cracking capability."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Placement: \"at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page\" / Suggested fix: none",
+      "fix": "Move the message adjacent to the password field, or add a suggested fix recommending that change.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Password reset, new password - first message block (8-character minimum)",
+      "severity": 3,
+      "violation": "The message is deliberately placed far from the field it concerns, violating proximity, yet no fix is suggested despite this being a clearly correctable placement issue."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Container: \"toast\" vs. Placement: \"in a dialog centered on the password reset step, over the new password field it blocks\"",
+      "fix": "Set Container to \"modal\" (or whichever matches the actual UI) to match the Placement description.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Password reset, new password - second message block (expired link)",
+      "severity": 3,
+      "violation": "A toast is a transient, non-blocking notification, but the description given is of a centered, blocking modal dialog - the two container types are contradictory."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-focus\"",
+      "fix": "Fire the message on page load (or on-load of the reset step) instead of on-focus.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Password reset, new password - second message block (expired link)",
+      "severity": 3,
+      "violation": "Link expiration is known at page load, not dependent on the user focusing the password field; deferring the message to on-focus lets the user fill out the form before learning the link is invalid."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The last changes were not saved and cannot be recovered. Contact support for assistance.\" vs. \"Input on resubmission: preserved\"",
+      "fix": "Reconcile the two: if the input is preserved, soften the message to avoid claiming unrecoverable loss; if truly unrecoverable, mark \"Input on resubmission\" as not-applicable.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Account settings, username - message block",
+      "severity": 3,
+      "violation": "The message claims the changes are unrecoverable, but the record states the input is preserved on resubmission - these two facts directly contradict each other."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" for a save failure, compared with the password-reset expired-link entry marked \"Predictable mistake: no\"",
+      "fix": "Apply a consistent rule for \"Predictable mistake\" - system-caused failures (save errors, expired links, 502s) should be classified the same way, or document why they differ.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Account settings, username - message block",
+      "severity": 3,
+      "violation": "Both errors stem from system/server-side conditions rather than a user input mistake, but the document classifies one as \"predictable mistake: yes\" and the structurally similar one as \"no,\" applying the classification inconsistently."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T05:45:34Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

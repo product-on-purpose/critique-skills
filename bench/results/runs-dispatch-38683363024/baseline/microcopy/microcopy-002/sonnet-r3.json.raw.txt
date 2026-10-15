@@ -1,0 +1,69 @@
+Location: Checkout form, shipping address — first message (30-character limit)
+Evidence: "Predictable mistake: yes" / "Fires: after-field-complete" / "Suggested fix: none"
+Problem: A fixed character maximum is entirely predictable and preventable, yet the error is only surfaced after the field is complete instead of being prevented at entry, and no fix is offered despite the mistake being avoidable.
+Fix: Constrain input to 30 characters as the user types (hard stop or live counter) so the error cannot occur, or offer an actual fix (e.g., auto-truncate) instead of "none."
+
+Location: Checkout form, shipping address — second message (Error code: 502)
+Evidence: "Placement: directly below the shipping address block" vs "Signal: bold text set above the address block at a larger size than its labels"
+Problem: Placement and Signal describe contradictory positions for the same message — one says the text sits below the address block, the other says above it.
+Fix: Decide on one position (above or below the block) and make Placement and Signal agree.
+
+Location: Checkout form, shipping address — second message (Error code: 502)
+Evidence: "Please correct the highlighted field. Error code: 502."
+Problem: The message surfaces a raw technical code (502, an HTTP Bad Gateway status) with no plain-language explanation and doesn't even name which field is "highlighted," leaving the user without an actionable next step.
+Fix: Name the specific field and state the real cause/action in plain language; drop the internal error code or move it to secondary/support-facing text only.
+
+Location: Checkout form, shipping address — second message (Error code: 502)
+Evidence: "Predictable mistake: yes" next to "Error code: 502"
+Problem: A 502 is a server/gateway failure, not something the user did or could have anticipated, so labeling it a "predictable mistake" misattributes a backend error to user behavior.
+Fix: Reclassify as predictable mistake: no and route it through system-error handling (e.g., retry guidance) rather than field-correction messaging.
+
+Location: Checkout form, shipping address — second message (Error code: 502)
+Evidence: "Fires: on-blur" paired with "Error code: 502"
+Problem: on-blur is a per-field, client-side timing event, but a 502 is a server/network failure that would only be known after a submission attempt — the stated trigger can't actually produce this error.
+Fix: Change the trigger to on-submit (or when the failed server call returns), not on-blur.
+
+Location: File upload, receipts — first message (10 MB limit)
+Evidence: "Fires: after-field-complete"
+Problem: File size is known the instant a file is selected, so deferring the error to an "after-field-complete" event withholds feedback the system could give immediately.
+Fix: Validate and display the size error as soon as the file is selected, not on a later field-completion event.
+
+Location: File upload, receipts — first message (10 MB limit)
+Evidence: "Suggested fix: described, names the one available alternative but requires the reader to enter it by hand"
+Problem: The fix is only described in prose, forcing the user to perform the correction manually, which is inconsistent with the sibling format-error message below that offers a one-click selectable fix for a comparably predictable mistake.
+Fix: Offer a selectable action (e.g., "choose a different file") instead of a text-only description.
+
+Location: File upload, receipts — second message (PDF/PNG only)
+Evidence: "Fires: on-submit"
+Problem: File format, like file size, is knowable immediately upon selection, so waiting until submit needlessly delays feedback until after the user may have completed the rest of the form.
+Fix: Validate the file format on selection and show the message at that point rather than on-submit.
+
+Location: Password reset, new password — first message (8-character minimum)
+Evidence: "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page"
+Problem: Placing the error far from the field it concerns in a long form forces the user to scroll and split attention between the message and the input, violating the principle that error text should sit adjacent to the control it describes.
+Fix: Move the message inline, directly below the new password field, instead of at the top of the form.
+
+Location: Password reset, new password — second message (expired link)
+Evidence: "Container: toast" vs "Placement: in a dialog centered on the password reset step, over the new password field it blocks"
+Problem: A toast is a lightweight, non-blocking, transient notification, but the described placement is a centered, blocking modal dialog — the container type and the described behavior contradict each other.
+Fix: Relabel the container as a dialog/modal if it truly blocks and centers over the field, or remove the blocking/centered description if it is meant to be a toast.
+
+Location: Password reset, new password — second message (expired link)
+Evidence: "Fires: on-focus" combined with "over the new password field it blocks"
+Problem: If the dialog already blocks/covers the password field, the user cannot focus that field to trigger the message, creating a circular condition where the trigger can never fire.
+Fix: Trigger the message when the expired link is detected (e.g., on load of the reset step), not on focusing a field the dialog itself obstructs.
+
+Location: Account settings, username — message block
+Evidence: "The last changes were not saved and cannot be recovered." vs "Input on resubmission: preserved"
+Problem: The message asserts the lost changes are permanently unrecoverable, while the spec simultaneously states the input is preserved for resubmission — these two claims contradict each other about whether the data still exists.
+Fix: Reconcile the claims: if the entry is actually preserved in the field, rewrite the message to say so instead of claiming irreversible loss.
+
+Location: Account settings, username — message block
+Evidence: "Predictable mistake: yes" for "The last changes were not saved and cannot be recovered."
+Problem: An unexplained save failure is a system/backend failure, not a mistake the user could predict or cause, so classifying it as a "predictable mistake" is inconsistent with how that label is used elsewhere in the document (e.g., character limits, file formats).
+Fix: Reclassify as predictable mistake: no and handle it as a system error rather than a user-correction case.
+
+Location: Account settings, username — message block
+Evidence: "Contact support for assistance." with "Suggested fix: none"
+Problem: For a message asserting permanent data loss, giving no selectable action and only a generic instruction to contact support leaves the user with no immediate recourse and no explanation of why the save failed.
+Fix: Provide a concrete next step (e.g., a retry action, a direct support link, or the actual failure reason) instead of "none."

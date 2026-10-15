@@ -1,0 +1,54 @@
+Location: Checkout form, shipping address — second error entry (Error code 502)
+Evidence: "Placement: directly below the shipping address block" vs. "Signal: bold text set above the address block at a larger size than its labels, icon"
+Problem: The entry contradicts itself about where the message sits relative to the address block — Placement says below, Signal says above.
+Fix: Make Placement and Signal agree on a single position (e.g., both "directly below the shipping address block").
+
+Location: Checkout form, shipping address — second error entry (Error code 502)
+Evidence: "Please correct the highlighted field. Error code: 502."
+Problem: The message is vague about which of several fields in the block is wrong, and exposes a raw backend-style error code (502 is normally an HTTP "Bad Gateway" status) without explanation; despite being marked a predictable mistake, no suggested fix is offered.
+Fix: Name the specific invalid field and state the actual validation problem in plain language; drop or translate the error code, and add a concrete suggested fix.
+
+Location: File upload, receipts — first error entry (10 MB limit)
+Evidence: Message: "Reduce the file size and upload it again." / Suggested fix: "described, names the one available alternative but requires the reader to enter it by hand"
+Problem: The Suggested fix field claims the message names an available alternative, but the message text never names one — it only says to reduce the file size.
+Fix: Either add the named alternative to the message text (e.g., "compress the file or upload a smaller scan") or correct the Suggested fix field to match what the message actually says.
+
+Location: File upload, receipts — comparing the two error entries
+Evidence: Error 1 Suggested fix: "requires the reader to enter it by hand" vs. Error 2 Suggested fix: "selectable, offers a convert and retry action in place of the message"
+Problem: Two similarly predictable, similarly fixable upload errors are handled inconsistently — one forces manual rework, the other offers an automated one-click remedy — with no stated reason for the difference.
+Fix: Align the two errors' remediation affordances, or document why the size error can't offer an equivalent one-click action (e.g., an in-browser compress-and-retry control).
+
+Location: Password reset, new password — first error entry (8-character minimum)
+Evidence: "long enough that a guessing attack cannot work through every combination"
+Problem: This security justification is factually inaccurate — an 8-character minimum does not make exhaustive guessing infeasible; it's misleading to present it as such.
+Fix: Replace with an accurate rationale (e.g., "meets our minimum security requirement") or drop the justification clause entirely.
+
+Location: Password reset, new password — first error entry (8-character minimum)
+Evidence: "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page"
+Problem: Forcing a scroll to the top of the form to see an error about a field that is already visible violates the principle that an error should appear next to the field it concerns.
+Fix: Move the message inline next to the new-password field instead of to the top of the form.
+
+Location: Password reset, new password — second error entry (expired link)
+Evidence: "Container: toast" vs. "Placement: in a dialog centered on the password reset step, over the new password field it blocks"
+Problem: The entry classifies the same message as both a toast (a small, transient, non-blocking notification) and a centered, blocking modal dialog, which are mutually exclusive UI patterns.
+Fix: Pick one container type and make the Placement description match it (e.g., change Container to "modal" if it truly blocks the field).
+
+Location: Password reset, new password — second error entry (expired link)
+Evidence: "Fires: on-focus" combined with "over the new password field it blocks"
+Problem: If the dialog already covers/blocks the new password field, the user cannot focus that field to trigger the message, making the stated firing condition unreachable.
+Fix: Change Fires to something that doesn't depend on interacting with an already-obscured field (e.g., "on-step-load").
+
+Location: Account settings, username — error entry (unsaved changes)
+Evidence: "The last changes were not saved and cannot be recovered." / "Predictable mistake: yes"
+Problem: An irrecoverable save failure is a system/backend failure, not a predictable user input mistake, yet it is labeled the same way as genuine input errors like the 30-character overflow; contrast with the expired-link case, which correctly marks "Predictable mistake: no" for a non-user-caused failure.
+Fix: Change "Predictable mistake" to "no" for this entry, consistent with how the other system-caused failure (expired link) is classified.
+
+Location: Account settings, username — error entry (unsaved changes)
+Evidence: "cannot be recovered" vs. "Input on resubmission: preserved"
+Problem: The message asserts the changes are permanently lost, while the metadata claims the input is preserved on resubmission — these two claims are in tension and will confuse whoever implements this behavior.
+Fix: Clarify whether "preserved" refers to the current on-screen field value (not the lost saved data) and state that distinction explicitly, or correct whichever claim is wrong.
+
+Location: Account settings, username — error entry (unsaved changes)
+Evidence: "Container: inline," "Signal: bold text set larger than the field label, icon," "Fires: on-blur," "Suggested fix: none"
+Problem: A permanent, irrecoverable data-loss event is presented with the same low-severity inline treatment used for minor field-validation errors, triggered by a routine field-blur event, and offers no in-product remedy beyond contacting support.
+Fix: Escalate the signal (e.g., a blocking dialog or banner) befitting irreversible data loss, decouple it from the on-blur field-validation trigger, and provide an actionable next step beyond "contact support" if one exists.

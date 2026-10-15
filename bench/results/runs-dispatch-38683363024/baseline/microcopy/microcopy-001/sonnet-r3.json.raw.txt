@@ -1,0 +1,49 @@
+Location: Signup form, email field — first message block, "Signal" line
+Evidence: "one step bolder and larger than the field label, icon" (signup) vs. "bold text set larger than the field label, icon" (checkout entry 2, both profile entries)
+Problem: The visual-emphasis spec for the same conceptual signal (error text weight relative to the field label) is worded differently between the signup section and every other section, and "one step bolder" reads as a smaller increment than "bold text," so it's unclear whether signup errors are meant to be less emphasized or this is just inconsistent phrasing for the same design.
+Fix: Standardize on one phrase for this signal across all screens, or if signup is intentionally less emphasized, state that explicitly (e.g., "one step bolder than the label, versus full bold elsewhere").
+
+Location: Signup form, email field — first message block, "Fires" line
+Evidence: "Message: The connection dropped before this finished." paired with "Fires: on-blur"
+Problem: A dropped-connection error reports a failed network/async operation, but "on-blur" is a field-level trigger normally reserved for validating what the user typed; nothing in the spec indicates an on-blur network call exists to fail, so the trigger doesn't match the failure described.
+Fix: Either specify the on-blur async check that this failure belongs to, or change the trigger to match when the operation actually runs (e.g., on-submit, matching the equivalent "Something went wrong" entry in Checkout).
+
+Location: Signup form, email field — first message block, "Predictable mistake" line
+Evidence: "Predictable mistake: yes" for the message "The connection dropped before this finished."
+Problem: A dropped connection is a system/network failure, not a user mistake, so marking it "yes" misclassifies it; the directly analogous generic-failure message in Checkout ("Something went wrong...") is correctly marked "no."
+Fix: Change this entry's "Predictable mistake" value to "no" to match the equivalent system-error entry in Checkout.
+
+Location: Signup form, email field — first message block, "Suggested fix" line
+Evidence: "Suggested fix: selectable, offers the one available next step as a direct action"
+Problem: Unlike every other populated field in the document, this description names no concrete action (e.g., "Retry") — "the one available next step" is left undefined, making the spec unimplementable as written.
+Fix: Name the actual action being offered, e.g., "selectable; offers a Retry button as a direct action."
+
+Location: Checkout form, payment method — first message block, "Placement" line
+Evidence: "in a banner directly above the payment method selector, staying on screen until another method is chosen"
+Problem: The message "Something went wrong. Contact support if this continues." never states the payment method itself is the cause, yet the banner can only be dismissed by switching payment methods — trapping a user whose real method was fine and the failure was transient (e.g., a timeout) with no way to clear the banner except picking a different, possibly unwanted, method.
+Fix: Either make the dismissal condition generic (e.g., clears on next submit attempt) or change the message to explain why switching methods is the resolution.
+
+Location: Checkout form, payment method — first message block, "Container" line
+Evidence: "Placement: in a banner directly ..." immediately followed by "Container: inline"
+Problem: "Banner" and "inline" are typically distinct container categories (a banner is a persistent, page-level element; inline messages sit embedded next to a field) — the placement text and the container classification contradict each other.
+Fix: Change "Container" to "banner" (or whatever category this design system uses for persistent top-of-section alerts), or reword the placement to avoid the word "banner" if it really is an inline element.
+
+Location: Checkout form, payment method — second message block, "Fires" line
+Evidence: "Message: The expiry date on this card has passed..." paired with "Fires: mid-keystroke"
+Problem: Whether an expiry date "has passed" can't be determined until the user has finished typing both month and year, so validating mid-keystroke will produce false/premature error flashes on partial input (e.g., after typing just the month).
+Fix: Change the trigger to on-blur (or on complete input of both month and year fields), matching the pattern used for the analogous email-format validation.
+
+Location: Profile settings, phone number — first message block, "Message" line
+Evidence: "You keep entering the wrong value. Re-enter it to continue."
+Problem: Unlike every other validation message in the document (e.g., the email-format and expiry-date messages), this one never states what is actually wrong with the value (format, length, missing country code, etc.), leaving the user with no way to correct it.
+Fix: Name the specific rule violated, e.g., "Enter a phone number with a country code, for example +1 555 123 4567."
+
+Location: Profile settings, phone number — first message block, "Fires" line
+Evidence: Message says "You keep entering the wrong value" while "Fires: on-blur" shows no attempt-count or repetition condition
+Problem: The message asserts a pattern of repeated incorrect entries, but the only documented trigger is a single on-blur event, so the message could appear on the very first attempt, making its claim of repetition false.
+Fix: Either add an explicit repetition threshold to "Fires" (e.g., "on-blur, after 2+ failed attempts") or reword the message to not assume prior attempts.
+
+Location: Profile settings, phone number — second message block, "Input on resubmission" line
+Evidence: "Input on resubmission: cleared" — the only "cleared" value among all six message blocks in the document; every other entry (including the other "Predictable mistake: no" entry in Checkout) uses "preserved"
+Problem: Clearing a phone number the user may need to reference (e.g., to tell support which number to move, or to check for a typo of their own) forces unnecessary re-entry and breaks the preserved-input convention used everywhere else in the document, with no stated rationale.
+Fix: Change this to "preserved" to match the rest of the document, unless there's a specific reason (e.g., a security concern) that should be stated explicitly.

@@ -1,0 +1,39 @@
+Location: Two-factor setup, verification code — first message block ("Verification codes are 6 digits long…")
+Evidence: "Check the message again and enter all six."
+Problem: "The message" has no defined referent anywhere in this block or the screen context — it's unclear whether it means an SMS, an email, or an in-app notification, so a reader doesn't know where to look to find the correct code.
+Fix: Name the actual delivery channel, e.g. "Check the text message we sent and enter all six digits."
+
+Location: Two-factor setup, verification code — second message block ("This verification code expired 10 minutes…")
+Evidence: Suggested fix: selectable, offers a resend code button in place of the message
+Problem: "In place of the message" implies the resend button replaces the error text entirely, which contradicts the block's own Message field (the text that explains why the code failed) and would leave the reader with no stated reason for the failure if the fix is implemented as described.
+Fix: Clarify that the button is offered alongside the message, not instead of it, e.g. "offers a resend code button in addition to the message."
+
+Location: Two-factor setup, verification code — second message block
+Evidence: "which stops an intercepted code from being reused later. Request a new code and enter it here."
+Problem: The security-rationale clause doesn't change what the reader does differently next time (the code will expire in 10 minutes regardless of their actions), yet it's placed before the actual instruction, burying the one actionable step under an explanation that doesn't serve recurrence-avoidance.
+Fix: Drop the replay-attack justification or move it after the instruction: "Request a new code and enter it here. Codes expire after 10 minutes for security."
+
+Location: Billing, promo code — first message block ("This promo code ended on 30 June…")
+Evidence: "This promo code ended on 30 June."
+Problem: The date omits the year, so a reader can't tell whether the code expired this year or a prior year, which matters since promo codes circulate in old emails and marketing pages for a long time.
+Fix: Include the year, e.g. "This promo code ended on 30 June 2026."
+
+Location: Billing, promo code — first message block
+Evidence: Predictable mistake: no (compare to the fourth message block's Predictable mistake: yes)
+Problem: Entering an expired promo code (e.g., from an old email or outdated page) is at least as common and foreseeable a mistake as applying an annual-only code to a monthly plan, so marking this one "no" while the plan-mismatch case is marked "yes" is an inconsistent classification.
+Fix: Reclassify this block's Predictable mistake as "yes," or document the reasoning for why expired-code entry is considered unpredictable.
+
+Location: Billing, promo code — first message block
+Evidence: "Enter a current code, or continue without one." / Suggested fix: none
+Problem: "Continue without one" is a single, unambiguous action (clear the promo code and proceed), the same kind of unambiguous recovery the verification-code screen turns into a one-click "resend code" button, yet here it's left as prose with no selectable affordance.
+Fix: Offer a "Continue without a promo code" button alongside the message, consistent with the resend-button pattern used elsewhere.
+
+Location: Billing, promo code — second message block ("This promo code applies to annual plans…")
+Evidence: "Change the plan to annual, or remove the code." / Suggested fix: none
+Problem: "Remove the code" is a single, unambiguous action, yet it's left as an instruction to re-type/clear the field manually rather than offered as a one-click "Remove code" action, inconsistent with the resend-button precedent set on the verification-code screen.
+Fix: Add a "Remove code" button next to the message so the reader can apply the unambiguous fix directly.
+
+Location: Billing, promo code — second message block
+Evidence: Fires: on-blur (on the promo code field)
+Problem: If the mismatch is created by changing the plan selector after the promo code field has already been blurred (code entered first while annual was selected, then switched to monthly), nothing refires this check, so the mismatch can go undetected until final submission.
+Fix: Also trigger this check when the plan selector changes, not only on blurring the promo code field.

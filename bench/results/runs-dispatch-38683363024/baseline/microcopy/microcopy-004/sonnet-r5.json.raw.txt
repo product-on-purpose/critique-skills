@@ -1,0 +1,59 @@
+Location: Two-factor setup, verification code — first message block ("5 digits" message)
+Evidence: "Check the message again and enter all six."
+Problem: "The message" is ambiguous — it could mean the SMS/email containing the code or this error message itself, so the instruction doesn't clearly tell the user where to look.
+Fix: Name the source explicitly, e.g. "Check the text message you received and enter all six digits."
+
+Location: Two-factor setup, verification code — first message block
+Evidence: "enter all six"
+Problem: "all six" has no noun, leaving it unclear whether the user should enter six digits, characters, or something else.
+Fix: Change to "enter all six digits."
+
+Location: Two-factor setup, verification code — first message block (fields)
+Evidence: Predictable mistake: yes / Suggested fix: none
+Problem: Calling a mistake "predictable" implies it can be prevented, yet no preventive fix is proposed (e.g. a live digit counter or disabling submit until six digits are entered), so the review only reacts to the error instead of preventing it.
+Fix: Propose a preventive fix, such as disabling submission until 6 digits are entered or showing a live digit count.
+
+Location: Two-factor setup, verification code — first message block (fields)
+Evidence: Fires: on-blur
+Problem: Firing the length check on blur risks a false positive during autofill, since many OTP autofill flows populate digits one at a time and can trigger blur before all six have landed, showing "5 digits" while entry is still in progress.
+Fix: Delay the on-blur check with a short debounce so late-arriving autofill digits are included before validating.
+
+Location: Two-factor setup, verification code — second message block (expired code)
+Evidence: "which stops an intercepted code from being reused later"
+Problem: This clause explains security rationale instead of telling the user what to do, adds length, and implies the user's specific code may have been intercepted, which can alarm them unnecessarily.
+Fix: Cut the rationale and keep the actionable sentence, e.g. "This verification code has expired. Request a new code and enter it here."
+
+Location: Two-factor setup, verification code — second message block, Suggested fix field
+Evidence: "selectable, offers a resend code button in place of the message"
+Problem: The text is not a grammatical sentence and conflates two unrelated ideas ("selectable" and a resend button) with no clear subject, so it can't be acted on as written.
+Fix: Rewrite as distinct clauses, e.g. "Replace the message with a 'Resend code' button," and either explain what "selectable" refers to or remove it if it's a leftover from another row.
+
+Location: Two-factor setup, verification code — second message block, Input on resubmission field
+Evidence: Input on resubmission: preserved
+Problem: Preserving the entered code makes no sense once it's known to be expired — the value is guaranteed invalid, and leaving it risks the user resubmitting the same expired code after requesting a new one.
+Fix: Clear the field (at least once a new code is requested) instead of preserving the expired value.
+
+Location: Billing, promo code — first message block (code ended)
+Evidence: "This promo code ended on 30 June."
+Problem: The date omits the year, making it ambiguous which 30 June is meant, especially for codes that could span a year boundary.
+Fix: Include the year, e.g. "This promo code ended on 30 June 2026."
+
+Location: Billing, promo code — first message block (fields)
+Evidence: Predictable mistake: no
+Problem: Expired promo codes (e.g. from an old marketing email) are a common, foreseeable occurrence, unlike the precise 10-minute 2FA expiry documented elsewhere, so classifying this as unpredictable is inconsistent with the reasoning used for similar cases.
+Fix: Reclassify as a predictable mistake, or add a note explaining why expired promo codes are treated as unpredictable here.
+
+Location: Billing, promo code — first message block vs. Two-factor setup — second message block
+Evidence: Both rows are marked "Predictable mistake: no," but one is "Fires: on-submit" and the other "Fires: on-blur."
+Problem: The two "unpredictable mistake" cases use different trigger timing with no stated reason, while the two "predictable mistake" cases are consistently on-blur, suggesting the Fires rule isn't actually tied to predictability or one of the two values is wrong.
+Fix: Apply one consistent rule for Fires timing based on predictability, or document why the expired-code and expired-promo-code cases differ.
+
+Location: Billing, promo code — second message block (fields)
+Evidence: Predictable mistake: yes / Suggested fix: none
+Problem: As with the 2FA length-mismatch row, marking this predictable implies it's preventable, yet no preventive fix is proposed (e.g. filtering out annual-only codes when a monthly plan is selected).
+Fix: Propose a preventive fix, such as disabling incompatible promo codes for the selected plan or surfacing the plan requirement before the user applies the code.
+
+Location: Signal field, all four message blocks
+Evidence: Signal: bold text set larger than the field label, icon (identical in every row)
+Problem: Every message — from a minor, easily-fixed digit miscount to an expired security code — gets the same visually loud treatment, so severity isn't communicated and repeated low-stakes errors risk desensitizing users to the strongest signal.
+Fix: Scale the signal to severity, e.g. a lighter signal (no icon) for simple format errors like the digit-count mismatch, reserving bold text plus icon for expired-code or security-relevant errors.

@@ -1,0 +1,160 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Check the message again and enter all six.\"",
+      "fix": "Name the source explicitly, e.g. \"Check the text message you received and enter all six digits.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - first message block (\"5 digits\" message)",
+      "severity": 3,
+      "violation": "\"The message\" is ambiguous - it could mean the SMS/email containing the code or this error message itself, so the instruction doesn't clearly tell the user where to look."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"enter all six\"",
+      "fix": "Change to \"enter all six digits.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - first message block",
+      "severity": 3,
+      "violation": "\"all six\" has no noun, leaving it unclear whether the user should enter six digits, characters, or something else."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Predictable mistake: yes / Suggested fix: none",
+      "fix": "Propose a preventive fix, such as disabling submission until 6 digits are entered or showing a live digit count.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - first message block (fields)",
+      "severity": 3,
+      "violation": "Calling a mistake \"predictable\" implies it can be prevented, yet no preventive fix is proposed (e.g. a live digit counter or disabling submit until six digits are entered), so the review only reacts to the error instead of preventing it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Fires: on-blur",
+      "fix": "Delay the on-blur check with a short debounce so late-arriving autofill digits are included before validating.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - first message block (fields)",
+      "severity": 3,
+      "violation": "Firing the length check on blur risks a false positive during autofill, since many OTP autofill flows populate digits one at a time and can trigger blur before all six have landed, showing \"5 digits\" while entry is still in progress."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"which stops an intercepted code from being reused later\"",
+      "fix": "Cut the rationale and keep the actionable sentence, e.g. \"This verification code has expired. Request a new code and enter it here.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - second message block (expired code)",
+      "severity": 3,
+      "violation": "This clause explains security rationale instead of telling the user what to do, adds length, and implies the user's specific code may have been intercepted, which can alarm them unnecessarily."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"selectable, offers a resend code button in place of the message\"",
+      "fix": "Rewrite as distinct clauses, e.g. \"Replace the message with a 'Resend code' button,\" and either explain what \"selectable\" refers to or remove it if it's a leftover from another row.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - second message block, Suggested fix field",
+      "severity": 3,
+      "violation": "The text is not a grammatical sentence and conflates two unrelated ideas (\"selectable\" and a resend button) with no clear subject, so it can't be acted on as written."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Input on resubmission: preserved",
+      "fix": "Clear the field (at least once a new code is requested) instead of preserving the expired value.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - second message block, Input on resubmission field",
+      "severity": 3,
+      "violation": "Preserving the entered code makes no sense once it's known to be expired - the value is guaranteed invalid, and leaving it risks the user resubmitting the same expired code after requesting a new one."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This promo code ended on 30 June.\"",
+      "fix": "Include the year, e.g. \"This promo code ended on 30 June 2026.\"",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Billing, promo code - first message block (code ended)",
+      "severity": 3,
+      "violation": "The date omits the year, making it ambiguous which 30 June is meant, especially for codes that could span a year boundary."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Predictable mistake: no",
+      "fix": "Reclassify as a predictable mistake, or add a note explaining why expired promo codes are treated as unpredictable here.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Billing, promo code - first message block (fields)",
+      "severity": 3,
+      "violation": "Expired promo codes (e.g. from an old marketing email) are a common, foreseeable occurrence, unlike the precise 10-minute 2FA expiry documented elsewhere, so classifying this as unpredictable is inconsistent with the reasoning used for similar cases."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Both rows are marked \"Predictable mistake: no,\" but one is \"Fires: on-submit\" and the other \"Fires: on-blur.\"",
+      "fix": "Apply one consistent rule for Fires timing based on predictability, or document why the expired-code and expired-promo-code cases differ.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Billing, promo code - first message block vs. Two-factor setup - second message block",
+      "severity": 3,
+      "violation": "The two \"unpredictable mistake\" cases use different trigger timing with no stated reason, while the two \"predictable mistake\" cases are consistently on-blur, suggesting the Fires rule isn't actually tied to predictability or one of the two values is wrong."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Predictable mistake: yes / Suggested fix: none",
+      "fix": "Propose a preventive fix, such as disabling incompatible promo codes for the selected plan or surfacing the plan requirement before the user applies the code.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Billing, promo code - second message block (fields)",
+      "severity": 3,
+      "violation": "As with the 2FA length-mismatch row, marking this predictable implies it's preventable, yet no preventive fix is proposed (e.g. filtering out annual-only codes when a monthly plan is selected)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Signal: bold text set larger than the field label, icon (identical in every row)",
+      "fix": "Scale the signal to severity, e.g. a lighter signal (no icon) for simple format errors like the digit-count mismatch, reserving bold text plus icon for expired-code or security-relevant errors.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "Signal field, all four message blocks",
+      "severity": 3,
+      "violation": "Every message - from a minor, easily-fixed digit miscount to an expired security code - gets the same visually loud treatment, so severity isn't communicated and repeated low-stakes errors risk desensitizing users to the strongest signal."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-004.md",
+    "artifact_sha256": "c8f58456a4deb36595b0ac00fe364b68e80445e939d7293d2db8d8f1a42ac91b",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T06:35:02Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 12,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

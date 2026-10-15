@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Heading \"Search results, no matches\" paired with Message: \"This request timed out before it could finish.\"",
+      "fix": "Give this message its own heading (e.g., \"Search results, request failed\") separate from the no-matches scenario below it.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Search results, no matches - first message block",
+      "severity": 3,
+      "violation": "The message describes a failed/timed-out request, not an empty-results state, so it is filed under a heading that doesn't describe what it is."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"bold heading text where the first result would sit, text-label\"",
+      "fix": "Add an error-specific visual cue (icon or distinct color) so the message can't be mistaken for actual result content.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Search results, no matches - first message block, Signal field",
+      "severity": 3,
+      "violation": "Styling a timeout error as heading text in the exact slot where a real result would appear risks it being read as content (e.g., a category label) rather than a system error, since nothing distinguishes it as an error."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: not-applicable\"",
+      "fix": "Specify that query/filter inputs are retained for retry rather than marking this not-applicable.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Search results, no matches - first message block, \"Input on resubmission\" field",
+      "severity": 3,
+      "violation": "A timeout is precisely the case where the user would want to retry the same search, so marking input handling on resubmission as not-applicable contradicts the obvious recovery path for this error."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: none\"",
+      "fix": "Add a retry action (e.g., a \"Try again\" button) as the suggested fix.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Search results, no matches - first message block, \"Suggested fix\" field",
+      "severity": 3,
+      "violation": "A failed request is left with no remediation, while the less severe no-matches message right below it gets an actionable fix (clear filters button); the more disruptive error is treated as lower priority."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action\"",
+      "fix": "Update the suggested fix to also change the banner's visual treatment (icon/color) so it's distinguishable from purely informational banners, not just append a button.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Search results, no matches - second message block (\"No orders fall inside the selected date range...\"), Signal field",
+      "severity": 3,
+      "violation": "The Signal field itself identifies a styling defect (no visual cue that action is needed), but the Suggested fix only adds a button and does not address the styling gap called out."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: no\"",
+      "fix": "Change the value to \"yes\" and apply whatever preventive handling predictable mistakes receive elsewhere (e.g., warn before submission).",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Search results, no matches - second message block, \"Predictable mistake\" field",
+      "severity": 3,
+      "violation": "Choosing a date range or filter combination that excludes all orders is a common, foreseeable user action, so labeling it \"no\" misclassifies the scenario."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Sync is paused while this device is on a metered connection, so syncing does not spend a data allowance. Select resume to sync now.\"",
+      "fix": "Reword to make the tradeoff explicit (e.g., \"Select resume to sync now using mobile data\") or offer a wait-for-Wi-Fi alternative instead of only \"resume now.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Notification center, sync status - Message field",
+      "severity": 3,
+      "violation": "The message justifies pausing sync as a way to avoid spending the data allowance, then immediately invites the user to resume syncing now, which would spend that same allowance - a self-contradicting instruction."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Placement: \"directly under the sync status row\"; Signal: \"bold text at the top of the notification list, icon\"",
+      "fix": "Reconcile Placement and Signal to describe one consistent location.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Notification center, sync status - Placement vs Signal fields",
+      "severity": 3,
+      "violation": "The two fields place the same message in two different locations - under the sync status row versus at the top of the list."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-focus\"",
+      "fix": "Change the trigger to fire on state change (e.g., when sync transitions to paused) instead of on-focus.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Notification center, sync status - Fires field",
+      "severity": 3,
+      "violation": "Firing on every focus of the notification list (rather than when the paused state actually begins) will cause this status message to reappear repeatedly for an ongoing condition, creating redundant interruptions."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message: \"Select resume to sync now.\"; Suggested fix: \"selectable, offers a resume now action inside the notification\"",
+      "fix": "Either hold off on the \"Select resume\" wording until the interactive action is implemented, or implement the selectable resume action to match what the copy already states.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Notification center, sync status - Message field vs Suggested fix field",
+      "severity": 3,
+      "violation": "The message copy already instructs the user to \"select resume,\" implying an interactive control exists, but the Suggested fix reveals that making it selectable with a resume action is still a proposed change - meaning the copy promises functionality the current design doesn't have."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T06:12:54Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: directly below the shipping address block\" vs. \"Signal: bold text set above the address block at a larger size than its labels, icon\"",
+      "fix": "Make Placement and Signal agree on a single position (e.g., both \"directly below the shipping address block\").",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - second error entry (Error code 502)",
+      "severity": 3,
+      "violation": "The entry contradicts itself about where the message sits relative to the address block - Placement says below, Signal says above."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Please correct the highlighted field. Error code: 502.\"",
+      "fix": "Name the specific invalid field and state the actual validation problem in plain language; drop or translate the error code, and add a concrete suggested fix.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - second error entry (Error code 502)",
+      "severity": 3,
+      "violation": "The message is vague about which of several fields in the block is wrong, and exposes a raw backend-style error code (502 is normally an HTTP \"Bad Gateway\" status) without explanation; despite being marked a predictable mistake, no suggested fix is offered."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message: \"Reduce the file size and upload it again.\" / Suggested fix: \"described, names the one available alternative but requires the reader to enter it by hand\"",
+      "fix": "Either add the named alternative to the message text (e.g., \"compress the file or upload a smaller scan\") or correct the Suggested fix field to match what the message actually says.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "File upload, receipts - first error entry (10 MB limit)",
+      "severity": 3,
+      "violation": "The Suggested fix field claims the message names an available alternative, but the message text never names one - it only says to reduce the file size."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Error 1 Suggested fix: \"requires the reader to enter it by hand\" vs. Error 2 Suggested fix: \"selectable, offers a convert and retry action in place of the message\"",
+      "fix": "Align the two errors' remediation affordances, or document why the size error can't offer an equivalent one-click action (e.g., an in-browser compress-and-retry control).",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "File upload, receipts - comparing the two error entries",
+      "severity": 3,
+      "violation": "Two similarly predictable, similarly fixable upload errors are handled inconsistently - one forces manual rework, the other offers an automated one-click remedy - with no stated reason for the difference."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"long enough that a guessing attack cannot work through every combination\"",
+      "fix": "Replace with an accurate rationale (e.g., \"meets our minimum security requirement\") or drop the justification clause entirely.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Password reset, new password - first error entry (8-character minimum)",
+      "severity": 3,
+      "violation": "This security justification is factually inaccurate - an 8-character minimum does not make exhaustive guessing infeasible; it's misleading to present it as such."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page\"",
+      "fix": "Move the message inline next to the new-password field instead of to the top of the form.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Password reset, new password - first error entry (8-character minimum)",
+      "severity": 3,
+      "violation": "Forcing a scroll to the top of the form to see an error about a field that is already visible violates the principle that an error should appear next to the field it concerns."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Container: toast\" vs. \"Placement: in a dialog centered on the password reset step, over the new password field it blocks\"",
+      "fix": "Pick one container type and make the Placement description match it (e.g., change Container to \"modal\" if it truly blocks the field).",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Password reset, new password - second error entry (expired link)",
+      "severity": 3,
+      "violation": "The entry classifies the same message as both a toast (a small, transient, non-blocking notification) and a centered, blocking modal dialog, which are mutually exclusive UI patterns."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-focus\" combined with \"over the new password field it blocks\"",
+      "fix": "Change Fires to something that doesn't depend on interacting with an already-obscured field (e.g., \"on-step-load\").",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Password reset, new password - second error entry (expired link)",
+      "severity": 3,
+      "violation": "If the dialog already covers/blocks the new password field, the user cannot focus that field to trigger the message, making the stated firing condition unreachable."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The last changes were not saved and cannot be recovered.\" / \"Predictable mistake: yes\"",
+      "fix": "Change \"Predictable mistake\" to \"no\" for this entry, consistent with how the other system-caused failure (expired link) is classified.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Account settings, username - error entry (unsaved changes)",
+      "severity": 3,
+      "violation": "An irrecoverable save failure is a system/backend failure, not a predictable user input mistake, yet it is labeled the same way as genuine input errors like the 30-character overflow; contrast with the expired-link case, which correctly marks \"Predictable mistake: no\" for a non-user-caused failure."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"cannot be recovered\" vs. \"Input on resubmission: preserved\"",
+      "fix": "Clarify whether \"preserved\" refers to the current on-screen field value (not the lost saved data) and state that distinction explicitly, or correct whichever claim is wrong.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Account settings, username - error entry (unsaved changes)",
+      "severity": 3,
+      "violation": "The message asserts the changes are permanently lost, while the metadata claims the input is preserved on resubmission - these two claims are in tension and will confuse whoever implements this behavior."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Container: inline,\" \"Signal: bold text set larger than the field label, icon,\" \"Fires: on-blur,\" \"Suggested fix: none\"",
+      "fix": "Escalate the signal (e.g., a blocking dialog or banner) befitting irreversible data loss, decouple it from the on-blur field-validation trigger, and provide an actionable next step beyond \"contact support\" if one exists.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Account settings, username - error entry (unsaved changes)",
+      "severity": 3,
+      "violation": "A permanent, irrecoverable data-loss event is presented with the same low-severity inline treatment used for minor field-validation errors, triggered by a routine field-blur event, and offers no in-product remedy beyond contacting support."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T05:51:53Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 11,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

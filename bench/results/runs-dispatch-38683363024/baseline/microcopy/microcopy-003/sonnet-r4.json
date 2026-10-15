@@ -1,0 +1,149 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Message: This request timed out before it could finish.\" (the first entry under this heading)",
+      "fix": "Split into two headings (e.g., \"Search results, request failed\" and \"Search results, no matches\") or rename the section heading to cover both states it documents.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section heading \"## Search results, no matches\"",
+      "severity": 3,
+      "violation": "The heading promises coverage of the \"no matches\" state, but the first message documented is a request-timeout/failure state, not a zero-results state. The heading doesn't describe the content that follows it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This request timed out before it could finish.\"",
+      "fix": "Reword to include a next step, e.g., \"This request timed out before it could finish. Try your search again.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section \"Search results, no matches,\" first entry, Message field",
+      "severity": 3,
+      "violation": "The message reports what happened but gives the user no guidance on what to do next (e.g., retry, check connection), unlike the second entry in the same section which tells the user exactly what to do."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"bold heading text where the first result would sit, text-label\"",
+      "fix": "Add an error icon or distinct visual treatment to the Signal so the timeout state is visually distinguishable from a normal results heading.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section \"Search results, no matches,\" first entry, Signal field",
+      "severity": 3,
+      "violation": "The signal has no error-specific styling (no icon, no distinguishing color/treatment), so a timeout could be mistaken for a legitimate results heading - the same category of flaw the document explicitly calls out for the very next entry (\"no visual cue that this one demands action\"), but leaves unflagged here."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: not-applicable\"",
+      "fix": "Specify whether the search term and filters are retained after the timeout (they should be), rather than marking the field not-applicable.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section \"Search results, no matches,\" first entry, Input on resubmission field",
+      "severity": 3,
+      "violation": "Since this state \"Fires: on-submit,\" a search query and/or filters were submitted; whether those values persist after a timeout is directly relevant to the user and shouldn't be dismissed as not-applicable."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: none\"",
+      "fix": "Add a suggested fix such as a \"Try again\" button that resubmits the same query/filters.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section \"Search results, no matches,\" first entry, Suggested fix field",
+      "severity": 3,
+      "violation": "A timeout is a recoverable, transient failure, yet no retry action is suggested, leaving the user with no way to recover other than guessing to resubmit manually."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action\"",
+      "fix": "Either update the Signal to use an action-oriented treatment (e.g., warning color or icon) or note in the Suggested fix that the styling itself is being changed, not just adding a button.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section \"Search results, no matches,\" second entry, Signal field",
+      "severity": 3,
+      "violation": "The entry identifies a real styling flaw (the message looks passive/informational despite requiring action), but the paired Suggested fix only adds a button beside the message - it does not change the Signal/styling, so the identified flaw remains unaddressed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: not-applicable\"",
+      "fix": "State explicitly that the previously selected date range and filters are retained, rather than marking the field not-applicable.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Section \"Search results, no matches,\" second entry, Input on resubmission field",
+      "severity": 3,
+      "violation": "As with the first entry, this state fires on-submit of a date range/filter form, so whether the selected date range and filters persist on screen is applicable and important, not \"not-applicable\" - especially since the Suggested fix assumes the filters are still visible/actionable (\"clear filters button\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Sync is paused while this device is on a metered connection, so syncing does not spend a data allowance. Select resume to sync now.\"",
+      "fix": "Add a caveat to the resume instruction, e.g., \"Select resume to sync now using your data allowance,\" or require confirmation before resuming on metered data.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Section \"Notification center, sync status,\" entry, Message field",
+      "severity": 3,
+      "violation": "The message justifies pausing specifically to avoid consuming the metered data allowance, then immediately invites the user to resume, which would consume that same data allowance, without any warning - the two sentences work against each other."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Placement: \"directly under the sync status row\" / Signal: \"bold text at the top of the notification list\"",
+      "fix": "Reconcile the two fields into one consistent location, e.g., confirm whether the sync status row is always first in the list, or correct Signal to reference the sync status row rather than \"the top of the notification list.\"",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Section \"Notification center, sync status,\" entry, Placement vs. Signal fields",
+      "severity": 3,
+      "violation": "These two fields describe contradictory locations for the same message - \"directly under the sync status row\" (which may not be at the top of the list) versus \"at the top of the notification list.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message: \"Select resume to sync now.\" / Suggested fix: \"offers a resume now action\"",
+      "fix": "Use the same label in both fields, e.g., settle on \"Resume\" or \"Resume now\" and use it consistently.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Section \"Notification center, sync status,\" entry, Message vs. Suggested fix fields",
+      "severity": 3,
+      "violation": "The control is referred to inconsistently - \"resume\" in the message versus \"resume now\" in the suggested fix - leaving the actual button label ambiguous."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-focus\"",
+      "fix": "Change the trigger to fire on the sync-paused state change itself (in addition to or instead of on-focus), so the user is notified regardless of when the panel is focused.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Section \"Notification center, sync status,\" entry, Fires field",
+      "severity": 3,
+      "violation": "Triggering only \"on-focus\" means that if the notification panel is already focused/open when sync pauses, the message will never appear, defeating its purpose as an alert about a state change."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T06:08:57Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 11,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

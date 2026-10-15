@@ -1,0 +1,54 @@
+Location: Two-factor setup, verification code — first message, body text
+Evidence: "Verification codes are 6 digits long, and this one has 5."
+Problem: The message hardcodes "5" as the entered digit count, but a user could enter any number of digits other than six (e.g., 3, 4, 7, 8); the copy doesn't generalize to those cases.
+Fix: Make the digit count dynamic (e.g., "this one has {n}") or write the message to not state a specific wrong count at all, e.g. "Enter all 6 digits of the code."
+
+Location: Two-factor setup, verification code — first message, metadata rows "Predictable mistake" and "Suggested fix"
+Evidence: "Predictable mistake: yes" paired with "Suggested fix: none"
+Problem: Flagging this as a predictable mistake implies it should be prevented by design (e.g., a 6-box input or digit-limited field), but no such fix is suggested, leaving the predictable error purely reactive.
+Fix: Propose a preventive fix, such as a segmented 6-digit input or a live character counter that blocks submission before 6 digits are entered.
+
+Location: Two-factor setup, verification code — first message, body text
+Evidence: "Check the message again and enter all six."
+Problem: "The message" is ambiguous — it could mean the SMS/email containing the code, or this very error message — so the instruction doesn't clearly tell the user what to go check.
+Fix: Reword to name the source explicitly, e.g. "Check the code you received and enter all 6 digits."
+
+Location: Two-factor setup, verification code — second message, body text
+Evidence: "which stops an intercepted code from being reused later"
+Problem: This security justification is unnecessary for task recovery and introduces alarming language ("intercepted") that could make a routine timeout sound like an active attack.
+Fix: Drop the rationale clause and state only the actionable fact, e.g. "This verification code has expired. Request a new code and enter it here."
+
+Location: Two-factor setup, verification code — second message, "Suggested fix" row
+Evidence: "selectable, offers a resend code button in place of the message"
+Problem: The entry is garbled — "selectable" is left unexplained and disconnected from the rest of the sentence, making the actual recommendation unclear.
+Fix: Rewrite as two clear clauses, e.g. "Replace the message with a 'Resend code' button" (and state separately, if intended, that the error text itself should be selectable/copyable).
+
+Location: Two-factor setup, verification code — second message, "Input on resubmission" row
+Evidence: "Input on resubmission: preserved" combined with the suggested resend-code button
+Problem: Preserving the expired code in the field while offering a resend button risks the user resubmitting the same invalid code instead of the new one.
+Fix: Clear the verification code field when a new code is requested/resent, rather than preserving the expired value.
+
+Location: Billing, promo code — first message, body text
+Evidence: "This promo code ended on 30 June."
+Problem: No year is given, so the expiration date is ambiguous, especially since promo codes can span multiple years.
+Fix: Include the year, e.g. "This promo code ended on 30 June 2026."
+
+Location: Billing, promo code — second message, metadata rows "Predictable mistake" and "Suggested fix"
+Evidence: "Predictable mistake: yes" paired with "Suggested fix: none"
+Problem: As with the verification-code digit-count message, a mistake marked predictable gets no preventive design fix, only a reactive message.
+Fix: Suggest a preventive fix, such as disabling or graying out plan-restricted promo codes when an incompatible plan is selected, or filtering promo code validity checks at plan-selection time.
+
+Location: Billing, promo code — second message, "Fires" row
+Evidence: "Fires: on-blur" (triggered by the promo code field)
+Problem: The mismatch between promo code and plan can equally be caused by changing the plan selector after the code was accepted, but the spec only defines firing on blur of the promo code field, leaving that path unvalidated.
+Fix: Specify that the check also re-fires when the plan selection changes, not only on promo-code-field blur.
+
+Location: Across all four message specs, "Signal" row
+Evidence: "Signal: bold text set larger than the field label, icon" repeated identically for all four messages
+Problem: The same high-emphasis visual treatment is used for a hard blocking error (invalid/expired verification code) and a softer advisory case (promo code not applicable), without differentiating severity.
+Fix: Scale the signal to severity — reserve the strongest treatment for blocking errors and use a lighter treatment (e.g., no bold/no icon) for non-blocking promo code notices.
+
+Location: Across "Two-factor setup, verification code" message 2 and "Billing, promo code" message 1, "Fires" row
+Evidence: "Fires: on-submit" (verification code expiry) vs. "Fires: on-blur" (promo code expiry)
+Problem: Both are time-based validity checks against the current moment, but they fire at inconsistent points in the interaction without explanation for the difference.
+Fix: Align the firing behavior for both expiry checks, or document the reason one must wait for submit while the other can be checked on blur.

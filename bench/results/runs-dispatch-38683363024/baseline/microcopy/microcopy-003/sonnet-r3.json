@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Heading reads \"Search results, no matches\" but the first message is \"This request timed out before it could finish.\"",
+      "fix": "Move the timeout message to its own section (e.g., \"Search results, request failed\") or broaden the heading to cover both failure types.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" heading, first message entry",
+      "severity": 3,
+      "violation": "A timeout is not a \"no matches\" outcome - the search never completed, so the match count is unknown - and grouping it under this heading mislabels the scenario."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-submit\"",
+      "fix": "Change the trigger to something like \"on-timeout\" or \"after-response-delay\".",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" section, first entry, Fires field",
+      "severity": 3,
+      "violation": "A timeout happens after a delay following submission, not at the moment of submission, so \"on-submit\" misrepresents when this message actually appears."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: none\"",
+      "fix": "Add a suggested fix offering a retry/\"Try again\" action.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" section, first entry, Suggested fix field",
+      "severity": 3,
+      "violation": "Unlike the other two entries (which offer \"clear filters\" and \"resume now\" actions), the timeout entry leaves the user with no recovery path even though retrying is the obvious remedy."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: no\" next to the message \"No orders fall inside the selected date range.\"",
+      "fix": "Mark this \"yes,\" or clarify the field's definition so the \"no\" classification can be justified.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" section, second entry, Predictable mistake field",
+      "severity": 3,
+      "violation": "The message itself anticipates that overly narrow filters are the likely cause, which is a predictable user configuration mistake, contradicting the \"no\" classification."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Signal: \"...with no visual cue that this one demands action...\" / Suggested fix: \"selectable, offers a clear filters button beside the message\"",
+      "fix": "Extend the suggested fix to also restyle the message (distinct color/icon) so it visually signals urgency, not just add a button.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" section, second entry, Signal and Suggested fix fields",
+      "severity": 3,
+      "violation": "The deficiency named in Signal is the lack of a visual cue that this message demands action, but the suggested fix only adds a button and never addresses that styling gap."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: not-applicable\" alongside \"Suggested fix: selectable, offers a clear filters button beside the message\"",
+      "fix": "Describe what happens to the filters/query on resubmission (e.g., \"filters reset, search resubmitted automatically\") instead of \"not-applicable\".",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" section, second entry, Input on resubmission field",
+      "severity": 3,
+      "violation": "The suggested fix directly invites the user to clear filters and resubmit, so resubmission is clearly applicable here; marking it \"not-applicable\" contradicts the fix proposed for the same entry."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Entry 1: \"in place of the results list\" vs Entry 2: \"directly under the filter bar it concerns\"",
+      "fix": "Standardize placement for empty-state messages in this panel, or add a note explaining why the two cases are placed differently.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" section, Placement field across both entries",
+      "severity": 3,
+      "violation": "Both entries describe an empty-results state in the same panel, but use inconsistent placement conventions with no explanation, leaving it unclear whether an empty results list still renders beneath the second message."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Placement: \"directly under the sync status row\" / Signal: \"bold text at the top of the notification list\"",
+      "fix": "Reconcile the fields - either state that the sync status row is always first, or change Signal to \"directly below the sync status row.\"",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "\"Notification center, sync status\" section, Placement vs Signal fields",
+      "severity": 3,
+      "violation": "These descriptions conflict unless the sync status row is guaranteed to always be the first row in the list, which is never stated, making the message's actual position contradictory."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-focus\"",
+      "fix": "Change the trigger to fire when the metered-connection state is detected (e.g., \"on-state-change\") rather than on focus.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "\"Notification center, sync status\" section, Fires field",
+      "severity": 3,
+      "violation": "Sync pausing on a metered connection is a state change driven by connectivity, not by the user focusing the notification, so firing only \"on-focus\" could delay the user learning sync is paused until they happen to open the notification list."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T06:04:16Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
