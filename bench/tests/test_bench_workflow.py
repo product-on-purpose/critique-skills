@@ -159,3 +159,35 @@ def test_dry_run_still_needs_no_fresh_directory() -> None:
     dry_run_return = source.index("if args.dry_run:")
     guard_call = source.index("out_dir_check = _check_out_dir_is_not_committed_evidence")
     assert dry_run_return < guard_call
+
+
+# ---------------------------------------------------------------------------
+# The CLI version a dispatch runs under (E28)
+# ---------------------------------------------------------------------------
+
+
+def _cli_install_lines() -> list[str]:
+    return [
+        line.strip()
+        for line in _workflow_text().splitlines()
+        if line.strip().startswith("run:") and "@anthropic-ai/claude-code" in line
+    ]
+
+
+def test_the_workflow_installs_exactly_one_claude_code_cli() -> None:
+    assert len(_cli_install_lines()) == 1
+
+
+def test_the_cli_install_is_pinned_to_an_exact_version() -> None:
+    """An unpinned install resolves `latest` at dispatch time, so two dispatches a week apart can run
+    under different agent loops with nothing in the evidence saying so. That is how every dispatch
+    through 2026-10-14 ran."""
+    (line,) = _cli_install_lines()
+    assert re.search(r"@anthropic-ai/claude-code@\d+\.\d+\.\d+(\s|$)", line), line
+
+
+def test_the_pinned_cli_matches_the_harness_constant() -> None:
+    """The harness warns when the CLI it finds is not PINNED_CLI_VERSION, and records both in its
+    provenance file. That warning is only meaningful if the workflow installs the same version."""
+    (line,) = _cli_install_lines()
+    assert line.endswith(f"@anthropic-ai/claude-code@{run_bench.PINNED_CLI_VERSION}"), line

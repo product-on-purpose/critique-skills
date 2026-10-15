@@ -779,7 +779,17 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.2.0 (was v0.1.x). **Category:** ci. **Confidence:** verified.
 - **Blocks:** Nothing directly; weakens reproducibility of every future dispatch
 - **Depends on:** Nothing
-- **Rank at intake:** 28 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-10-15.** `bench.yml` installs `@anthropic-ai/claude-code@2.1.300`, and
+  `bench/run_bench.py` carries the same version as `PINNED_CLI_VERSION`. Three tests in
+  `bench/tests/test_bench_workflow.py` fail if the install is unpinned, duplicated, or different from
+  the constant. A live run prints the CLI version it finds and warns on a mismatch. It also writes
+  `harness-provenance.txt` into its `--out-dir` before the first model call, with the CLI version,
+  the pin, the Python version, the harness commit, the working-tree state, the skills, the tiers and
+  k. This took the "provenance note" option rather than a contract bump: a `.txt` is invisible to
+  every envelope walker. The eight dispatch directories committed before the pin have their CLI
+  versions inferred from npm publish times in `bench/results/README.md`, with the inference stated.
+  2.1.300 is the version the four 2026-10-14 runs most probably used.
+- **Rank at intake:** 28 of 64. **Status:** closed 2026-10-15.
 - **Moved to v0.2.0 on 2026-10-15.** The maintainer ruled that the v0.2.0 measurement debt lands
   before the cut (see E23). `ROADMAP.md`'s v0.2.0 item 1 names this pin in the same bullet as E27
   (harness isolation), and v0.1.x is closed, so the item moves with E27.

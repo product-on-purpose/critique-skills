@@ -1454,3 +1454,100 @@ def test_skill_lane_names_the_artifact_bare_and_runs_in_the_staging_directory(mo
     assert "clarity-001.md" in calls[0]["input"]
     assert str(staged) not in calls[0]["input"], "the staged path must not reach the prompt"
     assert calls[0]["cwd"] == str(staged.parent)
+
+
+# ---------------------------------------------------------------------------
+# The CLI version and the provenance file (E28)
+# ---------------------------------------------------------------------------
+
+
+class _Completed:
+    def __init__(self, stdout: str, returncode: int = 0) -> None:
+        self.stdout = stdout
+        self.stderr = ""
+        self.returncode = returncode
+
+
+def test_the_cli_version_is_read_from_claude_version(monkeypatch) -> None:
+    monkeypatch.setattr(run_bench.subprocess, "run", lambda *a, **k: _Completed("2.1.300 (Claude Code)\n"))
+    assert run_bench._claude_cli_version() == "2.1.300"
+
+
+def test_an_unreadable_cli_version_is_none_not_a_crash(monkeypatch) -> None:
+    monkeypatch.setattr(run_bench.subprocess, "run", lambda *a, **k: _Completed("", returncode=1))
+    assert run_bench._claude_cli_version() is None
+
+    def _missing(*a, **k):
+        raise FileNotFoundError("claude")
+
+    monkeypatch.setattr(run_bench.subprocess, "run", _missing)
+    assert run_bench._claude_cli_version() is None
+
+
+def _provenance(**overrides: Any) -> str:
+    facts: dict[str, Any] = {
+        "started_at": "2026-10-15T00:00:00Z",
+        "cli_version": "2.1.300",
+        "skills": ["critique-clarity", "critique-forms"],
+        "tiers": [run_bench.Tier(alias="haiku", model_id="claude-haiku-x")],
+        "k": 5,
+        "commit": "abc123",
+        "tree_clean": True,
+    }
+    facts.update(overrides)
+    return run_bench.provenance_text(**facts)
+
+
+def test_provenance_records_the_cli_beside_the_pin() -> None:
+    lines = _provenance().splitlines()
+    assert "claude_cli_version: 2.1.300" in lines
+    assert f"pinned_cli_version: {run_bench.PINNED_CLI_VERSION}" in lines
+    assert "harness_commit: abc123" in lines
+    assert "working_tree: clean" in lines
+    assert "skills: critique-clarity, critique-forms" in lines
+    assert "tiers: haiku=claude-haiku-x" in lines
+    assert "k: 5" in lines
+
+
+def test_provenance_says_unknown_rather_than_guessing() -> None:
+    lines = _provenance(cli_version=None, commit=None, tree_clean=None).splitlines()
+    assert "claude_cli_version: unreadable" in lines
+    assert "harness_commit: unknown" in lines
+    assert "working_tree: unknown" in lines
+
+
+def test_the_provenance_file_is_never_mistaken_for_an_envelope(tmp_path, monkeypatch) -> None:
+    """Every envelope walker and the out-dir guard match *.json. A provenance file that broke that
+    would make validate:envelopes fail and the README figure guard miscount the evidence."""
+    monkeypatch.setattr(run_bench, "_git", lambda *a: None)
+    path = run_bench._write_provenance(
+        tmp_path / "runs-x", started_at="2026-10-15T00:00:00Z", cli_version="2.1.300", skills=[], tiers=[], k=1
+    )
+    assert path.name == run_bench.PROVENANCE_FILENAME
+    assert path.suffix == ".txt"
+    assert run_bench._check_out_dir_is_not_committed_evidence(tmp_path / "runs-x") is None
+
+
+def test_a_live_run_writes_provenance_and_warns_on_an_unpinned_cli(tmp_path, monkeypatch, capsys) -> None:
+    """The provenance file must exist before the first model call, so a run that fails part way
+    still records what it ran under. The client factory is the first thing that could reach a model,
+    so it fails the test here, after the file should already be on disk."""
+    monkeypatch.setattr(run_bench, "_check_claude_cli", lambda *a, **k: None)
+    monkeypatch.setattr(run_bench, "_claude_cli_version", lambda *a, **k: "9.9.9")
+    monkeypatch.setattr(run_bench, "_git", lambda *a: None)
+
+    def _stop(*a, **k):
+        raise RuntimeError("stopped before any model call")
+
+    monkeypatch.setattr(run_bench, "_client_factory", _stop)
+    out_dir = tmp_path / "fresh"
+
+    exit_code = main(["--skills", "critique-clarity", "--k", "1", "--out-dir", str(out_dir)])
+
+    captured = capsys.readouterr()
+    assert exit_code == 1
+    assert "stopped before any model call" in captured.err
+    assert f"not the pinned {run_bench.PINNED_CLI_VERSION}" in captured.err
+    provenance = (out_dir / run_bench.PROVENANCE_FILENAME).read_text(encoding="utf-8")
+    assert "claude_cli_version: 9.9.9" in provenance
+    assert "skills: critique-clarity" in provenance

@@ -70,8 +70,12 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
+      # Pinned (E28). The CLI's agent loop and built-in skills are part of every judged-lane cell, so
+      # an unpinned install let two dispatches run under different builds with nothing in the
+      # evidence to tell them apart. This version must equal PINNED_CLI_VERSION in
+      # bench/run_bench.py; bench/tests/test_bench_workflow.py fails if they disagree.
       - name: Install the Claude Code CLI (the harness reaches the model through it, not the API)
-        run: npm install -g @anthropic-ai/claude-code
+        run: npm install -g @anthropic-ai/claude-code@2.1.300
 
       - name: Run the bench harness
         env:

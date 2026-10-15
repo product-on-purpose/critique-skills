@@ -98,12 +98,11 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**28 items depend on nothing and can start today.** Derived from each item's own
+**27 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
 |---|---|---|---|
-| E28 | Pin or record the Claude Code CLI version bench.yml installs | S | v0.2.0 |
 | E29 | Make release.yml's re-run suite match what it claims to run | S | v0.1.x |
 | E31 | Add criterion-table completeness to skill-selftest.py | S | v0.1.x |
 | E32 | Close S-03 AC-3: flip the checkbox and add a corpus-composition CI check | S | v0.1.x |
