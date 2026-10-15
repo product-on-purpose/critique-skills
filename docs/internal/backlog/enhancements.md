@@ -701,7 +701,13 @@ and the repository did not have.
 - **Size:** L. **Release:** v0.2.0. **Category:** docs. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** Nothing (a consolidation, not a re-measurement); ideally after E20 so the usability verdict is final
-- **Rank at intake:** 25 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-10-15.** `bench/results/verdicts.md` now holds one current-state verdict per skill,
+  for all seven shipped skills, each with the gate it shipped under, the figures from
+  `results.json`, its weakest point, what would flip it, and the dated harness re-measurements as
+  caveats. History is cited to the ADRs rather than re-derived. The layered record it replaced is
+  recoverable at commit `a852b52`, and the file says so. No verdict moved. The four anchors other
+  pages link to are kept.
+- **Rank at intake:** 25 of 64. **Status:** closed 2026-10-15.
 
 ## E26 - Calibrate a per-lane consistency threshold (v2)
 
