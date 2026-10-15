@@ -350,7 +350,13 @@ and the repository did not have.
   purpose: that list is derived literally from items whose `Depends on` reads Nothing, and
   loosening the rule to mean "dependencies satisfied" would change what the list asserts without
   saying so.
-- **Rank at intake:** 12 of 64. **Status:** unblocked 2026-09-15; the wording is the maintainer's.
+- **DRAFTED 2026-09-30** with E13 as one draft pull request, at the maintainer's request, for the
+  maintainer to edit. The draft carries the 2026-09-14 amendment (forms in, survey out, dataviz
+  unscheduled), not the 2026-09-11 shape, and moves each overtaken item to where the ruling put it.
+- **CLOSED 2026-10-14.** The maintainer ruled the draft's four questions (Standards-watch line
+  added, headings renamed with their old anchors kept, internal gate items kept, Astro history
+  trimmed) and approved merging once they were applied. PR 57 merged with them.
+- **Rank at intake:** 12 of 64. **Status:** closed 2026-10-14.
 
 ## E13 - Update ROADMAP.md's v0.1.x section: two of four verification items are met
 
@@ -362,7 +368,11 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.1.x. **Category:** docs. **Confidence:** verified.
 - **Blocks:** An honest v0.1.x exit-gate declaration (decision 4), which per ROADMAP.md:9 gates v0.2.0 opening
 - **Depends on:** Nothing
-- **Rank at intake:** 13 of 64. **Status:** backlog (recorded 2026-09-11).
+- **DRAFTED 2026-09-30** with E12 as one draft pull request. By the time of drafting, all four
+  items were met, not two: AC-1 and AC-6 on 2026-09-14 and AC-4 on 2026-09-15. The fourth, the
+  live dispatch, ran and answered its question in the negative, and the draft says so.
+- **CLOSED 2026-10-14** with E12, in PR 57.
+- **Rank at intake:** 13 of 64. **Status:** closed 2026-10-14.
 
 ## E14 - Rule whether a site-guard defect resets the v0.1.x exit-gate clock
 
