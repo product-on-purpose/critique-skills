@@ -164,6 +164,13 @@ local run under a different version proceeds with a warning. Every live run writ
 it ran under. To move the pin, change both places in one commit and say so in the next run set's
 provenance note.
 
+A live run never hands the CLI this working tree. Each skill cell loads a fresh copy of the plugin
+without `bench/` or any `examples` directory, so the skill under test cannot read an answer key. A
+cell that modifies or deletes a file in its copy fails. A run in which anything outside `--out-dir`
+changed in the live tree fails before scoring
+([ADR 0030](docs/internal/decisions/0030-replace-the-api-key-in-the-bench-harness.md), amended
+2026-10-15).
+
 Point every live run at a fresh `--out-dir`. `bench/results/runs*/` is immutable measurement
 evidence; the harness refuses an `--out-dir` that already holds envelopes for exactly that reason.
 `--out-dir` defaults to `bench/results/runs`, so a live run that omits it is refused:

@@ -586,6 +586,10 @@ class _ClaudeCodeMessages:
                 # cwd is the staged artifact's directory for a skill run, so the agent's working
                 # directory contains the artifact and nothing else. See staged_artifact().
                 cwd=str(cwd) if cwd is not None else None,
+                # No bytecode written into the plugin copy by the scripted lane's imports (E27).
+                # tree_snapshot ignores bytecode anyway; this keeps the copy byte-identical when the
+                # CLI passes its environment through to the Bash tool, which is the usual case.
+                env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"},
             )
         finally:
             if system_file is not None:
@@ -738,6 +742,101 @@ def staged_artifact(artifact: ArtifactRef, *, repo_root: Path) -> Iterator[Path]
         shutil.rmtree(staging, ignore_errors=True)
 
 
+# What a staged plugin copy leaves out (E27). The copy is what `/plugin install` delivers, a clone of
+# this repository, minus three kinds of thing:
+#
+# * Answer keys. `bench/` holds every corpus manifest, and the live tree used to be the plugin
+#   directory itself, so the skill under test was handed a directory containing the answer key it
+#   was scored against. `examples` directories go for the same reason: a golden can be built from a
+#   corpus artifact, and `skills/critique-forms/examples/` held a byte copy of `forms-003.html` with
+#   its expected findings. Nothing at runtime reads an example; the skill protocol never names one.
+# * Local state that is not part of any install: version control, worktrees, caches, notes.
+# * Build output and dependencies: the site and node_modules.
+#
+# Excluding by name keeps the copy a faithful install everywhere else. `docs/` stays in, because
+# agents/critique-critic.md tells the critic to apply docs/reference/severity-scale.md.
+_STAGE_EXCLUDED_AT_ROOT = frozenset(
+    {
+        ".git",
+        ".claude",
+        ".agent-skills-toolkit",
+        ".memsearch",
+        ".playwright-mcp",
+        ".pytest_cache",
+        "_agent-context",
+        "_local",
+        "_LOCAL",
+        "bench",
+        "site",
+    }
+)
+_STAGE_EXCLUDED_ANYWHERE = frozenset({"__pycache__", "node_modules", "examples"})
+
+
+def _stage_ignore(repo_root: Path) -> Callable[[str, list[str]], set[str]]:
+    root = os.path.normcase(os.path.abspath(repo_root))
+
+    def ignore(directory: str, names: list[str]) -> set[str]:
+        skipped = {n for n in names if n in _STAGE_EXCLUDED_ANYWHERE}
+        if os.path.normcase(os.path.abspath(directory)) == root:
+            skipped |= {n for n in names if n in _STAGE_EXCLUDED_AT_ROOT}
+        return skipped
+
+    return ignore
+
+
+@contextlib.contextmanager
+def staged_plugin(repo_root: Path) -> Iterator[Path]:
+    """Copy the plugin into a fresh temporary directory and yield the copy (E27).
+
+    Write isolation. The skill runs with `Bash` on its allowlist, because its protocol runs the
+    scripted lane, and `Bash` can write. On 2026-08-09 a probe run left a copy of the staged
+    artifact inside `skills/critique-clarity/` of the live tree (ADR 0030); the conformance gate
+    caught it only because the write happened to land where the gate looks. Handing the CLI a copy
+    means a stray write lands in a directory that is deleted afterwards, and `tree_snapshot`
+    compared before and after the cell is what detects it. A fresh copy per cell makes every stray
+    write attributable to one cell and keeps it from contaminating the next. What a detected change
+    costs the cell is decided in execute_skill_cell.
+    """
+    staging = Path(tempfile.mkdtemp(prefix="bench-plugin-"))
+    try:
+        copy = staging / repo_root.name
+        shutil.copytree(repo_root, copy, ignore=_stage_ignore(repo_root))
+        yield copy
+    finally:
+        shutil.rmtree(staging, ignore_errors=True)
+
+
+def tree_snapshot(root: Path) -> dict[str, str]:
+    """Map every file under `root` to its sha256, by POSIX-style relative path.
+
+    Bytecode is left out. Python writes `__pycache__/*.pyc` into the copy whenever the scripted lane
+    imports `skills._shared`, which is a side effect of running at all rather than a stray write.
+    """
+    snapshot: dict[str, str] = {}
+    for path in sorted(root.rglob("*")):
+        if path.is_file() and "__pycache__" not in path.parts and path.suffix != ".pyc":
+            snapshot[path.relative_to(root).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
+    return snapshot
+
+
+def snapshot_changes(before: dict[str, str], after: dict[str, str]) -> list[str]:
+    """Describe every difference between two snapshots, one `added|modified|deleted <path>` each."""
+    changes = [f"added {p}" for p in sorted(after.keys() - before.keys())]
+    changes += [f"deleted {p}" for p in sorted(before.keys() - after.keys())]
+    changes += [f"modified {p}" for p in sorted(before.keys() & after.keys()) if before[p] != after[p]]
+    return changes
+
+
+class StrayWriteError(RuntimeError):
+    """A skill run modified or deleted a file in the plugin copy it was handed. The cell fails and its
+    envelope is not written: a run that rewrites its own plugin is not the run the evidence claims."""
+
+
+def _first_ten(items: Sequence[str]) -> str:
+    return ", ".join(items[:10]) + (f", and {len(items) - 10} more" if len(items) > 10 else "")
+
+
 def _read_artifact(repo_root: Path, artifact: ArtifactRef) -> str:
     """Read the artifact's bytes and verify them against the manifest's own sha256, the same
     check bench/metrics/__main__.py's own artifact reader makes: a run against the wrong bytes
@@ -776,14 +875,36 @@ def execute_skill_cell(
       fill these in and must not be trusted to. Writing the staged path into a committed envelope
       would also publish the running user's home directory and make the evidence unreproducible.
     """
-    with staged_artifact(cell.artifact, repo_root=repo_root) as staged:
+    # E27: the CLI loads a fresh copy of the plugin, never the live tree, and the copy is compared
+    # before and after the run. See staged_plugin().
+    with staged_plugin(repo_root) as plugin, staged_artifact(cell.artifact, repo_root=repo_root) as staged:
+        before = tree_snapshot(plugin)
         envelope = call_skill_lane(
             client,
             model_id=cell.tier.model_id,
             skill=cell.skill,
             staged_path=staged,
-            repo_root=repo_root,
+            repo_root=plugin,
             severity_3_threshold=severity_3_threshold,
+        )
+        changes = snapshot_changes(before, tree_snapshot(plugin))
+    # Two kinds of change, two consequences. A modified or deleted file means the run did not run
+    # the plugin the evidence says it ran, so the cell fails. An added file does not: every SKILL.md
+    # tells the model to change into its skill directory and write findings.json to a path of its
+    # own choosing, which is almost certainly how the 2026-08-09 stray file got there. In a per-cell
+    # copy an added file reaches neither the live tree nor any other cell, so it is reported and
+    # discarded with the copy rather than costing a paid cell. The live-tree check in main() still
+    # fails the run on any change at all.
+    altered = [c for c in changes if not c.startswith("added ")]
+    added = [c for c in changes if c.startswith("added ")]
+    if altered:
+        raise StrayWriteError(f"the skill run changed its plugin copy: {_first_ten(altered)}")
+    if added:
+        print(
+            f"bench: note: [skill] {cell.skill} {cell.artifact.artifact_id} {cell.tier.alias} "
+            f"r{cell.run_index} added {len(added)} file(s) to its plugin copy, discarded with it: "
+            f"{_first_ten(added)}",
+            file=sys.stderr,
         )
 
     # A scripted-only envelope is structurally indistinguishable from a merged one, so a run that
@@ -1005,6 +1126,62 @@ def _git(*args: str) -> str | None:
     return proc.stdout.strip() if proc.returncode == 0 else None
 
 
+def live_tree_state(repo_root: Path | None = None) -> dict[str, str] | None:
+    """Every path git reports as changed or untracked, mapped to its status code plus a sha256 of
+    its current bytes, or None where git or the repository is unavailable (E27).
+
+    The status code alone would miss a file that was already modified before the run and was
+    written again during it, so the bytes are hashed too.
+    """
+    root = repo_root or ROOT
+    try:
+        proc = subprocess.run(
+            ["git", "status", "--porcelain=v1", "-z", "--untracked-files=all"],
+            cwd=root,
+            capture_output=True,
+            timeout=120,
+            stdin=subprocess.DEVNULL,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    if proc.returncode != 0:
+        return None
+    state: dict[str, str] = {}
+    entries = proc.stdout.split(b"\0")
+    index = 0
+    while index < len(entries):
+        entry = entries[index]
+        index += 1
+        if len(entry) < 4:
+            continue
+        code, path = entry[:2].decode("ascii", "replace"), entry[3:].decode("utf-8", "replace")
+        if code[0] in "RC":
+            index += 1  # -z writes a rename's source path as the next entry; the target is what counts
+        target = root / path
+        digest = hashlib.sha256(target.read_bytes()).hexdigest() if target.is_file() else "-"
+        state[path] = f"{code} {digest}"
+    return state
+
+
+def live_tree_changes(
+    before: dict[str, str], after: dict[str, str], *, exclude: Sequence[Path], repo_root: Path | None = None
+) -> list[str]:
+    """The paths whose git state differs between two `live_tree_state` readings, leaving out
+    anything under `exclude`, which is where the harness itself writes."""
+    root = repo_root or ROOT
+    excluded = [os.path.normcase(os.path.abspath(p)) for p in exclude]
+
+    def outside_exclusions(path: str) -> bool:
+        full = os.path.normcase(os.path.abspath(root / path))
+        return not any(full == e or full.startswith(e + os.sep) for e in excluded)
+
+    return [
+        path
+        for path in sorted(before.keys() | after.keys())
+        if before.get(path) != after.get(path) and outside_exclusions(path)
+    ]
+
+
 def provenance_text(
     *,
     started_at: str,
@@ -1184,6 +1361,9 @@ def main(argv: list[str] | None = None) -> int:
         print(f"bench: {exc}", file=sys.stderr)
         return 1
 
+    # E27: the live tree is read before and after the grid. Each skill cell already runs against its
+    # own plugin copy, so a change here means something wrote outside that copy.
+    tree_before = live_tree_state()
     results = execute_grid(
         cells,
         client=client,
@@ -1200,6 +1380,22 @@ def main(argv: list[str] | None = None) -> int:
             f"{cell.tier.alias} r{cell.run_index}: {failure.detail}",
             file=sys.stderr,
         )
+
+    tree_after = live_tree_state() if tree_before is not None else None
+    if tree_before is None or tree_after is None:
+        print("bench: git is unavailable here, so the post-run check of the live tree was skipped.")
+    else:
+        stray = live_tree_changes(tree_before, tree_after, exclude=[out_dir])
+        if stray:
+            for path in stray:
+                print(f"bench: STRAY WRITE in the live tree during the run: {path}", file=sys.stderr)
+            print(
+                f"bench: {len(stray)} path(s) outside {out_dir} changed during the run; skipping the "
+                "scoring step. If you edited those files yourself while it ran, score the run directory "
+                "with `python -m bench.metrics score`; otherwise a run wrote outside its plugin copy.",
+                file=sys.stderr,
+            )
+            return 1
 
     if failures:
         print(f"bench: {len(failures)} cell(s) failed; skipping the scoring step.", file=sys.stderr)

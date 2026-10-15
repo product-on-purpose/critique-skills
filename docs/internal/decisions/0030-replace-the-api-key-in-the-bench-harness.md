@@ -302,6 +302,27 @@ bypassing permissions, but a benchmark run can still write to the repository it 
 nothing here prevents that. Real isolation would mean running against a copy of the plugin rather
 than the working tree, which is not done today.
 
+**Amended 2026-10-15: it is done now.** [E27 (harness isolation)](../backlog/enhancements.md) gives
+every skill cell a fresh copy of the plugin, made by `staged_plugin()` in `bench/run_bench.py`, and
+the CLI loads that copy instead of the live tree. The allowlist is still not a sandbox. What
+changed is where a stray write can land and who notices it:
+
+- **The copy leaves out every answer key.** `bench/` is not copied, and neither is any `examples`
+  directory. Until this change the live tree was the plugin directory, so the skill under test was
+  handed a directory holding every corpus manifest. Separately,
+  `skills/critique-forms/examples/` had held a byte copy of the corpus artifact `forms-003.html`
+  since 2026-10-14, with its expected findings beside it. No committed measurement ran in that
+  window with `critique-forms` in it. A test now fails if any staged file is byte-identical to a
+  corpus file.
+- **A change to the copy is detected per cell.** The copy is hashed before and after the run. A
+  modified or deleted file fails the cell, and its envelope is not written. An added file is
+  reported and discarded with the copy, because every `SKILL.md` has the model write
+  `findings.json` at a path of its own choosing after changing into its skill directory, and an
+  added file in a per-cell copy reaches neither the live tree nor the next cell.
+- **The live tree is checked once per run.** Git's view of the working tree is read before and after
+  the grid. Any change outside `--out-dir` fails the run and skips scoring. With a copy in place,
+  this is the detector that replaces the conformance gate's lucky catch, so it cannot be optional.
+
 ### Resolved: which repairs the harness may make
 
 The three failures below forced a question this ADR had not asked: the harness must stop

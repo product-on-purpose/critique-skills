@@ -764,7 +764,19 @@ and the repository did not have.
 - **Size:** M. **Release:** v0.2.0. **Category:** measurement. **Confidence:** verified.
 - **Blocks:** A fully-trusted live bench.yml dispatch on sonnet or any delegating tier
 - **Depends on:** Nothing
-- **Rank at intake:** 27 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-10-15.** `staged_plugin()` in `bench/run_bench.py` gives every skill cell a fresh
+  copy of the plugin, and the CLI loads the copy instead of the live tree. The copy leaves out
+  `bench/`, every `examples` directory, version control, local state and build output, and keeps
+  `docs/` because the critic reads it. The copy is hashed before and after each cell: a modified or
+  deleted file fails the cell and writes no envelope, and an added file is reported and discarded.
+  Git's view of the live tree is read before and after the grid, and any change outside `--out-dir`
+  fails the run before scoring. The work found a second leak: since 2026-10-14
+  `skills/critique-forms/examples/artifacts/golden-05.html` had been a byte copy of the corpus
+  artifact `forms-003.html`, with its expected findings beside it, inside the plugin directory. No
+  committed measurement ran `critique-forms` in that window. A test now fails if any staged file is
+  byte-identical to a corpus file. The first live exercise of the copy is the next approved
+  dispatch.
+- **Rank at intake:** 27 of 64. **Status:** closed 2026-10-15.
 - **Ruled 2026-10-15 by the maintainer:** lands before the v0.2.0 release is cut, for the reason
   recorded on E23. `ROADMAP.md` names this item and E28 (CLI version pin) in one bullet, so E28
   lands with it.

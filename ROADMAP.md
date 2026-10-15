@@ -60,7 +60,7 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
    - ~~An automated check for the evidence-quotes-not-characterizes field contract~~ **(done 2026-10-14)**.
    - ~~`severity_expected` scoring turned on~~ **(done 2026-10-14)**.
    - ~~The example and golden envelopes carry only real model values or a documented sentinel, not run metadata written by hand~~ **(done 2026-10-14)**.
-   - The benchmark harness isolated from the working tree it measures, and the Claude Code CLI version it installs pinned or recorded.
+   - ~~The benchmark harness isolated from the working tree it measures, and the Claude Code CLI version it installs pinned or recorded~~ **(done 2026-10-15)**.
 
 **2. Consistency threshold v2.** **Done 2026-10-15** ([ADR 0038](docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md)). The single 0.309 floor was a provisional number measured once, on one run set. It is replaced by a floor per tier on the overall lane: 0.450 on Sonnet, from the current benchmark harness, and 0.309 on Haiku, carried until the core skills have current-harness Haiku data. The scripted lane has an expected value of 1.000, and the judged lane is published as a diagnostic.
 

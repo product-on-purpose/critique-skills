@@ -196,6 +196,14 @@ Nothing is hardcoded. The grid is derived from what the repository already decla
 
 - **It never touches existing evidence.** `bench/results/runs*/` is immutable. The harness never
   reads those files and never writes to that directory; new records go to `--out-dir`.
+- **It never hands the skill the live repository.** Each skill run loads a fresh copy of the plugin
+  with no `bench/` and no `examples` directory. The skill under test therefore cannot read an
+  answer key, and it cannot write into the repository it is measuring. A run that modifies or
+  deletes a file in its copy fails. After the whole grid, the harness asks git whether anything
+  outside `--out-dir` changed, and fails the run if so.
+- **It records what it ran under.** `bench.yml` installs one pinned version of the Claude Code CLI.
+  Every live run writes `harness-provenance.txt` into its `--out-dir` before the first model call,
+  naming the CLI version it found, the harness commit, the skills, the tiers and k.
 - **It never writes an invalid record.** Every assembled record is validated against the contract
   first, and a failure means nothing is written.
 - **A live run cannot happen by accident.** The script checks for the Claude Code CLI up front
