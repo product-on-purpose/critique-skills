@@ -143,10 +143,14 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   v0.3.0, samples to v0.4.0+, and the survey and `critique-dataviz` to a new "Unscheduled" list.
   [E13 (v0.1.x verification items)](docs/internal/backlog/enhancements.md) marks all four v0.1.x
   verification items with the dates they were met. It also states plainly that the live
-  benchmark dispatch answered its question in the negative. On 2026-10-03 the page was brought up
-  to date with the `critique-forms` build: it now says the skill is built and registered
-  `experimental`, and the exit gate puts it in the README scoreboard only on a ship verdict
-  ([ADR 0036](docs/internal/decisions/0036-experimental-status-until-ship-verdict.md)).
+  benchmark dispatch answered its question in the negative. The page also records that
+  `critique-forms` shipped on 2026-10-06
+  ([ADR 0037](docs/internal/decisions/0037-critique-forms-ship-verdict.md)) and marks that gate
+  item met. The maintainer ruled the draft's four open questions on 2026-10-14: the page gains a
+  Standards-watch line (adopt each new Standard minor version in the next release, or say why
+  not), "Next: v0.1.x" and "Then: v0.2.0" become "Done: v0.1.x" and "Next: v0.2.0" with their old
+  anchors kept so no inbound link breaks, the internal gate items stay, and the Astro-site history
+  is trimmed to its one durable point, that none of its trigger conditions fired.
 
 ### Fixed
 

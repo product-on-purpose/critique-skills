@@ -353,7 +353,10 @@ and the repository did not have.
 - **DRAFTED 2026-09-30** with E13 as one draft pull request, at the maintainer's request, for the
   maintainer to edit. The draft carries the 2026-09-14 amendment (forms in, survey out, dataviz
   unscheduled), not the 2026-09-11 shape, and moves each overtaken item to where the ruling put it.
-- **Rank at intake:** 12 of 64. **Status:** drafted 2026-09-30; the wording is the maintainer's.
+- **CLOSED 2026-10-14.** The maintainer ruled the draft's four questions (Standards-watch line
+  added, headings renamed with their old anchors kept, internal gate items kept, Astro history
+  trimmed) and approved merging once they were applied. PR 57 merged with them.
+- **Rank at intake:** 12 of 64. **Status:** closed 2026-10-14.
 
 ## E13 - Update ROADMAP.md's v0.1.x section: two of four verification items are met
 
@@ -368,7 +371,8 @@ and the repository did not have.
 - **DRAFTED 2026-09-30** with E12 as one draft pull request. By the time of drafting, all four
   items were met, not two: AC-1 and AC-6 on 2026-09-14 and AC-4 on 2026-09-15. The fourth, the
   live dispatch, ran and answered its question in the negative, and the draft says so.
-- **Rank at intake:** 13 of 64. **Status:** drafted 2026-09-30; the wording is the maintainer's.
+- **CLOSED 2026-10-14** with E12, in PR 57.
+- **Rank at intake:** 13 of 64. **Status:** closed 2026-10-14.
 
 ## E14 - Rule whether a site-guard defect resets the v0.1.x exit-gate clock
 

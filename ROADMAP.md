@@ -8,9 +8,11 @@ This is a public statement of sequence, not a schedule. It says what shipped, wh
 
 **Sequence-only, no dates.** Every version below is gated by the exit criteria of the version before it. `v0.2.0` does not open until `v0.1.x`'s exit gate closes; `v0.3.0` does not open until `v0.2.0`'s does. This is a solo-maintained project that publishes its own honest measurement numbers, and a solo maintainer who commits to dates ends up choosing between missing them in public or quietly padding the numbers to hit them. Sequence-gating avoids that trade entirely: a version opens when its prerequisite work is actually done, not when a calendar says it should be.
 
-**This document is also a list of what is not done.** Reading only the "Now" section tells you what exists. Reading the rest tells you, just as precisely, what does not: no taxonomy survey yet, no BYOR mode yet, no revision loop as a first-class chain yet. Treat every "Then" and "After" item as a feature this library does not currently have, not a promise about when it will.
+**This document is also a list of what is not done.** Reading only the "Now" section tells you what exists. Reading the rest tells you, just as precisely, what does not: no taxonomy survey yet, no BYOR mode yet, no revision loop as a first-class chain yet. Treat every "Next" and "After" item as a feature this library does not currently have, not a promise about when it will.
 
 **Where the numbers live.** Nothing on this page overrides the measured results. `bench/results/README.md` is the source of truth for what the library actually catches; this page only sequences the work that produces future measurements.
+
+**Standards watch.** This plugin is graded against the Advanced Skill Library Standard version pinned in `library.json`. When the Standard publishes a new minor version, the next release of this plugin adopts it, or its release notes say why not.
 
 ---
 
@@ -24,7 +26,9 @@ Full detail: [`CHANGELOG.md`](CHANGELOG.md) and [`RELEASE-NOTES.md`](RELEASE-NOT
 
 ---
 
-## Next: v0.1.x
+<a id="next-v01x"></a>
+
+## Done: v0.1.x
 
 Patch-scope only: bug reports on scripted checks, contract schema errata, severity-anchor wording fixes, README clarity. No new skills and no new criteria land in a patch.
 
@@ -41,7 +45,9 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 
 ---
 
-## Then: v0.2.0
+<a id="then-v020"></a>
+
+## Next: v0.2.0
 
 **Re-cut on 2026-09-14.** This section used to promise a wider catalog on a regenerated research spine: the taxonomy survey, three new skills, BYOR, telemetry and a samples corpus, all in one version. Its exit gate required every one of them, including a chart-critique skill blocked on a generator nobody had scoped, so the version could not close. v0.2.0 now does two things. It makes every receipt the project already publishes whole, and it adds one skill. Everything that moved is listed under "Moved out of v0.2.0" below, with where it went.
 
@@ -58,16 +64,16 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 
 **2. Consistency threshold v2.** The 0.309 floor below is a provisional number measured once, on one run set. This version replaces it with a calibrated per-lane threshold, published with its method rather than asserted.
 
-**3. `critique-forms`**: form-usability critique sourced to Wroblewski, Baymard's research, GOV.UK, web.dev and others. It is built and registered `experimental` (PR 60): 24 criteria, 18 checked by script and 6 by judgment. It installs with the plugin, but the README catalog and the site leave it out until its ship verdict ([ADR 0036](docs/internal/decisions/0036-experimental-status-until-ship-verdict.md)). It comes before `critique-deck` because it reuses the shipped HTML artifact type and `critique-accessibility`'s element resolver, while a deck skill needs a corpus module for an artifact type this project has never built. Its published figures will be the first to come from the current benchmark harness, with the generic baseline measured beside it in the same run.
+**3. `critique-forms`**: form-usability critique sourced to Wroblewski, Baymard's research, GOV.UK, web.dev and others. It is built and registered `experimental` (PR 60): 24 criteria, 18 checked by script and 6 by judgment. **It shipped on 2026-10-06** ([ADR 0037](docs/internal/decisions/0037-critique-forms-ship-verdict.md)) and is now `active`, in the README catalog, the scoreboard and the site. Its figures are the first to come from the current benchmark harness, measured at k=5 on both pinned tiers with the generic baseline beside it in the same run. On Haiku it beats the baseline on both location metrics; on Sonnet it leads on recall, and its precision lead sits inside run-to-run noise. It came before `critique-deck` because it reuses the shipped HTML artifact type and `critique-accessibility`'s element resolver, while a deck skill needs a corpus module for an artifact type this project has never built.
 
-**4. Astro docs site. This item's sequence position was overtaken on 2026-08-18, and the site shipped on 2026-08-22, ahead of the samples corpus.** The original order put it after the samples on the reasoning that they are the content which gives a site an information architecture worth designing, and that a site built before that content exists is just a nicer-looking README. That reasoning still holds for the site's *content*, and it is not what moved the item. What moved it was a decision that the README is the project's front door, which makes the site a prerequisite for fixing the README rather than a reward for finishing the samples. **None of the three trigger conditions this item named actually fired**: the README was 517 lines when the item was pulled, against the roughly 600 named here, the marketplace listing had produced no traffic worth calling real, and no public essay had shipped. The item was pulled early for a reason it did not anticipate, and saying so is more useful than retrofitting a trigger.
+**4. Astro docs site: shipped 2026-08-22, ahead of the samples corpus.** It moved ahead on 2026-08-18, when the README was ruled the project's front door, which made the site a prerequisite for fixing the README. None of the three trigger conditions this item named had fired, and saying so is more honest than retrofitting one.
 
-**The site is live as of 2026-08-22** at `https://product-on-purpose.github.io/critique-skills/`, serving 50 pages: the six skill pages, an explorer for all 96 criterion IDs, an explorer for every measured benchmark cell, the four Diataxis quadrants, and the worked examples. It is generated from this repository's own sources at build time and nothing lives only there. The old exit gate named the site as one of its conditions, and the site met it; the re-cut gate below does not repeat a condition that is already met.
+**The site is live as of 2026-08-22** at `https://product-on-purpose.github.io/critique-skills/`. At launch it served 50 pages: the six skill pages, an explorer for all 96 criterion IDs, an explorer for every measured benchmark cell, the four Diataxis quadrants, and the worked examples. It is generated from this repository's own sources at build time and nothing lives only there. The old exit gate named the site as one of its conditions, and the site met it; the re-cut gate below does not repeat a condition that is already met.
 
 **Exit gate** (re-cut 2026-09-14):
 
 - Every entry in `bench/results/results.json` carries `run_set` and `lane` **(met 2026-09-14)**, and `bench.report` drift-checks the judged and scripted columns.
-- At least one Sonnet envelope per skill is committed through the shipped harness, and the fidelity-gate verdict is re-evaluated on that tier. The verdict was re-evaluated on 2026-09-15 and came back a failure (see v0.1.x above); two of the six skills have Sonnet envelopes through the shipped harness so far.
+- At least one Sonnet envelope per skill is committed through the shipped harness, and the fidelity-gate verdict is re-evaluated on that tier. The verdict was re-evaluated on 2026-09-15 and came back a failure (see v0.1.x above); three of the seven skills (`critique-clarity`, `critique-usability` and `critique-forms`) have Sonnet envelopes through the shipped harness so far.
 - Consistency threshold v2 is published with its method.
 - No `run.model` value outside the two pinned tiers appears under `skills/` or `examples/`, unless it is a documented sentinel, and a check enforces that.
 - `bench/results/verdicts.md` is one current-state document.
@@ -75,7 +81,7 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 - The evidence-quotes check runs in CI.
 - ~~`bench/results/runs/steering/` no longer sits inside the `runs*` glob~~ **(met 2026-09-14)**.
 - ~~A recorded ruling exists on `askit-*` authoring and CodeQL~~ **(met 2026-09-15: both adopted, CodeQL shipped)**.
-- `critique-forms` is measured at k=5 on both pinned tiers, and a recorded ship or hold verdict cites the figures. On a ship verdict it appears in the README scoreboard; on a hold it stays `experimental`, with its figures published in the full results table.
+- `critique-forms` is measured at k=5 on both pinned tiers, and a recorded ship or hold verdict cites the figures. On a ship verdict it appears in the README scoreboard; on a hold it stays `experimental`, with its figures published in the full results table. **(Met 2026-10-06: shipped, [ADR 0037](docs/internal/decisions/0037-critique-forms-ship-verdict.md).)**
 
 ### Moved out of v0.2.0
 
