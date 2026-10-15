@@ -51,7 +51,7 @@ the prompt never asks for them. These are fixed policy constants, named at their
 | Field | Value | Why fixed rather than parsed |
 |---|---|---|
 | `criterion` | `BASELINE-GENERIC` | The baseline has no rubric to cite a criterion from; `BASELINE` is its own namespace, existing only so a schema-valid finding can name something. |
-| `severity` | `3` (major) | v0.1 metrics do not score severity agreement (bench/README.md, "What the bench does not measure"), so this choice affects only `summary.gate` and `summary.suppressed_count`, never recall, precision, or consistency. |
+| `severity` | `3` (major) | Severity agreement (results version 1.3.0) is read on criterion-level matches only, and a `BASELINE-GENERIC` finding can never be one, so this choice affects only `summary.gate` and `summary.suppressed_count`, never recall, precision, consistency, or severity agreement. |
 | `confidence` | `medium` | Neutral default for a `judged`-lane finding; `lane` can never be `scripted` here, since nothing about the baseline is deterministic. |
 | `run.skill` | `baseline-generic` | The contract's own reserved example (`critique-contract.schema.json`, `run.skill`). |
 | `run.skill_version` | `BASELINE_VERSION` | Bumped only when `prompt.txt` or the mapping rule changes. |
