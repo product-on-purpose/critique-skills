@@ -909,7 +909,7 @@ test("exampleRoutes maps each README to its directory and every other file to a 
   assert.equal(routes.get("examples/docs/artifact.md"), "/examples/docs/artifact/");
   assert.equal(routes.get("examples/recipes/gate-in-ci.md"), "/examples/recipes/gate-in-ci/");
   // Discovered, not listed: every markdown file under examples/ is routed.
-  assert.equal(routes.size, 16);
+  assert.equal(routes.size, 17);
 });
 
 test("every routed source exists, and a missing one fails the build rather than emitting a stub", () => {

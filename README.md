@@ -286,7 +286,7 @@ Everything on the site is a rendering of something in this repo. Nothing lives o
 | In the repo | What |
 |---|---|
 | [`QUICKSTART.md`](QUICKSTART.md) | Install, run one critique, read the envelope, record a disposition |
-| [`examples/`](examples/) | Worked walkthroughs for six of the seven skills (`critique-forms` has none yet), plus cross-cutting recipes |
+| [`examples/`](examples/) | Worked walkthroughs for all seven skills, plus cross-cutting recipes |
 | [`docs/`](docs/) | Diataxis source: tutorials, how-to, reference, explanation |
 | [`bench/results/README.md`](bench/results/README.md) | Results narrative, unflattering numbers first, and the full generated grid |
 | [`ROADMAP.md`](ROADMAP.md) | Sequence-gated plan to v1.0, including what is deliberately not being done |

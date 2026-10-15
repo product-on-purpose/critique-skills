@@ -177,5 +177,5 @@ you recorded was the right call; that judgment is yours, which is the whole poin
 That is the complete loop this library exists to support: critique, disposition. Nothing above
 edited your document. Only you decided what changes.
 
-Want more worked examples before pointing this at your own files? `examples/README.md` indexes six
-skill walkthroughs and three cross-cutting recipes, organized by task.
+Want more worked examples before pointing this at your own files? `examples/README.md` indexes
+seven skill walkthroughs and three cross-cutting recipes, organized by task.
