@@ -21,4 +21,5 @@ by evidence grade. Version 0.1.0.
   the research record cites, at the grade it records.
 - `evals/` - `triggers.eval.json`, the trigger-description eval cases.
 - `examples/` - golden and anti-pattern fixtures (`golden-*.json`, `anti-*.json`) plus supporting
-  `artifacts/`, which between them exercise all 18 scripted criteria.
+  `artifacts/`, which between them exercise all 18 scripted criteria and, since golden-05, the
+  judged lane as well (`FORMS-TOUCH-TARGET`).
