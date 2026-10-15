@@ -9,10 +9,11 @@ that could otherwise fall through to a real `claude` process patch the seam with
 
 from __future__ import annotations
 
+import dataclasses
 import hashlib
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 import pytest
 
@@ -1354,7 +1355,9 @@ def test_execute_skill_cell_runs_the_skill_against_the_staged_copy(tmp_path) -> 
     )
 
     call = client.messages.calls[0]
-    assert call["plugin_dir"] == tmp_path
+    # Since E27 the CLI is handed a staged copy of the plugin, never the tree itself.
+    assert Path(call["plugin_dir"]) != tmp_path
+    assert Path(call["plugin_dir"]).parent.name.startswith("bench-plugin-")
     assert Path(call["cwd"]).name.startswith("bench-artifact-")
 
 
@@ -1551,3 +1554,207 @@ def test_a_live_run_writes_provenance_and_warns_on_an_unpinned_cli(tmp_path, mon
     provenance = (out_dir / run_bench.PROVENANCE_FILENAME).read_text(encoding="utf-8")
     assert "claude_cli_version: 9.9.9" in provenance
     assert "skills: critique-clarity" in provenance
+
+
+# ---------------------------------------------------------------------------
+# Write isolation: the CLI loads a copy of the plugin, never the live tree (E27)
+# ---------------------------------------------------------------------------
+
+
+def test_the_staged_plugin_is_an_install_without_answer_keys() -> None:
+    """Copied from the real repository, so a new top-level directory the runtime needs cannot be
+    left out without this failing."""
+    with run_bench.staged_plugin(run_bench.ROOT) as copy:
+        assert (copy / "library.json").is_file()
+        for needed in (".claude-plugin", "agents", "skills", "contract", "docs"):
+            assert (copy / needed).is_dir(), needed
+        # docs/ stays because the critic is told to apply it at runtime.
+        assert (copy / "docs" / "reference" / "severity-scale.md").is_file()
+        for excluded in ("bench", "site", ".git", "_local", "node_modules"):
+            assert not (copy / excluded).exists(), excluded
+        assert not any(p.name == "examples" for p in copy.rglob("*") if p.is_dir())
+        assert not any(p.name == "__pycache__" for p in copy.rglob("*") if p.is_dir())
+    assert not copy.exists(), "the copy is removed when the cell ends"
+
+
+def test_no_staged_file_carries_corpus_bytes() -> None:
+    """The invariant the exclusions exist for. A golden built from a corpus artifact once put a byte
+    copy of forms-003.html, with its expected findings, inside the plugin the skill was handed."""
+    corpus = {
+        hashlib.sha256(p.read_bytes()).hexdigest()
+        for p in (run_bench.ROOT / "bench" / "corpus").rglob("*")
+        if p.is_file()
+    }
+    with run_bench.staged_plugin(run_bench.ROOT) as copy:
+        leaked = [
+            p.relative_to(copy).as_posix()
+            for p in copy.rglob("*")
+            if p.is_file() and hashlib.sha256(p.read_bytes()).hexdigest() in corpus
+        ]
+    assert leaked == []
+
+
+def test_the_scripted_lane_runs_from_the_copy_and_leaves_it_unchanged() -> None:
+    """Proves the copy is self-sufficient: checks.py finds library.json and imports skills._shared
+    from inside the copy. Also proves a normal scripted-lane run does not trip the stray-write
+    check, which would otherwise fail every cell of a paid dispatch."""
+    import os
+    import subprocess
+    import sys
+
+    artifact = run_bench.ROOT / "bench" / "corpus" / "clarity" / "clarity-001.md"
+    with run_bench.staged_plugin(run_bench.ROOT) as copy:
+        before = run_bench.tree_snapshot(copy)
+        proc = subprocess.run(
+            [sys.executable, str(copy / "skills" / "critique-clarity" / "scripts" / "checks.py"), str(artifact)],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"},
+            timeout=120,
+        )
+        after = run_bench.tree_snapshot(copy)
+    assert proc.returncode == 0, proc.stderr
+    assert proc.stdout.strip()
+    assert run_bench.snapshot_changes(before, after) == []
+
+
+def test_snapshot_changes_names_every_kind_of_change_and_ignores_bytecode(tmp_path) -> None:
+    (tmp_path / "keep.md").write_text("same", encoding="utf-8")
+    (tmp_path / "edit.md").write_text("before", encoding="utf-8")
+    (tmp_path / "gone.md").write_text("here", encoding="utf-8")
+    before = run_bench.tree_snapshot(tmp_path)
+
+    (tmp_path / "edit.md").write_text("after", encoding="utf-8")
+    (tmp_path / "gone.md").unlink()
+    (tmp_path / "new.json").write_text("{}", encoding="utf-8")
+    (tmp_path / "pkg" / "__pycache__").mkdir(parents=True)
+    (tmp_path / "pkg" / "__pycache__" / "mod.cpython-312.pyc").write_bytes(b"\x00")
+
+    assert run_bench.snapshot_changes(before, run_bench.tree_snapshot(tmp_path)) == [
+        "added new.json",
+        "deleted gone.md",
+        "modified edit.md",
+    ]
+
+
+def _plugin_fixture(tmp_path: Path) -> ArtifactRef:
+    """A miniature plugin with the corpus beside it, laid out the way the repository is."""
+    _, artifact = _corpus_with_manifest(tmp_path)
+    (tmp_path / "library.json").write_text("{}", encoding="utf-8")
+    skill = tmp_path / "skills" / "critique-clarity"
+    (skill / "scripts").mkdir(parents=True)
+    (skill / "SKILL.md").write_text("---\nname: critique-clarity\n---\n", encoding="utf-8")
+    (skill / "scripts" / "checks.py").write_text("print('ok')\n", encoding="utf-8")
+    return artifact
+
+
+class _ActingClient:
+    """Stands in for the CLI and does something to the plugin directory it is handed."""
+
+    def __init__(self, actions: list[Callable[[Path], None]]) -> None:
+        self.plugin_dirs: list[Path] = []
+        outer = self
+
+        class _Messages:
+            def create(self, **kwargs: Any) -> FakeResponse:
+                plugin = Path(kwargs["plugin_dir"])
+                outer.plugin_dirs.append(plugin)
+                actions.pop(0)(plugin)
+                return FakeResponse(json.dumps(_ENVELOPE_FROM_SKILL))
+
+        self.messages = _Messages()
+
+
+def test_the_cli_never_sees_the_answer_keys(tmp_path) -> None:
+    artifact = _plugin_fixture(tmp_path)
+    seen: dict[str, bool] = {}
+
+    def look(plugin: Path) -> None:
+        seen["bench"] = (plugin / "bench").exists()
+        seen["skill"] = (plugin / "skills" / "critique-clarity" / "SKILL.md").is_file()
+
+    run_bench.execute_skill_cell(
+        _clarity_cell(tmp_path, artifact),
+        client=_ActingClient([look]),
+        repo_root=tmp_path,
+        frontmatter=_CLARITY_FRONTMATTER,
+        now_fn=_now,
+    )
+    assert seen == {"bench": False, "skill": True}
+
+
+def test_a_run_that_rewrites_its_plugin_fails_and_writes_no_envelope(tmp_path) -> None:
+    """The cell fails, the grid goes on, and the next cell gets a clean copy."""
+    artifact = _plugin_fixture(tmp_path)
+    checks = Path("skills") / "critique-clarity" / "scripts" / "checks.py"
+    observed: list[str] = []
+
+    def tamper(plugin: Path) -> None:
+        (plugin / checks).write_text("print('tampered')\n", encoding="utf-8")
+
+    def observe(plugin: Path) -> None:
+        observed.append((plugin / checks).read_text(encoding="utf-8"))
+
+    first = _clarity_cell(tmp_path, artifact)
+    second = dataclasses.replace(first, run_index=2, out_path=tmp_path / "out" / "haiku-r2.json")
+    client = _ActingClient([tamper, observe])
+
+    results = []
+    for cell in (first, second):
+        try:
+            run_bench.execute_skill_cell(
+                cell,
+                client=client,
+                repo_root=tmp_path,
+                frontmatter=_CLARITY_FRONTMATTER,
+                now_fn=_now,
+            )
+            results.append("ok")
+        except run_bench.StrayWriteError as exc:
+            results.append(str(exc))
+
+    assert "modified skills/critique-clarity/scripts/checks.py" in results[0]
+    assert results[1] == "ok"
+    assert observed == ["print('ok')\n"], "the second cell must get a fresh, untampered copy"
+    assert (tmp_path / checks).read_text(encoding="utf-8") == "print('ok')\n", "the live tree is untouched"
+    assert client.plugin_dirs[0] != client.plugin_dirs[1]
+
+
+def test_a_run_that_only_adds_a_file_is_reported_not_failed(tmp_path, capsys) -> None:
+    """Every SKILL.md has the model write findings.json at a path of its choosing after changing
+    into its skill directory. In a per-cell copy that file reaches nothing, so it costs no cell."""
+    artifact = _plugin_fixture(tmp_path)
+
+    def add(plugin: Path) -> None:
+        (plugin / "skills" / "critique-clarity" / "findings.json").write_text("{}", encoding="utf-8")
+
+    envelope = run_bench.execute_skill_cell(
+        _clarity_cell(tmp_path, artifact),
+        client=_ActingClient([add]),
+        repo_root=tmp_path,
+        frontmatter=_CLARITY_FRONTMATTER,
+        now_fn=_now,
+    )
+    assert envelope["findings"]
+    assert "added skills/critique-clarity/findings.json" in capsys.readouterr().err
+    assert not (tmp_path / "skills" / "critique-clarity" / "findings.json").exists()
+
+
+def test_live_tree_changes_ignores_the_run_directory(tmp_path) -> None:
+    before = {"README.md": " M aaa"}
+    after = {
+        "README.md": " M bbb",
+        "bench/results/runs-x/critique-clarity/clarity-001/haiku-r1.json": "?? ccc",
+        "skills/critique-clarity/stray.md": "?? ddd",
+    }
+    changes = run_bench.live_tree_changes(
+        before, after, exclude=[tmp_path / "bench" / "results" / "runs-x"], repo_root=tmp_path
+    )
+    assert changes == ["README.md", "skills/critique-clarity/stray.md"]
+
+
+def test_live_tree_state_reads_this_repository() -> None:
+    """None only where git is absent; in a checkout it is a mapping, possibly empty."""
+    state = run_bench.live_tree_state()
+    assert state is None or isinstance(state, dict)

@@ -98,7 +98,7 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**27 items depend on nothing and can start today.** Derived from each item's own
+**26 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
@@ -123,7 +123,6 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E70 | Teach the skill template how a synthesized rubric lays out its references and anchors | S | unscheduled |
 | E71 | Let a skill keep a bibliography in references/ without a criterion table | S | unscheduled |
 | E10 | Rule how BYOR is measured under the measured-only exclusion | M | v0.2.0 |
-| E27 | Isolate the bench harness from the working tree it measures | M | v0.2.0 |
 | E63 | Bring the dispatch run sets into results.json, or amend the rule they break | M | v0.2.0 |
 | E73 | Make the merge step run the scripted lane itself, instead of trusting the model's copy | M | v0.3.0 |
 | E67 | Expand critique-accessibility with the WCAG 2.2 AA criteria checkable from static markup | M to L | v0.2.0 |
