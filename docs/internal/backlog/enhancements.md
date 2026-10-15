@@ -728,7 +728,15 @@ and the repository did not have.
   to replace.
 - **UNBLOCKED 2026-09-15.** E19's dispatch landed at 40 of 40, so the sonnet-tier consistency data
   this item needs now exists on `bench-results/34917562578` and only needs committing.
-- **Rank at intake:** 26 of 64. **Status:** ready 2026-09-24; E19's envelopes are committed.
+- **CLOSED 2026-10-15 by
+  [ADR 0038 (consistency threshold v2)](../decisions/0038-consistency-threshold-v2-per-tier-floors.md).**
+  The maintainer ruled the recommended option on all three decisions. The overall-lane floor is set
+  per tier: 0.450 on sonnet, the lowest current-harness figure among the core skills
+  (`critique-clarity`, run `34917562578`), and 0.309 on haiku, carried from ADR 0022 until the core
+  skills have current-harness haiku data. The scripted lane's expected value is 1.000, reported and
+  not gated until E73 lands. The judged lane is a diagnostic with no threshold. The sonnet floor is
+  not in any published `results.json`, which makes E63 the item that restores the rule it breaks.
+- **Rank at intake:** 26 of 64. **Status:** closed 2026-10-15.
 
 ## E27 - Isolate the bench harness from the working tree it measures
 

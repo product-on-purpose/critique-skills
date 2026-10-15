@@ -50,8 +50,12 @@ A stretch skill ships only if **both** conditions hold ([S-05](../../docs/intern
 
 1. **Baseline win.** Higher seeded-defect recall than the frozen `baseline-generic` prompt at
    equal-or-better precision, on at least one pinned tier.
-2. **Consistency floor.** Consistency at or above **0.309**, the minimum core-skill overall-lane
-   consistency, per [ADR 0022 (consistency floor: 0.309, overall lane)](../../docs/internal/decisions/0022-consistency-floor-overall-lane-min-core.md).
+2. **Consistency floor.** Consistency at or above the floor for the tier being cited, on the overall
+   lane. The verdicts below applied **0.309**, the minimum core-skill overall-lane consistency, per
+   [ADR 0022 (consistency floor: 0.309, overall lane)](../../docs/internal/decisions/0022-consistency-floor-overall-lane-min-core.md).
+   Since 2026-10-15 the floor is **0.450 on sonnet** and **0.309 on haiku**, per
+   [ADR 0038 (consistency threshold v2)](../../docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md).
+   Every shipped skill clears both.
 
 A skill failing either condition is excluded from `library.json` components and retained in-tree as
 `status: incubating`, with its numbers published here regardless.

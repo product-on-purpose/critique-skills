@@ -196,8 +196,9 @@ no existing one.
 The gate specification, the measured bands, and what they do not cover are in
 [ADR 0031](docs/internal/decisions/0031-fidelity-gate-acceptance-band.md). Two results worth knowing
 before planning any re-run: **haiku's bands are 2.3x wider than sonnet's**, so the cheap tier is the
-weak test, and **consistency cannot be banded by this method**, so the 0.309 floor has no
-uncertainty estimate.
+weak test, and **consistency cannot be banded by this method**, so neither consistency floor has
+an uncertainty estimate (0.450 on sonnet and 0.309 on haiku, per
+[ADR 0038](docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md)).
 
 ### Release (`.github/workflows/release.yml`)
 

@@ -63,7 +63,8 @@ came from.
 - The `critique-forms` ship verdict: [ADR 0037 (critique-forms 0.1.0 ships)](../../docs/internal/decisions/0037-critique-forms-ship-verdict.md)
 - Measurement basis: [`measurement-manifest.json`](measurement-manifest.json) and
   [ADR 0023 (v0.1.0 measurement basis)](../../docs/internal/decisions/0023-v0.1.0-measurement-basis-two-pinned-tiers-k5.md)
-- Consistency floor: [ADR 0022 (consistency floor: 0.309, overall lane)](../../docs/internal/decisions/0022-consistency-floor-overall-lane-min-core.md)
+- Consistency floor: [ADR 0022 (consistency floor: 0.309, overall lane)](../../docs/internal/decisions/0022-consistency-floor-overall-lane-min-core.md),
+  amended by [ADR 0038 (consistency threshold v2: 0.450 sonnet, 0.309 haiku)](../../docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md)
 - Full generated tables, every skill and baseline row: [`../README.md`](../README.md)
 
 ---
