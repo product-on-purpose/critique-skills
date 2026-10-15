@@ -622,7 +622,16 @@ and the repository did not have.
 - **Size:** M. **Release:** v0.2.0. **Category:** measurement. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** Nothing, self-contained within bench/metrics
-- **Rank at intake:** 22 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-10-14.** `results_version` 1.3.0 adds `severity_agreement` (exact agreement on
+  criterion-level matched pairs), via a new `match.match_pairs` that keeps the pairing
+  `match_claims_to_defects` discarded. Rescored all three run sets and merged the field by identity
+  key; no other field of the 90 entries moved, and `variance.json` still verifies. Two design
+  choices, ruled on the maintainer's delegation: criterion-level rather than location-level
+  pairs, because severity is a rubric judgment and the baseline has no rubric; and exact agreement
+  rather than within-one, because the scale has four steps. **Read the judged lane:** the
+  generator plants scripted defects at `checks.py`'s own anchor severity, so scripted agreement is
+  1.000 in all 16 cells by design.
+- **Rank at intake:** 22 of 64. **Status:** closed 2026-10-14.
 
 ## E23 - Write methodology.md's location-level metrics section
 

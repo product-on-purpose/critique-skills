@@ -469,7 +469,8 @@ def test_lanes_table_reads_each_lane_from_its_own_entry() -> None:
     )
     rendered = render_lanes_table(entries)
     row = next(line for line in rendered.splitlines() if line.startswith("| critique-toy"))
-    assert row.endswith("| rs-1 | 0.130 | 0.110 | 0.150 | 0.580 | 0.853 | 0.768 |")
+    # The fixture entries predate results_version 1.3.0, so severity agreement reads n/a.
+    assert row.endswith("| rs-1 | 0.130 | 0.110 | 0.150 | n/a | 0.580 | 0.853 | 0.768 | n/a |")
 
 
 def test_lanes_table_omits_the_baseline() -> None:

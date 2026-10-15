@@ -40,12 +40,12 @@ def render_entries_table(entries: list[dict[str, Any]]) -> str:
         return "_No run set has been scored yet._"
     header = (
         "| Skill | Version | Model | Domain | Artifact type | Artifact-runs (k=5) | Recall | Precision | "
-        "Clean FP rate | Consistency | Consistency (exact) | Unresolvable |\n"
-        "|---|---|---|---|---|---|---|---|---|---|---|---|"
+        "Clean FP rate | Consistency | Consistency (exact) | Unresolvable | Severity agreement |\n"
+        "|---|---|---|---|---|---|---|---|---|---|---|---|---|"
     )
     rows = [
         "| {skill} | {version} | {model} | {domain} | {artifact_type} | {n} | {recall} | {precision} | "
-        "{fp} | {cons} | {cons_exact} | {unresolved} |".format(
+        "{fp} | {cons} | {cons_exact} | {unresolved} | {severity} |".format(
             skill=e["skill"],
             version=e["skill_version"],
             model=e["model"],
@@ -58,6 +58,8 @@ def render_entries_table(entries: list[dict[str, Any]]) -> str:
             cons=_fmt_metric(e["consistency"]),
             cons_exact=_fmt_metric(e["consistency_exact"]),
             unresolved=e["unresolvable_claims"],
+            # Absent from files written before results_version 1.3.0, which did not score it.
+            severity=_fmt_metric(e["severity_agreement"]) if "severity_agreement" in e else "n/a",
         )
         for e in sorted(entries, key=lambda e: (e["domain"], e["skill"], e["skill_version"], e["model"]))
     ]
@@ -168,17 +170,23 @@ def render_lanes_table(entries: list[dict[str, Any]]) -> str:
         for lane in LANES:
             entry = lanes.get(lane)
             if entry is None:
-                values.extend(["n/a", "n/a", "n/a"])
+                values.extend(["n/a", "n/a", "n/a", "n/a"])
                 continue
             values.extend(
-                [_fmt_metric(entry["recall"]), _fmt_metric(entry["precision"]), _fmt_metric(entry["consistency"])]
+                [
+                    _fmt_metric(entry["recall"]),
+                    _fmt_metric(entry["precision"]),
+                    _fmt_metric(entry["consistency"]),
+                    _fmt_metric(entry["severity_agreement"]) if "severity_agreement" in entry else "n/a",
+                ]
             )
         rows.append(f"| {skill} | {version} | {model} | {domain} | {run_set} | " + " | ".join(values) + " |")
 
     header = (
         "| Skill | Version | Model | Domain | Run set | Recall, judged | Precision, judged | "
-        "Consistency, judged | Recall, scripted | Precision, scripted | Consistency, scripted |"
-        "\n|---|---|---|---|---|---|---|---|---|---|---|"
+        "Consistency, judged | Severity agreement, judged | Recall, scripted | Precision, scripted | "
+        "Consistency, scripted | Severity agreement, scripted |"
+        "\n|---|---|---|---|---|---|---|---|---|---|---|---|---|"
     )
     return "\n".join([header, *rows])
 
@@ -356,7 +364,10 @@ def render_block(results: dict[str, Any]) -> str:
             "",
             "**Full per-run figures.** Every skill, baseline, model, and domain in this run set; "
             "the location-level table above and the rubric-operationalization table below are both "
-            "derived from these rows.",
+            "derived from these rows. Severity agreement pools both lanes and is mostly the scripted "
+            "lane's by-design 1.000; the per-lane table at the end carries the judged-lane figure, "
+            "which is the one that measures a model. It is n/a for `baseline-generic`, which has no "
+            "criterion-level matches.",
             "",
             render_entries_table(entries),
             "",
@@ -374,8 +385,11 @@ def render_block(results: dict[str, Any]) -> str:
             "rubric-operationalization table above is both lanes pooled. Each lane's recall is measured "
             "against every seeded defect, not only those under its own criteria, so it reads as that "
             "lane's share of the pooled recall; each lane's precision is over its own claims only. "
-            "`baseline-generic` has no scripted lane and is omitted. See bench/results/README.md, "
-            "\"The numbers\".",
+            "Severity agreement is the share of matched defects whose claim carries exactly the planted "
+            "`severity_expected`. Read it on the judged lane: the corpus generator plants each scripted "
+            "defect at the severity `checks.py`'s own anchor rule assigns, so scripted agreement is "
+            "1.000 by design and says nothing about a model. `baseline-generic` has no scripted lane "
+            "and is omitted. See bench/results/README.md, \"The numbers\".",
             "",
             render_lanes_table(all_entries),
             END_MARKER,

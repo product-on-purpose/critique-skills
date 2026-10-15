@@ -58,7 +58,7 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
    - The methodology's location-level metrics section written up properly.
    - `verdicts.md` rewritten as one document instead of a layered amendment trail.
    - An automated check for the evidence-quotes-not-characterizes field contract.
-   - `severity_expected` scoring turned on.
+   - ~~`severity_expected` scoring turned on~~ **(done 2026-10-14)**.
    - The example and golden envelopes carry only real model values or a documented sentinel, not run metadata written by hand.
    - The benchmark harness isolated from the working tree it measures, and the Claude Code CLI version it installs pinned or recorded.
 
@@ -77,7 +77,7 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 - Consistency threshold v2 is published with its method.
 - No `run.model` value outside the two pinned tiers appears under `skills/` or `examples/`, unless it is a documented sentinel, and a check enforces that.
 - `bench/results/verdicts.md` is one current-state document.
-- `severity_expected` is scored in the results table.
+- `severity_expected` is scored in the results table **(met 2026-10-14)**.
 - The evidence-quotes check runs in CI.
 - ~~`bench/results/runs/steering/` no longer sits inside the `runs*` glob~~ **(met 2026-09-14)**.
 - ~~A recorded ruling exists on `askit-*` authoring and CodeQL~~ **(met 2026-09-15: both adopted, CodeQL shipped)**.

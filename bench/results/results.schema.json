@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/product-on-purpose/critique-skills/main/bench/results/results.schema.json",
   "title": "Bench results",
-  "description": "Every computed number for one run set, produced by `python -m bench.metrics score` from committed manifests and run envelopes and nothing else. The README results table (bench/report.py) is generated from this file and only this file: no number appears in any document in this repository that is not present here. This file is results version 1.1.0 and validates 1.x documents only.",
+  "description": "Every computed number for one run set, produced by `python -m bench.metrics score` from committed manifests and run envelopes and nothing else. The README results table (bench/report.py) is generated from this file and only this file: no number appears in any document in this repository that is not present here. This file is results version 1.3.0 and validates 1.x documents only.",
   "$comment": "Results version 1.1.0. `entries[]` holds one row per (skill, skill_version, model, domain) group, baseline rows included: a baseline run carries skill \"baseline-generic\" in the same array, at the same shape, so a report script computes a skill-versus-baseline comparison by matching (domain, model) pairs rather than reading a separately stored, and therefore possibly stale, comparison table. 1.1.0 added recall_location and precision_location (P3 rescore, bench/results/README.md, \"Baseline comparison\"): recall.value and precision.value require an exact criterion-string match between a finding and a planted defect, which pins baseline-generic at exactly 0.0 everywhere because every baseline finding carries the fixed criterion BASELINE-GENERIC that no manifest plants a defect under; recall_location and precision_location apply the same per-artifact-type location tolerance with the criterion check dropped, so a skill and the baseline can be compared on whether either one pointed at the right place at all. Additive and backward-compatible: every 1.0.0 field keeps its old meaning and value.",
   "type": "object",
   "required": [
@@ -154,6 +154,10 @@
         "consistency_exact": {
           "$ref": "#/$defs/consistencyValue",
           "description": "The same aggregation as consistency, computed with zero tolerance on the canonical (criterion, key) sets. The gap between consistency and consistency_exact is the skill's location-phrasing instability."
+        },
+        "severity_agreement": {
+          "$ref": "#/$defs/metricValue",
+          "description": "Added in results_version 1.3.0 (E22). Of the criterion-level matches that produced recall, the share whose claim carries exactly the severity the manifest planted the defect at (severity_expected, 1 to 4). It reads only matched pairs, so it measures whether a found defect was rated right, not whether defects were found. Null for baseline-generic by construction, because it has no criterion-level matches. Optional so that 1.2.0 documents still validate."
         }
       },
       "description": "Since results_version 1.2.0 an entry is identified by (skill, skill_version, model, domain, run_set, lane); before that it was the first four, and a file holding two run sets could not say which entry came from which."
