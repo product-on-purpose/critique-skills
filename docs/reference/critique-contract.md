@@ -40,6 +40,8 @@ These are [methodology section 5](../explanation/methodology.md#5-the-critique-c
 - **`stripped_context`** must record every piece of framing that was actually disregarded. An absent field asserts that nothing was stripped, and only the critic knows whether that is true.
 - **`rubric_source`** must be `byor` for every finding of a BYOR run. The schema forces it whenever the criterion starts `BYOR-`, but a user rubric may declare its own namespace, and nothing in the envelope records which mode the run was in.
 
+The `evidence` field contract above still sits entirely in the review layer; this does not move it and does not touch the validator or its eleven rules. What changed is that `evidence` now also carries a fixture-hygiene test, `contract/evidence.py` and `contract/tests/test_evidence.py` (E24), run by the `unit-python` CI job alongside everything else `python -m pytest` collects. The test classifies every finding's evidence in every authored fixture, meaning every golden fixture under `skills/**/examples/golden-*.json` and every `examples/<domain>/envelope.json` whose artifact resolves, as a quotation, a measurement, or neither, and fails the build on the third case against a maintainer-reviewed allowlist of known breaches. A pattern cannot decide whether a true quotation is also an honest one, so this catches only the characterization shape, a free sentence with no verbatim fragment and no computed figure; it does not and cannot replace the reviewer's judgment the rest of this page describes. The same classifier also reports, never gates, the same breakdown over committed benchmark envelopes under `bench/results/runs*/`, which are measured model output rather than an authored claim: `python -m contract.evidence report bench/results/runs`.
+
 ### Machine-checked: what a passing validator does mean
 
 Stated so the boundary reads in both directions. A document that validates has been checked for all of this, and a reviewer need not re-check any of it by hand:
@@ -83,6 +85,8 @@ In text: frontmatter routes each criterion to one of two lanes. The scripted lan
 A run envelope has exactly three top-level keys.
 
 `run` is the reproducibility record: which skill and skill version ran, which contract version the envelope was written against, the artifact's path and SHA-256, the pinned model ID, an RFC 3339 UTC timestamp, and the `rubrics` array of every criterion namespace the run drew on. It optionally carries `stripped_context`, the clean-context ledger of authorial framing, requester opinion, prior critique, or scope steering that arrived with the artifact and was disregarded; see [0014 (stripped context, a typed run field)](../internal/decisions/0014-stripped-context-run-field.md) for why that ledger is typed rather than a free-text notes field.
+
+`run.model` carries one of three kinds of value: a pinned model ID for a real measured run, `none` for a run whose findings are all scripted-lane (no judged lane ran), or the documented sentinel `illustrative` for a hand-authored envelope that carries a judged-lane finding no measured model run ever produced. `contract/tests/test_run_model_provenance.py` walks every envelope under `skills/` and `examples/` and fails on any other value.
 
 `findings` is the array of findings this run actually emits, after output bounding. Empty is valid and expected for a clean artifact. A finding the output bound suppressed does not appear here; it is still counted in `summary.by_severity`, so nothing about it disappears silently, only its prose does.
 

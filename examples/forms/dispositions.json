@@ -1,0 +1,75 @@
+{
+  "contract_version": "1.0.0",
+  "envelope": {
+    "skill": "critique-forms",
+    "skill_version": "0.1.0",
+    "artifact": "skills/critique-forms/examples/artifacts/golden-05.html",
+    "artifact_sha256": "df62d7b38659529bf26df03102d3e7969a1c47b7c66e72bc8d3cf208f082bc1f",
+    "timestamp": "2026-10-14T00:00:00Z"
+  },
+  "dispositions": [
+    {
+      "finding_id": "F-001",
+      "disposition": "accept",
+      "note": "Confirmed: the phone field is required and the form also asks for an email address, with no word anywhere saying why a phone number is needed. Adding a line explaining it is used only to confirm a shipment.",
+      "criterion": "FORMS-PHONE-REASON",
+      "decided_at": "2026-10-14T09:12:00Z"
+    },
+    {
+      "finding_id": "F-002",
+      "disposition": "accept",
+      "note": "Confirmed: the membership number's 8-digit rule lives only in the placeholder, which disappears on the first keystroke. Moving it into hint text linked with aria-describedby next release.",
+      "criterion": "FORMS-PLACEHOLDER-INSTRUCTION",
+      "decided_at": "2026-10-14T09:15:00Z"
+    },
+    {
+      "finding_id": "F-003",
+      "disposition": "accept",
+      "note": "Confirmed: fourteen required fields and one optional field, and nothing marks either state. Adding (optional) to the one field that needs it is simpler than marking all fourteen.",
+      "criterion": "FORMS-REQUIRED-OPTIONAL",
+      "decided_at": "2026-10-14T09:18:00Z"
+    },
+    {
+      "finding_id": "F-004",
+      "disposition": "accept",
+      "note": "Confirmed: Clear form sits directly beside Create account, styled the same. Removing the reset control; nothing in support tickets has ever asked for it.",
+      "criterion": "FORMS-RESET-BUTTON",
+      "decided_at": "2026-10-14T09:21:00Z"
+    },
+    {
+      "finding_id": "F-005",
+      "disposition": "accept",
+      "note": "Confirmed against the declared style: 11px text and 1px by 2px padding render well under the 44 pixel target. Raising the button's padding and font size to match the other buttons on the page clears this.",
+      "criterion": "FORMS-TOUCH-TARGET",
+      "decided_at": "2026-10-14T09:24:00Z"
+    },
+    {
+      "finding_id": "F-006",
+      "disposition": "accept",
+      "note": "Confirmed: the account-number field has no inputmode attribute, so it opens the full keyboard for a digit string. Adding inputmode=numeric is a one-attribute change.",
+      "criterion": "FORMS-NUMERIC-INPUTMODE",
+      "decided_at": "2026-10-14T09:27:00Z"
+    },
+    {
+      "finding_id": "F-007",
+      "disposition": "defer",
+      "note": "Real, but Preferred shipping speed uses the shared design-system select component, which is already being replaced by a visible-options variant across the whole form library next quarter. Tracking against that rework instead of swapping this one instance early.",
+      "criterion": "FORMS-OPTION-CONTROL",
+      "decided_at": "2026-10-14T09:30:00Z"
+    },
+    {
+      "finding_id": "F-008",
+      "disposition": "accept",
+      "note": "Confirmed: the new-password field's minlength is 6. Raising it to 8 and leaving the field otherwise unconstrained, per the account team's own password policy.",
+      "criterion": "FORMS-PASSWORD-RULES",
+      "decided_at": "2026-10-14T09:33:00Z"
+    },
+    {
+      "finding_id": "F-009",
+      "disposition": "reject",
+      "note": "Given name and family name are collected separately on purpose: this account feeds a legal-identity verification step downstream that requires the two parts distinct, not concatenated prose. The split costs the extra box the finding describes, but merging the fields would break the verification step it exists for. Revisit if that downstream requirement ever changes.",
+      "criterion": "FORMS-SPLIT-ENTITY",
+      "decided_at": "2026-10-14T09:36:00Z"
+    }
+  ]
+}
