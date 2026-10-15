@@ -56,7 +56,7 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
    - ~~Per-entry `run_set` and a lane dimension added to the results schema~~ **(done 2026-09-14)**.
    - ~~`critique-usability`'s Sonnet cell re-measured~~ **(done 2026-09-25)**. It still does not qualify against baseline on that tier; see "Known limitations" below.
    - The methodology's location-level metrics section written up properly.
-   - `verdicts.md` rewritten as one document instead of a layered amendment trail.
+   - ~~`verdicts.md` rewritten as one document instead of a layered amendment trail~~ **(done 2026-10-15)**.
    - ~~An automated check for the evidence-quotes-not-characterizes field contract~~ **(done 2026-10-14)**.
    - ~~`severity_expected` scoring turned on~~ **(done 2026-10-14)**.
    - ~~The example and golden envelopes carry only real model values or a documented sentinel, not run metadata written by hand~~ **(done 2026-10-14)**.
@@ -76,7 +76,7 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 - At least one Sonnet envelope per skill is committed through the shipped harness, and the fidelity-gate verdict is re-evaluated on that tier **(met 2026-10-14)**. The verdict was re-evaluated on 2026-09-15 and came back a failure (see v0.1.x above). All seven skills now have Sonnet envelopes through the shipped harness: four dispatches on 2026-10-14 added `critique-accessibility`, `critique-argument`, `critique-docs` and `critique-microcopy`. Read against their published bands, `critique-microcopy` lands inside on both gated figures, and `critique-argument` and `critique-accessibility` each miss one figure by less than half the band's width. `critique-docs` misses a band of zero width by one stray claim ([ADR 0031](docs/internal/decisions/0031-fidelity-gate-acceptance-band.md)).
 - Consistency threshold v2 is published with its method **(met 2026-10-15, [ADR 0038](docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md))**.
 - No `run.model` value outside the two pinned tiers appears under `skills/` or `examples/`, unless it is a documented sentinel, and a check enforces that **(met 2026-10-14)**.
-- `bench/results/verdicts.md` is one current-state document.
+- `bench/results/verdicts.md` is one current-state document **(met 2026-10-15)**.
 - `severity_expected` is scored in the results table **(met 2026-10-14)**.
 - The evidence-quotes check runs in CI **(met 2026-10-14)**.
 - ~~`bench/results/runs/steering/` no longer sits inside the `runs*` glob~~ **(met 2026-09-14)**.
