@@ -30,7 +30,10 @@ which at the point it matters, not only here:
   envelope, a fixture checked into that skill's test suite and validated with
   `python -m contract.validate` before it was accepted. A fresh judged-lane run against the same
   artifact should land on the same criteria and severities; the exact wording of a `violation` or
-  `fix` can vary run to run, the way any model output does.
+  `fix` can vary run to run, the way any model output does. Because of this, every golden envelope
+  that carries a judged-lane finding reads `run.model: "illustrative"`: no measured model run ever
+  produced these bytes, and that sentinel says so in the field itself rather than only in this
+  prose.
 - **Curated illustration.** Disposition logs, findings-tour commentary, and (inside `recipes/`) one
   fictional consumer repository are authored for these pages, not sampled from a live run. Each page
   says so at the point it matters.

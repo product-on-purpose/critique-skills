@@ -163,7 +163,27 @@ and the repository did not have.
 - **Size:** M. **Release:** v0.2.0. **Category:** contract. **Confidence:** verified.
 - **Blocks:** Nothing downstream; load-bearing for the receipts argument
 - **Depends on:** Half (a) nothing; half (b) the sentinel decision, which is part of this item
-- **Rank at intake:** 5 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-10-14.** An inventory of every JSON file under `skills/` and `examples/` found 35
+  embedded run envelopes, not 31: 13 already carried a correct `run.model` of `none`, and the
+  other 22 carried the fabricated `claude-sonnet-4-5-20250929`. Of those 22, 7 had no judged-lane
+  finding (2 scripted-only, 5 with zero findings at all) and were corrected to `none`; the other
+  15 carry at least one judged-lane finding and were relabeled to the sentinel `illustrative`,
+  ruled on the maintainer's delegation to mean "hand-authored for illustration, never a measured
+  model run." Every file got a single-line, byte-level edit to its `model` value only; no finding,
+  timestamp, or other field changed, so no golden needed regeneration via `scripts/checks.py`. The
+  sentinel is documented in three places: `contract/critique-contract.schema.json`'s `run.model`
+  property description and `examples`, `docs/reference/critique-contract.md`, and
+  `examples/README.md`'s honesty-labeling section. The enforcing check is
+  `contract/tests/test_run_model_provenance.py`, which walks every JSON file under both
+  directories, reads the pinned tiers from `bench/results/measurement-manifest.json` rather than
+  hard-coding them, and fails naming each offending file; it also asserts the walker finds a
+  non-trivial number of envelopes and that a synthetic bad value is caught, so neither check can
+  go vacuous silently. `examples/recipes/revision-loop.md` already used a different, narrower
+  sentinel, `authored-illustration`, for one illustrative excerpt inside a markdown recipe; that
+  file is prose, not one of the 35 envelopes the check covers, and was left as is rather than
+  reopened under this item. Correcting RC-HANDOVER.md:116's fixture count was in this item's
+  original scope and was not done here; it remains open.
+- **Rank at intake:** 5 of 64. **Status:** closed 2026-10-14.
 
 ## E6 - Add per-entry run_set and a lane dimension to results.schema.json (v1.2.0)
 
