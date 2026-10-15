@@ -28,7 +28,7 @@ Every skill operationalizes a published external standard, cites a permanent cri
 | **Build on it or contribute** | [How a critique runs](#-how-a-critique-runs) and [where this stops](#-where-this-stops) | [The methodology](https://product-on-purpose.github.io/critique-skills/explanation/methodology/), the [Critique Contract](docs/reference/critique-contract.md), and [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 
 > [!NOTE]
-> **v0.1.6.** The finding contract, the severity scale, and the criterion IDs are stable commitments. The measured numbers are honest but young: one benchmark cycle on two pinned model tiers, with the consistency floor calibrated to **0.309**, well below the 0.7 proposed before any data existed.
+> **v0.1.6.** The finding contract, the severity scale, and the criterion IDs are stable commitments. The measured numbers are honest but young: one benchmark cycle on two pinned model tiers, with consistency floors set per tier at **0.450** on Sonnet and **0.309** on Haiku, well below the 0.7 proposed before any data existed ([ADR 0038](docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md)).
 
 ---
 
@@ -193,7 +193,7 @@ Receipts come before the claim, because that is the order that earns trust.
 _Location-level, shipped versions only, run set `p3-2026-07-31-plus-cal1-2026-08-01-plus-bench-2026-10-03`. Every figure is computed from `bench/results/results.json`._
 <!-- bench-scoreboard:end -->
 
-Recall is the flattering half. The floor is `critique-clarity` on Haiku at **0.309** run-to-run consistency, the lowest figure any core skill measured, with its judged lane alone at **0.150**. Among shipped skills precision falls to **0.169**, on `critique-usability` at Sonnet. Counting the retired `critique-accessibility` 0.1.0 it falls to **0.155**, which is the version [the failure below](#the-most-instructive-number-is-a-failure) is about. Both cuts are named because they are different questions: what you can install today, and what this library has ever measured.
+Recall is the flattering half. The lowest run-to-run consistency published is `critique-clarity` on Haiku at **0.309**, the lowest figure any core skill measured, with its judged lane alone at **0.150**. Among shipped skills precision falls to **0.169**, on `critique-usability` at Sonnet. Counting the retired `critique-accessibility` 0.1.0 it falls to **0.155**, which is the version [the failure below](#the-most-instructive-number-is-a-failure) is about. Both cuts are named because they are different questions: what you can install today, and what this library has ever measured.
 
 Every measured cell, with the counts behind every ratio: the [receipts explorer](https://product-on-purpose.github.io/critique-skills/receipts/). Every per-run figure ([`variance.json`](bench/results/variance.json)) and all 851 run envelopes (`bench/results/runs*/`) live in the repo, read unflattering numbers first by [`bench/results/README.md`](bench/results/README.md). Nothing lives only on the site.
 

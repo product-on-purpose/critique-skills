@@ -56,8 +56,8 @@ Stated here as well as in the ADR, because a number is easier to over-read than 
 - **k=5 makes the bootstrap coarse.** Five repetitions admit at most 5**5 distinct resamples, so the
   band understates true uncertainty rather than overstating it.
 - **Consistency is not banded and cannot be by this method.** `score.score_consistency` compares
-  pairs of envelopes and is undefined for a single repetition, so the published 0.309 floor carries
-  no uncertainty estimate. A band for it needs a different construction.
+  pairs of envelopes and is undefined for a single repetition, so the published consistency floors
+  carry no uncertainty estimate. A band for it needs a different construction.
 """
 
 from __future__ import annotations

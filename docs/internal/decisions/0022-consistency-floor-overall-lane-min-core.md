@@ -10,6 +10,13 @@
 - **Date:** 2026-07-31
 - **Deciders:** Jonathan Prisant, build-run P3 calibration judge (Claude)
 
+> **Amended 2026-10-15 by [ADR 0038 (consistency threshold v2)](0038-consistency-threshold-v2-per-tier-floors.md).**
+> The floor is now set per tier, by this ADR's method applied to the current benchmark harness.
+> Sonnet's floor is 0.450, from `critique-clarity` through the current harness. Haiku keeps this
+> ADR's 0.309 until all three core skills have current-harness haiku data. The scripted lane has an
+> expected value of 1.000, and the judged lane stays a diagnostic. This ADR is left as written,
+> because it records the floor that gated v0.1.0.
+
 ## Context and problem statement
 
 [R1 (consistency floor value)](../release-plans/plan_v0.1.0/plan_v0.1.0.md) left the stretch-skill consistency gate unset on purpose: the 0.7 Jaccard target in [methodology section 8](../../explanation/methodology.md) is a placeholder, and a pre-committed arbitrary number would either block every stretch skill or gate none of them. The plan's recommendation is `floor = min(core-skill consistency)` measured in P3, "minus nothing", so that the public claim is "stretch skills ship only if they are at least as consistent as the core skills we measured first".
