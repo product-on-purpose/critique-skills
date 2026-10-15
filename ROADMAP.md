@@ -20,7 +20,7 @@ This is a public statement of sequence, not a schedule. It says what shipped, wh
 
 Six patch releases have shipped since `v0.1.0`. None added a skill, a criterion, or a re-score, which is what patch scope means here; each fixed defects found by running something that had never been run. `CHANGELOG.md` carries the detail.
 
-Shipped: six measured critique skills (`critique-accessibility`, `critique-argument`, `critique-clarity`, `critique-docs`, `critique-microcopy`, `critique-usability`), the Critique Contract (finding schema, run envelope, disposition log) frozen with a JSON Schema and validator, the `critique-critic` clean-context subagent, a deterministic seeded-defect benchmark with 701 committed run envelopes across two pinned model tiers, `--gate` mode for CI, and Convergent (Silver) conformance with 0 errors and 0 warnings.
+Shipped: six measured critique skills (`critique-accessibility`, `critique-argument`, `critique-clarity`, `critique-docs`, `critique-microcopy`, `critique-usability`), the Critique Contract (finding schema, run envelope, disposition log) frozen with a JSON Schema and validator, the `critique-critic` clean-context subagent, a deterministic seeded-defect benchmark with 851 committed run envelopes across two pinned model tiers, `--gate` mode for CI, and Convergent (Silver) conformance with 0 errors and 0 warnings.
 
 Full detail: [`CHANGELOG.md`](CHANGELOG.md) and [`RELEASE-NOTES.md`](RELEASE-NOTES.md). Measured numbers: [`bench/results/README.md`](bench/results/README.md).
 
@@ -73,7 +73,7 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 **Exit gate** (re-cut 2026-09-14):
 
 - Every entry in `bench/results/results.json` carries `run_set` and `lane` **(met 2026-09-14)**, and `bench.report` drift-checks the judged and scripted columns **(met 2026-10-14)**.
-- At least one Sonnet envelope per skill is committed through the shipped harness, and the fidelity-gate verdict is re-evaluated on that tier. The verdict was re-evaluated on 2026-09-15 and came back a failure (see v0.1.x above); three of the seven skills (`critique-clarity`, `critique-usability` and `critique-forms`) have Sonnet envelopes through the shipped harness so far.
+- At least one Sonnet envelope per skill is committed through the shipped harness, and the fidelity-gate verdict is re-evaluated on that tier **(met 2026-10-14)**. The verdict was re-evaluated on 2026-09-15 and came back a failure (see v0.1.x above). All seven skills now have Sonnet envelopes through the shipped harness: four dispatches on 2026-10-14 added `critique-accessibility`, `critique-argument`, `critique-docs` and `critique-microcopy`. Read against their published bands, `critique-microcopy` lands inside on both gated figures, and `critique-argument` and `critique-accessibility` each miss one figure by less than half the band's width. `critique-docs` misses a band of zero width by one stray claim ([ADR 0031](docs/internal/decisions/0031-fidelity-gate-acceptance-band.md)).
 - Consistency threshold v2 is published with its method.
 - No `run.model` value outside the two pinned tiers appears under `skills/` or `examples/`, unless it is a documented sentinel, and a check enforces that **(met 2026-10-14)**.
 - `bench/results/verdicts.md` is one current-state document.

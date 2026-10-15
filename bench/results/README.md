@@ -749,6 +749,32 @@ also HTML-escaped its location strings in 1 run, which no score notices. The lik
 fix are
 [E73 (make the merge step run the scripted lane itself)](../../docs/internal/backlog/enhancements.md).
 
+**Four sonnet run directories followed on 2026-10-14, one for each skill no sonnet dispatch had
+reached.** The maintainer approved them for the v0.2.0 exit gate, which asks for a Sonnet envelope
+per skill through the shipped harness. Workflow runs `38673834829` (`critique-accessibility` 0.1.1),
+`38673837025` (`critique-docs`), `38678419907` (`critique-argument`) and `38683363024`
+(`critique-microcopy`) each measured one skill and the frozen baseline at k=5. The workflow log dates
+them 2026-10-15 in UTC. They are committed as `bench/results/runs-dispatch-<run id>/`: 150 envelopes
+in all, 40 per directory except argument's 30, with no failed cell. Each directory was verified
+byte-identical to its result branch, and each result branch's only commit touched only that directory.
+
+**Each carries its own `results.json`, and two of those files predate severity scoring.** The
+accessibility and docs runs ran on commit `7e33112`, before
+[E22 (severity_expected scoring)](../../docs/internal/backlog/enhancements.md) landed. Their files are
+therefore results version 1.2.0 and carry no `severity_agreement`. The argument and microcopy runs
+ran after it, and their files are 1.3.0. Rebuilding all four with today's `build_results` reproduces
+every other field of every entry. The two older files are left as the harness wrote them, because a
+run directory is immutable evidence.
+
+**They feed no published number.** Each one shares its cell with a p3 or cal1 entry, which is the
+collision "Known issues" describes, so all four stay outside `results.json` under
+[E63 (dispatch run sets outside results.json)](../../docs/internal/backlog/enhancements.md). Their
+figures are read against the published bands in
+[ADR 0031](../../docs/internal/decisions/0031-fidelity-gate-acceptance-band.md), in the section dated
+2026-10-14. Microcopy lands inside on both gated figures, argument and accessibility each miss one,
+and docs misses a band of zero width. The four directories are also the evidence base for
+[E26 (consistency threshold v2)](../../docs/internal/backlog/enhancements.md).
+
 ## Limitations
 
 Stated so no reader has to infer them from an absence.
@@ -973,10 +999,12 @@ Reported, not fixed. Each affects how far a reader should trust the surrounding 
   told apart in this format at all. A per-entry `run_set` belongs in the v0.2 schema alongside the
   lane dimension that [ADR 0022](../../docs/internal/decisions/0022-consistency-floor-overall-lane-min-core.md)
   already flagged.
-- **Three committed run directories feed no entry in `results.json`, against a rule that says every
+- **Seven committed run directories feed no entry in `results.json`, against a rule that says every
   committed run set does.** `bench/README.md` states that `results.json` "carries every computed
   number for every committed run set". `runs-dispatch-31988100372/` (haiku, 2026-08-17),
-  `runs-dispatch-34917562578/` and `runs-dispatch-34917728793/` (sonnet, 2026-09-15) are committed and
+  `runs-dispatch-34917562578/` and `runs-dispatch-34917728793/` (sonnet, 2026-09-15), and four sonnet
+  directories from 2026-10-14 (`runs-dispatch-38673834829/`, `runs-dispatch-38673837025/`,
+  `runs-dispatch-38678419907/` and `runs-dispatch-38683363024/`) are committed and
   schema-checked on every CI run, and none of them is in it; their figures are quoted in prose in
   [ADR 0031](../../docs/internal/decisions/0031-fidelity-gate-acceptance-band.md), this file and the
   changelog instead. They stay out deliberately for now. Each shares `(skill, skill_version, model,
@@ -985,7 +1013,7 @@ Reported, not fixed. Each affects how far a reader should trust the surrounding 
   below. Closing it needs every reader to key on `run_set` as well, and a ruling on which run set a
   published table shows. Tracked as
   [E63 (dispatch run sets outside results.json)](../../docs/internal/backlog/enhancements.md).
-  A fourth directory, `runs-dispatch-37091134037/` (both tiers, 2026-10-03), is in it, and it is the
+  An eighth directory, `runs-dispatch-37091134037/` (both tiers, 2026-10-03), is in it, and it is the
   only dispatch run set that is. No earlier entry is in the `forms` domain, so its 12 entries collide
   with nothing. They joined on 2026-10-06 with the `critique-forms` ship verdict, as "Provenance"
   explains.

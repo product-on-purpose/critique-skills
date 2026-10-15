@@ -15,10 +15,14 @@
   no new model runs, by regrouping them on the repetition index in their filenames.
 - **The finding that changes the run:** **haiku's bands are 2.3x wider than sonnet's** (median width
   0.145 against 0.063). The cheap tier is the weak test, which reverses the obvious budget choice.
-- **The gate has run twice.** Haiku, 2026-08-17: one gated figure outside by less than its band's
-  width, so investigation. **Sonnet, 2026-09-15: `precision_location` outside by more than its band's
+- **The gate ran first on one cell per tier.** Haiku, 2026-08-17: one gated figure outside by less
+  than its band's width, so investigation. **Sonnet, 2026-09-15: `precision_location` outside by more than its band's
   width, so a failure by the gate's own rule**, most of it traced to the judged lane no longer
   emitting `instances`. See the two dated sections below.
+- **Four more sonnet cells ran on 2026-10-14.** Microcopy passes. Argument and accessibility each
+  miss one gated figure by less than half its band's width, so each triggers investigation. Docs
+  misses a band of zero width, which this ADR had already called unusable as a gate. No cell shows a
+  skill finding fewer defects. See the section dated 2026-10-14.
 - **The seeding changed on 2026-10-07 (variance 1.1.0).** Each cell-metric now draws from its own
   random stream, so adding a run set cannot move another cell's band. The switch moved 71 older
   bands once, by 0.011 at most, and no gate verdict changed. See the section dated 2026-10-07.
@@ -390,6 +394,71 @@ and it is the same cell. Gate power therefore varies 7.6x rather than 8x. The ti
 and 0.063, and the 2.3x ratio are unchanged. Those paragraphs are left as written, because they record
 what the 1.0.0 file said. That file is recoverable from git at `c4183e8`, and `bench/results/README.md`
 carries the current figures.
+
+## Four more sonnet cells, 2026-10-14: one pass, two investigations, and one band too narrow to gate
+
+The v0.2.0 exit gate in `ROADMAP.md` asks for at least one Sonnet envelope per skill through the
+shipped harness. Four approved dispatches supplied the missing skills on 2026-10-14:
+`critique-accessibility` 0.1.1 (run `38673834829`), `critique-docs` (run `38673837025`),
+`critique-argument` (run `38678419907`) and `critique-microcopy` (run `38683363024`). Each ran at k=5
+with full coverage and the frozen baseline beside it. Every one of these cells has a band in
+`variance.json` that was published before the runs, so the rule under "The gate" applies to each as
+written. They are companions to the 2026-09-15 verdict, as the usability cell was, and they do not
+replace it.
+
+| Cell | Gated metric | Committed | Harness | Band | Reading |
+|---|---|---|---|---|---|
+| `critique-microcopy` 0.1.0 | `recall_location` | 0.960 | 0.960 (72/75) | [0.933, 0.987] | inside |
+| | `precision_location` | 0.911 | 0.900 (72/80) | [0.887, 0.935] | inside |
+| `critique-argument` 0.1.0 | `recall_location` | 0.775 | 0.825 (33/40) | [0.750, 0.825] | inside, on the upper bound |
+| | `precision_location` | 0.470 | 0.532 (33/62) | [0.434, 0.500] | outside above, by 0.032 against a band 0.066 wide |
+| `critique-accessibility` 0.1.1 | `recall_location` | 0.965 | 0.953 (81/85) | [0.918, 1.000] | inside |
+| | `precision_location` | 0.672 | 0.623 (81/130) | [0.640, 0.702] | outside below, by 0.017 against a band 0.062 wide |
+| `critique-docs` 0.1.0 | `recall_location` | 1.000 | 1.000 (30/30) | [1.000, 1.000] | inside |
+| | `precision_location` | 1.000 | 0.968 (30/31) | [1.000, 1.000] | outside, against a band of zero width |
+
+**By the rule, microcopy passes, and argument and accessibility each trigger investigation.** Each of
+the two misses one gated figure by less than half its band's width. **Docs fails by the rule's
+letter**, because any miss is wider than a band of zero width. "Consequences" below already called
+that band useless as a gate, because a single stray claim fails it. Here the stray claim is one
+judged finding, in 20 envelopes, that matched no planted defect. It is recorded as a miss, and it is
+not read as evidence about fidelity.
+
+### What moved in the four cells
+
+**Output shape is not the mechanism this time.** On 2026-09-15, most of clarity's move traced to the
+judged lane no longer emitting `instances`. No argument, docs or microcopy envelope carries
+`instances`, committed or dispatched. The committed accessibility envelopes carry one finding with two
+instance claims, which cannot account for a precision drop of 0.049.
+
+**Both investigations trace to how many judged findings the critic wrote, in opposite directions.**
+On argument, the judged lane wrote 52 findings against 56 committed and matched 33 defects against
+31, so precision rose. On accessibility, the judged lane wrote 67 findings against 55 committed and
+matched one defect fewer, so precision fell. Accessibility's scripted lane also carried 63 findings
+against 65, which is the transport loss
+[E73 (make the merge step run the scripted lane itself)](../backlog/enhancements.md) names. The
+finding counts for microcopy and docs moved by one at most.
+
+**The frozen baseline moved more than the skills did.** The baseline is reported, not gated. Its
+`precision_location` lands outside its band in all four runs. Microcopy's baseline moved furthest:
+`recall_location` 0.987 (74/75) against [0.813, 0.867], and `precision_location` 0.357 against
+[0.451, 0.508]. The baseline prompt has not changed since p3, so this is movement the band does not
+cover, as its last paragraph under "The gate" says. One consequence matters for reading microcopy:
+its `recall_location` now trails the in-run baseline, 72 of 75 against 74 of 75. The baseline rose;
+the skill did not fall.
+
+### What the four cells license, and what they do not
+
+**The 2026-09-15 verdict stands.** The rewritten lane does not reproduce the clarity sonnet figures
+within variance, and the published v0.1.0 figures remain the measurement of record. These cells
+support the reading recorded there: where a skill's output shape did not change, the harness lands
+inside its band or near it. `recall_location` is inside its band in all four cells, so none of them
+shows a skill finding fewer defects.
+
+**Why the critic wrote more judged findings on accessibility and fewer on argument is not
+established.** One k=5 run cannot separate a change in the harness from drift in the model behind a
+fixed ID. The envelopes are committed as evidence and feed no published number, under
+[E63 (dispatch run sets outside results.json)](../backlog/enhancements.md).
 
 ## Consequences
 
