@@ -42,6 +42,11 @@ prioritized ahead of deck**. The order is now:
 `ROADMAP.md` still states the old order and is deliberately not edited here; see
 [the shape options brief](../release-plans/v0.2.0-shape-options.md).
 
+**Updated 2026-10-15.** N2 shipped on 2026-10-06. On 2026-10-15 the maintainer dropped N1
+(critique-deck) and renamed N5 to `critique-payment-checkout`. The open skill proposals are now N5
+(critique-payment-checkout, issue #84) and N3 (critique-dataviz, issue #85). The table above stays
+as the record of 2026-09-14.
+
 ---
 
 ## N1 - critique-deck (assertion-evidence presentation critique)
@@ -77,7 +82,15 @@ prioritized ahead of deck**. The order is now:
   a technical dependency, and is superseded.
 - **Depends on:** E30 (skill-template gaps) hard, E2 (sonnet unblock) for two-tier k=5, and a new
   corpus module for the deck domain.
-- **Status:** backlog (recorded 2026-09-11).
+- **DROPPED 2026-10-15 by the maintainer.** A markdown deck is a markdown file of slide text with a
+  separator line between slides. A renderer such as Marp or Slidev applies a theme to turn it into
+  slides. A critique of that source sees the words and their order, but not the visual presentation
+  and structure that make most of a slideshow work. The maintainer ruled that a text-only critique is
+  not worth building. A critique of rendered slides would be a different proposal: it needs a
+  rendered-slide artifact type that the corpus generator cannot produce, the same class of blocker as
+  N3's chart-spec mode. The rename to `critique-slides`, proposed the same day, is moot, and no issue
+  was filed.
+- **Status:** dropped 2026-10-15 (recorded 2026-09-11).
 
 ## N2 - critique-forms (form usability, Wroblewski and Baymard)
 
@@ -177,6 +190,8 @@ prioritized ahead of deck**. The order is now:
 - **Blocks:** nothing directly.
 - **Depends on:** a chart-spec corpus generator mode that does not exist, plus E30 and E2.
 - **Status:** backlog (recorded 2026-09-11), accepted with the measurability condition above.
+- **Tracked as:** issue #85 for the skill, with the chart-spec generator mode as its sub-issue #86
+  (filed 2026-10-15).
 
 ## N4 - Revision loop as a first-class, invokable chain
 
@@ -207,9 +222,9 @@ prioritized ahead of deck**. The order is now:
 - **Depends on:** E52 (rule who performs revise).
 - **Status:** backlog (recorded 2026-09-11).
 
-## N5 - critique-checkout (checkout flow critique, its own research base)
+## N5 - critique-payment-checkout (checkout and payment flow critique, its own research base)
 
-- **Proposed name:** `critique-checkout`
+- **Proposed name:** `critique-payment-checkout`, renamed from `critique-checkout` on 2026-10-15.
 - **Component type:** skill.
 - **Target tier:** convergent (Silver).
 - **Agent-targets:** claude, codex.
@@ -246,4 +261,43 @@ prioritized ahead of deck**. The order is now:
 - **Seeded 2026-09-25:** 38 findings from the N2 research pass are tagged checkout-only, and the
   main ones are listed in the N2 draft's "Seeds for N5" section. The maintainer asked for a large
   research base of its own, so this proposal needs a checkout-specific pass before a registry.
-- **Status:** proposed 2026-09-25.
+- **Renamed 2026-10-15 by the maintainer.** In a coding agent's skill list, `critique-checkout`
+  reads as `git checkout`. The research mandate below also makes payment a larger share of the
+  skill. The new name passes the Standard's naming rules: it is kebab-case, 25 characters long, and
+  carries the `critique-` prefix. It is the catalog's first two-word domain.
+- **Scope, ruled 2026-10-15.** The skill covers the five concerns in the why-gate verdict above,
+  from cart review to order confirmation, plus subscription and free-trial sign-up. In the
+  maintainer's words, it covers "more if research uncovers it accordingly". Native in-app purchase
+  sheets stay out unless the research finds a reason to include them, because the platform draws
+  them and the page author cannot change them.
+- **Research pass, ruled 2026-10-15.** The pass starts at N2's scale plus a regulatory sweep, about
+  90 sources; N2 read 75 sources and verified 470 findings. During the pass it assesses whether a
+  far larger pass is viable: a floor of 200 sources across eight strands, each run until three
+  sources in a row add no new finding. The strands are checkout usability research, deceptive
+  design, price transparency and consumer law by jurisdiction, payment authentication, checkout
+  accessibility, wallets and buy-now-pay-later, international payment methods and formats, and
+  processor and platform guidance. The report gives that viability verdict beside its findings.
+- **Observability, ruled with the research pass.** Every finding is tagged by where it can be
+  observed: in static HTML, across several pages, or only at runtime. The why-gate's claim that this
+  skill needs no new infrastructure holds only if most findings are observable in static HTML. If
+  they are not, that claim needs a new ruling before anyone drafts a criterion registry.
+- **Recency, proposed 2026-10-15 and not yet ruled.** Each source records its publication date and,
+  where it differs, the date its data was collected. Each finding is classed by how fast its subject
+  changes:
+  - A **durable** finding, about perception or cognition, counts at any age once a later study
+    replicates it.
+  - A **platform-bound** finding, about devices, browsers, wallets, autofill or authentication,
+    counts only as background when its evidence is more than five years old, unless a newer source
+    confirms it.
+  - A **legal** finding counts only against the text in force. It records the effective date and any
+    court ruling against the rule.
+- **Source capture, requested 2026-10-15 by the maintainer.** The pass saves a local copy of every
+  source it can, and never commits the copies, as N2 did under
+  [ADR 0006 (copyright paraphrase policy)](../decisions/0006-copyright-paraphrase-policy.md). A web
+  page is kept as its raw HTML plus a markdown conversion, and a PDF is kept as downloaded. Each copy
+  gets a SHA-256 checksum in a manifest. Only the bibliography is committed. A paywalled or
+  license-restricted document is cited but not captured.
+- **ROADMAP placement, ruled 2026-10-15.** `ROADMAP.md` lists the skill under "Unscheduled". It gets
+  a release once the research report is in.
+- **Tracked as:** issue #84 (filed 2026-10-15).
+- **Status:** proposed 2026-09-25; renamed and scoped 2026-10-15. The research pass is next.

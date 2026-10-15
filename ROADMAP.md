@@ -88,7 +88,7 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 | Item | Now | Why |
 |---|---|---|
 | Taxonomy survey regeneration | Unscheduled | Deferred on 2026-09-14. The library still makes no claim about how many critique frameworks exist, and will not until the survey runs. |
-| `critique-deck` | v0.3.0 | Deprioritized behind `critique-forms`, which needs no new corpus machinery. |
+| `critique-deck` | Dropped 2026-10-15 | Deprioritized behind `critique-forms` on 2026-09-14, then dropped: a critique of markdown slide source sees the text, but not the visual presentation that makes a slideshow work. |
 | `critique-dataviz` | Unscheduled | It depends on a chart-spec corpus generator that has not been scoped, and dating a skill before its blocker is sized would be a guess. |
 | BYOR mode | v0.3.0 | Unchanged in substance; it moves with the skill wave. |
 | Disposition telemetry | v0.3.0 | Unchanged in substance. |
@@ -100,7 +100,6 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 
 ### v0.3.0
 
-- **`critique-deck`**: assertion-evidence presentation critique. Markdown decks are a scriptable artifact format, but the benchmark needs a corpus module for a domain that does not exist yet, which is why it follows `critique-forms`.
 - **BYOR mode** (bring your own rubric) on one flagship skill, as the pattern-setter for every skill after it. This is what lets a user hand the library a rubric it did not ship with, using the `rubric_source: byor` finding marker already defined in the methodology.
 - **Disposition telemetry begins.** Acceptance-rate-per-criterion data from real use starts feeding the first criterion pruning pass.
 - **Revision loop as a first-class chain.** The critique, disposition, revise, re-critique loop exists today as a documented recipe (`examples/recipes/revision-loop.md`); this version makes it a real, invokable chain with a defined convergence rule.
@@ -123,6 +122,7 @@ Accepted, but deliberately not given a version, because what they depend on has 
 
 - **Taxonomy survey regeneration.** A real research pass across candidate critique frameworks, with a gate verdict per candidate against the Two-Part Gate, published as `docs/internal/research/critique-framework-survey.md`. Until it exists, the library makes no survey-scale claim.
 - **`critique-dataviz`**: Tufte- and Cairo-sourced chart critique. It has the strongest demand signal of the planned skills and the hardest corpus problem, because chart-spec artifacts need a generator mode that does not exist yet.
+- **`critique-payment-checkout`**: checkout and payment flow critique, from cart review to order confirmation. It waits on a research pass that decides how much of checkout a static page can measure.
 
 ---
 

@@ -664,6 +664,9 @@ and the repository did not have.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
 - **Rank at intake:** 23 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Ruled 2026-10-15 by the maintainer:** lands before the v0.2.0 release is cut. `ROADMAP.md`'s
+  v0.2.0 item 1 says this debt is "closed here rather than carried further", and keeping that
+  promise costs no paid run.
 
 ## E24 - Add an automated evidence-quotes-not-characterizes check
 
@@ -755,6 +758,9 @@ and the repository did not have.
 - **Blocks:** A fully-trusted live bench.yml dispatch on sonnet or any delegating tier
 - **Depends on:** Nothing
 - **Rank at intake:** 27 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Ruled 2026-10-15 by the maintainer:** lands before the v0.2.0 release is cut, for the reason
+  recorded on E23. `ROADMAP.md` names this item and E28 (CLI version pin) in one bullet, so E28
+  lands with it.
 
 ## E28 - Pin or record the Claude Code CLI version bench.yml installs
 
@@ -763,10 +769,13 @@ and the repository did not have.
 - **Why:** ADR 0030's reproducibility argument for the CLI-bundled skills namespace rests on the CLI being pinned, and the first real dispatch has already happened without it; every further dispatch is an incomplete receipt.
 - **Evidence:** .github/workflows/bench.yml:74 (`npm install -g @anthropic-ai/claude-code`, no version); docs/internal/decisions/0030-replace-the-api-key-in-the-bench-harness.md lines ~268-272 ("a property of the pinned runtime"); contract/critique-contract.schema.json `run` object fields (no CLI/harness-version field); docs/internal/release-plans/plan_v0.1.0/S-07_ci-pipeline/spec.md:87 (NFR: "Workflows pin action versions by SHA")
 - **Derives from:** ADR 0030 (replace the API key in the bench harness) and S-07 (CI pipeline spec) Non-Functional Requirements
-- **Size:** S. **Release:** v0.1.x. **Category:** ci. **Confidence:** verified.
+- **Size:** S. **Release:** v0.2.0 (was v0.1.x). **Category:** ci. **Confidence:** verified.
 - **Blocks:** Nothing directly; weakens reproducibility of every future dispatch
 - **Depends on:** Nothing
 - **Rank at intake:** 28 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Moved to v0.2.0 on 2026-10-15.** The maintainer ruled that the v0.2.0 measurement debt lands
+  before the cut (see E23). `ROADMAP.md`'s v0.2.0 item 1 names this pin in the same bullet as E27
+  (harness isolation), and v0.1.x is closed, so the item moves with E27.
 
 ## E29 - Make release.yml's re-run suite match what it claims to run
 
@@ -1585,8 +1594,14 @@ and the repository did not have.
   differed from `checks.py`, the same family of defect.
 - **Derives from:** The N2 (critique-forms) paid run `37091134037`, analysed 2026-10-03 and
   2026-10-05.
-- **Size:** M. **Release:** v0.2.0. **Category:** fix. **Confidence:** the symptoms are verified
-  by comparing envelopes with `checks.py`; the cause is inferred from the code and not reproduced.
+- **Size:** M. **Release:** v0.3.0 (was v0.2.0). **Category:** fix. **Confidence:** the symptoms
+  are verified by comparing envelopes with `checks.py`; the cause is inferred from the code and not
+  reproduced.
 - **Blocks:** Nothing directly. Every future paid run inherits the defect until it lands.
 - **Depends on:** Nothing. It changes every skill's protocol, so it wants a spec before a build.
 - **Rank at intake:** unranked (added 2026-10-05). **Status:** backlog.
+- **Ruled 2026-10-15 by the maintainer: leads the next cycle, v0.3.0, instead of v0.2.0.** It changes
+  every skill's protocol, which probably means version bumps and paid re-measurement. The v0.2.0
+  exit gate is met without it, and
+  [ADR 0038 (per-tier consistency floors)](../decisions/0038-consistency-threshold-v2-per-tier-floors.md)
+  already reports the scripted lane without gating on it.

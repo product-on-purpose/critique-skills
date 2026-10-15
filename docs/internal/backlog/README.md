@@ -104,7 +104,7 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | ID | Item | Size | Release |
 |---|---|---|---|
 | E13 | Update ROADMAP.md's v0.1.x section: two of four verification items are met | S | v0.1.x |
-| E28 | Pin or record the Claude Code CLI version bench.yml installs | S | v0.1.x |
+| E28 | Pin or record the Claude Code CLI version bench.yml installs | S | v0.2.0 |
 | E29 | Make release.yml's re-run suite match what it claims to run | S | v0.1.x |
 | E31 | Add criterion-table completeness to skill-selftest.py | S | v0.1.x |
 | E32 | Close S-03 AC-3: flip the checkbox and add a corpus-composition CI check | S | v0.1.x |
@@ -130,7 +130,7 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E24 | Add an automated evidence-quotes-not-characterizes check | M | v0.2.0 |
 | E27 | Isolate the bench harness from the working tree it measures | M | v0.2.0 |
 | E63 | Bring the dispatch run sets into results.json, or amend the rule they break | M | v0.2.0 |
-| E73 | Make the merge step run the scripted lane itself, instead of trusting the model's copy | M | v0.2.0 |
+| E73 | Make the merge step run the scripted lane itself, instead of trusting the model's copy | M | v0.3.0 |
 | E67 | Expand critique-accessibility with the WCAG 2.2 AA criteria checkable from static markup | M to L | v0.2.0 |
 | E49 | Write one real tutorial for the empty Diataxis Tutorials quadrant | M | v0.2.0 |
 | E53 | Harden --gate as a documented per-skill CI recipe for consumers | M | v0.3.0 |
