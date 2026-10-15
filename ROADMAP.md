@@ -59,7 +59,7 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
    - `verdicts.md` rewritten as one document instead of a layered amendment trail.
    - An automated check for the evidence-quotes-not-characterizes field contract.
    - ~~`severity_expected` scoring turned on~~ **(done 2026-10-14)**.
-   - The example and golden envelopes carry only real model values or a documented sentinel, not run metadata written by hand.
+   - ~~The example and golden envelopes carry only real model values or a documented sentinel, not run metadata written by hand~~ **(done 2026-10-14)**.
    - The benchmark harness isolated from the working tree it measures, and the Claude Code CLI version it installs pinned or recorded.
 
 **2. Consistency threshold v2.** The 0.309 floor below is a provisional number measured once, on one run set. This version replaces it with a calibrated per-lane threshold, published with its method rather than asserted.
@@ -75,7 +75,7 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 - Every entry in `bench/results/results.json` carries `run_set` and `lane` **(met 2026-09-14)**, and `bench.report` drift-checks the judged and scripted columns **(met 2026-10-14)**.
 - At least one Sonnet envelope per skill is committed through the shipped harness, and the fidelity-gate verdict is re-evaluated on that tier. The verdict was re-evaluated on 2026-09-15 and came back a failure (see v0.1.x above); three of the seven skills (`critique-clarity`, `critique-usability` and `critique-forms`) have Sonnet envelopes through the shipped harness so far.
 - Consistency threshold v2 is published with its method.
-- No `run.model` value outside the two pinned tiers appears under `skills/` or `examples/`, unless it is a documented sentinel, and a check enforces that.
+- No `run.model` value outside the two pinned tiers appears under `skills/` or `examples/`, unless it is a documented sentinel, and a check enforces that **(met 2026-10-14)**.
 - `bench/results/verdicts.md` is one current-state document.
 - `severity_expected` is scored in the results table **(met 2026-10-14)**.
 - The evidence-quotes check runs in CI.
