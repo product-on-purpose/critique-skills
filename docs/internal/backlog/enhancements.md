@@ -640,7 +640,21 @@ and the repository did not have.
 - **Size:** M. **Release:** v0.2.0. **Category:** contract. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
-- **Rank at intake:** 24 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-10-14.** `contract/evidence.py` classifies a finding's evidence as a quotation, a
+  measurement, or a characterization, with tests in `contract/tests/test_evidence.py` run by the
+  `unit-python` CI job. Scope was ruled on the maintainer's delegation: enforced and failing for
+  every authored fixture (every golden fixture under `skills/**/examples/golden-*.json`, including
+  `skills/_template-fixture/`, and every `examples/<domain>/envelope.json` whose artifact
+  resolves), since those are written by this project; reported only, never gating, for committed
+  benchmark envelopes under `bench/results/runs*/`, since those are measured model output rather
+  than an authored claim. The enforcement test ran clean on first landing: all 120 evidence sites
+  across every enforced fixture classified as a quotation or a measurement, so the allowlist of
+  known breaches is empty. The report CLI (`python -m contract.evidence report <dir>`), run over
+  the two committed benchmark run sets, measured a quotation-or-measurement pass rate of 0.982
+  overall on `bench/results/runs` (judged 0.985 of 2148, scripted 0.959 of 293) and 0.972 overall
+  on `bench/results/runs-dispatch-37091134037` (judged 0.959 of 634, scripted 0.997 of 319), the
+  first published figures for this property.
+- **Rank at intake:** 24 of 64. **Status:** closed 2026-10-14.
 
 ## E25 - Rewrite verdicts.md as one current-state document
 
