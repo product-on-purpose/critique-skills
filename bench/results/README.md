@@ -776,6 +776,33 @@ figures are read against the published bands in
 and docs misses a band of zero width. The four directories are also the evidence base for
 [E26 (consistency threshold v2)](../../docs/internal/backlog/enhancements.md).
 
+**Which Claude Code CLI each dispatch ran under is inferred, not recorded.** Until 2026-10-15,
+`bench.yml` installed `@anthropic-ai/claude-code` with no version, and npm's install step does not
+print the version it resolves. The table below infers each version from npm's publish times: it is
+the newest release published before the run's install step started, per the workflow log. That
+inference assumes npm's `latest` tag pointed at the newest release at the time. The registry does
+not keep a history of its tags, so the assumption cannot be checked.
+
+| Run directory | Install step started (UTC) | Inferred CLI version |
+|---|---|---|
+| `runs-dispatch-31988100372` | 2026-08-17 02:28 | 2.1.233 |
+| `runs-dispatch-34917562578` | 2026-09-15 01:31 | 2.1.272 |
+| `runs-dispatch-34917728793` | 2026-09-15 01:33 | 2.1.272 |
+| `runs-dispatch-37091134037` | 2026-10-03 02:50 | 2.1.288 |
+| `runs-dispatch-38673834829` | 2026-10-15 02:58 | 2.1.300 |
+| `runs-dispatch-38673837025` | 2026-10-15 02:58 | 2.1.300 |
+| `runs-dispatch-38678419907` | 2026-10-15 03:51 | 2.1.300 |
+| `runs-dispatch-38683363024` | 2026-10-15 04:48 | 2.1.300 |
+
+`runs/` and `runs-cal1/` were not produced by `bench.yml`, so they have no install step to date
+them, and their CLI version is not recorded anywhere. Since
+[E28 (CLI version pin)](../../docs/internal/backlog/enhancements.md), `bench.yml` installs exactly
+2.1.300, the version the four 2026-10-14 runs most probably used. Every run directory written after
+that change also carries a `harness-provenance.txt`, which records the CLI version the run found
+beside the pinned one, along with the harness commit, the skills, the tiers and k. The harness
+writes that file before its first model call, so a run that fails part way still records what it
+ran under.
+
 ## Limitations
 
 Stated so no reader has to infer them from an absence.

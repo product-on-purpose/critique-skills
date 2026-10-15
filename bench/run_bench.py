@@ -98,6 +98,21 @@ DEFAULT_TIMEOUT_SECONDS = 900
 # attempts would hide a systematic failure behind cost rather than reporting it.
 SKILL_RUN_ATTEMPTS = 3
 
+# The Claude Code CLI version a dispatch runs under (E28). The CLI is part of what a judged-lane cell
+# measures: its agent loop and its built-in skills are in every run, and ADR 0030 calls them "a
+# property of the pinned runtime". bench.yml installed `latest` unpinned through 2026-10-14, so two
+# dispatches could run under different builds with nothing in the evidence to tell them apart.
+# bench.yml installs exactly this version, and bench/tests/test_bench_workflow.py fails if the two
+# disagree. 2.1.300 is the version the four 2026-10-14 dispatches most probably ran: npm's publish
+# times make it the newest release before each install. Bump it deliberately, in both places.
+PINNED_CLI_VERSION = "2.1.300"
+
+# Written into every live run's --out-dir before the first model call, so even a run that fails part
+# way records what it ran under. A .txt on purpose: every envelope walker (bench.metrics,
+# contract/validate_envelopes.py, scripts/check-readme-figures.mjs) and the out-dir immutability
+# guard match *.json only, so this file can never be mistaken for an envelope.
+PROVENANCE_FILENAME = "harness-provenance.txt"
+
 
 # ---------------------------------------------------------------------------
 # Skill discovery and filtering (unchanged from the pre-harness stub)
@@ -960,6 +975,74 @@ def _check_claude_cli(cli: str = "claude") -> str | None:
     return None
 
 
+_VERSION_RE = re.compile(r"\d+\.\d+\.\d+")
+
+
+def _claude_cli_version(cli: str = "claude") -> str | None:
+    """The version `claude --version` reports, such as "2.1.300", or None if it cannot be read.
+
+    Called only after _check_claude_cli has passed, so a failure here is unexpected. It is reported
+    as an unreadable version rather than stopping a run that can otherwise proceed.
+    """
+    try:
+        proc = subprocess.run(
+            [cli, "--version"], capture_output=True, text=True, timeout=60, stdin=subprocess.DEVNULL
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    match = _VERSION_RE.search(proc.stdout or "")
+    return match.group(0) if proc.returncode == 0 and match else None
+
+
+def _git(*args: str) -> str | None:
+    """One git query against this repository, or None where git or the repository is absent."""
+    try:
+        proc = subprocess.run(
+            ["git", *args], cwd=ROOT, capture_output=True, text=True, timeout=30, stdin=subprocess.DEVNULL
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    return proc.stdout.strip() if proc.returncode == 0 else None
+
+
+def provenance_text(
+    *,
+    started_at: str,
+    cli_version: str | None,
+    skills: Sequence[str],
+    tiers: Sequence[Tier],
+    k: int,
+    commit: str | None,
+    tree_clean: bool | None,
+) -> str:
+    """The body of PROVENANCE_FILENAME: one `key: value` line per fact, stable across runs so two
+    run directories can be compared with a plain diff."""
+    tree = "unknown" if tree_clean is None else ("clean" if tree_clean else "modified")
+    lines = [
+        "# critique-skills bench harness provenance (E28). Written before the first model call.",
+        f"started_at: {started_at}",
+        f"claude_cli_version: {cli_version or 'unreadable'}",
+        f"pinned_cli_version: {PINNED_CLI_VERSION}",
+        f"python_version: {sys.version.split()[0]}",
+        f"harness_commit: {commit or 'unknown'}",
+        f"working_tree: {tree}",
+        f"skills: {', '.join(skills)}",
+        f"tiers: {', '.join(f'{t.alias}={t.model_id}' for t in tiers)}",
+        f"k: {k}",
+    ]
+    return "\n".join(lines) + "\n"
+
+
+def _write_provenance(out_dir: Path, **facts: Any) -> Path:
+    """Write PROVENANCE_FILENAME into `out_dir`, adding the git facts this process can see."""
+    status = _git("status", "--porcelain")
+    text = provenance_text(commit=_git("rev-parse", "HEAD"), tree_clean=None if status is None else status == "", **facts)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    path = out_dir / PROVENANCE_FILENAME
+    _write_text(path, text)
+    return path
+
+
 def _build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python bench/run_bench.py",
@@ -1079,6 +1162,21 @@ def main(argv: list[str] | None = None) -> int:
     if not selected or not cells:
         print("bench: no skills to run yet (library.json declares none, or none matched the filter); nothing to do.")
         return 0
+
+    # E28: record what this run is about to run under, before the first model call, so a run that
+    # fails part way still leaves its provenance beside whatever envelopes it wrote.
+    cli_version = _claude_cli_version()
+    print(f"bench: claude CLI {cli_version or '(version unreadable)'}, pinned {PINNED_CLI_VERSION}")
+    if cli_version != PINNED_CLI_VERSION:
+        print(
+            f"bench: warning: this CLI is not the pinned {PINNED_CLI_VERSION}. The run proceeds and "
+            f"{PROVENANCE_FILENAME} records the version it ran under, but its figures were not measured "
+            "under the same CLI as a dispatch's.",
+            file=sys.stderr,
+        )
+    _write_provenance(
+        out_dir, started_at=_utc_now_iso(), cli_version=cli_version, skills=selected, tiers=tiers, k=args.k
+    )
 
     try:
         client = _client_factory(args.timeout)

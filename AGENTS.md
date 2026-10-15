@@ -157,6 +157,13 @@ reaches the model through the Claude Code CLI, which authenticates from a Claude
 does need the `claude` CLI on `PATH`, and it always passes `--model` explicitly, because a benchmark
 that inherits the caller's model measures nothing reproducible.
 
+The CLI version is pinned for the same reason. `bench.yml` installs exactly `PINNED_CLI_VERSION`
+from `bench/run_bench.py`, and `bench/tests/test_bench_workflow.py` fails if the two disagree. A
+local run under a different version proceeds with a warning. Every live run writes
+`harness-provenance.txt` into its `--out-dir` before the first model call, naming the CLI version
+it ran under. To move the pin, change both places in one commit and say so in the next run set's
+provenance note.
+
 Point every live run at a fresh `--out-dir`. `bench/results/runs*/` is immutable measurement
 evidence; the harness refuses an `--out-dir` that already holds envelopes for exactly that reason.
 `--out-dir` defaults to `bench/results/runs`, so a live run that omits it is refused:

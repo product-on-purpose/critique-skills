@@ -275,6 +275,16 @@ The remaining 18 are the CLI's own built-ins plus the six under test, which now 
 as `critique-skills:critique-*`. Those ship with the CLI version rather than with the operator, so
 they are a property of the pinned runtime and are reproducible in a way the other 91 were not.
 
+**Amended 2026-10-15: the runtime was not pinned until this date.** `bench.yml` installed the CLI
+with no version, so "the pinned runtime" above described an intention, not the workflow. Every
+dispatch through 2026-10-14 resolved npm's `latest` at its own install time.
+[E28 (CLI version pin)](../backlog/enhancements.md) pins it. `bench.yml` installs exactly
+`PINNED_CLI_VERSION` from `bench/run_bench.py`, and a test fails if the two disagree. The harness
+warns when the CLI it finds is a different version, and it writes the version it ran under into
+each run directory as `harness-provenance.txt`. The versions the eight earlier dispatches most
+probably ran are inferred from npm's publish times in
+[`bench/results/README.md`](../../../bench/results/README.md#provenance).
+
 Both flags go on **both** lanes. The committed baseline envelopes were produced by a plain API call
 with no environment at all, so isolating the baseline moves it closer to how it was measured, not
 further from it.
