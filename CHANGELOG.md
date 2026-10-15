@@ -131,6 +131,18 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- **The planned-skill slate changed: `critique-deck` is dropped, and checkout is renamed
+  `critique-payment-checkout`.** The maintainer ruled on 2026-10-15. A markdown deck is slide text
+  with separator lines, so a critique of its source sees the words but not the visual presentation
+  that makes a slideshow work. `ROADMAP.md` drops it from v0.3.0 and records why. The checkout
+  proposal, N5 in `docs/internal/backlog/new-components.md`, is renamed because "checkout" on its own
+  reads as `git checkout` in a coding agent. ROADMAP now lists it under "Unscheduled", pending a
+  research pass that decides how much of checkout a static page can measure. The same ruling moves
+  E73 (make the merge step run the scripted lane itself) to v0.3.0. E23 (location-level methodology
+  section), E27 (harness isolation) and E28 (CLI version pin) land before v0.2.0 is cut. The two
+  planned skills are now tracked as issues: `critique-payment-checkout` as #84, and
+  `critique-dataviz` as #85, with its chart-spec generator mode as sub-issue #86.
+
 - **No launch skill's version moves in this release, by the maintainer's ruling of 2026-10-14.**
   Each of the six launch skills changed after `v0.1.6`, but only in packaging and routing: `version`
   moved under `metadata` (E62, below), each skill README names `merge.py`, and
