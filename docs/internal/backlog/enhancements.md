@@ -196,7 +196,13 @@ and the repository did not have.
   entries share every identity field but `lane` and the decomposition silently compares repetition
   pools against whichever lane sorted last. Both treat a missing `lane` as `overall`, so they keep
   working against pre-1.2.0 files.
-- **Rank at intake:** 6 of 64. **Status:** CLOSED 2026-09-14.
+- **The last clause of "Done" was not met until 2026-10-14.** "report.py drift-checking the lane
+  columns like every other number" did not happen at closure: both readers filtered the lane
+  entries out, so no generator rendered them and no check covered them. Worse, nothing ran
+  `bench.report --check` against the committed files at all. `bench.report table` now renders a
+  per-lane table, and two tests in `bench/tests/test_report.py` run the check for the results block
+  and the scoreboard in CI. The hand-typed judged table matched the lane entries in 12 of 12 rows.
+- **Rank at intake:** 6 of 64. **Status:** CLOSED 2026-09-14; lane-column drift check 2026-10-14.
 
 ## E7 - Move bench/results/runs/steering/ out of the runs* glob
 
