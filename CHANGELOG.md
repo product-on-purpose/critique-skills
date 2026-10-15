@@ -119,6 +119,16 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- **No launch skill's version moves in this release, by the maintainer's ruling of 2026-10-14.**
+  Each of the six launch skills changed after `v0.1.6`, but only in packaging and routing: `version`
+  moved under `metadata` (E62, below), each skill README names `merge.py`, and
+  `critique-accessibility`, `critique-microcopy` and `critique-usability` gained boundary clauses in
+  their routing descriptions. None changed a criterion, the critique protocol or the scripted lane.
+  A version bump would have hidden each skill's measured scoreboard row, because the scoreboard
+  shows a skill only at the version `library.json` ships, until a paid re-measure ran. That
+  re-measure would test nothing that changed: the benchmark prompt names the skill directly, so
+  routing is never measured.
+
 - **The repository now follows Standard 0.17, and every skill declares its version under
   `metadata`.** [E62 (Standard version pin)](docs/internal/backlog/enhancements.md) was ruled on
   2026-09-30. `library.json` declares Standard `0.17` instead of `0.12`, and CI's `TOOLKIT_REF`
