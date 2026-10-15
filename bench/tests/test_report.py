@@ -448,3 +448,94 @@ def test_scoreboard_ignores_a_skill_library_json_does_not_ship() -> None:
 
     rendered = render_scoreboard(_scoreboard_results()["entries"], {})
     assert rendered == "_No shipped skill has been measured yet._"
+
+
+# --- the per-lane table (results version 1.2.0's judged and scripted entries) ---
+
+
+def _lane_entries(skill: str, **per_lane: dict) -> list[dict]:
+    """One entry per lane for a single cell, overall included, with any lane's
+    fields overridden by the keyword of the same name."""
+    return [_entry(skill, lane=lane, run_set="rs-1", **per_lane.get(lane, {})) for lane in ("overall", "judged", "scripted")]
+
+
+def test_lanes_table_reads_each_lane_from_its_own_entry() -> None:
+    from bench.report import render_lanes_table
+
+    entries = _lane_entries(
+        "critique-toy",
+        judged={"recall": _metric(0.130), "precision": _metric(0.110), "consistency": _consistency(0.150)},
+        scripted={"recall": _metric(0.580), "precision": _metric(0.853), "consistency": _consistency(0.768)},
+    )
+    rendered = render_lanes_table(entries)
+    row = next(line for line in rendered.splitlines() if line.startswith("| critique-toy"))
+    # The fixture entries predate results_version 1.3.0, so severity agreement reads n/a.
+    assert row.endswith("| rs-1 | 0.130 | 0.110 | 0.150 | n/a | 0.580 | 0.853 | 0.768 | n/a |")
+
+
+def test_lanes_table_omits_the_baseline() -> None:
+    """The baseline has no scripted lane, so its judged entry is its overall row
+    repeated, which the full per-run table already carries."""
+    from bench.report import render_lanes_table
+
+    rendered = render_lanes_table([*_lane_entries("critique-toy"), *_lane_entries("baseline-generic")])
+    assert "critique-toy" in rendered
+    assert "baseline-generic" not in rendered
+
+
+def test_lanes_table_marks_a_missing_lane_rather_than_dropping_the_row() -> None:
+    from bench.report import render_lanes_table
+
+    entries = [e for e in _lane_entries("critique-toy") if e["lane"] != "scripted"]
+    row = next(line for line in render_lanes_table(entries).splitlines() if line.startswith("| critique-toy"))
+    assert row.endswith("| n/a | n/a | n/a |")
+
+
+def test_lanes_table_says_so_for_a_file_with_no_lane_dimension() -> None:
+    """A results.json written before 1.2.0 carries no lane field at all."""
+    from bench.report import render_lanes_table
+
+    assert render_lanes_table([_entry("critique-toy")]).startswith("_No per-lane figures")
+
+
+def test_render_block_carries_the_lanes_table_and_keeps_the_others_overall_only() -> None:
+    """The lane split joins the block without leaking into the overall-lane tables:
+    one cell must still render one row in the full per-run table."""
+    results = {"run_set": "rs-1", "generated_at": "2026-10-14T00:00:00Z", "entries": _lane_entries("critique-toy")}
+    block = render_block(results)
+    assert "**Per lane (criterion-level).**" in block
+    full_table = block.split("**Full per-run figures.**", 1)[1].split("**Rubric operationalization", 1)[0]
+    assert sum(1 for line in full_table.splitlines() if line.startswith("| critique-toy")) == 1
+
+
+# --- the committed generated blocks match the committed results.json ---------
+#
+# `--check` exists so that no published table is hand-edited (bench/README.md, "Results"), but until
+# 2026-10-14 nothing ran it: no CI job and no test invoked `bench.report` against the committed files,
+# so a hand edit inside either marker pair, or a results.json change without a regeneration, would
+# have passed every check. These two tests are that run, in the unit-python job.
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+COMMITTED_RESULTS = REPO_ROOT / "bench" / "results" / "results.json"
+
+
+def test_committed_results_tables_have_no_drift() -> None:
+    target = REPO_ROOT / "bench" / "README.md"
+    assert main(["table", "--results", str(COMMITTED_RESULTS), "--target", str(target), "--check"]) == 0, (
+        "bench/README.md does not match results.json; run "
+        "`python -m bench.report table --results bench/results/results.json`"
+    )
+
+
+def test_committed_scoreboard_has_no_drift() -> None:
+    argv = [
+        "scoreboard",
+        "--results",
+        str(COMMITTED_RESULTS),
+        "--target",
+        str(REPO_ROOT / "README.md"),
+        "--library",
+        str(REPO_ROOT / "library.json"),
+        "--check",
+    ]
+    assert main(argv) == 0, "README.md's scoreboard does not match results.json; run `python -m bench.report scoreboard`"

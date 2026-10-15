@@ -411,7 +411,10 @@ an intuition.
 | sonnet | 0.063 | 0.080 | 0.096 |
 
 Haiku's bands are 2.3x wider. Per skill on location recall: clarity 3.0x, argument 2.7x, microcopy
-1.5x, usability 1.2x. (`critique-accessibility` 0.1.0 inverts it, but those are the cells that lost
+1.5x, usability 1.2x. (Correction, 2026-10-14: argument is 3.0x, 0.225 against 0.075, in every
+committed version of `variance.json`, from the first one in PR 22 through variance 1.1.0. The 2.7x
+was an arithmetic slip in this sentence. The 2.3x median and every other figure here are
+unaffected.) (`critique-accessibility` 0.1.0 inverts it, but those are the cells that lost
 to baseline and sit near the floor, where the metric is degenerate.) Cost runs the other way: a
 haiku cell takes 3m35s to 6m01s, a sonnet cell exceeds nine minutes. **Choosing haiku to save hours
 buys a gate roughly twice as easy to pass**, and that trade must be recorded if it is taken, not

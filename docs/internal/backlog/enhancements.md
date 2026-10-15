@@ -216,7 +216,13 @@ and the repository did not have.
   entries share every identity field but `lane` and the decomposition silently compares repetition
   pools against whichever lane sorted last. Both treat a missing `lane` as `overall`, so they keep
   working against pre-1.2.0 files.
-- **Rank at intake:** 6 of 64. **Status:** CLOSED 2026-09-14.
+- **The last clause of "Done" was not met until 2026-10-14.** "report.py drift-checking the lane
+  columns like every other number" did not happen at closure: both readers filtered the lane
+  entries out, so no generator rendered them and no check covered them. Worse, nothing ran
+  `bench.report --check` against the committed files at all. `bench.report table` now renders a
+  per-lane table, and two tests in `bench/tests/test_report.py` run the check for the results block
+  and the scoreboard in CI. The hand-typed judged table matched the lane entries in 12 of 12 rows.
+- **Rank at intake:** 6 of 64. **Status:** CLOSED 2026-09-14; lane-column drift check 2026-10-14.
 
 ## E7 - Move bench/results/runs/steering/ out of the runs* glob
 
@@ -636,7 +642,16 @@ and the repository did not have.
 - **Size:** M. **Release:** v0.2.0. **Category:** measurement. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** Nothing, self-contained within bench/metrics
-- **Rank at intake:** 22 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-10-14.** `results_version` 1.3.0 adds `severity_agreement` (exact agreement on
+  criterion-level matched pairs), via a new `match.match_pairs` that keeps the pairing
+  `match_claims_to_defects` discarded. Rescored all three run sets and merged the field by identity
+  key; no other field of the 90 entries moved, and `variance.json` still verifies. Two design
+  choices, ruled on the maintainer's delegation: criterion-level rather than location-level
+  pairs, because severity is a rubric judgment and the baseline has no rubric; and exact agreement
+  rather than within-one, because the scale has four steps. **Read the judged lane:** the
+  generator plants scripted defects at `checks.py`'s own anchor severity, so scripted agreement is
+  1.000 in all 16 cells by design.
+- **Rank at intake:** 22 of 64. **Status:** closed 2026-10-14.
 
 ## E23 - Write methodology.md's location-level metrics section
 

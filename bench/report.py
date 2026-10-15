@@ -40,12 +40,12 @@ def render_entries_table(entries: list[dict[str, Any]]) -> str:
         return "_No run set has been scored yet._"
     header = (
         "| Skill | Version | Model | Domain | Artifact type | Artifact-runs (k=5) | Recall | Precision | "
-        "Clean FP rate | Consistency | Consistency (exact) | Unresolvable |\n"
-        "|---|---|---|---|---|---|---|---|---|---|---|---|"
+        "Clean FP rate | Consistency | Consistency (exact) | Unresolvable | Severity agreement |\n"
+        "|---|---|---|---|---|---|---|---|---|---|---|---|---|"
     )
     rows = [
         "| {skill} | {version} | {model} | {domain} | {artifact_type} | {n} | {recall} | {precision} | "
-        "{fp} | {cons} | {cons_exact} | {unresolved} |".format(
+        "{fp} | {cons} | {cons_exact} | {unresolved} | {severity} |".format(
             skill=e["skill"],
             version=e["skill_version"],
             model=e["model"],
@@ -58,6 +58,8 @@ def render_entries_table(entries: list[dict[str, Any]]) -> str:
             cons=_fmt_metric(e["consistency"]),
             cons_exact=_fmt_metric(e["consistency_exact"]),
             unresolved=e["unresolvable_claims"],
+            # Absent from files written before results_version 1.3.0, which did not score it.
+            severity=_fmt_metric(e["severity_agreement"]) if "severity_agreement" in e else "n/a",
         )
         for e in sorted(entries, key=lambda e: (e["domain"], e["skill"], e["skill_version"], e["model"]))
     ]
@@ -125,6 +127,67 @@ def render_criterion_table(entries: list[dict[str, Any]]) -> str:
     if not rows:
         return "_No rubric-operationalization figures available yet._"
     header = "| Skill | Version | Domain | Model | Recall | Precision |\n|---|---|---|---|---|---|"
+    return "\n".join([header, *rows])
+
+
+LANES = ("judged", "scripted")
+
+
+def render_lanes_table(entries: list[dict[str, Any]]) -> str:
+    """Each skill cell's judged-lane and scripted-lane figures, side by
+    side, at criterion level.
+
+    `results_version` 1.2.0 (E6) writes three entries per cell, one per
+    lane, so these figures are fields to read rather than a scorer to
+    re-run. Before that they were derived outside the file by filtering
+    each envelope's findings and re-scoring (bench/results/README.md,
+    "Judged-lane figures are derived"), and even after it they were the
+    one published cut no drift check covered, because every other reader
+    in this module filters to the overall lane. Rendering them here puts
+    them under the same `--check` as every other number.
+
+    `baseline-generic` is omitted. It has no scripted lane, so its judged
+    entry is its overall row repeated, and the full per-run table already
+    shows that row. A file written before 1.2.0 carries no lane field and
+    so has nothing to render here; it says so rather than rendering an
+    empty table.
+    """
+    cells: dict[tuple[str, str, str, str, str], dict[str, dict[str, Any]]] = {}
+    for e in entries:
+        lane = e.get("lane")
+        if lane not in LANES or e["skill"] == BASELINE_SKILL:
+            continue
+        key = (e["domain"], e["skill"], e["skill_version"], e["model"], e.get("run_set", "?"))
+        cells.setdefault(key, {})[lane] = e
+
+    if not cells:
+        return "_No per-lane figures: this results.json predates the lane dimension (results version 1.2.0)._"
+
+    rows: list[str] = []
+    for domain, skill, version, model, run_set in sorted(cells):
+        lanes = cells[(domain, skill, version, model, run_set)]
+        values: list[str] = []
+        for lane in LANES:
+            entry = lanes.get(lane)
+            if entry is None:
+                values.extend(["n/a", "n/a", "n/a", "n/a"])
+                continue
+            values.extend(
+                [
+                    _fmt_metric(entry["recall"]),
+                    _fmt_metric(entry["precision"]),
+                    _fmt_metric(entry["consistency"]),
+                    _fmt_metric(entry["severity_agreement"]) if "severity_agreement" in entry else "n/a",
+                ]
+            )
+        rows.append(f"| {skill} | {version} | {model} | {domain} | {run_set} | " + " | ".join(values) + " |")
+
+    header = (
+        "| Skill | Version | Model | Domain | Run set | Recall, judged | Precision, judged | "
+        "Consistency, judged | Severity agreement, judged | Recall, scripted | Precision, scripted | "
+        "Consistency, scripted | Severity agreement, scripted |"
+        "\n|---|---|---|---|---|---|---|---|---|---|---|---|---|"
+    )
     return "\n".join([header, *rows])
 
 
@@ -264,7 +327,8 @@ def render_block(results: dict[str, Any]) -> str:
     # Published tables report the overall lane, which is what every committed figure has always
     # meant. Files written before results_version 1.2.0 carry no lane field at all; treating a
     # missing lane as "overall" keeps this reader working against both shapes.
-    entries = [e for e in results.get("entries", []) if e.get("lane", "overall") == "overall"]
+    all_entries = results.get("entries", [])
+    entries = [e for e in all_entries if e.get("lane", "overall") == "overall"]
     if not entries:
         return "\n".join(
             [
@@ -300,7 +364,10 @@ def render_block(results: dict[str, Any]) -> str:
             "",
             "**Full per-run figures.** Every skill, baseline, model, and domain in this run set; "
             "the location-level table above and the rubric-operationalization table below are both "
-            "derived from these rows.",
+            "derived from these rows. Severity agreement pools both lanes and is mostly the scripted "
+            "lane's by-design 1.000; the per-lane table at the end carries the judged-lane figure, "
+            "which is the one that measures a model. It is n/a for `baseline-generic`, which has no "
+            "criterion-level matches.",
             "",
             render_entries_table(entries),
             "",
@@ -312,6 +379,19 @@ def render_block(results: dict[str, Any]) -> str:
             "lose. See bench/results/README.md, \"Baseline comparison\".",
             "",
             render_criterion_table(entries),
+            "",
+            "**Per lane (criterion-level).** The same cells split by the lane that produced each "
+            "finding: the judged lane is the model's, the scripted lane is `checks.py`'s. The "
+            "rubric-operationalization table above is both lanes pooled. Each lane's recall is measured "
+            "against every seeded defect, not only those under its own criteria, so it reads as that "
+            "lane's share of the pooled recall; each lane's precision is over its own claims only. "
+            "Severity agreement is the share of matched defects whose claim carries exactly the planted "
+            "`severity_expected`. Read it on the judged lane: the corpus generator plants each scripted "
+            "defect at the severity `checks.py`'s own anchor rule assigns, so scripted agreement is "
+            "1.000 by design and says nothing about a model. `baseline-generic` has no scripted lane "
+            "and is omitted. See bench/results/README.md, \"The numbers\".",
+            "",
+            render_lanes_table(all_entries),
             END_MARKER,
         ]
     )
