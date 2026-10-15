@@ -1,0 +1,84 @@
+Location: `<title id="head-title">` (and `<h1 id="main-h1">`)
+Evidence: Title reads "Cascadia Regional Transit: Service Announcements" while the page's own `<h1>` reads "Fare and service announcements"
+Problem: The page title and main heading describe the page differently, which can confuse users and hurts SEO/accessibility consistency (screen reader users hear a different page identity than the visible heading).
+Fix: Make the `<title>` match or closely mirror the `<h1>` text, e.g. "Fare and Service Announcements | Cascadia Regional Transit".
+
+Location: `#s1-p1`
+Evidence: `style="color:#999999"`
+Problem: #999999 text on a white background yields roughly a 2.8:1 contrast ratio, failing WCAG AA's 4.5:1 minimum for normal text — ironic given this is in the "Accessibility improvements" section.
+Fix: Remove the inline style or change the color to one with at least 4.5:1 contrast (e.g. #595959 or darker) against the background.
+
+Location: `#s1-p1` and `#s1-p2`
+Evidence: Both paragraphs end with the identical sentence "Updates post to the schedule page within one business day."
+Problem: The trailing sentence is reused verbatim across unrelated paragraphs (kiosk schedule review vs. fare adjustment requests), suggesting templated/placeholder copy that wasn't customized for context.
+Fix: Write a sentence specific to each paragraph's actual topic, or remove the boilerplate line if it isn't accurate for both cases.
+
+Location: `#s1-h` / section `#s1`
+Evidence: Heading "Accessibility improvements" followed by paragraphs about reviewing schedules at a kiosk and requesting fare adjustments via the app
+Problem: Neither paragraph in this section discusses accessibility (e.g., ramps, elevators, screen reader support, wheelchair access) — the heading doesn't match the content.
+Fix: Either rewrite the section content to describe actual accessibility improvements, or retitle the heading to match the schedule/fare content (e.g., "Schedule and fare updates").
+
+Location: `#s2-p1`
+Evidence: "Local residents can check real time arrivals through the mobile app. A confirmation message follows once the request is processed."
+Problem: Checking real-time arrivals is not a "request" that needs processing or confirmation; the second sentence is a mismatched template fragment that doesn't logically follow the first.
+Fix: Replace the second sentence with something relevant to checking arrivals (e.g., "Arrival times update automatically every minute") or remove it.
+
+Location: `#s2-table1`
+Evidence: `<table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>...`
+Problem: The table has no `<caption>` or accessible name, so screen reader users aren't told what the table represents before encountering its data.
+Fix: Add `<caption>Zone status</caption>` as the first child of the table.
+
+Location: `#s3-p1`
+Evidence: Under heading "Weekend service": "Passengers may request a fare adjustment through the mobile app. The change takes effect on the following service day."
+Problem: This content is about fare adjustments, not weekend service, making it a non-sequitur under this heading.
+Fix: Move this paragraph to the fare-related section (e.g., merge with `#s1-p2`) or replace it with actual weekend service information.
+
+Location: `#s3-p2`
+Evidence: Under heading "Weekend service": "Local residents can report a service issue by calling rider services. Station staff can also help with the same request in person."
+Problem: Reporting a service issue is unrelated to the "Weekend service" heading, continuing the pattern of mismatched section content.
+Fix: Relocate this paragraph to a "Contact/report an issue" section or rewrite it to actually describe weekend service changes.
+
+Location: `#s3-banner`
+Evidence: `style="width:960px"`
+Problem: A fixed 960px width will overflow or force horizontal scrolling on small viewports, contradicting the page's `width=device-width` responsive viewport meta tag.
+Fix: Replace the fixed width with a responsive value, e.g. `max-width:960px; width:100%`.
+
+Location: `#s3-statuscard`
+Evidence: `style="height:60px;overflow:hidden"`
+Problem: A fixed height combined with `overflow:hidden` risks clipping the paragraph text it contains if content wraps to more lines than fit, hiding information from users.
+Fix: Remove the fixed height (let the card grow with content) or use `min-height:60px` instead.
+
+Location: `#s3-customcontrol`
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></div>`
+Problem: This reimplements button semantics on a `<div>`; without visible JavaScript keydown handling for Enter/Space in this markup, it won't be operable via keyboard the way a native button is, and it reinvents functionality a native element already provides.
+Fix: Replace the div with a native `<button type="button" aria-label="Delete item">` containing the icon, which gets keyboard activation and semantics for free.
+
+Location: `#s3-wizard`
+Evidence: "Choose a plan" / "Enter payment details" / "Confirm your order"
+Problem: This is a checkout/payment wizard component with no relation to transit service announcements, appearing to be stray or misplaced content on this page.
+Fix: Remove the wizard block from this page, or if intentional, add context explaining why a payment flow appears here.
+
+Location: `#s3-linkpara`
+Evidence: `<a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>` inside the sentence "For the full list of upcoming adjustments, read the accessibility improvements list."
+Problem: The link text promises an "accessibility improvements list" but the surrounding sentence is about "upcoming adjustments" and the href points to `/fares/history` — none of the three agree, which is misleading, especially for screen reader users who navigate by link text.
+Fix: Make the link text describe its actual destination, e.g. "read the fares history" (and point the href at whatever page truly lists upcoming adjustments).
+
+Location: `#s3-form-topic-label`
+Evidence: `<label for="topic-alt" id="s3-form-topic-label">Route</label>` followed by `<select id="topic">`
+Problem: The label's `for` attribute references `topic-alt`, which does not match the select's `id` of `topic`, so the label is not programmatically associated with the control.
+Fix: Change the label's `for` to `topic` (or the select's `id` to `topic-alt`) so they match.
+
+Location: `#s3-form-phone-label`
+Evidence: `<label for="phone" id="s3-form-phone-label">Phone number (required)</label>` with `<input id="phone" type="tel">`
+Problem: The label text tells users the phone field is required, but the input has no `required` or `aria-required="true"` attribute, so assistive technology and form validation won't actually treat it as required.
+Fix: Add `required` (and/or `aria-required="true"`) to the phone input to match the label's claim.
+
+Location: `#s3-form` promo input
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: `aria-invalid="true"` is hardcoded in the static markup, so the field is announced as invalid by default before the user has entered anything, which is incorrect initial state.
+Fix: Remove `aria-invalid="true"` from the default markup and set it dynamically (via JavaScript) only after validation fails.
+
+Location: `#s3-form-promo-error`
+Evidence: `<input id="promo" type="text" aria-invalid="true"><span class="error-text" id="s3-form-promo-error">Enter a 6 character code using letters and numbers only.</span>`
+Problem: The error message span is not linked to the promo input via `aria-describedby`, so screen reader users focusing the field won't hear the validation requirement or error.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the promo `<input>`.

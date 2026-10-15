@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.3.2",
+      "evidence": "DOM order is #s3-step3 \"Confirm your order\" (style=\"order:3\"), then #s3-step2 \"Enter payment details\" (style=\"order:2\"), then #s3-step1 \"Choose a plan\" (style=\"order:1\"); the CSS order property displays them visually as Choose a plan, Enter payment details, Confirm your order.",
+      "fix": "Reorder the three .step elements in the DOM to match the intended reading sequence (Choose a plan, Enter payment details, Confirm your order) and use the CSS order property only for a visual adjustment that does not reverse that sequence, or drop the order property if the DOM order is already correct.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#s3-wizard, three .step divs #s3-step3, #s3-step2, #s3-step1, lines 47-57",
+      "severity": 3,
+      "violation": "The sequence's DOM order is the reverse of the visual order the CSS order property produces, so a linearized reading (screen reader, or CSS removed) presents the confirm-and-pay step before the plan-selection and payment-detail steps it depends on, reversing the actual decision sequence."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "The page's only navigation mechanism is the two-link primary menu in #nav (\"Plan a trip\", \"Service alerts\"); the page offers no site search, no sitemap link, and no breadcrumb trail, and nothing in the content marks this page as one step of a linear process.",
+      "fix": "Add a second independent way to reach this page, such as a site search control or a breadcrumb trail distinct from the primary navigation links, so a reader who lands here directly (e.g. from a search engine) has more than one way to find related pages.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#nav, header navigation, lines 11-14",
+      "severity": 3,
+      "violation": "Fewer than two independent mechanisms for locating this page within the site are present, relying solely on a reader already knowing to use the primary navigation menu."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "Under this heading the section holds a promo banner, a real-time-arrivals status card, a three-step \"Choose a plan / Enter payment details / Confirm your order\" wizard, and a signup form asking for route, email, phone, and promo code - none of which concerns a schedule change.",
+      "fix": "Split the unrelated wizard and signup form out under their own descriptive heading (e.g. \"Sign up for alerts\") rather than nesting them under \"Schedule changes\", or rename this heading to cover the section's actual scope.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#s3-h, <h2> \"Schedule changes\", line 34",
+      "severity": 3,
+      "violation": "The heading's wording describes only a fraction of what follows; a reader scanning headings alone cannot predict that this section also contains an unrelated plan-selection and payment wizard and a signup form."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-4.1.2",
+      "evidence": "<div class=\"icon-delete\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div> carries no role, no tabindex, and no accessible name; the enclosed image's alt is empty.",
+      "fix": "Rebuild this as a native <button type=\"button\"> (or add role=\"button\", tabindex=\"0\", and a keydown handler if it must stay a div) and give it an accessible name such as aria-label=\"Delete\" that describes the action the icon represents.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#s3-customcontrol, <div> wrapping an icon-only image, line 44",
+      "severity": 3,
+      "violation": "A generic div built to act as an icon-only delete control exposes no role, no programmatically determinable name, and no keyboard access, so assistive technology cannot detect that an interactive control exists here at all, let alone what activating it would do."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-1.4.1",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label> is the only form label styled in red; no asterisk, no \"required\" text, and no icon accompanies it.",
+      "fix": "Add a non-color indicator alongside the red styling, such as a visible \"(required)\" suffix or an asterisk with an explanatory note, so the distinction survives without color.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#s3-form-phone-label, <label> \"Phone number\", line 64",
+      "severity": 2,
+      "violation": "Color is the only signal distinguishing this label from the other, unstyled labels in the same form, with no accompanying text or icon carrying the same meaning, so a reader who cannot perceive color gets no indication of whatever this field's distinct status is."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "The two paragraphs that follow (#s1-p1, #s1-p2) describe requesting a fare adjustment and checking real-time arrivals by phone; neither concerns an accessibility improvement.",
+      "fix": "Rename the heading to describe the fare-adjustment and real-time-arrival content it actually introduces (e.g. \"Fares and real-time arrivals\"), or move the accessibility-specific image and move this content under a heading that matches it.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#s1-h, <h2> \"Accessibility improvements\", line 19",
+      "severity": 2,
+      "violation": "The heading's wording does not describe the content that actually follows it, so a reader scanning headings expects accessibility-related content and has to open the section to learn it is not."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "The paragraph that follows (#s2-p1) describes requesting a fare adjustment through the mobile app, not weekend service; only the zone-status table that follows it relates to service status.",
+      "fix": "Move the fare-adjustment paragraph out of this section (it duplicates #s1-p1 verbatim) so \"Weekend service\" introduces only the zone-status table it actually describes.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "#s2-h, <h2> \"Weekend service\", line 25",
+      "severity": 2,
+      "violation": "The heading's wording does not describe the fare-adjustment paragraph nested under it, so a reader scanning headings expects weekend-service information and instead meets unrelated fare-adjustment instructions first."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> is followed by <span class=\"error-text\" id=\"s3-form-promo-error\">Error.</span>, with no aria-describedby on the input linking the two.",
+      "fix": "Replace \"Error.\" with text naming the specific problem (e.g. \"Promo code not recognized\") and add aria-describedby=\"s3-form-promo-error\" on #promo so assistive technology announces it with the field.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "#s3-form-promo-error, <span class=\"error-text\">, line 68",
+      "severity": 2,
+      "violation": "The error text is generic (\"Error.\") and names neither the field nor what is wrong with the entered value, and it is not programmatically associated with the invalid input via aria-describedby, so a screen-reader user who tabs to the field hears that it is invalid but gets no description of why and cannot determine what to correct."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "69ff628078a107c11bd403359666e3fafdba2d4ab204fdec80881f7db5374db6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-15T03:57:49Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,69 @@
+Location: `<p id="s1-p1">` in the "Accessibility improvements" section
+Evidence: "Riders may request a fare adjustment through the mobile app. Station staff can also help with the same request in person."
+Problem: This paragraph is about fare adjustments, not accessibility, so it doesn't belong under the "Accessibility improvements" heading. It also appears to be copy-pasted (see s2-p1).
+Fix: Replace with content that actually describes an accessibility improvement, or move this paragraph to a section about fares.
+
+Location: `<p id="s1-p2">` in the "Accessibility improvements" section
+Evidence: "Passengers can check real time arrivals by calling rider services."
+Problem: This is about real-time arrival lookup, not accessibility, and is a near-duplicate of s3-statuscard's text ("Local residents can check real time arrivals...").
+Fix: Remove the duplicate, and if this content is needed, place it in a relevant section (e.g., a "Real-time info" or "Rider services" section) rather than under Accessibility.
+
+Location: `<p id="s2-p1">` in the "Weekend service" section
+Evidence: "Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person."
+Problem: This is a near-verbatim duplicate of s1-p1 (only "Riders" vs "Passengers" differs) and has nothing to do with weekend service.
+Fix: Delete this duplicated paragraph and replace it with actual weekend service information, or remove if redundant.
+
+Location: `<table id="s2-table1">` in the "Weekend service" section
+Evidence: `<table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>...`
+Problem: The table has no caption or accessible name, so screen reader users encountering it have no description of what the table represents.
+Fix: Add a `<caption>` such as "Weekend service status by zone" inside the table.
+
+Location: `<p id="s3-p1">` in the "Schedule changes" section
+Evidence: "Local residents should review the updated schedule through the mobile app. Station staff can also help with the same request in person."
+Problem: The second sentence refers to "the same request," but the first sentence describes reviewing a schedule, not making a request — the pronoun reference is internally inconsistent (this text appears templated from the fare-adjustment paragraph).
+Fix: Rewrite as something like "Station staff can also help riders review the schedule in person," removing the mismatched "same request" phrasing.
+
+Location: `<p id="s3-p2">` in the "Schedule changes" section
+Evidence: "Passengers should review the updated schedule through the mobile app."
+Problem: This duplicates the opening sentence of s3-p1 almost verbatim within the same section, making the two paragraphs redundant.
+Fix: Merge the non-duplicate information (e.g., "the change takes effect on the following service day") into a single paragraph and remove the repeated sentence.
+
+Location: `<div class="status-card" id="s3-statuscard">` in the "Schedule changes" section
+Evidence: "Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day."
+Problem: This is a near-duplicate of s1-p2 and is about real-time arrivals, not schedule changes, so it doesn't fit the "Schedule changes" heading.
+Fix: Remove the duplicate and relocate real-time arrival information to one consistent section.
+
+Location: `<div class="icon-delete" id="s3-customcontrol">` in the "Schedule changes" section
+Evidence: `<div class="icon-delete" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></div>`
+Problem: This appears to be an interactive delete/remove control built from a `<div>` with a decorative (alt="") icon, but it has no button role, no tabindex, and no accessible name, making it unusable via keyboard or screen reader.
+Fix: Use a real `<button>` element with an accessible name (e.g., `aria-label="Delete"`), keeping the icon's alt text empty.
+
+Location: `<div class="wizard-steps" id="s3-wizard">`
+Evidence: DOM order is `s3-step3` ("Confirm your order", style="order:3"), then `s3-step2` ("Enter payment details", style="order:2"), then `s3-step1` ("Choose a plan", style="order:1")
+Problem: The CSS `order` property visually displays the steps as 1, 2, 3, but the underlying DOM/reading order is reversed (3, 2, 1), so screen reader and keyboard-tab users encounter the steps out of logical sequence.
+Fix: Reorder the markup to match the intended reading order (Choose a plan, Enter payment details, Confirm your order) instead of relying on CSS `order` to resequence it visually.
+
+Location: `<p id="s3-linkpara">`
+Evidence: `For the full list of upcoming adjustments, <a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>.`
+Problem: The link text says "accessibility improvements list" but the surrounding sentence is about "upcoming adjustments" and the href points to "/fares/history" — the link text matches neither its context nor its destination.
+Fix: Change the link text to describe its actual destination, e.g., "read the fare history" or "view upcoming schedule adjustments."
+
+Location: `<label for="phone" id="s3-form-phone-label" style="color:#cc0000">`
+Evidence: `style="color:#cc0000"` with no accompanying text or symbol
+Problem: Required/important status is conveyed only through red text color, which is not perceivable to colorblind users or screen reader users.
+Fix: Add a visible text indicator (e.g., "Phone number (required)") or an icon with accessible text, not color alone.
+
+Location: `<input id="promo" ... aria-invalid="true">` and `<span class="error-text" id="s3-form-promo-error">` in `#s3-form`
+Evidence: `<input id="promo" type="text" aria-invalid="true"><span class="error-text" id="s3-form-promo-error">Error.</span>`
+Problem: The input is marked invalid but has no `aria-describedby` pointing to the error message, so screen reader users aren't told why the field is invalid.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the promo input.
+
+Location: `<span class="error-text" id="s3-form-promo-error">`
+Evidence: "Error."
+Problem: The error message is generic and doesn't explain what is wrong with the promo code input.
+Fix: Replace with a specific message, e.g., "Promo code not recognized."
+
+Location: `<form id="s3-form">` — inputs `#topic`, `#email`, `#phone`, `#promo`
+Evidence: `<select id="topic">...</select>`, `<input id="email" type="email">`, `<input id="phone" type="tel">`, `<input id="promo" type="text" ...>`
+Problem: None of the form controls have a `name` attribute, so no data would be included when the form is submitted.
+Fix: Add appropriate `name` attributes (e.g., `name="route"`, `name="email"`, `name="phone"`, `name="promo"`) to each control.

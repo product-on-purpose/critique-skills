@@ -1,0 +1,74 @@
+Location: Section "Accessibility improvements" (s1), paragraph s1-p1
+Evidence: "Riders may request a fare adjustment through the mobile app. Station staff can also help with the same request in person."
+Problem: The content has nothing to do with accessibility; it describes a fare-adjustment process under a heading promising accessibility information.
+Fix: Replace this paragraph with actual accessibility-related content (e.g., elevator status, ramp availability) or move it to a relevant section like fares.
+
+Location: Section "Accessibility improvements" (s1), paragraph s1-p2
+Evidence: "Passengers can check real time arrivals by calling rider services. Updates post to the schedule page within one business day."
+Problem: Again, this is about real-time arrival info, not accessibility, so the section heading is not supported by its content.
+Fix: Move this content to a "Real-time arrivals" or "Schedule" section, and add genuine accessibility content here.
+
+Location: Section "Weekend service" (s2), paragraph s2-p1
+Evidence: "Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person."
+Problem: This is a near-verbatim duplicate of s1-p1 and is unrelated to "Weekend service," indicating boilerplate copy-paste rather than section-specific content.
+Fix: Remove the duplicated fare-adjustment text and replace it with actual weekend service details (hours, frequency changes, etc.).
+
+Location: Section "Weekend service" (s2), table s2-table1
+Evidence: `<table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>...`
+Problem: The table has no `<caption>` or accessible name, so screen reader users encounter it without knowing what it represents.
+Fix: Add `<caption>Weekend service status by zone</caption>` as the first child of the table.
+
+Location: Section "Schedule changes" (s3), paragraph s3-p1
+Evidence: "Local residents should review the updated schedule through the mobile app. Station staff can also help with the same request in person."
+Problem: The second sentence ("help with the same request") was copy-pasted from the fare-adjustment boilerplate and doesn't logically follow "review the updated schedule" — reviewing a schedule isn't a "request" staff can help fulfill in the same sense.
+Fix: Rewrite the sentence to match the actual action, e.g., "Station staff can also provide the updated schedule in person."
+
+Location: Section "Schedule changes" (s3), paragraph s3-p2
+Evidence: "Passengers should review the updated schedule through the mobile app. The change takes effect on the following service day."
+Problem: The first sentence duplicates s3-p1's opening sentence almost verbatim, producing redundant content within the same section.
+Fix: Merge s3-p1 and s3-p2 into one non-repetitive paragraph, or differentiate their content clearly.
+
+Location: Section "Schedule changes" (s3), promo banner (s3-banner)
+Evidence: "Route adjustments take effect on the posted effective date."
+Problem: This statement is circular/tautological (an "effective date" is by definition when something takes effect) and conveys no actual information to the rider.
+Fix: State the concrete effective date or link to where riders can find it, e.g., "Route adjustments take effect on November 3."
+
+Location: Section "Schedule changes" (s3), status card (s3-statuscard)
+Evidence: "Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day."
+Problem: This duplicates s1-p2 almost word-for-word, appearing in an unrelated section ("Schedule changes") a second time.
+Fix: Remove the duplicate and keep real-time arrival info consolidated in one place.
+
+Location: Section "Schedule changes" (s3), custom control (s3-customcontrol)
+Evidence: `<div class="icon-delete" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></div>`
+Problem: This is an interactive-looking "delete" control implemented as a non-interactive `<div>` with an image that has empty alt text, making it unreachable by keyboard and unlabeled for screen readers; it's also thematically unrelated to a transit schedule page (looks like leftover e-commerce UI).
+Fix: Either remove this control if unused, or implement it as a `<button>` with a descriptive accessible name (e.g., `aria-label="Delete"`), and confirm it belongs on this page.
+
+Location: Section "Schedule changes" (s3), wizard steps (s3-wizard)
+Evidence: `<div id="s3-step3" style="order:3">Confirm your order</div>` appears before `<div id="s3-step2" style="order:2">` and `<div id="s3-step1" style="order:1">` in the DOM
+Problem: The visual order (via CSS `order`) reads "Choose a plan → Enter payment details → Confirm your order," but the underlying DOM/reading order is reversed, so screen reader and keyboard-navigation users encounter the steps out of sequence (WCAG 1.3.2 Meaningful Sequence violation).
+Fix: Reorder the DOM elements to match the intended logical sequence instead of relying on CSS `order` to fix visual order.
+
+Location: Section "Schedule changes" (s3), wizard steps (s3-wizard)
+Evidence: "Confirm your order", "Enter payment details", "Choose a plan"
+Problem: This checkout/payment-flow content ("order," "payment details," "plan") is thematically unrelated to a transit route-update page and appears to be leftover template content from an e-commerce checkout flow.
+Fix: Remove this wizard block or replace it with content relevant to transit schedule changes.
+
+Location: Section "Schedule changes" (s3), link paragraph (s3-linkpara)
+Evidence: `For the full list of upcoming adjustments, <a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>.`
+Problem: The link text ("accessibility improvements list") contradicts both the surrounding sentence ("full list of upcoming adjustments") and the destination URL (`/fares/history`), making the link's purpose unclear and misleading.
+Fix: Rewrite the link text to accurately describe the destination, e.g., "view fare history," or correct the href to match the described content.
+
+Location: Section "Schedule changes" (s3), form label (s3-form-phone-label)
+Evidence: `<label for="phone" id="s3-form-phone-label" style="color:#cc0000">Phone number</label>`
+Problem: Red coloring is used as the sole indicator that this field is required (or otherwise significant), which fails WCAG 1.4.1 (use of color) since the meaning isn't conveyed to users who can't perceive color or color alone.
+Fix: Add explicit text (e.g., "Phone number (required)") or an `aria-required="true"` attribute alongside the visual styling.
+
+Location: Section "Schedule changes" (s3), form error (s3-form-promo-error)
+Evidence: `<input id="promo" type="text" aria-invalid="true"><span class="error-text" id="s3-form-promo-error">Error.</span>`
+Problem: The error message "Error." is not descriptive (fails WCAG 3.3.1) and is not programmatically associated with the input via `aria-describedby`, so screen reader users won't know what's wrong or that the message relates to this field; additionally the field is marked invalid by default before any user interaction.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the input, write a descriptive message (e.g., "Promo code is invalid or expired"), and only set `aria-invalid="true"` after validation fails.
+
+Location: Throughout document (s1-p1, s2-p1, s3-p1, s3-statuscard)
+Evidence: "Riders may request..." (s1-p1) vs. "Passengers may request..." (s2-p1) vs. "Local residents should review..." (s3-p1)
+Problem: The document inconsistently refers to its audience as "riders," "passengers," and "local residents," which reads as unedited boilerplate rather than a coherent voice.
+Fix: Standardize on one term (e.g., "riders") throughout the document.

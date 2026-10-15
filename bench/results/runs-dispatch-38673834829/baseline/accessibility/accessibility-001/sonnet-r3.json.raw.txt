@@ -1,0 +1,74 @@
+Location: `<html lang="translanguage">`
+Evidence: `lang="translanguage"`
+Problem: "translanguage" is not a valid BCP 47 language code, so assistive technology and browsers cannot determine the page's language.
+Fix: Set `lang` to the actual content language, e.g. `lang="en"`.
+
+Location: `<title id="head-title"></title>` in `<head>`
+Evidence: `<title id="head-title"></title>`
+Problem: The page title is empty, so the browser tab, history, bookmarks, and screen readers have no identifying title for this page.
+Fix: Add descriptive text, e.g. `<title>Rider service updates</title>`.
+
+Location: Section `s1`, paragraphs `s1-p1` and `s1-p2`
+Evidence: Both end with "Station staff can also help with the same request in person."
+Problem: The identical trailing sentence is reused verbatim for two unrelated actions (requesting a fare adjustment vs. checking arrivals); checking real-time arrivals isn't a "request" staff process in person, so the second instance doesn't make sense.
+Fix: Write a sentence specific to each paragraph's actual action, or remove the ill-fitting reuse in `s1-p2`.
+
+Location: `<img src="/img/platform-update.jpg" id="s1-img1">`
+Evidence: `<img src="/img/platform-update.jpg" id="s1-img1">`
+Problem: The image has no `alt` attribute, so screen reader users get no description of its content.
+Fix: Add an `alt` attribute describing the image, or `alt=""` if it is purely decorative.
+
+Location: Heading `s2-h`
+Evidence: `<h4 id="s2-h">Accessibility improvements</h4>` directly follows an `<h2>` in `s1-h`
+Problem: The heading level jumps from h2 to h4, skipping h3, which breaks the document's heading hierarchy for screen reader navigation.
+Fix: Change `s2-h` to `<h2>` (or `<h3>` if it's meant to be a subsection of `s1`) to keep heading levels sequential.
+
+Location: Heading `s2-h` and its section content
+Evidence: Heading reads "Accessibility improvements" but the section body is "Passengers can report a service issue by calling rider services... " plus a zone status table
+Problem: The heading does not describe the content that follows it; nothing in the section relates to accessibility.
+Fix: Rename the heading to match the content (e.g. "Service status") or move this content under a heading that actually covers accessibility improvements.
+
+Location: Table `s2-table1`
+Evidence: `<table id="s2-table1"><tr><th scope="col">Zone</th>...`
+Problem: The table has no `<caption>`, so screen reader users aren't told what the table represents before reading its cells.
+Fix: Add a `<caption>` such as "Zone status" inside the table.
+
+Location: Promo banner `s3-banner`
+Evidence: "Route adjustments take effect on the posted effective date."
+Problem: The sentence is circular/uninformative — it refers to "the posted effective date" without stating what that date is or where it's posted.
+Fix: Either state the actual date or link to where the effective date is published.
+
+Location: Status card `s3-statuscard`
+Evidence: "Local residents can check real time arrivals through the online portal. A confirmation message follows once the request is processed."
+Problem: Checking real-time arrivals is not a "request" that produces a confirmation message; this is a mismatched sentence template reused from a different context (e.g. reporting an issue), and it also contradicts `s1-p2`, which says arrivals are checked "at any station kiosk," not through an "online portal."
+Fix: Replace with accurate text describing how to check arrivals, and reconcile the channel (kiosk vs. portal) with `s1-p2`.
+
+Location: Custom control `s3-customcontrol`
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Problem: A non-semantic `<div>` is used to fake a button instead of a native `<button>` element, and it has no associated item for it to delete — it is disconnected from any list or record on the page.
+Fix: Replace with a native `<button>` element, and either attach it to a specific item or remove it if it has no functional context on this page.
+
+Location: Wizard steps `s3-wizard`
+Evidence: "Choose a plan", "Enter payment details", "Confirm your order"
+Problem: This checkout-style step list is unrelated to the rider-service page content (fares, schedules, accessibility) and appears to be unrelated/leftover content; it also gives no indication of which step is current (no `aria-current` or similar).
+Fix: Remove this component if it doesn't belong on this page, or if intentional, mark the current step and connect it to the actual relevant flow.
+
+Location: Link `s3-link1`
+Evidence: `<a href="/fares/history" id="s3-link1">click here</a>`
+Problem: "click here" is non-descriptive link text, which fails accessibility guidance (link purpose should be clear out of context) and hurts SEO.
+Fix: Use descriptive text, e.g. "view the full list of upcoming fare adjustments".
+
+Location: Form field `phone`
+Evidence: `<label for="phone" id="s3-form-phone-label">Phone number (required)</label>` next to `<input id="phone" type="tel">`
+Problem: The label text claims the field is required, but the input has no `required` or `aria-required="true"` attribute, so assistive technology and form validation won't actually enforce or announce it as required.
+Fix: Add `required` (or `aria-required="true"`) to the `phone` input.
+
+Location: Form field `promo`
+Evidence: `<input id="promo" type="text" aria-invalid="true">` with `<span class="error-text" id="s3-form-promo-error">Enter a 6 character code...</span>`
+Problem: `aria-invalid="true"` is hardcoded regardless of actual input state, and the error text is not programmatically associated with the input via `aria-describedby`, so screen reader users won't reliably hear the error reason.
+Fix: Set `aria-invalid` dynamically based on validation state, and add `aria-describedby="s3-form-promo-error"` to the `promo` input.
+
+Location: Submit button `s3-form-submit`
+Evidence: `<button type="submit" class="btn-primary" id="s3-form-submit" aria-label="Send form now">Submit</button>`
+Problem: The accessible name ("Send form now") does not contain the visible label text ("Submit"), violating the WCAG "Label in Name" requirement and confusing voice-control/screen-reader users who reference the visible text.
+Fix: Remove the `aria-label` or change it to include the visible text, e.g. `aria-label="Submit form"`.

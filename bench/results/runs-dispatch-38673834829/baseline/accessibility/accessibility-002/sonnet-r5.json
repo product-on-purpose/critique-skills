@@ -1,0 +1,193 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`content=\"width=device-width, initial-scale=1, user-scalable=no\"`",
+      "fix": "Remove `user-scalable=no` (and any `maximum-scale` restriction) from the viewport meta tag.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<meta name=\"viewport\">` in `<head>`",
+      "severity": 3,
+      "violation": "Disabling user scaling prevents low-vision users from pinch-zooming to read content, violating WCAG 1.4.4 (Resize Text)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<h2 id=\"s1-h\">Accessibility improvements</h2>` followed by `<p id=\"s1-p1\">Passengers should review the updated schedule at any station kiosk...`",
+      "fix": "Rename the heading to match the actual content (e.g., \"Schedule and fare updates\") or replace the body text with content that actually describes accessibility improvements.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section `s1`, heading `s1-h`",
+      "severity": 3,
+      "violation": "The heading promises content about accessibility improvements, but the paragraphs underneath discuss schedule kiosks and fare adjustments, not accessibility."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"color:#999999\"` on body text",
+      "fix": "Remove the inline color override or use a darker gray (e.g., `#595959` or darker) that meets 4.5:1 contrast.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`s1-p1`",
+      "severity": 3,
+      "violation": "`#999999` text on a white background yields a contrast ratio of roughly 2.85:1, well below the 4.5:1 minimum required by WCAG 1.4.3 for normal text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Both end with the identical sentence \"Updates post to the schedule page within one business day.\"",
+      "fix": "Remove the redundant sentence from one paragraph or replace it with information specific to that paragraph's topic.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`s1-p1` and `s1-p2`",
+      "severity": 3,
+      "violation": "The duplicated trailing sentence across two unrelated paragraphs reads as templated filler rather than distinct information, adding no value and diluting the section's content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`alt=\"A transit operator inspecting the platform screen doors before the morning shift.\"`",
+      "fix": "Either add body copy that explains the platform screen door inspection shown in the image, or replace the image with one that illustrates the fare/schedule content actually present.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`s1-img1`",
+      "severity": 3,
+      "violation": "The alt text describes platform screen door inspection, a topic never mentioned anywhere in the surrounding \"Accessibility improvements\" section text, so it doesn't support or explain the adjacent content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<table id=\"s2-table1\"><tr><th scope=\"col\">Zone</th><th scope=\"col\">Status</th></tr>...`",
+      "fix": "Add a `<caption>` element (e.g., \"Zone status\") as the first child of the table.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`s2-table1`",
+      "severity": 3,
+      "violation": "The table has no `<caption>`, so screen reader users get no accessible name or summary describing what the table represents."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<h2 id=\"s3-h\">Weekend service</h2>` followed by content about fare adjustments, service-issue reporting, and a `wizard-steps` block with \"Choose a plan / Enter payment details / Confirm your order\"",
+      "fix": "Move the payment wizard to the correct page/section and rewrite the \"Weekend service\" section with content actually describing weekend service changes.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Section `s3`, heading `s3-h`",
+      "severity": 3,
+      "violation": "None of the content under \"Weekend service\" relates to weekend transit service; the payment wizard in particular looks like unrelated e-commerce checkout content misplaced in a transit announcements page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"width:960px\"`",
+      "fix": "Replace the fixed width with a responsive value (e.g., `max-width:960px; width:100%`).",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "`s3-banner` div",
+      "severity": 3,
+      "violation": "A fixed pixel width of 960px will overflow or force horizontal scrolling on narrow mobile viewports, especially since the viewport meta tag also blocks zooming out to compensate."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"height:60px;overflow:hidden\"`",
+      "fix": "Remove the fixed height (let the box grow with content) or replace `overflow:hidden` with a scrollable/expandable treatment.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "`s3-statuscard` div",
+      "severity": 3,
+      "violation": "A fixed height combined with `overflow:hidden` will silently clip the text if it wraps to more lines (e.g., at larger font sizes or narrow viewports), hiding information from the user without any indication."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>`",
+      "fix": "Replace the div with a native `<button type=\"button\" aria-label=\"Delete item\">` containing the icon.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "`s3-customcontrol`",
+      "severity": 3,
+      "violation": "This reinvents a button using a `div` with ARIA role instead of a native `<button>`; native buttons get keyboard activation (Enter/Space), focus styling, and form semantics for free, and nothing in the markup shows the required keydown handling for this custom control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"/fares/history\" id=\"s3-link1\">read the accessibility improvements list</a>`",
+      "fix": "Change the link text to accurately describe the destination, e.g., \"read the list of upcoming fare adjustments.\"",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "`s3-linkpara`",
+      "severity": 3,
+      "violation": "The link text says \"accessibility improvements list\" but the link points to `/fares/history` and the surrounding sentence is about \"upcoming adjustments\" - the link text doesn't describe its actual destination, which is confusing, especially for screen reader users who navigate by link text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"topic-alt\" id=\"s3-form-topic-label\">Route</label>` paired with `<select id=\"topic\">`",
+      "fix": "Change the label's `for` attribute to `topic` (or change the select's `id` to `topic-alt`) so they match.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "`s3-form`, labels/inputs",
+      "severity": 3,
+      "violation": "The label's `for` attribute references `topic-alt`, which does not exist, while the actual select has `id=\"topic\"`; this breaks the programmatic label/control association, so screen readers and click-to-focus won't connect \"Route\" to the dropdown."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"phone\" id=\"s3-form-phone-label\">Phone number (required)</label>` with `<input id=\"phone\" type=\"tel\">`",
+      "fix": "Add `required` (and optionally `aria-required=\"true\"`) to the phone `<input>`.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "`s3-form`, phone field",
+      "severity": 3,
+      "violation": "The label visually states the field is required, but the input has no `required` attribute (and no `aria-required`), so assistive technology and native form validation won't enforce or announce it as required."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">`",
+      "fix": "Remove `aria-invalid=\"true\"` from the initial markup and set it dynamically only after validation fails.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "`s3-form`, promo field",
+      "severity": 3,
+      "violation": "`aria-invalid=\"true\"` is hardcoded in the static markup, so screen reader users are told the field is invalid before they've even interacted with the form or submitted it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">` followed by `<span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span>`",
+      "fix": "Add `aria-describedby=\"s3-form-promo-error\"` to the `#promo` input.",
+      "id": "F-015",
+      "lane": "judged",
+      "location": "`s3-form`, promo field and its error text",
+      "severity": 3,
+      "violation": "The error message span is not associated with the input (no `aria-describedby`), so screen reader users focused on the promo field won't hear the validation requirement."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-002.html",
+    "artifact_sha256": "b49ce74681df60732a6ef3b5309ce82264ad1b6ad48c6fa8b85989f2c712f113",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T03:53:22Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 15,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

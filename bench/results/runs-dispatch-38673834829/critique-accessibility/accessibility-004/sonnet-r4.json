@@ -1,0 +1,50 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "The page's only navigation mechanism is <nav id=\"nav\"><a href=\"/plan\">Plan a trip</a><a href=\"/accessibility\">Accessibility</a></nav>; no search form, sitemap link, or breadcrumb trail appears anywhere in the document, and the page is a general informational page (\"Rider service updates\"), not one step in a linear process such as checkout.",
+      "fix": "Add a second, independent way to reach this page or its sibling pages, such as a site search form or a breadcrumb trail (e.g. Home > Rider updates) that does not merely duplicate the primary navigation's links.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#nav, <nav> element, line 11",
+      "severity": 3,
+      "violation": "WCAG-2.4.5 requires at least two independent mechanisms for locating this page within the site; only one (the primary navigation menu) is present."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> is followed by <span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span>, with no aria-describedby or aria-errormessage attribute on the input linking it to that span.",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the #promo input so assistive technology announces the error text when the field receives focus.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#promo, <input type=\"text\"> control, line 67",
+      "severity": 2,
+      "violation": "WCAG-3.3.1 requires the error to be identified to the reader; aria-invalid exposes that the field is invalid, but with no programmatic link to the error text, a screen-reader user tabbing to the field is told only that it is invalid and must separately explore the page to discover why."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "393fe58fac52d6953cd372944cd352ef9181df5c42ae778bd6d17214acb080c7",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-15T04:41:13Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

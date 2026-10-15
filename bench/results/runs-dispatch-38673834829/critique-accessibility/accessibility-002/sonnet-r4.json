@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.10",
+      "evidence": "declared width: 960px",
+      "fix": "Cap the element's width with a relative max-width (a percentage or viewport unit), or add a media query that shrinks it below 320px.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "#s3-banner, <div> element, line 37",
+      "severity": 3,
+      "violation": "A fixed width of 960px forces horizontal scrolling once the viewport narrows to 320px, with no responsive override."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.3",
+      "evidence": "text color #999999 on background #ffffff, contrast ratio 2.85:1",
+      "fix": "Darken the text or lighten the background until the ratio reaches at least 4.5:1.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "#s1-p1, <p> element, text 'Passengers should review the updated schedule at any station kiosk. Updates p...', line 20",
+      "severity": 3,
+      "violation": "Contrast ratio 2.85:1 is below the 4.5:1 AA minimum for normal text."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.4",
+      "evidence": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\" id=\"head-viewport\">",
+      "fix": "Remove user-scalable=no so readers can zoom the page.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "#head-viewport, <meta> viewport element, line 5",
+      "severity": 3,
+      "violation": "The viewport meta tag sets user-scalable=no, disabling browser zoom entirely."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "The document's only way to reach other pages is <nav id=\"nav\"><a href=\"/accessibility\">Accessibility</a><a href=\"/fares\">Fares and passes</a></nav>; no site search form, no sitemap link, and no breadcrumb trail appear anywhere in the document, and the page is a standalone announcements page, not one step in a linear process.",
+      "fix": "Add a second, independent way to reach this page, such as a site search form or a breadcrumb trail that does not simply duplicate the primary nav's links.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#nav, <nav> element (the page's only navigation mechanism), line 11",
+      "severity": 3,
+      "violation": "Only one navigation mechanism (the primary nav menu) exists anywhere on the page, with no search, sitemap, or breadcrumb trail offering an independent path to this content, and the page is not exempt as a step in a linear process."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.11",
+      "evidence": "boundary color #9d9d9d against adjacent background #ffffff, contrast ratio 2.71:1",
+      "fix": "Darken the border or outline color, or change the adjacent background, until the ratio reaches at least 3:1.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "#s3-button1, <button> element boundary, line 43",
+      "severity": 2,
+      "violation": "Component boundary contrast ratio 2.71:1 is below the 3:1 AA minimum."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.12",
+      "evidence": "height: 60px; overflow: hidden",
+      "fix": "Remove the fixed height so the element grows with its content, or replace the clipped overflow with visible or auto.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "#s3-statuscard, <div> element, line 40",
+      "severity": 2,
+      "violation": "A fixed height combined with clipped overflow truncates this element's text once a reader applies wider line, paragraph, letter, or word spacing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "The section under this heading reads: \"Passengers should review the updated schedule at any station kiosk...\" and \"Local residents may request a fare adjustment through the mobile app...\", plus an image of a platform operator; none of this content concerns accessibility features.",
+      "fix": "Retitle the heading to name what the section actually covers, such as 'Schedule and fare-adjustment updates'.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "#s1-h, <h2> element, text 'Accessibility improvements', line 19",
+      "severity": 2,
+      "violation": "The heading 'Accessibility improvements' misdescribes the section that follows, which covers schedule review and fare-adjustment requests rather than any accessibility feature, so a reader scanning headings cannot predict the section's actual content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> is followed by <span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span>, with no aria-describedby, aria-errormessage, or other programmatic attribute on the input linking it to that span.",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" (or aria-errormessage) on the #promo input so assistive technology announces the error text when the field receives focus.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "#promo, <input type=\"text\"> control; its error text #s3-form-promo-error, line 67",
+      "severity": 2,
+      "violation": "The invalid promo-code field is marked aria-invalid but has no programmatic association to its error text, so a screen-reader user who tabs to the field is told it is invalid but is not told why without separately discovering the adjacent span."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-3.3.2",
+      "evidence": "<select id=\"topic\">",
+      "fix": "Add a <label for> pointing at this control's id, wrap the control in a <label>, or set aria-label.",
+      "id": "F-009",
+      "lane": "scripted",
+      "location": "#topic, <select> control, line 61",
+      "severity": 2,
+      "violation": "No label, aria-label, aria-labelledby, or title identifies what this control expects."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-002.html",
+    "artifact_sha256": "b49ce74681df60732a6ef3b5309ce82264ad1b6ad48c6fa8b85989f2c712f113",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-15T03:47:03Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

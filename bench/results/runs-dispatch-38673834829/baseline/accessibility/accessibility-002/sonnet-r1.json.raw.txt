@@ -1,0 +1,104 @@
+Location: `<title id="head-title">` vs `<h1 id="main-h1">`
+Evidence: "Cascadia Regional Transit: Service Announcements" (title) vs "Fare and service announcements" (h1)
+Problem: The page title and the main heading describe the page differently, which can confuse users navigating by tab title or bookmarking the page.
+Fix: Align the title text with the h1, e.g. "Fare and service announcements – Cascadia Regional Transit".
+
+Location: `<meta name="viewport" ...>` in `<head>`
+Evidence: `content="width=device-width, initial-scale=1, user-scalable=no"`
+Problem: `user-scalable=no` disables pinch-to-zoom, which blocks low-vision users from magnifying content and violates WCAG 1.4.4 (Resize Text).
+Fix: Remove `user-scalable=no` (and any `maximum-scale` restriction) from the viewport meta tag.
+
+Location: Section `s1`, heading "Accessibility improvements" (`#s1-h`)
+Evidence: Section is titled "Accessibility improvements" but body text reads "Passengers should review the updated schedule at any station kiosk" and "Local residents may request a fare adjustment through the mobile app."
+Problem: The section heading promises accessibility-related content, but the paragraphs describe schedule lookup and fare adjustments, unrelated to accessibility.
+Fix: Either rewrite the paragraphs to cover actual accessibility improvements or rename the heading to match the content (e.g. "Fare and schedule updates").
+
+Location: `#s1-p1`
+Evidence: `style="color:#999999"`
+Problem: Inline gray text color (#999999) on a presumably white background yields roughly 2.4:1 contrast, failing the WCAG AA 4.5:1 minimum for body text.
+Fix: Remove the inline color override or replace it with a color that meets at least 4.5:1 contrast against the background.
+
+Location: `#s1-p1` and `#s1-p2`
+Evidence: Both end with the identical sentence "Updates post to the schedule page within one business day."
+Problem: The same boilerplate sentence is reused for two unrelated actions (checking a kiosk schedule vs. requesting a fare adjustment), making it unclear which process it actually describes.
+Fix: Write a sentence specific to each paragraph's actual action/confirmation behavior instead of reusing identical boilerplate text.
+
+Location: `#s1-img1`
+Evidence: `alt="A transit operator inspecting the platform screen doors before the morning shift."`
+Problem: The alt text describes platform screen door inspection, which has no relation to the surrounding content about kiosks and fare adjustments in the "Accessibility improvements" section.
+Fix: Replace the alt text with a description relevant to the section's actual content, or replace the image.
+
+Location: `#s2-p1`
+Evidence: "Local residents can check real time arrivals through the mobile app. A confirmation message follows once the request is processed."
+Problem: Checking real-time arrivals is a lookup, not a submitted request, so "a confirmation message follows once the request is processed" doesn't logically apply.
+Fix: Remove or rewrite the second sentence to match a lookup action, e.g. "Arrival times update automatically as trains approach."
+
+Location: `#s2-table1`
+Evidence: `<table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>...`
+Problem: The table has no `<caption>` identifying what it represents, forcing screen reader users to infer its purpose solely from context.
+Fix: Add a `<caption>` such as "Current zone status" inside the table.
+
+Location: `#s3-p1`, section "Weekend service"
+Evidence: "Passengers may request a fare adjustment through the mobile app. The change takes effect on the following service day."
+Problem: Under the "Weekend service" heading, this paragraph is actually about fare adjustments, not weekend service, duplicating content already given in section `s1`.
+Fix: Replace with content specific to weekend service changes, or move this paragraph to the fares section and remove the duplicate.
+
+Location: `#s3-p2`, section "Weekend service"
+Evidence: "Local residents can report a service issue by calling rider services. Station staff can also help with the same request in person."
+Problem: This paragraph, also unrelated to "Weekend service," instructs users to report issues by phone or in person, while the status card below (`#s3-statuscard`) tells users to use an online portal for the same action — a direct contradiction placed in the same section.
+Fix: Reconcile the two into one consistent instruction for reporting a service issue, and move content under a heading relevant to its topic.
+
+Location: `#s3-banner`
+Evidence: `style="width:960px"`
+Problem: A fixed pixel width of 960px will overflow or get clipped on mobile viewports, especially since pinch-zoom is also disabled via the viewport meta tag, leaving no way to view the full banner.
+Fix: Use a responsive width (e.g. `max-width: 960px; width: 100%;`) instead of a fixed pixel width.
+
+Location: `#s3-statuscard`
+Evidence: `style="height:60px;overflow:hidden"`
+Problem: A fixed height combined with `overflow:hidden` will clip the paragraph text if it wraps to more lines than fit in 60px, hiding part of the message from users.
+Fix: Remove the fixed height/overflow restriction and let the card size to its content.
+
+Location: `#s3-statuscard`
+Evidence: "Riders can report a service issue through the online portal. Updates post to the schedule page within one business day."
+Problem: This repeats the "Updates post to the schedule page within one business day." boilerplate from section `s1`, again attached to an unrelated action (reporting an issue vs. checking a schedule).
+Fix: Write a confirmation sentence specific to submitting an issue report, not the reused schedule-update boilerplate.
+
+Location: `#s3-button1`
+Evidence: `style="border:1px solid #9d9d9d"`
+Problem: A #9d9d9d border against a white background produces roughly 2.7:1 contrast, below the 3:1 minimum required by WCAG 1.4.11 for UI component boundaries.
+Fix: Darken the border color to achieve at least 3:1 contrast against the background.
+
+Location: `#s3-customcontrol`
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" ...>`
+Problem: A "Delete item" control appears among status/refresh elements with no corresponding list item or deletable content on the page, making its purpose unclear and seemingly out of place.
+Fix: Remove the control if unused, or clarify what item it deletes with surrounding context/markup.
+
+Location: `#s3-wizard`
+Evidence: "Choose a plan" / "Enter payment details" / "Confirm your order"
+Problem: These checkout-style wizard steps are unrelated to transit service announcements and appear to be leftover/misplaced content from another flow.
+Fix: Remove the wizard block or replace it with steps relevant to this page (e.g. a weekend-service planning flow).
+
+Location: `#s3-linkpara` / `#s3-link1`
+Evidence: `<a href="/fares/history" ...>read the accessibility improvements list</a>` inside "For the full list of upcoming adjustments, ..."
+Problem: The link text says "accessibility improvements list" but the surrounding sentence refers to "upcoming adjustments" and the href points to `/fares/history`, so the link text does not describe its actual destination or purpose.
+Fix: Change the link text to match its target, e.g. "read the list of upcoming fare adjustments."
+
+Location: `#s3-form`, Route field
+Evidence: `<label for="topic-alt" ...>Route</label>` next to `<select id="topic">`
+Problem: The label's `for` attribute references `topic-alt`, which does not exist, so the "Route" label is not programmatically associated with the select element.
+Fix: Change the label's `for` attribute to `topic` to match the select's `id`.
+
+Location: `#s3-form`, Phone field
+Evidence: `<label for="phone" ...>Phone number (required)</label>` with `<input id="phone" type="tel">`
+Problem: The label text states the field is required, but the input lacks a `required` or `aria-required="true"` attribute, so assistive technology and form validation won't enforce or convey that requirement.
+Fix: Add `required` (or `aria-required="true"`) to the phone input.
+
+Location: `#s3-form`, Promo code field
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: `aria-invalid="true"` is hardcoded on page load before the user has entered anything, causing screen readers to announce an error on an untouched, empty field.
+Fix: Set `aria-invalid="false"` (or omit it) by default and only set it to `true` after validation fails.
+
+Location: `#s3-form`, Promo code field and error text
+Evidence: `<input id="promo" type="text" aria-invalid="true">` followed by `<span class="error-text" id="s3-form-promo-error">Enter a 6 character code...</span>`
+Problem: The error message is not linked to the input via `aria-describedby`, so screen reader users won't hear the error explanation when focused on the field.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the promo input.

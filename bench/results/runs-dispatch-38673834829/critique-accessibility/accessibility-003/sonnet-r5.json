@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-1.3.2",
+      "evidence": "DOM order is #s3-step3 (style=\"order:3\") \"Confirm your order\", then #s3-step2 (style=\"order:2\") \"Enter payment details\", then #s3-step1 (style=\"order:1\") \"Choose a plan\"; the CSS order values place them visually in the opposite sequence (1, 2, 3).",
+      "fix": "Reorder the three .step divs in the DOM to match the intended reading sequence (Choose a plan, Enter payment details, Confirm your order) and remove the CSS order overrides, or otherwise make DOM order match visual order.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#s3-wizard, <div> wizard-steps container",
+      "severity": 3,
+      "violation": "The DOM order of the three wizard steps is the reverse of the sequence the CSS order property gives them visually, so a linearized or screen-reader reading encounters \"Confirm your order\" before the plan is chosen or payment is entered, reversing the actual decision sequence WCAG-1.3.2 requires markup order to preserve."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "The only navigation mechanisms anywhere in the document are the header's #nav links (\"Plan a trip\", \"Service alerts\") and the footer's #footer-link1 / #footer-link2 (\"Privacy policy\", \"Terms of service\"); no search form, sitemap link, or breadcrumb trail appears anywhere.",
+      "fix": "Add a second independent wayfinding mechanism distinct from #nav, such as a site search form or a breadcrumb trail reflecting this page's place in the site.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#nav, <nav> primary navigation landmark",
+      "severity": 3,
+      "violation": "WCAG-2.4.5 requires at least two independent ways to locate a page within the site unless the page is one step in a linear process. This is a general rider-updates content page, not a linear-process step, and it exposes exactly one wayfinding mechanism, the primary navigation menu."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "#promo carries aria-invalid=\"true\" with no aria-describedby attribute; the adjacent #s3-form-promo-error span's entire text content is \"Error.\"",
+      "fix": "Replace \"Error.\" with text naming the actual problem (for example, \"Promo code not recognized\"), and add aria-describedby=\"s3-form-promo-error\" on #promo so assistive technology announces it when the field receives focus.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#promo, <input type=\"text\"> promo code field",
+      "severity": 3,
+      "violation": "The error text accompanying the invalid promo-code field names neither which requirement failed nor what to correct, and is not programmatically associated with the field through aria-describedby, so WCAG-3.3.1's requirement that an error identify the item and describe the problem in text is breached."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-1.4.1",
+      "evidence": "#s3-form-phone-label is styled with style=\"color:#cc0000\"; it is the only one of the form's four labels (#s3-form-topic-label, #s3-form-email-label, #s3-form-phone-label, #s3-form-promo-label) carrying any color styling, with no asterisk, \"required\" text, or icon alongside it.",
+      "fix": "Add a visible non-color indicator (such as a \"required\" suffix or an icon with its own text alternative) alongside or in place of the red styling.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#s3-form-phone-label, <label> \"Phone number\"",
+      "severity": 2,
+      "violation": "The red color is the sole signal distinguishing this label from its siblings, with no accompanying text or icon carrying the same information, so a color-blind reader cannot perceive what, if anything, is different about the phone field, breaching WCAG-1.4.1."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "#s1-h reads \"Accessibility improvements\"; the section's paragraphs #s1-p1 and #s1-p2 describe requesting a fare adjustment through the mobile app and checking real-time arrivals by phone, neither of which concerns accessibility.",
+      "fix": "Retitle the heading to match its actual content (for example, \"Fares and real-time arrivals\"), or move genuinely accessibility-related content, such as the parking-repainting update already described by #s1-img1's alt text, into this section in place of the fare and arrival paragraphs.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#s1-h, <h2> heading \"Accessibility improvements\"",
+      "severity": 2,
+      "violation": "The heading's wording promises a topic that the section's actual paragraph content does not deliver, so a reader scanning headings alone cannot predict what this section covers, breaching WCAG-2.4.6."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "#s2-h reads \"Weekend service\"; its paragraph #s2-p1 is the same fare-adjustment-request boilerplate as #s1-p1 (\"Passengers may request a fare adjustment through the mobile app...\"), and the zone-status table #s2-table1 that follows is not weekend-specific either.",
+      "fix": "Replace the paragraph and table with weekend-specific service information, or rename the heading to match the fare-adjustment content actually present.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#s2-h, <h2> heading \"Weekend service\"",
+      "severity": 2,
+      "violation": "The heading names a specific topic, weekend service, that the section's actual content never addresses, breaching WCAG-2.4.6."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "69ff628078a107c11bd403359666e3fafdba2d4ab204fdec80881f7db5374db6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-15T04:20:52Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

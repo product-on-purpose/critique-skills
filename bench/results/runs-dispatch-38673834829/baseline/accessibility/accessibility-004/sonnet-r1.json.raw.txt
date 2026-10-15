@@ -1,0 +1,74 @@
+Location: s1-p1
+Evidence: "Station staff can also help with the same request in person."
+Problem: This generic sentence is reused verbatim across unrelated paragraphs (s1-p1, s1-p2, s2-p1) no matter what "the same request" actually refers to, making the referent unclear and the content feel templated.
+Fix: Write a sentence specific to each paragraph's actual request instead of reusing the same boilerplate line.
+
+Location: s1-p2
+Evidence: "Commuters can report a service issue by calling rider services. Station staff can also help with the same request in person."
+Problem: This is a verbatim duplicate of the closing sentence already used in s1-p1.
+Fix: Remove the duplicate sentence or rewrite it so it isn't identical across paragraphs.
+
+Location: s1-img1
+Evidence: alt="Crews repainting the accessible parking spaces near the station entrance." on src="/img/platform-update.jpg"
+Problem: The alt text describes parking-lot repainting while the filename and the "Station updates" section imply a platform/schedule update, so the image content doesn't match its context.
+Fix: Confirm the correct image for this section and make the filename, alt text, and surrounding content consistent.
+
+Location: s2-h / s2-table1
+Evidence: Heading "Schedule changes" followed by a table reading "North / On time", "South / On time"
+Problem: The heading promises information about schedule changes, but the table only reports current on-time status with no change shown.
+Fix: Rename the heading to reflect current status (e.g., "Zone status") or add content that actually documents schedule changes.
+
+Location: s2-p1
+Evidence: "Passengers can check real time arrivals through the online portal. Station staff can also help with the same request in person."
+Problem: This is the third verbatim repetition of the same "same request" boilerplate sentence (also in s1-p1 and s1-p2).
+Fix: Deduplicate across the document; write context-appropriate text or drop the sentence.
+
+Location: s3-p1
+Evidence: "Riders can report a service issue by calling rider services. Updates post to the schedule page within one business day."
+Problem: The second sentence (about updates posting to a schedule page) doesn't logically follow from the first sentence about reporting an issue by phone; the two look like mismatched boilerplate stitched together.
+Fix: Replace the second sentence with information relevant to reporting an issue, such as expected response time.
+
+Location: s3-p2
+Evidence: "Local residents can check real time arrivals through the online portal. A confirmation message follows once the request is processed."
+Problem: Checking real-time arrivals isn't a submitted request that gets "processed," so the second sentence doesn't match the first.
+Fix: Remove or replace the second sentence with text relevant to checking arrivals, such as portal refresh frequency.
+
+Location: s3-banner
+Evidence: "Route adjustments take effect on the posted effective date."
+Problem: This is a tautology (an "effective date" is by definition when something takes effect) and conveys no actual information.
+Fix: State the actual effective date or timeframe, or remove the banner.
+
+Location: s3-statuscard
+Evidence: "Riders can check real time arrivals at any station kiosk. Updates post to the schedule page within one business day."
+Problem: This reuses the mismatched "within one business day" boilerplate from s3-p1 and sits directly above a "Refresh status" button, creating a contradiction between an instant manual refresh and a one-business-day update delay.
+Fix: Write status-card text specific to what the adjacent "Refresh status" button actually does, removing the conflicting boilerplate.
+
+Location: s3-button1
+Evidence: `<button type="button" class="btn-secondary" id="s3-button1">Refresh status</button>`
+Problem: The button presumably updates the status card dynamically, but there is no aria-live region or other mechanism to announce the updated status to screen reader users.
+Fix: Wrap the status content in an `aria-live="polite"` region that updates when the button is activated.
+
+Location: s3-customcontrol
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" ...>`
+Problem: A "Delete item" control appears on a route-updates/fare-adjustments page with no list of deletable items for context, and it's built from a div with role="button" instead of a native button element, an accessibility anti-pattern.
+Fix: Replace the div with a real `<button>` element, and remove this control if it is leftover from another page/template since it has no apparent purpose here.
+
+Location: s3-wizard
+Evidence: "Choose a plan" / "Enter payment details" / "Confirm your order"
+Problem: These checkout-wizard steps are unrelated to fare adjustments or route updates and appear to be a misplaced component from a different flow.
+Fix: Remove the wizard-steps block from this page or replace it with steps actually relevant to fare adjustments.
+
+Location: s3-linkpara
+Evidence: "For the full list of upcoming adjustments, read the accessibility improvements list" (href="/fares/history")
+Problem: The link text "read the accessibility improvements list" doesn't match the preceding text about "upcoming adjustments" or the destination URL "/fares/history," so the link is mislabeled.
+Fix: Change the link text to accurately describe the destination, e.g., "read the full list of fare adjustments."
+
+Location: s3-form, phone field
+Evidence: `<label for="phone" ...>Phone number (required)</label>` paired with `<input id="phone" type="tel">`
+Problem: The label states the field is required, but the input has no `required` or `aria-required="true"` attribute, so this isn't enforced or conveyed to assistive technology.
+Fix: Add `required` and/or `aria-required="true"` to the phone input.
+
+Location: s3-form, promo field
+Evidence: `<input id="promo" type="text" aria-invalid="true">` followed by `<span class="error-text" id="s3-form-promo-error">Enter a 6 character code using letters and numbers only.</span>`
+Problem: `aria-invalid` is hardcoded to "true" regardless of actual input state, and the error text isn't linked to the input via `aria-describedby`, so screen reader users hear a false "invalid" announcement with no explanation.
+Fix: Set `aria-invalid` dynamically based on real validation state and add `aria-describedby="s3-form-promo-error"` to the input.

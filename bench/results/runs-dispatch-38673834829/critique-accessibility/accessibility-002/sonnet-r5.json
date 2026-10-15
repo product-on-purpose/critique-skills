@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.10",
+      "evidence": "declared width: 960px",
+      "fix": "Cap the element's width with a relative max-width (a percentage or viewport unit), or add a media query that shrinks it below 320px.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "#s3-banner, <div> element, line 37",
+      "severity": 3,
+      "violation": "A fixed width of 960px forces horizontal scrolling once the viewport narrows to 320px, with no responsive override."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.3",
+      "evidence": "text color #999999 on background #ffffff, contrast ratio 2.85:1",
+      "fix": "Darken the text or lighten the background until the ratio reaches at least 4.5:1.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "#s1-p1, <p> element, text 'Passengers should review the updated schedule at any station kiosk. Updates p...', line 20",
+      "severity": 3,
+      "violation": "Contrast ratio 2.85:1 is below the 4.5:1 AA minimum for normal text."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.4",
+      "evidence": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\" id=\"head-viewport\">",
+      "fix": "Remove user-scalable=no so readers can zoom the page.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "#head-viewport, <meta> viewport element, line 5",
+      "severity": 3,
+      "violation": "The viewport meta tag sets user-scalable=no, disabling browser zoom entirely."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "The only navigation mechanism on the page is the header's <nav id=\"nav\"> containing two links, 'Accessibility' (/accessibility) and 'Fares and passes' (/fares). There is no search form, no sitemap link, no breadcrumb trail, and no related-links list anywhere in the markup, and this page is a general announcements page, not one step of a linear process.",
+      "fix": "Add a second independent mechanism, such as a site search, a sitemap link, or a breadcrumb trail, and ensure the primary navigation itself includes a path to this page's section.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#nav, <nav> element, line 11",
+      "severity": 3,
+      "violation": "Fewer than two independent mechanisms exist for locating this page (or any page like it) within the site: only the primary navigation menu is present, and it does not even link to this announcements page's own category, so a reader who lands here directly has no second way to find their way back or find a page like it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "Section #s3 under this heading contains a fare-adjustment paragraph, a service-issue-reporting paragraph, a promo banner about route adjustments, a status card, a 'Refresh status' button, a custom delete control, a three-step 'Choose a plan / Enter payment details / Confirm your order' wizard, a link captioned 'read the accessibility improvements list', and a four-field contact/route form (#s3-form). None of these name or concern weekend service specifically.",
+      "fix": "Split this section under headings that name its actual topics (for example, separate headings for service-issue reporting and for the route/contact form), or rename this heading to describe the breadth of what it actually introduces.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#s3-h, <h2> element, text 'Weekend service', line 34",
+      "severity": 3,
+      "violation": "The heading names a narrow topic, weekend service, while the section it introduces is this page's largest block and covers fare adjustments, status reporting, a purchase-style wizard, and an unrelated form, so a reader scanning headings to find any one of those cannot predict that this heading leads to it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.11",
+      "evidence": "boundary color #9d9d9d against adjacent background #ffffff, contrast ratio 2.71:1",
+      "fix": "Darken the border or outline color, or change the adjacent background, until the ratio reaches at least 3:1.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "#s3-button1, <button> element boundary, line 43",
+      "severity": 2,
+      "violation": "Component boundary contrast ratio 2.71:1 is below the 3:1 AA minimum."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.12",
+      "evidence": "height: 60px; overflow: hidden",
+      "fix": "Remove the fixed height so the element grows with its content, or replace the clipped overflow with visible or auto.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "#s3-statuscard, <div> element, line 40",
+      "severity": 2,
+      "violation": "A fixed height combined with clipped overflow truncates this element's text once a reader applies wider line, paragraph, letter, or word spacing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "Section #s1 under this heading reads: 'Passengers should review the updated schedule at any station kiosk. Updates post to the schedule page within one business day.' and 'Local residents may request a fare adjustment through the mobile app. Updates post to the schedule page within one business day.' Neither sentence, nor the section's image, concerns accessibility.",
+      "fix": "Rename the heading to describe what the section actually covers (for example, 'Schedule and fare updates'), or move genuine accessibility content under it.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "#s1-h, <h2> element, text 'Accessibility improvements', line 19",
+      "severity": 2,
+      "violation": "The heading promises accessibility-improvement content, but the section beneath it covers schedule review and fare adjustment, so a reader scanning headings for accessibility information is misled into opening a section with none."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> is immediately followed by <span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span>, but the input carries no aria-describedby, aria-errormessage, or other attribute referencing #s3-form-promo-error.",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" (or aria-errormessage) on #promo so the error text is programmatically tied to the field.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "#promo, <input> element, aria-invalid=\"true\", line 67",
+      "severity": 2,
+      "violation": "The invalid field is marked programmatically invalid and specific error text exists in the markup, but nothing associates that text with the field, so a screen reader announcing the field on focus has no guarantee of exposing why it is invalid."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-3.3.2",
+      "evidence": "<select id=\"topic\">",
+      "fix": "Add a <label for> pointing at this control's id, wrap the control in a <label>, or set aria-label.",
+      "id": "F-010",
+      "lane": "scripted",
+      "location": "#topic, <select> control, line 61",
+      "severity": 2,
+      "violation": "No label, aria-label, aria-labelledby, or title identifies what this control expects."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-002.html",
+    "artifact_sha256": "b49ce74681df60732a6ef3b5309ce82264ad1b6ad48c6fa8b85989f2c712f113",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-15T03:52:10Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

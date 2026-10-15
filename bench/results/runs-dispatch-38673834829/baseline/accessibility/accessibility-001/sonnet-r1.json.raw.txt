@@ -1,0 +1,94 @@
+Location: <html lang="translanguage" id="html">
+Evidence: lang="translanguage"
+Problem: "translanguage" is not a valid BCP 47 language code, so assistive technology and browsers cannot determine the page's actual language for pronunciation/translation purposes.
+Fix: Set lang to the actual content language, e.g. lang="en".
+
+Location: <title id="head-title"></title>
+Evidence: <title id="head-title"></title>
+Problem: The title element is empty, so the browser tab, history, bookmarks, and screen readers announcing page identity have no page name to show.
+Fix: Add descriptive text, e.g. "Rider Service Updates".
+
+Location: Section s1, p id="s1-p2"
+Evidence: "Riders can check real time arrivals at any station kiosk. Station staff can also help with the same request in person."
+Problem: This reuses the exact closing sentence from s1-p1 verbatim ("Station staff can also help with the same request in person."), even though the two paragraphs describe different requests (fare adjustment vs. checking arrivals), indicating unedited boilerplate rather than content tailored to this paragraph.
+Fix: Write a sentence specific to checking real-time arrivals, or remove the duplicated boilerplate sentence.
+
+Location: Section s1, img id="s1-img1"
+Evidence: <img src="/img/platform-update.jpg" id="s1-img1">
+Problem: The image has no alt attribute at all, which is both invalid HTML and an accessibility failure — screen reader users get no description of the image's content or purpose.
+Fix: Add an alt attribute describing the image, e.g. alt="Updated platform signage at the station", or alt="" if purely decorative.
+
+Location: Section s2, heading id="s2-h"
+Evidence: <h4 id="s2-h">Accessibility improvements</h4>
+Problem: This heading jumps from h1 (main-h1) to h4, skipping h2 and h3, breaking the document outline; it also sits at a different level than the sibling section headings s1-h and s3-h, which are both h2.
+Fix: Change to <h2> to match the other top-level section headings and preserve a logical heading hierarchy.
+
+Location: Section s2 (heading "Accessibility improvements" vs. its content)
+Evidence: "Passengers can report a service issue by calling rider services. Updates post to the schedule page within one business day." followed by a zone status table
+Problem: The section is headed "Accessibility improvements" but its content (reporting issues by phone, and a zone on-time status table) has nothing to do with accessibility features; the heading does not match the content underneath it.
+Fix: Retitle the section to match its actual content (e.g. "Service status") or add actual accessibility-related content under this heading.
+
+Location: Section s2, p id="s2-p1"
+Evidence: "Updates post to the schedule page within one business day."
+Problem: This sentence is reused verbatim later in s3-p2 ("Commuters should review the updated schedule through the online portal. Updates post to the schedule page within one business day."), indicating duplicated template text rather than content specific to each context.
+Fix: Differentiate the sentences so each paragraph conveys information specific to its own context, or remove the redundant repetition.
+
+Location: Section s2, table id="s2-table1"
+Evidence: <table id="s2-table1"><tr><th scope="col">Zone</th>...
+Problem: The table has no caption or accessible name explaining what it represents, so screen reader users encountering it out of context (e.g. via a table-navigation shortcut) won't know what "Zone/Status" refers to.
+Fix: Add a <caption> element, e.g. <caption>Current zone service status</caption>.
+
+Location: Section s3, p id="s3-p1"
+Evidence: "A confirmation message follows once the request is processed."
+Problem: This exact sentence reappears verbatim in the s3-statuscard div below, again showing duplicated boilerplate text rather than content written for each specific context.
+Fix: Remove the duplication or write context-appropriate text for each instance.
+
+Location: Section s3, div id="s3-banner"
+Evidence: "Route adjustments take effect on the posted effective date."
+Problem: This statement is circular/tautological — it says the effective date is the date that's effective — and conveys no actual information to the reader.
+Fix: State the actual effective date or a concrete mechanism for finding it, e.g. "Route adjustments take effect on the date shown on the schedule page."
+
+Location: Section s3, div id="s3-statuscard"
+Evidence: "Local residents can check real time arrivals through the online portal. A confirmation message follows once the request is processed."
+Problem: Checking real-time arrivals is not a "request" that gets "processed" and confirmed, so this reused boilerplate sentence (duplicated from s3-p1) doesn't logically fit this context.
+Fix: Replace with a sentence that accurately describes what happens after checking real-time arrivals (likely nothing needs confirming), rather than reusing the request-confirmation boilerplate.
+
+Location: Section s3, div id="s3-customcontrol"
+Evidence: <div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">
+Problem: A "Delete item" control appears with no surrounding list, item, or explanation of what it deletes, making it contextually orphaned; it is also a non-native interactive control (div with role="button") rather than a <button>, which risks missing built-in keyboard/activation semantics.
+Fix: Either remove this stray control if it has no purpose on this page, or move it next to the specific item it deletes and replace the div with a native <button> element.
+
+Location: Section s3, div id="s3-wizard"
+Evidence: "Choose a plan" / "Enter payment details" / "Confirm your order"
+Problem: This payment/checkout wizard content is unrelated to the "Station updates" section (or the page's rider-service-update topic generally) and appears to be misplaced content from an unrelated flow.
+Fix: Remove this wizard block from the page, or move it to the correct page where a purchase/checkout flow is relevant.
+
+Location: Section s3, p id="s3-linkpara"
+Evidence: "For the full list of upcoming adjustments, <a href=\"/fares/history\">click here</a>."
+Problem: "Click here" is non-descriptive link text; screen reader users navigating by a links list, and users scanning the page, get no indication of the link's destination or purpose.
+Fix: Make the link text itself descriptive, e.g. "For the full list of upcoming adjustments, see the fare adjustment history."
+
+Location: Section s3, form field label id="s3-form-phone-label" / input id="phone"
+Evidence: Label text "Phone number (required)" on <input id="phone" type="tel">
+Problem: The label visually/textually indicates the field is required, but the input has neither a required attribute nor aria-required="true", so assistive technology and form validation won't treat it as required.
+Fix: Add the required attribute (and/or aria-required="true") to the phone input to match the label's claim.
+
+Location: Section s3, form field input id="promo"
+Evidence: <input id="promo" type="text" aria-invalid="true">
+Problem: aria-invalid="true" is hardcoded in the markup, so the field is announced as invalid before the user has interacted with or submitted the form, which is misleading.
+Fix: Remove the static aria-invalid="true" and set it dynamically only after validation determines the field's value is actually invalid.
+
+Location: Section s3, form field input id="promo" and span id="s3-form-promo-error"
+Evidence: <input id="promo" type="text" aria-invalid="true"> ... <span class="error-text" id="s3-form-promo-error">Enter a 6 character code...</span>
+Problem: The error message is not programmatically associated with the input (no aria-describedby), so a screen reader user focused on the promo field won't hear the error text.
+Fix: Add aria-describedby="s3-form-promo-error" to the promo input.
+
+Location: Section s3, button id="s3-form-submit"
+Evidence: <button type="submit" class="btn-primary" id="s3-form-submit" aria-label="Send form now">Submit</button>
+Problem: The accessible name ("Send form now") does not match or contain the visible button text ("Submit"), violating the WCAG 2.5.3 Label in Name requirement and confusing users who rely on voice control or who compare visible text to announced text.
+Fix: Remove the aria-label so the accessible name matches the visible text "Submit", or change aria-label to include that visible text.
+
+Location: Section s3, form id="s3-form"
+Evidence: <form id="s3-form">
+Problem: The form has no action or method attribute, so submitting it has no defined destination or HTTP method.
+Fix: Add appropriate action and method attributes for where/how the form should be submitted.

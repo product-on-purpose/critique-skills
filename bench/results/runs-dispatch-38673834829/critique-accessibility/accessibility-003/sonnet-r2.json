@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-1.3.2",
+      "evidence": "DOM order is #s3-step3 \"Confirm your order\" (style=\"order:3\"), then #s3-step2 \"Enter payment details\" (style=\"order:2\"), then #s3-step1 \"Choose a plan\" (style=\"order:1\")",
+      "fix": "Reorder the three .step divs in the markup itself to match the intended sequence (choose a plan, enter payment details, confirm your order) so DOM order and the order property driven visual order agree, rather than relying on CSS order alone to fix a reversed DOM",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#s3-wizard, div.step children #s3-step3, #s3-step2, #s3-step1, lines 47-57",
+      "severity": 3,
+      "violation": "The three step divs carry inline order values (3, 2, 1) that only take effect inside a flex or grid formatting context, implying the intended visual sequence is choose a plan, then enter payment details, then confirm your order; the DOM order presents the opposite sequence, confirm your order first, so a linearized or screen reader traversal hears the confirm-and-pay step before hearing what is being purchased or paid for, reversing the actual checkout decision order"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "The only links on the page outside the article body are #nav-link1 \"Plan a trip\", #nav-link2 \"Service alerts\", #footer-link1 \"Privacy policy\", and #footer-link2 \"Terms of service\"; no search form, sitemap link, or breadcrumb trail appears anywhere in the markup",
+      "fix": "Add a second independent wayfinding mechanism, such as a site search form, a sitemap link, or a breadcrumb trail reflecting this page's place in the site, alongside the existing #nav menu",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#nav, <nav> element, lines 11-14, the page's only wayfinding mechanism",
+      "severity": 3,
+      "violation": "Fewer than two independent mechanisms for locating this 'Rider service updates' page exist; the page relies solely on a reader already knowing to use the primary navigation menu in #nav, and nothing in the page's content marks it as one step in a linear process that would exempt it"
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"><span class=\"error-text\" id=\"s3-form-promo-error\">Error.</span>, with no aria-describedby attribute on #promo referencing #s3-form-promo-error",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the #promo input, and rewrite the error text to name the field and the specific problem, for example 'Promo code: this code has expired'",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#s3-form-promo-error, <span class=\"error-text\"> element, paired with #promo input, lines 67-68",
+      "severity": 3,
+      "violation": "The promo code input is marked invalid through aria-invalid=\"true\" but its only error text reads 'Error.', naming neither the field nor what is wrong with the entered value, and the span is not programmatically associated with the input through aria-describedby, so a screen reader user who reaches the field is told only that something is invalid with no way to learn what, and is not even guaranteed to hear the span's text at all when focusing the field"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-4.1.2",
+      "evidence": "<div class=\"icon-delete\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>, with no role, aria-label, or tabindex attribute anywhere on the div",
+      "fix": "Replace the div with a native <button> carrying an accessible name describing the action, for example aria-label=\"Delete\", or add role=\"button\", a matching accessible name, and tabindex=\"0\" with keyboard activation handling if a native button cannot be used",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#s3-customcontrol, <div class=\"icon-delete\"> custom control, lines 44-46",
+      "severity": 3,
+      "violation": "This div is built as a custom icon only control, its class name icon-delete and its trash icon image (correctly marked decorative with alt=\"\") both signal a delete action, but the div itself carries no role, no programmatically determinable accessible name, and no tabindex or other keyboard affordance, so assistive technology exposes nothing at this location and a screen reader or keyboard only user cannot detect that a control exists here at all"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-1.4.1",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label>, while the sibling labels #s3-form-topic-label, #s3-form-email-label, and #s3-form-promo-label carry no color styling at all",
+      "fix": "Add a non-color indicator alongside the red text, such as a visible asterisk paired with an accessible description like 'required', if the styling is meant to mark this field as required or otherwise distinct from the others; do not let color be the only carrier of that distinction",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#s3-form-phone-label, <label for=\"phone\"> element, line 64",
+      "severity": 2,
+      "violation": "The phone number label is the only label in the form singled out with red text (#cc0000) and no other signal, such as an asterisk, the word required, or an icon, so a color blind reader has no way to perceive whatever distinction this field's red label is meant to convey relative to its siblings"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "69ff628078a107c11bd403359666e3fafdba2d4ab204fdec80881f7db5374db6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-15T04:03:39Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
