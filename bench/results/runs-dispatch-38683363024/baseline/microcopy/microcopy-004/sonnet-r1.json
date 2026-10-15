@@ -1,0 +1,149 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Verification codes are 6 digits long, and this one has 5.\"",
+      "fix": "Make the digit count dynamic (e.g., \"this one has {n}\") or write the message to not state a specific wrong count at all, e.g. \"Enter all 6 digits of the code.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - first message, body text",
+      "severity": 3,
+      "violation": "The message hardcodes \"5\" as the entered digit count, but a user could enter any number of digits other than six (e.g., 3, 4, 7, 8); the copy doesn't generalize to those cases."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" paired with \"Suggested fix: none\"",
+      "fix": "Propose a preventive fix, such as a segmented 6-digit input or a live character counter that blocks submission before 6 digits are entered.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - first message, metadata rows \"Predictable mistake\" and \"Suggested fix\"",
+      "severity": 3,
+      "violation": "Flagging this as a predictable mistake implies it should be prevented by design (e.g., a 6-box input or digit-limited field), but no such fix is suggested, leaving the predictable error purely reactive."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Check the message again and enter all six.\"",
+      "fix": "Reword to name the source explicitly, e.g. \"Check the code you received and enter all 6 digits.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - first message, body text",
+      "severity": 3,
+      "violation": "\"The message\" is ambiguous - it could mean the SMS/email containing the code, or this very error message - so the instruction doesn't clearly tell the user what to go check."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"which stops an intercepted code from being reused later\"",
+      "fix": "Drop the rationale clause and state only the actionable fact, e.g. \"This verification code has expired. Request a new code and enter it here.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - second message, body text",
+      "severity": 3,
+      "violation": "This security justification is unnecessary for task recovery and introduces alarming language (\"intercepted\") that could make a routine timeout sound like an active attack."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"selectable, offers a resend code button in place of the message\"",
+      "fix": "Rewrite as two clear clauses, e.g. \"Replace the message with a 'Resend code' button\" (and state separately, if intended, that the error text itself should be selectable/copyable).",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - second message, \"Suggested fix\" row",
+      "severity": 3,
+      "violation": "The entry is garbled - \"selectable\" is left unexplained and disconnected from the rest of the sentence, making the actual recommendation unclear."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: preserved\" combined with the suggested resend-code button",
+      "fix": "Clear the verification code field when a new code is requested/resent, rather than preserving the expired value.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - second message, \"Input on resubmission\" row",
+      "severity": 3,
+      "violation": "Preserving the expired code in the field while offering a resend button risks the user resubmitting the same invalid code instead of the new one."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This promo code ended on 30 June.\"",
+      "fix": "Include the year, e.g. \"This promo code ended on 30 June 2026.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Billing, promo code - first message, body text",
+      "severity": 3,
+      "violation": "No year is given, so the expiration date is ambiguous, especially since promo codes can span multiple years."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" paired with \"Suggested fix: none\"",
+      "fix": "Suggest a preventive fix, such as disabling or graying out plan-restricted promo codes when an incompatible plan is selected, or filtering promo code validity checks at plan-selection time.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Billing, promo code - second message, metadata rows \"Predictable mistake\" and \"Suggested fix\"",
+      "severity": 3,
+      "violation": "As with the verification-code digit-count message, a mistake marked predictable gets no preventive design fix, only a reactive message."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-blur\" (triggered by the promo code field)",
+      "fix": "Specify that the check also re-fires when the plan selection changes, not only on promo-code-field blur.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Billing, promo code - second message, \"Fires\" row",
+      "severity": 3,
+      "violation": "The mismatch between promo code and plan can equally be caused by changing the plan selector after the code was accepted, but the spec only defines firing on blur of the promo code field, leaving that path unvalidated."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Signal: bold text set larger than the field label, icon\" repeated identically for all four messages",
+      "fix": "Scale the signal to severity - reserve the strongest treatment for blocking errors and use a lighter treatment (e.g., no bold/no icon) for non-blocking promo code notices.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Across all four message specs, \"Signal\" row",
+      "severity": 3,
+      "violation": "The same high-emphasis visual treatment is used for a hard blocking error (invalid/expired verification code) and a softer advisory case (promo code not applicable), without differentiating severity."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-submit\" (verification code expiry) vs. \"Fires: on-blur\" (promo code expiry)",
+      "fix": "Align the firing behavior for both expiry checks, or document the reason one must wait for submit while the other can be checked on blur.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Across \"Two-factor setup, verification code\" message 2 and \"Billing, promo code\" message 1, \"Fires\" row",
+      "severity": 3,
+      "violation": "Both are time-based validity checks against the current moment, but they fire at inconsistent points in the interaction without explanation for the difference."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-004.md",
+    "artifact_sha256": "c8f58456a4deb36595b0ac00fe364b68e80445e939d7293d2db8d8f1a42ac91b",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T06:16:19Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 11,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

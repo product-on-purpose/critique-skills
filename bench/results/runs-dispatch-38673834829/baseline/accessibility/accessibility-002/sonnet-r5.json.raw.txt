@@ -1,0 +1,74 @@
+Location: `<meta name="viewport">` in `<head>`
+Evidence: `content="width=device-width, initial-scale=1, user-scalable=no"`
+Problem: Disabling user scaling prevents low-vision users from pinch-zooming to read content, violating WCAG 1.4.4 (Resize Text).
+Fix: Remove `user-scalable=no` (and any `maximum-scale` restriction) from the viewport meta tag.
+
+Location: Section `s1`, heading `s1-h`
+Evidence: `<h2 id="s1-h">Accessibility improvements</h2>` followed by `<p id="s1-p1">Passengers should review the updated schedule at any station kiosk...`
+Problem: The heading promises content about accessibility improvements, but the paragraphs underneath discuss schedule kiosks and fare adjustments, not accessibility.
+Fix: Rename the heading to match the actual content (e.g., "Schedule and fare updates") or replace the body text with content that actually describes accessibility improvements.
+
+Location: `s1-p1`
+Evidence: `style="color:#999999"` on body text
+Problem: `#999999` text on a white background yields a contrast ratio of roughly 2.85:1, well below the 4.5:1 minimum required by WCAG 1.4.3 for normal text.
+Fix: Remove the inline color override or use a darker gray (e.g., `#595959` or darker) that meets 4.5:1 contrast.
+
+Location: `s1-p1` and `s1-p2`
+Evidence: Both end with the identical sentence "Updates post to the schedule page within one business day."
+Problem: The duplicated trailing sentence across two unrelated paragraphs reads as templated filler rather than distinct information, adding no value and diluting the section's content.
+Fix: Remove the redundant sentence from one paragraph or replace it with information specific to that paragraph's topic.
+
+Location: `s1-img1`
+Evidence: `alt="A transit operator inspecting the platform screen doors before the morning shift."`
+Problem: The alt text describes platform screen door inspection, a topic never mentioned anywhere in the surrounding "Accessibility improvements" section text, so it doesn't support or explain the adjacent content.
+Fix: Either add body copy that explains the platform screen door inspection shown in the image, or replace the image with one that illustrates the fare/schedule content actually present.
+
+Location: `s2-table1`
+Evidence: `<table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>...`
+Problem: The table has no `<caption>`, so screen reader users get no accessible name or summary describing what the table represents.
+Fix: Add a `<caption>` element (e.g., "Zone status") as the first child of the table.
+
+Location: Section `s3`, heading `s3-h`
+Evidence: `<h2 id="s3-h">Weekend service</h2>` followed by content about fare adjustments, service-issue reporting, and a `wizard-steps` block with "Choose a plan / Enter payment details / Confirm your order"
+Problem: None of the content under "Weekend service" relates to weekend transit service; the payment wizard in particular looks like unrelated e-commerce checkout content misplaced in a transit announcements page.
+Fix: Move the payment wizard to the correct page/section and rewrite the "Weekend service" section with content actually describing weekend service changes.
+
+Location: `s3-banner` div
+Evidence: `style="width:960px"`
+Problem: A fixed pixel width of 960px will overflow or force horizontal scrolling on narrow mobile viewports, especially since the viewport meta tag also blocks zooming out to compensate.
+Fix: Replace the fixed width with a responsive value (e.g., `max-width:960px; width:100%`).
+
+Location: `s3-statuscard` div
+Evidence: `style="height:60px;overflow:hidden"`
+Problem: A fixed height combined with `overflow:hidden` will silently clip the text if it wraps to more lines (e.g., at larger font sizes or narrow viewports), hiding information from the user without any indication.
+Fix: Remove the fixed height (let the box grow with content) or replace `overflow:hidden` with a scrollable/expandable treatment.
+
+Location: `s3-customcontrol`
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></div>`
+Problem: This reinvents a button using a `div` with ARIA role instead of a native `<button>`; native buttons get keyboard activation (Enter/Space), focus styling, and form semantics for free, and nothing in the markup shows the required keydown handling for this custom control.
+Fix: Replace the div with a native `<button type="button" aria-label="Delete item">` containing the icon.
+
+Location: `s3-linkpara`
+Evidence: `<a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>`
+Problem: The link text says "accessibility improvements list" but the link points to `/fares/history` and the surrounding sentence is about "upcoming adjustments" — the link text doesn't describe its actual destination, which is confusing, especially for screen reader users who navigate by link text.
+Fix: Change the link text to accurately describe the destination, e.g., "read the list of upcoming fare adjustments."
+
+Location: `s3-form`, labels/inputs
+Evidence: `<label for="topic-alt" id="s3-form-topic-label">Route</label>` paired with `<select id="topic">`
+Problem: The label's `for` attribute references `topic-alt`, which does not exist, while the actual select has `id="topic"`; this breaks the programmatic label/control association, so screen readers and click-to-focus won't connect "Route" to the dropdown.
+Fix: Change the label's `for` attribute to `topic` (or change the select's `id` to `topic-alt`) so they match.
+
+Location: `s3-form`, phone field
+Evidence: `<label for="phone" id="s3-form-phone-label">Phone number (required)</label>` with `<input id="phone" type="tel">`
+Problem: The label visually states the field is required, but the input has no `required` attribute (and no `aria-required`), so assistive technology and native form validation won't enforce or announce it as required.
+Fix: Add `required` (and optionally `aria-required="true"`) to the phone `<input>`.
+
+Location: `s3-form`, promo field
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: `aria-invalid="true"` is hardcoded in the static markup, so screen reader users are told the field is invalid before they've even interacted with the form or submitted it.
+Fix: Remove `aria-invalid="true"` from the initial markup and set it dynamically only after validation fails.
+
+Location: `s3-form`, promo field and its error text
+Evidence: `<input id="promo" type="text" aria-invalid="true">` followed by `<span class="error-text" id="s3-form-promo-error">Enter a 6 character code using letters and numbers only.</span>`
+Problem: The error message span is not associated with the input (no `aria-describedby`), so screen reader users focused on the promo field won't hear the validation requirement.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the `#promo` input.

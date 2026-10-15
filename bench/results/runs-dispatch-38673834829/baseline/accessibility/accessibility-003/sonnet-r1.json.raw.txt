@@ -1,0 +1,69 @@
+Location: Section "Accessibility improvements", paragraph s1-p1
+Evidence: "Riders may request a fare adjustment through the mobile app. Station staff can also help with the same request in person."
+Problem: This content is about fare adjustments and has nothing to do with accessibility, despite being the opening paragraph under the "Accessibility improvements" heading.
+Fix: Replace with content describing an actual accessibility improvement, or move this paragraph to a fares-related section.
+
+Location: Section "Accessibility improvements", paragraph s1-p2
+Evidence: "Passengers can check real time arrivals by calling rider services. Updates post to the schedule page within one business day."
+Problem: This is about real-time arrival info, not accessibility, and the same sentence (with "Local residents" swapped for "Passengers") reappears verbatim later in the unrelated "Schedule changes" section (s3-statuscard).
+Fix: Write distinct, section-relevant copy for each location, or remove the duplicate.
+
+Location: Section "Weekend service", paragraph s2-p1
+Evidence: "Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person."
+Problem: Near-verbatim duplicate of s1-p1 (only "Riders"→"Passengers" changed) and unrelated to weekend service.
+Fix: Replace with actual weekend-service details, or delete the paragraph.
+
+Location: Section "Weekend service", table s2-table1
+Evidence: `<table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>...`
+Problem: The table has no `<caption>` identifying its purpose, leaving screen-reader users without context for what the zone/status data represents.
+Fix: Add a `<caption>` such as "Weekend zone status" inside the table.
+
+Location: Section "Schedule changes", paragraph s3-p1
+Evidence: "Local residents should review the updated schedule through the mobile app. Station staff can also help with the same request in person."
+Problem: The second sentence refers to "the same request," but the first sentence describes reviewing a schedule, not making a request — this is leftover boilerplate copied from the fare-adjustment paragraphs that no longer makes sense in context.
+Fix: Rewrite the second sentence to match the actual action, e.g. "Station staff can also help you find the updated schedule in person."
+
+Location: Section "Schedule changes", paragraph s3-p2
+Evidence: "Passengers should review the updated schedule through the mobile app. The change takes effect on the following service day."
+Problem: Duplicates the "review the updated schedule through the mobile app" instruction already given in s3-p1 immediately above, adding only the effective-date sentence as new information.
+Fix: Merge the effective-date sentence into s3-p1 and delete this paragraph, or replace it with distinct content.
+
+Location: Section "Schedule changes", promo banner s3-banner
+Evidence: "Route adjustments take effect on the posted effective date."
+Problem: Tautological statement ("take effect on the effective date") that conveys no actual date or useful information.
+Fix: State the real effective date or a concrete rule for finding it, e.g. "Route adjustments take effect on the date shown on the alert for your route."
+
+Location: Section "Schedule changes", status card s3-statuscard
+Evidence: "Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day."
+Problem: Near-duplicate of s1-p2 under "Accessibility improvements," pasted into an unrelated "Schedule changes" card with only "Passengers"→"Local residents" swapped.
+Fix: Remove the duplicate and write content specific to schedule changes, or consolidate real-time arrival info into a single location.
+
+Location: Section "Schedule changes", custom control s3-customcontrol
+Evidence: `<div class="icon-delete" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></div>`
+Problem: A clickable-looking delete icon is implemented as a plain `<div>` with an empty-alt image, giving it no accessible name, role, or keyboard focusability.
+Fix: Use a `<button>` element (or add `role="button"`, `tabindex="0"`, and keyboard handlers) with an `aria-label="Delete"` or similar.
+
+Location: Section "Schedule changes", wizard steps s3-wizard
+Evidence: `<div class="step" id="s3-step3" style="order:3">Confirm your order</div>` appears first in the markup, followed by step2 then step1 (order:1)
+Problem: The DOM order (step3, step2, step1) is reversed from the CSS visual order (1, 2, 3), so screen reader and keyboard tab order present "Confirm your order" before "Choose a plan," contradicting the visual sequence.
+Fix: Reorder the elements in the HTML source to match the intended reading/visual sequence instead of relying on CSS `order`.
+
+Location: Section "Schedule changes", link paragraph s3-linkpara
+Evidence: `<a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>`
+Problem: The link text ("read the accessibility improvements list") matches neither the surrounding sentence ("full list of upcoming adjustments") nor its destination URL (`/fares/history`), making the link's purpose unclear or misleading.
+Fix: Change the link text to accurately describe the destination, e.g. "view fare adjustment history," or point the href at the actual accessibility list if that was intended.
+
+Location: Section "Schedule changes", form label s3-form-phone-label
+Evidence: `<label for="phone" id="s3-form-phone-label" style="color:#cc0000">Phone number</label>`
+Problem: The label is styled red with no accompanying text or symbol, so any meaning conveyed by the color (e.g., required field) is lost on users who can't perceive color.
+Fix: Add a visible text/symbol cue (e.g., "Phone number (required)") in addition to or instead of the color.
+
+Location: Section "Schedule changes", form promo field (input#promo and s3-form-promo-error)
+Evidence: `<input id="promo" type="text" aria-invalid="true"><span class="error-text" id="s3-form-promo-error">Error.</span>`
+Problem: `aria-invalid="true"` is hardcoded in the static markup so the field is announced as invalid before any user input, and the error text is not programmatically linked to the input via `aria-describedby`, nor is "Error." descriptive of the actual problem.
+Fix: Remove the hardcoded `aria-invalid="true"` from the default markup, add `aria-describedby="s3-form-promo-error"` on the input, and replace "Error." with a specific message (e.g., "Promo code not recognized").
+
+Location: Section "Schedule changes", form s3-form controls
+Evidence: `<select id="topic">...`, `<input id="email" type="email">`, `<input id="phone" type="tel">`, `<input id="promo" type="text" aria-invalid="true">`
+Problem: None of the form controls have a `name` attribute, so submitting the form would send no field data to the server.
+Fix: Add a `name` attribute to each control, e.g. `name="route"`, `name="email"`, `name="phone"`, `name="promo"`.

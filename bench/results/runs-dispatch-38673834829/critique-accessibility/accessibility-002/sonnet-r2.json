@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.10",
+      "evidence": "declared width: 960px",
+      "fix": "Cap the element's width with a relative max-width (a percentage or viewport unit), or add a media query that shrinks it below 320px.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "#s3-banner, <div> element, line 37",
+      "severity": 3,
+      "violation": "A fixed width of 960px forces horizontal scrolling once the viewport narrows to 320px, with no responsive override."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.3",
+      "evidence": "text color #999999 on background #ffffff, contrast ratio 2.85:1",
+      "fix": "Darken the text or lighten the background until the ratio reaches at least 4.5:1.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "#s1-p1, <p> element, text 'Passengers should review the updated schedule at any station kiosk. Updates p...', line 20",
+      "severity": 3,
+      "violation": "Contrast ratio 2.85:1 is below the 4.5:1 AA minimum for normal text."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.4",
+      "evidence": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\" id=\"head-viewport\">",
+      "fix": "Remove user-scalable=no so readers can zoom the page.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "#head-viewport, <meta> viewport element, line 5",
+      "severity": 3,
+      "violation": "The viewport meta tag sets user-scalable=no, disabling browser zoom entirely."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "The page exposes only a two-link primary navigation menu (#nav-link1 'Accessibility', #nav-link2 'Fares and passes'); no site search, sitemap, or breadcrumb trail appears anywhere in the document, and the page is a general announcements page, not one step of a linear process.",
+      "fix": "Add a second independent mechanism, such as a site search, a sitemap link, or a breadcrumb trail that does not just duplicate the primary navigation's links.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#nav, <nav> element, line 11",
+      "severity": 3,
+      "violation": "Fewer than two independent mechanisms exist for locating this page, relying solely on the primary navigation menu, so a reader arriving by another route has exactly one way to find any related page."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.11",
+      "evidence": "boundary color #9d9d9d against adjacent background #ffffff, contrast ratio 2.71:1",
+      "fix": "Darken the border or outline color, or change the adjacent background, until the ratio reaches at least 3:1.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "#s3-button1, <button> element boundary, line 43",
+      "severity": 2,
+      "violation": "Component boundary contrast ratio 2.71:1 is below the 3:1 AA minimum."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.12",
+      "evidence": "height: 60px; overflow: hidden",
+      "fix": "Remove the fixed height so the element grows with its content, or replace the clipped overflow with visible or auto.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "#s3-statuscard, <div> element, line 40",
+      "severity": 2,
+      "violation": "A fixed height combined with clipped overflow truncates this element's text once a reader applies wider line, paragraph, letter, or word spacing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "The section under this heading reads: 'Passengers should review the updated schedule at any station kiosk...', 'Local residents may request a fare adjustment through the mobile app...', and an image of a transit operator inspecting platform screen doors.",
+      "fix": "Reword the heading to name what the section actually covers (for example, schedule and fare updates), or move an actual accessibility-improvements item into the section if that was the intent.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "#s1-h, <h2> element, text 'Accessibility improvements', line 19",
+      "severity": 2,
+      "violation": "The heading reads 'Accessibility improvements' but the section's actual content is schedule-review and fare-adjustment guidance, not a description of accessibility improvements, so a reader scanning headings cannot predict what this section covers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "The section under this heading contains a status card, a 'Refresh status' button, a custom delete control, a three-step 'Choose a plan / Enter payment details / Confirm your order' wizard, and a contact form asking for route, email, phone, and promo code, none of which concerns weekend service scheduling.",
+      "fix": "Split the unrelated payment-wizard and contact-form content into their own section with its own descriptive heading, or reword this heading to cover everything the section actually contains.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "#s3-h, <h2> element, text 'Weekend service', line 34",
+      "severity": 2,
+      "violation": "The heading reads 'Weekend service' but most of the section's content is an unrelated payment wizard and contact form, so a reader scanning headings cannot predict what this section covers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> is immediately followed by <span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span> with no aria-describedby, aria-errormessage, or other attribute linking the two.",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" (or aria-errormessage) on the #promo input so assistive technology announces the error text when the field receives focus.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "#promo, <input type=\"text\"> control, line 67",
+      "severity": 2,
+      "violation": "The error text naming the specific problem exists but is not programmatically associated with the invalid field, so a screen-reader user who tabs to the field hears only that it is invalid, not why, unless they separately navigate to find the adjacent text."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-002.html",
+    "artifact_sha256": "b49ce74681df60732a6ef3b5309ce82264ad1b6ad48c6fa8b85989f2c712f113",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-15T03:35:29Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

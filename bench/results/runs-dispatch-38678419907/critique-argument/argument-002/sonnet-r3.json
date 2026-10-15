@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-CLAIM-MARKER",
+      "evidence": "0 conclusion-marker phrases found across 401 words.",
+      "fix": "Add an explicit conclusion-signalling phrase at the point the artifact states its central claim, for example therefore or we recommend.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "severity": 3,
+      "violation": "No phrase from the conclusion-marker lexicon (therefore, thus, hence, it follows that, we recommend, this paper argues, I argue that, the conclusion is, in conclusion, we should, the case for) appears anywhere in the artifact, so a reader scanning rather than reading straight through has no signpost to where the conclusion is asserted."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-GROUNDS",
+      "evidence": "\"What the Pilot Showed\" reports only the avoidance-survey finding (self-reported avoidance dropping from 20 percent to 3 percent); no return-rate figure, on-time return percentage, or circulation figure from the pilot appears anywhere in the artifact, including in the earlier \"Circulation Trends\" section, which describes the review process rather than reporting any result.",
+      "fix": "Either report the pilot's actual return-rate figures where \"What the Pilot Showed\" currently reports only the avoidance survey, or remove every reference to \"return-rate results\" from the Recommendation and Warrant sections so the claim cites only the evidence actually given.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"Recommendation\" section (\"Given the return-rate and avoidance-survey results above\") and \"Why the Pilot Result Applies Systemwide\" section (\"the pilot's return-rate and avoidance-survey results, taken together\")",
+      "severity": 3,
+      "violation": "The central claim and the warrant both cite \"the return-rate ... results\" as part of what supports ending fines systemwide, but no return-rate result is stated anywhere in the document for a reader to check; half of the grounds the argument repeatedly invokes for its load-bearing claim does not exist in the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-HEDGE-DENSITY",
+      "evidence": "10 of 14 sentences (0.71) carry at least one hedging term.",
+      "fix": "Remove the hedge from sentences whose claim the evidence actually supports, reserving qualification for the claims that genuinely need it.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "severity": 3,
+      "violation": "More than 0.35 of the artifact's sentences carry a term from the hedging lexicon (may, might, could, possibly, perhaps, arguably, somewhat, relatively, it seems, appears to, tends to, to a degree), spread across the whole document rather than concentrated where the evidence actually underdetermines the claim."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-QUALIFIER",
+      "evidence": "The claim is asserted as \"plainly\" correct and as removing every charge \"permanently\" and \"without qualification,\" while the only section stating the underlying warrant twice calls the relationship it relies on \"somewhat qualified,\" and the grounds behind it are one twelve-month avoidance survey at four of the consortium's ten branches plus a three-fiscal-year revenue review at those same four branches.",
+      "fix": "Match the claim's asserted strength to what the pilot evidence actually covers: qualify the Recommendation and \"What the Pilot Showed\" language (for example, replacing \"plainly\" and \"without qualification\" with language scoped to what four branches' pilot data supports) or state explicitly why the four-branch result is expected to hold at the other six.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"What the Pilot Showed\" (\"Ending overdue fines is plainly the better path...\") and \"Recommendation\" (\"removes every overdue-related charge permanently, for every item the consortium owns, without qualification\") versus \"Why the Pilot Result Applies Systemwide\" (\"In a somewhat qualified way...\")",
+      "severity": 3,
+      "violation": "The central claim is stated with unconditional certainty (\"plainly,\" \"permanently,\" \"without qualification\") on grounds the artifact's own warrant section describes as only somewhat qualified and that come from four of the ten branches the recommendation covers, so a reader acting on the stated certainty gets no signal that the result might not generalize to the other six branches or to every item type the policy now covers."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-CLAIM",
+      "evidence": "The section states the ask crisply once: \"the stronger choice is a systemwide end to overdue fines across all ten consortium branches, effective at the start of the next fiscal year,\" then immediately restates it as \"the recommended change is about making things better for patrons going forward, in whatever way the consortium finds workable.\"",
+      "fix": "Delete the vaguer restatement (\"in whatever way the consortium finds workable\") or replace it with the same specific commitment already stated, so the document states its conclusion once, at one strength.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Recommendation\" section, the sentence beginning \"Given the return-rate and avoidance-survey results above\" versus the sentence beginning \"Specifically, the recommended change is about making things better for patrons\"",
+      "severity": 2,
+      "violation": "The artifact states its conclusion crisply in one sentence and then dissolves it into a vacuous restatement in the very next sentence of the same section, so a reader cannot tell which version is the actual ask: the specific ten-branch, next-fiscal-year end to fines, or an open-ended commitment to do whatever the consortium later finds workable."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-REBUTTAL",
+      "evidence": "The document raises and answers the revenue objection in full (\"a skeptic on the board points to overdue fines as a source of materials-replacement funding ... fine revenue covered under 2 percent of the annual materials budget ... without a measurable change to their replacement-copy spending\"), but nowhere raises the objection that the pilot ran at only four of the ten branches the recommendation now covers.",
+      "fix": "Add a section addressing why the four pilot branches' results should be expected to hold at the remaining six, or note what evidence the consortium will gather from the remaining branches before treating the systemwide effect as settled.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "\"Addressing the Revenue Concern\" section, and the absence of any comparable section on pilot-to-systemwide scope",
+      "severity": 2,
+      "violation": "The argument's own grounds leave open whether a result measured at four branches over one year holds at the other six, which is a foreseeable challenge a skeptical reader would raise second, right after the revenue question the document does answer; the document answers one of the two objections its own scope invites and never raises the other."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/argument/argument-002.md",
+    "artifact_sha256": "0322bc2ebeb48318c56473186a8cb1f1e78d8667b99cfaf75ee7bb84f82fcfa2",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "TOULMIN"
+    ],
+    "skill": "critique-argument",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-10-15T04:32:43Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

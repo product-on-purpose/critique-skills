@@ -1,0 +1,104 @@
+Location: `<html lang="translanguage" id="html">`
+Evidence: `lang="translanguage"`
+Problem: "translanguage" is not a valid BCP 47 language tag, so assistive technology and translation tools cannot determine the page's language.
+Fix: Set `lang` to the actual content language, e.g. `lang="en"`.
+
+Location: `<title id="head-title"></title>`
+Evidence: `<title id="head-title"></title>`
+Problem: The page title is empty, so browser tabs, bookmarks, search results, and screen reader users have no page name to go on.
+Fix: Add descriptive text, e.g. `<title>Rider Service Updates</title>`.
+
+Location: section #s1, paragraph `#s1-p2`
+Evidence: "Riders can check real time arrivals at any station kiosk. Station staff can also help with the same request in person."
+Problem: The second sentence is boilerplate reused from the fare-adjustment paragraph above; checking a kiosk is already an in-person station action, so "staff can also help... in person" is redundant/nonsensical here.
+Fix: Rewrite or remove the trailing sentence so it actually describes an alternative channel for checking arrivals (e.g., a mobile app or website).
+
+Location: `<img src="/img/platform-update.jpg" id="s1-img1">`
+Evidence: `<img src="/img/platform-update.jpg" id="s1-img1">`
+Problem: The image has no `alt` attribute, so screen reader users get no description of its content or purpose.
+Fix: Add an `alt` attribute describing the image, or `alt=""` if it is purely decorative.
+
+Location: `<h4 id="s2-h">Accessibility improvements</h4>`
+Evidence: heading sequence h1 → h2 (`s1-h`) → h4 (`s2-h`)
+Problem: The heading level jumps from h2 to h4, skipping h3, which breaks the document outline used by screen reader navigation.
+Fix: Change `s2-h` to `<h2>` (or add an intervening `<h3>` section) to keep heading levels sequential.
+
+Location: section #s2, heading `#s2-h` and body `#s2-p1`/`#s2-table1`
+Evidence: heading "Accessibility improvements" followed by content about reporting a service issue and a zone on-time status table
+Problem: The section heading does not describe the content beneath it; nothing in the section discusses accessibility.
+Fix: Rename the heading to match the content (e.g., "Service status") or move the content to a section actually about accessibility.
+
+Location: section #s2, paragraph `#s2-p1`
+Evidence: "Passengers can report a service issue by calling rider services. Updates post to the schedule page within one business day."
+Problem: The second sentence (schedule-page updates) does not logically follow from reporting a service issue by phone; it reads as a mismatched boilerplate sentence copied from elsewhere.
+Fix: Replace the trailing sentence with one that actually describes what happens after a phone-in issue report (e.g., confirmation or ticket number).
+
+Location: `<table id="s2-table1">`
+Evidence: `<table id="s2-table1"><tr><th scope="col">Zone</th>...`
+Problem: The table has no `<caption>` and no `<thead>`/`<tbody>` sectioning, so screen reader users aren't told what the table represents.
+Fix: Add a `<caption>` (e.g., "Zone status") and wrap the header/data rows in `<thead>`/`<tbody>`.
+
+Location: section #s3, status card `#s3-statuscard`
+Evidence: "Local residents can check real time arrivals through the online portal. A confirmation message follows once the request is processed."
+Problem: Checking real-time arrivals is not a "request" that gets "processed" with a confirmation message; this trailing sentence is mismatched boilerplate reused from a request-based flow.
+Fix: Replace with a sentence relevant to viewing arrival data (e.g., "Data refreshes every minute.").
+
+Location: section #s3, overall structure (`#s3-banner`, `#s3-statuscard`, `#s3-customcontrol`, `#s3-wizard`, `#s3-form`)
+Evidence: heading "Station updates" containing a promo banner, a status card, a delete-icon control, a payment wizard, and a contact form
+Problem: The section mixes several unrelated widgets that have nothing to do with "station updates," making the page's information architecture incoherent.
+Fix: Split these components into their own appropriately-headed sections or remove the ones unrelated to station updates.
+
+Location: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Evidence: `aria-label="Delete item"` with no surrounding context indicating what item it deletes
+Problem: This interactive control appears with no associated list item, card, or data it acts on, leaving its purpose and target unclear to all users, including assistive technology users.
+Fix: Associate the control with the specific item it deletes (e.g., place it inside a list item) or remove it if it is leftover/placeholder markup.
+
+Location: `<div class="wizard-steps" id="s3-wizard">`
+Evidence: steps "Choose a plan", "Enter payment details", "Confirm your order"
+Problem: These checkout/payment wizard steps are unrelated to a transit rider-updates page and appear with no semantic list structure or indication of which step is current.
+Fix: Remove this component if it's unrelated content, or if intentional, mark it up as an ordered list with `aria-current` on the active step.
+
+Location: `<p id="s3-linkpara">`
+Evidence: `click here`
+Problem: "Click here" is a non-descriptive link text that is meaningless out of context for screen reader users navigating by links, and it is also placed under "Station updates" even though it links to fare history (`/fares/history`), topically belonging with the "Fare adjustments" section.
+Fix: Use descriptive link text like "View upcoming fare adjustments" and move the paragraph into section #s1.
+
+Location: `<label for="phone" id="s3-form-phone-label">Phone number (required)</label>` / `<input id="phone" type="tel">`
+Evidence: label text says "(required)" but the input has no `required` or `aria-required` attribute
+Problem: The visible label claims the field is required, but the markup doesn't enforce or convey that programmatically, so form validation and assistive technology won't treat it as required.
+Fix: Add `required` (and/or `aria-required="true"`) to the `#phone` input.
+
+Location: `<input id="promo" type="text" aria-invalid="true">`
+Evidence: `aria-invalid="true"` present in the static markup
+Problem: The promo code field is hardcoded as invalid before the user has entered anything or submitted the form, which will cause screen readers to announce an error prematurely.
+Fix: Remove `aria-invalid="true"` from the initial markup and set it dynamically only after validation fails.
+
+Location: `<input id="promo" ...>` and `<span class="error-text" id="s3-form-promo-error">`
+Evidence: no `aria-describedby` linking the input to `s3-form-promo-error`
+Problem: The error message is not programmatically associated with the promo input, so screen reader users won't hear the error text when focused on the field.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the `#promo` input.
+
+Location: `<input id="promo" type="text" ...>` vs. error text `#s3-form-promo-error`
+Evidence: error text "Enter a 6 character code using letters and numbers only."
+Problem: The stated validation rule (6 characters, alphanumeric) is not enforced by any `pattern`, `minlength`, or `maxlength` attribute on the input.
+Fix: Add `pattern="[A-Za-z0-9]{6}"` and `maxlength="6"` to the `#promo` input.
+
+Location: `<button type="submit" class="btn-primary" id="s3-form-submit" aria-label="Send form now">Submit</button>`
+Evidence: visible text "Submit" vs. `aria-label="Send form now"`
+Problem: The accessible name ("Send form now") does not contain the visible label text ("Submit"), violating the WCAG 2.5.3 Label in Name requirement and confusing voice-control/screen reader users who reference the visible text.
+Fix: Remove the `aria-label` (letting the accessible name be "Submit") or change it to include the visible text, e.g. `aria-label="Submit form"`.
+
+Location: throughout document (`#s1-p1` "Riders", `#s2-p1` "Passengers", `#s3-p2` "Commuters", `#s3-statuscard` "Local residents")
+Evidence: "Riders may request...", "Passengers can report...", "Commuters should review...", "Local residents can check..."
+Problem: Four different terms are used for what appears to be the same audience, creating inconsistent voice and potentially confusing readers about whether different groups are being addressed.
+Fix: Standardize on a single term (e.g., "Riders") throughout the document.
+
+Location: `<div id="main-content">`
+Evidence: `<div id="main-content">` wrapping the page's primary content
+Problem: The primary content region uses a generic `div` instead of the semantic `<main>` element, so assistive technology users lose a landmark for jumping directly to main content.
+Fix: Change `<div id="main-content">` to `<main id="main-content">` (and its closing tag).
+
+Location: `<head id="head">`
+Evidence: no `<meta name="description">` tag present
+Problem: The page lacks a meta description, which hurts search engine result snippets and SEO.
+Fix: Add a `<meta name="description" content="...">` summarizing the page content.

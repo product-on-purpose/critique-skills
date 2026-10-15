@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`mode: how-to`",
+      "fix": "Move the definition sentence out of the step sequence into a \"Concepts\"/reference doc, or a brief intro note clearly separated from the numbered/step content.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Frontmatter, `mode: how-to`",
+      "severity": 3,
+      "violation": "The document is declared as a how-to (task-oriented, step-based) but contains conceptual/definitional content (\"A threshold is the numeric boundary...\") mixed into the steps, violating the how-to mode's procedural-only convention."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"A threshold is the numeric boundary that triggers an alert once a metric crosses it.\"",
+      "fix": "Remove this sentence from this section, or relocate it to an introductory paragraph before the first step if background is needed.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"Open alert settings\" section, second paragraph",
+      "severity": 3,
+      "violation": "This definition is unrelated to the action described by the heading (\"Open alert settings\") and interrupts the procedural flow with unrequested conceptual explanation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This is because the console applies the new threshold to every future evaluation of this rule.\"",
+      "fix": "Either delete the sentence or rewrite it to actually justify the unit-matching instruction (e.g., explain that a mismatched unit causes the alert to fire at the wrong real-world value), or move it to explain a different, related step.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Set the new threshold\" section, second paragraph",
+      "severity": 3,
+      "violation": "\"This is because\" implies it explains the immediately preceding instruction (confirming the unit matches), but the stated fact (future evaluations use the new threshold) does not actually explain why units must match - it's a non-sequitur."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"confirm the unit matches the metric in use\"",
+      "fix": "Add a sentence describing how to change the unit or where to find the correct unit for the metric.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"Set the new threshold\" section",
+      "severity": 3,
+      "violation": "The instruction tells the reader to check for a unit mismatch but never says what to do if the units don't match, leaving the reader without a corrective action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Enter the updated threshold value in the field provided\"",
+      "fix": "Name the specific field (e.g., \"Enter the value in the Threshold field\") or reference its location in the panel.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Set the new threshold\" section",
+      "severity": 3,
+      "violation": "\"the field provided\" is vague and does not identify the field by name or location, making the step hard to follow for someone unfamiliar with the UI."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"confirm the new threshold appears there\"",
+      "fix": "Add a follow-up instruction for the failure case, e.g., \"If the new value doesn't appear, the save may have failed - repeat the previous step or check for a validation error.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "\"Save and verify\" section",
+      "severity": 3,
+      "violation": "The step gives no guidance on what to do if the new threshold does not appear in the rule list, leaving no troubleshooting path."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"select the rule you want to adjust\"",
+      "fix": "Add a note or link covering how to create a new alert rule first, or narrow the title/scope to \"Edit an existing alert threshold.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "\"Open alert settings\" section",
+      "severity": 3,
+      "violation": "The instructions assume an alert rule already exists and give no guidance for the case where no rule exists yet, despite the document title (\"Configure alert thresholds\") implying broader applicability."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-001.md",
+    "artifact_sha256": "b41787144ac8cc1ae14bcce23fa2b574f6ee68f1aaa9cc432628f9f148ddd713",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T03:06:31Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"retry_policy field accepts one of none, linear, or exponential, and the default value is exponential\"",
+      "fix": "Add a description of each option's retry schedule (e.g., attempt count, interval/backoff formula, max duration).",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "## retry_policy",
+      "severity": 3,
+      "violation": "No explanation of what each retry policy actually does (intervals, number of attempts, backoff rate), so a reader cannot predict delivery behavior from this reference alone."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert.\"",
+      "fix": "Document what response codes/timeouts count as delivery failure and trigger retry_policy.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "## endpoint_url",
+      "severity": 3,
+      "violation": "Doesn't specify what happens on non-2xx responses, timeouts, or redirects, which is essential for a delivery reference and directly interacts with retry_policy."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The signing_secret field accepts a string used to verify the payload signature on receipt.\"",
+      "fix": "Specify the signing algorithm (e.g., HMAC-SHA256), which header carries the signature, and how the signed string is constructed.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "## signing_secret",
+      "severity": 3,
+      "violation": "Doesn't describe the signature scheme (algorithm, header name, payload encoding), making it impossible to actually implement verification."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The signing_secret field accepts a string\"",
+      "fix": "State any length/format requirements and how rotation is handled.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "## signing_secret",
+      "severity": 3,
+      "violation": "No constraints given (minimum length, allowed characters, generation/rotation method), unlike typical reference docs for secrets."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Only three fields (endpoint_url, signing_secret, retry_policy) are documented under \"Webhook delivery reference\"",
+      "fix": "Add sections for payload schema/content-type, delivery timeout, and field optionality/defaults for endpoint_url and signing_secret.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Document overall",
+      "severity": 3,
+      "violation": "A delivery reference omits other fields typically needed to configure webhook delivery, such as event/alert types delivered, payload schema, timeout settings, and whether endpoint_url is required or optional."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-004.md",
+    "artifact_sha256": "7f41536ab3c3f7bc93a3dde86b8e81cee5dab0339f2b1d472e9222a20b42d7ae",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T03:49:32Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

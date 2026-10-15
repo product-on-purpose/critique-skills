@@ -1,0 +1,29 @@
+Location: Heading "#### Check the sidebar updated"
+Evidence: `#### Check the sidebar updated` immediately follows a `##` heading, while every other step in the document uses `##`.
+Problem: The heading level jumps from H2 to H4, skipping H3 and breaking the otherwise consistent step hierarchy (other steps are all H2).
+Fix: Change this heading to `##` to match the other step headings, or demote it to body text / a sub-step convention used consistently elsewhere.
+
+Location: Heading "#### Check the sidebar updated"
+Evidence: "Check the sidebar updated"
+Problem: The phrase is grammatically incomplete — "updated" needs either "that ... updated" or should be "update" to agree with the imperative "Check".
+Fix: Reword to "Check that the sidebar updated" or "Check the sidebar update".
+
+Location: "Open the test console" section, first two steps
+Evidence: "select the sample alert rule provided for new accounts" followed by "confirm the rule count now includes the sample rule"
+Problem: Selecting a pre-existing sample rule (already "provided for new accounts") would not logically change the sidebar's rule count, so the verification step doesn't match the action that precedes it.
+Fix: Either clarify that selecting the rule enables/adds it to the account's rule list, or change the verification step to check something that actually results from "selecting" (e.g., that the rule appears highlighted/selected), not a count change.
+
+Location: "Check the sidebar updated" step
+Evidence: "confirm the rule count now includes the sample rule"
+Problem: No baseline count is given, so the reader has no way to tell whether the count has actually changed ("now includes") versus just currently showing some number.
+Fix: State the expected before/after values (e.g., "the rule count increases by one" or "shows at least 1 rule") so the check is verifiable.
+
+Location: "Trigger the sample alert" section
+Evidence: "The status indicator takes a few seconds to update while the delivery pipeline processes the event in the background."
+Problem: This explanatory sentence floats as an unmarked paragraph between the action and the next heading, inconsistent with the rest of the document's step-only structure, and it isn't tied to any user action.
+Fix: Fold it into the preceding instruction (e.g., "...wait for the status indicator to change to Sent — this can take a few seconds while the delivery pipeline processes the event.") or format it distinctly as a note/tip.
+
+Location: "Check the delivery log" section
+Evidence: "Open the delivery log and check that..."
+Problem: Unlike the first step, which specifies where to find the test console ("from the developer menu"), this step gives no location for the delivery log, making it harder to navigate there without outside help.
+Fix: Add the location, e.g., "Open the delivery log from the developer menu" or wherever it actually lives.

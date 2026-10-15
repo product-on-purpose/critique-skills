@@ -1,0 +1,24 @@
+Location: ## timeout section
+Evidence: "Leaving this field at its default is the right choice for most teams, and raising it is worth doing only when a specific integration needs the extra room."
+Problem: The section refers to "its default" twice but never states what the actual default value is, so a reader has no way to know what timeout applies when the field is omitted.
+Fix: Add the explicit default value (e.g., "defaults to 5000 ms") to the timeout section, matching how retries and logging each state their default.
+
+Location: ## timeout section
+Evidence: "The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000."
+Problem: Only a lower bound is documented; unlike retries (which gives both a minimum and maximum of 0 to 10), there is no stated upper bound or maximum allowed timeout.
+Fix: Document the maximum allowed value, or explicitly state that there is no upper bound.
+
+Location: ## retries section
+Evidence: "The retries field takes an integer from 0 to 10, and it defaults to 3."
+Problem: Unlike the timeout section, which states what the validator does with out-of-range input ("the validator rejects any value below 1000"), this section never says what happens if a value outside 0–10 is submitted, making validation behavior inconsistent across fields.
+Fix: Add a sentence describing the validator's behavior for out-of-range retries values.
+
+Location: ## Related pages section
+Evidence: "- Metric catalog reference" (and the eight following bullet items)
+Problem: None of the nine "Related pages" entries are hyperlinks or include a path/URL, so a reader cannot actually navigate to any of them despite the section's purpose.
+Fix: Convert each bullet into a markdown link pointing to the real page path or URL.
+
+Location: document title, "# Alert rule fields reference"
+Evidence: Only three fields are documented: timeout, retries, and logging.
+Problem: A page titled as the reference for "alert rule fields" covers only operational/delivery-related settings and omits core fields an alert rule would need (e.g., name, condition/query, severity, notification channels), making the document appear incomplete relative to its own title.
+Fix: Either add the missing fields or narrow the title/scope (e.g., "Alert rule delivery settings reference") to accurately reflect the limited content.

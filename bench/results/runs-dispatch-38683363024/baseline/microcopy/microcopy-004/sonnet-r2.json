@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" paired with \"Suggested fix: none\"",
+      "fix": "Add a preventive fix, such as restricting the code field to exactly 6 digit characters (e.g. six separate boxes, or a mask that blocks a 7th keystroke) so the mistake can't occur.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - first message block (wrong digit count)",
+      "severity": 3,
+      "violation": "The entry identifies this as a predictable, foreseeable mistake but proposes no design change to prevent it, leaving the error to recur indefinitely."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Request a new code and enter it here.\"",
+      "fix": "Add a resend-code action to the error state itself (as this entry's own suggested fix proposes), or point the message to an existing resend control elsewhere on the screen.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - second message block (expired code)",
+      "severity": 3,
+      "violation": "The message instructs the user to request a new code, but the error is delivered as static inline text with no control to actually do that, so the requested action is unavailable where the error appears."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: preserved\"",
+      "fix": "Clear the field for this error, unlike the digit-count error where preserving input is appropriate, so the user isn't invited to resubmit the same expired value.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - second message block (expired code)",
+      "severity": 3,
+      "violation": "Preserving the expired code is misleading, since that exact value can never become valid again; the user may simply resubmit it instead of realizing a wholly new code is required."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"selectable, offers a resend code button in place of the message\"",
+      "fix": "Update the \"Container\" field to match the proposed fix (e.g. \"interactive\"/\"button\"), or reword \"Suggested fix\" to make clear it describes a future state, not the current one.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - second message block (expired code), Suggested fix field",
+      "severity": 3,
+      "violation": "\"Selectable\" contradicts this same entry's own \"Container: inline\" value, leaving the record internally inconsistent about whether the error is static text or an interactive control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This promo code ended on 30 June.\"",
+      "fix": "Include the year, e.g. \"This promo code ended on 30 June 2026.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Billing, promo code - first message block (expired code)",
+      "severity": 3,
+      "violation": "The date omits the year, so the user can't tell how long ago the code expired, and the message is ambiguous near a year boundary."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" paired with \"Suggested fix: none\"",
+      "fix": "Prevent the mismatch at entry, e.g. by hiding or disabling annual-only promo codes when a monthly plan is selected, or by prompting a plan switch at the moment such a code is entered.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Billing, promo code - second message block (plan mismatch)",
+      "severity": 3,
+      "violation": "As with the digit-count error above, a foreseeable mistake is flagged but no preventive design change is proposed."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-004.md",
+    "artifact_sha256": "c8f58456a4deb36595b0ac00fe364b68e80445e939d7293d2db8d8f1a42ac91b",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T06:20:09Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

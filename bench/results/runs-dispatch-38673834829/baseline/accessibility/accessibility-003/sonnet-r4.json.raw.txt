@@ -1,0 +1,84 @@
+Location: `<title id="head-title">` versus `<h1 id="main-h1">`
+Evidence: "Cascadia Regional Transit: Route Updates" vs. "Rider service updates"
+Problem: The page title and main heading describe the page differently, so a screen-reader user switching tabs or a sighted user comparing the browser tab to the page won't easily confirm they're on the same page.
+Fix: Make the `<title>` match or closely echo the `<h1>` text, e.g. "Rider service updates | Cascadia Regional Transit".
+
+Location: Section s1 ("Accessibility improvements"), paragraph s1-p1
+Evidence: "Riders may request a fare adjustment through the mobile app. Station staff can also help with the same request in person."
+Problem: This paragraph is about fare adjustments, not accessibility, so it doesn't match the section heading at all.
+Fix: Replace with content actually describing the accessibility improvements (e.g. ramps, elevators, boarding assistance) or move this sentence to a "Fares" section.
+
+Location: Section s1 ("Accessibility improvements"), paragraph s1-p2
+Evidence: "Passengers can check real time arrivals by calling rider services."
+Problem: Like s1-p1, this content is about real-time arrival info, not accessibility, leaving the section with no actual accessibility content.
+Fix: Replace with accessibility-specific information or relocate this sentence to a section about arrivals/alerts.
+
+Location: Section s1, image s1-img1
+Evidence: alt="Crews repainting the accessible parking spaces near the station entrance."
+Problem: No surrounding text in the section mentions parking lot repainting or construction, so the image's alt content is disconnected from the prose around it.
+Fix: Add a sentence in s1 introducing/explaining the parking repainting work, or replace the image with one that matches the fare/arrival content already there.
+
+Location: Section s2 ("Weekend service"), paragraph s2-p1
+Evidence: "Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person."
+Problem: This is a verbatim duplicate of s1-p1's topic (fare adjustments) and has nothing to do with weekend service.
+Fix: Replace with actual weekend service details (e.g. reduced frequency, affected lines) and remove the duplicated fare-adjustment boilerplate.
+
+Location: Section s2, table s2-table1
+Evidence: `<table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>...`
+Problem: The table has no caption or accessible name, so a screen-reader user landing on it out of context doesn't know what it represents.
+Fix: Add `<caption>Weekend service status by zone</caption>` inside the table.
+
+Location: Section s3 ("Schedule changes"), paragraph s3-p1
+Evidence: "Local residents should review the updated schedule through the mobile app. Station staff can also help with the same request in person."
+Problem: "the same request" refers back to nothing — reviewing a schedule isn't a "request" staff can help with in person, a logical carryover from the fare-adjustment boilerplate used elsewhere.
+Fix: Rewrite to remove the dangling "same request" reference, e.g. "Station staff can also help riders review the updated schedule in person."
+
+Location: Section s3, paragraph s3-p2
+Evidence: "Passengers should review the updated schedule through the mobile app."
+Problem: This duplicates the instruction already given in s3-p1 one line above, within the same section.
+Fix: Merge s3-p1 and s3-p2 into a single paragraph or remove the redundant one.
+
+Location: Section s3, div s3-statuscard
+Evidence: "Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day."
+Problem: This is a verbatim duplicate of s1-p2, repeated here under an unrelated "Schedule changes" heading.
+Fix: Remove the duplicate and instead state schedule-change-specific status information, or link to the arrivals info already given in s1 instead of repeating it.
+
+Location: Section s3, div s3-banner
+Evidence: "Route adjustments take effect on the posted effective date."
+Problem: The sentence is circular and gives no actual date or way to find one, so it conveys no usable information to the reader.
+Fix: State the actual effective date or link to where it is posted, e.g. "Route adjustments take effect November 2 — see the schedule page for details."
+
+Location: Section s3, div s3-customcontrol
+Evidence: `<div class="icon-delete" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></div>`
+Problem: This is clearly meant to be an interactive delete control (trash icon) but is implemented as a plain `<div>` with no button/role, no tabindex, and no accessible name, making it invisible and unusable to keyboard and screen-reader users.
+Fix: Implement it as a real `<button type="button" aria-label="Delete">` (or add `role="button"`, `tabindex="0"`, and an `aria-label`) instead of a bare styled div.
+
+Location: Section s3, div s3-wizard (steps s3-step1/2/3)
+Evidence: DOM order is `s3-step3` ("Confirm your order", order:3), `s3-step2` ("Enter payment details", order:2), `s3-step1` ("Choose a plan", order:1)
+Problem: The CSS `order` property visually reorders the steps to "Choose a plan → Enter payment details → Confirm your order," but the underlying DOM/reading order is the reverse, so keyboard and screen-reader navigation won't match the visual sequence (WCAG 1.3.2 Meaningful Sequence).
+Fix: Reorder the elements in the DOM to match the intended visual/logical sequence instead of relying on CSS `order` to fix it visually.
+
+Location: Section s3, paragraph s3-linkpara
+Evidence: "For the full list of upcoming adjustments, <a href="/fares/history">read the accessibility improvements list</a>."
+Problem: The link text says "accessibility improvements list" but the surrounding sentence is about "upcoming adjustments" and the href points to "/fares/history" — none of the three agree on what the link actually leads to.
+Fix: Make the link text accurately describe the destination, e.g. "read the fare history page," or point the href to an actual accessibility-improvements or schedule-adjustments resource matching the sentence.
+
+Location: Section s3, form label s3-form-phone-label
+Evidence: `<label for="phone" id="s3-form-phone-label" style="color:#cc0000">Phone number</label>`
+Problem: Red text is used to signal something (likely "required") about this field with no accompanying text, icon, or `aria-required`/`required` attribute, so the meaning conveyed by color alone is lost on users who can't perceive it (WCAG 1.4.1).
+Fix: Add a visible text indicator such as "Phone number (required)" and the `required`/`aria-required="true"` attribute on the input, not just a color change.
+
+Location: Section s3, form field `<select id="topic">`
+Evidence: `<select id="topic"><option>Northbound</option><option>Southbound</option></select>`
+Problem: The select has no `name` attribute, so its value won't be included when the form is submitted.
+Fix: Add a `name` attribute, e.g. `name="route"`.
+
+Location: Section s3, form field s3-form-promo-label / input#promo / s3-form-promo-error
+Evidence: `<input id="promo" type="text" aria-invalid="true"><span class="error-text" id="s3-form-promo-error">Error.</span>`
+Problem: The input is marked invalid but has no `aria-describedby` pointing to the error span, so assistive technology won't announce the error message when the field is focused.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the `#promo` input.
+
+Location: Section s3, error text s3-form-promo-error
+Evidence: "Error."
+Problem: The error message doesn't explain what's wrong with the promo code, leaving the user unable to correct it.
+Fix: Replace with a specific message, e.g. "This promo code isn't valid. Check for typos and try again."

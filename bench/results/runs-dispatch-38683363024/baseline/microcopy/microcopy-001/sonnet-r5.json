@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Message: The connection dropped before this finished.\" paired with \"Predictable mistake: yes\"",
+      "fix": "Change \"Predictable mistake\" to \"no\" for this entry, or if the category is meant to cover \"predictable failure modes\" more broadly, rename/redefine the field so network errors fit without misrepresenting user behavior.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Signup form, email field - first message block, \"Predictable mistake\" line",
+      "severity": 3,
+      "violation": "A dropped connection is a transient network/system failure, not a mistake the user made, so classifying it as a \"predictable mistake\" is a miscategorization that conflates system failures with user error."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: selectable, offers the one available next step as a direct action\"",
+      "fix": "Name the concrete next step, e.g. \"selectable; add a Retry action that resubmits the field value directly.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Signup form, email field - first message block, \"Suggested fix\" line",
+      "severity": 3,
+      "violation": "The suggested fix refers to \"the one available next step\" without ever naming what that step is (e.g., retry, resubmit), so the entry isn't actionable as a spec and can't be implemented or verified as written."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: in a banner directly above the payment method selector...\" next to \"Container: inline\"",
+      "fix": "Correct \"Container\" to \"banner\" for this entry, or if \"inline\" is accurate, rewrite the placement text to drop the word \"banner.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Checkout form, payment method - first message block, \"Placement\" and \"Container\" lines",
+      "severity": 3,
+      "violation": "The placement explicitly describes a banner, but the container is logged as \"inline,\" contradicting the stated placement and making the entry internally inconsistent with every other row (where placement and container agree)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Something went wrong. Contact support if this continues.\" with \"Suggested fix: none\"",
+      "fix": "Replace with a specific instruction, e.g. \"Something went wrong processing this payment. Try again, or contact support at [link] if it fails again,\" and update \"Suggested fix\" accordingly.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Checkout form, payment method - first message block, \"Message\" and \"Suggested fix\" lines",
+      "severity": 3,
+      "violation": "\"If this continues\" gives no threshold (how many retries? how long?) and no contact method, so the escalation path is effectively unusable, yet the entry claims no fix is needed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Message: The expiry date on this card has passed...\" paired with \"Fires: mid-keystroke\"",
+      "fix": "Change \"Fires\" to on-blur or on-submit so the date is only evaluated once the field contains a complete value.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Checkout form, payment method - second message block, \"Fires\" line",
+      "severity": 3,
+      "violation": "Validating \"has passed\" while the user is still typing digits will produce false positives on incomplete input (e.g., a partially typed year parsed as an already-past date before the user finishes typing)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You keep entering the wrong value. Re-enter it to continue.\" with \"Suggested fix: none\"",
+      "fix": "Rewrite with the specific validation rule being violated and an example, and mark \"Suggested fix\" to reflect that rewrite rather than \"none.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Profile settings, phone number - first message block, \"Message\" and \"Suggested fix\" lines",
+      "severity": 3,
+      "violation": "The message never states what is wrong with the value (format, length, missing country code, etc.), leaving the user unable to self-correct, which is inconsistent with the specific/constructive standard set by sibling entries (e.g., the email format message) and contradicts \"Suggested fix: none.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You keep entering the wrong value\" paired with \"Fires: on-blur\"",
+      "fix": "Either add an explicit attempt-count condition to \"Fires\" (e.g., \"on-blur, after 2nd invalid attempt\") or remove \"keep\" from the message so it's accurate on a first failure.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Profile settings, phone number - first message block, \"Message\" and \"Fires\" lines",
+      "severity": 3,
+      "violation": "The wording \"keep entering\" asserts a history of repeated failed attempts, but nothing in the spec (Fires: on-blur has no attempt-count condition) establishes that this message only shows after multiple tries, so it could fire on a user's very first attempt and falsely accuse them of repetition."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: cleared\"",
+      "fix": "Set \"Input on resubmission\" to \"preserved\" to match every other entry, since the phone number the user typed is valid and worth keeping on screen.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Profile settings, phone number - second message block, \"Input on resubmission\" line",
+      "severity": 3,
+      "violation": "This is the only entry across all three forms where input is cleared rather than preserved, and the value itself isn't invalid (it's merely registered elsewhere), so clearing it forces needless re-entry of a correct number with no stated rationale."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-001.md",
+    "artifact_sha256": "0580399008ca4517da0a1b1f620180b68a4cfb24e596be279a5f782cde325fc7",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T05:18:47Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

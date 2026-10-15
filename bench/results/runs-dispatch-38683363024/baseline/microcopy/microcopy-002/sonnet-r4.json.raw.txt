@@ -1,0 +1,49 @@
+Location: Checkout form, shipping address — first message block (30-character field limit)
+Evidence: "Predictable mistake: yes" paired with "Suggested fix: none"
+Problem: The entry itself flags this as a predictable mistake, which by the document's own logic (see later entries with "selectable"/"described" fixes) should warrant a preventive or corrective suggestion, yet none is offered.
+Fix: Either add a suggested fix (e.g., live character counter or input truncation) or justify why predictable mistakes sometimes get no fix.
+
+Location: Checkout form, shipping address — second message block (Error code: 502)
+Evidence: Placement: "directly below the shipping address block" vs. Signal: "bold text set above the address block at a larger size than its labels, icon"
+Problem: Placement states the message sits below the address block, but Signal describes the same message as positioned above it — a direct contradiction about where the message appears.
+Fix: Correct one of the two fields so Placement and Signal agree on the message's actual position.
+
+Location: Checkout form, shipping address — second message block (Error code: 502)
+Evidence: "Please correct the highlighted field. Error code: 502." / "Predictable mistake: yes"
+Problem: HTTP 502 is a server/gateway failure, not a user input error, so telling the user to "correct the highlighted field" misattributes a backend problem to their input, and marking it a "predictable mistake" is inconsistent with it being a system failure.
+Fix: Rewrite the message to describe the actual server error and offer a retry action, and mark "Predictable mistake" as no.
+
+Location: File upload, receipts — comparison of the 10 MB message and the PDF/PNG format message
+Evidence: 10 MB message fires "after-field-complete" with suggested fix "requires the reader to enter it by hand"; format message fires "on-submit" with suggested fix "offers a convert and retry action"
+Problem: Two closely related validations on the same control (size and format) are checked at different points in the flow and given inconsistent remediation quality, so a user can learn about a size problem immediately but not discover a format problem until final submission.
+Fix: Align the timing (validate both at selection/after-field-complete) and offer the same level of actionable remediation for both.
+
+Location: Password reset, new password — first message block (8-character minimum)
+Evidence: "Choose a password of at least 8 characters, long enough that a guessing attack cannot work through every combination."
+Problem: The stated rationale is factually misleading — 8 characters is not long enough to make exhaustive/guessing attacks infeasible against modern cracking capability.
+Fix: Remove or correct the security claim, or require a longer minimum consistent with the stated rationale.
+
+Location: Password reset, new password — first message block (8-character minimum)
+Evidence: Placement: "at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page" / Suggested fix: none
+Problem: The message is deliberately placed far from the field it concerns, violating proximity, yet no fix is suggested despite this being a clearly correctable placement issue.
+Fix: Move the message adjacent to the password field, or add a suggested fix recommending that change.
+
+Location: Password reset, new password — second message block (expired link)
+Evidence: Container: "toast" vs. Placement: "in a dialog centered on the password reset step, over the new password field it blocks"
+Problem: A toast is a transient, non-blocking notification, but the description given is of a centered, blocking modal dialog — the two container types are contradictory.
+Fix: Set Container to "modal" (or whichever matches the actual UI) to match the Placement description.
+
+Location: Password reset, new password — second message block (expired link)
+Evidence: "Fires: on-focus"
+Problem: Link expiration is known at page load, not dependent on the user focusing the password field; deferring the message to on-focus lets the user fill out the form before learning the link is invalid.
+Fix: Fire the message on page load (or on-load of the reset step) instead of on-focus.
+
+Location: Account settings, username — message block
+Evidence: "The last changes were not saved and cannot be recovered. Contact support for assistance." vs. "Input on resubmission: preserved"
+Problem: The message claims the changes are unrecoverable, but the record states the input is preserved on resubmission — these two facts directly contradict each other.
+Fix: Reconcile the two: if the input is preserved, soften the message to avoid claiming unrecoverable loss; if truly unrecoverable, mark "Input on resubmission" as not-applicable.
+
+Location: Account settings, username — message block
+Evidence: "Predictable mistake: yes" for a save failure, compared with the password-reset expired-link entry marked "Predictable mistake: no"
+Problem: Both errors stem from system/server-side conditions rather than a user input mistake, but the document classifies one as "predictable mistake: yes" and the structurally similar one as "no," applying the classification inconsistently.
+Fix: Apply a consistent rule for "Predictable mistake" — system-caused failures (save errors, expired links, 502s) should be classified the same way, or document why they differ.

@@ -1,0 +1,34 @@
+Location: Heading structure — "#### Check the sidebar updated" under "## Open the test console"
+Evidence: `## Open the test console` followed by `#### Check the sidebar updated`
+Problem: The heading level jumps from H2 to H4, skipping H3, which breaks the document's heading hierarchy and any auto-generated table of contents.
+Fix: Change "Check the sidebar updated" to an H3 (`###`) to maintain a consistent hierarchy, or remove the subsection heading and fold it into the parent step's prose.
+
+Location: "Open the test console" section
+Evidence: "select the sample alert rule provided for new accounts"
+Problem: The instruction assumes every reader has a "new account" with this sample rule available, but doesn't say what to do if the account is older or the sample rule isn't present.
+Fix: Add a note or alternate instruction for accounts without a pre-provisioned sample rule (e.g., how to create one).
+
+Location: "Check the sidebar updated" subsection
+Evidence: "Look at the sidebar and confirm the rule count now includes the sample rule."
+Problem: Merely opening the test console and selecting an existing sample rule doesn't create a new rule, so there's no reason the sidebar's rule count would change; this step appears logically inconsistent with the prior action.
+Fix: Clarify what actually changes in the sidebar (e.g., the rule becomes highlighted/selected) or remove this verification step if it doesn't correspond to a real UI change.
+
+Location: "Trigger the sample alert" section
+Evidence: "Click Trigger sample alert and wait for the status indicator to change to Sent.\n\nThe status indicator takes a few seconds to update while the delivery pipeline processes the event in the background."
+Problem: The explanation for why the wait is needed appears after the instruction to wait, so a reader may already be confused or think something is broken before reaching the clarifying sentence.
+Fix: Move the explanatory sentence before or merge it into the instruction, e.g., "Click Trigger sample alert, then wait a few seconds for the status indicator to change to Sent while the delivery pipeline processes the event."
+
+Location: "Trigger the sample alert" section
+Evidence: "wait for the status indicator to change to Sent."
+Problem: No guidance is given for what to do if the status indicator does not change to "Sent" (e.g., shows an error or stays pending), leaving the user without troubleshooting steps.
+Fix: Add a brief troubleshooting note for failure/error states of the status indicator.
+
+Location: "Check the delivery log" section
+Evidence: "Open the delivery log and check that the test alert shows a Sent status with a timestamp."
+Problem: Unlike the first step, which specifies where to find the test console ("from the developer menu"), this step gives no location or navigation path for the delivery log.
+Fix: Specify where the delivery log is located (e.g., "Open the delivery log from the developer menu's Logs tab").
+
+Location: End of document
+Evidence: Document ends at "...shows a Sent status with a timestamp." with no further content
+Problem: The tutorial ends abruptly without a concluding statement confirming the overall task is complete or pointing to next steps.
+Fix: Add a brief closing line confirming the test alert workflow is complete and optionally linking to a next tutorial.

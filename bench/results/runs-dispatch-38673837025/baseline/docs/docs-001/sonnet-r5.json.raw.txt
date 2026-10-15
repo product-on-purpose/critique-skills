@@ -1,0 +1,29 @@
+Location: ## Open alert settings, second sentence
+Evidence: "A threshold is the numeric boundary that triggers an alert once a metric crosses it."
+Problem: This is a conceptual definition dropped into the middle of a procedural step; it interrupts the action sequence ("open the panel, select the rule") with unrelated explanatory content that doesn't belong in a how-to.
+Fix: Move this definition to a concepts/overview section or a short intro before the steps, and keep the "Open alert settings" step limited to navigation actions.
+
+Location: ## Open alert settings
+Evidence: "select the rule you want to adjust"
+Problem: The step assumes the reader can already locate the desired rule, with no guidance for searching or filtering when many rules exist.
+Fix: Add a sentence describing how to find a specific rule (e.g., search box, filter by name) or what to do if it isn't immediately visible.
+
+Location: ## Set the new threshold, first sentence
+Evidence: "confirm the unit matches the metric in use"
+Problem: The instruction is vague — it doesn't say where the unit is displayed, what the valid units are, or what action to take if there's a mismatch.
+Fix: Specify where the unit indicator/selector appears in the UI and what to do if it doesn't match (e.g., "choose the matching unit from the dropdown next to the field").
+
+Location: ## Set the new threshold, second sentence
+Evidence: "This is because the console applies the new threshold to every future evaluation of this rule."
+Problem: Presented as a causal justification ("This is because"), but it doesn't actually explain the preceding instruction to match units — it's a non-sequitur that leaves the real reasoning for unit-matching unstated.
+Fix: Remove the sentence, or rewrite it to explain why unit-matching matters (e.g., a mismatched unit causes the threshold to be misapplied to incoming metric values).
+
+Location: ## Save and verify
+Evidence: "confirm the new threshold appears there"
+Problem: The verification only checks that some value is present, not that it matches what was just entered, so a value silently corrupted or defaulted during save would still pass this check.
+Fix: Instruct the reader to confirm the displayed value and unit exactly match what was entered in the previous step.
+
+Location: whole document
+Evidence: no "Prerequisites" or permissions statement anywhere in the text
+Problem: The procedure assumes the reader already has permission to edit alert rules, with no note about required role/access, so a reader lacking permission has no explanation for why controls might be missing or disabled.
+Fix: Add a brief prerequisites note stating the role or permission needed to edit alert thresholds.

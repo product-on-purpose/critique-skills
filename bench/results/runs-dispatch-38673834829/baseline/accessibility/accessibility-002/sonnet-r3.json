@@ -1,0 +1,215 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Title reads \"Cascadia Regional Transit: Service Announcements\" while the page's own `<h1>` reads \"Fare and service announcements\"",
+      "fix": "Make the `<title>` match or closely mirror the `<h1>` text, e.g. \"Fare and Service Announcements | Cascadia Regional Transit\".",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<title id=\"head-title\">` (and `<h1 id=\"main-h1\">`)",
+      "severity": 3,
+      "violation": "The page title and main heading describe the page differently, which can confuse users and hurts SEO/accessibility consistency (screen reader users hear a different page identity than the visible heading)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"color:#999999\"`",
+      "fix": "Remove the inline style or change the color to one with at least 4.5:1 contrast (e.g. #595959 or darker) against the background.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`#s1-p1`",
+      "severity": 3,
+      "violation": "#999999 text on a white background yields roughly a 2.8:1 contrast ratio, failing WCAG AA's 4.5:1 minimum for normal text - ironic given this is in the \"Accessibility improvements\" section."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Both paragraphs end with the identical sentence \"Updates post to the schedule page within one business day.\"",
+      "fix": "Write a sentence specific to each paragraph's actual topic, or remove the boilerplate line if it isn't accurate for both cases.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`#s1-p1` and `#s1-p2`",
+      "severity": 3,
+      "violation": "The trailing sentence is reused verbatim across unrelated paragraphs (kiosk schedule review vs. fare adjustment requests), suggesting templated/placeholder copy that wasn't customized for context."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Heading \"Accessibility improvements\" followed by paragraphs about reviewing schedules at a kiosk and requesting fare adjustments via the app",
+      "fix": "Either rewrite the section content to describe actual accessibility improvements, or retitle the heading to match the schedule/fare content (e.g., \"Schedule and fare updates\").",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`#s1-h` / section `#s1`",
+      "severity": 3,
+      "violation": "Neither paragraph in this section discusses accessibility (e.g., ramps, elevators, screen reader support, wheelchair access) - the heading doesn't match the content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Local residents can check real time arrivals through the mobile app. A confirmation message follows once the request is processed.\"",
+      "fix": "Replace the second sentence with something relevant to checking arrivals (e.g., \"Arrival times update automatically every minute\") or remove it.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`#s2-p1`",
+      "severity": 3,
+      "violation": "Checking real-time arrivals is not a \"request\" that needs processing or confirmation; the second sentence is a mismatched template fragment that doesn't logically follow the first."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<table id=\"s2-table1\"><tr><th scope=\"col\">Zone</th><th scope=\"col\">Status</th></tr>...`",
+      "fix": "Add `<caption>Zone status</caption>` as the first child of the table.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`#s2-table1`",
+      "severity": 3,
+      "violation": "The table has no `<caption>` or accessible name, so screen reader users aren't told what the table represents before encountering its data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Under heading \"Weekend service\": \"Passengers may request a fare adjustment through the mobile app. The change takes effect on the following service day.\"",
+      "fix": "Move this paragraph to the fare-related section (e.g., merge with `#s1-p2`) or replace it with actual weekend service information.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`#s3-p1`",
+      "severity": 3,
+      "violation": "This content is about fare adjustments, not weekend service, making it a non-sequitur under this heading."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Under heading \"Weekend service\": \"Local residents can report a service issue by calling rider services. Station staff can also help with the same request in person.\"",
+      "fix": "Relocate this paragraph to a \"Contact/report an issue\" section or rewrite it to actually describe weekend service changes.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "`#s3-p2`",
+      "severity": 3,
+      "violation": "Reporting a service issue is unrelated to the \"Weekend service\" heading, continuing the pattern of mismatched section content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"width:960px\"`",
+      "fix": "Replace the fixed width with a responsive value, e.g. `max-width:960px; width:100%`.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "`#s3-banner`",
+      "severity": 3,
+      "violation": "A fixed 960px width will overflow or force horizontal scrolling on small viewports, contradicting the page's `width=device-width` responsive viewport meta tag."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"height:60px;overflow:hidden\"`",
+      "fix": "Remove the fixed height (let the card grow with content) or use `min-height:60px` instead.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "`#s3-statuscard`",
+      "severity": 3,
+      "violation": "A fixed height combined with `overflow:hidden` risks clipping the paragraph text it contains if content wraps to more lines than fit, hiding information from users."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>`",
+      "fix": "Replace the div with a native `<button type=\"button\" aria-label=\"Delete item\">` containing the icon, which gets keyboard activation and semantics for free.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "`#s3-customcontrol`",
+      "severity": 3,
+      "violation": "This reimplements button semantics on a `<div>`; without visible JavaScript keydown handling for Enter/Space in this markup, it won't be operable via keyboard the way a native button is, and it reinvents functionality a native element already provides."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Choose a plan\" / \"Enter payment details\" / \"Confirm your order\"",
+      "fix": "Remove the wizard block from this page, or if intentional, add context explaining why a payment flow appears here.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "`#s3-wizard`",
+      "severity": 3,
+      "violation": "This is a checkout/payment wizard component with no relation to transit service announcements, appearing to be stray or misplaced content on this page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"/fares/history\" id=\"s3-link1\">read the accessibility improvements list</a>` inside the sentence \"For the full list of upcoming adjustments, read the accessibility improvements list.\"",
+      "fix": "Make the link text describe its actual destination, e.g. \"read the fares history\" (and point the href at whatever page truly lists upcoming adjustments).",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "`#s3-linkpara`",
+      "severity": 3,
+      "violation": "The link text promises an \"accessibility improvements list\" but the surrounding sentence is about \"upcoming adjustments\" and the href points to `/fares/history` - none of the three agree, which is misleading, especially for screen reader users who navigate by link text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"topic-alt\" id=\"s3-form-topic-label\">Route</label>` followed by `<select id=\"topic\">`",
+      "fix": "Change the label's `for` to `topic` (or the select's `id` to `topic-alt`) so they match.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "`#s3-form-topic-label`",
+      "severity": 3,
+      "violation": "The label's `for` attribute references `topic-alt`, which does not match the select's `id` of `topic`, so the label is not programmatically associated with the control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"phone\" id=\"s3-form-phone-label\">Phone number (required)</label>` with `<input id=\"phone\" type=\"tel\">`",
+      "fix": "Add `required` (and/or `aria-required=\"true\"`) to the phone input to match the label's claim.",
+      "id": "F-015",
+      "lane": "judged",
+      "location": "`#s3-form-phone-label`",
+      "severity": 3,
+      "violation": "The label text tells users the phone field is required, but the input has no `required` or `aria-required=\"true\"` attribute, so assistive technology and form validation won't actually treat it as required."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">`",
+      "fix": "Remove `aria-invalid=\"true\"` from the default markup and set it dynamically (via JavaScript) only after validation fails.",
+      "id": "F-016",
+      "lane": "judged",
+      "location": "`#s3-form` promo input",
+      "severity": 3,
+      "violation": "`aria-invalid=\"true\"` is hardcoded in the static markup, so the field is announced as invalid by default before the user has entered anything, which is incorrect initial state."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\"><span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span>`",
+      "fix": "Add `aria-describedby=\"s3-form-promo-error\"` to the promo `<input>`.",
+      "id": "F-017",
+      "lane": "judged",
+      "location": "`#s3-form-promo-error`",
+      "severity": 3,
+      "violation": "The error message span is not linked to the promo input via `aria-describedby`, so screen reader users focusing the field won't hear the validation requirement or error."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-002.html",
+    "artifact_sha256": "b49ce74681df60732a6ef3b5309ce82264ad1b6ad48c6fa8b85989f2c712f113",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T03:42:49Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 17,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

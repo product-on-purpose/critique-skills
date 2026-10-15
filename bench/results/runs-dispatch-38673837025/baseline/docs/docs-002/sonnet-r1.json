@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The document opens directly with \"Open the test console from the developer menu...\" with no introductory text",
+      "fix": "Add a short introductory paragraph stating the goal of the tutorial and any prerequisites.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Document start, before the first heading (\"## Open the test console\")",
+      "severity": 3,
+      "violation": "A tutorial gives no overview of what it accomplishes or what prerequisites (permissions, account state, enabled developer menu) are needed before starting."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Open the test console from the developer menu\"",
+      "fix": "Give an explicit path, e.g. \"From the top navigation bar, select Developer > Test console.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"## Open the test console\"",
+      "severity": 3,
+      "violation": "The instruction doesn't say where the developer menu is located (e.g., top nav bar, settings panel), so a reader without prior knowledge can't find it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"select the sample alert rule provided for new accounts\"",
+      "fix": "Clarify how to proceed if the sample alert rule isn't present, or state that it's always available regardless of account age.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"## Open the test console\"",
+      "severity": 3,
+      "violation": "This implies the sample rule only exists for new accounts, leaving no guidance for existing accounts or accounts where the sample rule was deleted or never provisioned."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"## Open the test console\" is an H2, followed immediately by \"#### Check the sidebar updated\" (H4)",
+      "fix": "Change \"Check the sidebar updated\" to an H3 (\"### Check the sidebar updated\") to maintain a consistent outline.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"#### Check the sidebar updated\"",
+      "severity": 3,
+      "violation": "The heading level jumps from H2 to H4, skipping H3, breaking the document's heading hierarchy and likely rendering with inconsistent nesting."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Check the sidebar updated\"",
+      "fix": "Reword to \"Check that the sidebar updated\" or \"Check the sidebar update.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"#### Check the sidebar updated\"",
+      "severity": 3,
+      "violation": "The heading is grammatically malformed - it reads as a fragment rather than a complete instruction."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Click Trigger sample alert and wait for the status indicator to change to Sent.\"",
+      "fix": "Add a troubleshooting note describing possible non-success statuses and how to resolve them.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "\"## Trigger the sample alert\"",
+      "severity": 3,
+      "violation": "No guidance is given for what to do if the status indicator shows a failure/error state instead of \"Sent.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"select the sample alert rule\" / \"Trigger sample alert\" / \"the test alert shows a Sent status\"",
+      "fix": "Standardize on a single term (e.g., \"sample alert\") throughout the document.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Across the document - \"## Open the test console\", \"## Trigger the sample alert\", \"## Check the delivery log\"",
+      "severity": 3,
+      "violation": "The same object is alternately called \"sample alert\" and \"test alert,\" which is confusing since the reader can't tell if these refer to the same thing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Document ends with \"Open the delivery log and check that the test alert shows a Sent status with a timestamp.\"",
+      "fix": "Add a brief closing statement summarizing what was accomplished and linking to a logical next tutorial or step.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "End of document, \"## Check the delivery log\"",
+      "severity": 3,
+      "violation": "The tutorial ends abruptly with no confirmation of overall success or pointer to next steps (e.g., creating a real alert rule)."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-002.md",
+    "artifact_sha256": "25c4dd0ebb76ed338a3330329de0387044967be4fa65c3db44b1e3042d579c91",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T03:15:31Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

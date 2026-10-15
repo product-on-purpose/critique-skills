@@ -1,0 +1,50 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-CONSTRUCTIVE",
+      "evidence": "This request timed out before it could finish.",
+      "fix": "Add a concrete next step the reader can take, e.g. \"Try your search again, or check your connection.\"",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "Search results, no matches, message 1",
+      "severity": 3,
+      "violation": "The message states that a problem exists with no imperative instruction or named next step anywhere in the text, and the block's Suggested fix field is none, so nothing on the screen tells the reader what to do."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-SALIENT",
+      "evidence": "Signal: styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action, text-label",
+      "fix": "Give this message a visual treatment distinct from informational banners on the same page: added weight, a warning-toned accent, or a position that sets it apart as something to act on.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Search results, no matches, message 2",
+      "severity": 3,
+      "violation": "The message's Signal field states it is styled identically to the page's purely informational banners, with no visual cue marking it as a message the reader needs to act on, so a reader scanning at normal speed has no reason to notice it demands action."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-10-15T06:06:49Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

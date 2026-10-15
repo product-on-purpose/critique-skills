@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`## Open the test console` is immediately followed by `#### Check the sidebar updated`",
+      "fix": "Change the heading to `###` (h3), or make all step headings use a consistent level such as `##`.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Heading \"#### Check the sidebar updated\"",
+      "severity": 3,
+      "violation": "The heading level jumps from h2 to h4, skipping h3, which breaks the document's heading hierarchy."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Check the sidebar updated\"",
+      "fix": "Reword to \"Check that the sidebar updated\" or \"Confirm the sidebar update.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Heading \"Check the sidebar updated\"",
+      "severity": 3,
+      "violation": "The phrase is grammatically malformed as a heading - it reads as an incomplete sentence rather than an instruction."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"confirm the rule count now includes the sample rule\"",
+      "fix": "Either remove this verification step or explain what actually causes the count to change (e.g., selecting the rule adds it to an \"active rules\" list).",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Check the sidebar updated\" section body",
+      "severity": 3,
+      "violation": "This implies the rule count changes as a result of opening the console and selecting the rule, but the rule was already described as \"provided for new accounts,\" meaning it already existed before this step - the cause-and-effect here doesn't hold."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Click Trigger sample alert and wait for the status indicator to change to Sent.\"",
+      "fix": "Add a short troubleshooting note, e.g., \"If the status doesn't update after a minute, check your connection and retry.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"Trigger the sample alert\" section",
+      "severity": 3,
+      "violation": "No guidance is given for what to do if the status indicator does not change to \"Sent\" (e.g., it errors or stays pending), leaving the reader with no recourse."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Open the delivery log and check that the test alert shows a Sent status with a timestamp.\"",
+      "fix": "Add navigation instructions, e.g., \"Open the delivery log from the developer menu\" (or wherever it actually lives).",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Check the delivery log\" section",
+      "severity": 3,
+      "violation": "Unlike the first step, which specifies where to find the test console (\"from the developer menu\"), this step gives no location or navigation path for the delivery log."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The document ends immediately after the last verification step with no closing statement.",
+      "fix": "Add a brief closing line, e.g., \"You've successfully sent and verified your first test alert,\" optionally followed by a pointer to related tutorials.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "End of document, after the final sentence \"...shows a Sent status with a timestamp.\"",
+      "severity": 3,
+      "violation": "The tutorial doesn't confirm overall completion or point to next steps, leaving the reader unsure whether the goal stated in the title (\"Send your first test alert\") has been fully accomplished."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-002.md",
+    "artifact_sha256": "25c4dd0ebb76ed338a3330329de0387044967be4fa65c3db44b1e3042d579c91",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T03:18:27Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

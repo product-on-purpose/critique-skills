@@ -1,0 +1,94 @@
+Location: `<html>` opening tag
+Evidence: `lang="translanguage"`
+Problem: "translanguage" is not a valid BCP 47 language code, so assistive technology and browsers cannot determine the page's language.
+Fix: Set `lang` to the actual content language, e.g. `lang="en"`.
+
+Location: `<title id="head-title">` in `<head>`
+Evidence: `<title id="head-title"></title>`
+Problem: The title element is empty, so the browser tab, history, bookmarks, and screen readers have no page name to announce.
+Fix: Add a descriptive title, e.g. "Rider Service Updates".
+
+Location: `<img src="/img/platform-update.jpg" id="s1-img1">` in section s1
+Evidence: `<img src="/img/platform-update.jpg" id="s1-img1">`
+Problem: The image has no `alt` attribute, so screen reader users get no description of its content or purpose.
+Fix: Add an `alt` attribute describing the image, or `alt=""` if it is purely decorative.
+
+Location: s1-p1 and s1-p2
+Evidence: Both paragraphs end with "Station staff can also help with the same request in person."
+Problem: The identical closing sentence is reused for two unrelated requests (fare adjustment vs. checking real-time arrivals at a kiosk), and makes no sense for the kiosk case since the kiosk is already an in-person option.
+Fix: Write a distinct, relevant closing sentence for each paragraph, or remove it from s1-p2.
+
+Location: s2, heading `<h4 id="s2-h">`
+Evidence: `<h2 id="s1-h">Fare adjustments</h2>` followed later by `<h4 id="s2-h">Accessibility improvements</h4>`
+Problem: The heading level jumps from h2 to h4, skipping h3 and breaking the document's heading hierarchy.
+Fix: Change `s2-h` to `<h2>` (or add the missing h3 level consistently) to keep headings sequential.
+
+Location: section s2, heading and body
+Evidence: Heading "Accessibility improvements" followed by text "Passengers can report a service issue by calling rider services..." and a zone status table
+Problem: The section heading does not match its content, which is about reporting service issues and zone status, not accessibility.
+Fix: Rename the heading to reflect the actual content (e.g. "Service status") or move the content under an appropriately titled section.
+
+Location: `<table id="s2-table1">`
+Evidence: `<table id="s2-table1">` with no `<caption>`
+Problem: The table has no caption or accessible name, so screen reader users aren't told what the table represents before reading it.
+Fix: Add a `<caption>` such as "Zone status" inside the table.
+
+Location: s2-p1 vs s3-p1
+Evidence: "Passengers can report a service issue by calling rider services." (s2-p1) vs. "Passengers can report a service issue at any station kiosk." (s3-p1)
+Problem: The document gives two different, unreconciled instructions for how to report a service issue, which is contradictory.
+Fix: State a single consistent method (or explicitly list both options together in one place).
+
+Location: s2-p1 and s3-p2
+Evidence: Both contain "Updates post to the schedule page within one business day."
+Problem: The identical sentence is reused for two unrelated actions (reporting a service issue and reviewing the schedule), suggesting copy-paste duplication rather than content tailored to each paragraph.
+Fix: Replace one instance with a sentence relevant to its own context, or remove the duplicate.
+
+Location: s3-p1 and s3-statuscard
+Evidence: Both contain "A confirmation message follows once the request is processed."
+Problem: This sentence is duplicated across reporting a service issue and checking real-time arrivals; a "confirmation message" makes no sense for a simple arrivals lookup.
+Fix: Remove or rewrite the sentence in s3-statuscard to match what actually happens when checking arrivals.
+
+Location: s3-statuscard vs s1-p2
+Evidence: "Local residents can check real time arrivals through the online portal." (s3-statuscard) vs. "Riders can check real time arrivals at any station kiosk." (s1-p2)
+Problem: Two different, unreconciled instructions are given for checking real-time arrivals, which is contradictory.
+Fix: Consolidate into a single consistent instruction (or clearly present both as valid options in the same place).
+
+Location: `<button id="s3-button1">Refresh status</button>`
+Evidence: `<button type="button" class="btn-secondary" id="s3-button1">Refresh status</button>`
+Problem: The button is not associated with any specific content (e.g. the status card) via `aria-controls` or placement, so its purpose and target are unclear.
+Fix: Move the button adjacent to the status card it refreshes and/or add `aria-controls="s3-statuscard"`.
+
+Location: `<div class="icon-delete" id="s3-customcontrol">`
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Problem: A custom div is used to simulate a button instead of a native `<button>`, and it has no clear relation to any "item" on this rider-updates page, leaving its purpose and keyboard-activation behavior unclear.
+Fix: Replace with a native `<button>` element, and either remove it if unused or clarify what item it deletes.
+
+Location: `<div class="wizard-steps" id="s3-wizard">`
+Evidence: Steps listed: "Choose a plan", "Enter payment details", "Confirm your order"
+Problem: This checkout-style wizard content is unrelated to the surrounding rider service/station update content and appears to be leftover template content.
+Fix: Remove the wizard block or replace it with content relevant to station updates.
+
+Location: `<p id="s3-linkpara">`
+Evidence: `<a href="/fares/history" id="s3-link1">click here</a>`
+Problem: "Click here" is non-descriptive link text that fails to convey the link's purpose out of context, which is an accessibility and usability issue.
+Fix: Change the link text to something descriptive, e.g. "View the full list of upcoming adjustments."
+
+Location: s3-form, phone field
+Evidence: `<label for="phone" id="s3-form-phone-label">Phone number (required)</label>` with `<input id="phone" type="tel">`
+Problem: The label text tells users the field is required, but the input has no `required` or `aria-required="true"` attribute, so this isn't enforced or exposed to assistive technology.
+Fix: Add `required` (and/or `aria-required="true"`) to the `phone` input.
+
+Location: s3-form, promo field
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: `aria-invalid="true"` is hardcoded on page load before the user has entered anything, incorrectly announcing an error state prematurely.
+Fix: Set `aria-invalid="false"` (or omit it) by default and only set it to `true` after validation fails.
+
+Location: s3-form, promo error text
+Evidence: `<input id="promo" type="text" aria-invalid="true">` followed by `<span class="error-text" id="s3-form-promo-error">Enter a 6 character code...</span>`
+Problem: The error message is not programmatically associated with the input (no `aria-describedby`), so screen reader users won't hear it when focusing the field.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the `promo` input.
+
+Location: s3-form submit button
+Evidence: `<button type="submit" class="btn-primary" id="s3-form-submit" aria-label="Send form now">Submit</button>`
+Problem: The `aria-label` ("Send form now") does not contain the visible text ("Submit"), violating the WCAG "Label in Name" requirement and causing a mismatch for speech-input and screen reader users.
+Fix: Remove the `aria-label` or change it to include the visible text, e.g. `aria-label="Submit form"`.

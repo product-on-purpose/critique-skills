@@ -1,0 +1,59 @@
+Location: Section "Station updates" (`#s1-img1`), image alt text
+Evidence: `alt="Crews repainting the accessible parking spaces near the station entrance."` on `src="/img/platform-update.jpg"`
+Problem: The alt text describes crews repainting parking spaces, but the image filename and surrounding section ("Station updates" / schedule kiosks) indicate it should depict a platform update; the alt text doesn't match the image's apparent subject.
+Fix: Replace the alt text with a description that matches the actual image content (a platform update), or replace the image if it genuinely shows parking lot repainting.
+
+Location: `#s1-p1` and `#s1-p2`, "Station updates" section
+Evidence: Both paragraphs end with the identical sentence "Station staff can also help with the same request in person."
+Problem: The same boilerplate sentence is repeated verbatim in two consecutive paragraphs, adding no new information and reading as templated filler.
+Fix: Remove the duplicate sentence from one paragraph, or combine both tips into a single paragraph that states the in-person option once.
+
+Location: `#s2-p1`, "Schedule changes" section
+Evidence: "Passengers can check real time arrivals through the online portal. Station staff can also help with the same request in person."
+Problem: This is the third verbatim occurrence of "Station staff can also help with the same request in person." across sections, confirming the content is templated boilerplate rather than section-specific guidance.
+Fix: Write a unique, section-relevant sentence for this paragraph instead of reusing the stock closer.
+
+Location: `#s3-p1`, "Fare adjustments" section
+Evidence: "Riders can report a service issue by calling rider services."
+Problem: This sentence about reporting a general service issue is unrelated to the "Fare adjustments" heading and duplicates the topic already covered in `#s1-p2`.
+Fix: Remove this sentence from the Fare adjustments section or replace it with content specifically about fare changes.
+
+Location: `#s3-p2`, "Fare adjustments" section
+Evidence: "Local residents can check real time arrivals through the online portal."
+Problem: Checking real-time arrivals is unrelated to fare adjustments and duplicates the topic already covered in `#s2-p1`.
+Fix: Replace with content relevant to fare adjustments, or remove the sentence.
+
+Location: `#s3-statuscard`, "Fare adjustments" section
+Evidence: "Riders can check real time arrivals at any station kiosk. Updates post to the schedule page within one business day."
+Problem: The closing sentence duplicates `#s3-p1`'s closing sentence verbatim ("Updates post to the schedule page within one business day."), and the opening sentence repeats the arrivals topic already stated in `#s3-p2` and `#s2-p1`.
+Fix: Rewrite the status card with unique content specific to fare adjustment status, removing the duplicated sentences.
+
+Location: `#s3-linkpara`, link `#s3-link1`
+Evidence: Link text "read the accessibility improvements list" points to `href="/fares/history"`, inside a sentence about "the full list of upcoming adjustments"
+Problem: The link text describes "accessibility improvements," which matches neither the surrounding sentence (fare adjustments) nor the destination URL (`/fares/history`); this is misleading link text, especially problematic for screen reader users who navigate by link text out of context.
+Fix: Change the link text to describe its actual destination/content, e.g. "read the fare adjustment history."
+
+Location: `#s3-customcontrol`
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Problem: A custom `div` reimplements button semantics via `role="button"` and `tabindex="0"` instead of using a native `<button>`, which loses built-in keyboard activation (Space/Enter), and no visible item/list is present on the page that this "Delete item" control could apply to.
+Fix: Replace with a native `<button>` element, and either attach it to a specific item it deletes or remove it if it has no corresponding content on this page.
+
+Location: `#s3-wizard` (`#s3-step1`, `#s3-step2`, `#s3-step3`)
+Evidence: Three `<div class="step">` elements: "Choose a plan", "Enter payment details", "Confirm your order"
+Problem: The steps are marked up as plain, unordered `div`s with no list semantics and no indication of which step is current (no `aria-current`), so assistive technology users can't tell this is a sequential wizard or which step they're on; the payment wizard also has no evident connection to the surrounding fare-adjustment content.
+Fix: Mark the steps up as an ordered list (`<ol><li>`) and add `aria-current="step"` to the active step, or remove the wizard if it isn't part of this page's flow.
+
+Location: `#s3-form`, phone field
+Evidence: Label text "Phone number (required)" for `<input id="phone" type="tel">` with no `required` or `aria-required` attribute
+Problem: The label visually/textually marks the field as required, but the input itself carries no `required`/`aria-required` attribute, so the required state isn't programmatically exposed to assistive technology or enforced by the browser.
+Fix: Add `required` (or `aria-required="true"`) to the `#phone` input to match its label.
+
+Location: `#s3-form`, promo code field
+Evidence: `<input id="promo" type="text" aria-invalid="true">` present in the static markup with no prior user interaction
+Problem: `aria-invalid="true"` is hardcoded from page load rather than being set after a validation failure, so screen reader users will be told the field is invalid before they've entered anything.
+Fix: Remove `aria-invalid="true"` from the initial markup and set it dynamically only after validation determines the entered value is invalid.
+
+Location: `#s3-form`, promo code field and `#s3-form-promo-error`
+Evidence: `<input id="promo" ... aria-invalid="true">` followed by `<span class="error-text" id="s3-form-promo-error">Enter a 6 character code...</span>` with no linking attribute
+Problem: The error message is not associated with the input via `aria-describedby`, so screen reader users focusing the promo field won't hear why it's marked invalid.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the `#promo` input.

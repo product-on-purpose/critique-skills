@@ -1,0 +1,182 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This field takes a maximum of 30 characters.\"",
+      "fix": "Name the specific field in the message text, e.g. \"The company name field takes a maximum of 30 characters.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - first message (field length error)",
+      "severity": 3,
+      "violation": "The message says \"This field\" without naming which field, so a user who encounters it out of visual context (e.g., via scroll, screen reader, or after the page re-renders) cannot tell which input to fix."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" paired with \"Suggested fix: none\"",
+      "fix": "Prevent the error at the source (cap input length or show a live character counter) rather than only reporting it after submission.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - first message (field length error)",
+      "severity": 3,
+      "violation": "A fixed 30-character maximum is fully knowable in advance and can be enforced at input time, yet this predictable error has no corrective affordance offered at all."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Please correct the highlighted field. Error code: 502.\"",
+      "fix": "Split the cases - show a specific field-level message for validation failures, and a distinct \"something went wrong on our end, try again\" message (without the raw status code) for a 502.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - second message (error code 502)",
+      "severity": 3,
+      "violation": "The message asks the user to fix \"the highlighted field\" (implying a user input mistake) while citing 502, a server/gateway error unrelated to field validation, conflating a system failure with a user-correctable mistake and giving no actionable detail."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Placement: \"directly below the shipping address block\" vs. Signal: \"bold text set above the address block at a larger size than its labels\"",
+      "fix": "Reconcile the two fields to a single, consistent position for the message.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - second message (error code 502)",
+      "severity": 3,
+      "violation": "Placement and Signal specify contradictory positions for the same message - one below the address block, the other above it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Suggested fix: \"described, names the one available alternative\" next to Message: \"Reduce the file size and upload it again.\"",
+      "fix": "Either name the specific alternative in the message text, or correct the Suggested fix field to reflect that none is named.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "File upload, receipts - first message (size limit)",
+      "severity": 3,
+      "violation": "The Suggested fix field claims the message names a specific alternative, but the message only gives a generic instruction and never names an actual alternative action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "First message \"Fires: after-field-complete\" vs. second message \"Fires: on-submit\"",
+      "fix": "Fire the format check at after-field-complete, the same point the size check fires, so the user learns about an unsupported format right away.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "File upload, receipts - second message (format restriction)",
+      "severity": 3,
+      "violation": "File format, like file size, is knowable the instant a file is selected, yet this error is deferred until submission while the size error fires immediately - an inconsistent delay for an equally predictable mistake."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Suggested fix: \"selectable, offers a convert and retry action in place of the message\" vs. Message: \"Change this file to one of those formats and upload it again, or select a different receipt.\"",
+      "fix": "Decide whether the button replaces or supplements the text, and make the two fields agree.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "File upload, receipts - second message (format restriction)",
+      "severity": 3,
+      "violation": "The fix is described as replacing the message, but the full instructional text is still specified, leaving it unclear whether the text appears alongside the button or is replaced by it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Placement: \"at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page\"",
+      "fix": "Move the message inline next to the password field, consistent with the other entries.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Password reset, new password - first message (password requirements)",
+      "severity": 3,
+      "violation": "The message is displayed away from the field it describes, forcing the user to scroll between the message and the field, unlike every other entry in the document that places its message directly adjacent to the relevant control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Container: \"toast\" vs. Placement: \"in a dialog centered on the password reset step, over the new password field it blocks\"",
+      "fix": "Pick one pattern - since it is centered and blocks the field, classify it as a dialog, not a toast.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Password reset, new password - second message (expired link)",
+      "severity": 3,
+      "violation": "A toast and a centered, blocking modal dialog are mutually exclusive UI patterns, so Container and Placement describe two incompatible treatments of the same message."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-focus\"",
+      "fix": "Show the expired-link message immediately on page load rather than waiting for field focus.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Password reset, new password - second message (expired link)",
+      "severity": 3,
+      "violation": "The link's expiration is already known before the user interacts with the page, yet the message is withheld until the user focuses the password field, letting them begin filling out a form that cannot succeed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Suggested fix: \"selectable, offers a send a new link button in place of the message\" vs. Message: \"Request a new link and check the inbox again.\"",
+      "fix": "Make the Message and Suggested fix fields consistent about whether the button replaces or accompanies the instructional text.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Password reset, new password - second message (expired link)",
+      "severity": 3,
+      "violation": "As with the receipts format entry, the fix is described as replacing the message, but the message field still carries the full manual instruction, so the two fields disagree on what the user actually sees."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message: \"The last changes were not saved and cannot be recovered.\" vs. \"Input on resubmission: preserved\"",
+      "fix": "Align the two fields - either drop the \"cannot be recovered\" claim or mark the input as not preserved.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "Account settings, username",
+      "severity": 3,
+      "violation": "If the user's input is preserved and still present on resubmission, the change was not actually lost, directly contradicting the message's claim that it \"cannot be recovered.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-blur\"",
+      "fix": "Trigger this message only after an actual save attempt fails (e.g., on-submit or the save action's error callback), not on simple blur.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "Account settings, username",
+      "severity": 3,
+      "violation": "A severe claim that a save \"was not saved and cannot be recovered\" is triggered merely by the user leaving the field, which does not necessarily correspond to any save attempt having occurred."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\"",
+      "fix": "Mark this entry's Predictable mistake field as \"no,\" consistent with the other system-failure entry (the expired reset link).",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "Account settings, username",
+      "severity": 3,
+      "violation": "Unlike the other entries, where \"predictable mistake\" marks a foreseeable user input error (wrong length, wrong format), an unrecoverable save failure is a system/infrastructure failure outside the user's control, making this label inconsistent with how the field is used elsewhere."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T05:26:03Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 14,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

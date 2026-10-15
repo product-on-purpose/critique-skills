@@ -1,0 +1,19 @@
+Location: ## signing_secret section
+Evidence: "The signing_secret field accepts a string used to verify the payload signature on receipt."
+Problem: The doc never states the signing algorithm (e.g., HMAC-SHA256) or where the resulting signature is placed (e.g., a specific header name), so an implementer cannot actually verify a payload.
+Fix: Add the algorithm used and the exact header/field name where the computed signature is sent with each request.
+
+Location: ## retry_policy section
+Evidence: "The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential."
+Problem: The three values are named but never defined — there's no information on retry counts, delay intervals, backoff multiplier, or max duration, so none of the options can be implemented or predicted from this reference.
+Fix: Document the concrete behavior of each value (e.g., number of attempts and delay schedule for linear vs exponential, and confirm "none" means zero retries).
+
+Location: ## endpoint_url section
+Evidence: "The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert."
+Problem: It doesn't say whether the field is required, what timeout is applied, or what response is considered a successful delivery (e.g., does a non-2xx response trigger retry_policy?), leaving delivery semantics undefined.
+Fix: State whether the field is required, the request timeout, and which response codes count as success vs. failure triggering retries.
+
+Location: Document as a whole
+Evidence: The document contains only the three sections "## endpoint_url", "## signing_secret", and "## retry_policy".
+Problem: A "Webhook delivery reference" never describes the actual webhook payload (its structure, fields, or an example), which is essential information for anyone consuming these webhooks.
+Fix: Add a payload schema section with field definitions and a sample JSON payload.

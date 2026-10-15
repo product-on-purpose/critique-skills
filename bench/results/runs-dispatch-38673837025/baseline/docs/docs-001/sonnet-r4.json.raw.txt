@@ -1,0 +1,29 @@
+Location: Title, "# Configure alert thresholds"
+Evidence: "Configure alert thresholds" (plural) vs. "select the rule you want to adjust" (singular, per-rule workflow)
+Problem: The title implies configuring multiple thresholds at once, but the entire procedure addresses one rule's threshold at a time, creating a scope mismatch.
+Fix: Retitle to "Configure an alert threshold" or add a line noting the steps must be repeated per rule.
+
+Location: Document overall, before "## Open alert settings"
+Evidence: No section or sentence mentions required role, permission, or access level to edit alert rules.
+Problem: A reader without edit permissions can follow every step and only discover they're blocked at the end, with no guidance given.
+Fix: Add a short "Before you begin" note specifying the permission/role needed to modify alert thresholds.
+
+Location: "## Open alert settings", second sentence
+Evidence: "A threshold is the numeric boundary that triggers an alert once a metric crosses it."
+Problem: This is conceptual/definitional content inserted into a how-to procedure (frontmatter declares `mode: how-to`), breaking the step-by-step flow with an explanation rather than an action.
+Fix: Remove this sentence from the how-to, or move it to a separate conceptual/reference document and link to it instead.
+
+Location: "## Set the new threshold", first paragraph
+Evidence: "confirm the unit matches the metric in use"
+Problem: The instruction doesn't say how to check the unit or what to do if it doesn't match, making the step non-actionable.
+Fix: Specify the mechanism, e.g., "Check the unit shown next to the field and ensure it matches the unit displayed on the metric's chart (e.g., ms, %, count); if it doesn't, select the correct unit from the dropdown."
+
+Location: "## Set the new threshold", second sentence
+Evidence: "This is because the console applies the new threshold to every future evaluation of this rule."
+Problem: Like the earlier definition, this is explanatory "why" content breaking the how-to mode, and it doesn't logically justify the preceding instruction about matching units — it's a non sequitur in context.
+Fix: Remove the sentence, or rewrite it so it actually explains why unit matching matters (e.g., mismatched units cause incorrect evaluation), and relocate such rationale to a conceptual doc if the mode must stay purely procedural.
+
+Location: "## Save and verify"
+Evidence: "Save the rule and open the rule list to confirm the new threshold appears there."
+Problem: No guidance is given for what to do if the new value doesn't appear, leaving the verification step without an error-recovery path.
+Fix: Add a brief troubleshooting line, e.g., "If the updated threshold isn't shown, refresh the page or re-open the rule to check for a save error."

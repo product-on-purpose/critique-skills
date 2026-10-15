@@ -1,0 +1,44 @@
+Location: Signup form, email field, first entry — "Predictable mistake" field
+Evidence: Message is "The connection dropped before this finished." paired with "Predictable mistake: yes"
+Problem: A dropped connection is a network/system failure, not a predictable user input mistake, so labeling it "yes" misclassifies the error and will mis-route it through whatever handling the taxonomy applies to predictable mistakes.
+Fix: Change this entry's "Predictable mistake" value to "no" to match the other system-failure entry (checkout, "Something went wrong"), which is correctly marked "no".
+
+Location: Signup form, email field, first entry — "Fires" field
+Evidence: "Fires: on-blur" for the message "The connection dropped before this finished."
+Problem: A connection dropping is something that would be detected during a submission attempt, not when the user leaves the email field; on-blur is not a plausible trigger for this failure mode.
+Fix: Change "Fires" to "on-submit" for this entry, consistent with the other submission-time failure (checkout, "Something went wrong").
+
+Location: Signup form, email field, first entry — "Suggested fix" field
+Evidence: "Suggested fix: selectable, offers the one available next step as a direct action"
+Problem: The phrasing doesn't identify what "selectable" applies to (the message? a button? the container?), making the recommendation unimplementable as written.
+Fix: Rewrite as, e.g., "Add a selectable retry action (e.g., a 'Try again' button) directly in the message so the user can take the next step without re-navigating."
+
+Location: Checkout form, payment method, first entry — "Container" field
+Evidence: Placement reads "in a banner directly above the payment method selector, staying on screen until another method is chosen" while Container reads "inline"
+Problem: The placement description explicitly calls this a banner, which contradicts the "inline" container classification given to it.
+Fix: Change "Container" to "banner" for this entry to match the placement description.
+
+Location: Checkout form, payment method, first entry — "Message" field
+Evidence: "Something went wrong. Contact support if this continues."
+Problem: The message gives the user no information about what failed or what they can do right now (beyond waiting for recurrence), which is weak for a payment failure where users need to decide whether to retry or pick another method.
+Fix: Name the likely cause if known (e.g., "Your payment couldn't be processed") and offer an immediate action ("Try again or choose a different payment method") rather than deferring to support only after repeated failures.
+
+Location: Checkout form, payment method, second entry — "Fires" field
+Evidence: "Fires: mid-keystroke" for the message "The expiry date on this card has passed."
+Problem: Validating "has passed" while the user is still typing the date will trigger on incomplete input (e.g., a partially-typed year), producing false or premature errors before the user has finished entering a valid date.
+Fix: Change "Fires" to "on-blur" (or on-submit) so the expiry check only runs once the full date has been entered.
+
+Location: Profile settings, phone number, first entry — "Message" field
+Evidence: "You keep entering the wrong value. Re-enter it to continue."
+Problem: The message never states what is actually wrong with the value (format, length, invalid characters, etc.), leaving the user unable to correct it other than by guessing.
+Fix: Replace with a specific description of the validation rule being violated, e.g., "Enter a phone number using digits only, including area code."
+
+Location: Profile settings, phone number, first entry — "Message" and "Fires" fields
+Evidence: Message says "You keep entering the wrong value" while "Fires: on-blur" has no stated repeat-attempt condition
+Problem: The wording presumes repeated failed attempts, but the trigger fires on every blur unconditionally, so it could display this accusatory "keep entering" language on the very first mistake.
+Fix: Either gate this message behind a tracked failure count (e.g., show only after the second consecutive on-blur failure) or reword the message to not presume repetition.
+
+Location: Profile settings, phone number, second entry — "Input on resubmission" field
+Evidence: "Input on resubmission: cleared" — the only entry in the document with this value; every other entry reads "preserved"
+Problem: Clearing the phone number after a duplicate-account conflict forces the user to retype the number they just entered (e.g., to reference it when contacting support or trying a different number), which is inconsistent with the preserved-input pattern used everywhere else and offers no apparent benefit.
+Fix: Change to "preserved" unless there is a specific security/privacy reason to clear it, in which case document that reason explicitly in the entry.

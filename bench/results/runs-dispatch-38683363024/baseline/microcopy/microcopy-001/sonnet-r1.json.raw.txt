@@ -1,0 +1,59 @@
+Location: Signup form, email field, first entry ("The connection dropped before this finished.") — "Predictable mistake" line
+Evidence: "Predictable mistake: yes"
+Problem: A dropped connection is a network/system failure, not a user mistake, yet it's classified the same way as a genuine input error; the analogous system failure in Checkout ("Something went wrong") is correctly marked "no."
+Fix: Change this field to "no" to match how the document treats other non-user-caused failures.
+
+Location: Signup form, email field, first entry ("The connection dropped before this finished.") — "Fires" line
+Evidence: "Fires: on-blur"
+Problem: On-blur fires when a field loses focus, which makes sense for validating entered content, but a dropped connection happens during a submission attempt, not when the user leaves the field.
+Fix: Change the trigger to "on-submit" (or "on-submit-failure") to reflect when this error actually occurs.
+
+Location: Signup form, email field, first entry ("The connection dropped before this finished.") — "Placement" line
+Evidence: "directly below the email input field"
+Problem: The message is about a failed network request, not about the email value itself, so anchoring it under the email field misleadingly suggests the email input is the source of the problem.
+Fix: Reposition as a page-level or form-level banner/toast, consistent with how the equally generic "Something went wrong" message in Checkout is placed in a banner rather than under a specific field.
+
+Location: Signal field, compare Signup entries ("one step bolder and larger than the field label") to Checkout/Profile entries ("bold text set larger than the field label")
+Evidence: "one step bolder and larger than the field label, icon" vs. "bold text set larger than the field label, icon"
+Problem: The same visual emphasis is described with different wording in different sections, making it unclear whether the signal treatment is actually identical across the product or whether this is an undocumented inconsistency.
+Fix: Standardize on one phrase for this signal across all entries, or explicitly note where the treatment genuinely differs and why.
+
+Location: Checkout form, payment method, first entry ("Something went wrong...") — "Container" line
+Evidence: Placement reads "in a banner directly above the payment method selector," but Container reads "inline"
+Problem: The Placement text explicitly describes a banner, while the Container field classifies it as "inline," which directly contradicts the placement description and is the only entry where this happens.
+Fix: Correct the Container value to "banner" (or whatever discrete category matches the actual UI), or revise Placement if "inline" is in fact correct.
+
+Location: Checkout form, payment method, first entry ("Something went wrong...") — "Placement" dismissal condition
+Evidence: "staying on screen until another method is chosen"
+Problem: A generic "something went wrong" failure (e.g., a server error or timeout) has no logical connection to which payment method is selected, so requiring the user to pick a different method to dismiss it is an unjustified and confusing forced action.
+Fix: Dismiss the banner on retry or after a successful submission attempt, not on selection of a different payment method, unless this message is actually meant for a payment-method-specific failure.
+
+Location: Checkout form, payment method, first entry ("Something went wrong...") — "Suggested fix" line
+Evidence: "Suggested fix: none"
+Problem: This message is at least as non-actionable as the Signup "connection dropped" message, which was given a suggested fix for lacking a direct next step; applying "none" here is an inconsistent standard.
+Fix: Either add a suggested fix (e.g., an explicit retry action) to match the treatment given to the Signup entry, or explain why this vague message needs no improvement while the other does.
+
+Location: Checkout form, payment method, second entry ("The expiry date on this card has passed...") — "Fires" line
+Evidence: "Fires: mid-keystroke"
+Problem: Validating whether an expiry date "has passed" requires a complete date; checking mid-keystroke will flag the field as expired while the user is still typing a valid future date, producing false positives.
+Fix: Change the trigger to on-blur (or on-submit), consistent with how the rest of the document handles date/format checks.
+
+Location: Profile settings, phone number, first entry ("You keep entering the wrong value...")
+Evidence: "You keep entering the wrong value. Re-enter it to continue."
+Problem: The message never states what is wrong with the value (format, length, allowed characters) and reads as blaming the user, unlike the Signup email-format entry, which is marked as an equally predictable mistake but gives specific, concrete guidance with an example.
+Fix: Replace with a specific description of the expected format (e.g., digit count, allowed characters) and drop the accusatory framing.
+
+Location: Profile settings, phone number, first entry ("You keep entering the wrong value...") — "Suggested fix" line
+Evidence: "Suggested fix: none"
+Problem: Given the vagueness identified above, marking "none" here is inconsistent with the document's own standard of flagging non-specific, non-actionable messages elsewhere (e.g., the Signup connection-drop entry).
+Fix: Add a suggested fix calling for specific guidance on the expected phone number format.
+
+Location: Profile settings, phone number, second entry ("This phone number is already on another account...") — "Predictable mistake" line
+Evidence: "Predictable mistake: no"
+Problem: A phone number already registered to another account is a specific, well-understood conflict (analogous to "email already in use"), not an unpredictable system failure, so classifying it the same way as truly unpredictable errors (e.g., "Something went wrong," also marked "no") is inconsistent.
+Fix: Change this field to "yes" to match how other specific, foreseeable input conflicts are classified.
+
+Location: Profile settings, phone number, second entry ("This phone number is already on another account...") — "Input on resubmission" line
+Evidence: "Input on resubmission: cleared"
+Problem: This is the only entry in the entire document where input is cleared rather than preserved, even though the entered phone number is validly formatted and only conflicts with another account; clearing it forces the user to retype a number they entered correctly.
+Fix: Change this to "preserved" to match every other entry, unless there is an undocumented reason specific to this case that should be stated explicitly.

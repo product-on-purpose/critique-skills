@@ -1283,9 +1283,11 @@ and the repository did not have.
 - **Target:** `bench/results/results.json`, `bench/report.py`, `bench/variance.py`,
   `scripts/gen-site.mjs`, `bench/README.md`
 - **Change:** `bench/README.md` says `results.json` "carries every computed number for every
-  committed run set". Three committed run directories are in no entry of it:
+  committed run set". Seven committed run directories are in no entry of it:
   `runs-dispatch-31988100372/` (haiku, 2026-08-17), `runs-dispatch-34917562578/` and
-  `runs-dispatch-34917728793/` (sonnet, 2026-09-15). Their figures are quoted in prose instead, in
+  `runs-dispatch-34917728793/` (sonnet, 2026-09-15), and `runs-dispatch-38673834829/`,
+  `runs-dispatch-38673837025/`, `runs-dispatch-38678419907/` and `runs-dispatch-38683363024/` (sonnet,
+  2026-10-14, one each for accessibility, docs, argument and microcopy). Their figures are quoted in prose instead, in
   ADR 0031, `bench/results/README.md`, `verdicts.md` and the changelog. Done: either every reader of
   `results.json` keys cells on `run_set` as well as `(skill, skill_version, model, domain)` and the
   dispatch entries are added, with a ruling on which run set each published table shows; or the rule
@@ -1296,7 +1298,7 @@ and the repository did not have.
   entries sharing every field but `lane` on 2026-09-14. Adding them without the reader changes would
   repeat both.
 - **Evidence:** `bench/README.md` "Results"; `bench/results/README.md` "Known issues in the
-  measurement tooling"; the three `runs-dispatch-*` directories; `bench/run_bench.py:1112`, which
+  measurement tooling"; the seven `runs-dispatch-*` directories outside it; `bench/run_bench.py:1112`, which
   defaults `--results-out` to `bench/results/results.json` and scores only the new run directory into
   it, and `bench.yml`'s publish step (`git add bench/results`), which commits that overwrite to every
   `bench-results/*` branch. The cheap half of this item is passing `--results-out` into the run

@@ -1,0 +1,64 @@
+Location: <title id="head-title"> element
+Evidence: "Cascadia Regional Transit: Route Updates"
+Problem: The page title promises "Route Updates," but none of the document's sections (Station updates, Schedule changes, Fare adjustments) actually describe route changes, so the title misrepresents the page's content.
+Fix: Change the title to match the actual content, e.g. "Cascadia Regional Transit: Rider Service Updates."
+
+Location: s1-p1 and s1-p2, in "Station updates"
+Evidence: "Station staff can also help with the same request in person." appears identically in both paragraphs.
+Problem: The identical sentence is reused verbatim for two different actions (reviewing a schedule vs. reporting an issue), making the copy feel templated and redundant rather than written for each instruction.
+Fix: Write a distinct follow-up sentence for each paragraph, or delete the repeated sentence from one of them.
+
+Location: s1-img1 image
+Evidence: alt="Crews repainting the accessible parking spaces near the station entrance."
+Problem: The image's alt text describes parking-lot repainting, which is unrelated to the surrounding "Station updates" paragraphs about checking schedules and reporting issues, so it reads as mismatched or misplaced content.
+Fix: Replace the image with one relevant to the surrounding text (e.g., a kiosk), or move it under a heading actually about accessibility/parking work.
+
+Location: s2-p1, in "Schedule changes"
+Evidence: "Passengers can check real time arrivals through the online portal. Station staff can also help with the same request in person."
+Problem: The same "Station staff can also help..." boilerplate recurs a third time, now attached to an online self-service action, which is a non sequitur (staff assisting "in person" with an online portal check) and confirms the sentence is copy-pasted rather than purpose-written.
+Fix: Remove the sentence here or replace it with wording appropriate to an online action.
+
+Location: s2-table1
+Evidence: `<table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>...`
+Problem: The table has no `<caption>`, so it lacks an accessible name for screen-reader users browsing by table list.
+Fix: Add a `<caption>` such as "Current zone status."
+
+Location: s3-p1 and s3-statuscard, in "Fare adjustments"
+Evidence: "Updates post to the schedule page within one business day." follows both "report a service issue by calling rider services" and "check real time arrivals at any station kiosk."
+Problem: The identical follow-up sentence is paired with two unrelated actions; pairing it with the instantaneous "check real time arrivals" action is a non sequitur, since checking arrivals doesn't produce an update that "posts... within one business day."
+Fix: Write a context-appropriate follow-up sentence for each card instead of reusing the same clause.
+
+Location: s3-linkpara, anchor s3-link1
+Evidence: `<a href="/fares/history">read the accessibility improvements list</a>` inside the sentence "For the full list of upcoming adjustments, ..."
+Problem: The link text ("accessibility improvements list") does not match its destination (a fare-adjustment history page) or the surrounding sentence about fare adjustments, which is misleading, especially for screen-reader users navigating by link text.
+Fix: Change the link text to something accurate, e.g. "read the full list of fare adjustments."
+
+Location: s3-customcontrol div, in "Fare adjustments"
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item">`
+Problem: A "Delete item" control appears with no explanation of what item it deletes, and it is built as a div with role="button" instead of a native `<button>`, risking missing default keyboard activation behavior.
+Fix: Clarify (or remove, if placeholder) what the control deletes, and implement it as a native `<button>` element.
+
+Location: s3-wizard, in "Fare adjustments"
+Evidence: `<div class="wizard-steps">` containing plain `<div class="step">` elements: "Choose a plan," "Enter payment details," "Confirm your order"
+Problem: The wizard has no lead-in text explaining its purpose and no current-step indicator (no `aria-current`, no list semantics), so sighted and assistive-technology users alike can't tell which step is active or why it's there.
+Fix: Add introductory text, mark the steps up as an ordered list, and indicate the active step with `aria-current="step"`.
+
+Location: s3-form, email field (s3-form-email-label / #email)
+Evidence: `<label for="email" id="s3-form-email-label">Email address</label>` with no "(required)"/"(optional)" qualifier, unlike the phone label that follows
+Problem: The form states phone is required via label text but gives no indication whether email is required or optional, leaving the requirement status inconsistent across fields.
+Fix: Add an explicit "(required)" or "(optional)" qualifier to the email label.
+
+Location: s3-form, phone field (s3-form-phone-label / #phone)
+Evidence: `<label for="phone">Phone number (required)</label>` paired with `<input id="phone" type="tel">`
+Problem: The label text says the field is required, but the input has no `required` or `aria-required="true"` attribute, so assistive technology and native form validation won't treat it as required.
+Fix: Add `required` (and/or `aria-required="true"`) to the phone input.
+
+Location: s3-form, promo code field (#promo)
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: `aria-invalid` is hardcoded to "true" in the static markup, so the field is announced as invalid before the user has entered anything or submitted the form.
+Fix: Set `aria-invalid="false"` or omit it by default, applying "true" only after a failed validation.
+
+Location: s3-form, promo code field and error text (#promo / s3-form-promo-error)
+Evidence: `<input id="promo" ... aria-invalid="true">` followed by `<span class="error-text" id="s3-form-promo-error">Enter a 6 character code...</span>` with no linking attribute
+Problem: The error message is not associated with the input via `aria-describedby`, so screen reader users focused on the promo field won't hear why it's flagged invalid.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the `#promo` input.

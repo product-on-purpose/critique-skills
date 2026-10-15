@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Check the message again and enter all six.\"",
+      "fix": "Reword to cover the field itself, e.g. \"Enter all 6 digits of the code. If you're not sure you have the right code, check the message again.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - first message block (\"Verification codes are 6 digits long...\")",
+      "severity": 3,
+      "violation": "The remediation assumes the only cause of a 5-digit entry is misreading the original SMS/email, but a short entry is just as likely caused by a dropped keystroke, autofill truncation, or a copy-paste error in the field itself - the instruction doesn't match all realistic causes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" paired with \"Suggested fix: none\"",
+      "fix": "Add a preventive fix, such as limiting the input field to 6 characters or auto-advancing/validating as digits are typed, so the error condition can't occur.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - first message block",
+      "severity": 3,
+      "violation": "A mistake already classified as predictable (users entering too few digits) is given no preventive fix, even though the entry is exactly the kind of case design intervention should target (e.g., constraining input length)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This verification code expired 10 minutes after it was sent, which stops an intercepted code from being reused later. Request a new code and enter it here.\"",
+      "fix": "Lead with the instruction and demote the rationale, e.g. \"This code expired. Request a new one.\" with the security explanation moved to secondary/help text if it's needed at all.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - second message block (\"This verification code expired...\")",
+      "severity": 3,
+      "violation": "The one actionable instruction (request a new code) is buried inside a longer sentence explaining security rationale, adding reading burden during a time-sensitive task."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: selectable, offers a resend code button in place of the message\"",
+      "fix": "Rewrite as a complete instruction, e.g. \"Replace the message with a resend-code button the user can select.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - second message block, \"Suggested fix\" field",
+      "severity": 3,
+      "violation": "\"Selectable\" has no clear referent - it isn't stated whether the message text, an icon, or something else becomes selectable - leaving the suggested fix ambiguous to implement."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Request a new code and enter it here.\" / \"Input on resubmission: preserved\"",
+      "fix": "Clear the field automatically once the code is flagged as expired (or once a new code is sent), instead of preserving the invalid value.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - second message block, \"Input on resubmission\" field",
+      "severity": 3,
+      "violation": "Preserving the expired code's value in the field contradicts the instruction to enter a newly requested code - the user must notice and manually clear stale input, and resubmitting without doing so just reproduces the same error."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This promo code ended on 30 June.\"",
+      "fix": "Include the year, e.g. \"This promo code ended on 30 June 2026.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Billing, promo code - first message block (\"This promo code ended on 30 June...\")",
+      "severity": 3,
+      "violation": "The date omits a year, so the message is ambiguous about which expiration date it refers to, especially around year boundaries or if read well after the fact."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-submit\" vs \"Fires: on-blur\"",
+      "fix": "Align the timing for both expiration checks, or document the specific reason for the difference (e.g., security concerns with validating a verification code before submit).",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Compare Two-factor setup, verification code - second message block (\"Fires: on-submit\") with Billing, promo code - first message block (\"Fires: on-blur\")",
+      "severity": 3,
+      "violation": "Both messages report an expiration condition, yet one is surfaced immediately on leaving the field and the other only after submission, with no stated reason for the differing timing - inconsistent behavior for logically parallel cases."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" paired with \"Suggested fix: none\"",
+      "fix": "Add a preventive fix, such as disabling/flagging incompatible promo codes as soon as the plan selection is known, or filtering which codes are offered based on the selected plan.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Billing, promo code - second message block (\"This promo code applies to annual plans...\")",
+      "severity": 3,
+      "violation": "As with the verification-code length error, a mistake already identified as predictable (entering a plan-specific code on the wrong plan) is left without any preventive fix."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Signal: bold text set larger than the field label, icon\" is repeated identically in every one of the four entries",
+      "fix": "Vary signal strength (e.g., weight, icon type) by severity, or explicitly note in the document why uniform treatment across all four cases is intentional.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "\"Signal\" field across all four message blocks",
+      "severity": 3,
+      "violation": "A simple format error, a security-driven expiration, and two business-rule mismatches all receive identical visual weight, giving users no way to distinguish severity or urgency between error types."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-004.md",
+    "artifact_sha256": "c8f58456a4deb36595b0ac00fe364b68e80445e939d7293d2db8d8f1a42ac91b",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T06:24:38Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

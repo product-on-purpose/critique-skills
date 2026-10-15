@@ -1,0 +1,50 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "The only wayfinding mechanisms on the page are #nav-link1 (\"Plan a trip\") and #nav-link2 (\"Accessibility\") inside #nav, plus #footer-link1 and #footer-link2 in #footer for privacy and terms. No search form, sitemap link, or breadcrumb trail appears anywhere in the markup.",
+      "fix": "Add a second independent mechanism, such as a breadcrumb trail reflecting the page's place in the site or a site search control, that does not merely duplicate the links already in #nav.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#nav, <nav> landmark, only navigation mechanism on the page",
+      "severity": 3,
+      "violation": "The page relies on exactly one navigation mechanism (the primary nav menu) with no site search, sitemap, or breadcrumb trail, and the page is not a step in a linear process that would exempt it, so a reader has fewer than the two independent ways to locate this page that the criterion requires."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> is immediately followed by <span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span>, with no aria-describedby on #promo and no other programmatic link between the input and the span.",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to #promo so the existing error text is announced together with the field's invalid state.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#promo, <input type=\"text\"> control, line 67",
+      "severity": 2,
+      "violation": "The invalid field is marked with aria-invalid but carries no programmatic association (aria-describedby or equivalent) to the error text that names the problem, so a screen-reader user focused on the field is told only that it is invalid, not what the 6-character rule requires, without separately locating the adjacent span."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "393fe58fac52d6953cd372944cd352ef9181df5c42ae778bd6d17214acb080c7",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-15T04:45:50Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

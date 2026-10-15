@@ -1,0 +1,54 @@
+Location: "Search results, no matches" section, first message block — the "Message" line versus the section heading
+Evidence: Heading reads "Search results, no matches" but the message text is "This request timed out before it could finish."
+Problem: A timeout is a different failure mode from "no matches" — the message doesn't describe zero results, so it's filed under the wrong scenario heading.
+Fix: Move this message to its own heading (e.g., "Search results, request failed") or broaden the section heading to cover both zero-result and error states.
+
+Location: "Search results, no matches" section, first message block, "Signal" field
+Evidence: "bold heading text where the first result would sit, text-label"
+Problem: "where the first result would sit" restates the Placement field ("in place of the results list") instead of describing the visual signal, making the field redundant with Placement.
+Fix: Limit Signal to the visual treatment only, e.g. "bold heading text, text-label," and leave positioning to the Placement field.
+
+Location: "Search results, no matches" section, first message block, "Fires" field
+Evidence: "Fires: on-submit"
+Problem: A timeout fires after the request has been pending and failed to complete in time, not at the moment of submission, so labeling it "on-submit" conflates it with the initial loading state.
+Fix: Use a distinct trigger value such as "on-timeout" or "on-error" instead of "on-submit."
+
+Location: "Search results, no matches" section, first message block, "Suggested fix" field
+Evidence: "Suggested fix: none"
+Problem: A timeout is typically recoverable by retrying, yet no retry action is offered, leaving the user stuck with no inline way to recover.
+Fix: Change to something like "selectable, offers a try again button."
+
+Location: "Search results, no matches" section, second message block, "Predictable mistake" field
+Evidence: "No orders fall inside the selected date range... / Predictable mistake: no"
+Problem: Choosing filter combinations (especially a narrow date range) that exclude all orders is a common, foreseeable outcome, so marking this "no" misses the case for proactive prevention.
+Fix: Mark as "yes" and pair it with a prevention measure, e.g. a live count of matching orders shown before submit.
+
+Location: "Search results, no matches" section, second message block, "Input on resubmission" field
+Evidence: "Input on resubmission: not-applicable" alongside "Suggested fix: selectable, offers a clear filters button beside the message"
+Problem: Offering a "clear filters" action implies the existing filter inputs persist after the failed search, which makes input-on-resubmission state applicable (preserved), contradicting the "not-applicable" label.
+Fix: Change the field to "preserved" to reflect that filters remain set until the user explicitly clears them.
+
+Location: "Search results, no matches" section, second message block, "Suggested fix" field
+Evidence: "Signal: ... with no visual cue that this one demands action" vs. "Suggested fix: selectable, offers a clear filters button beside the message"
+Problem: The Signal field explicitly diagnoses that the message's styling gives no cue it demands action, but the suggested fix only adds a button without changing that styling, so the diagnosed problem is left unresolved.
+Fix: Have the fix also change the visual treatment (e.g., warning color/icon) so the message reads as actionable, not just add a button.
+
+Location: "Notification center, sync status" section, "Message" field
+Evidence: "so syncing does not spend a data allowance"
+Problem: "Spend a data allowance" is awkward, non-idiomatic phrasing that may read as unclear to users.
+Fix: Reword to something like "so it doesn't use your data allowance" or "to avoid using your mobile data."
+
+Location: "Notification center, sync status" section, "Signal" field versus "Placement" field
+Evidence: "Placement: in the notification list, directly under the sync status row" vs. "Signal: bold text at the top of the notification list, icon"
+Problem: The message can't be both "directly under the sync status row" and "at the top of the notification list" unless the sync status row is guaranteed to be first, which the document never states — the two fields contradict each other.
+Fix: Reconcile the fields — either state the sync status row is always first, or rewrite Signal to describe styling relative to the sync status row rather than the list's top.
+
+Location: "Notification center, sync status" section, "Fires" field
+Evidence: "Fires: on-focus" paired with "Select resume to sync now."
+Problem: Tying this time-sensitive, action-prompting message to the notification list gaining focus means sync could stay paused indefinitely if the user never opens that list, undermining the "sync now" urgency the message implies.
+Fix: Trigger the message when the sync-paused state actually occurs (e.g., "on-state-change"), or add an indicator outside the list that prompts the user to check it.
+
+Location: "Notification center, sync status" section, "Suggested fix" field versus "Message" field
+Evidence: "Select resume to sync now." vs. "Suggested fix: selectable, offers a resume now action inside the notification"
+Problem: The message text names the action "resume" while the Suggested fix field calls it "resume now," an inconsistent action label between the two fields that could lead to a mismatched implementation.
+Fix: Use one consistent label for the action in both the message text and the Suggested fix description (e.g., settle on "Resume").

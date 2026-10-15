@@ -1,0 +1,49 @@
+Location: Search results, no matches — first message block
+Evidence: Heading "Search results, no matches" paired with Message: "This request timed out before it could finish."
+Problem: The message describes a failed/timed-out request, not an empty-results state, so it is filed under a heading that doesn't describe what it is.
+Fix: Give this message its own heading (e.g., "Search results, request failed") separate from the no-matches scenario below it.
+
+Location: Search results, no matches — first message block, Signal field
+Evidence: "bold heading text where the first result would sit, text-label"
+Problem: Styling a timeout error as heading text in the exact slot where a real result would appear risks it being read as content (e.g., a category label) rather than a system error, since nothing distinguishes it as an error.
+Fix: Add an error-specific visual cue (icon or distinct color) so the message can't be mistaken for actual result content.
+
+Location: Search results, no matches — first message block, "Input on resubmission" field
+Evidence: "Input on resubmission: not-applicable"
+Problem: A timeout is precisely the case where the user would want to retry the same search, so marking input handling on resubmission as not-applicable contradicts the obvious recovery path for this error.
+Fix: Specify that query/filter inputs are retained for retry rather than marking this not-applicable.
+
+Location: Search results, no matches — first message block, "Suggested fix" field
+Evidence: "Suggested fix: none"
+Problem: A failed request is left with no remediation, while the less severe no-matches message right below it gets an actionable fix (clear filters button); the more disruptive error is treated as lower priority.
+Fix: Add a retry action (e.g., a "Try again" button) as the suggested fix.
+
+Location: Search results, no matches — second message block ("No orders fall inside the selected date range..."), Signal field
+Evidence: "styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action"
+Problem: The Signal field itself identifies a styling defect (no visual cue that action is needed), but the Suggested fix only adds a button and does not address the styling gap called out.
+Fix: Update the suggested fix to also change the banner's visual treatment (icon/color) so it's distinguishable from purely informational banners, not just append a button.
+
+Location: Search results, no matches — second message block, "Predictable mistake" field
+Evidence: "Predictable mistake: no"
+Problem: Choosing a date range or filter combination that excludes all orders is a common, foreseeable user action, so labeling it "no" misclassifies the scenario.
+Fix: Change the value to "yes" and apply whatever preventive handling predictable mistakes receive elsewhere (e.g., warn before submission).
+
+Location: Notification center, sync status — Message field
+Evidence: "Sync is paused while this device is on a metered connection, so syncing does not spend a data allowance. Select resume to sync now."
+Problem: The message justifies pausing sync as a way to avoid spending the data allowance, then immediately invites the user to resume syncing now, which would spend that same allowance — a self-contradicting instruction.
+Fix: Reword to make the tradeoff explicit (e.g., "Select resume to sync now using mobile data") or offer a wait-for-Wi-Fi alternative instead of only "resume now."
+
+Location: Notification center, sync status — Placement vs Signal fields
+Evidence: Placement: "directly under the sync status row"; Signal: "bold text at the top of the notification list, icon"
+Problem: The two fields place the same message in two different locations — under the sync status row versus at the top of the list.
+Fix: Reconcile Placement and Signal to describe one consistent location.
+
+Location: Notification center, sync status — Fires field
+Evidence: "Fires: on-focus"
+Problem: Firing on every focus of the notification list (rather than when the paused state actually begins) will cause this status message to reappear repeatedly for an ongoing condition, creating redundant interruptions.
+Fix: Change the trigger to fire on state change (e.g., when sync transitions to paused) instead of on-focus.
+
+Location: Notification center, sync status — Message field vs Suggested fix field
+Evidence: Message: "Select resume to sync now."; Suggested fix: "selectable, offers a resume now action inside the notification"
+Problem: The message copy already instructs the user to "select resume," implying an interactive control exists, but the Suggested fix reveals that making it selectable with a resume action is still a proposed change — meaning the copy promises functionality the current design doesn't have.
+Fix: Either hold off on the "Select resume" wording until the interactive action is implemented, or implement the selectable resume action to match what the copy already states.

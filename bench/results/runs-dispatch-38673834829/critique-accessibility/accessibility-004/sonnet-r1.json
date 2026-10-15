@@ -1,0 +1,50 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "The entire document's only navigation structure is <nav id=\"nav\"><a href=\"/plan\" id=\"nav-link1\">Plan a trip</a><a href=\"/accessibility\" id=\"nav-link2\">Accessibility</a></nav>; no search form, sitemap link, or breadcrumb trail element appears anywhere else in the markup, and the footer carries only <a href=\"/privacy\"> and <a href=\"/terms\">.",
+      "fix": "Add a second independent mechanism, such as a breadcrumb trail (for example Home followed by Rider service updates) placed before #main-h1, or a site search form in #header, so a reader who lands directly on this page has more than one way to find it.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#nav, <nav> element, the page's only navigation mechanism",
+      "severity": 3,
+      "violation": "WCAG-2.4.5 requires at least two independent mechanisms capable of leading a reader to this page, and this content page (not a step in a linear process) exposes exactly one, the primary navigation menu, with no site search, sitemap, or breadcrumb trail anywhere in the markup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> is immediately followed by <span class=\"error-text\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span> with no aria-describedby attribute on #promo referencing #s3-form-promo-error, and no other attribute on #promo associating it with that span.",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to #promo so assistive technology announces the error text when the field receives focus.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#promo, <input> control, invalid promo-code field",
+      "severity": 2,
+      "violation": "WCAG-3.3.1 requires the nature of an identified error to be described to the reader in text as part of encountering the invalid item; the description text exists but carries no programmatic association to #promo, so a screen-reader user who tabs to the field hears only that it is invalid and has no reliable way to hear why."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "393fe58fac52d6953cd372944cd352ef9181df5c42ae778bd6d17214acb080c7",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-15T04:26:26Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
