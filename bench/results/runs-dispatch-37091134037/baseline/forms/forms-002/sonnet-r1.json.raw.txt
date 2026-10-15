@@ -1,0 +1,74 @@
+Location: `<head>` section
+Evidence: `<meta charset="utf-8"><title>Join Meridian Outfitters</title>` — no `<meta name="viewport">` tag present
+Problem: Without a viewport meta tag, the page will render at desktop width on mobile browsers, making this long form very hard to use on phones.
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to the `<head>`.
+
+Location: `row-phone2`, the secondary phone input
+Evidence: `type="tel" autocomplete="tel" pattern="[0-9]+"`
+Problem: The `pattern="[0-9]+"` rejects common valid phone formatting such as `+`, spaces, dashes, or parentheses, which contradicts using `type="tel"`/`autocomplete="tel"` for international-friendly input.
+Fix: Remove the digits-only pattern (or broaden it to allow `+`, spaces, and dashes) so legitimately formatted phone numbers aren't rejected.
+
+Location: `row-phone` and `row-phone2` inputs
+Evidence: Both use `autocomplete="tel"`
+Problem: Two different phone fields sharing the identical autocomplete token will confuse browser/password-manager autofill, which can't distinguish primary from secondary phone.
+Fix: Differentiate them, e.g. keep `tel` on the primary and omit autocomplete (or use a custom non-standard grouping) on the secondary.
+
+Location: `row-website`
+Evidence: `<input id="website-input" name="website" required="" type="text">`
+Problem: A "Company website" field is marked required on a consumer account-creation form ("Join Meridian Outfitters"), which will block ordinary individual customers from signing up; it also uses `type="text"` instead of `type="url"`.
+Fix: Make the field optional (or remove it) and change `type` to `url` with an appropriate `autocomplete` value if kept.
+
+Location: `row-member`
+Evidence: `placeholder="Must be 8 digits"` with no `pattern`, `minlength`, or `maxlength`
+Problem: The 8-digit requirement is only communicated via placeholder text (which disappears on focus/input) and isn't enforced by validation, so malformed values can be submitted.
+Fix: Add `pattern="[0-9]{8}"` (or `minlength="8" maxlength="8"`) and move the instruction into visible helper text rather than relying solely on the placeholder.
+
+Location: `row-acctnum`
+Evidence: `<label id="acctnum-label" for="acctnum-input">Account number</label>` required, immediately following the required "Membership number" field
+Problem: Requiring both a membership number and a separate account number on a new-account signup form is confusing — a prospective member joining for the first time likely has neither yet, and the two fields' purposes aren't distinguished.
+Fix: Clarify why both are needed (or remove one), and make clear whether these refer to pre-existing identifiers from another system.
+
+Location: `row-postal`
+Evidence: `<input id="postal-input" ... size="3">`
+Problem: `size="3"` renders a very narrow input box, but postal codes (e.g., many non-US formats) commonly exceed 3 characters, making the field visually misleading and cramped.
+Fix: Remove the `size` attribute or set it wide enough (e.g., 10) to comfortably fit international postal codes.
+
+Location: `row-shipspeed` select options
+Evidence: `<option>Overnight</option> <option>Next-day</option>`
+Problem: "Overnight" and "Next-day" describe essentially the same shipping speed, creating ambiguous, overlapping choices for the user.
+Fix: Remove the duplicate option or rename them to be clearly distinct (e.g., "Overnight (arrives tomorrow AM)" vs. a genuinely different tier).
+
+Location: `row-legalname`
+Evidence: `<label id="legalname-label" for="legalname-input">Your name</label>` with `name="legal_name" autocomplete="name"`, appearing after the earlier `row-name` "Full name" field
+Problem: This duplicates the "Full name" field collected earlier in the form with no explanation of why a second, differently-labeled name field is needed.
+Fix: Remove the redundant field, or if a distinct legal name is genuinely required, relabel both fields to clarify the difference (e.g., "Preferred name" vs. "Legal name").
+
+Location: `row-org`
+Evidence: `<input id="org-input" name="organization" type="text" required="" style="font-size:13px">`
+Problem: An inline style shrinks this field's text below the size used by every other input, hurting readability/accessibility and visually inconsistent with the rest of the form.
+Fix: Remove the inline `font-size:13px` style and let it inherit the form's default styling.
+
+Location: `row-contacttime`
+Evidence: `<label id="contacttime-label" for="contacttime-input" style="display:inline-block;float:left;width:140px">Preferred contact time</label>`
+Problem: This is the only label in the form using inline float/width styling, which can break layout alignment with its input and is inconsistent with every other row.
+Fix: Remove the inline style and use the same markup pattern as the other label/input rows.
+
+Location: `row-contacttime` input
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: A free-text field for "Preferred contact time" with no placeholder, format hint, or structured control (e.g., time picker/select) will produce inconsistent, hard-to-parse data.
+Fix: Add a placeholder/format example (e.g., "e.g. 9am–12pm") or replace with a `<select>` of time ranges.
+
+Location: `viewdetails-btn`, between the contact-time row and the date-of-birth fieldset
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>`
+Problem: This button has `type="button"` (no form submission behavior) and no visible associated handler or purpose in context, appearing as a dead or orphaned control in the middle of the signup form.
+Fix: Either wire it to actual functionality and clarify its purpose with surrounding text, or remove it if it's leftover/unused.
+
+Location: `dob-year-select` options
+Evidence: Year options range only from `<option>1950</option>` to `<option>2009</option>`
+Problem: This excludes anyone born before 1950 (over age ~76) from completing signup, and as of 2026 also excludes anyone born 2010 or later, incorrectly gating out valid adult customers at the older end.
+Fix: Generate the year range dynamically relative to the current date (e.g., current year minus 100 through current year minus 13), rather than a hardcoded fixed range.
+
+Location: Form-wide, across all required inputs
+Evidence: Only `row-phone2`'s label includes "(optional)"; no other label or input shows a required indicator (e.g., asterisk)
+Problem: Required fields are not visually distinguished from optional ones (aside from the single "(optional)" label), so sighted users have no way to tell which fields are mandatory before submitting.
+Fix: Add a consistent visual indicator (e.g., "*") next to required labels, or mark optional fields consistently, and explain the convention near the top of the form.

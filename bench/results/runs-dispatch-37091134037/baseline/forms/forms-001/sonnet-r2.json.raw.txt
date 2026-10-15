@@ -1,0 +1,74 @@
+Location: `<head>` section
+Evidence: `<meta charset="utf-8">` is the only meta tag present; no `<meta name="viewport">` exists
+Problem: Without a viewport meta tag, this form will render at desktop width and be zoomed/tiny on mobile devices, badly degrading usability for mobile signups.
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to the head.
+
+Location: `<form id="form">` opening tag
+Evidence: `<form id="form">` with no `action` or `method` attribute, and no JavaScript anywhere in the document to intercept submission
+Problem: A form with no method defaults to GET, so submitting it will append all field values — including `password` and `password_again` — as plaintext query parameters in the URL, exposing credentials in browser history, server logs, and the Referer header.
+Fix: Add `method="post"` and a valid `action`, or attach a submit handler that posts the data via fetch/XHR instead of relying on default navigation.
+
+Location: row-email, `#email-input`
+Evidence: `autocomplete="e-mail"`
+Problem: `"e-mail"` is not a valid HTML autocomplete token (the correct value is `"email"`), so browsers won't use it to power autofill for this field.
+Fix: Change `autocomplete="e-mail"` to `autocomplete="email"`.
+
+Location: row-housenumber, `#housenumber-input`
+Evidence: `<input id="housenumber-input" name="house_number" type="text" required="">` has no `autocomplete` attribute, while the adjacent `#street-input` has `autocomplete="address-line1"`
+Problem: Splitting address into house number and street but only annotating one part breaks browser address autofill, since the house number field won't be recognized as part of the address.
+Fix: Add an appropriate autocomplete token to the house number field (e.g. `autocomplete="address-line1"` on house number and `address-line2` on street, or combine them into one field).
+
+Location: row-phone
+Evidence: `<input id="phone-input" ...><p>We will text you about delivery updates.</p>`
+Problem: The helper text explaining why a phone number is collected is not programmatically associated with the input, so screen reader users may not hear it when focusing the field.
+Fix: Give the `<p>` an id and reference it from the input with `aria-describedby`.
+
+Location: row-website, `#website-input`
+Evidence: `<label id="website-label" for="website-input">Company website</label> <input ... name="website" type="url" required="">`
+Problem: Requiring a "Company website" to create a personal shopping account is an irrelevant mandatory field that will block individual (non-business) customers from signing up at all.
+Fix: Make this field optional, or remove it if it isn't actually needed for consumer registration.
+
+Location: row-member, `#member-input`
+Evidence: `placeholder="Must be 8 digits"` with no `pattern`, `minlength`, or `maxlength` attribute
+Problem: The digit-count requirement is communicated only via placeholder text (which disappears on focus/input and isn't reliably announced by all screen readers) and is never actually enforced by validation.
+Fix: Add `pattern="\d{8}"` (or `minlength`/`maxlength` of 8) and move the instruction into visible helper text tied via `aria-describedby`, not just the placeholder.
+
+Location: row-acctnum, `#acctnum-input`
+Evidence: `<label id="acctnum-label" for="acctnum-input">Account number</label>` with no further description, next to a separate `member-input` for "Membership number"
+Problem: It's unclear what "account number" refers to (bank account? a different loyalty account?) or why it's required, since a membership number is already being collected — this ambiguity risks users entering sensitive financial data unnecessarily.
+Fix: Clarify the field's purpose in the label or helper text, or remove it if it's redundant with the membership number.
+
+Location: row-shipspeed, `#shipspeed-select`
+Evidence: `<option>Overnight</option><option>Next-day</option>`
+Problem: "Overnight" and "Next-day" describe the same shipping speed, so the option list presents a confusing, effectively duplicate choice.
+Fix: Remove one of the two redundant options or clearly differentiate them (e.g. rename to indicate a real difference like cutoff time).
+
+Location: row-shipspeed, `#shipspeed-select`
+Evidence: `<select id="shipspeed-select" required="">` with no blank/placeholder `<option>`
+Problem: Since the first option ("Standard") is selected by default and there is no empty option, `required` has no practical effect — the field can never be submitted unselected, so the attribute is misleading about forcing an active choice.
+Fix: Either remove `required` (it's a no-op here) or add a disabled, selected, blank first option like `<option value="" disabled selected>Select a shipping speed</option>`.
+
+Location: row-legalname, `#legalname-input`
+Evidence: `<label ...>Your name</label><input ... name="legal_name" type="text" autocomplete="name" ...>` versus row-name's `<label>Full name</label><input ... name="full_name" ... autocomplete="name">`
+Problem: Two separate required fields both collect a person's name with `autocomplete="name"`; this duplicates data entry, confuses browser autofill (which may fill both identically or only one), and isn't explained to the user as being different from "Full name."
+Fix: Remove the duplicate "Your name" field, or rename/clarify it (e.g. "Legal name, if different from above") and make it optional.
+
+Location: row-org, `#org-input`
+Evidence: `<label id="org-label" for="org-input">Organization name</label><input ... name="organization" ... required="">`
+Problem: Requiring an organization name on a consumer "Create your account" form blocks individual customers who have no organization to enter.
+Fix: Make the organization field optional, or remove it if this signup flow is not meant for business accounts.
+
+Location: row-contacttime, `#contacttime-input`
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">` with no placeholder, pattern, or helper text
+Problem: A free-text required field for "Preferred contact time" gives no guidance on expected format (time of day, day of week, time range), making it likely users enter inconsistent, unparseable values or fail validation unexpectedly.
+Fix: Add placeholder/helper text describing the expected format, or replace with a constrained input (e.g. a `<select>` of time slots).
+
+Location: `#viewdetails-btn`, between row-contacttime and row-hear
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>`
+Problem: This button has `type="button"` (so it won't submit the form) but no associated script, handler, or visible target anywhere in the document, making it a dead control that does nothing when clicked.
+Fix: Wire up its intended behavior (e.g. a details modal/panel) or remove the button if it's leftover from another template.
+
+Location: row-hear, `#hear-select`
+Evidence: `<label>How did you hear about us?</label><select id="hear-select" required="">`
+Problem: Making a marketing-attribution survey question mandatory can block or frustrate users trying to complete account creation for a question that has no bearing on their account.
+Fix: Remove `required` from this field so it's optional.

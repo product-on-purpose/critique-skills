@@ -7,7 +7,7 @@ level: intermediate
 
 # Severity scale
 
-Every critique-skills finding carries one severity value on one 0-4 scale, defined as `$defs/severity` in [`contract/critique-contract.schema.json`](../../contract/critique-contract.schema.json). The scale does not vary by domain: the six launch skills share it so a severity 3 in a clarity critique and a severity 3 in an accessibility critique carry the same weight. Severity must be a JSON integer literal (`3`, not `3.0`); the contract rejects the float form even though JSON Schema's `integer` type would otherwise accept it.
+Every critique-skills finding carries one severity value on one 0-4 scale, defined as `$defs/severity` in [`contract/critique-contract.schema.json`](../../contract/critique-contract.schema.json). The scale does not vary by domain: every skill shares it so a severity 3 in a clarity critique and a severity 3 in an accessibility critique carry the same weight. Severity must be a JSON integer literal (`3`, not `3.0`); the contract rejects the float form even though JSON Schema's `integer` type would otherwise accept it.
 
 ## The scale
 
@@ -33,7 +33,7 @@ Impact sets the level first. A single occurrence of something that blocks recove
 
 ## Domain anchors
 
-The examples below are original, illustrative anchors, not the six skills' criterion catalogs. Each skill's own `references/` directory, once built, carries the authoritative criterion registry and its own anchor examples per criterion; these anchors exist to calibrate levels 2 and 3 consistently across domains before any skill ships. Level 2 and level 3 are anchored here because they are where reviewers most often disagree; 0, 1, and 4 rarely need debate.
+The examples below are original, illustrative anchors, not the skills' criterion catalogs. Each skill's own `references/` directory, once built, carries the authoritative criterion registry and its own anchor examples per criterion; these anchors exist to calibrate levels 2 and 3 consistently across domains before any skill ships. Level 2 and level 3 are anchored here because they are where reviewers most often disagree; 0, 1, and 4 rarely need debate.
 
 ### Usability (critique-usability)
 

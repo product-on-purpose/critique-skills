@@ -1,0 +1,182 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"form\">` has no `method` or `action` attribute",
+      "fix": "Add `method=\"post\"` (and an appropriate `action`) to the form element.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<form id=\"form\">` opening tag",
+      "severity": 3,
+      "violation": "Without an explicit method, the form defaults to a GET submission, which would place the password (and account number, membership number, etc.) into the URL - exposed in browser history, server logs, and referrer headers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<p>We will text you about delivery updates.</p>`",
+      "fix": "Give the paragraph an `id` and reference it from the input with `aria-describedby`.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "row-phone, the `<p>` following `#phone-input`",
+      "severity": 3,
+      "violation": "This explanatory text sits visually near the phone field but is not programmatically associated with it, so screen reader users tabbing to the input won't hear the disclosure."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`type=\"tel\" ... pattern=\"[0-9]+\"`",
+      "fix": "Remove the digit-only `pattern` (or relax it to allow `+`, spaces, hyphens, and parentheses).",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-phone2, `#phone2-input`",
+      "severity": 3,
+      "violation": "Restricting a `tel` field to digits-only rejects legitimate phone formatting such as `+1 555-123-4567`, parentheses, or spaces that `type=\"tel\"` is meant to accommodate."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"website-input\" name=\"website\" required=\"\" type=\"text\">`",
+      "fix": "Make the field optional (or remove it if this is a consumer signup), and change its type to `url`.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-website, `#website-input`",
+      "severity": 3,
+      "violation": "A required \"Company website\" field is out of place on a consumer account-signup form (full name, email, home address, phone) and will block individual customers who have no company site; it also uses `type=\"text\"` instead of `type=\"url\"`, losing built-in validation and the URL keyboard on mobile."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no `pattern` or `maxlength`",
+      "fix": "Add `pattern=\"[0-9]{8}\"` and `maxlength=\"8\"`, and move the format hint into persistent helper text instead of relying solely on the placeholder.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "row-member, `#member-input`",
+      "severity": 3,
+      "violation": "The 8-digit requirement is only communicated via placeholder text, which disappears once the user starts typing, and nothing actually enforces the 8-digit constraint."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Membership number (8 digits)\" and \"Account number\" are both `required` on a form titled \"Create your account\"",
+      "fix": "Remove these fields from the signup form, or mark them optional/for-existing-customers-only.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "row-member and row-acctnum (`#member-input`, `#acctnum-input`)",
+      "severity": 3,
+      "violation": "A brand-new signup form cannot require a pre-existing membership number or account number, since a new customer won't have one yet - this will block legitimate new users from ever completing the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`size=\"3\"` on the postal code input",
+      "fix": "Increase `size` to at least 8-10 characters, or remove the attribute and size via CSS.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "row-postal, `#postal-input`",
+      "severity": 3,
+      "violation": "A visual width of 3 characters is too narrow for most real postal codes (e.g. US 5/9-digit ZIPs, UK \"SW1A 1AA\"), making the field look wrong and encouraging truncated-looking entry."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Overnight</option> <option>Next-day</option> ... <option>International</option>`",
+      "fix": "Collapse \"Overnight\"/\"Next-day\" into a single option, and move \"International\" to a separate shipping-destination control (or remove it from this list).",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "row-shipspeed, `#shipspeed-select` options",
+      "severity": 3,
+      "violation": "\"Overnight\" and \"Next-day\" describe the same delivery speed and will confuse users about which to pick, and \"International\" is a destination type, not a shipping speed, mixing incompatible categories in one list."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "label \"Your name\", `name=\"legal_name\"`, `autocomplete=\"name\"` - duplicating row-name's \"Full name\" (`name=\"full_name\"`, `autocomplete=\"name\"`)",
+      "fix": "Remove the duplicate field, or clearly differentiate its purpose (e.g. \"Legal name, if different from above\") and explain why both are needed.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "row-legalname, `#legalname-input`",
+      "severity": 3,
+      "violation": "The form asks for the user's name twice under different labels, which is redundant and may confuse users into thinking the two fields need different values."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"font-size:13px\"` and `required=\"\"`",
+      "fix": "Remove the inline font-size override so it matches other fields, and make organization name optional or remove it if this isn't a business account form.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "row-org, `#org-input`",
+      "severity": 3,
+      "violation": "The inline 13px font is smaller than the rest of the form's text, hurting readability/accessibility, and a required \"Organization name\" field is mismatched for what otherwise reads as an individual consumer signup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label ... style=\"display:inline-block;float:left;width:140px\">Preferred contact time</label>` next to a free-text `type=\"text\"` input",
+      "fix": "Replace the free-text input with a constrained control (e.g. a `<select>` of time ranges), and remove the inline float styling in favor of consistent layout/CSS.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "row-contacttime, `#contacttime-input` and its label",
+      "severity": 3,
+      "violation": "The field gives users no guidance on expected format (e.g. \"2-4pm\" vs \"14:00\"), inviting inconsistent, unparseable data, and the label uses an ad hoc inline float/width style instead of the layout approach used elsewhere in the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>`",
+      "fix": "Either wire the button to its intended behavior (e.g. expanding a details panel) or remove it from the form.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "`#viewdetails-btn`, between row-contacttime and the dob fieldset",
+      "severity": 3,
+      "violation": "This button has no associated handler or visible target in the document and interrupts the form's field flow right before the date-of-birth fieldset, suggesting dead or incomplete functionality."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "year options run only `<option>1950</option>` … `<option>2009</option>`",
+      "fix": "Widen the year range to cover realistic customer ages (e.g. current year minus 100 through current year minus a minimum sign-up age).",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "row-dob, `#dob-year-select`",
+      "severity": 3,
+      "violation": "This excludes anyone born before 1950 (older than ~76 in 2026) or after 2009 (younger than ~17 in 2026) from completing signup, which is an arbitrary and overly narrow range for a retail customer base."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "first options are `<option>1</option>`, `<option>January</option>`, `<option>1950</option>` with no \"choose a value\" placeholder, and all three are `required`",
+      "fix": "Add a disabled, selected placeholder option (e.g. \"Select...\") to each select so the required validation actually forces a deliberate choice.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "row-dob, `#dob-day-select`, `#dob-month-select`, `#dob-year-select`",
+      "severity": 3,
+      "violation": "Because each select is pre-populated with a valid-looking default (Jan 1, 1950), a user who never touches these controls will silently submit that fabricated birthdate, and the `required` attribute won't catch it since a value is already \"selected.\""
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-002.html",
+    "artifact_sha256": "e39d0a6e9175987711e114d2ce5edd568205f5aecafb2d271246e6036a16457f",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T04:19:22Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 14,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

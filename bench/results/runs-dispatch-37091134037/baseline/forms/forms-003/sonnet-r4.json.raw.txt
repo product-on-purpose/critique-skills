@@ -1,0 +1,59 @@
+Location: `<div id="row-password">` — password input
+Evidence: `minlength="6"`
+Problem: A 6-character minimum is a very weak password policy, and there's no visible text near the field telling the user what the requirement is before they hit submit and get a native validation error.
+Fix: Increase the minimum length (e.g., 8+) and add visible helper text describing the password requirements.
+
+Location: `<div id="row-phone">`
+Evidence: `<p>Thanks for signing up.</p>`
+Problem: A "thanks for signing up" message is embedded inside the phone number field's row, before the form has been submitted — this looks like a misplaced success message or leftover content.
+Fix: Remove the message, or move it to a post-submission confirmation view.
+
+Location: `<div id="row-website">` — website input
+Evidence: `<input id="website-input" name="website" type="url" required="">`
+Problem: The field is `required` with no `autocomplete` attribute, unlike every other comparable field in the form (name, email, tel, address, postal code all specify autocomplete tokens); it's also questionable whether a company website should be mandatory for account signup.
+Fix: Add `autocomplete="url"` for consistency, and reconsider whether this field should be required.
+
+Location: `<div id="row-member">` — membership number input
+Evidence: `placeholder="Must be 8 digits"` with no `pattern` or `maxlength` attribute
+Problem: The "8 digits" requirement is communicated only via placeholder text, which disappears once the user starts typing and is not enforced by any validation attribute, so the browser won't catch non-conforming input.
+Fix: Add `pattern="\d{8}"` and `maxlength="8"`, and move the requirement text into persistent helper text rather than the placeholder.
+
+Location: `<div id="row-acctnum">` — account number input
+Evidence: `<input id="acctnum-input" name="account_number" type="text" required="">`
+Problem: It's unclear how "Account number" differs from the "Membership number" field collected just above it, and unlike every other field, it has no `autocomplete` attribute at all.
+Fix: Clarify the distinction between account number and membership number in the label/help text, or remove the duplicate field; add an appropriate `autocomplete` value if the field is kept.
+
+Location: `<div id="row-legalname">`
+Evidence: `<label id="given-label" for="given-input">First name</label>` ... `<label id="family-label" for="family-input">Last name</label>` both inside one row, alongside the earlier `<label id="name-label" for="name-input">Full name</label>`
+Problem: The form collects both a "Full name" field and separate "First name"/"Last name" fields, which is redundant and can produce conflicting data; additionally, this row packs two label/input pairs into a single div while every other row holds exactly one field, breaking the document's structural pattern.
+Fix: Remove the redundant full-name (or first/last name) fields, and if both are kept, split them into separate row divs consistent with the rest of the form.
+
+Location: `<div id="row-org">` — organization input
+Evidence: `style="font-size:16px"`
+Problem: This is the only input in the form with an inline font-size style, suggesting an inconsistent (and likely iOS-zoom-prevention) hack applied to just one field while every other text input remains at the default size.
+Fix: Apply a consistent font-size via a shared stylesheet rule to all inputs rather than an inline style on one field.
+
+Location: `<div id="row-contacttime">`
+Evidence: `<label id="contacttime-label" for="contacttime-input" style="display:block">` and `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: This is the only label in the form with an inline `display:block` style, indicating inconsistent layout handling, and the "preferred contact time" field is free text with no format hint, so submitted values will be unstructured and hard to validate or parse.
+Fix: Remove the inline style in favor of consistent CSS, and replace the free-text input with a `<select>` of time ranges or an `<input type="time">`.
+
+Location: `<button id="viewdetails-btn">`
+Evidence: `style="padding:1px 2px;font-size:11px"`
+Problem: The padding and font size are far below usable/accessible sizing (tap target well under the ~44px guideline and text near the minimum legible size), making the button hard to tap or read, especially on touch devices.
+Fix: Increase padding and font-size to match the other buttons' sizing, or apply shared button styling instead of a one-off inline style.
+
+Location: `<form id="form">`
+Evidence: `<form id="form">`
+Problem: The form has no `action` or `method` attribute, so submitting it falls back to a GET request to the current URL, which is almost certainly not the intended account-creation behavior.
+Fix: Add an explicit `action` (endpoint URL) and `method="post"` to the form tag.
+
+Location: `<head>`
+Evidence: only `<meta charset="utf-8">` and `<title>` are present
+Problem: There is no `<meta name="viewport">` tag, so on mobile browsers this signup form will render at desktop width and require pinch-zooming.
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to the head.
+
+Location: entire `<form id="form">`
+Evidence: 15 field rows (name, email, password, street, phone, phone2, website, membership, account number, postal, shipping speed, given/family name, organization, contact time) are all flat siblings with no grouping
+Problem: The form has no `<fieldset>`/`<legend>` sections or visual headings separating logically distinct groups (account credentials vs. address vs. shipping vs. organization info), making a long form harder to scan and navigate, and no required-field legend is shown anywhere despite most fields being `required`.
+Fix: Group related rows into `<fieldset>` blocks with `<legend>` headings, and add a visible "* required" legend near the top of the form.

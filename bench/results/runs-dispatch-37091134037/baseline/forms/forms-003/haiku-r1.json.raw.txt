@@ -1,0 +1,39 @@
+Location: Inside the phone number input row (line 29)
+Evidence: `<p>Thanks for signing up.</p>` appears within `<div id="row-phone">`
+Problem: The success message appears in the middle of the form instead of after submission, before users have finished entering all required fields.
+Fix: Move the success message outside the form or display it only after successful form submission via JavaScript.
+
+Location: Membership number input (line 41)
+Evidence: `placeholder="Must be 8 digits"` but no validation attributes
+Problem: The placeholder text requires 8 digits, but there is no pattern or maxlength validation to enforce this constraint.
+Fix: Add `pattern="\d{8}"` and `maxlength="8"` attributes to the input.
+
+Location: Preferred shipping speed select element (line 52)
+Evidence: `<select id="shipspeed-select" required="">` lacks a name attribute
+Problem: Without a name attribute, the selected shipping speed value will not be included when the form is submitted.
+Fix: Add `name="shipping_speed"` to the select element.
+
+Location: Full name field (line 12) and First name/Last name fields (lines 60-65)
+Evidence: Form includes separate inputs for "Full name", "First name", and "Last name"
+Problem: The form requests the same information twice—once as a full name and again broken into first and last names separately.
+Fix: Remove either the full name field or the separate first/last name fields.
+
+Location: Organization name input (line 68)
+Evidence: `style="font-size:16px"`
+Problem: Inline styles should be defined in a stylesheet rather than on individual elements.
+Fix: Remove the inline style and define it in a CSS file.
+
+Location: Preferred contact time label (line 71)
+Evidence: `style="display:block"`
+Problem: Inline styles should be defined in a stylesheet rather than on individual elements.
+Fix: Remove the inline style and define it in a CSS file.
+
+Location: Preferred contact time input (line 72)
+Evidence: `type="text"` for a field labeled "Preferred contact time"
+Problem: The input type is text, but the field asks for a contact time and should use a time input type.
+Fix: Change `type="text"` to `type="time"`.
+
+Location: View details button (line 75)
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:1px 2px;font-size:11px">View details</button>`
+Problem: The button has inline styles and no onclick handler or function, making it non-functional and its purpose unclear.
+Fix: Either remove the button, add an onclick handler with a function, or change it to `type="submit"` if it should submit the form. Move inline styles to a stylesheet if the button is retained.

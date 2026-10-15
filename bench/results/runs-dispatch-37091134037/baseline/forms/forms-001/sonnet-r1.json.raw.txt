@@ -1,0 +1,79 @@
+Location: `<head>` section
+Evidence: `<meta charset="utf-8">` is the only meta tag present
+Problem: There is no `<meta name="viewport">` tag, so on mobile browsers this long form will render at desktop width and require pinch-zooming to use.
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to the head.
+
+Location: `<form id="form">` opening tag
+Evidence: `<form id="form">`
+Problem: The form has no `action` or `method` attribute and the document contains no `<script>` anywhere, so submitting it has no defined destination or behavior.
+Fix: Add an `action` URL and `method="post"` (or wire up a submit handler in script) so the form actually sends data somewhere.
+
+Location: `row-email` / `email-input`
+Evidence: `autocomplete="e-mail"`
+Problem: `"e-mail"` is not a valid autocomplete token; the correct value is `"email"`, so browsers won't autofill this field correctly.
+Fix: Change `autocomplete="e-mail"` to `autocomplete="email"`.
+
+Location: `row-password` / `row-confirm-password`
+Evidence: two password inputs (`password-input`, `confirm-password-input`) with no accompanying `<script>` in the document
+Problem: There is no client-side (or any visible server-side) check that the two password fields match before submission; a user can submit mismatched passwords undetected.
+Fix: Add JavaScript to compare the two fields on submit (or at minimum use `setCustomValidity`) and show an inline error if they don't match.
+
+Location: `row-housenumber` / `housenumber-input`
+Evidence: `<input id="housenumber-input" name="house_number" type="text" required="">`
+Problem: Unlike the adjacent street field, this input has no `autocomplete` attribute, so browser address autofill will skip or mis-fill the house number.
+Fix: Add an appropriate autocomplete token, e.g. `autocomplete="address-line2"` (or combine house number into the address-line1 field with street).
+
+Location: Between `row-street` and `row-phone` (address block)
+Evidence: Fields present are house number, street address, and (further down) postal code only — `housenumber-input`, `street-input`, `postal-input`
+Problem: The address block has no city field and no country field, which is required to produce a deliverable shipping address.
+Fix: Add a "City" input (`autocomplete="address-level2"`) and a "Country" field (`autocomplete="country"` or `country-name"`).
+
+Location: `row-website` / `website-input`
+Evidence: `<label id="website-label" for="website-input">Company website</label> ... required=""`
+Problem: A personal shopping account for "Meridian Outfitters" has no apparent reason to require a company website; this looks like a field copied from an unrelated B2B form and will block real customers from signing up.
+Fix: Remove the `website` field (or make it optional and only relevant to business accounts).
+
+Location: `row-member` / `member-input`
+Evidence: `<input id="member-input" name="membership_number" type="text" inputmode="numeric" placeholder="Must be 8 digits" required="">`
+Problem: The "8 digits" requirement is communicated only via placeholder text (which disappears once the user types and is not announced reliably to screen readers) and is not actually enforced by any `pattern` or `maxlength` attribute.
+Fix: Add `pattern="\d{8}"` and `maxlength="8"`, and move the format hint into visible helper text tied to the input via `aria-describedby`.
+
+Location: `row-acctnum` / `acctnum-input`
+Evidence: `<label id="acctnum-label" for="acctnum-input">Account number</label>`
+Problem: It's unclear what this "Account number" is or why a new signup form would already require one (distinct from the membership number just above), and unlike the membership field it has no format hint or validation at all.
+Fix: Either remove this field if it doesn't apply to new accounts, or clarify its purpose in the label/help text and add appropriate validation.
+
+Location: `row-shipspeed` / `shipspeed-select`
+Evidence: `<option>Overnight</option> ... <option>Next-day</option>`
+Problem: "Overnight" and "Next-day" are the same shipping concept listed as two separate options, which will confuse users choosing between them.
+Fix: Remove the duplicate option, keeping a single clearly-named option for next-day/overnight delivery.
+
+Location: `row-shipspeed` and `row-hear` select elements
+Evidence: `<select id="shipspeed-select" required="">` and `<select id="hear-select" required="">`, both starting directly with a real option (`Standard`, `Search engine`)
+Problem: Because neither `<select>` has a blank/placeholder first option, the `required` attribute is meaningless — the first real option is selected by default and satisfies validation without the user ever making a choice.
+Fix: Add a disabled, selected `<option value="">Select...</option>` as the first option in each select so `required` actually forces a deliberate choice.
+
+Location: `row-legalname` / `legalname-input`
+Evidence: `<label id="legalname-label" for="legalname-input">Your name</label> <input ... name="legal_name" type="text" autocomplete="name" ... required="">`
+Problem: This duplicates the "Full name" field (`name-input`) earlier in the form — both collect a person's name via `autocomplete="name"`, which is redundant and confusing.
+Fix: Remove one of the two name fields, or clearly differentiate their purposes (e.g., "legal name" vs. "display name") in the labels.
+
+Location: `row-org` / `org-input`
+Evidence: `<input id="org-input" name="organization" type="text" style="font-size:16px" required="">`
+Problem: Organization name is required for what appears to be a consumer retail account, and it carries a one-off inline `font-size:16px` style not applied consistently to other text inputs (likely an iOS zoom-prevention hack applied inconsistently).
+Fix: Make the organization field optional (or remove it) and move any iOS-zoom font-size fix into a shared stylesheet applied to all inputs uniformly.
+
+Location: `row-contacttime` / `contacttime-input`
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: "Preferred contact time" is a free-text required field with no placeholder, pattern, or format guidance, so submitted values will be inconsistent and hard to process.
+Fix: Replace with a constrained input, e.g. a `<select>` of time ranges or a `<input type="time">`, and make it optional if not essential to account creation.
+
+Location: `viewdetails-btn`
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>`
+Problem: This button has `type="button"` (so it won't submit the form) but there is no `<script>` anywhere in the document to give it an `onclick` handler or other behavior, making it a dead control that does nothing when clicked.
+Fix: Either implement the intended behavior in JavaScript or remove the button.
+
+Location: `row-phone2` label
+Evidence: `<label id="phone2-label" for="phone2-input">Secondary phone (optional)</label>` versus every other field, which is `required=""` with no visual marker
+Problem: Optionality is only called out on this single field while roughly a dozen other fields are silently required with no asterisk or "(required)" indicator, creating an inconsistent and confusing convention for which fields are mandatory.
+Fix: Adopt one consistent convention — mark required fields (e.g., with an asterisk and a legend) rather than calling out the one optional field in isolation.

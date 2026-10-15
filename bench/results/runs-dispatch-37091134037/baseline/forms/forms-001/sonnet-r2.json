@@ -1,0 +1,193 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<meta charset=\"utf-8\">` is the only meta tag present; no `<meta name=\"viewport\">` exists",
+      "fix": "Add `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">` to the head.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<head>` section",
+      "severity": 3,
+      "violation": "Without a viewport meta tag, this form will render at desktop width and be zoomed/tiny on mobile devices, badly degrading usability for mobile signups."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"form\">` with no `action` or `method` attribute, and no JavaScript anywhere in the document to intercept submission",
+      "fix": "Add `method=\"post\"` and a valid `action`, or attach a submit handler that posts the data via fetch/XHR instead of relying on default navigation.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<form id=\"form\">` opening tag",
+      "severity": 3,
+      "violation": "A form with no method defaults to GET, so submitting it will append all field values - including `password` and `password_again` - as plaintext query parameters in the URL, exposing credentials in browser history, server logs, and the Referer header."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`autocomplete=\"e-mail\"`",
+      "fix": "Change `autocomplete=\"e-mail\"` to `autocomplete=\"email\"`.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-email, `#email-input`",
+      "severity": 3,
+      "violation": "`\"e-mail\"` is not a valid HTML autocomplete token (the correct value is `\"email\"`), so browsers won't use it to power autofill for this field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"housenumber-input\" name=\"house_number\" type=\"text\" required=\"\">` has no `autocomplete` attribute, while the adjacent `#street-input` has `autocomplete=\"address-line1\"`",
+      "fix": "Add an appropriate autocomplete token to the house number field (e.g. `autocomplete=\"address-line1\"` on house number and `address-line2` on street, or combine them into one field).",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-housenumber, `#housenumber-input`",
+      "severity": 3,
+      "violation": "Splitting address into house number and street but only annotating one part breaks browser address autofill, since the house number field won't be recognized as part of the address."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"phone-input\" ...><p>We will text you about delivery updates.</p>`",
+      "fix": "Give the `<p>` an id and reference it from the input with `aria-describedby`.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "row-phone",
+      "severity": 3,
+      "violation": "The helper text explaining why a phone number is collected is not programmatically associated with the input, so screen reader users may not hear it when focusing the field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"website-label\" for=\"website-input\">Company website</label> <input ... name=\"website\" type=\"url\" required=\"\">`",
+      "fix": "Make this field optional, or remove it if it isn't actually needed for consumer registration.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "row-website, `#website-input`",
+      "severity": 3,
+      "violation": "Requiring a \"Company website\" to create a personal shopping account is an irrelevant mandatory field that will block individual (non-business) customers from signing up at all."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no `pattern`, `minlength`, or `maxlength` attribute",
+      "fix": "Add `pattern=\"\\d{8}\"` (or `minlength`/`maxlength` of 8) and move the instruction into visible helper text tied via `aria-describedby`, not just the placeholder.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "row-member, `#member-input`",
+      "severity": 3,
+      "violation": "The digit-count requirement is communicated only via placeholder text (which disappears on focus/input and isn't reliably announced by all screen readers) and is never actually enforced by validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"acctnum-label\" for=\"acctnum-input\">Account number</label>` with no further description, next to a separate `member-input` for \"Membership number\"",
+      "fix": "Clarify the field's purpose in the label or helper text, or remove it if it's redundant with the membership number.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "row-acctnum, `#acctnum-input`",
+      "severity": 3,
+      "violation": "It's unclear what \"account number\" refers to (bank account? a different loyalty account?) or why it's required, since a membership number is already being collected - this ambiguity risks users entering sensitive financial data unnecessarily."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Overnight</option><option>Next-day</option>`",
+      "fix": "Remove one of the two redundant options or clearly differentiate them (e.g. rename to indicate a real difference like cutoff time).",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "row-shipspeed, `#shipspeed-select`",
+      "severity": 3,
+      "violation": "\"Overnight\" and \"Next-day\" describe the same shipping speed, so the option list presents a confusing, effectively duplicate choice."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">` with no blank/placeholder `<option>`",
+      "fix": "Either remove `required` (it's a no-op here) or add a disabled, selected, blank first option like `<option value=\"\" disabled selected>Select a shipping speed</option>`.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "row-shipspeed, `#shipspeed-select`",
+      "severity": 3,
+      "violation": "Since the first option (\"Standard\") is selected by default and there is no empty option, `required` has no practical effect - the field can never be submitted unselected, so the attribute is misleading about forcing an active choice."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label ...>Your name</label><input ... name=\"legal_name\" type=\"text\" autocomplete=\"name\" ...>` versus row-name's `<label>Full name</label><input ... name=\"full_name\" ... autocomplete=\"name\">`",
+      "fix": "Remove the duplicate \"Your name\" field, or rename/clarify it (e.g. \"Legal name, if different from above\") and make it optional.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "row-legalname, `#legalname-input`",
+      "severity": 3,
+      "violation": "Two separate required fields both collect a person's name with `autocomplete=\"name\"`; this duplicates data entry, confuses browser autofill (which may fill both identically or only one), and isn't explained to the user as being different from \"Full name.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"org-label\" for=\"org-input\">Organization name</label><input ... name=\"organization\" ... required=\"\">`",
+      "fix": "Make the organization field optional, or remove it if this signup flow is not meant for business accounts.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "row-org, `#org-input`",
+      "severity": 3,
+      "violation": "Requiring an organization name on a consumer \"Create your account\" form blocks individual customers who have no organization to enter."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">` with no placeholder, pattern, or helper text",
+      "fix": "Add placeholder/helper text describing the expected format, or replace with a constrained input (e.g. a `<select>` of time slots).",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "row-contacttime, `#contacttime-input`",
+      "severity": 3,
+      "violation": "A free-text required field for \"Preferred contact time\" gives no guidance on expected format (time of day, day of week, time range), making it likely users enter inconsistent, unparseable values or fail validation unexpectedly."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>`",
+      "fix": "Wire up its intended behavior (e.g. a details modal/panel) or remove the button if it's leftover from another template.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "`#viewdetails-btn`, between row-contacttime and row-hear",
+      "severity": 3,
+      "violation": "This button has `type=\"button\"` (so it won't submit the form) but no associated script, handler, or visible target anywhere in the document, making it a dead control that does nothing when clicked."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label>How did you hear about us?</label><select id=\"hear-select\" required=\"\">`",
+      "fix": "Remove `required` from this field so it's optional.",
+      "id": "F-015",
+      "lane": "judged",
+      "location": "row-hear, `#hear-select`",
+      "severity": 3,
+      "violation": "Making a marketing-attribution survey question mandatory can block or frustrate users trying to complete account creation for a question that has no bearing on their account."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-001.html",
+    "artifact_sha256": "531c999912c0ab6c8224cbeb2347e7644d493a84e3a9461a434deaf5f2f09cdd",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T03:15:30Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 15,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

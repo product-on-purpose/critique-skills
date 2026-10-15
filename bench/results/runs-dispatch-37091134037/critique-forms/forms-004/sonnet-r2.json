@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "The field's label is \"Account number\" and the input (name=\"account_number\") is required, on a form whose heading is \"Set up your account\" and whose submit button reads \"Create account\".",
+      "fix": "Remove the account-number field from account creation. If it identifies a legacy record to link, make it optional and explain its purpose, or move the linking step to after the account exists.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#acctnum-input, <input> field, label \"Account number\", line 45",
+      "severity": 4,
+      "violation": "The form requires a pre-existing account number as a condition of creating the account. Because no account exists until this form is submitted, no person completing it for the first time can hold a true value for this field, so every new signer-up is blocked from honestly completing the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "Label \"Membership number (8 digits)\", required=\"\", on a form whose task is creating a new account.",
+      "fix": "Make membership number optional, or move it to a separate \"link an existing membership\" step that does not block account creation.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#member-input, <input> field, label \"Membership number (8 digits)\", line 41",
+      "severity": 3,
+      "violation": "A required membership number presumes the person already holds a membership, which a first-time signer-up does not, so most people reaching this field must guess a value or stop."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "Label \"Company website\", input type=\"url\" name=\"website\" required=\"\", on a form headed \"Set up your account\" with no other indication this is a business-only account.",
+      "fix": "Drop the company-website field from account creation, or make it optional and gate it behind an explicit \"this is a business account\" choice.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#website-input, <input> field, label \"Company website\", line 37",
+      "severity": 3,
+      "violation": "The task named by the form's heading and submit label is creating a personal outfitters account, which has no stated use for a company website, and the field is required with a type that enforces a URL shape, so a person with no company cannot supply a valid value and either fabricates one or abandons the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "`#viewdetails-btn` declares `style=\"padding:12px 20px;font-size:16px\"`, giving it a deliberately enlarged, readable size. `#submit-btn`, the form's primary action, declares no style at all and renders at the browser's unstyled default button size, which is smaller than the secondary button's declared size.",
+      "fix": "Style the primary submit button as the most visually prominent control (larger, filled or higher-contrast), and reduce the secondary button's visual weight so it reads as secondary.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> 'View details', beside #submit-btn, <button> 'Create account'",
+      "severity": 2,
+      "violation": "The secondary action (\"View details\") is styled at least as prominently as the primary action (\"Create account\"), so a person must read both labels rather than rely on visual weight to find the control that submits the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "Label \"Preferred contact time\" is required, free-text, on a form whose task is creating an account.",
+      "fix": "Remove preferred contact time from account creation and ask it only when a contact is actually being scheduled.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#contacttime-input, <input> field, label \"Preferred contact time\", line 71",
+      "severity": 2,
+      "violation": "A preferred contact time answers a question about a later support or sales interaction that may never happen, which account creation does not need now."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "Label \"Your name\" (name=\"legal_name\", autocomplete=\"name\") is required, and the same form already has #name-input, label \"Full name\" (name=\"full_name\", autocomplete=\"name\"), earlier in the same form.",
+      "fix": "Remove the duplicate name field, or if the two are genuinely different values (e.g. a legal name distinct from a display name), label them so the difference is clear.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label \"Your name\", line 62",
+      "severity": 2,
+      "violation": "The form asks for a person's name twice under two different labels, so the person must either repeat themselves or guess what distinguishes \"Your name\" from \"Full name\" already given."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "Label \"Organization name\" is required, on a form whose task, named by its heading and submit label, is creating a personal account.",
+      "fix": "Remove the organization-name field, or make it optional and ask it only when the person indicates a business account.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "#org-input, <input> field, label \"Organization name\", line 67",
+      "severity": 2,
+      "violation": "Account creation has no stated use for an organization name, so a person with no organization must invent a value to get past the field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "Required `<select>` offering Standard, Express, Overnight, Next-day and International, on a form whose task is creating an account, not placing an order.",
+      "fix": "Remove preferred shipping speed from account creation and ask it during checkout instead.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "#shipspeed-select, <select> field, label \"Preferred shipping speed\", line 53",
+      "severity": 2,
+      "violation": "Shipping speed answers a question about a future order, which account creation does not need and which could be asked when an order is actually placed."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-10-03T05:34:38Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 2,
+      "4": 1
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

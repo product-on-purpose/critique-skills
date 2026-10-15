@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`autocomplete=\"e-mail\"`",
+      "fix": "Change `autocomplete=\"e-mail\"` to `autocomplete=\"email\"`.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Email address field (row-email)",
+      "severity": 3,
+      "violation": "\"e-mail\" is not a valid autocomplete value per HTML specification; the standard value is \"email\"."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"confirm-password-input\" name=\"password_again\" type=\"password\" autocomplete=\"new-password\" required=\"\">`",
+      "fix": "Add `minlength=\"8\"` to the confirm-password input to match the password field's constraint.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Confirm password field (row-confirm-password)",
+      "severity": 3,
+      "violation": "The password field requires minlength=\"8\", but the confirm password field does not, allowing the confirmation to be submitted with a different length than the password."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no pattern or maxlength attribute",
+      "fix": "Add `pattern=\"[0-9]{8}\"` and `maxlength=\"8\"` to enforce the 8-digit requirement.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Membership number field (row-member)",
+      "severity": 3,
+      "violation": "The placeholder claims the field must be 8 digits, but no validation attribute enforces this; users can submit any text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Change to `type=\"time\"` or add a placeholder (e.g., `placeholder=\"HH:MM AM/PM\"`) to clarify the expected format.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Preferred contact time field (row-contacttime)",
+      "severity": 3,
+      "violation": "The field is type=\"text\" with no guidance on format, making it unclear whether to enter a time, time range, or time zone."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Two separate fields - row-name with label \"Full name\" (name=\"full_name\") and row-legalname with label \"Your name\" (name=\"legal_name\")",
+      "fix": "Remove one of the name fields, or change the labels to clarify their distinct purposes (e.g., \"Display name\" vs. \"Legal name\").",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Full name and Your name fields",
+      "severity": 3,
+      "violation": "The form asks for the user's name twice with different field names and labels, creating confusion about whether they serve different purposes or if one is redundant."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">`",
+      "fix": "Add `name=\"preferred_shipping_speed\"` to the select element.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Preferred shipping speed select (row-shipspeed)",
+      "severity": 3,
+      "violation": "The select element has no name attribute, so its value will not be included when the form is submitted."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"hear-select\" required=\"\">`",
+      "fix": "Add `name=\"how_heard\"` to the select element.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "How did you hear about us select (row-hear)",
+      "severity": 3,
+      "violation": "The select element has no name attribute, so its value will not be included when the form is submitted."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-001.html",
+    "artifact_sha256": "531c999912c0ab6c8224cbeb2347e7644d493a84e3a9461a434deaf5f2f09cdd",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T03:04:10Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

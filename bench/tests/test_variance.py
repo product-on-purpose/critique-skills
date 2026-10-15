@@ -216,6 +216,47 @@ def test_the_band_is_seeded_and_reproducible() -> None:
     assert first == second
 
 
+def test_each_cell_metric_gets_its_own_stream() -> None:
+    key = ("p3", "critique-toy", "0.1.0", "model-a", "toy")
+
+    def draws(rng: random.Random) -> list[float]:
+        return [rng.random() for _ in range(3)]
+
+    assert draws(variance.cell_rng(1, key, "recall")) == draws(variance.cell_rng(1, key, "recall"))
+    assert draws(variance.cell_rng(1, key, "recall")) != draws(variance.cell_rng(1, key, "precision"))
+    assert draws(variance.cell_rng(1, key, "recall")) != draws(variance.cell_rng(2, key, "recall"))
+
+
+def _varied_cell(run_set: str):
+    """One cell, five repetitions whose recall differs, so the bootstrap is not degenerate."""
+    per_repetition = {
+        r: [_artifact_score(defects_total=10, defects_matched=m, claims_total=10, claims_matched=m)]
+        for r, m in zip(range(1, 6), (4, 7, 5, 9, 6))
+    }
+    key = (run_set, "critique-toy", "0.1.0", "model-a", "toy")
+    return key, {name: per_repetition for name in ("recall", "precision", "recall_location", "precision_location")}
+
+
+def test_a_cells_band_does_not_depend_on_the_other_cells_in_the_file(tmp_path, monkeypatch) -> None:
+    """Variance version 1.0.0 drew every cell from one shared stream in sorted order. Adding the
+    bench-2026-10-03 run set, whose label sorts before cal1 and p3, moved 71 of the 104 committed
+    bands although none of their evidence changed. A band is published before the run it judges,
+    so it must not move when an unrelated run set joins the file."""
+    kept_key, kept_cell = _varied_cell("p3")
+    early_key, early_cell = _varied_cell("a-sorts-first")
+
+    def build(cells):
+        monkeypatch.setattr(variance, "_group_scores", lambda *_args: cells)
+        document = build_variance(CORPUS_DIR, [(tmp_path, "p3")], generated_at="2026-08-15T00:00:00Z", draws=1000)
+        return [e for e in document["entries"] if e["run_set"] == "p3"]
+
+    alone = build({kept_key: kept_cell})
+    beside_another = build({early_key: early_cell, kept_key: kept_cell})
+
+    assert alone == beside_another
+    assert any(e["band_width"] > 0 for e in alone)
+
+
 def test_the_band_brackets_the_pooled_figure() -> None:
     totals = {1: (6, 10), 2: (8, 10), 3: (5, 10), 4: (9, 10), 5: (7, 10)}
     pooled = sum(n for n, _ in totals.values()) / sum(d for _, d in totals.values())

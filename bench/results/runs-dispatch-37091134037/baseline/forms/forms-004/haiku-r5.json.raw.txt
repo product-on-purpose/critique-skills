@@ -1,0 +1,29 @@
+Location: row-name, the "Full name" field
+Evidence: `<input id="name-input" name="full_name" ... autocomplete="name" ... required="">`
+Problem: This field duplicates the "Your name" field later in the form (row-legalname, name="legal_name"), both asking for the user's name with identical autocomplete="name" attributes.
+Fix: Remove one of the two name fields, or clarify the purpose of each if both are genuinely needed (e.g., "Full name" vs. "Legal name as it appears on documents").
+
+Location: row-member, the "Membership number" field
+Evidence: `<input id="member-input" name="membership_number" type="text" inputmode="numeric" placeholder="Must be 8 digits" required="">`
+Problem: The placeholder text says "Must be 8 digits" but there is no minlength, maxlength, or pattern attribute to enforce this constraint, so users can enter any length.
+Fix: Add `minlength="8" maxlength="8" pattern="[0-9]{8}"` to enforce the 8-digit requirement.
+
+Location: row-shipspeed, the "Preferred shipping speed" select
+Evidence: `<select id="shipspeed-select" required="">`
+Problem: The select element is missing a name attribute, so its value will not be submitted with the form.
+Fix: Add `name="shipspeed"` (or another appropriate name) to the select element.
+
+Location: row-legalname, the "Your name" field
+Evidence: `<input id="legalname-input" name="legal_name" type="text" autocomplete="name" ... required="">`
+Problem: This field duplicates the "Full name" field earlier in the form (row-name, name="full_name"), both asking for the user's name.
+Fix: Remove one of the two name fields, or clarify the purpose of each if both are genuinely needed.
+
+Location: row-org, the "Organization name" field
+Evidence: `<input id="org-input" name="organization" type="text" style="font-size:16px" required="">`
+Problem: This field has an inline style attribute while all other text inputs do not, creating visual and code inconsistency.
+Fix: Remove `style="font-size:16px"` or apply font sizing consistently to all inputs via a stylesheet.
+
+Location: row-contacttime, the "Preferred contact time" field
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: The field uses type="text" for a time value, which does not provide browser-native time input controls or validation.
+Fix: Change to `type="time"` or `type="datetime-local"` to provide appropriate input semantics and UI.

@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "pattern=\"[0-9]+\"",
+      "fix": "Replace with a specific pattern like pattern=\"[0-9]{10}\" and add maxlength=\"10\".",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "row-phone2 (Secondary phone field)",
+      "severity": 3,
+      "violation": "Pattern allows any number of digits with no length constraint, which is invalid for phone numbers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "type=\"text\"",
+      "fix": "Change to type=\"url\".",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "row-website (Company website field)",
+      "severity": 3,
+      "violation": "Field requests a website URL but uses type=\"text\" instead of type=\"url\", missing URL validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "placeholder=\"Must be 8 digits\" with no validation",
+      "fix": "Add pattern=\"[0-9]{8}\" and maxlength=\"8\".",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-member (Membership number field)",
+      "severity": 3,
+      "violation": "Label and placeholder specify \"8 digits\" but no pattern or maxlength attribute enforces this constraint."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "inputmode=\"numeric\" with no length validation",
+      "fix": "Add maxlength=\"20\" (or appropriate length for expected account numbers) and optionally a pattern attribute.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-acctnum (Account number field)",
+      "severity": 3,
+      "violation": "No pattern or maxlength attribute to constrain account number input."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "size=\"3\"",
+      "fix": "Increase or remove size attribute, or add maxlength=\"10\".",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "row-postal (Postal code field)",
+      "severity": 3,
+      "violation": "Size constraint of 3 characters is too small for valid postal codes (US: 5 digits, Canada: 6 alphanumeric)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<select id=\"shipspeed-select\" required=\"\"> with no name attribute",
+      "fix": "Add name=\"shipping_speed\" to the select element.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "shipspeed-select (Preferred shipping speed)",
+      "severity": 3,
+      "violation": "Select element is missing the name attribute, so its value will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<option>Standard</option> (all options lack value attributes)",
+      "fix": "Add value attributes to each option, e.g., <option value=\"standard\">Standard</option>.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "shipspeed-select options",
+      "severity": 3,
+      "violation": "Options have no value attributes, so form will submit display text instead of coded values."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<label>Your name</label> paired with row-name's <label>Full name</label>",
+      "fix": "Remove row-legalname entirely or clarify the distinction between the two name fields.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "row-legalname (Your name field)",
+      "severity": 3,
+      "violation": "Duplicate field collecting the same information (person's name) with different field names (full_name vs legal_name)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "type=\"text\"",
+      "fix": "Change to type=\"time\".",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "row-contacttime (Preferred contact time field)",
+      "severity": 3,
+      "violation": "Field uses type=\"text\" instead of type=\"time\", providing no time picker UI or validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "dob-day-select, dob-month-select, dob-year-select all have options like <option>1</option> with no value attributes and no default option",
+      "fix": "Add value attributes to each option and prepend a default option like <option value=\"\">Select day</option> to each select.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "fieldset row-dob (Date of birth section)",
+      "severity": 3,
+      "violation": "Options lack value attributes (will submit display text) and all selects lack a placeholder option to prompt user selection."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-002.html",
+    "artifact_sha256": "e39d0a6e9175987711e114d2ce5edd568205f5aecafb2d271246e6036a16457f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T03:41:45Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

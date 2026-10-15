@@ -1,0 +1,34 @@
+Location: Email input, line with `id="email-input"`
+Evidence: `autocomplete="e-mail"`
+Problem: The correct autocomplete attribute value for email is "email", not "e-mail".
+Fix: Change `autocomplete="e-mail"` to `autocomplete="email"`
+
+Location: Confirm password input, line with `id="confirm-password-input"`
+Evidence: Missing `minlength` attribute when password requires `minlength="8"`
+Problem: The password field requires a minimum of 8 characters, but the confirm password field has no minlength constraint, allowing validation to pass even if the passwords are mismatched in length.
+Fix: Add `minlength="8"` to the confirm password input
+
+Location: Preferred shipping speed select, line with `id="shipspeed-select"`
+Evidence: `<select id="shipspeed-select" required="">`
+Problem: The select element is missing a `name` attribute, so this field's value will not be included when the form is submitted.
+Fix: Add `name="shipping_speed"` (or appropriate name) to the select element
+
+Location: How did you hear about us select, line with `id="hear-select"`
+Evidence: `<select id="hear-select" required="">`
+Problem: The select element is missing a `name` attribute, so this field's value will not be included when the form is submitted.
+Fix: Add `name="hear_about_us"` (or appropriate name) to the select element
+
+Location: Name fields comparison: "Full name" input (`name="full_name"`) and "Your name" input (`name="legal_name"`)
+Evidence: Two separate name inputs labeled "Full name" and "Your name" 
+Problem: The form asks for the user's name twice with different labels and field names, creating confusion about why both fields are needed.
+Fix: Remove one of the duplicate name fields, or clarify the purpose of each (e.g., rename one to "Legal name for documents")
+
+Location: Preferred contact time input, line with `id="contacttime-input"`
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: The field is labeled "Preferred contact time" and should use a time input type for proper UX, but is using `type="text"` which forces the user to type freeform text instead of selecting a time.
+Fix: Change `type="text"` to `type="time"`
+
+Location: View details button, line with `id="viewdetails-btn"`
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>`
+Problem: This button has no associated onclick handler or any mechanism to perform an action when clicked, making it non-functional.
+Fix: Either remove the button, add an onclick handler with associated JavaScript, or add an aria-label explaining why it's disabled

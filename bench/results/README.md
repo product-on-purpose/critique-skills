@@ -39,12 +39,28 @@ records the verdict, its adversarial checks, and what it still does not establis
 the frozen baseline was not re-run, and no number of theirs moved. Where a section below quotes an
 accessibility figure without a version, it is the 0.1.0 figure and is marked.
 
+**A seventh skill was measured later, in a run set of its own, and it ships.** Run set
+`bench-2026-10-03` measured `critique-forms` 0.1.0 and the frozen baseline on 2026-10-03, on the same
+two pinned tiers at k=5. It used the four-artifact `forms` domain, which no launch skill was measured
+on. Forms beats the baseline on both tiers at location level: recall **0.933 against 0.438** on haiku
+and **0.905 against 0.819** on sonnet, and precision **0.458 against 0.287** and **0.317 against
+0.303**. The sonnet precision win is a near-tie: forms takes it in 3 of 5 repetitions, and in all
+5 under ADR 0026's exact-node cut. Its 95 percent band in [`variance.json`](variance.json),
+[0.288, 0.346], overlaps the baseline's, [0.280, 0.322], so that margin is inside repetition noise.
+On haiku the two bands are disjoint on both location metrics. The scripted lane carries the result. The judged lane names 4 of its 15 seeded instances on
+each tier, and all four are one criterion. [ADR 0037 (the critique-forms ship verdict)](../../docs/internal/decisions/0037-critique-forms-ship-verdict.md)
+records the SHIP ruling, the six checks behind it, and what it does not establish. The run's 12
+entries are in [`results.json`](results.json) beside the p3 and cal1 entries. The sections below were
+written for the six launch skills and are not extended to forms; "Provenance" records where its run
+came from.
+
 - Machine-readable numbers: [`results.json`](results.json)
 - Stretch-skill ship/hold decisions and the post-calibration core verdict: [`verdicts.md`](verdicts.md)
 - Gate re-examination against the fair comparison:
   [ADR 0026 (location-level re-examination of the baseline gates)](../../docs/internal/decisions/0026-location-level-re-examination-of-baseline-gates.md)
 - The calibration iteration: [ADR 0027 (accessibility location-emission calibration)](../../docs/internal/decisions/0027-accessibility-location-emission-calibration.md)
 - The post-calibration verdict: [ADR 0028 (accessibility clears AC-6 on re-measurement)](../../docs/internal/decisions/0028-post-calibration-verdict-accessibility-clears-ac-6.md)
+- The `critique-forms` ship verdict: [ADR 0037 (critique-forms 0.1.0 ships)](../../docs/internal/decisions/0037-critique-forms-ship-verdict.md)
 - Measurement basis: [`measurement-manifest.json`](measurement-manifest.json) and
   [ADR 0023 (v0.1.0 measurement basis)](../../docs/internal/decisions/0023-v0.1.0-measurement-basis-two-pinned-tiers-k5.md)
 - Consistency floor: [ADR 0022 (consistency floor: 0.309, overall lane)](../../docs/internal/decisions/0022-consistency-floor-overall-lane-min-core.md)
@@ -361,11 +377,12 @@ figure suggests.** [`variance.json`](variance.json) publishes the spread: for ea
 what each single repetition would have reported on its own, and a 95 percent band on the pooled
 statistic. It is computed by `python -m bench.variance` from these same committed envelopes, with no
 new runs, and it refuses to emit anything unless pooling the repetitions back together reproduces
-the numbers on this page exactly (currently 104 of 104 cell-metrics).
+the numbers on this page exactly (currently 120 of 120 cell-metrics, across all three run sets).
 
 Read it before reading any single figure here as precise. `critique-accessibility` 0.1.0 on sonnet
 publishes a location recall of **0.306** from five runs that measured **0.529, 0.294, 0.353, 0.118
-and 0.235**. The median band width across the skill cells is 0.082 and the widest is 0.247. Two
+and 0.235**. Across the launch skills' location-level cells, the median band width is 0.081 and
+the widest is 0.235. Two
 things follow that are not obvious from the tables: **haiku's bands are 2.3x wider than sonnet's**,
 so the cheaper tier is also the less reliable one, and **consistency has no band at all**, because
 it compares pairs of envelopes and is undefined for a single repetition, so the 0.309 floor below
@@ -700,6 +717,36 @@ on sonnet, 2026-09-15". The usability run landed inside its band on both gated f
 re-measured the one cell [section 2](#2-cells-where-a-skill-is-worse-than-the-generic-prompt) leaves
 open; what it found is recorded there.
 
+**A fourth run directory followed on 2026-10-03, and it measures a skill no earlier run set saw.**
+Workflow run `37091134037`, dispatched through `bench.yml` on commit `c442ba8`, measured
+`critique-forms` 0.1.0 and the frozen baseline on both pinned tiers at k=5, in one run set. It is
+committed as `bench/results/runs-dispatch-37091134037/`: 80 envelopes, 40 per arm, with no failed
+cell, plus the baseline arm's 40 `.json.raw.txt` companions. Only the run directory was taken from
+the result branch, as before.
+
+**It is the first run directory to carry its own `results.json`.** Since the cheap half of
+[E63 (dispatch run sets outside results.json)](../../docs/internal/backlog/enhancements.md) landed,
+`bench.yml` writes a run's scores inside its run directory instead of over the committed file. This
+one holds 12 entries under run set `bench-2026-10-03`. Rebuilding it from the 80 envelopes with
+`build_results` reproduces every entry field for field. `contract/validate_envelopes.py` and the
+scorer's envelope discovery both skip it by name.
+
+**Its 12 entries joined the top-level `results.json` on 2026-10-06, the first dispatch run set
+published there.** They waited for the ship verdict, because the documentation site's receipts page
+renders every entry in `results.json` and does not read a skill's status. Adding them earlier would
+have shown a skill registered `experimental` on the site. [ADR 0037](../../docs/internal/decisions/0037-critique-forms-ship-verdict.md) ruled SHIP, and the
+same change moved the skill to `active` under [ADR 0036](../../docs/internal/decisions/0036-experimental-status-until-ship-verdict.md). The three earlier dispatch
+directories stay outside `results.json` for the reason "Known issues" gives. These entries could
+join because no earlier entry is in the `forms` domain, so none of them shares a cell with another
+run set.
+
+**One fidelity finding travels with it.** In 10 of the 40 `critique-forms` envelopes, the scripted
+lane differs from what `checks.py` emits for the same artifact. Sonnet dropped script findings in 6
+runs. Haiku labeled judged-criterion findings as scripted in 3 runs, all on the clean form. Haiku
+also HTML-escaped its location strings in 1 run, which no score notices. The likely cause and the
+fix are
+[E73 (make the merge step run the scripted lane itself)](../../docs/internal/backlog/enhancements.md).
+
 ## Limitations
 
 Stated so no reader has to infer them from an absence.
@@ -820,18 +867,27 @@ python -m bench.generator leak-check --corpus bench/corpus
 python -m bench.metrics score --corpus bench/corpus --runs bench/results/runs \
     --out /tmp/results-p3.json --run-set p3-2026-07-31
 
-# 4. Score the calibration run set. Its 2 entries are the critique-accessibility 0.1.1 rows.
+# 3. Score the calibration run set. Its 2 entries are the critique-accessibility 0.1.1 rows.
 #    runs-cal1 holds no probes either, so it is likewise scored in place.
 python -m bench.metrics score --corpus bench/corpus --runs bench/results/runs-cal1 \
     --out /tmp/results-cal1.json --run-set cal1-2026-08-01
 
-# 5. The committed results.json is the two entry arrays concatenated and sorted by
+# 4. Score the critique-forms run set. Its 12 entries are the forms domain, both arms, both tiers.
+#    The directory also holds the run's own results.json, which the scorer skips by name.
+python -m bench.metrics score --corpus bench/corpus --runs bench/results/runs-dispatch-37091134037 \
+    --out /tmp/results-forms.json --run-set bench-2026-10-03
+
+# 5. The committed results.json is the three entry arrays concatenated and sorted by
 #    (skill, skill_version, model, domain), which is the order build_results itself emits, with
-#    run_set "p3-2026-07-31-plus-cal1-2026-08-01". Both run sets are held in one file because the
-#    repository's rule is that no number appears anywhere that is not in a committed results.json,
-#    and because holding 0.1.0 and 0.1.1 side by side is what stops the calibration overwriting the
-#    failure it fixed. python -m bench.metrics score cannot span two run directories in one call,
-#    so this concatenation is the one assembly step not performed by a committed command.
+#    run_set "p3-2026-07-31-plus-cal1-2026-08-01-plus-bench-2026-10-03". All three run sets are held
+#    in one file because the repository's rule is that no number appears anywhere that is not in a
+#    committed results.json, and because holding 0.1.0 and 0.1.1 side by side is what stops the
+#    calibration overwriting the failure it fixed. python -m bench.metrics score cannot span more
+#    than one run directory in a call, so this concatenation is the one assembly step not performed
+#    by a committed command. Compare entries by (skill, skill_version, model, domain, lane), not by
+#    position: within a cell, build_results emits the lanes judged, overall, scripted, while the 78
+#    entries committed before 2026-10-06 list them overall, judged, scripted. Checked 2026-10-06:
+#    all 90 entries are equal by that key.
 
 # 6. Confirm the published tables have not drifted from the committed numbers.
 python -m bench.report table --results bench/results/results.json --check
@@ -857,7 +913,7 @@ which is the check that it is measuring what that ADR measured.
 1.2.0. Read a lane column by filtering `entries[]` on `lane`.
 
 The lanes partition, and that is checked rather than assumed: judged claims plus scripted claims
-equal overall claims in all 26 cells, while the ground-truth denominator is identical across all
+equal overall claims in all 30 cells, while the ground-truth denominator is identical across all
 three, since a lane filter that moved it would mean the filter had reached the manifest. Both
 invariants are asserted in `bench/metrics/tests/test_cli.py` against this committed file.
 
@@ -913,6 +969,10 @@ Reported, not fixed. Each affects how far a reader should trust the surrounding 
   below. Closing it needs every reader to key on `run_set` as well, and a ruling on which run set a
   published table shows. Tracked as
   [E63 (dispatch run sets outside results.json)](../../docs/internal/backlog/enhancements.md).
+  A fourth directory, `runs-dispatch-37091134037/` (both tiers, 2026-10-03), is in it, and it is the
+  only dispatch run set that is. No earlier entry is in the `forms` domain, so its 12 entries collide
+  with nothing. They joined on 2026-10-06 with the `critique-forms` ship verdict, as "Provenance"
+  explains.
 - **`bench/report.py` used to drop a row silently.** Its baseline-comparison tables keyed each
   `(domain, model)` cell by skill name alone, so two entries for the same skill at different versions
   collided and whichever was inserted first vanished from the comparison without any error. It was

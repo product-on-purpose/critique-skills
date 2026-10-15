@@ -1,0 +1,64 @@
+Location: <head>
+Evidence: `<meta charset="utf-8">` and `<title>...</title>` are the only two tags in `<head>`
+Problem: There is no viewport meta tag, so on mobile devices (where this form's `tel`, `numeric`, and `url` input types are clearly meant to be used) the page will render at desktop width and force pinch-zooming.
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to `<head>`.
+
+Location: row-email, email-input
+Evidence: `autocomplete="e-mail"`
+Problem: `e-mail` is not a valid HTML autocomplete token; the correct value is `email`, so browsers will not reliably autofill this field.
+Fix: Change `autocomplete="e-mail"` to `autocomplete="email"`.
+
+Location: row-housenumber, housenumber-input
+Evidence: `<input id="housenumber-input" name="house_number" type="text" required="">`
+Problem: Unlike every other address-related field in the form, this input has no `autocomplete` attribute, so browser address autofill will skip it.
+Fix: Add an appropriate autocomplete token, e.g. `autocomplete="address-line1"` (and adjust the street field accordingly), or `address-line2` depending on which field should hold the number vs. street name.
+
+Location: row-phone2, phone2-input
+Evidence: `<input id="phone2-input" name="phone_secondary" type="tel" autocomplete="tel">` — identical to `phone-input`'s `autocomplete="tel"`
+Problem: Using the same `autocomplete="tel"` token for both the primary and secondary phone fields means browsers may autofill the same stored number into both, defeating the purpose of a "secondary" field.
+Fix: Omit `autocomplete` on the secondary phone field or use a distinct value (there is no standard "secondary tel" token, so disabling autofill there is the practical fix).
+
+Location: row-website, website-input
+Evidence: `<label id="website-label" for="website-input">Company website</label> ... required=""`
+Problem: Requiring a "Company website" to create a personal shopping account on an apparel retailer (Meridian Outfitters) is a mismatched/unnecessary required field that will block ordinary consumers from signing up.
+Fix: Remove this field, or make it optional and only shown/required for a business-account flow.
+
+Location: row-member, member-input
+Evidence: `placeholder="Must be 8 digits"` with no `pattern` or `maxlength`/`minlength` attribute
+Problem: The 8-digit requirement is only communicated via placeholder text, not enforced, so the field accepts any length or non-numeric text despite `inputmode="numeric"`.
+Fix: Add `pattern="\d{8}" maxlength="8" minlength="8"` to actually enforce the stated format.
+
+Location: row-member and row-acctnum
+Evidence: both `membership-input` and `acctnum-input` are `required=""` on an account-*creation* form
+Problem: Requiring a pre-existing "Membership number" and "Account number" before the user has even created an account is logically contradictory, and "Account number" has no label text explaining what it refers to.
+Fix: Make these optional (e.g., "if you already have a membership number"), or remove `acctnum-input` entirely if it duplicates `member-input`.
+
+Location: row-postal, postal-input
+Evidence: `postal-input` appears after `row-acctnum` and before `row-shipspeed`, far from `row-housenumber`/`row-street`
+Problem: Postal code is part of the mailing address but is separated from the house number and street fields by seven unrelated fields (phone, website, membership number, account number), breaking logical field grouping.
+Fix: Move `row-postal` next to `row-street` so the full address is entered together.
+
+Location: row-shipspeed, shipspeed-select
+Evidence: `<option>Overnight</option> ... <option>Next-day</option>`
+Problem: "Overnight" and "Next-day" describe the same delivery speed, giving users two confusing, overlapping choices.
+Fix: Remove one of the duplicate options (keep a single "Overnight/Next-day" option).
+
+Location: row-legalname, legalname-input
+Evidence: `<label>Your name</label> ... name="legal_name" ... autocomplete="name" ... required=""`, compare to `row-name`'s `name="full_name" ... autocomplete="name" ... required=""`
+Problem: This field duplicates the "Full name" field collected earlier in the form — both use `autocomplete="name"` and both are required, so the user is asked for the same information twice under different labels.
+Fix: Remove `row-legalname` (or merge its purpose into `row-name` if a legally distinct name is genuinely needed, with a clarifying label explaining the difference).
+
+Location: row-org, org-input
+Evidence: `<input id="org-input" name="organization" type="text" style="font-size:16px" required="">`
+Problem: An "Organization name" required field is out of place on a consumer apparel signup form (no business-account context established), and it carries a stray inline style not used consistently elsewhere.
+Fix: Remove the field or make it optional/conditional on a "business account" toggle; drop the ad-hoc inline style in favor of a stylesheet rule if sizing matters.
+
+Location: row-contacttime, contacttime-input / contacttime-label
+Evidence: `<label ... style="display:block">Preferred contact time</label>` next to `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: A "preferred contact time" is being collected with a free-text `type="text"` input instead of a structured `type="time"` input, so it won't get a time picker or format validation; the label also has a one-off inline style not applied to any other label.
+Fix: Change the input to `type="time"`, and move the `display:block` styling into shared CSS applied consistently (or remove it).
+
+Location: viewdetails-btn
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>` placed directly inside `<form>` between `row-contacttime` and `row-hear`
+Problem: Unlike every other control, this button is not wrapped in a `row-*` div, has no associated label/row, and no visible purpose or handler in a sign-up form — it appears to be stray/leftover markup.
+Fix: Remove the button if unused, or wrap it in a properly labeled row and clarify what "View details" does in this context.

@@ -1,0 +1,29 @@
+Location: Email input (row-email)
+Evidence: `autocomplete="e-mail"`
+Problem: The autocomplete attribute value should be "email" without a hyphen per HTML specification.
+Fix: Change to `autocomplete="email"`
+
+Location: Confirm password input (row-confirm-password)
+Evidence: Input lacks `minlength` attribute, while password input has `minlength="8"`
+Problem: The password and confirm-password fields have inconsistent validation constraints.
+Fix: Add `minlength="8"` to the confirm password input.
+
+Location: Shipping speed select (row-shipspeed)
+Evidence: `<select id="shipspeed-select" required="">`
+Problem: The select element is missing a `name` attribute, so its value won't be included in form submission.
+Fix: Add `name="preferred_shipping_speed"` to the select element.
+
+Location: Form name fields
+Evidence: Two required name inputs with labels "Full name" (name-input) and "Your name" (legalname-input)
+Problem: The form contains two fields asking for a person's name with ambiguous labels, creating confusion about which field to fill.
+Fix: Either consolidate into a single name field or clarify the distinction with labels like "Full name" and "Legal name".
+
+Location: How did you hear about us select (row-hear)
+Evidence: `<select id="hear-select" required="">`
+Problem: The select element is missing a `name` attribute, so its value won't be included in form submission.
+Fix: Add `name="hear_about_us"` to the select element.
+
+Location: Form element
+Evidence: `<form id="form">` with no action or method attributes
+Problem: The form lacks `action` and `method` attributes required for server-side form submission.
+Fix: Add `action` and `method` attributes, such as `action="/account/create"` and `method="POST"`.

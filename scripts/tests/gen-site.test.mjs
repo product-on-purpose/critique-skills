@@ -50,6 +50,11 @@ import {
   buildRouteMap,
   resolveLink,
   rewriteLinks,
+  countWord,
+  workedExamplePath,
+  criterionRubric,
+  synthesizedRubrics,
+  criteriaExplorerLines,
 } from "../gen-site.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -554,18 +559,19 @@ test("criterionPattern comes from the frozen contract schema, not a copy of it",
 
 // --- the real skills --------------------------------------------------------
 
-test("the shipped skills carry exactly 42 scripted and 54 judged criteria", () => {
+test("the shipped skills carry exactly 60 scripted and 60 judged criteria", () => {
   // Hard-coded on purpose. In this repository a criterion is added, removed, or moved between
   // lanes only by a deliberate, versioned change to a skill, so this test breaking is the
   // correct alarm and not friction: it means the site's headline figure moved and the README's
-  // hand-typed sentence ("42 run as deterministic scripts and 54 require judgment") is stale.
+  // hand-typed sentence ("60 run as deterministic scripts and 60 require judgment") is stale.
+  // Moved from 42, 54 and 96 when critique-forms went active (ADR 0037), adding 18 and 6.
   const skills = loadSkills();
-  assert.equal(skills.length, 6);
+  assert.equal(skills.length, 7);
   const scripted = skills.reduce((n, s) => n + s.scripted.length, 0);
   const judged = skills.reduce((n, s) => n + s.judged.length, 0);
-  assert.equal(scripted, 42, "scripted lane");
-  assert.equal(judged, 54, "judged lane");
-  assert.equal(scripted + judged, 96, "total criteria");
+  assert.equal(scripted, 60, "scripted lane");
+  assert.equal(judged, 60, "judged lane");
+  assert.equal(scripted + judged, 120, "total criteria");
 });
 
 test("every shipped criterion ID is unique and matches the contract grammar", () => {
@@ -578,7 +584,7 @@ test("every shipped criterion ID is unique and matches the contract grammar", ()
       seen.add(id);
     }
   }
-  assert.equal(seen.size, 96);
+  assert.equal(seen.size, 120);
 });
 
 test("every skill version agrees with library.json", () => {
@@ -603,6 +609,95 @@ test("every shipped rubric source has a citation, and a url only when one exists
       if (src.url) assert.match(src.url, /^https:\/\//, `${skill.name}/${src.id} url`);
     }
   }
+});
+
+// --- criteria explorer attribution (E72) ------------------------------------------------
+
+test("criterionRubric credits each shipped ID shape to the rubric that owns it", () => {
+  assert.deepEqual(criterionRubric("WCAG-1.4.3", [{ id: "WCAG" }]), { id: "WCAG", synthesized: false });
+  assert.deepEqual(criterionRubric("NNG-EM-TIMING", [{ id: "NNG-EM" }]), { id: "NNG-EM", synthesized: false });
+  // critique-usability: no source id prefixes NNG-H3-..., so the source sharing its first segment does.
+  assert.deepEqual(criterionRubric("NNG-H3-DEADEND", [{ id: "NNG-HEURISTICS" }, { id: "NNG-SEVERITY" }]), {
+    id: "NNG-HEURISTICS",
+    synthesized: false,
+  });
+});
+
+test("criterionRubric prefers the longest source id that prefixes the criterion", () => {
+  assert.equal(criterionRubric("NNG-EM-TIMING", [{ id: "NNG" }, { id: "NNG-EM" }]).id, "NNG-EM");
+});
+
+test("criterionRubric credits a synthesized namespace to its rubric, never to the first listed source", () => {
+  // The E72 defect: this used to return BAYMARD, the first of critique-forms' sixteen sources.
+  assert.deepEqual(criterionRubric("FORMS-INPUT-TYPE", [{ id: "BAYMARD" }, { id: "GOOGLE" }]), {
+    id: "FORMS",
+    synthesized: true,
+  });
+});
+
+test("every critique-forms criterion resolves to FORMS, and no other skill's to a synthesized rubric", () => {
+  const forms = parseSkill(
+    readFileSync(resolve(REPO_ROOT, "skills", "critique-forms", "SKILL.md"), "utf8"),
+    "skills/critique-forms/SKILL.md",
+  );
+  for (const id of [...forms.scripted, ...forms.judged]) {
+    assert.deepEqual(criterionRubric(id, forms.rubricSources), { id: "FORMS", synthesized: true }, id);
+  }
+  assert.deepEqual(synthesizedRubrics(forms), ["FORMS"]);
+  for (const skill of loadSkills().filter((s) => s.name !== "critique-forms")) {
+    assert.deepEqual(synthesizedRubrics(skill), [], skill.name);
+  }
+});
+
+test("the criteria explorer names a synthesized rubric, points to its rows, and counts its skills", () => {
+  const plain = {
+    name: "critique-plain",
+    route: "/skills/critique-plain/",
+    dir: "skills/critique-plain",
+    version: "0.1.0",
+    scripted: ["SRC-ONE"],
+    judged: [],
+    rubricSources: [{ id: "SRC", citation: "A source.", url: "", accessed: "2026-01-01", operationalization: "verbatim" }],
+  };
+  const synth = {
+    name: "critique-synth",
+    route: "/skills/critique-synth/",
+    dir: "skills/critique-synth",
+    version: "0.1.0",
+    scripted: ["SYN-A"],
+    judged: ["SYN-B"],
+    rubricSources: ["PUB1", "PUB2", "PUB3"].map((id) => ({
+      id,
+      citation: `${id} citation.`,
+      url: "",
+      accessed: "2026-01-01",
+      operationalization: "paraphrased",
+    })),
+  };
+  const text = criteriaExplorerLines([plain, synth]).join("\n");
+  assert.match(text, /counted from the two `SKILL\.md` frontmatters/);
+  assert.match(text, /\| `SYN-A` \| scripted \| `SYN` \|/);
+  assert.match(text, /\| `SYN-B` \| judged \| `SYN` \|/);
+  assert.doesNotMatch(text, /\| `SYN-[AB]` \| \w+ \| `PUB1` \|/);
+  assert.match(text, /`SYN`, synthesized from 3 sources/);
+  assert.match(text, /\[`references\/SYN\.md`\]\(https:\/\/github\.com\/[^)]+\/skills\/critique-synth\/references\/SYN\.md\)/);
+  assert.match(text, /`SYN` is not a source\./);
+  // The single-source skill reads exactly as before.
+  assert.match(text, /1 criteria, from `SRC`\. \[Skill page\]/);
+  assert.match(text, /\| `SRC-ONE` \| scripted \| `SRC` \|/);
+  assert.match(text, /^\| Source \| Citation \| Operationalization \|$/m);
+});
+
+test("a skill page links its worked example only when one exists", () => {
+  assert.equal(workedExamplePath({ name: "critique-accessibility" }), "examples/accessibility/README.md");
+  // critique-forms went active with no walkthrough; an unconditional link would 404 on GitHub.
+  assert.equal(workedExamplePath({ name: "critique-nonexistent" }), null);
+});
+
+test("countWord spells small counts and falls back to digits", () => {
+  assert.equal(countWord(6), "six");
+  assert.equal(countWord(7), "seven");
+  assert.equal(countWord(13), "13");
 });
 
 test("the route map routes every shipped skill and the critic subagent", () => {
@@ -635,8 +730,8 @@ function activeVersionMap() {
 
 test("loadResults reads the committed benchmark file and its provenance", () => {
   const results = loadResults();
-  assert.equal(results.entries.length, 26);
-  assert.equal(results.runSet, "p3-2026-07-31-plus-cal1-2026-08-01");
+  assert.equal(results.entries.length, 30);
+  assert.equal(results.runSet, "p3-2026-07-31-plus-cal1-2026-08-01-plus-bench-2026-10-03");
   assert.ok(results.generatedAt, "generated_at");
   assert.ok(results.resultsVersion, "results_version");
 });
@@ -644,7 +739,7 @@ test("loadResults reads the committed benchmark file and its provenance", () => 
 test("activeCut drops the baseline and every superseded version, and nothing else", () => {
   const results = loadResults();
   const active = activeCut(results.entries, activeVersionMap());
-  assert.equal(active.length, 12);
+  assert.equal(active.length, 14);
   assert.ok(active.every((e) => !isBaseline(e)), "no baseline row survives the cut");
   // critique-accessibility 0.1.0 is the one superseded version in the dataset, and it must stay
   // OUT of the floors while staying IN the table: the 0.1.0-to-0.1.1 comparison is the page's
@@ -687,7 +782,9 @@ test("the published floors are what the committed evidence says they are", () =>
   assert.equal(worst("precision"), 0.169, "criterion-level precision floor");
   assert.equal(worst("precision_location"), 0.169, "location-level precision floor");
   assert.equal(worst("recall"), 0.686, "criterion-level recall floor");
-  assert.equal(Math.max(...active.map((e) => e.clean_fp_rate.value)), 9.4, "worst clean-FP rate");
+  // 9.8 is critique-forms on sonnet, all of it from the judged lane (ADR 0037). It was 9.4,
+  // critique-clarity on sonnet, until forms went active.
+  assert.equal(Math.max(...active.map((e) => e.clean_fp_rate.value)), 9.8, "worst clean-FP rate");
 });
 
 test("the baseline scores exactly zero at criterion level, which is structural", () => {
@@ -695,7 +792,7 @@ test("the baseline scores exactly zero at criterion level, which is structural",
   // match at the criterion level whatever it says. The page explains this in place; if a future
   // baseline ever scores non-zero here, that explanation is wrong and must be rewritten.
   const baseline = loadResults().entries.filter(isBaseline);
-  assert.equal(baseline.length, 12);
+  assert.equal(baseline.length, 14);
   for (const entry of baseline) {
     assert.equal(entry.precision.value, 0, `${entry.domain}/${entry.model} precision`);
     assert.equal(entry.recall.value, 0, `${entry.domain}/${entry.model} recall`);

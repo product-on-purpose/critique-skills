@@ -1,0 +1,193 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"password-input\" name=\"password\" type=\"password\" autocomplete=\"new-password\" minlength=\"8\" required=\"\">`",
+      "fix": "Add visible helper text under the password field (e.g., \"At least 8 characters\") so users know the rule upfront.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "row-password, `password-input`",
+      "severity": 3,
+      "violation": "The 8-character minimum is enforced only via the `minlength` attribute; there is no visible text telling the user the password requirement before they get a validation error."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"street-input\" name=\"street_address\" ...>` followed later by `<input id=\"postal-input\" name=\"postal_code\" ...>` with no field in between",
+      "fix": "Add city, state/region, and country fields (or a combined address-line2/city/state group) between street address and postal code.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "row-street and row-postal",
+      "severity": 3,
+      "violation": "The form collects a street address and postal code but has no city, state/province, or country field, making the mailing address incomplete."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"phone2-input\" name=\"phone_secondary\" type=\"tel\" autocomplete=\"tel\">` - identical to `<input id=\"phone-input\" name=\"phone\" type=\"tel\" autocomplete=\"tel\" required=\"\">`",
+      "fix": "Differentiate the tokens, e.g. keep `tel` on the primary field and omit autocomplete (or use `tel-national`/a custom scheme) on the secondary field, or rely on `autocomplete=\"off\"` for the secondary.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-phone2, `phone2-input`",
+      "severity": 3,
+      "violation": "Both the primary and secondary phone fields use the same `autocomplete=\"tel\"` token, so browsers cannot reliably distinguish which stored number to autofill into each."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"website-label\" for=\"website-input\">Company website</label>` with the input marked `required=\"\"`",
+      "fix": "Remove this field from the consumer signup flow, or make it optional and relabel it for the actual use case (e.g., a separate B2B registration form).",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-website, `website-label`",
+      "severity": 3,
+      "violation": "A required \"Company website\" field is out of place on a consumer account-creation form for an outfitters retailer and will block signup for ordinary customers who have no company website."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required=\"\">`",
+      "fix": "Add `pattern=\"\\d{8}\"` and `maxlength=\"8\"` (and move the hint to persistent helper text rather than relying solely on the placeholder).",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "row-member, `member-input`",
+      "severity": 3,
+      "violation": "The \"8 digits\" requirement is communicated only through placeholder text with no `maxlength`, `pattern`, or `minlength` attribute, so the constraint isn't actually validated and disappears once the user starts typing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"acctnum-label\" for=\"acctnum-input\">Account number</label>` directly below the \"Membership number (8 digits)\" field",
+      "fix": "Either merge these into one field or add label/help text clarifying the distinct purpose of each, plus a format hint for account number.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "row-acctnum, `acctnum-label`/`acctnum-input`",
+      "severity": 3,
+      "violation": "\"Account number\" and \"Membership number\" appear immediately adjacent with no explanation of how they differ, and account number has no format hint or validation, making it unclear whether this is a duplicate field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">`",
+      "fix": "Add `name=\"shipping_speed\"` to the select element.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "row-shipspeed, `shipspeed-select`",
+      "severity": 3,
+      "violation": "The `<select>` has no `name` attribute, so the chosen shipping speed will never be included in the submitted form data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Overnight</option>` and `<option>Next-day</option>`",
+      "fix": "Remove one of the duplicate options or rename them to describe genuinely distinct service levels.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "row-shipspeed, options list",
+      "severity": 3,
+      "violation": "\"Overnight\" and \"Next-day\" describe the same delivery timeframe, giving users two confusing, overlapping choices."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\"><option>Standard</option>...`",
+      "fix": "Add a disabled, selected placeholder option (e.g., `<option value=\"\" disabled selected>Select shipping speed</option>`) so the required validation is meaningful.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "row-shipspeed, `shipspeed-select`",
+      "severity": 3,
+      "violation": "Because no blank/placeholder option is defined, \"Standard\" is selected by default, so `required` never actually forces an intentional choice - a user can submit without having picked anything themselves."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"legalname-label\" for=\"legalname-input\">Your name</label>` with `name=\"legal_name\"` and `autocomplete=\"name\"` - compare to `<label id=\"name-label\" for=\"name-input\">Full name</label>` earlier in the form",
+      "fix": "Remove the duplicate field, or if a distinct legal name is genuinely needed, rename the label (e.g., \"Legal name (if different from full name)\") and clarify its purpose.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "row-legalname, `legalname-label`",
+      "severity": 3,
+      "violation": "This field duplicates the \"Full name\" field collected earlier; both use `autocomplete=\"name\"`, and the vague label \"Your name\" doesn't explain why the user must enter their name twice."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required=\"\">`",
+      "fix": "Remove or make optional for consumer signup, and move any needed font-size rule into a shared stylesheet/class instead of an inline style on a single input.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "row-org, `org-input`",
+      "severity": 3,
+      "violation": "Like the company website field, a required \"Organization name\" field doesn't fit a consumer account signup; it also carries a one-off inline `style=\"font-size:16px\"` not applied to any other input, an inconsistent styling pattern."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Replace with a `<select>` of defined time ranges (e.g., \"Morning\", \"Afternoon\", \"Evening\") or a `<input type=\"time\">`/range picker.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "row-contacttime, `contacttime-input`",
+      "severity": 3,
+      "violation": "\"Preferred contact time\" is captured as unconstrained free text, which is error-prone and hard to process compared to a structured control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"contacttime-label\" for=\"contacttime-input\" style=\"display:block\">Preferred contact time</label>`",
+      "fix": "Remove the inline style and apply block display via a shared CSS rule for all labels if that's the intended layout.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "row-contacttime, `contacttime-label`",
+      "severity": 3,
+      "violation": "This label alone carries an inline `style=\"display:block\"` not used on any other label in the form, an inconsistent and unexplained styling choice."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>`",
+      "fix": "Either wire it to an actual action (e.g., a modal describing membership/account number details) or remove it from the form.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "`viewdetails-btn`",
+      "severity": 3,
+      "violation": "This button has `type=\"button\"` with no visible handler, href, or surrounding script, so its purpose and behavior inside the signup form are undefined - it appears to be dead or orphaned UI."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<meta charset=\"utf-8\"><title>Create your Meridian Outfitters account</title>` - no viewport meta tag present",
+      "fix": "Add `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">` to the `<head>`.",
+      "id": "F-015",
+      "lane": "judged",
+      "location": "`<head>`",
+      "severity": 3,
+      "violation": "Without a `<meta name=\"viewport\">` tag, this long form will not scale correctly on mobile browsers, which commonly zoom out to a desktop-width layout."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T05:41:45Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 15,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

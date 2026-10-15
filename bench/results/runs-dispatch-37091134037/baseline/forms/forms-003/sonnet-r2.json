@@ -1,0 +1,182 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<meta charset=\"utf-8\"><title>Join Meridian Outfitters</title>` with no viewport meta tag",
+      "fix": "Add `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">` to the `<head>`.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<head>` section",
+      "severity": 3,
+      "violation": "There is no `<meta name=\"viewport\">` tag, so on mobile browsers this form will render at desktop width and require pinch-zooming, undermining the font-size workaround applied later on the organization input."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<p>Thanks for signing up.</p>` inside the phone-number row, before the form has been submitted",
+      "fix": "Remove the paragraph from this row, or move it to a confirmation view that only renders after successful submission.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`#row-phone`",
+      "severity": 3,
+      "violation": "A \"thank you for signing up\" message is shown in the middle of the still-unsubmitted form, which is confusing and appears to be a misplaced post-submit message."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Street address is the 4th field in the form; postal code is the 9th field, separated by phone, secondary phone, website, membership number, and account number",
+      "fix": "Group street address, city/state, and postal code together in a single contiguous block.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`#row-street` and `#row-postal`",
+      "severity": 3,
+      "violation": "Related address fields (street, postal code, and the still-missing city/state) are split apart by unrelated fields, making the form harder to scan and increasing the chance a user skips one."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The form collects `street_address` and `postal_code` but has no field for city, state/province, or country",
+      "fix": "Add city and state/province (and country, if the outfitter ships internationally) fields near the street address field.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Between `#row-street` and `#row-postal`",
+      "severity": 3,
+      "violation": "The address is incomplete - a mailing address cannot be validated or used for shipping without a city/state and country."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"website-input\" name=\"website\" type=\"url\" required=\"\">` on a personal account signup form",
+      "fix": "Make the website field optional, or remove it unless this form is specifically for business accounts.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`#row-website`",
+      "severity": 3,
+      "violation": "Requiring a company website from every individual creating a membership account is inconsistent with the form's purpose and will block legitimate signups who have no website."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"member-input\" name=\"membership_number\" ... placeholder=\"Must be 8 digits\" required=\"\">` on a \"Set up your account\" / join form",
+      "fix": "Remove this field if it duplicates the account being created, or if it's legitimately needed (e.g., migrating an existing member), make it optional and add `pattern=\"\\d{8}\"` with persistent helper text instead of relying on the placeholder.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`#row-member`",
+      "severity": 3,
+      "violation": "A brand-new signup can't be expected to already have an 8-digit membership number - requiring it contradicts the purpose of the form, and the \"8 digits\" rule is only communicated via a disappearing placeholder with no `pattern`/`maxlength` to actually enforce it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" required=\"\">`",
+      "fix": "Remove the field if it's redundant with the account being created, or clarify its purpose with helper text and an appropriate `autocomplete` value if it's legitimately distinct.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`#row-acctnum`",
+      "severity": 3,
+      "violation": "Like membership number, requiring a pre-existing account number on a new-account signup form is contradictory, and there's no autocomplete hint or format guidance for this sensitive identifier."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\"><option>Standard</option>...`",
+      "fix": "Add a disabled, selected placeholder option (e.g. `<option value=\"\" disabled selected>Select shipping speed</option>`) so `required` has an effect.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "`#row-shipspeed`",
+      "severity": 3,
+      "violation": "The select has no blank/placeholder option, so \"Standard\" is selected by default and the `required` attribute never actually forces a deliberate choice - users who skip this field silently get \"Standard\" without realizing they made a choice."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`given_name`/`family_name` fields (\"First name\" / \"Last name\") appear later in the form, while `full_name` is already collected in `#row-name`",
+      "fix": "Pick one representation of the name - remove `full_name` and keep given/family name, or vice versa.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "`#row-legalname`",
+      "severity": 3,
+      "violation": "The form collects the user's name twice in incompatible formats (one combined field, one split into first/last), which is redundant and creates ambiguity about which is authoritative for labels, legal documents, etc."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required=\"\">`",
+      "fix": "Move the 16px minimum font-size rule into a shared stylesheet applied to all form inputs, rather than inlining it on a single field.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "`#row-org`",
+      "severity": 3,
+      "violation": "An explicit 16px font-size (commonly used to prevent iOS Safari from zooming on focus) is applied inconsistently to only this one input, implying every other input on the page is vulnerable to the same mobile zoom issue."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">` with no placeholder, pattern, or structured control",
+      "fix": "Replace with a `<select>` of time ranges, or add a `pattern`/placeholder showing the expected format.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "`#row-contacttime`",
+      "severity": 3,
+      "violation": "\"Preferred contact time\" is collected as unconstrained free text, giving no guidance on expected format (e.g. \"mornings\", \"9am\", \"9:00-11:00\") and making the data hard to use consistently."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:1px 2px;font-size:11px\">View details</button>`",
+      "fix": "Increase padding/font-size to a reasonable touch-target size and add `aria-expanded`/`aria-controls` pointing at whatever content it toggles.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "`#viewdetails-btn`",
+      "severity": 3,
+      "violation": "The button's padding (1-2px) and font size (11px) produce a tap target far below accepted accessibility minimums (e.g. WCAG 2.5.8's 24x24px), and the button has no `aria-expanded`/`aria-controls` to indicate what \"details\" it reveals."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"reset-btn\" type=\"reset\">Clear form</button>` placed directly beside the submit button at the end of a 15-field form",
+      "fix": "Remove the reset button, or require a confirmation dialog before clearing the form.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "`#reset-btn`",
+      "severity": 3,
+      "violation": "A reset button on a long form is a well-known UX trap - a single misclick discards every field the user has filled in, with no confirmation step."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"password-input\" ... minlength=\"6\">`",
+      "fix": "Raise `minlength` to at least 8 and consider adding complexity or breached-password checks server-side.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "`#row-password`",
+      "severity": 3,
+      "violation": "A 6-character minimum is weaker than current baseline password guidance (commonly 8+ characters), offering little protection against brute-force or credential-stuffing attacks."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-003.html",
+    "artifact_sha256": "df62d7b38659529bf26df03102d3e7969a1c47b7c66e72bc8d3cf208f082bc1f",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T04:51:10Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 14,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

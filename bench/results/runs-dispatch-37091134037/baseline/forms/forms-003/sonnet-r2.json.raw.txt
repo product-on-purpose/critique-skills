@@ -1,0 +1,69 @@
+Location: `<head>` section
+Evidence: `<meta charset="utf-8"><title>Join Meridian Outfitters</title>` with no viewport meta tag
+Problem: There is no `<meta name="viewport">` tag, so on mobile browsers this form will render at desktop width and require pinch-zooming, undermining the font-size workaround applied later on the organization input.
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to the `<head>`.
+
+Location: `#row-phone`
+Evidence: `<p>Thanks for signing up.</p>` inside the phone-number row, before the form has been submitted
+Problem: A "thank you for signing up" message is shown in the middle of the still-unsubmitted form, which is confusing and appears to be a misplaced post-submit message.
+Fix: Remove the paragraph from this row, or move it to a confirmation view that only renders after successful submission.
+
+Location: `#row-street` and `#row-postal`
+Evidence: Street address is the 4th field in the form; postal code is the 9th field, separated by phone, secondary phone, website, membership number, and account number
+Problem: Related address fields (street, postal code, and the still-missing city/state) are split apart by unrelated fields, making the form harder to scan and increasing the chance a user skips one.
+Fix: Group street address, city/state, and postal code together in a single contiguous block.
+
+Location: Between `#row-street` and `#row-postal`
+Evidence: The form collects `street_address` and `postal_code` but has no field for city, state/province, or country
+Problem: The address is incomplete — a mailing address cannot be validated or used for shipping without a city/state and country.
+Fix: Add city and state/province (and country, if the outfitter ships internationally) fields near the street address field.
+
+Location: `#row-website`
+Evidence: `<input id="website-input" name="website" type="url" required="">` on a personal account signup form
+Problem: Requiring a company website from every individual creating a membership account is inconsistent with the form's purpose and will block legitimate signups who have no website.
+Fix: Make the website field optional, or remove it unless this form is specifically for business accounts.
+
+Location: `#row-member`
+Evidence: `<input id="member-input" name="membership_number" ... placeholder="Must be 8 digits" required="">` on a "Set up your account" / join form
+Problem: A brand-new signup can't be expected to already have an 8-digit membership number — requiring it contradicts the purpose of the form, and the "8 digits" rule is only communicated via a disappearing placeholder with no `pattern`/`maxlength` to actually enforce it.
+Fix: Remove this field if it duplicates the account being created, or if it's legitimately needed (e.g., migrating an existing member), make it optional and add `pattern="\d{8}"` with persistent helper text instead of relying on the placeholder.
+
+Location: `#row-acctnum`
+Evidence: `<input id="acctnum-input" name="account_number" type="text" required="">`
+Problem: Like membership number, requiring a pre-existing account number on a new-account signup form is contradictory, and there's no autocomplete hint or format guidance for this sensitive identifier.
+Fix: Remove the field if it's redundant with the account being created, or clarify its purpose with helper text and an appropriate `autocomplete` value if it's legitimately distinct.
+
+Location: `#row-shipspeed`
+Evidence: `<select id="shipspeed-select" required=""><option>Standard</option>...`
+Problem: The select has no blank/placeholder option, so "Standard" is selected by default and the `required` attribute never actually forces a deliberate choice — users who skip this field silently get "Standard" without realizing they made a choice.
+Fix: Add a disabled, selected placeholder option (e.g. `<option value="" disabled selected>Select shipping speed</option>`) so `required` has an effect.
+
+Location: `#row-legalname`
+Evidence: `given_name`/`family_name` fields ("First name" / "Last name") appear later in the form, while `full_name` is already collected in `#row-name`
+Problem: The form collects the user's name twice in incompatible formats (one combined field, one split into first/last), which is redundant and creates ambiguity about which is authoritative for labels, legal documents, etc.
+Fix: Pick one representation of the name — remove `full_name` and keep given/family name, or vice versa.
+
+Location: `#row-org`
+Evidence: `<input id="org-input" name="organization" type="text" style="font-size:16px" required="">`
+Problem: An explicit 16px font-size (commonly used to prevent iOS Safari from zooming on focus) is applied inconsistently to only this one input, implying every other input on the page is vulnerable to the same mobile zoom issue.
+Fix: Move the 16px minimum font-size rule into a shared stylesheet applied to all form inputs, rather than inlining it on a single field.
+
+Location: `#row-contacttime`
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">` with no placeholder, pattern, or structured control
+Problem: "Preferred contact time" is collected as unconstrained free text, giving no guidance on expected format (e.g. "mornings", "9am", "9:00-11:00") and making the data hard to use consistently.
+Fix: Replace with a `<select>` of time ranges, or add a `pattern`/placeholder showing the expected format.
+
+Location: `#viewdetails-btn`
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:1px 2px;font-size:11px">View details</button>`
+Problem: The button's padding (1-2px) and font size (11px) produce a tap target far below accepted accessibility minimums (e.g. WCAG 2.5.8's 24x24px), and the button has no `aria-expanded`/`aria-controls` to indicate what "details" it reveals.
+Fix: Increase padding/font-size to a reasonable touch-target size and add `aria-expanded`/`aria-controls` pointing at whatever content it toggles.
+
+Location: `#reset-btn`
+Evidence: `<button id="reset-btn" type="reset">Clear form</button>` placed directly beside the submit button at the end of a 15-field form
+Problem: A reset button on a long form is a well-known UX trap — a single misclick discards every field the user has filled in, with no confirmation step.
+Fix: Remove the reset button, or require a confirmation dialog before clearing the form.
+
+Location: `#row-password`
+Evidence: `<input id="password-input" ... minlength="6">`
+Problem: A 6-character minimum is weaker than current baseline password guidance (commonly 8+ characters), offering little protection against brute-force or credential-stuffing attacks.
+Fix: Raise `minlength` to at least 8 and consider adding complexity or breached-password checks server-side.

@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "FORMS-ADDRESS-FORMAT",
+      "evidence": "<input id=\"housenumber-input\" name=\"house_number\" type=\"text\" required=\"\">",
+      "fix": "Collect the house number and street together in one address-line field.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "#housenumber-input, <input> field, label 'House number', line 28",
+      "severity": 3,
+      "violation": "The house number has its own field separate from the street, and it is required, so an address with no number cannot be entered."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-AUTOCOMPLETE",
+      "evidence": "<input id=\"email-input\" name=\"email\" type=\"email\" required=\"\" autocomplete=\"e-mail\">",
+      "fix": "Replace it with the standard token for this field, for example email.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "#email-input, <input> field, label 'Email address', line 16",
+      "severity": 3,
+      "violation": "The autocomplete value e-mail is not a valid autofill detail in the HTML standard, so autofill is broken for this field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required=\"\"> and <input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required=\"\"> both sit on a page titled 'Create your Meridian Outfitters account', with no earlier step that would have issued either number.",
+      "fix": "Drop both fields from account creation, or mark them optional and explain when an existing member or account holder would already have a number to enter.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#acctnum-input, <input> field, label 'Account number', line 53",
+      "severity": 3,
+      "violation": "The task is creating a new account, which by definition has not yet issued an account number or a membership number to the person filling the form, so a new customer has no value to put in either required field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"housenumber-input\" ...>, <input id=\"street-input\" ...>, <input id=\"postal-input\" ...> and <select id=\"shipspeed-select\" required=\"\"> (preferred shipping speed) are all required on the same form that only creates an account, before any item has been chosen to ship.",
+      "fix": "Move the address fields and the shipping-speed choice to checkout, and let account creation finish with only what creating the account itself needs.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#housenumber-input, <input> field, label 'House number', line 28",
+      "severity": 3,
+      "violation": "A full delivery address and a shipping-speed preference serve a later checkout step, not account creation, and requiring them now forces every new customer to supply shipping details before deciding to buy anything."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button> sits between the row-contacttime field and the row-hear field; the primary <button id=\"submit-btn\" type=\"submit\">Submit</button> at the very end of the form carries no declared style at all.",
+      "fix": "Remove the explicit padding and font-size from #viewdetails-btn, or give #submit-btn at least as much visual weight, and move #viewdetails-btn out of the field sequence so it no longer interrupts the fields.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> button, text 'View details', line 81",
+      "severity": 2,
+      "violation": "A secondary action (View details) is the only button in the form with declared padding and font size, making it as or more visually prominent than the unstyled primary submit button, and it sits between two fields rather than beside the primary at the end of the column."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-ACTION-LABEL",
+      "evidence": "<button id=\"submit-btn\" type=\"submit\">",
+      "fix": "Label the button with the action it performs, such as Create account or Send message.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "#submit-btn, <button> button, text 'Submit', line 92",
+      "severity": 2,
+      "violation": "The form's primary button is labelled Submit, a generic word that says nothing about what pressing it does."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-AUTOCORRECT",
+      "evidence": "<input id=\"name-input\" name=\"full_name\" type=\"text\" autocomplete=\"name\" required=\"\">",
+      "fix": "Add autocorrect=off and spellcheck=false.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "#name-input, <input> field, label 'Full name', line 12",
+      "severity": 2,
+      "violation": "On this name field, autocorrection and spellchecking stay on, so a phone keyboard can change a value it does not know."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-CONFIRM-PASSWORD",
+      "evidence": "<input id=\"confirm-password-input\" name=\"password_again\" type=\"password\" autocomplete=\"new-password\" required=\"\">",
+      "fix": "Remove the confirmation field and offer a control that shows the password as typed.",
+      "id": "F-008",
+      "lane": "scripted",
+      "location": "#confirm-password-input, <input> field, label 'Confirm password', line 24",
+      "severity": 2,
+      "violation": "The form asks for the new password a second time to confirm it, doubling the typing for every person."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">",
+      "fix": "Remove the field from account creation, or ask it later, next to whatever step first needs to schedule contact.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "#contacttime-input, <input> field, label 'Preferred contact time', line 79",
+      "severity": 2,
+      "violation": "A required free-text preferred contact time has no stated use in creating an account and no format guidance, so it could wait until the service actually needs to schedule contact."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-001.html",
+    "artifact_sha256": "531c999912c0ab6c8224cbeb2347e7644d493a84e3a9461a434deaf5f2f09cdd",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-10-03T03:28:25Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 8,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 3
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`autocorrect=\"off\"`",
+      "fix": "Remove `autocorrect=\"off\"` and keep only `spellcheck=\"false\"`.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Full name input (id=\"name-input\")",
+      "severity": 3,
+      "violation": "The autocorrect attribute is not a standard HTML5 attribute and will be ignored by browsers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Single password field with no confirmation field",
+      "fix": "Add a second password input with id=\"password-confirm-input\" and label \"Confirm password\".",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Password input (id=\"password-input\")",
+      "severity": 3,
+      "violation": "Users cannot verify they've entered their password correctly before submitting, risking an incorrect password being saved."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`autocorrect=\"off\"`",
+      "fix": "Remove `autocorrect=\"off\"`.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Street address input (id=\"street-input\")",
+      "severity": 3,
+      "violation": "The autocorrect attribute is not standard HTML5."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Label says \"(8 digits)\", placeholder says \"Must be 8 digits\", but no pattern or maxlength attribute",
+      "fix": "Add `pattern=\"\\d{8}\"` and `maxlength=\"8\"` attributes to enforce exactly 8 numeric digits.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Membership number input (id=\"member-input\")",
+      "severity": 3,
+      "violation": "The form will accept any input (letters, wrong length) despite promising to validate 8-digit format."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Option elements lack value attributes: `<option>Standard</option>`",
+      "fix": "Add value attributes to each option: `<option value=\"standard\">Standard</option>`, `<option value=\"express\">Express</option>`, etc.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Shipping speed select (id=\"shipspeed-select\")",
+      "severity": 3,
+      "violation": "Options should have explicit value attributes to ensure predictable form submission data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Options include both \"Overnight\" and \"Next-day\"",
+      "fix": "Remove one option (recommend removing \"Next-day\" to keep only \"Overnight\").",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Shipping speed select (id=\"shipspeed-select\")",
+      "severity": 3,
+      "violation": "Both options refer to the same shipping service, creating confusion about which to select."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`autocorrect=\"off\"`",
+      "fix": "Remove `autocorrect=\"off\"`.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Legal name input (id=\"legalname-input\")",
+      "severity": 3,
+      "violation": "The autocorrect attribute is not standard HTML5."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Two separate name inputs with names=\"full_name\" and name=\"legal_name\"",
+      "fix": "Consolidate to a single name field or clarify labels as \"Full Name\" and \"Full Legal Name (as on ID)\".",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Form contains both Full name (id=\"row-name\") and Your name / Legal name (id=\"row-legalname\") fields",
+      "severity": 3,
+      "violation": "The form asks for the user's name twice with unclear distinction, making it ambiguous whether they should differ or if one is redundant."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"font-size:16px\"`",
+      "fix": "Remove the inline style and define font-size in an external or internal CSS stylesheet.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Organization name input (id=\"org-input\")",
+      "severity": 3,
+      "violation": "Inline styles should be managed in a stylesheet, not embedded in HTML."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"display:block\"`",
+      "fix": "Remove the inline style and manage layout in a stylesheet.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Preferred contact time label (id=\"contacttime-label\")",
+      "severity": 3,
+      "violation": "Inline styles should be managed in a stylesheet."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Change to `type=\"time\"` if a specific time is needed, or add `placeholder=\"e.g., 9am-5pm\"` to clarify the expected format.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Preferred contact time input (id=\"contacttime-input\")",
+      "severity": 3,
+      "violation": "The input type is \"text\" with no guidance on expected format, leaving it ambiguous whether users should enter a time of day, time range, or something else."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T05:15:01Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 11,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

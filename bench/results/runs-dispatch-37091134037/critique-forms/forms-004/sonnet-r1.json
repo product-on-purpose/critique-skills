@@ -1,0 +1,86 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required=\"\"> and <input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required=\"\"> on a form titled \"Create your Meridian Outfitters account\"",
+      "fix": "Remove the account-number field, since the system generates that identifier once the account is created, and make the membership-number field optional, framed as 'Already a member? Enter your number', so a brand-new customer can proceed without one.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#member-input, <input> field, label 'Membership number (8 digits)', line 41",
+      "severity": 4,
+      "violation": "The task this form performs is creating a new account, yet it requires a membership number and an account number before that account exists. A person who is, by definition, new to the service has neither value and cannot truthfully complete either required field, so the form blocks its entire intended audience rather than asking for something the task can use."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"website-input\" name=\"website\" type=\"url\" required=\"\"> alongside required fields #org-input (Organization name), #shipspeed-select (Preferred shipping speed) and #contacttime-input (Preferred contact time), on a consumer account sign-up with no other indication this is a business or wholesale flow",
+      "fix": "Drop the company-website and organization-name fields unless this is specifically a business account flow, and move shipping speed and preferred contact time to checkout or account settings, where the task that consumes them happens.",
+      "id": "F-002",
+      "instances": [
+        {
+          "evidence": "<input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required=\"\">",
+          "location": "#org-input, <input> field, label 'Organization name', line 67"
+        },
+        {
+          "evidence": "<select id=\"shipspeed-select\" required=\"\">",
+          "location": "#shipspeed-select, <select> field, label 'Preferred shipping speed', line 53"
+        },
+        {
+          "evidence": "<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">",
+          "location": "#contacttime-input, <input> field, label 'Preferred contact time', line 71"
+        }
+      ],
+      "lane": "judged",
+      "location": "#website-input, <input> field, label 'Company website', line 37",
+      "severity": 3,
+      "violation": "None of these four required answers is used by the task of creating an account: a company website and an organization name fit a business signup the page never announces, a preferred shipping speed is an order-time decision, and a preferred contact time is needed only once a contact is actually scheduled. Each could be asked later, when the task that uses it actually occurs, or not at all."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button> followed immediately by <button id=\"submit-btn\" type=\"submit\">Create account</button>, which carries no declared style at all",
+      "fix": "Remove the extra padding and font-size declarations from 'View details', or apply a clearly more prominent filled style to the 'Create account' submit button so it outranks the secondary action visually.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> button, text 'View details', line 73",
+      "severity": 2,
+      "violation": "The secondary action is given explicit padding and a larger declared font size while the primary submit button is left with no styling, so the secondary control reads as more prominent than the one that actually completes the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"name-input\" name=\"full_name\" type=\"text\" autocomplete=\"name\" required=\"\"> labelled 'Full name' (line 12) and <input id=\"legalname-input\" name=\"legal_name\" type=\"text\" autocomplete=\"name\" required=\"\"> labelled 'Your name' (line 63)",
+      "fix": "Remove the second name field, or if a distinct legal name is genuinely needed, label it to say so explicitly, such as 'Legal name (if different from above)'.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label 'Your name', line 63",
+      "severity": 2,
+      "violation": "The form asks for the person's name twice under labels that read identically to a visitor ('Full name' and 'Your name'), even though the fields are named differently internally. The task already has the answer from the first field."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-10-03T05:28:37Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 1,
+      "4": 1
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

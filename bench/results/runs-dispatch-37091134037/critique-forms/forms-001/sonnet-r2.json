@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "FORMS-ADDRESS-FORMAT",
+      "evidence": "<input id=\"housenumber-input\" name=\"house_number\" type=\"text\" required=\"\">",
+      "fix": "Collect the house number and street together in one address-line field.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "#housenumber-input, <input> field, label 'House number', line 28",
+      "severity": 3,
+      "violation": "The house number has its own field separate from the street, and it is required, so an address with no number cannot be entered."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-AUTOCOMPLETE",
+      "evidence": "<input id=\"email-input\" name=\"email\" type=\"email\" required=\"\" autocomplete=\"e-mail\">",
+      "fix": "Replace it with the standard token for this field, for example email.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "#email-input, <input> field, label 'Email address', line 16",
+      "severity": 3,
+      "violation": "The autocomplete value e-mail is not a valid autofill detail in the HTML standard, so autofill is broken for this field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"website-input\" name=\"website\" type=\"url\" required=\"\">, and required in the same form: #member-input (label 'Membership number (8 digits)', line 49), #acctnum-input (label 'Account number', line 53), #shipspeed-select (label 'Preferred shipping speed', line 61), #org-input (label 'Organization name', line 75), #contacttime-input (label 'Preferred contact time', line 79), and #hear-select (label 'How did you hear about us?', line 84).",
+      "fix": "Remove these fields from account creation, or mark them optional and ask only when the task that needs them runs: shipping preferences at checkout, marketing attribution after signup, and membership or account numbers only where the service issues rather than requests them.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#website-input, <input> field, label 'Company website', line 45",
+      "severity": 3,
+      "violation": "The page's own task, stated in its heading 'Create your account' and its title, is to create an account, yet it requires a company website, a membership number, an account number, a shipping speed, an organization name, a preferred contact time, and how the person heard about the service before the account can be created, none of which that task uses; several of these either duplicate what a working account would issue (a membership or account number) or serve a later step (shipping speed, contact time, marketing attribution) and could be asked then."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button> sits between the row-contacttime and row-hear fields, while the primary action, <button id=\"submit-btn\" type=\"submit\">Submit</button>, carries no declared style at all.",
+      "fix": "Style the secondary action more plainly than the primary action, and move it out of the field sequence to sit beside Submit at the end of the form.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> button, text 'View details', line 81",
+      "severity": 2,
+      "violation": "This secondary action carries explicit padding and font-size styling, making it at least as visually prominent as the primary submit button, which declares no style of its own, and it is placed in the middle of the field sequence rather than where the fields end alongside the primary action."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-ACTION-LABEL",
+      "evidence": "<button id=\"submit-btn\" type=\"submit\">",
+      "fix": "Label the button with the action it performs, such as Create account or Send message.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "#submit-btn, <button> button, text 'Submit', line 92",
+      "severity": 2,
+      "violation": "The form's primary button is labelled Submit, a generic word that says nothing about what pressing it does."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-AUTOCORRECT",
+      "evidence": "<input id=\"name-input\" name=\"full_name\" type=\"text\" autocomplete=\"name\" required=\"\">",
+      "fix": "Add autocorrect=off and spellcheck=false.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "#name-input, <input> field, label 'Full name', line 12",
+      "severity": 2,
+      "violation": "On this name field, autocorrection and spellchecking stay on, so a phone keyboard can change a value it does not know."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-CONFIRM-PASSWORD",
+      "evidence": "<input id=\"confirm-password-input\" name=\"password_again\" type=\"password\" autocomplete=\"new-password\" required=\"\">",
+      "fix": "Remove the confirmation field and offer a control that shows the password as typed.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "#confirm-password-input, <input> field, label 'Confirm password', line 24",
+      "severity": 2,
+      "violation": "The form asks for the new password a second time to confirm it, doubling the typing for every person."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"legalname-input\" name=\"legal_name\" type=\"text\" autocomplete=\"name\" autocorrect=\"off\" spellcheck=\"false\" required=\"\"> duplicates <input id=\"name-input\" name=\"full_name\" type=\"text\" autocomplete=\"name\" required=\"\"> labelled 'Full name', earlier in the same form.",
+      "fix": "Remove the second name field, or state clearly how it differs from the first (for example, a legal name used only when it differs from a preferred name).",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label 'Your name', line 71",
+      "severity": 2,
+      "violation": "The form asks for the person's name twice, once as 'Full name' and again as 'Your name', both carrying autocomplete=name, so the person must enter the same answer a second time with no stated reason the two differ."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-001.html",
+    "artifact_sha256": "531c999912c0ab6c8224cbeb2347e7644d493a84e3a9461a434deaf5f2f09cdd",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-10-03T03:14:23Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "FORMS-DATE-SELECTS",
+      "evidence": "<select id=\"dob-day-select\" autocomplete=\"bday-day\" required=\"\"> <select id=\"dob-month-select\" autocomplete=\"bday-month\" required=\"\"> <select id=\"dob-year-select\" autocomplete=\"bday-year\" required=\"\">",
+      "fix": "Use three short text fields for day, month and year, with the numeric input mode.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "#dob-day-select, <select> field, label 'Day', line 77",
+      "severity": 3,
+      "violation": "A date the person knows by heart is picked from three drop-downs, the year from 60 options."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "Heading \"Create your account\" (line 8) and submit button \"Create account\" (line 189) name the task; <input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required> requires an account number before that account exists.",
+      "fix": "Remove the account-number field from sign-up, or, if it refers to a pre-existing account being linked, say so in the label and make clear why a new sign-up needs it.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#acctnum-input, <input> field, label 'Account number', line 45",
+      "severity": 3,
+      "violation": "This required field asks for an account number before the account it would belong to has been created, so the task of creating an account cannot use what it asks for."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-WIDTH",
+      "evidence": "<input id=\"postal-input\" name=\"postal_code\" type=\"text\" autocomplete=\"postal-code\" required=\"\" size=\"3\"> (size=3)",
+      "fix": "Size the field to show at least 5 characters.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "#postal-input, <input> field, label 'Postal code', line 49",
+      "severity": 3,
+      "violation": "This postal code field shows 3 characters, too few to show a typical value whole while it is typed and checked."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FORMAT-TOLERANCE",
+      "evidence": "pattern=[0-9]+",
+      "fix": "Loosen the pattern to accept every valid way of writing the value, and normalise it after submission.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "#phone2-input, <input> field, label 'Secondary phone (optional)', line 33",
+      "severity": 3,
+      "violation": "The pattern on this phone field rejects valid values such as +44 20 7946 0958; 020 7946 0958."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button> (line 73) sits between #row-contacttime (lines 69-72) and the #row-dob fieldset (lines 74-188), while the primary submit <button id=\"submit-btn\" type=\"submit\">Create account</button> (line 189) comes only after every field.",
+      "fix": "Move 'View details' beside or below the primary submit button, after every field, or remove it from the field sequence entirely.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> 'View details', line 73",
+      "severity": 2,
+      "violation": "This secondary action is inserted between two groups of fields rather than placed with the primary action where the fields end, so a person reaching it mid-form cannot tell whether it ends the form or merely interrupts it before the date-of-birth fields that follow."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label for=\"name-input\">Full name</label><input id=\"name-input\" name=\"full_name\" ... required> (lines 11-12) and <label for=\"legalname-input\">Your name</label><input id=\"legalname-input\" name=\"legal_name\" type=\"text\" autocomplete=\"name\" ... required> (lines 62-63) both carry the inferred purpose name.",
+      "fix": "Remove the duplicate field, or relabel it to ask for something #name-input does not already cover, such as a legal name that may differ from a preferred one, and say so.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label 'Your name', line 63",
+      "severity": 2,
+      "violation": "This field asks again for the same information #name-input already collected, under different wording, so the person answers one question twice."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required> sits in the same account-creation form as #acctnum-input, with nothing on the page stating where this membership number comes from.",
+      "fix": "State in the label or hint text where this number comes from (such as an existing loyalty card), or remove the field if the account itself is the membership.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "#member-input, <input> field, label 'Membership number (8 digits)', line 41",
+      "severity": 2,
+      "violation": "This required field asks for an 8-digit membership number with no stated source, and nothing distinguishes it from a number the account being created would issue, so a new sign-up may have nothing to enter."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"org-input\" name=\"organization\" type=\"text\" required> (line 67) and <input id=\"website-input\" name=\"website\" required type=\"text\"> (line 37) both require business-identity details; the rest of the form (name, email, password, home address, date of birth) reads as a personal retail sign-up with nothing stating a business context.",
+      "fix": "Remove the organization and website fields from personal sign-up, or add a visible step or toggle that marks this as a business account and explains why they are needed.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "#org-input, <input> field, label 'Organization name', line 67",
+      "severity": 2,
+      "violation": "Both fields require business details on what otherwise reads as a personal account sign-up, with nothing on the page explaining why a personal account needs an organization name or a company website."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<select id=\"shipspeed-select\" required> (lines 52-59) sits in an account-creation form with no cart, order or item in progress.",
+      "fix": "Drop this field from account sign-up and ask it at checkout instead, or make it optional with a sensible default.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "#shipspeed-select, <select> field, label 'Preferred shipping speed', line 53",
+      "severity": 2,
+      "violation": "Preferred shipping speed is an order-time decision; requiring an answer during account creation forces a choice before there is any shipment to speed, and the answer could wait until the person actually orders something."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-002.html",
+    "artifact_sha256": "e39d0a6e9175987711e114d2ce5edd568205f5aecafb2d271246e6036a16457f",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-10-03T03:53:06Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 8,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 3
+  }
+}

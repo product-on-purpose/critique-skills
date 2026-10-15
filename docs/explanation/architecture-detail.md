@@ -14,7 +14,7 @@ one says why they are shaped that way, and what happens if you change them.
 ## 1. The two-lane split, and what decides the line
 
 Every skill declares its criteria in two sets in `SKILL.md` frontmatter: `checks.scripted` and
-`checks.judged`. Across the six skills that is 42 scripted and 54 judged, 96 total.
+`checks.judged`. Across the seven skills that is 60 scripted and 60 judged, 120 total.
 
 | Skill | Scripted | Judged | Rubric sources |
 |---|---:|---:|---|
@@ -71,7 +71,7 @@ sets the dependency-light rule; the lazy import is documented in `contract/valid
 drafts, the authoring history, or the requester's opinion of the artifact. A skill delegates to it
 where a subagent tool is available.
 
-**One subagent, shared by all six skills, rather than one per domain.** The critic carries no
+**One subagent, shared by all seven skills, rather than one per domain.** The critic carries no
 domain knowledge; it reads the named skill's `SKILL.md` and `references/` at run time and executes
 that skill's protocol. Six near-identical critics would mean the clean-context guarantee is
 implemented six times and can drift five ways. Implementing it once is the whole point, and it is
@@ -103,7 +103,7 @@ that are actually there, how many does a skill recover, and how repeatably?**
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'primaryColor':'#eef2ff','primaryBorderColor':'#c7d2fe','lineColor':'#6366f1','fontFamily':'system-ui, sans-serif'}}}%%
 flowchart LR
-  gen["bench/generator<br/>deterministic, seeded"]:::det --> corpus["23 artifacts<br/>+ ground-truth manifests"]:::data
+  gen["bench/generator<br/>deterministic, seeded"]:::det --> corpus["27 artifacts<br/>+ ground-truth manifests"]:::data
   corpus --> staging["staging copy<br/>manifests stripped"]:::data
   staging --> runs["measurement grid<br/>k=5, two pinned tiers,<br/>skill + baseline"]:::run
   runs --> env["502 run envelopes<br/>immutable"]:::data

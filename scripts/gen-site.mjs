@@ -544,8 +544,8 @@ export function loadSkills() {
  *
  * `higherIsWorse` exists for exactly one of them: `clean_fp_rate` counts false positives raised on
  * artifacts that had no defect planted, so it is a rate per clean artifact rather than a ratio,
- * it is not bounded by 1 (the worst measured cell is 9.40), and a reader scanning a wall of
- * 0-to-1 figures will otherwise read it as "94% good".
+ * it is not bounded by 1 (the worst active cell is 9.80), and a reader scanning a wall of
+ * 0-to-1 figures will otherwise read it as "98% good".
  */
 export const METRICS = [
   { key: "recall_location", label: "Recall (location)", higherIsWorse: false },
@@ -936,6 +936,10 @@ function generateSkillPage(skill, index, skills, routes, measured) {
     "",
     "## What it reads against",
     "",
+    ...synthesizedRubrics(skill).flatMap((id) => [
+      `The rubric is \`${id}\`, which this library synthesized from the ${skill.rubricSources.length} sources below. Each criterion's row in [\`references/${id}.md\`](${GH_BLOB}/${skill.dir}/references/${id}.md) cites its own.`,
+      "",
+    ]),
     "| Rubric | Citation | Operationalization | Accessed |",
     "|---|---|---|---|",
     ...rubricRows,
@@ -993,11 +997,15 @@ function generateSkillPage(skill, index, skills, routes, measured) {
     );
   }
 
+  // The worked example is linked only when it exists. critique-forms went active without one, and
+  // an unconditional link sent every reader of its page to a 404 on GitHub, which no site guard sees
+  // because the link leaves the site.
+  const example = workedExamplePath(skill);
   sections.push(
     "## Elsewhere",
     "",
     `- [\`SKILL.md\`](${GH_BLOB}/${skill.path}), the source this page is generated from`,
-    `- [Worked example](${GH_BLOB}/examples/${skill.name.replace(/^critique-/, "")}/README.md)`,
+    ...(example ? [`- [Worked example](${GH_BLOB}/${example})`] : []),
     `- License: ${skill.license}`,
     "",
   );
@@ -1015,23 +1023,95 @@ function generateSkillPage(skill, index, skills, routes, measured) {
 }
 
 /**
- * Emit the criteria explorer: every criterion the shipped skills score, in one page.
- *
- * `editUrl: false` because it has no single source. One section per skill, which gives each skill
- * page a real anchor to link into, and one summary table whose totals are derived rather than
- * typed. The README states the lane split as a sentence; this page is where that claim becomes
- * auditable, so if a skill adds a criterion the site is right and the README is stale.
+ * The repo path of a skill's worked example, `examples/<domain>/README.md`, or null when the skill
+ * has none yet. The domain is the skill name without its `critique-` prefix.
  */
-function generateCriteriaExplorer(skills) {
+export function workedExamplePath(skill, root = ROOT) {
+  const path = `examples/${skill.name.replace(/^critique-/, "")}/README.md`;
+  return existsSync(join(root, path)) ? path : null;
+}
+
+const COUNT_WORDS = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"];
+
+/** A small count as a word ("seven"), and a larger one as digits, for prose the page computes. */
+export function countWord(n) {
+  return COUNT_WORDS[n] ?? String(n);
+}
+
+/**
+ * The rubric one criterion is credited to on the site, and whether that rubric is synthesized.
+ *
+ * Three cases, tried in order:
+ * 1. A source whose id prefixes the criterion ID owns it: `WCAG-1.4.3` is `WCAG`'s, and
+ *    `NNG-EM-TIMING` is `NNG-EM`'s. The longest such id wins.
+ * 2. A source whose id shares the criterion's first segment owns it: `NNG-H3-DEADEND` is
+ *    `NNG-HEURISTICS`'s. This is the fallback `critique-usability` has always resolved through.
+ * 3. Otherwise the namespace names a rubric this library synthesized from every listed source
+ *    ([ADR 0035](../docs/internal/decisions/0035-synthesized-rubric-namespace.md)), so the
+ *    criterion is credited to that rubric, and its own sources are on its row in the skill's
+ *    `references/`.
+ *
+ * The page used to fall back to the first listed source instead of case 3, which credited every
+ * `FORMS` criterion to Baymard (E72).
+ *
+ * @param {string} criterionId
+ * @param {Array<{id: string}>} rubricSources
+ * @returns {{id: string, synthesized: boolean}}
+ */
+export function criterionRubric(criterionId, rubricSources) {
+  const prefixed = rubricSources
+    .filter((src) => criterionId.startsWith(`${src.id}-`))
+    .sort((a, b) => b.id.length - a.id.length);
+  if (prefixed.length > 0) return { id: prefixed[0].id, synthesized: false };
+  const namespace = criterionId.split("-")[0];
+  const family = rubricSources.find((src) => src.id.startsWith(`${namespace}-`));
+  if (family) return { id: family.id, synthesized: false };
+  return { id: namespace, synthesized: true };
+}
+
+/** The synthesized rubrics a skill's criteria resolve to, in first-seen order; usually none. */
+export function synthesizedRubrics(skill) {
+  const ids = [...skill.scripted, ...skill.judged].map((id) => criterionRubric(id, skill.rubricSources));
+  return [...new Set(ids.filter((r) => r.synthesized).map((r) => r.id))];
+}
+
+/** One rubric cell for the summary table and one sentence for the skill's own section. */
+function rubricSummary(skill) {
+  const synthesized = synthesizedRubrics(skill);
+  const ids = skill.rubricSources.map((r) => `\`${r.id}\``);
+  if (synthesized.length === 0) return { cell: ids.join(", "), sentence: `from ${ids.join(" and ")}` };
+  const names = synthesized.map((id) => `\`${id}\``).join(" and ");
+  const refs = synthesized
+    .map((id) => `[\`references/${id}.md\`](${GH_BLOB}/${skill.dir}/references/${id}.md)`)
+    .join(" and ");
+  return {
+    cell: `${names}, synthesized from ${skill.rubricSources.length} sources`,
+    sentence:
+      `from ${names}, a rubric this library synthesized from ${skill.rubricSources.length} sources. ` +
+      `Each criterion's own sources are on its row in ${refs}`,
+  };
+}
+
+/**
+ * The criteria explorer's Markdown body, as lines. Pure, so the attribution rules are testable
+ * without writing the page.
+ */
+export function criteriaExplorerLines(skills) {
   const scripted = skills.reduce((n, s) => n + s.scripted.length, 0);
   const judged = skills.reduce((n, s) => n + s.judged.length, 0);
   const namespaces = new Map();
   for (const skill of skills) {
     for (const src of skill.rubricSources) namespaces.set(src.id, src);
   }
+  const synthesizedNotes = skills.flatMap((skill) =>
+    synthesizedRubrics(skill).map(
+      (id) =>
+        `\`${id}\` is not a source. It is a rubric this library synthesized for [${skill.name}](${BASE}${skill.route}) from the sources it lists above, and each of its criteria cites its own.`,
+    ),
+  );
 
   const lines = [
-    `**${scripted + judged} criteria** across ${skills.length} shipped skills: **${scripted} scripted** and **${judged} judged**. Every figure on this page is counted from the six \`SKILL.md\` frontmatters at build time, and every ID is checked against the criterion grammar in the frozen contract schema before it is written here.`,
+    `**${scripted + judged} criteria** across ${skills.length} shipped skills: **${scripted} scripted** and **${judged} judged**. Every figure on this page is counted from the ${countWord(skills.length)} \`SKILL.md\` frontmatters at build time, and every ID is checked against the criterion grammar in the frozen contract schema before it is written here.`,
     "",
     "A criterion ID is permanent. It is never reused for a different test and never renumbered, because a finding recorded against it has to stay meaningful after the rubric behind it is revised. The grammar and the permanence rules are in [criterion IDs](" + BASE + "/reference/criterion-ids/).",
     "",
@@ -1039,18 +1119,19 @@ function generateCriteriaExplorer(skills) {
     "|---|---|---:|---:|---:|---|",
     ...skills.map(
       (s) =>
-        `| [${s.name}](${BASE}${s.route}) | ${s.version} | ${s.scripted.length} | ${s.judged.length} | ${s.scripted.length + s.judged.length} | ${s.rubricSources.map((r) => `\`${r.id}\``).join(", ")} |`,
+        `| [${s.name}](${BASE}${s.route}) | ${s.version} | ${s.scripted.length} | ${s.judged.length} | ${s.scripted.length + s.judged.length} | ${rubricSummary(s).cell} |`,
     ),
     `| **Total** | | **${scripted}** | **${judged}** | **${scripted + judged}** | |`,
     "",
     "## Rubric sources",
     "",
-    "| Namespace | Citation | Operationalization |",
+    "| Source | Citation | Operationalization |",
     "|---|---|---|",
     ...[...namespaces.values()]
       .sort((a, b) => a.id.localeCompare(b.id))
       .map((src) => `| \`${src.id}\` | ${citationCell(src)} | ${src.operationalization} |`),
     "",
+    ...synthesizedNotes.flatMap((note) => [note, ""]),
   ];
 
   for (const skill of skills) {
@@ -1061,28 +1142,36 @@ function generateCriteriaExplorer(skills) {
     lines.push(
       `## ${skill.name}`,
       "",
-      `${rows.length} criteria, from ${skill.rubricSources.map((r) => `\`${r.id}\``).join(" and ")}. [Skill page](${BASE}${skill.route}).`,
+      `${rows.length} criteria, ${rubricSummary(skill).sentence}. [Skill page](${BASE}${skill.route}).`,
       "",
       "| Criterion | Lane | Rubric |",
       "|---|---|---|",
-      ...rows.map((row) => {
-        const namespace = row.id.split("-")[0];
-        const src = skill.rubricSources.find((r) => r.id === namespace) ?? skill.rubricSources[0];
-        return `| \`${row.id}\` | ${row.lane} | \`${src.id}\` |`;
-      }),
+      ...rows.map((row) => `| \`${row.id}\` | ${row.lane} | \`${criterionRubric(row.id, skill.rubricSources).id}\` |`),
       "",
     );
   }
+  return lines;
+}
 
+/**
+ * Emit the criteria explorer: every criterion the shipped skills score, in one page.
+ *
+ * `editUrl: false` because it has no single source. One section per skill, which gives each skill
+ * page a real anchor to link into, and one summary table whose totals are derived rather than
+ * typed. The README states the lane split as a sentence; this page is where that claim becomes
+ * auditable, so if a skill adds a criterion the site is right and the README is stale.
+ */
+function generateCriteriaExplorer(skills) {
+  const total = skills.reduce((n, s) => n + s.scripted.length + s.judged.length, 0);
+  const lines = criteriaExplorerLines(skills);
   const frontmatter = emitFrontmatter({
     title: "Criteria",
-    description: `All ${scripted + judged} criteria the shipped critique skills score, each with its lane, its owning skill, and the rubric it traces to.`,
+    description: `All ${total} criteria the shipped critique skills score, each with its lane, its owning skill, and the rubric it traces to.`,
     editUrl: false,
     extra: ["tableOfContents:", "  maxHeadingLevel: 2"],
   });
   const repoOut = `site/src/content/docs${outputPathFor(CRITERIA_ROUTE)}`;
-  const banner =
-    "<!-- Generated by scripts/gen-site.mjs from all six SKILL.md frontmatters. Do not edit: this file is gitignored and rewritten on every build. -->";
+  const banner = `<!-- Generated by scripts/gen-site.mjs from all ${countWord(skills.length)} SKILL.md frontmatters. Do not edit: this file is gitignored and rewritten on every build. -->`;
   writeUtf8(join(ROOT, repoOut), `${frontmatter}\n\n${banner}\n\n${lines.join("\n").trim()}\n`);
   return repoOut;
 }

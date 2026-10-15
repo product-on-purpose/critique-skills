@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<p>Thanks for signing up.</p>` appears between the phone input and closing `</div>`",
+      "fix": "Move the paragraph outside the form, or remove it and display it with JavaScript after submission.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Inside row-phone div",
+      "severity": 3,
+      "violation": "A success message is placed in the middle of a form field row, disrupting the form structure."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">`",
+      "fix": "Add `name=\"preferred_shipping_speed\"` (or the appropriate field name) to the select element.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "The shipping speed select element",
+      "severity": 3,
+      "violation": "The select element is missing a `name` attribute, so its value will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Full name\" field with `name=\"full_name\"` and separate \"First name\"/\"Last name\" fields with `name=\"given_name\"` and `name=\"family_name\"`, both marked required",
+      "fix": "Remove either the \"Full name\" field or the split \"First name\"/\"Last name\" fields, keeping only one naming approach.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Name input fields (row-name and row-legalname)",
+      "severity": 3,
+      "violation": "The form collects the user's name twice in different formats, which is redundant and will confuse users about which fields to fill."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no pattern, maxlength, or minlength validation",
+      "fix": "Add `pattern=\"\\d{8}\"` and `maxlength=\"8\"` to enforce the 8-digit requirement.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Membership number input field",
+      "severity": 3,
+      "violation": "The placeholder specifies an 8-digit requirement, but there is no actual validation enforcing this constraint."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-003.html",
+    "artifact_sha256": "df62d7b38659529bf26df03102d3e7969a1c47b7c66e72bc8d3cf208f082bc1f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T04:34:22Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,74 @@
+Location: row-password, `password-input`
+Evidence: `<input id="password-input" name="password" type="password" autocomplete="new-password" minlength="8" required="">`
+Problem: The 8-character minimum is enforced only via the `minlength` attribute; there is no visible text telling the user the password requirement before they get a validation error.
+Fix: Add visible helper text under the password field (e.g., "At least 8 characters") so users know the rule upfront.
+
+Location: row-street and row-postal
+Evidence: `<input id="street-input" name="street_address" ...>` followed later by `<input id="postal-input" name="postal_code" ...>` with no field in between
+Problem: The form collects a street address and postal code but has no city, state/province, or country field, making the mailing address incomplete.
+Fix: Add city, state/region, and country fields (or a combined address-line2/city/state group) between street address and postal code.
+
+Location: row-phone2, `phone2-input`
+Evidence: `<input id="phone2-input" name="phone_secondary" type="tel" autocomplete="tel">` — identical to `<input id="phone-input" name="phone" type="tel" autocomplete="tel" required="">`
+Problem: Both the primary and secondary phone fields use the same `autocomplete="tel"` token, so browsers cannot reliably distinguish which stored number to autofill into each.
+Fix: Differentiate the tokens, e.g. keep `tel` on the primary field and omit autocomplete (or use `tel-national`/a custom scheme) on the secondary field, or rely on `autocomplete="off"` for the secondary.
+
+Location: row-website, `website-label`
+Evidence: `<label id="website-label" for="website-input">Company website</label>` with the input marked `required=""`
+Problem: A required "Company website" field is out of place on a consumer account-creation form for an outfitters retailer and will block signup for ordinary customers who have no company website.
+Fix: Remove this field from the consumer signup flow, or make it optional and relabel it for the actual use case (e.g., a separate B2B registration form).
+
+Location: row-member, `member-input`
+Evidence: `<input id="member-input" name="membership_number" type="text" inputmode="numeric" placeholder="Must be 8 digits" required="">`
+Problem: The "8 digits" requirement is communicated only through placeholder text with no `maxlength`, `pattern`, or `minlength` attribute, so the constraint isn't actually validated and disappears once the user starts typing.
+Fix: Add `pattern="\d{8}"` and `maxlength="8"` (and move the hint to persistent helper text rather than relying solely on the placeholder).
+
+Location: row-acctnum, `acctnum-label`/`acctnum-input`
+Evidence: `<label id="acctnum-label" for="acctnum-input">Account number</label>` directly below the "Membership number (8 digits)" field
+Problem: "Account number" and "Membership number" appear immediately adjacent with no explanation of how they differ, and account number has no format hint or validation, making it unclear whether this is a duplicate field.
+Fix: Either merge these into one field or add label/help text clarifying the distinct purpose of each, plus a format hint for account number.
+
+Location: row-shipspeed, `shipspeed-select`
+Evidence: `<select id="shipspeed-select" required="">`
+Problem: The `<select>` has no `name` attribute, so the chosen shipping speed will never be included in the submitted form data.
+Fix: Add `name="shipping_speed"` to the select element.
+
+Location: row-shipspeed, options list
+Evidence: `<option>Overnight</option>` and `<option>Next-day</option>`
+Problem: "Overnight" and "Next-day" describe the same delivery timeframe, giving users two confusing, overlapping choices.
+Fix: Remove one of the duplicate options or rename them to describe genuinely distinct service levels.
+
+Location: row-shipspeed, `shipspeed-select`
+Evidence: `<select id="shipspeed-select" required=""><option>Standard</option>...`
+Problem: Because no blank/placeholder option is defined, "Standard" is selected by default, so `required` never actually forces an intentional choice — a user can submit without having picked anything themselves.
+Fix: Add a disabled, selected placeholder option (e.g., `<option value="" disabled selected>Select shipping speed</option>`) so the required validation is meaningful.
+
+Location: row-legalname, `legalname-label`
+Evidence: `<label id="legalname-label" for="legalname-input">Your name</label>` with `name="legal_name"` and `autocomplete="name"` — compare to `<label id="name-label" for="name-input">Full name</label>` earlier in the form
+Problem: This field duplicates the "Full name" field collected earlier; both use `autocomplete="name"`, and the vague label "Your name" doesn't explain why the user must enter their name twice.
+Fix: Remove the duplicate field, or if a distinct legal name is genuinely needed, rename the label (e.g., "Legal name (if different from full name)") and clarify its purpose.
+
+Location: row-org, `org-input`
+Evidence: `<input id="org-input" name="organization" type="text" style="font-size:16px" required="">`
+Problem: Like the company website field, a required "Organization name" field doesn't fit a consumer account signup; it also carries a one-off inline `style="font-size:16px"` not applied to any other input, an inconsistent styling pattern.
+Fix: Remove or make optional for consumer signup, and move any needed font-size rule into a shared stylesheet/class instead of an inline style on a single input.
+
+Location: row-contacttime, `contacttime-input`
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: "Preferred contact time" is captured as unconstrained free text, which is error-prone and hard to process compared to a structured control.
+Fix: Replace with a `<select>` of defined time ranges (e.g., "Morning", "Afternoon", "Evening") or a `<input type="time">`/range picker.
+
+Location: row-contacttime, `contacttime-label`
+Evidence: `<label id="contacttime-label" for="contacttime-input" style="display:block">Preferred contact time</label>`
+Problem: This label alone carries an inline `style="display:block"` not used on any other label in the form, an inconsistent and unexplained styling choice.
+Fix: Remove the inline style and apply block display via a shared CSS rule for all labels if that's the intended layout.
+
+Location: `viewdetails-btn`
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>`
+Problem: This button has `type="button"` with no visible handler, href, or surrounding script, so its purpose and behavior inside the signup form are undefined — it appears to be dead or orphaned UI.
+Fix: Either wire it to an actual action (e.g., a modal describing membership/account number details) or remove it from the form.
+
+Location: `<head>`
+Evidence: `<meta charset="utf-8"><title>Create your Meridian Outfitters account</title>` — no viewport meta tag present
+Problem: Without a `<meta name="viewport">` tag, this long form will not scale correctly on mobile browsers, which commonly zoom out to a desktop-width layout.
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to the `<head>`.

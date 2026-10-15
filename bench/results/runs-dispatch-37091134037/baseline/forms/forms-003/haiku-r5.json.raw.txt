@@ -1,0 +1,19 @@
+Location: Inside row-phone div
+Evidence: `<p>Thanks for signing up.</p>` appears between the phone input and closing `</div>`
+Problem: A success message is placed in the middle of a form field row, disrupting the form structure.
+Fix: Move the paragraph outside the form, or remove it and display it with JavaScript after submission.
+
+Location: The shipping speed select element
+Evidence: `<select id="shipspeed-select" required="">`
+Problem: The select element is missing a `name` attribute, so its value will not be submitted with the form.
+Fix: Add `name="preferred_shipping_speed"` (or the appropriate field name) to the select element.
+
+Location: Name input fields (row-name and row-legalname)
+Evidence: "Full name" field with `name="full_name"` and separate "First name"/"Last name" fields with `name="given_name"` and `name="family_name"`, both marked required
+Problem: The form collects the user's name twice in different formats, which is redundant and will confuse users about which fields to fill.
+Fix: Remove either the "Full name" field or the split "First name"/"Last name" fields, keeping only one naming approach.
+
+Location: Membership number input field
+Evidence: `placeholder="Must be 8 digits"` with no pattern, maxlength, or minlength validation
+Problem: The placeholder specifies an 8-digit requirement, but there is no actual validation enforcing this constraint.
+Fix: Add `pattern="\d{8}"` and `maxlength="8"` to enforce the 8-digit requirement.

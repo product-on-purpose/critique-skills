@@ -66,7 +66,7 @@ export default defineConfig({
       },
       customCss: ['./src/styles/custom.css'],
 
-      // THE READER'S ORDER, NOT THE REPOSITORY'S. Install, then what the six skills are, then
+      // THE READER'S ORDER, NOT THE REPOSITORY'S. Install, then what the skills are, then
       // whether to believe the numbers, then worked examples, then task-oriented how-tos, then
       // reference, then the theory. Project furniture sits at the bottom and Releases is
       // collapsed, because the changelog is 354 lines and nobody navigating a docs site wants it

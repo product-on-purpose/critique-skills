@@ -1,0 +1,49 @@
+Location: row-phone2 (Secondary phone field)
+Evidence: pattern="[0-9]+"
+Problem: Pattern allows any number of digits with no length constraint, which is invalid for phone numbers.
+Fix: Replace with a specific pattern like pattern="[0-9]{10}" and add maxlength="10".
+
+Location: row-website (Company website field)
+Evidence: type="text"
+Problem: Field requests a website URL but uses type="text" instead of type="url", missing URL validation.
+Fix: Change to type="url".
+
+Location: row-member (Membership number field)
+Evidence: placeholder="Must be 8 digits" with no validation
+Problem: Label and placeholder specify "8 digits" but no pattern or maxlength attribute enforces this constraint.
+Fix: Add pattern="[0-9]{8}" and maxlength="8".
+
+Location: row-acctnum (Account number field)
+Evidence: inputmode="numeric" with no length validation
+Problem: No pattern or maxlength attribute to constrain account number input.
+Fix: Add maxlength="20" (or appropriate length for expected account numbers) and optionally a pattern attribute.
+
+Location: row-postal (Postal code field)
+Evidence: size="3"
+Problem: Size constraint of 3 characters is too small for valid postal codes (US: 5 digits, Canada: 6 alphanumeric).
+Fix: Increase or remove size attribute, or add maxlength="10".
+
+Location: shipspeed-select (Preferred shipping speed)
+Evidence: <select id="shipspeed-select" required=""> with no name attribute
+Problem: Select element is missing the name attribute, so its value will not be submitted with the form.
+Fix: Add name="shipping_speed" to the select element.
+
+Location: shipspeed-select options
+Evidence: <option>Standard</option> (all options lack value attributes)
+Problem: Options have no value attributes, so form will submit display text instead of coded values.
+Fix: Add value attributes to each option, e.g., <option value="standard">Standard</option>.
+
+Location: row-legalname (Your name field)
+Evidence: <label>Your name</label> paired with row-name's <label>Full name</label>
+Problem: Duplicate field collecting the same information (person's name) with different field names (full_name vs legal_name).
+Fix: Remove row-legalname entirely or clarify the distinction between the two name fields.
+
+Location: row-contacttime (Preferred contact time field)
+Evidence: type="text"
+Problem: Field uses type="text" instead of type="time", providing no time picker UI or validation.
+Fix: Change to type="time".
+
+Location: fieldset row-dob (Date of birth section)
+Evidence: dob-day-select, dob-month-select, dob-year-select all have options like <option>1</option> with no value attributes and no default option
+Problem: Options lack value attributes (will submit display text) and all selects lack a placeholder option to prompt user selection.
+Fix: Add value attributes to each option and prepend a default option like <option value="">Select day</option> to each select.

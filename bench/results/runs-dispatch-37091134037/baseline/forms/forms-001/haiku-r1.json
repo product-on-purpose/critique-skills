@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`autocomplete=\"e-mail\"`",
+      "fix": "Change `autocomplete=\"e-mail\"` to `autocomplete=\"email\"`",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Email input, line with `id=\"email-input\"`",
+      "severity": 3,
+      "violation": "The correct autocomplete attribute value for email is \"email\", not \"e-mail\"."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Missing `minlength` attribute when password requires `minlength=\"8\"`",
+      "fix": "Add `minlength=\"8\"` to the confirm password input",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Confirm password input, line with `id=\"confirm-password-input\"`",
+      "severity": 3,
+      "violation": "The password field requires a minimum of 8 characters, but the confirm password field has no minlength constraint, allowing validation to pass even if the passwords are mismatched in length."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">`",
+      "fix": "Add `name=\"shipping_speed\"` (or appropriate name) to the select element",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Preferred shipping speed select, line with `id=\"shipspeed-select\"`",
+      "severity": 3,
+      "violation": "The select element is missing a `name` attribute, so this field's value will not be included when the form is submitted."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"hear-select\" required=\"\">`",
+      "fix": "Add `name=\"hear_about_us\"` (or appropriate name) to the select element",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "How did you hear about us select, line with `id=\"hear-select\"`",
+      "severity": 3,
+      "violation": "The select element is missing a `name` attribute, so this field's value will not be included when the form is submitted."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Two separate name inputs labeled \"Full name\" and \"Your name\"",
+      "fix": "Remove one of the duplicate name fields, or clarify the purpose of each (e.g., rename one to \"Legal name for documents\")",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Name fields comparison: \"Full name\" input (`name=\"full_name\"`) and \"Your name\" input (`name=\"legal_name\"`)",
+      "severity": 3,
+      "violation": "The form asks for the user's name twice with different labels and field names, creating confusion about why both fields are needed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Change `type=\"text\"` to `type=\"time\"`",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Preferred contact time input, line with `id=\"contacttime-input\"`",
+      "severity": 3,
+      "violation": "The field is labeled \"Preferred contact time\" and should use a time input type for proper UX, but is using `type=\"text\"` which forces the user to type freeform text instead of selecting a time."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>`",
+      "fix": "Either remove the button, add an onclick handler with associated JavaScript, or add an aria-label explaining why it's disabled",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "View details button, line with `id=\"viewdetails-btn\"`",
+      "severity": 3,
+      "violation": "This button has no associated onclick handler or any mechanism to perform an action when clicked, making it non-functional."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-001.html",
+    "artifact_sha256": "531c999912c0ab6c8224cbeb2347e7644d493a84e3a9461a434deaf5f2f09cdd",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T02:53:07Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

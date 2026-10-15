@@ -1,0 +1,160 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`minlength=\"8\"` with no accompanying visible text",
+      "fix": "Add visible helper text under the password field (e.g. \"At least 8 characters\") in addition to the minlength attribute.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "row-password (`<input id=\"password-input\" ... minlength=\"8\" required=\"\">`)",
+      "severity": 3,
+      "violation": "The password's minimum length requirement is encoded only as an HTML attribute; there is no visible hint telling the user the password must be at least 8 characters, so they only discover it after a failed submission."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Address fields present are only \"Street address\" and \"Postal code\"",
+      "fix": "Add city and state/region inputs (e.g. with autocomplete=\"address-level2\" and \"address-level1\") between street address and postal code.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "row-street and row-postal (`<input id=\"street-input\" ... name=\"street_address\">` ... `<input id=\"postal-input\" ... name=\"postal_code\">`)",
+      "severity": 3,
+      "violation": "The address section has no city and state/region fields, so a shipping address cannot actually be captured in full."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`autocomplete=\"tel\"` is identical to the primary phone field's `autocomplete=\"tel\"`",
+      "fix": "Differentiate the fields, e.g. drop autocomplete on the secondary field or use a distinguishing value so autofill doesn't duplicate the primary number into it.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-phone2 (`<input id=\"phone2-input\" name=\"phone_secondary\" type=\"tel\" autocomplete=\"tel\">`)",
+      "severity": 3,
+      "violation": "Using the same autocomplete token for both phone fields can cause browsers to autofill both inputs with the same number, defeating the purpose of a separate \"secondary phone\" field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`required=\"\"` on a \"Company website\" field during personal account creation",
+      "fix": "Make this field optional, or remove it if it isn't actually needed for a personal retail account.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-website (`<label id=\"website-label\" for=\"website-input\">Company website</label> <input id=\"website-input\" name=\"website\" type=\"url\" required=\"\">`)",
+      "severity": 3,
+      "violation": "Requiring a company website to create what otherwise looks like a consumer shopping account (name, personal address, phone) will block individual customers who have no company or website."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`type=\"url\"`",
+      "fix": "Either add a pattern that accepts bare domains, or show inline guidance/example text indicating the \"https://\" prefix is required.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "row-website (`<input id=\"website-input\" name=\"website\" type=\"url\" required=\"\">`)",
+      "severity": 3,
+      "violation": "type=\"url\" requires a fully qualified URI with scheme (e.g. \"https://example.com\"); users who type a bare domain like \"example.com\" will fail native validation with no explanation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no `pattern` or `maxlength` attribute",
+      "fix": "Add `pattern=\"\\d{8}\"` and `maxlength=\"8\"`, and move the \"Must be 8 digits\" instruction into persistent helper text rather than the placeholder.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "row-member (`<input id=\"member-input\" ... placeholder=\"Must be 8 digits\" required=\"\">`)",
+      "severity": 3,
+      "violation": "The 8-digit requirement is conveyed only through placeholder text, which disappears once the user starts typing, and there is no pattern/maxlength to actually enforce 8 digits."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "No description accompanies \"Account number\", immediately following \"Membership number (8 digits)\"",
+      "fix": "Add explanatory text clarifying what this account number is and where to find it, or remove the field if it duplicates membership number.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "row-acctnum (`<label id=\"acctnum-label\" for=\"acctnum-input\">Account number</label>`)",
+      "severity": 3,
+      "violation": "It's unclear what distinguishes \"Account number\" from \"Membership number\" - the field appears redundant or under-explained, risking user confusion about which number to enter."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Both \"Overnight\" and \"Next-day\" appear as separate options in the same select",
+      "fix": "Merge these into a single clearly-labeled option (e.g. \"Overnight / Next-day\") or differentiate them with explicit delivery-time details.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "row-shipspeed (`<option>Overnight</option> <option>Next-day</option>`)",
+      "severity": 3,
+      "violation": "\"Overnight\" and \"Next-day\" shipping are generally the same thing, so offering both as distinct choices is confusing and ambiguous for the user."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`autocomplete=\"name\"` duplicates the value already used on `name-input` (\"Full name\") earlier in the form",
+      "fix": "Remove the duplicate \"legal_name\" field, or clearly differentiate its purpose from \"Full name\" (e.g. label it \"Legal name (if different from full name)\") and give it a distinct autocomplete value.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "row-legalname (`<label id=\"legalname-label\" for=\"legalname-input\">Your name</label> <input id=\"legalname-input\" name=\"legal_name\" type=\"text\" autocomplete=\"name\" ... required=\"\">`)",
+      "severity": 3,
+      "violation": "Two separate required fields (\"Full name\" and \"Your name\") both collect a person's name and share the same autocomplete token, which is redundant for the user and will cause browsers to autofill both identically despite them appearing to request different information."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "No `autocomplete` attribute present; `style=\"font-size:16px\"` applied only here",
+      "fix": "Add `autocomplete=\"organization\"`, and either apply the same font-size rule to all text inputs via a shared stylesheet rule or remove the one-off inline style.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "row-org (`<input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required=\"\">`)",
+      "severity": 3,
+      "violation": "The field is missing `autocomplete=\"organization\"`, and the inline `font-size:16px` (likely intended to prevent mobile zoom-on-focus) is applied inconsistently - only to this input and not to the other text inputs (name, email, password, street, etc.), so mobile zoom behavior will differ field to field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`type=\"text\"` with no format hint, and a one-off `style=\"display:block\"` on this label not used on any other label",
+      "fix": "Use a structured control (e.g. type=\"time\" or a select of time ranges) and move any shared label styling into CSS applied uniformly to all labels.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "row-contacttime (`<label id=\"contacttime-label\" for=\"contacttime-input\" style=\"display:block\">Preferred contact time</label> <input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`)",
+      "severity": 3,
+      "violation": "A free-text input for \"contact time\" with no structure or example will produce inconsistent, hard-to-parse values (e.g. \"morning\" vs \"9am\" vs \"9:00-12:00\"), and the inline display:block style is applied inconsistently compared to other labels in the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Button has `type=\"button\"` with no associated script, handler, or explanation visible in the document",
+      "fix": "Either wire it to an actual action (e.g. toggling an order/plan summary) or remove it from the form.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "viewdetails-btn (`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>`)",
+      "severity": 3,
+      "violation": "\"View details\" appears to be a non-functional/dead button sitting right before the submit button, which is confusing since it has no defined behavior."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T05:29:41Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 12,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

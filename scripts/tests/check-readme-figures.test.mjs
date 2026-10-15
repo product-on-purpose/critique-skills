@@ -42,6 +42,16 @@ test("counts only *.json under runs* roots, ignoring sidecars and other director
   assert.equal(countEnvelopes(resultsTree(t, 7)), 7);
 });
 
+test("does not count a run directory's own results.json or a schema file, as the validator does not", (t) => {
+  const dir = resultsTree(t, 5);
+  const dispatch = join(dir, "runs-dispatch-1", "critique-toy", "toy-001");
+  mkdirSync(dispatch, { recursive: true });
+  writeFileSync(join(dispatch, "haiku-r1.json"), "{}");
+  writeFileSync(join(dir, "runs-dispatch-1", "results.json"), "{}");
+  writeFileSync(join(dir, "runs-dispatch-1", "results.schema.json"), "{}");
+  assert.equal(countEnvelopes(dir), 6);
+});
+
 test("passes when prose, badge value and badge alt text all agree with the tree", (t) => {
   const results = resultsTree(t, 12);
   const file = doc(

@@ -1,0 +1,64 @@
+Location: row-phone2, secondary phone input
+Evidence: `pattern="[0-9]+"`
+Problem: The pattern allows only digits, which excludes common phone number formatting like spaces, dashes, or international plus signs.
+Fix: Remove the pattern attribute or change it to `pattern="[0-9\s\-\+]*"` to allow formatted numbers.
+
+Location: row-website, website input field
+Evidence: `<input id="website-input" name="website" required="" type="text">`
+Problem: The field uses type="text" instead of type="url", so the browser won't validate the URL format.
+Fix: Change `type="text"` to `type="url"`.
+
+Location: row-member, membership number input
+Evidence: Label says "(8 digits)" but the input has no validation pattern
+Problem: There is no pattern validation to enforce the documented 8-digit requirement.
+Fix: Add `pattern="[0-9]{8}"` to the input element.
+
+Location: row-acctnum, account number input
+Evidence: `<input id="acctnum-input" name="account_number" type="text" inputmode="numeric" required="">`
+Problem: The account number field has no validation constraints despite likely needing a specific format.
+Fix: Add validation such as `pattern="[0-9]+"` or appropriate minlength/maxlength attributes.
+
+Location: row-postal, postal code input
+Evidence: `size="3"`
+Problem: The size attribute is too restrictive since postal codes vary by country (5-10+ characters), and size doesn't actually constrain input length.
+Fix: Remove the `size="3"` attribute.
+
+Location: row-shipspeed, shipping speed select
+Evidence: `<select id="shipspeed-select" required="">`
+Problem: The select element has no name attribute, so the selected value won't be submitted with the form data.
+Fix: Add `name="shipping_speed"` to the select element.
+
+Location: row-legalname, legal name input field
+Evidence: Two fields labeled "Full name" (name="full_name") and "Your name" (name="legal_name")
+Problem: The form collects the user's name twice with different field names, which is confusing and redundant.
+Fix: Remove one of the duplicate name fields or clarify why both are needed.
+
+Location: row-org, organization name input
+Evidence: `style="font-size:13px"`
+Problem: Inline styles are scattered throughout the document instead of being in a style block or external CSS.
+Fix: Move inline styles to a `<style>` block in the head or external stylesheet.
+
+Location: row-contacttime, preferred contact time
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">` with label having `style="display:inline-block;float:left;width:140px"`
+Problem: The field uses type="text" instead of type="time", and the label has inline styles instead of being in a stylesheet.
+Fix: Change `type="text"` to `type="time"` and move the label's style to a stylesheet.
+
+Location: viewdetails-btn, button element
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>`
+Problem: The button has inline styles and type="button" but no onclick handler or purpose, making it non-functional.
+Fix: Either remove the button if unused, or add an onclick handler and move the styles to a stylesheet.
+
+Location: row-dob fieldset, date of birth selects
+Evidence: Three select elements with `id="dob-day-select"`, `id="dob-month-select"`, `id="dob-year-select"` but no name attributes
+Problem: The date selects lack name attributes, so the date of birth data won't be submitted with the form.
+Fix: Add name attributes to each select: `name="dob_day"`, `name="dob_month"`, and `name="dob_year"`.
+
+Location: row-dob fieldset, date of birth options
+Evidence: Day dropdown allows 1-31, all 12 months, and years 1950-2009 without dependency
+Problem: Users can select invalid dates such as February 31st or June 31st because the dropdowns have no interdependency.
+Fix: Use `<input type="date">` instead, or implement JavaScript validation to enforce valid date combinations.
+
+Location: form element opening tag
+Evidence: `<form id="form">`
+Problem: The form has no action attribute specifying where to submit, and no method attribute (defaults to GET).
+Fix: Add `action="/submit"` (or appropriate endpoint) and `method="post"` attributes to the form element.

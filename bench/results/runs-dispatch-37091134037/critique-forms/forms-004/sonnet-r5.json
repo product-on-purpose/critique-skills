@@ -1,0 +1,111 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "label id=acctnum-label for=acctnum-input>Account number</label><input id=acctnum-input name=account_number type=text inputmode=numeric required> is required on a form whose heading is Set up your account and whose submit button reads Create account. The sibling field label id=member-label for=member-input>Membership number (8 digits)</label><input id=member-input name=membership_number type=text inputmode=numeric required> has the identical problem.",
+      "fix": "Remove the required Account number field from account creation, or mark it optional and add a hint explaining it is for an existing customer linking a prior account, not for a new one.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#acctnum-input, <input> field, label 'Account number'",
+      "severity": 3,
+      "violation": "FORMS-FIELD-NECESSITY: the task of creating a new account cannot use this answer, since no account, and therefore no account number, exists until the form is submitted, so a first-time customer has no value to enter."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "label id=legalname-label for=legalname-input>Your name</label><input id=legalname-input name=legal_name type=text autocomplete=name required> follows label id=name-label for=name-input>Full name</label><input id=name-input name=full_name type=text autocomplete=name required> earlier in the same form.",
+      "fix": "Delete #legalname-input and its label and reuse the #name-input value wherever a name is needed, or, if a distinct value such as a legal name was intended, explain in each label how the two fields differ.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label 'Your name'",
+      "severity": 3,
+      "violation": "FORMS-FIELD-NECESSITY: the form asks again for something it already asked. Both #name-input and #legalname-input collect the same person's name, and both carry autocomplete=name."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "The page's h1 reads Set up your account and the primary submit reads Create account, yet required fields #street-input, #postal-input, #shipspeed-select (Preferred shipping speed), #phone-input (with the helper text We will text you about delivery updates) and #contacttime-input (Preferred contact time) all collect shipping or delivery-contact logistics.",
+      "fix": "Remove street address, postal code, shipping speed, phone numbers and preferred contact time from this account-creation form, and collect them at checkout or in a post-signup shipping-preferences step instead.",
+      "id": "F-003",
+      "instances": [
+        {
+          "location": "#postal-input, <input> field, label 'Postal code'"
+        },
+        {
+          "location": "#shipspeed-select, <select> field, label 'Preferred shipping speed'"
+        },
+        {
+          "location": "#phone-input, <input> field, label 'Phone number'"
+        },
+        {
+          "location": "#phone2-input, <input> field, label 'Secondary phone (optional)'"
+        },
+        {
+          "location": "#contacttime-input, <input> field, label 'Preferred contact time'"
+        }
+      ],
+      "lane": "judged",
+      "location": "#street-input, <input> field, label 'Street address'",
+      "severity": 3,
+      "violation": "FORMS-FIELD-NECESSITY: these fields' answers serve a later step, placing or shipping an order, rather than the task the form itself names, creating an account."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "button id=viewdetails-btn type=button style=padding:12px 20px;font-size:16px>View details</button> sits directly before button id=submit-btn type=submit>Create account</button>, which carries no style attribute and no class at all.",
+      "fix": "Remove the explicit padding and font-size styling from #viewdetails-btn, or give #submit-btn clearly stronger styling such as a filled background color, so the primary action is visibly the most prominent control.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> 'View details'",
+      "severity": 2,
+      "violation": "FORMS-ACTION-HIERARCHY requires the primary action to be the most prominent control. Here the secondary action (viewdetails-btn) carries explicit padding and font-size styling while the primary submit (submit-btn) declares no styling, so the markup gives the secondary action equal or greater visual weight than the primary."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "label id=org-label for=org-input>Organization name</label><input id=org-input name=organization type=text style=font-size:16px required> and label id=website-label for=website-input>Company website</label><input id=website-input name=website type=url required> are both required, though nothing on the page establishes that the account being created is a business account.",
+      "fix": "Remove Organization name and Company website from the required signup fields, or reveal and require them only after a choice such as this is a business account.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#org-input, <input> field, label 'Organization name'",
+      "severity": 2,
+      "violation": "FORMS-FIELD-NECESSITY: the task of creating a personal retail account cannot use an organization name or a company website, so these required fields force every signer to fabricate a value or abandon the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-LABEL-POSITION",
+      "evidence": "label id=contacttime-label for=contacttime-input style=display:block>Preferred contact time</label> is the only label in the form whose declared CSS forces it onto its own line above its field. Every other label, for example #name-label and #email-label, declares no position at all.",
+      "fix": "Remove the inline style=display:block from #contacttime-label, or apply the same declared position to every label in the form, so label alignment is consistent throughout.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#contacttime-label, <label> 'Preferred contact time'",
+      "severity": 2,
+      "violation": "FORMS-LABEL-POSITION's operational test flags a form that mixes labels above fields with labels beside them. This form's one explicitly block-level label is inconsistent with the rest of the form's unstyled, inline label-field pairing."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-10-03T05:54:03Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -26,7 +26,7 @@ much of the truth that process actually recovers.
 flowchart TD
   subgraph authored["Authored, stable"]
     rubric["Published rubric<br/>WCAG 2.2, Nielsen, Diataxis,<br/>Toulmin, Plain Language"]:::src
-    skill["skills/critique-*<br/>96 criteria, each with a permanent ID"]:::comp
+    skill["skills/critique-*<br/>120 criteria, each with a permanent ID"]:::comp
   end
   subgraph runtime["Runtime"]
     critic["agents/critique-critic<br/>clean-context runner"]:::comp
@@ -58,7 +58,7 @@ flowchart TD
   classDef out fill:#eef2ff,stroke:#818cf8,color:#312e81
 ```
 
-In text: a published rubric is operationalized into a skill carrying 96 permanent criterion IDs.
+In text: a published rubric is operationalized into a skill carrying 120 permanent criterion IDs.
 The `critique-critic` subagent runs that skill in clean context, splitting the work into a scripted
 lane (42 criteria, deterministic Python) and a judged lane (54 criteria, model judgment against the
 rubric text). Both lanes emit into one frozen JSON Schema contract. The resulting record goes to a
@@ -75,7 +75,7 @@ person to dispose, and is separately measured against a seeded-defect benchmark.
 ## How one critique runs
 
 1. **Selection.** You describe what you want in plain language. The matching skill triggers on its
-   own `description`; nothing is invoked by name. Six sibling skills make this a real routing
+   own `description`; nothing is invoked by name. Seven sibling skills make this a real routing
    problem, which is why the descriptions carry explicit boundary clauses and why
    [`evals/joint-routing.eval.json`](../../evals/joint-routing.eval.json) exists.
 2. **Clean-context handoff.** Where a subagent is available, the skill delegates to

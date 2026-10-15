@@ -1,0 +1,69 @@
+Location: `<head>` section
+Evidence: `<meta charset="utf-8">` followed directly by `<title>` with no viewport meta tag
+Problem: There is no `<meta name="viewport" content="width=device-width, initial-scale=1">`, so on mobile browsers the form will render at desktop scale and may trigger unwanted zoom-on-focus for inputs.
+Fix: Add a viewport meta tag in the `<head>`.
+
+Location: `<form id="form">` opening tag
+Evidence: `<form id="form">`
+Problem: The form has no `action` or `method` attribute, so it will submit via the default GET method to the current URL — meaning the password field's value would be appended to the URL as a query parameter, exposing it in browser history, server logs, and referrer headers.
+Fix: Add an explicit `method="post"` (and appropriate `action`) to the form.
+
+Location: `row-password` div
+Evidence: `minlength="6"`
+Problem: A 6-character minimum is a weak password policy by current standards.
+Fix: Raise `minlength` to at least 8 and consider adding complexity guidance.
+
+Location: `row-phone` div
+Evidence: `<p>Thanks for signing up.</p>` nested inside the phone-number field's div, before the form has been submitted
+Problem: A post-submission thank-you message is displayed in the middle of the still-unsubmitted form, which is confusing and appears to be stray/leftover markup.
+Fix: Remove this paragraph from the phone row and show the thank-you message only after successful submission.
+
+Location: `row-phone` and `row-phone2` divs
+Evidence: both `<input ... name="phone" ... autocomplete="tel">` and `<input ... name="phone_secondary" ... autocomplete="tel">`
+Problem: Both phone inputs share the identical `autocomplete="tel"` token, so browser autofill cannot distinguish them and may fill the same number into both fields.
+Fix: Differentiate the tokens, e.g. use `tel` for the primary and omit/alter autocomplete (or use a non-standard but distinguishing value) for the secondary field.
+
+Location: `row-website` div
+Evidence: `<input id="website-input" ... name="website" type="url" required="">`
+Problem: A required company website is inconsistent with the rest of the form, which otherwise reads as an individual consumer membership signup (full name, personal address, phone); not every signing-up person has a company website.
+Fix: Make this field optional, or remove it unless the form is specifically for business accounts.
+
+Location: `row-member` div
+Evidence: `placeholder="Must be 8 digits"` with no `pattern`, `minlength`, or `maxlength` attribute
+Problem: The 8-digit requirement is only communicated via placeholder text (which disappears once the user types) and is never actually enforced by validation.
+Fix: Add `pattern="\d{8}"` and `maxlength="8"` (or equivalent) so the constraint is enforced, and show the hint outside the placeholder so it remains visible while typing.
+
+Location: `row-acctnum` div
+Evidence: `<label ...>Account number</label><input id="acctnum-input" name="account_number" type="text" required="">`
+Problem: It's unclear why a brand-new signup already has an "account number" distinct from the "membership number" collected two fields later; this looks like a duplicate/confusing field with no explanation of its purpose.
+Fix: Clarify the distinct purpose of this field in a label/help text, or remove it if redundant with membership number.
+
+Location: `row-shipspeed` div
+Evidence: `<select id="shipspeed-select" required="">` with options `Standard`, `Express`, `Overnight` and no blank/placeholder option
+Problem: Because there is no empty option, the select always has a valid value ("Standard") selected by default, making `required` meaningless and letting users submit a choice they never actively made.
+Fix: Add a disabled, selected placeholder option (e.g. "Select shipping speed") so the required validation has an empty state to enforce.
+
+Location: `row-legalname` div
+Evidence: `given_name`/`family_name` inputs for "First name" / "Last name", compared to `row-name`'s `full_name` input for "Full name"
+Problem: The form collects the user's name twice in two different shapes (one combined "Full name" field and separate "First name"/"Last name" fields), which is redundant and will likely produce inconsistent data.
+Fix: Remove one of the two name representations — keep either the single full-name field or the split given/family-name fields, not both.
+
+Location: `row-org` div
+Evidence: `<input id="org-input" name="organization" type="text" style="font-size:16px" required="">`
+Problem: A required "Organization name," like the required website field, is inconsistent with what otherwise looks like an individual consumer signup, and forces non-business users to invent a value.
+Fix: Make this field optional or remove it for a consumer-facing signup.
+
+Location: `row-contacttime` div
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: "Preferred contact time" is a freeform required text field with no format guidance, which will produce inconsistent, hard-to-parse data (e.g. "mornings" vs "9am" vs "after 5").
+Fix: Replace with a `<select>` of defined time ranges or a `type="time"` input, and make it optional.
+
+Location: `viewdetails-btn`
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:1px 2px;font-size:11px">View details</button>`
+Problem: The button's tiny padding and 11px font create a very small touch target and hard-to-read text, failing accessible target-size/readability guidelines; additionally, with no script in the document, the button has no handler and does nothing when clicked.
+Fix: Give the button adequately sized padding and font (e.g. ≥16px font, comfortable padding/min 44px target), and wire up its intended behavior or remove it if unimplemented.
+
+Location: `reset-btn`
+Evidence: `<button id="reset-btn" type="reset">Clear form</button>`
+Problem: A reset button on a long multi-field signup form risks accidentally discarding all entered data with a single misclick and no confirmation.
+Fix: Remove the reset button, or require a confirmation step before clearing the form.

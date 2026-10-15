@@ -1,0 +1,39 @@
+Location: row-website input
+Evidence: type="text"
+Problem: URL field should use type="url" instead of type="text" for proper validation
+Fix: Change type="text" to type="url"
+
+Location: row-member input
+Evidence: placeholder="Must be 8 digits" with no pattern or maxlength
+Problem: Membership number field requires exactly 8 digits but has no validation to enforce this constraint
+Fix: Add pattern="[0-9]{8}" and maxlength="8" attributes
+
+Location: row-postal input
+Evidence: size="3"
+Problem: Postal code field width of 3 characters is too small; most postal codes (US ZIP, UK postcodes) require 5-8+ characters
+Fix: Remove the size attribute or increase to size="10"
+
+Location: row-shipspeed select
+Evidence: <select id="shipspeed-select" required="">
+Problem: The select element is missing a name attribute, so the selection won't be included in form submission data
+Fix: Add name="shipping_speed" (or similar) to the select element
+
+Location: row-name and row-legalname inputs
+Evidence: Both contain name-type inputs: "Full name" in row-name and "Your name" in row-legalname
+Problem: Form has two redundant name fields serving the same apparent purpose, creating unclear intent
+Fix: Remove one field, or update labels to distinguish their purposes (e.g., "Your name" vs "Legal name for billing")
+
+Location: row-contacttime input
+Evidence: type="text" required=""
+Problem: Contact time field lacks format guidance; unclear whether user should enter time as 12-hour, 24-hour, with/without AM/PM, etc.
+Fix: Change to type="time" or add placeholder="HH:MM (e.g., 09:00)" with pattern="[0-9]{2}:[0-9]{2}"
+
+Location: row-dob month select
+Evidence: <option>January</option>, <option>February</option>, ... <option>December</option>
+Problem: Month options contain text values instead of numeric values; form will submit "January" instead of "01", requiring backend conversion
+Fix: Add value attributes: <option value="01">January</option>, <option value="02">February</option>, etc.
+
+Location: row-dob fieldset (dob-day-select, dob-month-select, dob-year-select)
+Evidence: All three selects have id attributes but no name attributes
+Problem: Date-of-birth select elements lack name attributes; these fields won't be included in form submission data
+Fix: Add name attributes to each select: name="dob_day", name="dob_month", name="dob_year"

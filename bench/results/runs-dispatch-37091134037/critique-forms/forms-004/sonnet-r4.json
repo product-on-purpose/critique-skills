@@ -1,0 +1,95 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "Heading 'Set up your account' (line 8) and primary submit 'Create account' (line 74) name the task as creating an account, yet the form requires: #street-input 'Street address' (line 24), #phone-input 'Phone number' (line 28), #website-input 'Company website' (line 37), #member-input 'Membership number (8 digits)' (line 41), #acctnum-input 'Account number' (line 45), #postal-input 'Postal code' (line 49), #shipspeed-select 'Preferred shipping speed' (line 53), #org-input 'Organization name' (line 67), and #contacttime-input 'Preferred contact time' (line 71), all carrying required=\"\".",
+      "fix": "Keep only the fields account creation itself needs (name, email, password) on this form. Move address, phone, shipping speed, membership and account numbers, organization details and contact-time preference to a profile or checkout step that actually consumes them, where they can be asked once they are relevant.",
+      "id": "F-001",
+      "instances": [
+        {
+          "evidence": "<input id=\"phone-input\" name=\"phone\" type=\"tel\" autocomplete=\"tel\" required>",
+          "location": "#phone-input, <input> field, label 'Phone number', line 28"
+        },
+        {
+          "evidence": "<input id=\"website-input\" name=\"website\" type=\"url\" required>",
+          "location": "#website-input, <input> field, label 'Company website', line 37"
+        },
+        {
+          "evidence": "<input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required>",
+          "location": "#member-input, <input> field, label 'Membership number (8 digits)', line 41"
+        },
+        {
+          "evidence": "<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required>",
+          "location": "#acctnum-input, <input> field, label 'Account number', line 45"
+        },
+        {
+          "evidence": "<input id=\"postal-input\" name=\"postal_code\" type=\"text\" autocomplete=\"postal-code\" required>",
+          "location": "#postal-input, <input> field, label 'Postal code', line 49"
+        },
+        {
+          "evidence": "<select id=\"shipspeed-select\" required> with options Standard, Express, Overnight, Next-day, International",
+          "location": "#shipspeed-select, <select> field, label 'Preferred shipping speed', line 53"
+        },
+        {
+          "evidence": "<input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required>",
+          "location": "#org-input, <input> field, label 'Organization name', line 67"
+        },
+        {
+          "evidence": "<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required>",
+          "location": "#contacttime-input, <input> field, label 'Preferred contact time', line 71"
+        }
+      ],
+      "lane": "judged",
+      "location": "#street-input, <input> field, label 'Street address', line 24",
+      "severity": 3,
+      "violation": "None of these required fields is needed to create an account: a street address, postal code and shipping-speed choice serve a later checkout step; a phone number serves delivery, which has no delivery to arrange yet; a company website and organization name serve a business profile the task never mentions; a membership number, an account number and a preferred contact time all serve interactions that happen after the account exists. The task is account creation, and none of these answers is used by it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button> <button id=\"submit-btn\" type=\"submit\">Create account</button>",
+      "fix": "Give the primary submit at least the same explicit sizing as the secondary action, or a filled or otherwise visually heavier style, so a person can tell which button is primary without reading both labels.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#submit-btn, <button type=submit> 'Create account', immediately preceded by #viewdetails-btn, <button type=button> 'View details', lines 73 to 74",
+      "severity": 2,
+      "violation": "The secondary action (View details) carries explicit padding and font-size styling while the primary submit (Create account) carries no style at all, so the markup gives the primary no greater visual weight than the secondary; if anything the secondary reads as the more deliberately designed control."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"legalname-label\" for=\"legalname-input\">Your name</label> <input id=\"legalname-input\" name=\"legal_name\" type=\"text\" ... required>, following #name-input, label 'Full name', line 11",
+      "fix": "Remove the duplicate name field. If a legal name distinct from the name already collected is genuinely needed, label both fields to say so, such as 'Full name' and 'Legal name (if different)', and make the second one optional.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label 'Your name', line 62",
+      "severity": 2,
+      "violation": "The form already asked for the person's name as the required 'Full name' field (#name-input); 'Your name' (#legalname-input) asks again for the same information under a second required field, with nothing in either label explaining why the two differ."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-10-03T05:46:38Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

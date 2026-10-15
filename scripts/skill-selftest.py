@@ -34,7 +34,7 @@ name only: this file implements a small, deliberately restricted block
 subset (mappings, sequences of scalars, sequences of flat mappings, no
 anchors, no multi-line scalars, and no flow style beyond the bare `[]`
 empty-sequence token) rather than depending on PyYAML, because that
-subset is all six skills' frontmatter ever needs.
+subset is all the skills' frontmatter ever needs.
 """
 
 from __future__ import annotations

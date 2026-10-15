@@ -96,6 +96,14 @@ benchmark figure and an opinion.
 | **EX** | Expert guidance, no data |
 | **AN** | Anecdote: a result reported without method, sample or significance |
 
+**Five grades corrected 2026-10-03, on the maintainer's ruling (PR 60 question 2).** A close
+reading of the saved sources moved `baymard-touch-keyboard-cheatsheet` from OG to EX (a private
+firm's guidance, not a standards body; it stays LS where its 48-site benchmark is cited),
+`nng-placeholders-harmful` from US to EX (no method of its own), `baymard-label-position` from EX
+to US (a described study of 18 mobile sites), `lukew-primary-secondary` from EX to US (the
+author's own write-up of the Etre study), and `silver-design-a-better-form` from US to EX ("in
+testing", with no method or sample). No criterion, threshold or severity changed.
+
 Three rules the table follows:
 
 - **Correlation is labelled.** Chrome's autofill figures come from Chrome's own correlational study,
@@ -150,7 +158,7 @@ Figures are quoted exactly as their sources state them. Handles resolve in the
 
 1. **`FORMS-INPUT-TYPE`.** LS: Baymard's 48-site benchmark found "54% of mobile sites fail to invoke
    optimized touch keyboards" for phone, ZIP or card fields (`baymard-mobile-touch-keyboards`). OG:
-   `webdev-signin-form`, `webdev-payment-address-form`, `baymard-touch-keyboard-cheatsheet`. EX:
+   `webdev-signin-form`, `webdev-payment-address-form`. EX: `baymard-touch-keyboard-cheatsheet`,
    `silver-form-design-patterns` p. 34, `nng-mobile-input-checklist`, `lukew-mobile-input`.
 2. **`FORMS-NUMERIC-INPUTMODE`.** OG with research: GOV.UK moved away from `type="number"` after
    finding Chrome silently discards non-numeric characters and that the field fails in Dragon and
@@ -174,7 +182,7 @@ Figures are quoted exactly as their sources state them. Handles resolve in the
    wrong autocorrection costs "on average 5.5 seconds" (`alharbi-predictive-keyboards-2020`). OG:
    `govuk-names-pattern` (`spellcheck="false"` on names). EX: `nng-mobile-input-checklist`, Silver
    p. 203.
-5. **`FORMS-PLACEHOLDER-INSTRUCTION`.** US: placeholder text strains memory once typing starts and
+5. **`FORMS-PLACEHOLDER-INSTRUCTION`.** EX: placeholder text strains memory once typing starts and
    makes empty fields less noticeable in eye tracking (`nng-placeholders-harmful`). OG: it
    disappears, is not always announced by screen readers, and its default styling often fails
    contrast (`govuk-text-input-component`). EX: `baymard-inline-labels`, Wroblewski p. 170, Silver
@@ -196,9 +204,9 @@ Figures are quoted exactly as their sources state them. Handles resolve in the
    Wroblewski pp. 116 to 118. Scripted only when the width is set in markup.
 9. **`FORMS-FORMAT-TOLERANCE`.** OG: accept phone numbers in any format (`govuk-phone-numbers-pattern`);
    silently ignore case, spacing and punctuation in postcodes (`govuk-addresses-pattern`); match
-   names with Unicode letters, not Latin-only patterns (`webdev-payment-address-form`); iOS's phone
+   names with Unicode letters, not Latin-only patterns (`webdev-payment-address-form`); EX: iOS's phone
    keyboard cannot type the special characters a strict pattern demands, and several countries'
-   postcodes contain letters (`baymard-touch-keyboard-cheatsheet`); an email field must accommodate
+   postcodes contain letters (`baymard-touch-keyboard-cheatsheet`); OG: an email field must accommodate
    "up to 254 characters" (`govuk-email-addresses-pattern`). Boundary: decision 6.
 10. **`FORMS-PASSWORD-RULES`.** LS: across 1,362 forms the password field has the highest mean
     abandonment of the common fields, "a mean abandonment rate of 10.5%" (`zuko-25-conversion-stats`,
@@ -240,7 +248,7 @@ Figures are quoted exactly as their sources state them. Handles resolve in the
     method (`silver-58-form-design-ux-best-practices`).
 18. **`FORMS-ADDRESS-FORMAT`.** OG: do not require house number and street in separate inputs
     (`webdev-payment-address-form`); county is not needed for UK delivery and should be optional or
-    removed (`govuk-addresses-pattern`); postcode formats vary by country
+    removed (`govuk-addresses-pattern`). EX: postcode formats vary by country
     (`baymard-touch-keyboard-cheatsheet`). Address lookup is left to N5.
 19. **`FORMS-FIELD-NECESSITY`.** LS, checkout-scoped: "the average US checkout flow contains 23.48
     form elements" against a far smaller need (`baymard-cart-abandonment-list`). OG: never ask the
@@ -257,14 +265,16 @@ Figures are quoted exactly as their sources state them. Handles resolve in the
     mixed**, so the criterion is judged and its severity is capped at 2.
 21. **`FORMS-LABEL-POSITION`.** US: moving from a top-aligned label to its field took "just 50ms",
     against a typical "500ms" for left-aligned labels (`penzo-2006-label-placement`, sample not
-    stated, familiar data only). OG: `govuk-text-input-component`, `webdev-signin-form`. EX:
-    `nng-web-form-design`, `baymard-label-position`; do not mix alignments (Wroblewski p. 103). Left
+    stated, familiar data only); Baymard's mobile testing points the same way
+    (`baymard-label-position`). OG: `govuk-text-input-component`, `webdev-signin-form`. EX:
+    `nng-web-form-design`; do not mix alignments (Wroblewski p. 103). Left
     alignment remains legitimate for long forms of unfamiliar data (Wroblewski p. 96).
 22. **`FORMS-ACTION-HIERARCHY`.** US: the Etre study (23 participants, six designs) found the layout
     separating primary and secondary actions led "26 percent" to click Cancel by mistake, and
-    centred buttons made people "around six seconds slower" (Wroblewski pp. 142 to 149). US:
-    buttons at the top of a form made testers think they had reached its end
-    (`silver-design-a-better-form`). EX: `nng-web-form-design`, `lukew-primary-secondary`.
+    centred buttons made people "around six seconds slower" (Wroblewski pp. 142 to 149), also written
+    up by Wroblewski himself (`lukew-primary-secondary`). EX: buttons at the top of a form made
+    testers think they had reached its end, reported without a method
+    (`silver-design-a-better-form`); `nng-web-form-design`.
 23. **`FORMS-SELECTION-DEPENDENT`.** US: the Etre study of eight designs with 23 participants found
     exposing every branch's fields cost "a whopping 18 more fixations" than the best design, and that
     hiding irrelevant controls until chosen worked best (Wroblewski pp. 276 to 301). One source, a

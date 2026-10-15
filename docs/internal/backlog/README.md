@@ -3,7 +3,7 @@
 Local-first, version-controlled backlogs (Standard sec 7.1). Two files, plus this index:
 
 - **[enhancements.md](enhancements.md)** - features, fixes and refinements to components that already
-  exist. 72 items, `E1` through `E72`.
+  exist. 73 items, `E1` through `E73`.
 - **[new-components.md](new-components.md)** - proposals to ADD a skill, command, subagent, hook or
   chain. 5 items, `N1` through `N5`, each with a recorded why-gate verdict.
 
@@ -124,13 +124,13 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E69 | Revisit ADR 0011's npm option now that the toolkit ships on npm | S | unscheduled |
 | E70 | Teach the skill template how a synthesized rubric lays out its references and anchors | S | unscheduled |
 | E71 | Let a skill keep a bibliography in references/ without a criterion table | S | unscheduled |
-| E72 | Fix the site's rubric attribution for a synthesized namespace before critique-forms goes active | S to M | v0.2.0 |
 | E10 | Rule how BYOR is measured under the measured-only exclusion | M | v0.2.0 |
 | E22 | Turn on severity_expected scoring | M | v0.2.0 |
 | E23 | Write methodology.md's location-level metrics section | M | v0.2.0 |
 | E24 | Add an automated evidence-quotes-not-characterizes check | M | v0.2.0 |
 | E27 | Isolate the bench harness from the working tree it measures | M | v0.2.0 |
 | E63 | Bring the dispatch run sets into results.json, or amend the rule they break | M | v0.2.0 |
+| E73 | Make the merge step run the scripted lane itself, instead of trusting the model's copy | M | v0.2.0 |
 | E67 | Expand critique-accessibility with the WCAG 2.2 AA criteria checkable from static markup | M to L | v0.2.0 |
 | E49 | Write one real tutorial for the empty Diataxis Tutorials quadrant | M | v0.2.0 |
 | E53 | Harden --gate as a documented per-skill CI recipe for consumers | M | v0.3.0 |

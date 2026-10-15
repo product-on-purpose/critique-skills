@@ -1,0 +1,215 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"password-input\" name=\"password\" type=\"password\" autocomplete=\"new-password\" minlength=\"8\" required=\"\">`",
+      "fix": "Add a second \"Confirm password\" input and validate client-side (and server-side) that it matches.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<input id=\"password-input\" ...>` in `#row-password`",
+      "severity": 3,
+      "violation": "There is no password-confirmation field, so a typo in the password can't be caught at signup and will lock the user out later."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<p>We will text you about delivery updates.</p>` with no accompanying checkbox",
+      "fix": "Add a required or optional checkbox (e.g., \"I agree to receive SMS delivery updates\") tied to the phone field.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`#row-phone`",
+      "severity": 3,
+      "violation": "The form states SMS messages will be sent but collects no explicit opt-in consent for texting, which is required in many jurisdictions (e.g., TCPA) and is a UX best practice regardless."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`pattern=\"[0-9]+\"`",
+      "fix": "Remove the restrictive pattern (rely on `type=\"tel\"`) or use a pattern that tolerates standard phone punctuation, e.g. `pattern=\"[0-9+\\-() ]+\"`.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`#row-phone2`, `<input id=\"phone2-input\" ...>`",
+      "severity": 3,
+      "violation": "The pattern rejects common, valid phone formatting characters like `+`, `-`, spaces, and parentheses, so many legitimately formatted secondary numbers will fail validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"website-input\" name=\"website\" required=\"\" type=\"text\">`",
+      "fix": "Change `type=\"text\"` to `type=\"url\"`, add `autocomplete=\"url\"`, and make the field optional unless a business website is genuinely mandatory.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`#row-website`, `<input id=\"website-input\" ...>`",
+      "severity": 3,
+      "violation": "The field is `type=\"text\"` instead of `type=\"url\"` (losing built-in URL validation/keyboard), and it's marked `required` on a consumer account-creation form where most individual signups won't have a company website."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no `pattern` or `maxlength`",
+      "fix": "Add `pattern=\"[0-9]{8}\"` and `maxlength=\"8\"` to enforce the stated format.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`#row-member`, `<input id=\"member-input\" ...>`",
+      "severity": 3,
+      "violation": "The 8-digit requirement is communicated only via placeholder text with no actual constraint, so the browser will accept any length or non-numeric input."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"acctnum-label\" ...>Account number</label>` and `<label id=\"member-label\" ...>Membership number (8 digits)</label>`, both `required`, on a form titled \"Create your account\"",
+      "fix": "Remove these fields from the signup form (assign them after account creation) or clearly explain what each number is and where to find it, making them optional if not truly required at signup.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`#row-acctnum` and `#row-member`",
+      "severity": 3,
+      "violation": "This is a new-account signup form, yet it requires a membership number and an account number that a brand-new user would not yet possess, and it's unclear how the two fields differ."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`size=\"3\"`",
+      "fix": "Remove the `size` attribute or set it to at least 8-10.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`#row-postal`, `<input id=\"postal-input\" ...>`",
+      "severity": 3,
+      "violation": "A visible width of 3 characters is too narrow for most postal codes (US ZIP+4, Canadian, or UK formats), truncating the visible input as the user types."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\"><option>Standard</option>...`",
+      "fix": "Add a disabled, selected placeholder option (e.g., `<option value=\"\" disabled selected>Select shipping speed</option>`).",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "`#row-shipspeed`, `<select id=\"shipspeed-select\" ...>`",
+      "severity": 3,
+      "violation": "The select has no neutral placeholder option, so \"Standard\" is selected by default and the `required` attribute never blocks submission even if the user never touches the field, allowing an unintended shipping choice to be submitted silently."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Express</option><option>Overnight</option><option>Next-day</option><option>International</option>`",
+      "fix": "Pick one term for next-day delivery (drop the duplicate) and move \"International\" to a separate destination/region field, not the speed selector.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "`#row-shipspeed` options",
+      "severity": 3,
+      "violation": "\"Overnight\" and \"Next-day\" are overlapping/ambiguous speed options, and \"International\" describes a destination rather than a shipping speed, conflating two different concepts in one control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"legalname-label\" for=\"legalname-input\">Your name</label>` and `name=\"legal_name\" autocomplete=\"name\"`",
+      "fix": "Remove the duplicate field, or if a separate legal name is genuinely needed, relabel it to clarify the distinction (e.g., \"Legal name, if different from above\") and make it optional.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "`#row-legalname`",
+      "severity": 3,
+      "violation": "This duplicates the \"Full name\" field collected earlier in `#row-name`, asking the user for their name twice with no explanation of why they differ."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"font-size:13px\"` and `required=\"\"`",
+      "fix": "Remove the inline `font-size` style and make the field optional unless a business account type is being created.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "`#row-org`, `<input id=\"org-input\" ...>`",
+      "severity": 3,
+      "violation": "The field uses an inline style to shrink its text below the rest of the form, hurting readability/consistency, and is required even though organization name is likely irrelevant for an individual consumer signup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"contacttime-label\" ... style=\"display:inline-block;float:left;width:140px\">` and `<input id=\"contacttime-input\" ... type=\"text\" required=\"\">`",
+      "fix": "Use a `<select>` of time ranges or a `type=\"time\"` input with a clear format, and move the layout styling into a stylesheet/class rather than inline attributes.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "`#row-contacttime`",
+      "severity": 3,
+      "violation": "Preferred contact time is collected as unconstrained free text with no format hint or input type, and the label is positioned with ad hoc inline CSS (float/width) that's inconsistent with the rest of the form's markup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>`",
+      "fix": "Either remove the button or implement its intended behavior (e.g., open a details modal) with an associated event handler.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "`<button id=\"viewdetails-btn\" ...>` (between `#row-contacttime` and `#row-dob`)",
+      "severity": 3,
+      "violation": "The button has `type=\"button\"` but no script in the document wires up any click handler, so it does nothing and its purpose inside the signup form is unexplained."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Year options run `<option>1950</option>` … `<option>2009</option>`",
+      "fix": "Generate the year range dynamically (e.g., current year minus 100 through current year minus 13) instead of a hardcoded 1950-2009 list.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "`#row-dob`, `dob-year-select` options",
+      "severity": 3,
+      "violation": "As of 2026 this range only covers ages roughly 17-76, excluding legitimate younger (18+) and older customers from being able to enter a correct birth year."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Day/Month/Year selects all `required` with first options `1`, `January`, `1950` and no placeholder",
+      "fix": "Add a disabled, selected empty/placeholder option to each of the day, month, and year selects.",
+      "id": "F-015",
+      "lane": "judged",
+      "location": "`#row-dob` fieldset",
+      "severity": 3,
+      "violation": "Like the shipping-speed select, these three required dropdowns default to a concrete value (Jan 1, 1950) and will pass validation even if the user never interacts with them, risking silent submission of a false birth date."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<meta charset=\"utf-8\"><title>Join Meridian Outfitters</title>` with no other meta tags",
+      "fix": "Add `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">` to the `<head>`.",
+      "id": "F-016",
+      "lane": "judged",
+      "location": "`<head>`",
+      "severity": 3,
+      "violation": "There is no `<meta name=\"viewport\">` tag, so the form will render at desktop scale and be hard to use on mobile devices."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Only `street_address` and `postal_code` are collected; no city, state/region, or country field exists, yet shipping speed offers `<option>International</option>`",
+      "fix": "Add city, state/region, and country fields to the address section.",
+      "id": "F-017",
+      "lane": "judged",
+      "location": "Address fields (`#row-street`, `#row-postal`) compared to `#row-shipspeed`",
+      "severity": 3,
+      "violation": "Without a country (and city/state) field, an address is incomplete for shipping, and the \"International\" shipping option can't be reconciled with a destination that was never captured."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-002.html",
+    "artifact_sha256": "e39d0a6e9175987711e114d2ce5edd568205f5aecafb2d271246e6036a16457f",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-03T04:12:39Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 17,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

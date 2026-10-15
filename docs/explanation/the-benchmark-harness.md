@@ -71,7 +71,7 @@ Five of seven steps are ordinary Python with no network call.
 
 ### Why steps 3 and 6 cannot be scripted away
 
-**Step 3.** Of the 96 criteria across the six skills, 42 are scripted and 54 are judged. A scripted
+**Step 3.** Of the 120 criteria across the seven skills, 60 are scripted and 60 are judged. A scripted
 criterion is one a program can decide alone: contrast ratios, heading depth, sentence length,
 whether an `alt` attribute exists. A judged criterion needs someone to read for meaning: whether an
 argument's warrant is missing, whether an error message tells you what to do next, whether a page is

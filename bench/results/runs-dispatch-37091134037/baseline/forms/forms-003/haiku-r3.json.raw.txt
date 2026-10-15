@@ -1,0 +1,34 @@
+Location: Inside `<div id="row-phone">`, after the phone input
+Evidence: `<p>Thanks for signing up.</p>`
+Problem: A success message appears in the middle of an active form, confusing users about whether signup is complete before they finish filling it out.
+Fix: Remove this paragraph from the form entirely; display it only after successful form submission.
+
+Location: `<select id="shipspeed-select" required="">`
+Evidence: Select element has no `name` attribute
+Problem: Without a name attribute, the selected shipping speed won't be submitted with the form data.
+Fix: Add `name="preferred_shipping_speed"` (or similar) to the select element.
+
+Location: `<select id="shipspeed-select">` option elements
+Evidence: `<option>Standard</option>` (and other options without value attributes)
+Problem: Options lack explicit value attributes, relying on text content as values, which is fragile and unclear.
+Fix: Add value attributes to each option: `<option value="standard">Standard</option>`, etc.
+
+Location: `<div id="row-name">` and `<div id="row-legalname">`
+Evidence: Full name input with `name="full_name"` followed later by separate First name `name="given_name"` and Last name `name="family_name"` fields
+Problem: The form asks for the user's name twice in different formats, creating confusion and redundant data collection.
+Fix: Remove either the "Full name" field or the "First name"/"Last name" field pair; keep only one approach.
+
+Location: `<input id="member-input" name="membership_number" type="text" inputmode="numeric" placeholder="Must be 8 digits">`
+Evidence: No validation pattern despite placeholder stating "Must be 8 digits"
+Problem: The membership number field accepts any text despite requiring exactly 8 digits; the placeholder alone doesn't enforce the requirement.
+Fix: Add `pattern="[0-9]{8}"` to enforce validation of exactly 8 digits.
+
+Location: `<input id="contacttime-input" name="contact_time" type="text">`
+Evidence: `type="text"` for a contact time field
+Problem: Using text input for time data makes it easy to enter invalid values and doesn't provide user-friendly time selection.
+Fix: Change to `type="time"` for proper time input with browser-native controls.
+
+Location: `<button id="viewdetails-btn" type="button" style="padding:1px 2px;font-size:11px">`
+Evidence: `style="padding:1px 2px;font-size:11px"`
+Problem: The button is nearly impossible to read and click due to 11px font size and minimal padding.
+Fix: Increase font-size to at least 14px and padding to at least 8px 12px, or use a standard button style class.

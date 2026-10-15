@@ -1,0 +1,50 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "The form contains two fields that ask for the person's name: #name-input with label 'Full name' (line 11) and #legalname-input with label 'Your name' (line 62).",
+      "fix": "Remove the duplicate 'Your name' field (#legalname-input and its row container #row-legalname) from the form.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label 'Your name', line 62",
+      "severity": 3,
+      "violation": "The form asks again for something it already asked. The account-creation task specified by the heading 'Set up your account' and submit button 'Create account' needs the person's name once, not twice."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-TOUCH-TARGET",
+      "evidence": "The viewdetails button's declared style is 'padding:12px 20px;font-size:16px'. Calculated height: 12px (top padding) + 16px (font-size) + 12px (bottom padding) = approximately 40 CSS pixels, below the 44-48 pixel recommended minimum.",
+      "fix": "Increase the button's padding or add a minimum height style. For example, change 'padding:12px 20px' to 'padding:16px 20px' or add 'min-height:44px' to reach the recommended 44-48 pixel touch target size.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> element, text 'View details', line 73",
+      "severity": 2,
+      "violation": "The button is smaller than the recommended 44-48 CSS pixel minimum height for mobile touch targets. A control smaller than 44 pixels in either dimension is harder to tap accurately on a phone."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.0",
+    "timestamp": "2026-10-03T05:20:35Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
