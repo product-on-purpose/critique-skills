@@ -55,7 +55,7 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 
    - ~~Per-entry `run_set` and a lane dimension added to the results schema~~ **(done 2026-09-14)**.
    - ~~`critique-usability`'s Sonnet cell re-measured~~ **(done 2026-09-25)**. It still does not qualify against baseline on that tier; see "Known limitations" below.
-   - The methodology's location-level metrics section written up properly.
+   - ~~The methodology's location-level metrics section written up properly~~ **(done 2026-10-15)**.
    - ~~`verdicts.md` rewritten as one document instead of a layered amendment trail~~ **(done 2026-10-15)**.
    - ~~An automated check for the evidence-quotes-not-characterizes field contract~~ **(done 2026-10-14)**.
    - ~~`severity_expected` scoring turned on~~ **(done 2026-10-14)**.

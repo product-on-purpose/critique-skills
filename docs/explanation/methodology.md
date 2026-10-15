@@ -265,14 +265,47 @@ Critique runs in a fresh context that has not seen the artifact being authored. 
 
 The library publishes its own performance. Four measures:
 
-### Seeded-defect recall
+### Seeded-defect recall and precision
 
-A deterministic generator produces synthetic artifacts with a manifest of planted violations keyed to criterion IDs. Because ground truth is known, recall and precision are directly computable:
+A deterministic generator produces synthetic artifacts with a manifest of planted violations keyed to criterion IDs. Because ground truth is known, recall and precision are directly computable. Generation is seeded and reproducible, so the corpus is a stable target across skill versions.
 
-- **Recall:** what fraction of planted defects did the skill find?
-- **Precision:** what fraction of reported findings correspond to planted defects or to genuine unplanted ones?
+The unit of scoring is the **claim**: one `(criterion, location)` pair that a run asserts. A finding contributes one claim, plus one more for each entry in its `instances` list. Matching is one-to-one: a planted defect is matched by at most one claim, and a claim matches at most one defect. A duplicate finding therefore earns recall once and costs precision every time.
 
-Generation is seeded and reproducible, so the corpus is a stable target across skill versions.
+- **Recall** is matched planted defects over all planted defects. Only seeded artifacts count. A clean artifact has nothing to find, so it adds nothing to either side.
+- **Precision** is matched claims over all claims emitted, across every artifact, clean ones included. Suppressed findings are left out, because a user never sees them.
+- **A correct finding that was not planted counts against precision.** No adjudication step exists, so the scorer cannot tell a real unplanted defect from an invented one. Precision therefore understates a skill by an unknown amount, and every results table says so.
+- **`clean_fp_rate`** is the mean number of claims per clean artifact. It shows what a skill says about a document with nothing wrong with it.
+
+#### Criterion-level and location-level
+
+Recall and precision are each published at two levels. Both levels come from the same envelopes, through the same resolver and the same tolerance rules. They differ in one condition.
+
+| | Criterion-level: `recall`, `precision` | Location-level: `recall_location`, `precision_location` |
+|---|---|---|
+| A claim matches a planted defect when | its criterion ID equals the defect's exactly, **and** its location resolves within tolerance | its location resolves within tolerance; the criterion ID is ignored |
+| The question it answers | Did the skill find the defect and file it under the criterion the rubric assigns? | Did the reviewer point at the planted defect at all? |
+| Its role | The primary per-skill metric, and the formal pass condition of the ship gates | The substantive reading of the ship gates, and the figure the README scoreboard reports |
+
+**Why the second level exists.** The baseline is a generic prompt with no rubric. Every baseline finding carries the fixed criterion `BASELINE-GENERIC`, and no manifest plants a defect under it. The baseline's criterion-level recall and precision are therefore 0.000 by construction. At criterion level, "beats the baseline" is met by any nonzero number, so it can never fail. Location-level scoring drops the criterion condition, so a skill and the baseline answer the same question. [ADR 0026](../internal/decisions/0026-location-level-re-examination-of-baseline-gates.md) made it the substantive reading of the gates on 2026-07-31, without changing any evidence.
+
+**Reading the two side by side.** Suppose a skill's location-level figures sit well above its criterion-level ones. The skill is reaching the right places but filing some findings under the wrong criterion. That gap is a rubric-operationalization problem, not a detection problem. The comparison is a reading aid, not an inequality: matching is greedy and one-to-one, so the two levels are not guaranteed to order the same way on every artifact.
+
+#### Location tolerance
+
+A finding's `location` is free text, per [ADR 0012](../internal/decisions/0012-location-grammar-freetext-plus-reserved-selector.md). The scorer resolves that text into anchors, using the artifact itself as the vocabulary: paragraph numbers, section titles, element ids, CSS selectors and list keys. It then applies the tolerance for the artifact's type, per [ADR 0015](../internal/decisions/0015-location-tolerance-per-artifact-type.md). One principle sets every rule: tolerance is generous only where adjacency carries meaning.
+
+| Artifact type | A claim is within tolerance when it names |
+|---|---|
+| `markdown-prose` | For a planted paragraph: that paragraph, one on either side of it, or the section that holds it. When a claim names both a paragraph and a section, the window is clipped to that section. For a planted heading: the heading's title, or the paragraph immediately before or after it. |
+| `markdown-tree` | The `markdown-prose` rule, after a page check. Naming a different page is a miss. Naming no page is not penalized, because the critic was handed one page. A defect about a page as a whole matches on the page alone. |
+| `html` | The planted element, its parent or grandparent, or one of its direct children. Naming the `<figure>` around a bad `<img>` is navigable; naming `<body>` is not. |
+| `string-list` | Exactly the planted item, by position or by key. Item 4 and item 5 are unrelated strings, so there is no neighborhood to credit. |
+
+The generator bounds section-level credit in markdown. No section holds more than six paragraphs, so a location that names only a section is worth at most a one-in-six guess. The tolerance rule and that generator constraint are one design, and neither changes without the other.
+
+A location that resolves to no anchor, such as "throughout the document", is a miss for recall and counts against precision. That is Part 1 of the Two-Part Gate expressed as arithmetic: a finding that cannot say where has not made a falsifiable claim. Each results entry reports how many such claims it held, as `unresolvable_claims`.
+
+This section summarizes the rules. The normative versions, including the block parser and the resolver's exact vocabulary, are in [`bench/README.md`](../../bench/README.md) under "Location tolerance" and "Metrics".
 
 ### Run-to-run consistency
 
@@ -282,7 +315,7 @@ Each skill is run k=5 times against the same artifact. Consistency is the mean p
 
 ### Baseline comparison
 
-Every skill is compared against a generic prompt ("critique this document") on the same corpus, on at least two model tiers. A skill that does not beat the baseline does not ship. Results tables pin model IDs and dates, because these numbers decay.
+Every skill is compared against a generic prompt ("critique this document") on the same corpus, on at least two model tiers. A skill that does not beat the baseline does not ship. The comparison is read at location level, for the reason given under "Criterion-level and location-level" above. Results tables pin model IDs and dates, because these numbers decay.
 
 ### Acceptance rate
 

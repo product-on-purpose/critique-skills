@@ -663,7 +663,14 @@ and the repository did not have.
 - **Size:** M. **Release:** v0.2.0. **Category:** docs. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
-- **Rank at intake:** 23 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-10-15.** `docs/explanation/methodology.md` Section 8 now defines the claim, recall,
+  precision and `clean_fp_rate`. It also states the one condition that separates criterion-level
+  from location-level matching, says why the location-level cut exists and what each cut is for,
+  and summarizes the tolerance rule per artifact type. It links to `bench/README.md` as the
+  normative source. The same change corrects the precision bullet, which said genuine unplanted
+  findings count in a skill's favor. They count against it, as `bench/README.md` and the scorer
+  have always had it.
+- **Rank at intake:** 23 of 64. **Status:** closed 2026-10-15.
 - **Ruled 2026-10-15 by the maintainer:** lands before the v0.2.0 release is cut. `ROADMAP.md`'s
   v0.2.0 item 1 says this debt is "closed here rather than carried further", and keeping that
   promise costs no paid run.

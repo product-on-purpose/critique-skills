@@ -98,12 +98,11 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**34 items depend on nothing and can start today.** Derived from each item's own
+**28 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
 |---|---|---|---|
-| E13 | Update ROADMAP.md's v0.1.x section: two of four verification items are met | S | v0.1.x |
 | E28 | Pin or record the Claude Code CLI version bench.yml installs | S | v0.2.0 |
 | E29 | Make release.yml's re-run suite match what it claims to run | S | v0.1.x |
 | E31 | Add criterion-table completeness to skill-selftest.py | S | v0.1.x |
@@ -125,9 +124,6 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E70 | Teach the skill template how a synthesized rubric lays out its references and anchors | S | unscheduled |
 | E71 | Let a skill keep a bibliography in references/ without a criterion table | S | unscheduled |
 | E10 | Rule how BYOR is measured under the measured-only exclusion | M | v0.2.0 |
-| E22 | Turn on severity_expected scoring | M | v0.2.0 |
-| E23 | Write methodology.md's location-level metrics section | M | v0.2.0 |
-| E24 | Add an automated evidence-quotes-not-characterizes check | M | v0.2.0 |
 | E27 | Isolate the bench harness from the working tree it measures | M | v0.2.0 |
 | E63 | Bring the dispatch run sets into results.json, or amend the rule they break | M | v0.2.0 |
 | E73 | Make the merge step run the scripted lane itself, instead of trusting the model's copy | M | v0.3.0 |
@@ -135,8 +131,6 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E49 | Write one real tutorial for the empty Diataxis Tutorials quadrant | M | v0.2.0 |
 | E53 | Harden --gate as a documented per-skill CI recipe for consumers | M | v0.3.0 |
 | E54 | Ship one documented cross-library composition workflow | M | v0.3.0 |
-| E25 | Rewrite verdicts.md as one current-state document | L | v0.2.0 |
-| E26 | Calibrate a per-lane consistency threshold (v2) | L | v0.2.0 |
 
 With S-07's AC-4 closed, every criterion in that spec passes and
 [ADR 0034](../decisions/0034-v0.1.x-exit-gate-declaration.md)'s two named conditions for calling
