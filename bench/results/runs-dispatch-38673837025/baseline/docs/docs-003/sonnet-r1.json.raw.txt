@@ -1,0 +1,14 @@
+Location: ## retries
+Evidence: "The retries field takes an integer from 0 to 10, and it defaults to 3."
+Problem: Unlike every other field in the document, no validator/rejection behavior is described for out-of-range values, leaving it unclear what happens if a value outside 0-10 is supplied.
+Fix: Add a sentence specifying what the validator does with out-of-range values (e.g., "the validator rejects any value outside this range"), matching the style used for timeout and logging.
+
+Location: ## timeout
+Evidence: "Leaving this field at its default is the right choice for most teams, and raising it is worth doing only when a specific integration needs the extra room."
+Problem: This guidance states there is a default worth "leaving," but no default value is ever given for timeout, unlike retries (defaults to 3) and logging (defaults to info).
+Fix: State the actual default timeout value (e.g., "defaults to 5000ms") before referencing it.
+
+Location: ## Related pages
+Evidence: "- Metric catalog reference" and the seven other bullet links
+Problem: The list items are plain text, not actual links or document references, so a reader cannot navigate to any of these related pages from the document.
+Fix: Convert each item into an actual hyperlink or file path pointing to the corresponding reference document.

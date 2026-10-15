@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential.\"",
+      "fix": "Add specifics, e.g. retry counts/intervals for each policy (\"linear: retries every N seconds up to M times; exponential: doubles delay starting at N seconds up to M attempts\").",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "## retry_policy",
+      "severity": 3,
+      "violation": "No rationale or detail is given for what \"linear\" vs \"exponential\" actually do (intervals, max attempts, backoff caps), leaving the field underspecified for implementers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The signing_secret field accepts a string used to verify the payload signature on receipt.\"",
+      "fix": "Specify the signing algorithm (e.g., HMAC-SHA256), which header carries the signature, and the encoding format (hex/base64).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "## signing_secret",
+      "severity": 3,
+      "violation": "Doesn't document the signature scheme (e.g., HMAC algorithm, header name, encoding) needed to actually verify the payload, making the field impossible to use correctly from this reference alone."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert.\"",
+      "fix": "State whether endpoint_url is required/has a default, and describe what response codes are treated as success vs. trigger a retry.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "## endpoint_url",
+      "severity": 3,
+      "violation": "Doesn't state whether the field is required, if there's a default, or what happens if the URL is unreachable/returns a non-2xx status (ties into the undocumented retry behavior)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Document contains only three fields (endpoint_url, signing_secret, retry_policy) with no sections on payload structure, headers sent, or error/failure semantics.",
+      "fix": "Add a section describing the payload structure/schema and a section on delivery failure handling (timeouts, what counts as failure, max retry duration).",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Whole document",
+      "severity": 3,
+      "violation": "A \"Webhook delivery reference\" omits the payload schema and delivery/failure semantics, which are core to a delivery reference."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-004.md",
+    "artifact_sha256": "7f41536ab3c3f7bc93a3dde86b8e81cee5dab0339f2b1d472e9222a20b42d7ae",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T03:48:14Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

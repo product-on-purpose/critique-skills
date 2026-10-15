@@ -1,0 +1,29 @@
+Location: Heading "#### Check the sidebar updated"
+Evidence: `## Open the test console` is immediately followed by `#### Check the sidebar updated`
+Problem: The heading level jumps from h2 to h4, skipping h3, which breaks the document's heading hierarchy.
+Fix: Change the heading to `###` (h3), or make all step headings use a consistent level such as `##`.
+
+Location: Heading "Check the sidebar updated"
+Evidence: "Check the sidebar updated"
+Problem: The phrase is grammatically malformed as a heading — it reads as an incomplete sentence rather than an instruction.
+Fix: Reword to "Check that the sidebar updated" or "Confirm the sidebar update."
+
+Location: "Check the sidebar updated" section body
+Evidence: "confirm the rule count now includes the sample rule"
+Problem: This implies the rule count changes as a result of opening the console and selecting the rule, but the rule was already described as "provided for new accounts," meaning it already existed before this step — the cause-and-effect here doesn't hold.
+Fix: Either remove this verification step or explain what actually causes the count to change (e.g., selecting the rule adds it to an "active rules" list).
+
+Location: "Trigger the sample alert" section
+Evidence: "Click Trigger sample alert and wait for the status indicator to change to Sent."
+Problem: No guidance is given for what to do if the status indicator does not change to "Sent" (e.g., it errors or stays pending), leaving the reader with no recourse.
+Fix: Add a short troubleshooting note, e.g., "If the status doesn't update after a minute, check your connection and retry."
+
+Location: "Check the delivery log" section
+Evidence: "Open the delivery log and check that the test alert shows a Sent status with a timestamp."
+Problem: Unlike the first step, which specifies where to find the test console ("from the developer menu"), this step gives no location or navigation path for the delivery log.
+Fix: Add navigation instructions, e.g., "Open the delivery log from the developer menu" (or wherever it actually lives).
+
+Location: End of document, after the final sentence "...shows a Sent status with a timestamp."
+Evidence: The document ends immediately after the last verification step with no closing statement.
+Problem: The tutorial doesn't confirm overall completion or point to next steps, leaving the reader unsure whether the goal stated in the title ("Send your first test alert") has been fully accomplished.
+Fix: Add a brief closing line, e.g., "You've successfully sent and verified your first test alert," optionally followed by a pointer to related tutorials.

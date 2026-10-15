@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"A threshold is the numeric boundary that triggers an alert once a metric crosses it.\"",
+      "fix": "Move this definition to a concepts/overview section or a short intro before the steps, and keep the \"Open alert settings\" step limited to navigation actions.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "## Open alert settings, second sentence",
+      "severity": 3,
+      "violation": "This is a conceptual definition dropped into the middle of a procedural step; it interrupts the action sequence (\"open the panel, select the rule\") with unrelated explanatory content that doesn't belong in a how-to."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"select the rule you want to adjust\"",
+      "fix": "Add a sentence describing how to find a specific rule (e.g., search box, filter by name) or what to do if it isn't immediately visible.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "## Open alert settings",
+      "severity": 3,
+      "violation": "The step assumes the reader can already locate the desired rule, with no guidance for searching or filtering when many rules exist."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"confirm the unit matches the metric in use\"",
+      "fix": "Specify where the unit indicator/selector appears in the UI and what to do if it doesn't match (e.g., \"choose the matching unit from the dropdown next to the field\").",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "## Set the new threshold, first sentence",
+      "severity": 3,
+      "violation": "The instruction is vague - it doesn't say where the unit is displayed, what the valid units are, or what action to take if there's a mismatch."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This is because the console applies the new threshold to every future evaluation of this rule.\"",
+      "fix": "Remove the sentence, or rewrite it to explain why unit-matching matters (e.g., a mismatched unit causes the threshold to be misapplied to incoming metric values).",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "## Set the new threshold, second sentence",
+      "severity": 3,
+      "violation": "Presented as a causal justification (\"This is because\"), but it doesn't actually explain the preceding instruction to match units - it's a non-sequitur that leaves the real reasoning for unit-matching unstated."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"confirm the new threshold appears there\"",
+      "fix": "Instruct the reader to confirm the displayed value and unit exactly match what was entered in the previous step.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "## Save and verify",
+      "severity": 3,
+      "violation": "The verification only checks that some value is present, not that it matches what was just entered, so a value silently corrupted or defaulted during save would still pass this check."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "no \"Prerequisites\" or permissions statement anywhere in the text",
+      "fix": "Add a brief prerequisites note stating the role or permission needed to edit alert thresholds.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "whole document",
+      "severity": 3,
+      "violation": "The procedure assumes the reader already has permission to edit alert rules, with no note about required role/access, so a reader lacking permission has no explanation for why controls might be missing or disabled."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-001.md",
+    "artifact_sha256": "b41787144ac8cc1ae14bcce23fa2b574f6ee68f1aaa9cc432628f9f148ddd713",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T03:12:46Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,34 @@
+Location: ## endpoint_url section
+Evidence: "The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert."
+Problem: The field's requiredness (mandatory vs. optional, and whether there's a default) is never stated, and "alert" is used without defining what counts as an alert or whether this reference is scoped only to alerting.
+Fix: State whether endpoint_url is required, give its default (if any), and either define "alert" or link to where alerts are defined.
+
+Location: ## endpoint_url section
+Evidence: "accepts an HTTPS URL"
+Problem: It's not specified what happens if a non-HTTPS URL (e.g., http://) is supplied — rejected at save time, silently ignored, or allowed with a warning.
+Fix: Add a sentence describing validation behavior for non-HTTPS input, e.g. "Non-HTTPS URLs are rejected with a validation error."
+
+Location: ## signing_secret section
+Evidence: "The signing_secret field accepts a string used to verify the payload signature on receipt."
+Problem: The signing algorithm and where the resulting signature is delivered (e.g., HMAC-SHA256 in an X-Signature header) are never documented, so a reader cannot actually implement verification.
+Fix: Document the exact signing scheme (algorithm, header name, encoding) or link to a page that does.
+
+Location: ## signing_secret section
+Evidence: "accepts a string"
+Problem: No constraints are given on length, allowed characters, whether it's required, or whether there's a default/auto-generated value.
+Fix: Specify minimum/maximum length, character requirements, and required/optional status, plus how to generate or rotate the secret.
+
+Location: ## retry_policy section
+Evidence: "accepts one of none, linear, or exponential"
+Problem: The three enum values are named but never defined — it's unclear what "none" vs "linear" vs "exponential" actually do (e.g., whether "none" disables retries entirely, what interval "linear" uses).
+Fix: Add a definition for each value, e.g. "none: delivery is attempted once with no retries; linear: retries occur at a fixed interval; exponential: retry interval doubles after each failure."
+
+Location: ## retry_policy section
+Evidence: "the default value is exponential"
+Problem: There is no mention of the maximum number of retry attempts, the backoff timing/intervals, or the request timeout that determines a failed delivery attempt — all of which are necessary to understand retry behavior.
+Fix: Document the retry count limit, concrete interval/backoff values, and the timeout used to judge a delivery attempt as failed.
+
+Location: Document as a whole
+Evidence: The document only contains sections for endpoint_url, signing_secret, and retry_policy.
+Problem: A "Webhook delivery reference" never describes the payload schema/content-type being POSTed, or what HTTP response codes from the endpoint are treated as success vs. triggering a retry.
+Fix: Add a section documenting the payload structure (fields, content-type, example JSON) and the response status codes that count as acknowledgment.

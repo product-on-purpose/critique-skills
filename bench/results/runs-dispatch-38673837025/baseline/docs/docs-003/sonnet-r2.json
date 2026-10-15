@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000.\"",
+      "fix": "State the maximum accepted value for timeout, or explicitly note that there is no upper bound.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "## timeout section, first sentence",
+      "severity": 3,
+      "violation": "Only a lower bound is given; unlike the retries field (explicitly bounded 0 to 10), timeout has no stated upper limit, leaving the valid range undefined."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Leaving this field at its default is the right choice for most teams, and raising it is worth doing only when a specific integration needs the extra room.\"",
+      "fix": "Add the timeout field's default value in the first sentence, e.g., \"...and defaults to 5000ms, and the validator rejects any value below 1000.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "## timeout section, second sentence",
+      "severity": 3,
+      "violation": "The text instructs readers to rely on \"its default\" but no default value is ever given for timeout, unlike retries (\"defaults to 3\") and logging (\"default value is info\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"- Metric catalog reference\\n- Notification channel reference\\n...\"",
+      "fix": "Convert each bullet into a markdown link pointing to the actual page path or URL.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "## Related pages",
+      "severity": 3,
+      "violation": "The related-page entries are plain text with no hyperlinks or file paths, so a reader cannot actually navigate to them from this document."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T03:30:57Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

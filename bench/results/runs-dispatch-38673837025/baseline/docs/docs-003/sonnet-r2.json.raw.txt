@@ -1,0 +1,14 @@
+Location: ## timeout section, first sentence
+Evidence: "The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000."
+Problem: Only a lower bound is given; unlike the retries field (explicitly bounded 0 to 10), timeout has no stated upper limit, leaving the valid range undefined.
+Fix: State the maximum accepted value for timeout, or explicitly note that there is no upper bound.
+
+Location: ## timeout section, second sentence
+Evidence: "Leaving this field at its default is the right choice for most teams, and raising it is worth doing only when a specific integration needs the extra room."
+Problem: The text instructs readers to rely on "its default" but no default value is ever given for timeout, unlike retries ("defaults to 3") and logging ("default value is info").
+Fix: Add the timeout field's default value in the first sentence, e.g., "...and defaults to 5000ms, and the validator rejects any value below 1000."
+
+Location: ## Related pages
+Evidence: "- Metric catalog reference\n- Notification channel reference\n..."
+Problem: The related-page entries are plain text with no hyperlinks or file paths, so a reader cannot actually navigate to them from this document.
+Fix: Convert each bullet into a markdown link pointing to the actual page path or URL.

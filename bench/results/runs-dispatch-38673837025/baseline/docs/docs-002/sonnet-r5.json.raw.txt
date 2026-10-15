@@ -1,0 +1,39 @@
+Location: Frontmatter, `mode: tutorial`
+Evidence: `---\nmode: tutorial\n---`
+Problem: The document has no title/description metadata and no introductory sentence stating what the reader will accomplish or any prerequisites (e.g., account permissions, having a sample alert rule available).
+Fix: Add a short intro paragraph after the H1 stating the goal of the tutorial and any prerequisites needed before starting.
+
+Location: `#### Check the sidebar updated`
+Evidence: `#### Check the sidebar updated`
+Problem: This heading jumps from H2 to H4, skipping H3, breaking the document's heading hierarchy and making it unclear whether this is a sub-step of "Open the test console" or a standalone step.
+Fix: Change the heading to H2 to match the other steps, or explicitly nest it as a sub-step with H3 if it's meant to be secondary to the preceding section.
+
+Location: `#### Check the sidebar updated`
+Evidence: "Check the sidebar updated"
+Problem: The heading is grammatically incomplete/awkward — it reads as a sentence fragment missing "has" or "that".
+Fix: Reword to "Check that the sidebar has updated."
+
+Location: "Open the test console"
+Evidence: "select the sample alert rule provided for new accounts"
+Problem: This assumes every reader has a "new account" with the sample rule present; there's no guidance for readers on existing accounts who may not have this sample rule available.
+Fix: Add a note clarifying how to proceed (or where to find/create the sample rule) if the account doesn't already have one.
+
+Location: "Trigger the sample alert" section
+Evidence: "The status indicator takes a few seconds to update while the delivery pipeline processes the event in the background."
+Problem: This explanatory sentence is presented as a free-floating paragraph with no callout formatting (e.g., "Note:"), making it unclear whether it's an instruction or background information, and it's disconnected from the preceding instruction it's explaining.
+Fix: Format it as a clearly marked note/tip directly below the triggering instruction, e.g., "> Note: The status indicator takes a few seconds to update..."
+
+Location: "Trigger the sample alert" and "Check the delivery log" sections
+Evidence: "wait for the status indicator to change to Sent" / "check that the test alert shows a Sent status"
+Problem: There is no troubleshooting guidance for what to do if the status indicator never changes to "Sent" or if the delivery log doesn't show the expected entry.
+Fix: Add a brief troubleshooting note describing what a failure state looks like and where to check for errors.
+
+Location: Throughout (e.g., "Click Trigger sample alert", "Open the delivery log")
+Evidence: "Click Trigger sample alert" vs "Open the delivery log"
+Problem: UI elements (buttons, menu items) are referenced inconsistently — sometimes as plain text matching exact button labels, sometimes as generic descriptions — with no consistent styling (bold/code) to distinguish literal UI labels from descriptive text.
+Fix: Consistently format literal UI labels (button/menu names) in bold or code style throughout the document.
+
+Location: End of document, "Check the delivery log" section
+Evidence: "Open the delivery log and check that the test alert shows a Sent status with a timestamp."
+Problem: The tutorial ends abruptly without a concluding statement confirming the reader has successfully completed the tutorial or suggesting next steps.
+Fix: Add a brief closing line, e.g., "You've successfully sent your first test alert. Next, try creating a custom alert rule."

@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert.\"",
+      "fix": "Add required/optional status and specify the validation behavior for non-HTTPS input.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "## endpoint_url",
+      "severity": 3,
+      "violation": "The section never states whether the field is required or has a default, nor what happens if a non-HTTPS URL is supplied (rejected, auto-upgraded, or silently stored)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Entire section, two sentences, no sample value",
+      "fix": "Add an example such as `https://example.com/webhooks/alerts`.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "## endpoint_url",
+      "severity": 3,
+      "violation": "No example URL is given, so format expectations (path, query params, port, length limits) are unclear."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"accepts a string used to verify the payload signature on receipt.\"",
+      "fix": "Document the exact algorithm (e.g., HMAC-SHA256), the header name, and the encoding (hex/base64) of the signature.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "## signing_secret",
+      "severity": 3,
+      "violation": "The signing algorithm, the HTTP header carrying the signature, and the signature encoding are never named, so a reader cannot actually implement verification."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The signing_secret field accepts a string\"",
+      "fix": "State the allowed string length/format, whether the field is required, and how rotation/regeneration works.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "## signing_secret",
+      "severity": 3,
+      "violation": "No length/character constraints, required/optional status, or secret-rotation behavior is specified."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"accepts one of none, linear, or exponential\"",
+      "fix": "Define the concrete retry schedule for each option (attempt count, interval/backoff formula, maximum duration).",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "## retry_policy",
+      "severity": 3,
+      "violation": "\"linear\" and \"exponential\" are left undefined - no retry count, interval, backoff multiplier, or cap is given, so the setting isn't actionable for an implementer or user."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"the default value is exponential\"",
+      "fix": "Explicitly state the default (or \"required, no default\") for endpoint_url and signing_secret as well.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "## retry_policy",
+      "severity": 3,
+      "violation": "Only this field states a default; endpoint_url and signing_secret give no default/required status, making the three field descriptions inconsistent in completeness."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Title \"Webhook delivery reference\" followed only by three field descriptions",
+      "fix": "Add sections covering the payload format, delivery timeout, and terminal failure behavior.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Whole document",
+      "severity": 3,
+      "violation": "A delivery reference omits the actual delivery semantics - payload schema/content, delivery timeout, and what happens when all retries (or \"none\") are exhausted."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-004.md",
+    "artifact_sha256": "7f41536ab3c3f7bc93a3dde86b8e81cee5dab0339f2b1d472e9222a20b42d7ae",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T03:44:32Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,24 @@
+Location: ## retry_policy
+Evidence: "retry_policy field accepts one of none, linear, or exponential, and the default value is exponential"
+Problem: No explanation of what each retry policy actually does (intervals, number of attempts, backoff rate), so a reader cannot predict delivery behavior from this reference alone.
+Fix: Add a description of each option's retry schedule (e.g., attempt count, interval/backoff formula, max duration).
+
+Location: ## endpoint_url
+Evidence: "The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert."
+Problem: Doesn't specify what happens on non-2xx responses, timeouts, or redirects, which is essential for a delivery reference and directly interacts with retry_policy.
+Fix: Document what response codes/timeouts count as delivery failure and trigger retry_policy.
+
+Location: ## signing_secret
+Evidence: "The signing_secret field accepts a string used to verify the payload signature on receipt."
+Problem: Doesn't describe the signature scheme (algorithm, header name, payload encoding), making it impossible to actually implement verification.
+Fix: Specify the signing algorithm (e.g., HMAC-SHA256), which header carries the signature, and how the signed string is constructed.
+
+Location: ## signing_secret
+Evidence: "The signing_secret field accepts a string"
+Problem: No constraints given (minimum length, allowed characters, generation/rotation method), unlike typical reference docs for secrets.
+Fix: State any length/format requirements and how rotation is handled.
+
+Location: Document overall
+Evidence: Only three fields (endpoint_url, signing_secret, retry_policy) are documented under "Webhook delivery reference"
+Problem: A delivery reference omits other fields typically needed to configure webhook delivery, such as event/alert types delivered, payload schema, timeout settings, and whether endpoint_url is required or optional.
+Fix: Add sections for payload schema/content-type, delivery timeout, and field optionality/defaults for endpoint_url and signing_secret.

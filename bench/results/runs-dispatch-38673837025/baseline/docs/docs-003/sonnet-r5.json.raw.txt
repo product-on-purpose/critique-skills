@@ -1,0 +1,14 @@
+Location: ## timeout, first paragraph
+Evidence: "the validator rejects any value below 1000"
+Problem: Only a lower bound is given; no upper bound is documented, unlike the retries field which specifies a full range (0 to 10).
+Fix: State the maximum allowed value for timeout, or explicitly note that there is no upper bound.
+
+Location: ## timeout, second paragraph
+Evidence: "Leaving this field at its default is the right choice for most teams"
+Problem: The section never states what the default value actually is, even though retries and logging both explicitly state their defaults ("defaults to 3", "the default value is info").
+Fix: Add the concrete default value for timeout, e.g. "timeout defaults to 5000ms."
+
+Location: ## Related pages
+Evidence: "Metric catalog reference", "Notification channel reference", "Webhook delivery reference", ...
+Problem: These related-page references are plain text items with no links, so a reader cannot navigate to them from this document despite it being a reference page.
+Fix: Convert each list item into a markdown link pointing to its corresponding page.

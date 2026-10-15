@@ -1,0 +1,34 @@
+Location: ## endpoint_url
+Evidence: "The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert."
+Problem: The section never states whether the field is required or has a default, nor what happens if a non-HTTPS URL is supplied (rejected, auto-upgraded, or silently stored).
+Fix: Add required/optional status and specify the validation behavior for non-HTTPS input.
+
+Location: ## endpoint_url
+Evidence: Entire section, two sentences, no sample value
+Problem: No example URL is given, so format expectations (path, query params, port, length limits) are unclear.
+Fix: Add an example such as `https://example.com/webhooks/alerts`.
+
+Location: ## signing_secret
+Evidence: "accepts a string used to verify the payload signature on receipt."
+Problem: The signing algorithm, the HTTP header carrying the signature, and the signature encoding are never named, so a reader cannot actually implement verification.
+Fix: Document the exact algorithm (e.g., HMAC-SHA256), the header name, and the encoding (hex/base64) of the signature.
+
+Location: ## signing_secret
+Evidence: "The signing_secret field accepts a string"
+Problem: No length/character constraints, required/optional status, or secret-rotation behavior is specified.
+Fix: State the allowed string length/format, whether the field is required, and how rotation/regeneration works.
+
+Location: ## retry_policy
+Evidence: "accepts one of none, linear, or exponential"
+Problem: "linear" and "exponential" are left undefined — no retry count, interval, backoff multiplier, or cap is given, so the setting isn't actionable for an implementer or user.
+Fix: Define the concrete retry schedule for each option (attempt count, interval/backoff formula, maximum duration).
+
+Location: ## retry_policy
+Evidence: "the default value is exponential"
+Problem: Only this field states a default; endpoint_url and signing_secret give no default/required status, making the three field descriptions inconsistent in completeness.
+Fix: Explicitly state the default (or "required, no default") for endpoint_url and signing_secret as well.
+
+Location: Whole document
+Evidence: Title "Webhook delivery reference" followed only by three field descriptions
+Problem: A delivery reference omits the actual delivery semantics — payload schema/content, delivery timeout, and what happens when all retries (or "none") are exhausted.
+Fix: Add sections covering the payload format, delivery timeout, and terminal failure behavior.

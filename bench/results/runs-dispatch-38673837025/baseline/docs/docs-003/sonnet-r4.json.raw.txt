@@ -1,0 +1,29 @@
+Location: ## timeout
+Evidence: "Leaving this field at its default is the right choice for most teams" — yet no default value is given anywhere in the section.
+Problem: The text refers to "its default" but the actual default value for timeout is never stated, so a reader can't know what value is currently in effect.
+Fix: Add the explicit default (e.g., "and defaults to 5000ms") alongside the validation rule in the first sentence.
+
+Location: ## timeout
+Evidence: "the validator rejects any value below 1000"
+Problem: Only a lower bound is given; there is no mention of whether an upper bound exists or whether the field is effectively unbounded.
+Fix: State the maximum accepted value, or explicitly note that there is no upper limit.
+
+Location: ## retries
+Evidence: "The retries field takes an integer from 0 to 10, and it defaults to 3."
+Problem: Unlike the timeout section, this section doesn't describe what the validator does with an out-of-range or non-integer value, leaving the validation behavior inconsistent across fields in the same reference.
+Fix: Add a sentence describing the validator's behavior for invalid retries values, matching the detail given for timeout.
+
+Location: ## logging
+Evidence: "The logging field accepts one of debug, info, warn, or error, and the default value is info."
+Problem: Same inconsistency as retries — no statement of what happens if an unsupported value is supplied.
+Fix: State the validator's behavior for an invalid logging value.
+
+Location: ## Related pages
+Evidence: "- Metric catalog reference" and the other eight list items
+Problem: The related pages are listed as plain text rather than hyperlinks, so they can't actually be navigated to from this reference document.
+Fix: Turn each list item into a link pointing to its corresponding page.
+
+Location: # Alert rule fields reference (title) / overall document scope
+Evidence: Only three fields (timeout, retries, logging) are documented under a title that promises "Alert rule fields reference"
+Problem: Alert rules plausibly have additional fields (e.g., condition, severity, name, channels) that are not covered, and the document gives no indication that this is a partial list.
+Fix: Either document the remaining fields or add a note scoping the page to just these three fields.

@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"the validator rejects any value below 1000\"",
+      "fix": "State the maximum allowed value for timeout, or explicitly note that there is no upper bound.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "## timeout, first paragraph",
+      "severity": 3,
+      "violation": "Only a lower bound is given; no upper bound is documented, unlike the retries field which specifies a full range (0 to 10)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Leaving this field at its default is the right choice for most teams\"",
+      "fix": "Add the concrete default value for timeout, e.g. \"timeout defaults to 5000ms.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "## timeout, second paragraph",
+      "severity": 3,
+      "violation": "The section never states what the default value actually is, even though retries and logging both explicitly state their defaults (\"defaults to 3\", \"the default value is info\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Metric catalog reference\", \"Notification channel reference\", \"Webhook delivery reference\", ...",
+      "fix": "Convert each list item into a markdown link pointing to its corresponding page.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "## Related pages",
+      "severity": 3,
+      "violation": "These related-page references are plain text items with no links, so a reader cannot navigate to them from this document despite it being a reference page."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T03:40:01Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"A threshold is the numeric boundary that triggers an alert once a metric crosses it.\"",
+      "fix": "Remove this sentence or move it to a conceptual/reference document, leaving this section with only the two actions (open panel, select rule).",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"## Open alert settings\" section, second sentence",
+      "severity": 3,
+      "violation": "This is a conceptual definition dropped into the middle of a procedural step list, breaking the action sequence of a how-to document that should contain only task-oriented instructions."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"confirm the unit matches the metric in use\"",
+      "fix": "State where the metric's unit is shown (e.g., next to the metric name in the rule editor) or list which units apply to which metrics.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"## Set the new threshold\" section, first sentence",
+      "severity": 3,
+      "violation": "The reader is told to \"confirm\" a match but is given no way to know what the correct unit is or where to check it, so the instruction can't actually be carried out."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This is because the console applies the new threshold to every future evaluation of this rule.\"",
+      "fix": "Replace with a reason that actually relates to unit matching (e.g., \"a mismatched unit will cause the alert to fire at the wrong value\"), or delete the sentence.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"## Set the new threshold\" section, second sentence",
+      "severity": 3,
+      "violation": "The \"This is because\" clause doesn't actually explain the preceding instruction about matching units - it describes something unrelated (that the setting persists for future evaluations), making the causal link a non-sequitur."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Save the rule and open the rule list to confirm the new threshold appears there.\"",
+      "fix": "Add a step to run a test evaluation or check the rule's recent evaluation/alert history to confirm the new threshold behaves as expected.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"## Save and verify\" section",
+      "severity": 3,
+      "violation": "This only confirms the displayed value, not that the rule evaluates correctly at the new threshold, so a rule that is broken in some other way would still pass this \"verify\" step."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "absence of any mention of required access level before the steps begin",
+      "fix": "Add a short prerequisites line (e.g., \"Requires Editor or Admin role\") before \"## Open alert settings\".",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "whole document (no prerequisites noted)",
+      "severity": 3,
+      "violation": "The guide never states what permissions are needed to edit an alert rule, so a reader without edit rights could follow every step and only discover the blocker at \"Save\" with no explanation."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-001.md",
+    "artifact_sha256": "b41787144ac8cc1ae14bcce23fa2b574f6ee68f1aaa9cc432628f9f148ddd713",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-15T03:04:14Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
