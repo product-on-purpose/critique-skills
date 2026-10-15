@@ -64,8 +64,16 @@ DOCUMENTED_SENTINELS = {"none", "illustrative"}
 
 def test_pinned_model_ids_are_not_vacuous() -> None:
     """A manifest read that silently returned nothing would make the main test below check
-    only the two sentinels, passing even if every pinned tier vanished from the allowed set."""
-    assert _pinned_model_ids() == {"claude-haiku-4-5-20251001", "claude-sonnet-5"}
+    only the two sentinels, passing even if every pinned tier vanished from the allowed set.
+    This does not assert the IDs themselves: a v0.2.0 re-pin must not have to edit this test,
+    only the manifest it reads from."""
+    ids = _pinned_model_ids()
+    assert len(ids) >= 1, "expected at least one pinned model id from measurement-manifest.json"
+    assert all(isinstance(i, str) and i for i in ids), "every pinned model id must be a non-empty string"
+    assert not (ids & DOCUMENTED_SENTINELS), (
+        "a pinned model id collided with a documented sentinel ('none'/'illustrative'), which "
+        "would silently widen what the main test accepts"
+    )
 
 
 def test_walker_finds_a_non_trivial_number_of_envelopes() -> None:
