@@ -4,8 +4,10 @@ title: critique-accessibility
 
 # critique-accessibility
 
-Reviews HTML pages and fragments (markdown where mappable) against WCAG 2.2 AA: contrast, alt
-text, heading structure, link text, and keyboard and screen-reader access. Version 0.1.1; see the
+Reviews HTML pages and fragments (markdown where mappable) against 22 of the 55 WCAG 2.2 Level A
+and AA success criteria: contrast, alt text, heading structure, link text, and keyboard and
+screen-reader access. A report with no findings is not an AA conformance claim; `references/WCAG.md`,
+"Scope", lists the 33 criteria this skill does not check and why. Version 0.1.1; see the
 root README's "most instructive number is a failure" section for why this skill shipped, lost to
 the unrubricked baseline, and was recalibrated in place rather than silently replaced.
 

@@ -108,10 +108,10 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E32 | Close S-03 AC-3: flip the checkbox and add a corpus-composition CI check | S | v0.1.x |
 | E33 | Correct ROADMAP's Gold-tier bullet (3 of 4 done) and decide the tier declaration | S | v0.1.x |
 | E34 | Close the SKIP_DIRS carry-forward note - fixed upstream and already adopted | S | v0.1.x |
-| E35 | Run plugin-dev:plugin-validator and plugin-dev:skill-reviewer, or record why not | S | v0.2.0 |
+| E35 | Run plugin-dev:plugin-validator and plugin-dev:skill-reviewer, or record why not | S | v0.3.0 |
 | E36 | Confirm or deprecate the reserved selector field per ADR 0012's own RC question | S | v0.1.x |
 | E37 | Run the TOULMIN-HEDGE-DENSITY false-positive check ADR 0017 named, and fix TOULMIN.md's future tense | S | v0.1.x |
-| E38 | Measure critique-accessibility's location fix on id-poor markup | S | v0.2.0 |
+| E38 | Measure critique-accessibility's location fix on id-poor markup | S | v0.3.0 |
 | E39 | Record the CLAUDE_CODE_OAUTH_TOKEN retention decision and a rotation procedure | S | v0.1.x |
 | E40 | Look at a Mermaid diagram in light and dark on the live site | S | v0.1.x |
 | E42 | Reconcile 'frozen with a JSON Schema' against 'freezes at v1.0' | S | unscheduled |
@@ -122,11 +122,11 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E69 | Revisit ADR 0011's npm option now that the toolkit ships on npm | S | unscheduled |
 | E70 | Teach the skill template how a synthesized rubric lays out its references and anchors | S | unscheduled |
 | E71 | Let a skill keep a bibliography in references/ without a criterion table | S | unscheduled |
-| E10 | Rule how BYOR is measured under the measured-only exclusion | M | v0.2.0 |
-| E63 | Bring the dispatch run sets into results.json, or amend the rule they break | M | v0.2.0 |
+| E10 | Rule how BYOR is measured under the measured-only exclusion | M | v0.3.0 |
+| E63 | Bring the dispatch run sets into results.json, or amend the rule they break | M | v0.3.0 |
 | E73 | Make the merge step run the scripted lane itself, instead of trusting the model's copy | M | v0.3.0 |
-| E67 | Expand critique-accessibility with the WCAG 2.2 AA criteria checkable from static markup | M to L | v0.2.0 |
-| E49 | Write one real tutorial for the empty Diataxis Tutorials quadrant | M | v0.2.0 |
+| E67 | Expand critique-accessibility with the WCAG 2.2 AA criteria checkable from static markup | M to L | v0.3.0 |
+| E49 | Write one real tutorial for the empty Diataxis Tutorials quadrant | M | v0.3.0 |
 | E53 | Harden --gate as a documented per-skill CI recipe for consumers | M | v0.3.0 |
 | E54 | Ship one documented cross-library composition workflow | M | v0.3.0 |
 
