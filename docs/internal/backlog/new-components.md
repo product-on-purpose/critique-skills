@@ -297,6 +297,11 @@ as the record of 2026-09-14.
   page is kept as its raw HTML plus a markdown conversion, and a PDF is kept as downloaded. Each copy
   gets a SHA-256 checksum in a manifest. Only the bibliography is committed. A paywalled or
   license-restricted document is cited but not captured.
+- **"Resources", read 2026-10-15.** The maintainer asked for an unusually deep base of research and
+  resources. "Resources" is read as the library of saved sources described under "Source capture",
+  not as extra reference files shipped inside the skill. This was the stated default when the
+  question was put a second time, and the maintainer did not choose otherwise. One word from the
+  maintainer reverses it.
 - **ROADMAP placement, ruled 2026-10-15.** `ROADMAP.md` lists the skill under "Unscheduled". It gets
   a release once the research report is in.
 - **Tracked as:** issue #84 (filed 2026-10-15).
