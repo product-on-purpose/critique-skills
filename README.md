@@ -310,7 +310,7 @@ Everything on the site is a rendering of something in this repo. Nothing lives o
 | **Subagents** | 1 (`critique-critic`, clean-context) |
 | **Conformance** | convergent (Silver), 0 errors / 0 warnings; reproduce with `node scripts/check.mjs` |
 | **Measurement** | 851 committed run envelopes, k=5, two pinned model tiers, 27-artifact seeded corpus |
-| **Tests** | 1161 Python, 154 Node; reproduce with `python -m pytest -q` and `npm test` |
+| **Tests** | 1166 Python, 154 Node; reproduce with `python -m pytest -q` and `npm test` |
 | **License** | [Apache-2.0](LICENSE) (code) / CC-BY-4.0 (corpus) |
 
 History: [`CHANGELOG.md`](CHANGELOG.md) for technical detail, [`RELEASE-NOTES.md`](RELEASE-NOTES.md) for curated highlights, [`ROADMAP.md`](ROADMAP.md) for what is next.

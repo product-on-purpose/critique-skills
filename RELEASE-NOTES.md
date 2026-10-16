@@ -78,6 +78,12 @@ so does a run set that changes anything in the repository outside its own output
 one pinned version, and every run writes down the version it found before its first model call. The
 versions behind earlier runs are recorded as inferred from publish dates, and labeled that way.
 
+**`critique-accessibility` now says what it does not check.** It checks 22 of WCAG 2.2's 55 Level A
+and AA success criteria, and its scope statement used to claim the A and AA criteria required for AA
+conformance. It now says that a report with no findings is not a conformance claim. Its reference
+file lists the other 33 criteria with the reason each one is not checked, and a test keeps that list
+and the skill's own criteria from drifting apart. No check changed.
+
 ### What changed in the plan
 
 - **`critique-deck` is dropped.** A critique of markdown slide source sees the words, but not the
@@ -92,10 +98,10 @@ versions behind earlier runs are recorded as inferred from publish dates, and la
 - **`critique-usability` still does not beat the generic baseline on Sonnet.** Re-measured through
   the current harness, it trails on both location metrics, by gaps smaller than either side's
   run-to-run spread.
-- **`critique-accessibility` checks 22 of WCAG 2.2's 55 Level A and AA success criteria**, while its
-  scope statement claims the A and AA criteria required for AA conformance. Five more criteria that
-  can be checked from static markup are planned, with a paid re-measure, and the scope statement is
-  to be narrowed to what the skill checks.
+- **`critique-accessibility` checks 22 of WCAG 2.2's 55 Level A and AA success criteria.** Five of
+  the others can be checked from static markup and are planned, with a paid re-measure. Most of the
+  rest need a rendered page, live interaction, media files or several pages, which a static review
+  does not have.
 - **`critique-dataviz` has no date.** It depends on a chart-spec corpus generator that nobody has
   scoped yet.
 
