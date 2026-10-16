@@ -72,7 +72,7 @@ half, Haiku agrees less often than Sonnet wherever the two differ.
 under test ran from inside this repository, with the expected answers for every test file a few
 folders away and with permission to write there. Each run now gets a fresh copy with the benchmark
 folder and every example folder removed. A run that changes or deletes a file in its copy fails, and
-so does a run set that changes anything in the repository.
+so does a run set that changes anything in the repository outside its own output folder.
 
 **Every benchmark run records which Claude Code version it ran under.** The build machine installs
 one pinned version, and every run writes down the version it found before its first model call. The
