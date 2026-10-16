@@ -52,7 +52,7 @@ Ask a general-purpose model to critique your work and you get fluent, confident,
 
 ## ⚡ Install
 
-The `product-on-purpose` marketplace pins `critique-skills` to the `v0.1.6` release tag, so `/plugin install` gives you exactly that commit rather than whatever `main` happens to hold.
+The `product-on-purpose` marketplace pins `critique-skills` to the `v0.2.0` release tag, so `/plugin install` gives you exactly that commit rather than whatever `main` happens to hold.
 
 ```bash
 # Claude Code (recommended)
