@@ -79,6 +79,8 @@ team.
 
 ## The root decision
 
+**v0.2.0 was released on 2026-10-15** (tag `v0.2.0` at `53eac2b`, marketplace registry 1.102.0). The ruling below is kept as the record of how its scope was set. Open work now targets v0.3.0, whose bullets are in `ROADMAP.md` under "Next".
+
 **RULED 2026-09-11: v0.2.0 is Option A plus Option C**, receipts first plus the research spine.
 E1 was the root node and was blocked since 2026-08-08; nine of the ten largest items could not be
 ordered until it was settled. The ruling, what moved, and the resulting exit gate are recorded in
