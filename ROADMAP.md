@@ -16,11 +16,11 @@ This is a public statement of sequence, not a schedule. It says what shipped, wh
 
 ---
 
-## Now: v0.1.6
+## Now: v0.2.0
 
-Six patch releases have shipped since `v0.1.0`. None added a skill, a criterion, or a re-score, which is what patch scope means here; each fixed defects found by running something that had never been run. `CHANGELOG.md` carries the detail.
+v0.2.0 is the first minor release since `v0.1.0`, after six patch releases. It added one skill, `critique-forms`, and made the receipts behind every published number whole. `CHANGELOG.md` carries the detail.
 
-Shipped: six measured critique skills (`critique-accessibility`, `critique-argument`, `critique-clarity`, `critique-docs`, `critique-microcopy`, `critique-usability`), the Critique Contract (finding schema, run envelope, disposition log) frozen with a JSON Schema and validator, the `critique-critic` clean-context subagent, a deterministic seeded-defect benchmark with 851 committed run envelopes across two pinned model tiers, `--gate` mode for CI, and Convergent (Silver) conformance with 0 errors and 0 warnings.
+Shipped: seven measured critique skills (`critique-accessibility`, `critique-argument`, `critique-clarity`, `critique-docs`, `critique-forms`, `critique-microcopy`, `critique-usability`), a documentation site generated from this repository, the Critique Contract (finding schema, run envelope, disposition log) frozen with a JSON Schema and validator, the `critique-critic` clean-context subagent, a deterministic seeded-defect benchmark with 851 committed run envelopes across two pinned model tiers, `--gate` mode for CI, and Convergent (Silver) conformance with 0 errors and 0 warnings.
 
 Full detail: [`CHANGELOG.md`](CHANGELOG.md) and [`RELEASE-NOTES.md`](RELEASE-NOTES.md). Measured numbers: [`bench/results/README.md`](bench/results/README.md).
 
@@ -47,9 +47,11 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 
 <a id="then-v020"></a>
 
-## Next: v0.2.0
+## Done: v0.2.0
 
-**Re-cut on 2026-09-14.** This section used to promise a wider catalog on a regenerated research spine: the taxonomy survey, three new skills, BYOR, telemetry and a samples corpus, all in one version. Its exit gate required every one of them, including a chart-critique skill blocked on a generator nobody had scoped, so the version could not close. v0.2.0 now does two things. It makes every receipt the project already publishes whole, and it adds one skill. Everything that moved is listed under "Moved out of v0.2.0" below, with where it went.
+**Released 2026-10-15, with every exit-gate clause below met.**
+
+**Re-cut on 2026-09-14.** This section used to promise a wider catalog on a regenerated research spine: the taxonomy survey, three new skills, BYOR, telemetry and a samples corpus, all in one version. Its exit gate required every one of them, including a chart-critique skill blocked on a generator nobody had scoped, so the version could not close. The re-cut v0.2.0 did two things. It makes every receipt the project already publishes whole, and it adds one skill. Everything that moved is listed under "Moved out of v0.2.0" below, with where it went.
 
 **1. Measurement debt from the v0.1.0 run**, closed here rather than carried further:
 
@@ -96,9 +98,9 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 
 ---
 
-## After
+<a id="next-v030"></a>
 
-### v0.3.0
+## Next: v0.3.0
 
 - **BYOR mode** (bring your own rubric) on one flagship skill, as the pattern-setter for every skill after it. This is what lets a user hand the library a rubric it did not ship with, using the `rubric_source: byor` finding marker already defined in the methodology.
 - **Disposition telemetry begins.** Acceptance-rate-per-criterion data from real use starts feeding the first criterion pruning pass.
@@ -106,6 +108,10 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 - **Gate hardening.** `--gate` exit codes exercised and documented across every shipped skill as a CI recipe for consumer repositories, not just this one.
 - **Cross-library composition.** One documented workflow where a sibling library's output is critiqued by this one, as the concrete proof of the family's think-make-judge value chain rather than an assertion about it.
 - **Gold-tier groundwork.** Chain and hook evaluation coverage, folder-README and docs-frontmatter completion, source docblocks - conformance work that only becomes meaningful once the revision-loop chain above exists to evaluate.
+
+---
+
+## After
 
 ### v0.4.0+
 
@@ -156,6 +162,7 @@ Stated plainly rather than left for the results tables to surface on their own:
 
 - **The consistency floors are low, and each rests on thin evidence.** The Haiku floor, 0.309, is still one measurement of `critique-clarity`, taken through the mechanism the current harness replaced. The Sonnet floor, 0.450, rests on committed envelopes that no published `results.json` scores yet. Both are well below the 0.7 figure proposed before any data existed. They are the floors because they are the lowest any core skill measured, not because they are comfortable numbers ([ADR 0038](docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md)).
 - **`critique-usability`'s non-qualifying Sonnet cell.** Its Haiku tier beats baseline outright. At v0.1.0 its Sonnet tier won recall narrowly at a precision cost that did not clear the bar on that tier alone, and a 2026-09-15 re-measure through the shipped harness confirmed it: the skill now trails a re-run baseline on both location metrics, by margins inside run-to-run spread. The skill ships qualified through Haiku, not unconditionally.
+- **`critique-accessibility` checks 22 of WCAG 2.2's 55 Level A and AA success criteria.** A report from it with no findings is not a conformance claim. Its reference file lists the 33 criteria it does not check and the reason for each. Most need a rendered page, live interaction, media files or several pages; five could be checked from markup and declared CSS and are not implemented.
 - **Precision is the weak axis across the board.** Recall numbers are consistently the stronger of the two measured metrics; precision is where most of the remaining gap to a clean win sits, cell by cell.
 - **No human acceptance data yet.** Every number published so far comes from the benchmark's seeded-defect corpus, not from real users disposing real findings. Disposition telemetry, which is what closes that gap, does not begin until v0.3.0.
 - **The benchmark corpus is agent-generated.** The seeded defects, and the clean artifacts they are seeded into, were produced by the same class of system being measured, not hand-authored by an independent party. That is a known limitation of the measurement, not a hidden one.
