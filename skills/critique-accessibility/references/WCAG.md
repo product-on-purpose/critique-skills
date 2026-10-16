@@ -9,10 +9,12 @@ paraphrase policy; the Operationalization column carries zero quotation marks.
 
 ## Scope
 
-WCAG 2.2 Level A and Level AA success criteria (WCAG 2.2 AA conformance requires both), scoped to what
-a static HTML page or fragment critique can evaluate from markup and CSS text alone, matching this
-skill's artifact claim: HTML pages and fragments, markdown where mappable. `scripts/checks.py` parses
-markup and declared CSS; it does not render a page, run a browser, or observe live interaction.
+This registry covers 22 of WCAG 2.2's 55 Level A and Level AA success criteria. AA conformance requires
+all 55, so this skill makes no conformance claim. The 22 are scoped to what a static HTML page or
+fragment critique can evaluate from markup and CSS text alone, matching this skill's artifact claim:
+HTML pages and fragments, markdown where mappable. `scripts/checks.py` parses markup and declared CSS;
+it does not render a page, run a browser, or observe live interaction. The other 33 are listed below,
+after the two settled exclusions, each with the reason this skill does not check it.
 
 Two exclusions follow from that boundary, both settled in this pass:
 
@@ -26,6 +28,60 @@ Two exclusions follow from that boundary, both settled in this pass:
   belongs to this skill). Recorded here, where the boundary actually takes effect.
 - **WCAG 2.2's former SC 4.1.1 Parsing is correctly absent**, deprecated by WCAG 2.2 itself, not an
   oversight of this registry.
+
+### The 33 criteria this skill does not check
+
+Recorded 2026-10-15 under E68 (narrow the accessibility scope claim), in
+`docs/internal/backlog/enhancements.md`. The first column is the bare WCAG number, not a criterion ID,
+because none of these is in the registry. Reach is one of three values:
+
+- **Out of reach**: deciding the criterion needs something a static review of markup and CSS text does
+  not have, such as the media file, the rendered page, live interaction, several pages of one site, or
+  a multi-step process.
+- **Checkable, not implemented**: the criterion can be decided from markup and declared CSS. These five
+  are the expansion ruled on 2026-09-25 as E67 (expand the skill with static-markup WCAG criteria), in
+  the same backlog file.
+- **Partly checkable, not implemented**: markup or declared CSS shows some failures of the criterion,
+  but not all of them, so a check would cover only part of it.
+
+`scripts/tests/test_wcag_scope_accessibility.py` fails unless these 33 and the registry's 22 are disjoint and
+together make up exactly WCAG 2.2's 55 Level A and AA success criteria.
+
+| SC | Name | Level | Reach | Why this skill does not check it |
+|---|---|---|---|---|
+| 1.2.1 | Audio-only and Video-only (Prerecorded) | A | Out of reach | Deciding whether an alternative is equivalent needs the media file and its content. |
+| 1.2.2 | Captions (Prerecorded) | A | Out of reach | A track element can be present while the captions are missing, wrong or out of sync, which only the media shows. |
+| 1.2.3 | Audio Description or Media Alternative (Prerecorded) | A | Out of reach | Whether visual information reaches a listener depends on what the video shows and what its audio says. |
+| 1.2.4 | Captions (Live) | AA | Out of reach | Live captions exist only while a broadcast runs. |
+| 1.2.5 | Audio Description (Prerecorded) | AA | Out of reach | Needs the video and its soundtrack, as 1.2.3 does. |
+| 1.3.4 | Orientation | AA | Checkable, not implemented | A declared CSS rule that locks the layout to one orientation is visible in the stylesheet. |
+| 1.3.5 | Identify Input Purpose | AA | Checkable, not implemented | A personal-data field's autocomplete attribute, or its absence, is visible in the markup. |
+| 1.4.2 | Audio Control | A | Partly checkable, not implemented | An autoplay attribute and a missing controls attribute are visible in the markup, but how long the audio plays needs the media file. |
+| 1.4.5 | Images of Text | AA | Partly checkable, not implemented | Alt text that reads as running prose can suggest an image of text, but deciding needs the image itself. |
+| 1.4.13 | Content on Hover or Focus | AA | Out of reach | Whether extra content can be dismissed, hovered and kept visible is behavior seen only in a running page. |
+| 2.1.1 | Keyboard | A | Partly checkable, not implemented | A click handler on an element that cannot take focus is visible in the markup, but whether every function works from a keyboard needs live testing. |
+| 2.1.2 | No Keyboard Trap | A | Out of reach | Settled in the first exclusion above: it needs a page responding to input over time. |
+| 2.1.4 | Character Key Shortcuts | A | Out of reach | Single-key shortcuts are bound by script, and their behavior needs a running page. |
+| 2.2.1 | Timing Adjustable | A | Out of reach | Settled in the first exclusion above. |
+| 2.2.2 | Pause, Stop, Hide | A | Partly checkable, not implemented | An endless CSS animation or a marquee element is visible in declared CSS and markup, but content moved or updated by script is not. |
+| 2.3.1 | Three Flashes or Below Threshold | A | Out of reach | Flash rate and area are properties of rendered frames over time. |
+| 2.4.7 | Focus Visible | AA | Checkable, not implemented | A declared CSS rule that removes the focus outline with no replacement style is visible in the stylesheet. |
+| 2.4.11 | Focus Not Obscured (Minimum) | AA | Out of reach | Whether a sticky header or overlay hides the focused element depends on the rendered layout at the moment of focus. |
+| 2.5.1 | Pointer Gestures | A | Out of reach | Settled in the first exclusion above. |
+| 2.5.2 | Pointer Cancellation | A | Out of reach | Whether a press can be aborted before it acts is behavior, and the handlers usually live in script. |
+| 2.5.4 | Motion Actuation | A | Out of reach | Device-motion handlers live in script and act only on a physical device. |
+| 2.5.7 | Dragging Movements | AA | Out of reach | Settled in the first exclusion above. |
+| 2.5.8 | Target Size (Minimum) | AA | Checkable, not implemented | Declared widths, heights and spacing of controls are visible in the stylesheet. |
+| 3.2.1 | On Focus | A | Out of reach | A change of context when a control takes focus is caused by script, and needs a running page. |
+| 3.2.2 | On Input | A | Out of reach | A change of context when a setting changes is caused by script, and needs a running page. |
+| 3.2.3 | Consistent Navigation | AA | Out of reach | Needs several pages of the same site to compare. |
+| 3.2.4 | Consistent Identification | AA | Out of reach | Needs several pages of the same site to compare. |
+| 3.2.6 | Consistent Help | A | Out of reach | Needs several pages of the same site to compare. |
+| 3.3.3 | Error Suggestion | AA | Partly checkable, not implemented | Error text already in the markup can be read for a suggested fix, as WCAG-3.3.1 reads it, but errors produced after submission need a running page. |
+| 3.3.4 | Error Prevention (Legal, Financial, Data) | AA | Out of reach | Whether a submission can be reversed, checked or confirmed is a property of the whole submission flow. |
+| 3.3.7 | Redundant Entry | A | Out of reach | Needs a multi-step process, to see what a later step asks for again. |
+| 3.3.8 | Accessible Authentication (Minimum) | AA | Partly checkable, not implemented | A password field that blocks pasting or lacks autocomplete is visible in the markup, but whether sign-in demands a memory or puzzle test needs the whole flow. |
+| 4.1.3 | Status Messages | AA | Checkable, not implemented | A status region's role or live-region attribute, or its absence, is visible in the markup. |
 
 Every finding raised against a criterion below names its element the way `SKILL.md`, "Naming a
 location", requires: the element's `id` as a `#id` token, or a double-quoted bounded CSS selector,
@@ -83,7 +139,8 @@ rationale below for the rest of the reasoning.
 
 22 criteria total: 13 scripted lane, 9 judged lane. Above the S-05 spec's >=15 minimum for
 `critique-accessibility` (AC-2) and this pipeline's own 15-criterion minimum parameter. All are WCAG
-2.2 Level A or AA, matching the skill's WCAG 2.2 AA scope, which by definition includes both levels.
+2.2 Level A or AA. They are 22 of the 55 Level A and AA success criteria; the other 33 are listed under
+"Scope", with the reason each is not checked.
 No criterion ID appears in any other skill's registry (S-05 AC-3); these are upstream WCAG identifiers,
 the one namespace the registry permits to repeat across skills in principle, and it does not repeat
 here because `critique-accessibility` is the only skill drawing on WCAG.

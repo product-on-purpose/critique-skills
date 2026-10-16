@@ -290,10 +290,12 @@ and the repository did not have.
 - **Why:** Needed to size Option B honestly; without it BYOR either violates the project's own stated rule or requires a rule amendment nobody has made.
 - **Evidence:** ROADMAP.md 'Deliberately not doing' section ('Any skill that cannot be measured'); ROADMAP.md v0.2.0 exit-gate line ('every new component in this version built and measured to the same bar as v0.1.0'); docs/explanation/methodology.md section 3 (Bring Your Own Rubric); docs/internal/skill-template.md 'Corpus-module obligation' section; grep of docs/internal/decisions/*.md for byor (0013, 0016, plus the S-02/S-04/S-05 specs, none addressing measurement)
 - **Derives from:** Tension between ROADMAP.md's v0.2.0 exit gate, its BYOR E3, and its 'Deliberately not doing' section
-- **Size:** M. **Release:** v0.2.0. **Category:** decision. **Confidence:** speculative.
+- **Size:** M. **Release:** v0.3.0 (was v0.2.0). **Category:** decision. **Confidence:** speculative.
 - **Blocks:** E45; the honesty of Option B
 - **Depends on:** Nothing; it is itself a prerequisite decision
 - **Rank at intake:** 10 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Ruled 2026-10-15 by the maintainer:** moves to v0.3.0 at the v0.2.0 cut. The v0.2.0 exit gate,
+  re-cut on 2026-09-14, never named this item, and the release does not wait on it.
 
 ## E11 - Rule on the two v0.2.0 commitments that vanished: askit-* authoring and CodeQL
 
@@ -911,10 +913,12 @@ and the repository did not have.
 - **Why:** Release-engineering hygiene explicitly named in the plan; a deliberate decision beats letting it age across every subsequent release.
 - **Evidence:** docs/internal/execution/RC-HANDOVER.md:121-122; docs/internal/execution/P7-report.md:133-134; `grep -n 'plugin-validator\|skill-reviewer' CHANGELOG.md` returns no matches
 - **Derives from:** Release plan implementation phase B5, docs/internal/release-plans/plan_v0.1.0/implementation/IMPL-B-skills-to-rc.md
-- **Size:** S. **Release:** v0.2.0. **Category:** ci. **Confidence:** verified.
+- **Size:** S. **Release:** v0.3.0 (was v0.2.0). **Category:** ci. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
 - **Rank at intake:** 35 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Ruled 2026-10-15 by the maintainer:** moves to v0.3.0 at the v0.2.0 cut. The v0.2.0 exit gate,
+  re-cut on 2026-09-14, never named this item, and the release does not wait on it.
 
 ## E36 - Confirm or deprecate the reserved selector field per ADR 0012's own RC question
 
@@ -947,10 +951,12 @@ and the repository did not have.
 - **Why:** This is the result that discharged v0.1.0's only release-blocking benchmark failure; if the gain is a corpus artifact, real-world location accuracy is unknown.
 - **Evidence:** docs/internal/decisions/0028-post-calibration-verdict-accessibility-clears-ac-6.md:129; bench/results/README.md:704-709 (Limitations); ROADMAP.md:58 (measurement-debt list omits this item)
 - **Derives from:** ADR 0028 (post-calibration verdict: critique-accessibility 0.1.1 clears AC-6)
-- **Size:** S. **Release:** v0.2.0. **Category:** measurement. **Confidence:** verified.
+- **Size:** S. **Release:** v0.3.0 (was v0.2.0). **Category:** measurement. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
 - **Rank at intake:** 38 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Ruled 2026-10-15 by the maintainer:** moves to v0.3.0 at the v0.2.0 cut. The v0.2.0 exit gate,
+  re-cut on 2026-09-14, never named this item, and the release does not wait on it.
 
 ## E39 - Record the CLAUDE_CODE_OAUTH_TOKEN retention decision and a rotation procedure
 
@@ -1089,10 +1095,12 @@ and the repository did not have.
 - **Why:** The 50-page site is visibly incomplete the moment a reader clicks Tutorials and finds an apology.
 - **Evidence:** docs/tutorials/README.md:1-17; site/src/content/docs/tutorials/index.md; docs/how-to/*.md, docs/reference/*.md, docs/explanation/*.md (line counts compared); ROADMAP.md (grepped for 'tutorial', no match)
 - **Derives from:** Diataxis coverage assessment: the thinnest quadrant
-- **Size:** M. **Release:** v0.2.0. **Category:** docs. **Confidence:** verified.
+- **Size:** M. **Release:** v0.3.0 (was v0.2.0). **Category:** docs. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
 - **Rank at intake:** 52 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Ruled 2026-10-15 by the maintainer:** moves to v0.3.0 at the v0.2.0 cut. The v0.2.0 exit gate,
+  re-cut on 2026-09-14, never named this item, and the release does not wait on it.
 
 ## E50 - List critique-skills in agent-plugins' convergence table
 
@@ -1370,7 +1378,7 @@ and the repository did not have.
   `bench-results/*` branch. The cheap half of this item is passing `--results-out` into the run
   directory from `bench.yml`, so a result branch stops carrying a `results.json` nobody may merge.
 - **Derives from:** Landing E19 and E20's envelopes, 2026-09-24.
-- **Size:** M. **Release:** v0.2.0. **Category:** measurement. **Confidence:** verified.
+- **Size:** M. **Release:** v0.3.0 (was v0.2.0). **Category:** measurement. **Confidence:** verified.
 - **Blocks:** Any published table showing a re-run figure; `bench.yml` result branches merging cleanly
 - **Depends on:** Nothing
 - **Cheap half done 2026-09-30,** on the N2 (critique-forms) build branch, because N2's paid run
@@ -1378,6 +1386,8 @@ and the repository did not have.
   `bench/tests/test_bench_workflow.py` holds it. The rest of the item (readers keyed on `run_set`,
   or the amended rule) is still open.
 - **Rank at intake:** unranked (added 2026-09-24). **Status:** backlog.
+- **Ruled 2026-10-15 by the maintainer:** moves to v0.3.0 at the v0.2.0 cut. The v0.2.0 exit gate,
+  re-cut on 2026-09-14, never named this item, and the release does not wait on it.
 
 ## E64 - Rule on ADR 0030 now that the sonnet fidelity gate has failed
 
@@ -1494,10 +1504,15 @@ and the repository did not have.
   at `https://www.w3.org/TR/WCAG22/`, read 2026-09-25.
 - **Derives from:** N2's revision-2 research pass; decision 8, ruled 2026-09-25.
 - **Size:** M to L (five criteria, their injectors and tests, a version bump, a corpus decision,
-  and a paid re-measure). **Release:** v0.2.0. **Category:** skills. **Confidence:** verified.
-- **Blocks:** E68.
+  and a paid re-measure). **Release:** v0.3.0 (was v0.2.0). **Category:** skills. **Confidence:** verified.
+- **Blocks:** Nothing now. It blocked E68 until the maintainer ruled on 2026-10-15 that E68
+  lands first.
 - **Depends on:** Nothing
 - **Rank at intake:** unranked (added 2026-09-25). **Status:** ruled 2026-09-25; needs a spec.
+- **Ruled 2026-10-15 by the maintainer:** moves to v0.3.0 at the v0.2.0 cut. The v0.2.0 exit gate,
+  re-cut on 2026-09-14, never named this item, and the release does not wait on it. E68 (narrow the
+  accessibility scope claim) closed the same day without it, and `references/WCAG.md` lists this
+  item's five criteria as checkable and not implemented.
 
 ## E68 - Narrow critique-accessibility's scope claim to the criteria it actually checks
 
@@ -1513,8 +1528,20 @@ and the repository did not have.
 - **Derives from:** decision 8, ruled 2026-09-25.
 - **Size:** S. **Release:** v0.2.0. **Category:** docs. **Confidence:** verified.
 - **Blocks:** Nothing
-- **Depends on:** E67
-- **Rank at intake:** unranked (added 2026-09-25). **Status:** backlog.
+- **Depends on:** E67 until 2026-10-15, when the maintainer ruled that E68 lands before the
+  v0.2.0 cut and E67 moves to v0.3.0.
+- **Rank at intake:** unranked (added 2026-09-25). **Status:** closed 2026-10-15.
+- **CLOSED 2026-10-15.** The scope claim now says the skill checks 22 of the 55 WCAG 2.2 Level A and
+  AA success criteria, and that a report with no findings is not a conformance claim. The `SKILL.md`
+  description and scope paragraph, the skill README, the root README's shelf card, the generated
+  catalog and index, and `docs/reference/criterion-ids.md` all say so. `references/WCAG.md`,
+  "Scope", lists the 33 unchecked criteria with a reason for each, in three groups: 22 out of reach
+  for a static review, 5 checkable and not implemented (E67's expansion), and 6 partly checkable and
+  not implemented. The Change line above assumed E67 would land first; it did not, so the list
+  covers all 33 rather than about 24. A new test, `scripts/tests/test_wcag_scope_accessibility.py`,
+  fails unless the registry and that list are disjoint and together make up the 55 criteria in the
+  W3C Recommendation, checked against its text on 2026-10-15. No criterion, check or skill version
+  changed.
 
 ## E69 - Revisit ADR 0011's npm option now that the toolkit ships on npm
 

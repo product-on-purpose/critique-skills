@@ -1,6 +1,6 @@
 ---
 name: critique-accessibility
-description: "Reviews HTML pages and fragments (markdown where mappable) against WCAG 2.2 AA: contrast, alt text, heading hierarchy for screen readers, link text, and keyboard and screen-reader access. Judges conformance against WCAG, not an interface's general usability, flow, or controls (critique-usability covers that), or how much effort a form's fields cost to fill in on a phone (critique-forms covers that). Use when the user asks for an accessibility review, feedback, a second opinion, a red-line pass, an a11y audit, or a pre-launch quality check on a page or component."
+description: "Reviews HTML pages and fragments (markdown where mappable) against 22 of the 55 WCAG 2.2 Level A and AA success criteria: contrast, alt text, heading hierarchy for screen readers, link text, and keyboard and screen-reader access. Judges conformance against WCAG, not an interface's general usability, flow, or controls (critique-usability covers that), or how much effort a form's fields cost to fill in on a phone (critique-forms covers that). Use when the user asks for an accessibility review, feedback, a second opinion, a red-line pass, an a11y audit, or a pre-launch quality check on a page or component."
 metadata:
   version: 0.1.1
 license: Apache-2.0
@@ -40,12 +40,13 @@ checks:
 # critique-accessibility
 
 Reviews an HTML page or fragment (markdown where its structure maps cleanly to HTML, such as headings,
-links, and images) against WCAG 2.2 AA, covering both success-criterion levels A and AA required for
-AA conformance. The artifact claim is narrow and static: this skill evaluates markup and declared CSS
-as text, never a rendered page, a running application, or live keyboard and pointer interaction. Four
-WCAG 2.2 success criteria that require observing a page respond to input over time (No Keyboard Trap,
-Timing Adjustable, Pointer Gestures, Dragging Movements) are out of this skill's reach for that reason
-and are not in its registry; see `references/WCAG.md`, "Scope", for the full boundary and reasoning.
+links, and images) against 22 of the 55 WCAG 2.2 Level A and AA success criteria. AA conformance
+requires all 55, so a report from this skill with no findings is not a conformance claim. The
+artifact claim is narrow and static: this skill evaluates markup and declared CSS as text, never a
+rendered page, a running application, or live keyboard and pointer interaction. Most of the 33
+criteria it does not check need one of those, or time-based media, or more than one page. Some could
+be checked from markup and declared CSS, wholly or in part, and are not implemented. None of the 33
+is in this skill's registry; `references/WCAG.md`, "Scope", lists every one with the reason.
 
 ## Contract
 
