@@ -774,12 +774,26 @@ and the repository did not have.
   `skills/critique-forms/examples/artifacts/golden-05.html` had been a byte copy of the corpus
   artifact `forms-003.html`, with its expected findings beside it, inside the plugin directory. No
   committed measurement ran `critique-forms` in that window. A test now fails if any staged file is
-  byte-identical to a corpus file. The first live exercise of the copy is the next approved
-  dispatch.
+  byte-identical to a corpus file.
+- **First live run through the copy, 2026-10-15:** a local probe ran one `critique-clarity` cell on
+  haiku at k=1 against `clarity-001`, at harness commit `ae047a2`. It made one model call and
+  wrote one valid envelope with 10 findings, five scripted and five judged, including the planted
+  `PLAIN-MAIN-IDEA-FIRST`. The plugin copy and the live tree were both unchanged afterwards. The
+  copy, its two snapshots and its cleanup took about 3.5 seconds of a 4 minute 45 second cell. The
+  probe ran under Claude Code 2.1.301, one patch above the pin, so it shows that the staged copy
+  loads and runs. It does not exercise the dispatch path at 2.1.300.
 - **Rank at intake:** 27 of 64. **Status:** closed 2026-10-15.
 - **Ruled 2026-10-15 by the maintainer:** lands before the v0.2.0 release is cut, for the reason
   recorded on E23. `ROADMAP.md` names this item and E28 (CLI version pin) in one bullet, so E28
   lands with it.
+- **Ruled 2026-10-15 by the maintainer, on the stray-write policy:** a modified or deleted file in
+  the copy fails the cell, and an added file is reported and discarded. This replaces "fails the
+  run on any stray write" in the Change line above. Every `SKILL.md` tells the model to write
+  `findings.json` after changing into its skill directory, so an added file is expected behavior,
+  and an added file in a throwaway copy reaches nothing.
+- **Ruled 2026-10-15 by the maintainer, on `golden-05`:** the shipped golden stays as it is. The
+  corpus and its answer keys are already public in the repository, so the only risk was a model
+  reading them during a benchmark run, and the copy now leaves out every `examples` directory.
 
 ## E28 - Pin or record the Claude Code CLI version bench.yml installs
 
