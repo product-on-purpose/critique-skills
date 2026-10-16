@@ -4,6 +4,14 @@ Curated, user-facing highlights. For the full technical history, see `CHANGELOG.
 
 ## Unreleased
 
+Nothing yet.
+
+## 0.2.0 - 2026-10-15
+
+**One new skill, a documentation site, and the receipts behind every published number made whole.**
+
+None of the six original skills changed what it checks or how it critiques, and none of their versions moved.
+
 ### A seventh skill: `critique-forms`
 
 **`critique-forms` reviews HTML forms for how easy they are to fill in, especially on a phone.** It
@@ -23,6 +31,93 @@ planted defects on their own. The part that needs judgment is weak: the model na
 instances on each tier. On sonnet, its precision beats the baseline's only narrowly, 0.317 against
 0.303, and that margin is smaller than the variation between repeated runs. The verdict and the checks behind it are in
 [ADR 0037](docs/internal/decisions/0037-critique-forms-ship-verdict.md).
+
+### The documentation site
+
+**Every skill, criterion and measured result can now be read on the documentation site at
+[product-on-purpose.github.io/critique-skills](https://product-on-purpose.github.io/critique-skills/).**
+There is a page per skill, an explorer for every criterion ID, and a filterable table of every
+measured benchmark result. The site is built from this repository's own files, so nothing lives only
+there. The README is now a short front door that links into it.
+
+### The ones that affect what you can trust
+
+**Every skill now has Sonnet figures from the current benchmark harness.** Four runs on 2026-10-14
+measured `critique-accessibility`, `critique-argument`, `critique-docs` and `critique-microcopy` on
+the more expensive tier, each with the generic baseline prompt beside it. They are published as
+evidence, and they do not replace the scoreboard's figures.
+
+**The current harness does not reproduce our original Sonnet figures, and we say so beside them.**
+The benchmark was rewritten to run the skill you install, instead of a prompt the benchmark assembled
+itself. Run that way, `critique-clarity`'s location precision on Sonnet read 0.541. Its published band
+of run-to-run variation is 0.403 to 0.466, and our own rule counts a miss wider than the band itself
+as a failure. Most
+of the move comes from a change in output shape: the skill now reports a repeated problem as one
+finding instead of listing each repeat separately. Of the four skills measured on 2026-10-14,
+`critique-microcopy` landed inside its published bands, `critique-argument` and
+`critique-accessibility` each missed one figure narrowly, and `critique-docs` missed by one stray
+finding. The original figures remain the measurement of record, with that caveat stated beside them.
+
+**The bar for run-to-run consistency is now set per tier.** A skill's findings have to agree with
+themselves across repeated runs on the same file. The single bar of 0.309 came from one early
+measurement. It is now 0.450 on Sonnet, and it stays 0.309 on Haiku until the core skills have current
+Haiku data. Every shipped skill clears both, so no skill changed status.
+
+**Severity is now scored.** Every seeded defect has always recorded the severity it was planted at,
+and until now nothing read it. The results now say how often a skill's finding carries that same
+severity. Read the judged half: the scripted half agrees perfectly by construction. On the judged
+half, Haiku agrees less often than Sonnet wherever the two differ.
+
+**The benchmark runs each skill against a clean copy of the plugin.** Before this release, the skill
+under test ran from inside this repository, with the expected answers for every test file a few
+folders away and with permission to write there. Each run now gets a fresh copy with the benchmark
+folder and every example folder removed. A run that changes or deletes a file in its copy fails, and
+so does a run set that changes anything in the repository outside its own output folder.
+
+**Every benchmark run records which Claude Code version it ran under.** The build machine installs
+one pinned version, and every run writes down the version it found before its first model call. The
+versions behind earlier runs are recorded as inferred from publish dates, and labeled that way.
+
+**`critique-accessibility` now says what it does not check.** It checks 22 of WCAG 2.2's 55 Level A
+and AA success criteria, and its scope statement used to claim the A and AA criteria required for AA
+conformance. It now says that a report with no findings is not a conformance claim. Its reference
+file lists the other 33 criteria with the reason each one is not checked, and a test keeps that list
+and the skill's own criteria from drifting apart. No check changed.
+
+### What changed in the plan
+
+- **`critique-deck` is dropped.** A critique of markdown slide source sees the words, but not the
+  visual presentation that makes a slideshow work.
+- **The proposed checkout skill is now `critique-payment-checkout`.** It waits on a research pass
+  that decides how much of a checkout a static page can show.
+- **The library follows version 0.17 of the Advanced Skill Library Standard.** Each skill now
+  declares its version where the Standard says to look for it, and no version number changed.
+
+### Still open, stated rather than buried
+
+- **`critique-usability` still does not beat the generic baseline on Sonnet.** Re-measured through
+  the current harness, it trails on both location metrics, by gaps smaller than either side's
+  run-to-run spread.
+- **`critique-accessibility` checks 22 of WCAG 2.2's 55 Level A and AA success criteria.** Five of
+  the others can be checked from static markup and are planned, with a paid re-measure. Most of the
+  rest need a rendered page, live interaction, media files or several pages, which a static review
+  does not have.
+- **`critique-dataviz` has no date.** It depends on a chart-spec corpus generator that nobody has
+  scoped yet.
+
+### The part worth admitting
+
+**From its first live run until this release, the benchmark ran every skill with the answer keys
+within reach.** The expected findings for every test file sat inside the folder the benchmark handed
+to the skill. Nothing told a run to look there, and each run worked from a different folder. But
+nothing recorded which files a run opened, so we cannot prove that none did. That includes the run
+behind `critique-forms`' published figures, on 2026-10-03.
+
+The same fix turned up a sharper case, one we introduced ourselves. On 2026-10-14, an example added
+to `critique-forms` was a byte-for-byte copy of one of its own test files, with the expected findings
+beside it. No measurement ran `critique-forms` after that date, so no published number was affected.
+The example stays in the plugin, because the test files and their answers are public in this
+repository anyway, but the benchmark can no longer see it.
 
 ## 0.1.6 - 2026-08-16
 
