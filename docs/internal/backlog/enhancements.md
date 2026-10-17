@@ -1513,6 +1513,9 @@ and the repository did not have.
   re-cut on 2026-09-14, never named this item, and the release does not wait on it. E68 (narrow the
   accessibility scope claim) closed the same day without it, and `references/WCAG.md` lists this
   item's five criteria as checkable and not implemented.
+- **Ruled 2026-10-16 by the maintainer: named in `ROADMAP.md` under "Next: v0.3.0"**, as the
+  bullet "Accessibility expansion". Until then the backlog tagged it v0.3.0 while the roadmap did
+  not mention it. The paid re-measure still needs its own approval before it runs.
 
 ## E68 - Narrow critique-accessibility's scope claim to the criteria it actually checks
 

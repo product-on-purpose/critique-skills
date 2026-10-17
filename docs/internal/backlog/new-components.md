@@ -304,5 +304,8 @@ as the record of 2026-09-14.
   maintainer reverses it.
 - **ROADMAP placement, ruled 2026-10-15.** `ROADMAP.md` lists the skill under "Unscheduled". It gets
   a release once the research report is in.
+- **How the pass runs, ruled 2026-10-16.** The maintainer answered "Use a workflow": the research
+  pass runs as a multi-agent workflow rather than one long agent. The recency policy above is still
+  proposed, so the workflow plan presents it as the default to rule on before the pass starts.
 - **Tracked as:** issue #84 (filed 2026-10-15).
 - **Status:** proposed 2026-09-25; renamed and scoped 2026-10-15. The research pass is next.
