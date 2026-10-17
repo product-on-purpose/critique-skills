@@ -108,6 +108,7 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 - **Gate hardening.** `--gate` exit codes exercised and documented across every shipped skill as a CI recipe for consumer repositories, not just this one.
 - **Cross-library composition.** One documented workflow where a sibling library's output is critiqued by this one, as the concrete proof of the family's think-make-judge value chain rather than an assertion about it.
 - **Gold-tier groundwork.** Chain and hook evaluation coverage, folder-README and docs-frontmatter completion, source docblocks - conformance work that only becomes meaningful once the revision-loop chain above exists to evaluate.
+- **Accessibility expansion.** `critique-accessibility` adds the five WCAG 2.2 success criteria it could check from markup and declared CSS and does not yet: 1.3.4 Orientation, 1.3.5 Identify Input Purpose, 2.4.7 Focus Visible, 2.5.8 Target Size (Minimum) and 4.1.3 Status Messages. That takes it from 22 to 27 of the 55 Level A and AA criteria, as a new skill version measured on both pinned tiers.
 
 ---
 
