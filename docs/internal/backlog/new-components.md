@@ -281,9 +281,9 @@ as the record of 2026-09-14.
   observed: in static HTML, across several pages, or only at runtime. The why-gate's claim that this
   skill needs no new infrastructure holds only if most findings are observable in static HTML. If
   they are not, that claim needs a new ruling before anyone drafts a criterion registry.
-- **Recency, proposed 2026-10-15 and not yet ruled.** Each source records its publication date and,
-  where it differs, the date its data was collected. Each finding is classed by how fast its subject
-  changes:
+- **Recency, proposed 2026-10-15 and ruled as proposed on 2026-10-17.** Each source records its
+  publication date and, where it differs, the date its data was collected. Each finding is classed
+  by how fast its subject changes:
   - A **durable** finding, about perception or cognition, counts at any age once a later study
     replicates it.
   - A **platform-bound** finding, about devices, browsers, wallets, autofill or authentication,
@@ -307,5 +307,21 @@ as the record of 2026-09-14.
 - **How the pass runs, ruled 2026-10-16.** The maintainer answered "Use a workflow": the research
   pass runs as a multi-agent workflow rather than one long agent. The recency policy above is still
   proposed, so the workflow plan presents it as the default to rule on before the pass starts.
+- **Run plan, ruled 2026-10-17.** The maintainer chose the recommended option on all four
+  questions the plan put:
+  - **Recency:** the policy above, as proposed.
+  - **Agents:** eleven, above the session's guideline of fewer than ten, by the maintainer's
+    choice. Nine Sonnet agents research the strands, one Sonnet agent checks fidelity, and one Opus
+    agent writes the report. Consumer law runs as two agents, EU and UK, then US and the rest,
+    because primary legal texts are long.
+  - **Jurisdictions:** US federal law plus California, the EU and the UK in depth. Australia,
+    Canada and India get one primary source each.
+  - **Extraction model:** Sonnet, not Haiku, because every finding carries four classifications
+    and a rule that figures are copied verbatim.
+- **What the pass measures.** Each strand logs how many new findings each source adds, in reading
+  order, against the 38 checkout findings N2 already holds. That curve is the evidence for the
+  200-source verdict. The three-in-a-row rule is therefore measured in this pass, not used to stop
+  it.
 - **Tracked as:** issue #84 (filed 2026-10-15).
-- **Status:** proposed 2026-09-25; renamed and scoped 2026-10-15. The research pass is next.
+- **Status:** proposed 2026-09-25; renamed and scoped 2026-10-15. The research pass launched on
+  2026-10-17.
