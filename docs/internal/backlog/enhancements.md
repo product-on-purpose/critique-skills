@@ -1169,10 +1169,13 @@ and the repository did not have.
 - **Why:** Explicitly sequenced behind the revision-loop chain; scoped now so it is not lost as a separate deliverable.
 - **Evidence:** ROADMAP.md:81; .agent-skills-toolkit/docs/reference/gold-checks.md (G1-G10 table with conditional flags)
 - **Derives from:** ROADMAP.md v0.3.0 E4 (Gold-tier groundwork), sub-part 1
-- **Size:** M. **Release:** v0.3.0. **Category:** ci. **Confidence:** verified.
+- **Size:** M. **Release:** v0.4.0+. **Category:** ci. **Confidence:** verified.
 - **Blocks:** The tier: advanced declaration (E33, second half)
 - **Depends on:** N4
 - **Rank at intake:** 59 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Moved 2026-10-21 from v0.3.0 to v0.4.0+**, together with the roadmap's "Gold-tier groundwork"
+  bullet, when the v0.3.0 exit gate was set. The coverage needs N4 built first, so as a v0.3.0 gate
+  condition it would hold the version open until the chain was built and then evaluated.
 
 ## E56 - Plan the external-consumer path for the v1.0 criterion
 
