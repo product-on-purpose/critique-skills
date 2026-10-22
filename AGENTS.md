@@ -113,7 +113,9 @@ counts a skipped check as a passing one. See
 date. It exists because an advisory with no fixed version anywhere (GHSA-ch52-4w7c-c8xp, in a
 package Astro uses only at build time) failed every branch on 2026-10-02, and plain `npm audit` can
 only be passed or failed as a whole. An exception lasts at most 31 days, which
-`scripts/tests/audit.test.mjs` enforces, so keeping one longer takes a deliberate renewal.
+`scripts/tests/audit.test.mjs` enforces, so keeping one longer takes a deliberate renewal. The list
+has been empty since 2026-10-22, when `http-cache-semantics` 4.3.0 fixed that advisory; an empty
+list is the normal state, not a missing file.
 
 **`build-site` builds the documentation site and runs its guards without deploying anything.** It
 runs the same recipe as `deploy-pages.yml` so a green pull request predicts a green deploy, which it
