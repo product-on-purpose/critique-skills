@@ -893,6 +893,10 @@ and the repository did not have.
 - **Depends on:** Nothing for the correction; the tier declaration is a maintainer call
 - **Review note:** Retagged from v0.2.0 to v0.1.x by the critic: the correction half depends on nothing, and every other zero-dependency doc fix is v0.1.x.
 - **Rank at intake:** 33 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Correction half done 2026-10-23,** when the v0.3.0 exit gate was set. The Gold-tier bullet, now
+  under v0.4.0+, names only chain and hook coverage (G1 and G3), and says the folder READMEs, docs
+  frontmatter and source docblocks already pass the strict gate. A strict run that day still reported
+  "Tier: Convergent (no blockers detected)". The tier-declaration half is still open.
 
 ## E34 - Close the SKIP_DIRS carry-forward note - fixed upstream and already adopted
 
