@@ -107,8 +107,21 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 - **Revision loop as a first-class chain.** The critique, disposition, revise, re-critique loop exists today as a documented recipe (`examples/recipes/revision-loop.md`); this version makes it a real, invokable chain with a defined convergence rule.
 - **Gate hardening.** `--gate` exit codes exercised and documented across every shipped skill as a CI recipe for consumer repositories, not just this one.
 - **Cross-library composition.** One documented workflow where a sibling library's output is critiqued by this one, as the concrete proof of the family's think-make-judge value chain rather than an assertion about it.
-- **Gold-tier groundwork.** Chain and hook evaluation coverage, folder-README and docs-frontmatter completion, source docblocks - conformance work that only becomes meaningful once the revision-loop chain above exists to evaluate.
 - **Accessibility expansion.** `critique-accessibility` adds the five WCAG 2.2 success criteria it could check from markup and declared CSS and does not yet: 1.3.4 Orientation, 1.3.5 Identify Input Purpose, 2.4.7 Focus Visible, 2.5.8 Target Size (Minimum) and 4.1.3 Status Messages. That takes it from 22 to 27 of the 55 Level A and AA criteria, as a new skill version measured on both pinned tiers.
+
+**Exit gate** (set 2026-10-23). Each condition names the backlog item that delivers it.
+
+- The ruling on how BYOR is measured is recorded ([E10 (rule how BYOR is measured)](docs/internal/backlog/enhancements.md)). One flagship skill accepts a user-supplied rubric and is measured under that ruling ([E45 (build BYOR on one flagship skill)](docs/internal/backlog/enhancements.md)).
+- Disposition logs from real use are collected, an aggregation script turns them into acceptance rates per criterion, and the first acceptance table is published ([E48 (disposition telemetry)](docs/internal/backlog/enhancements.md)). Real use means runs on real artifacts, including the maintainer's own, not bench runs. The first pruning pass is not part of this gate, because it needs months of dispositions.
+- The ruling on who performs "revise" is recorded ([E52 (who performs revise)](docs/internal/backlog/enhancements.md)). The revision loop is an invokable chain with a stated rule for when it stops ([N4 (the revision-loop chain)](docs/internal/backlog/new-components.md)).
+- `--gate` exit codes are exercised on every shipped skill, and the CI recipe for other repositories is documented ([E53 (`--gate` as a CI recipe)](docs/internal/backlog/enhancements.md)).
+- One workflow that composes this library with a sibling library is documented and runs end to end ([E54 (cross-library composition)](docs/internal/backlog/enhancements.md)).
+- `critique-accessibility` covers 27 of the 55 Level A and AA criteria, as a new skill version measured on both pinned tiers ([E67 (accessibility expansion)](docs/internal/backlog/enhancements.md)).
+- The dispatch run sets are in `results.json`, or `bench/README.md` is amended to say that check runs are committed as evidence and scored in prose ([E63 (dispatch run sets into results.json)](docs/internal/backlog/enhancements.md)). Each skill's merge step runs its scripted checks itself, instead of trusting the model's copy of their output ([E73 (merge step runs the scripted lane)](docs/internal/backlog/enhancements.md)).
+
+The last condition gates two v0.3.0 backlog items that no bullet above names. Three smaller v0.3.0 items stay outside the gate: [E35 (run the plugin validators)](docs/internal/backlog/enhancements.md), [E38 (measure the location fix on id-poor markup)](docs/internal/backlog/enhancements.md) and [E49 (one real tutorial)](docs/internal/backlog/enhancements.md). They are v0.3.0 work, but none of them defines the version.
+
+**Gold-tier groundwork moved to v0.4.0+ on 2026-10-21.** It only becomes meaningful once the revision-loop chain exists to evaluate. As a gate condition, it would keep v0.3.0 open until the chain was built and then evaluated.
 
 ---
 
@@ -121,7 +134,8 @@ Priority among these is set by what telemetry from v0.3.0 onward says is actuall
 - **Samples corpus.** Worked, narrative samples distinct from the benchmark: multiple skills applied across a small set of running example threads, each following the same scenario-to-disposition shape, with machine-validated envelopes checked in CI and provenance honestly labeled as illustrative single runs, never conflated with k=5 measurement. Samples never enter `bench/` and never carry ground-truth manifests; that boundary is what keeps a compelling example from being mistaken for a measured claim.
 - **Benchmark harness as a standalone asset.** Publishing the corpus generator and grading harness so third-party skill authors can measure their own skills against the same discipline this library holds itself to.
 - **Remaining domain waves**, drawn from whatever the taxonomy survey admits once it runs: visual design, naming and terminology, and any newcomer the survey surfaces.
-- **Further domain and Gold-tier work**, continued from v0.3.0 as coverage and telemetry justify it.
+- **Gold-tier groundwork**, moved from v0.3.0 on 2026-10-21: chain and hook evaluation coverage (Gold checks G1 and G3), which starts once the v0.3.0 revision-loop chain exists to evaluate. The folder READMEs, docs frontmatter and source docblocks this bullet once listed already pass the strict gate.
+- **Further domain work**, continued as coverage and telemetry justify it.
 
 ### Unscheduled
 
