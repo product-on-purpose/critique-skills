@@ -1152,7 +1152,16 @@ and the repository did not have.
 - **Size:** M. **Release:** v0.3.0. **Category:** docs. **Confidence:** likely.
 - **Blocks:** E56
 - **Depends on:** Nothing
-- **Rank at intake:** 57 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-10-23.** `contract/tests/test_gate_shipped_skills.py` gates the `expected_envelope`
+  of every golden file of every skill `library.json` registers, and each skill reaches exit 0 and
+  exit 2 from committed content. Exit 1 is reached per skill by a contract-valid severity-4 variant
+  built in the test, because no golden carries severity 4. The test also runs the consumer command
+  from outside the checkout. "Exercised" is read as the gate running on each skill's committed
+  envelopes with no model call, not on a live run. `docs/how-to/gate-in-ci.md` now says the workflow
+  covers any shipped skill and adds a multi-envelope loop, and both gate pages pin `v0.2.0`. The
+  v0.3.0 exit-gate condition in `ROADMAP.md` is left for the maintainer to mark met, because that
+  reading is theirs to accept.
+- **Rank at intake:** 57 of 64. **Status:** closed 2026-10-23.
 
 ## E54 - Ship one documented cross-library composition workflow
 

@@ -92,7 +92,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: product-on-purpose/critique-skills
-          ref: v0.1.0
+          ref: v0.2.0
           path: .critique-skills
 
       - name: Setup Python
@@ -114,6 +114,11 @@ because this envelope was not produced by Northwind Retail's own CI; per
 [Gate in CI](../../docs/how-to/gate-in-ci.md#threshold-configuration), pass `--threshold` explicitly
 whenever the envelope is not yours. A GitHub Actions `run:` step already fails the job on any nonzero
 exit code, so nothing beyond this one command is needed to make the job fail or pass with the envelope.
+
+Nothing in the job is specific to `critique-accessibility`. An envelope from any shipped skill is gated
+by the same step with only its path changed, and
+[Gate in CI](../../docs/how-to/gate-in-ci.md#any-shipped-skill-or-several-at-once) shows a loop that
+gates several envelopes in one job.
 
 ## Run one: the button as shipped, exit 1
 
