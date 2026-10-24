@@ -920,9 +920,15 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.3.0 (was v0.2.0). **Category:** ci. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
-- **Rank at intake:** 35 of 64. **Status:** backlog (recorded 2026-09-11).
 - **Ruled 2026-10-15 by the maintainer:** moves to v0.3.0 at the v0.2.0 cut. The v0.2.0 exit gate,
   re-cut on 2026-09-14, never named this item, and the release does not wait on it.
+- **CLOSED 2026-10-23.** Both validators ran against `main` at `4c31c59`, as read-only Sonnet
+  subagents, and `claude plugin validate .` ran beside them. The plugin loads cleanly. Of 14
+  findings, none was both mechanical and outside a `SKILL.md`, so none was applied. Five are listed
+  for their skills' next versions and one for the critic subagent's. Two are left for the
+  maintainer: the empty `keywords` and the missing icon. The other six need no change. Every finding and its disposition is in
+  `docs/internal/execution/E35-validator-run.md`.
+- **Rank at intake:** 35 of 64. **Status:** closed 2026-10-23.
 
 ## E36 - Confirm or deprecate the reserved selector field per ADR 0012's own RC question
 

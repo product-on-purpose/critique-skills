@@ -130,6 +130,9 @@ so the list stays complete.
 
 - **Run the two named external validators**, `plugin-dev:plugin-validator` and
   `plugin-dev:skill-reviewer` (release plan phase B5), never run against this release.
+  **Ran 2026-10-23 against `main` at `4c31c59`.** The plugin loads cleanly, and none of the 14
+  findings was both mechanical and outside a `SKILL.md`, so none was applied. Findings and
+  dispositions: [E35 validator run](E35-validator-run.md).
 - **Measure CI runtime on GitHub-hosted runners** (the CI-pipeline spec's AC-6), impossible before
   the first push.
 - **Gold tier**: the `architecture-overview` / `architecture-detailed` doc pair, deliberately out of
