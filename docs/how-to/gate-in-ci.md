@@ -46,8 +46,9 @@ is for reading the job log afterward.
 The validator ships inside the critique-skills repository itself, not as a separate package, so a
 consumer's CI checks out a pinned copy of it the same way this repository checks out
 `agent-skills-toolkit` in its own CI (`.github/workflows/ci.yml`, job `conformance`). Pin `ref` to a
-released tag, `v0.1.0` once critique-skills is tagged, or a specific commit before then; a moving
-branch is not reproducible.
+released tag or a specific commit; a moving branch is not reproducible. The example pins `v0.2.0`,
+the latest release when this page was last revised. The
+[releases page](https://github.com/product-on-purpose/critique-skills/releases) lists newer tags.
 
 ```yaml
 name: critique-gate
@@ -67,7 +68,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: product-on-purpose/critique-skills
-          ref: v0.1.0
+          ref: v0.2.0
           path: .critique-skills
 
       - name: Setup Python
@@ -92,6 +93,55 @@ an API client and so needs no key and no SDK (ADR 0030). `PYTHONPATH` points at 
 `python -m contract.validate` resolves as a package without installing anything into your own
 repository. This shape, running the module against a path outside the checkout while
 `PYTHONPATH` points at it, was verified directly in this repository before writing this page.
+
+## Any shipped skill, or several at once
+
+The workflow above names no skill. The gate reads the envelope's `summary` alone, and every
+`critique-<domain>` skill writes the same envelope shape, so the same step gates the output of any
+shipped skill. Only the envelope path changes.
+
+This repository's own tests hold that claim for every shipped skill
+(`contract/tests/test_gate_shipped_skills.py`). They run the gate on each skill's committed sample
+envelopes, which reach exit 0 and exit 2 for every skill. They raise one finding in one sample per
+skill to severity 4 and check that the result is still contract-valid and exits 1. They also run
+the command above from a directory outside the checkout, with `PYTHONPATH` pointing at it, as the
+workflow does. No model is called.
+
+To gate several envelopes in one job, for example one from `critique-accessibility` and one from
+`critique-clarity`, replace the last step with a loop over the directory that holds them:
+
+```yaml
+      - name: Gate on every critique envelope
+        env:
+          PYTHONPATH: ${{ github.workspace }}/.critique-skills
+        run: |
+          status=0
+          for envelope in critique/*.json; do
+            echo "Gating $envelope"
+            python -m contract.validate "$envelope" --gate --threshold 0 || status=$?
+          done
+          exit "$status"
+```
+
+The step fails if any envelope fails, and it exits with the code of the last envelope that failed,
+so read the log for each envelope's own result. If the pattern matches no file, the validator
+receives the literal pattern, cannot read it, and exits 4, so a missing envelope fails the job
+rather than passing it. The loop was run under bash with GitHub Actions' default `-eo pipefail`
+flags against three sample envelopes. It exited 1 with a severity-4 envelope present, 2 once that
+file was removed, 0 with only the clean envelope left, and 4 with none.
+
+### Trying the gate on a shipped skill's sample
+
+The golden files under `skills/critique-<domain>/examples/` are test fixtures, not envelopes. Each
+wraps its envelope in an `expected_envelope` key beside the artifact it was written for, so `--gate`
+on the file itself exits 3. From a checkout of this repository, extract the envelope first:
+
+```
+python -c "import json, sys; json.dump(json.load(open(sys.argv[1], encoding='utf-8'))['expected_envelope'], open(sys.argv[2], 'w', encoding='utf-8'))" skills/critique-docs/examples/golden-02.json sample-envelope.json
+python -m contract.validate sample-envelope.json --gate
+```
+
+That sample carries one severity-3 finding, so the gate prints `valid` and exits 2.
 
 ## Threshold configuration
 
