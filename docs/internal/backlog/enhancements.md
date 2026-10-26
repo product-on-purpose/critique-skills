@@ -296,6 +296,12 @@ and the repository did not have.
 - **Rank at intake:** 10 of 64. **Status:** backlog (recorded 2026-09-11).
 - **Ruled 2026-10-15 by the maintainer:** moves to v0.3.0 at the v0.2.0 cut. The v0.2.0 exit gate,
   re-cut on 2026-09-14, never named this item, and the release does not wait on it.
+- **Ruled 2026-10-23 and 2026-10-24 by the maintainer: BYOR is measured by parity.** The flagship's
+  own judged criteria are rewritten as a user-supplied rubric and scored against the native path on
+  the same corpus. The flagship is `critique-microcopy`, and the published figure carries a fixed
+  caveat that a user's rubric is unmeasured. The measured-only rule is unchanged.
+  [ADR 0039 (BYOR measured by parity)](../decisions/0039-byor-measured-by-parity.md) records the
+  ruling and closes this item.
 
 ## E11 - Rule on the two v0.2.0 commitments that vanished: askit-* authoring and CodeQL
 
@@ -1061,6 +1067,10 @@ and the repository did not have.
 - **Blocks:** Every later skill's BYOR support
 - **Depends on:** E1 and E10; a named flagship skill
 - **Rank at intake:** 45 of 64. **Status:** backlog (recorded 2026-09-11).
+- **E10 ruled, and the flagship named, 2026-10-24:** `critique-microcopy`, measured by parity under
+  [ADR 0039 (BYOR measured by parity)](../decisions/0039-byor-measured-by-parity.md). This item's
+  spec sets the parity pass band and the rewrite rule, and it decides whether to add judged-defect
+  recipes to the microcopy corpus. The parity run needs its own approval.
 
 ## E46 - Sync the samples-corpus THREAD_PROFILES placeholders from pm-skills
 
@@ -1147,6 +1157,13 @@ and the repository did not have.
 - **Blocks:** N4
 - **Depends on:** Nothing
 - **Rank at intake:** 55 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Ruled 2026-10-25 by the maintainer: the chain pauses at revise and hands over a revision brief.**
+  A person, or a tool the person runs, writes the next version, and the library never writes the
+  artifact. The auto-fix exclusion and methodology section 10 stand unchanged. The iteration count
+  becomes an optional disposition-log field, and the brief stays outside the contract until E54
+  consumes it.
+  [ADR 0040 (the revision loop pauses with a revision brief)](../decisions/0040-revision-loop-pauses-with-a-revision-brief.md)
+  records the ruling and closes this item.
 
 ## E53 - Harden --gate as a documented per-skill CI recipe for consumers
 
