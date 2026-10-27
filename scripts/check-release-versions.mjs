@@ -16,10 +16,9 @@
 //
 // To run locally against the tag you are about to push:
 //   node scripts/check-release-versions.mjs v0.1.0
-import { readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { VERSION_MANIFESTS } from "./lib/version-manifest.mjs";
+import { VERSION_MANIFESTS, readEntryVersions } from "./lib/version-manifest.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "..");
@@ -34,26 +33,27 @@ if (!rawTag) {
 }
 const expected = rawTag.startsWith("v") ? rawTag.slice(1) : rawTag;
 
-function readPointer(data, pointer) {
-  return pointer.split(".").reduce((node, key) => (node == null ? node : node[key]), data);
-}
-
 let fail = false;
-for (const { file, pointer } of VERSION_MANIFESTS) {
-  const abs = resolve(ROOT, file);
-  let actual;
+for (const entry of VERSION_MANIFESTS) {
+  let versions;
   try {
-    actual = readPointer(JSON.parse(readFileSync(abs, "utf8")), pointer);
+    versions = readEntryVersions(entry, ROOT);
   } catch (e) {
-    console.error(`error: ${file}: ${e.message}`);
+    console.error(`error: ${entry.file}: ${e.message}`);
     fail = true;
     continue;
   }
+  if (versions.length > 1) {
+    console.error(`error: ${entry.file} pins disagree with each other: ${versions.join(", ")}`);
+    fail = true;
+    continue;
+  }
+  const actual = versions[0];
   if (actual !== expected) {
-    console.error(`error: ${file} version "${actual}" does not match tag "${expected}"`);
+    console.error(`error: ${entry.file} version "${actual}" does not match tag "${expected}"`);
     fail = true;
   } else {
-    console.log(`ok: ${file} = ${actual}`);
+    console.log(`ok: ${entry.file} = ${actual}`);
   }
 }
 

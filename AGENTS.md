@@ -221,7 +221,9 @@ an uncertainty estimate (0.450 on sonnet and 0.309 on haiku, per
 Triggered by pushing a tag matching `v*`. Re-runs every command in the CI table above, then guards
 that the tag equals every version-bearing manifest, listed once in
 `scripts/lib/version-manifest.mjs` so the guard and any future version-bump tool cannot drift apart.
-Reproduce the guard locally against the tag you are about to push:
+That list covers three JSON files and two prose pages that pin the plugin version inline
+(`docs/how-to/gate-in-ci.md`, `examples/recipes/gate-in-ci.md`), the gap PR 102 (the E53 gate
+recipe) recorded. Reproduce the guard locally against the tag you are about to push:
 
 ```
 node scripts/check-release-versions.mjs v0.1.0
