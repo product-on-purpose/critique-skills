@@ -27,6 +27,7 @@ from typing import Any
 
 import pytest
 
+from contract.validate import validate_document
 from skills._shared import merge
 from skills._shared.artifact import Artifact
 from skills._shared.findings import RawFinding, to_finding_dict
@@ -123,19 +124,39 @@ IDS = [skill["name"] for skill in SKILLS]
 # ----------------------------------------------------------------------------------------------
 
 
+@pytest.mark.parametrize("competing_judged", [0, 3, 12], ids=["no-competition", "light-competition", "heavy-competition"])
 @pytest.mark.parametrize("skill", SKILLS, ids=IDS)
-def test_every_script_finding_is_listed_or_suppressed(skill: dict[str, Any]) -> None:
+def test_every_script_finding_is_listed_or_suppressed(skill: dict[str, Any], competing_judged: int) -> None:
     """The shared test from the spec's Tests table: the scripted lane in the merged envelope
     cannot be compared byte for byte with checks.py's own envelope, because bounding runs over the
     combined pool. So every severity 3 or 4 script finding must survive (nothing outranks it), and
-    every suppressed below-3 script finding must be covered by summary.suppressed_count. The
-    findings file here is empty: this is AC-1 at its strongest, since nothing the model wrote can
-    be relied on to carry a script finding forward any more.
+    every suppressed below-3 script finding must be covered by summary.suppressed_count.
+
+    Uses `_golden_with_script_findings`, not a skill's first golden artifact: critique-argument's
+    first golden is a pure judged-criteria case with an empty scripted lane, which made this test
+    vacuous for that skill (nothing in `script_raw` to check). Parametrized over 0, 3 and 12
+    competing below-severity-3 judged findings, so the bound (`OUTPUT_BOUND_BELOW_SEVERITY_3`, 5)
+    is actually exercised: with 0 competitors the findings file is empty (AC-1 at its strongest,
+    since nothing the model wrote can be relied on to carry a script finding forward), and with 3
+    or 12 the judged findings compete with the script's own below-3 findings for the same five
+    slots, which is what makes `summary.suppressed_count` meaningful to check at all.
     """
-    script_raw = _script_raw(skill)
-    envelope = merge.assemble(
-        skill=skill["name"], artifact=_artifact_path(skill), findings=[], repo_root=REPO_ROOT
-    )
+    golden, artifact = _golden_with_script_findings(skill)
+    if golden is None:
+        pytest.skip(f"{skill['name']}: no committed golden artifact's scripted lane is non-empty")
+    script_raw = _script_raw(skill, artifact)
+
+    findings: list[dict[str, Any]] = []
+    if competing_judged:
+        _scripted_ids, judged_ids = _lane_ids(skill)
+        if not judged_ids:
+            pytest.skip(f"{skill['name']}: no declared judged criterion to build competing findings from")
+        judged_target = sorted(judged_ids)[0]
+        findings = [
+            _finding(judged_target, 2, location=f"competing-judged-finding-{i}") for i in range(competing_judged)
+        ]
+
+    envelope = merge.assemble(skill=skill["name"], artifact=artifact, findings=findings, repo_root=REPO_ROOT)
     kept = {(f["criterion"], f["location"]): f for f in envelope["findings"]}
     kept_pairs = set(kept)
 
@@ -200,16 +221,27 @@ def test_an_undeclared_criterion_fails_the_merge_by_name(skill: dict[str, Any]) 
 
 
 @pytest.mark.parametrize("skill", SKILLS, ids=IDS)
-def test_a_byor_marked_finding_is_filed_as_judged_whatever_its_namespace(skill: dict[str, Any]) -> None:
-    findings = [_finding("BYOR-TEST-CRITERION", 3, rubric_source="byor")]
+@pytest.mark.parametrize("criterion", ["BYOR-TEST-CRITERION", "ACME-THING"], ids=["byor-namespace", "other-namespace"])
+def test_a_byor_marked_finding_is_filed_as_judged_whatever_its_namespace(
+    skill: dict[str, Any], criterion: str
+) -> None:
+    """D2 option A files a `rubric_source: byor` finding as judged whatever its namespace, not
+    only one spelled `BYOR-...`. A criterion in the `ACME-` namespace, which the skill declares in
+    neither `checks.scripted` nor `checks.judged`, covers the half of that rule the `BYOR-` case
+    cannot: a regression to keying on the `BYOR-` prefix instead of `rubric_source` would still
+    pass for `BYOR-TEST-CRITERION` and only fail here.
+    """
+    findings = [_finding(criterion, 3, rubric_source="byor")]
 
     envelope = merge.assemble(
         skill=skill["name"], artifact=_artifact_path(skill), findings=findings, repo_root=REPO_ROOT
     )
 
-    matches = [f for f in envelope["findings"] if f["criterion"] == "BYOR-TEST-CRITERION"]
+    matches = [f for f in envelope["findings"] if f["criterion"] == criterion]
     assert len(matches) == 1
     assert matches[0]["lane"] == "judged"
+    assert criterion.split("-", 1)[0] in envelope["run"]["rubrics"]
+    assert validate_document(envelope).ok
 
 
 # ----------------------------------------------------------------------------------------------

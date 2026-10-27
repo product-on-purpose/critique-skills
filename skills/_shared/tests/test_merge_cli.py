@@ -296,8 +296,13 @@ def test_the_cli_fails_loudly_rather_than_printing_an_invalid_envelope(artifact:
 
     Severity 7 on PLAIN-AUDIENCE, a declared judged criterion, rather than an odd criterion name:
     since D2 (requirement 5), an undeclared, non-BYOR criterion is its own rejection (MergeError,
-    naming the ID) rather than reaching the schema validator at all; this test wants the schema
-    validator's own failure path, which a declared criterion with an out-of-range severity reaches.
+    naming the ID) before the schema validator ever runs. An out-of-range severity does not reach
+    the schema validator either, and predates this branch: `by_severity_histogram`
+    (`skills/_shared/envelope.py`) keys its counter dict by the five valid severities only, so
+    severity 7 raises an uncaught `KeyError` first, with the traceback on stderr and nothing on
+    stdout. That still satisfies this test's real guarantee - no invalid envelope ever reaches
+    stdout, whatever broke the run - so the assertions stay; only the superseded claim that this
+    input reaches the schema validator's own failure path is removed.
     """
     payload = json.dumps({"findings": [_finding("PLAIN-AUDIENCE", 7)]})
 
