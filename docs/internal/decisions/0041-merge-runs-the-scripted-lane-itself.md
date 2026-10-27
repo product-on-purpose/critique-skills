@@ -8,10 +8,11 @@
   on a criterion in neither list fails the merge, naming it, unless it is marked
   `rubric_source: byor`, which is filed `judged` whatever its namespace. A judged finding with no
   stated confidence defaults to `medium`, not `high`.
-- **This is D1 through D3.** D4 through D6 are this decision's consequences: every skill's version
-  moves once, together with E67's version move, in the release that carries both; the moved skills
-  are measured by a free replay first and then one paid dispatch; five of the six E35 validator
-  findings ride the same version move, and one (R1) waits for its own change.
+- **This is D1 through D3.** D4 through D6 are this decision's consequences.
+  - D4: every skill's version moves once, in the release that also carries E67's move.
+  - D5: the moved skills are measured by a free replay first, then by one paid dispatch.
+  - D6: five of the six E35 validator findings are fixed in this build, and R1 waits for its own
+    change.
 - **The version moves and the paid re-measure (AC-9) are still to come.** Neither is built by this
   ADR, and both need the maintainer's own, separate approval before they happen.
 - **Ruled:** by the maintainer on 2026-10-23. Built 2026-10-26.
@@ -119,7 +120,7 @@ The maintainer accepted the recommended option on each, answering "Ok" to all th
 
 ## Decision outcome
 
-**The scripted lane runs in-process.** `skills/_shared/merge.py`'s `run_script_checks` (line 326)
+**The scripted lane runs in-process.** `skills/_shared/merge.py`'s `run_script_checks` (line 334)
 loads the skill's own `scripts/checks.py` as a module and calls its `check(artifact)`, the way
 `skills/_shared/runner.py`'s `_run` already does for the standalone scripted-lane CLI. Every
 finding it returns enters the pool as `scripted`, exactly as emitted; running `checks.py` as a
@@ -127,14 +128,13 @@ subprocess would not do, because its own output is already bounded, and a findin
 beyond the fifth would be lost before the merge could weigh it against the judged lane.
 
 **A model finding's lane comes from the declaration, read once per run.** `read_lane_manifest`
-(line 133) parses `checks.scripted` and `checks.judged` from the skill's `SKILL.md` frontmatter, in
-the style `read_skill_version` already used for `metadata.version`: the frontmatter block only, and
-only `checks:`'s own direct children, so a body line is never mistaken for the declaration.
-`_route_model_findings` (line 252) then applies D1 through D3 to every finding in the model's
-findings file:
+(line 158) reads `checks.scripted` and `checks.judged` from the skill's `SKILL.md` frontmatter. It
+uses `parse_frontmatter` from `scripts/skill-selftest.py`, the parser that gates every `SKILL.md` in
+CI, so the merge step and the gate cannot read one declaration two ways. `_route_model_findings`
+(line 258) then applies D1 through D3 to every finding in the model's findings file:
 
 - a criterion in `checks.scripted` is dropped; the dropped count, by criterion, is reported on
-  standard error by the CLI (`main`, line 479) whenever it is non-zero;
+  standard error by the CLI (`main`, line 487) whenever it is non-zero;
 - a criterion in `checks.judged`, or any criterion marked `rubric_source: byor`, is kept, filed
   `judged`, at its stated confidence or `medium` if it states none;
 - any other criterion fails the merge outright, naming every such ID in one message rather than
