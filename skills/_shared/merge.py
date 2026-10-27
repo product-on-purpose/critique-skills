@@ -127,67 +127,73 @@ def read_skill_version(skill_md_text: str) -> str:
     raise ValueError("SKILL.md frontmatter declares no metadata.version")
 
 
-_CHECKS_LIST_ITEM_RE = re.compile(r"^(\s+)-\s*(\S+)\s*$")
+_skill_selftest_module_cache: dict[str, Any] = {}
 
 
-def read_lane_manifest(skill_md_text: str) -> tuple[frozenset[str], frozenset[str]]:
+def _skill_selftest_parse_frontmatter(repo_root: Path):
+    """Load `scripts/skill-selftest.py` as a module and return its `parse_frontmatter` function.
+
+    Cached per resolved path, since the module defines nothing that depends on call-time state and
+    reloading it on every `read_lane_manifest` call would cost a file read and a parse for nothing.
+    """
+    path = repo_root / "scripts" / "skill-selftest.py"
+    key = str(path.resolve()) if path.exists() else str(path)
+    module = _skill_selftest_module_cache.get(key)
+    if module is None:
+        if not path.is_file():
+            raise MergeError(f"{path} does not exist")
+        module_name = "_critique_skills_skill_selftest"
+        spec = importlib.util.spec_from_file_location(module_name, path)
+        if spec is None or spec.loader is None:
+            raise MergeError(f"could not load {path} as a module")
+        module = importlib.util.module_from_spec(spec)
+        # Registered before exec_module for the same reason `_load_check_fn` registers a skill's
+        # checks.py: this file's `@dataclass(frozen=True)` resolves its own module by this name.
+        sys.modules[module_name] = module
+        spec.loader.exec_module(module)
+        _skill_selftest_module_cache[key] = module
+    return module.parse_frontmatter
+
+
+def read_lane_manifest(
+    skill_md_text: str, *, repo_root: Path = ROOT
+) -> tuple[frozenset[str], frozenset[str]]:
     """Return `(scripted, judged)` criterion ID sets from a SKILL.md's `checks.scripted` and
-    `checks.judged` frontmatter declaration (docs/internal/skill-template.md, "Lane manifest"), in
-    the style of `read_skill_version`: the frontmatter block only, and only `checks:`'s own direct
-    children (`scripted:` and `judged:`) and their list items, so a body line or an unrelated
-    frontmatter list (`rubric_sources`, say) is never mistaken for the declaration.
+    `checks.judged` frontmatter declaration (docs/internal/skill-template.md, "Lane manifest").
 
     This is what requirement 3 means by "a model finding's lane comes from the declaration": this
     function is the declaration, and a finding's own `lane` field never overrides it.
+
+    Delegates to `scripts/skill-selftest.py`'s own `parse_frontmatter`, the parser that gates every
+    SKILL.md in CI (`scripts/tests/test_skills_conformance.py`), rather than a second, hand-rolled
+    reader of the same block. The hand-rolled reader this replaced disagreed with that parser on
+    three inputs every SKILL.md author could plausibly write: a quoted ID kept its quotes (so
+    `"A-ONE"` never matched the bare `A-ONE` a finding cites), a list item with a trailing inline
+    comment was dropped outright, and a `checks:` sibling key other than `scripted`/`judged` (a
+    `notes:` block, say) leaked its items into whichever lane preceded it. All seven shipped
+    `SKILL.md` files and the template fixture happened to avoid every one of those shapes, so the
+    disagreement was latent. Importing the real parser means a future change to it changes this
+    function too, instead of leaving two readers to drift apart unnoticed.
     """
-    lines = skill_md_text.lstrip("﻿").splitlines()
-    if not lines or lines[0].strip() != "---":
-        raise ValueError("SKILL.md has no '---' delimited frontmatter block")
-    close = next((i for i in range(1, len(lines)) if lines[i].strip() == "---"), None)
-    if close is None:
-        raise ValueError("SKILL.md frontmatter has no closing '---' delimiter")
-    frontmatter = lines[1:close]
+    parse_frontmatter = _skill_selftest_parse_frontmatter(repo_root)
+    try:
+        frontmatter = parse_frontmatter(skill_md_text.lstrip("﻿"))
+    except Exception as exc:
+        raise ValueError(f"SKILL.md: {exc}") from exc
 
-    scripted: list[str] = []
-    judged: list[str] = []
-    in_checks = False
-    checks_indent: str | None = None
-    current: list[str] | None = None
-    current_indent: str | None = None
+    checks = frontmatter.get("checks") if isinstance(frontmatter, dict) else None
+    if not isinstance(checks, dict):
+        raise ValueError("SKILL.md frontmatter declares no checks.scripted or checks.judged manifest")
 
-    for line in frontmatter:
-        if not line.strip():
-            continue
-        if not line[0].isspace():
-            in_checks = line.rstrip() == "checks:"
-            checks_indent = None
-            current = None
-            current_indent = None
-            continue
-        if not in_checks:
-            continue
-        indent = line[: len(line) - len(line.lstrip())]
-        stripped = line.strip()
-        if checks_indent is None:
-            checks_indent = indent
-        if indent == checks_indent:
-            if stripped == "scripted:":
-                current, current_indent = scripted, None
-                continue
-            if stripped == "judged:":
-                current, current_indent = judged, None
-                continue
-        if current is None:
-            continue
-        match = _CHECKS_LIST_ITEM_RE.match(line)
-        if not match:
-            continue
-        item_indent = match.group(1)
-        if current_indent is None:
-            current_indent = item_indent
-        if item_indent == current_indent:
-            current.append(match.group(2))
+    def _ids(key: str) -> list[str]:
+        value = checks.get(key)
+        if value in (None, []):
+            return []
+        if not isinstance(value, list):
+            raise ValueError(f"SKILL.md frontmatter's checks.{key} is not a list")
+        return [str(item) for item in value]
 
+    scripted, judged = _ids("scripted"), _ids("judged")
     if not scripted and not judged:
         raise ValueError("SKILL.md frontmatter declares no checks.scripted or checks.judged manifest")
     return frozenset(scripted), frozenset(judged)
@@ -268,6 +274,8 @@ def _route_model_findings(
     undeclared: list[str] = []
 
     for index, finding in enumerate(findings):
+        if not isinstance(finding, Mapping):
+            raise MergeError(f"finding {index}: expected an object, got {type(finding).__name__}")
         criterion = finding.get("criterion")
         if criterion is None:
             raise MergeError(f"finding {index}: missing required field(s) criterion")
@@ -436,7 +444,7 @@ def assemble(
     except ValueError as exc:
         raise MergeError(f"{skill} SKILL.md: {exc}") from exc
     try:
-        scripted_ids, judged_ids = read_lane_manifest(skill_md_text)
+        scripted_ids, judged_ids = read_lane_manifest(skill_md_text, repo_root=repo_root)
     except ValueError as exc:
         raise MergeError(f"{skill} SKILL.md: {exc}") from exc
 
