@@ -87,7 +87,11 @@ Three decisions, ruled in one walk on 2026-10-23.
 **D1. A model finding on a scripted criterion the script did not emit.**
 
 1. **Drop the finding, and report the count on standard error, by criterion (chosen).** The
-   envelope's scripted lane is then exactly the script's.
+   envelope's scripted lane is then exactly the script's. The stderr count is diagnostic only: no
+   envelope field, bench result, or kept transcript carries it forward, so it does not by itself
+   leave a trace anyone later studies. It also fires on every run that still sends the old pass 4's
+   harmless script-finding copies, not only on a genuine heuristic miss, so it cannot distinguish
+   the two without someone reading that run's own stderr at the time.
 2. **Keep it, filed as `judged`.** Rejected: this is the `lane-overlap` rule, reopened at the merge
    step instead of at declaration time.
 3. **Fail the merge.** Rejected: one stray finding would cost a whole run.
@@ -160,6 +164,15 @@ seven `SKILL.md` files, the critic and the template can say the same, simpler th
 
 **Negative, and tracked separately (D4-D6):**
 
+- **An undeclared criterion now costs the whole run its envelope, not only the one finding.** Before
+  this build, a mistyped or invented ID was recorded as `scripted`, silently. Now the merge fails
+  outright, naming it. Measured on dispatch `31988100372` (2026-08-17): 4 of 19 Haiku
+  `critique-clarity` envelopes named an undeclared, namespace-swapped ID such as
+  `WILLIAMS-AUDIENCE`, against 444 committed skill envelopes overall with no other case. Each of
+  those four runs would now produce no envelope at all rather than a flawed one. The cost is
+  sharper than that count alone suggests: pass 4 tells the model to say so and stop if assembly
+  fails, so a model cannot retry the same run after a typo, and pass 4 does not state that a judged
+  finding's criterion must be one `checks.judged` already declares.
 - **Every skill's envelope can now differ from before, even though no rubric changed.** A dropped
   script finding reappears, and a mislabeled judgment changes lane and confidence. D4 ruled that
   this moves every skill's version, and the critic's, by one patch release, in the release that
@@ -184,6 +197,14 @@ seven `SKILL.md` files, the critic and the template can say the same, simpler th
   `docs/internal/execution/E35-validator-run.md` records each disposition. R1 (critique-docs's
   description naming no sibling skill) changes triggering, not reporting, and waits for a change
   measured by the trigger evals, not by the bench; it is **not fixed here**.
+- **A provenance window is open until the version move lands.** Every `SKILL.md` and
+  `agents/critique-critic.md` change this build makes, including requirement 9's reworded pass 4,
+  takes effect on `main` immediately, while every skill's `metadata.version` stays at what it was
+  before this build, per D4. An envelope produced from `main` in that window, by any dispatch,
+  carries the new merge behaviour but the old `skill_version`, indistinguishable from one produced
+  before this build by that field alone. `scripts/check-release-versions.mjs` checks a release tag
+  against the version manifests, and nothing gates on E73's spec AC-9's checkbox, so a tag could
+  be cut before the version move closes this window.
 
 **Neutral:** no change to any `checks.py`, to the contract (the `lane` enum stays `scripted` and
 `judged`), to bounding or ranking in `skills/_shared/envelope.py`, or to the bench harness or its

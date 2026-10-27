@@ -23,7 +23,16 @@ settled.
 The rule for this run was to fix only a mechanical finding that touches no `SKILL.md`. A change to a
 `SKILL.md` moves that skill's version and puts its measured numbers in question, so such a finding
 is listed here for the skill's next version, not applied. **No finding met the rule, so none was
-applied.**
+applied on 2026-10-23.**
+
+**Addendum, 2026-10-26.** [E73 (merge runs the scripted lane itself)](../release-plans/_unassigned/E73_merge-runs-scripted-lane/spec.md)'s
+D6 ruled that R2, R3, R4, V1 and V2 ride its own `SKILL.md` edits rather than wait for a version
+move of their own, because none of the five changes what a skill reports. E73's build fixed all
+five on that date, named "Fixed in E73's build (2026-10-26)" in the table below. R1 still waits for
+a change of its own, since a description edit changes triggering, which the trigger evals measure,
+not this run. Per [D4](../release-plans/_unassigned/E73_merge-runs-scripted-lane/spec.md#d4-whether-every-skills-version-moves-decided),
+no `metadata.version` moved for these five fixes: the version move for every skill E73 touches is
+deferred to the release that also carries E67.
 
 | ID | Source | Severity | Location | Finding | Disposition |
 |---|---|---|---|---|---|
