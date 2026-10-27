@@ -11,6 +11,16 @@ recurring failures were the critic mis-stating its own measurement, a histogram 
 len(findings) plus suppressed_count, and a scripted finding claiming less than high confidence. This
 module turns both from arithmetic the model must get right into a subprocess it already has the
 tools to run.
+
+E73 (2026-10-26) changed what `findings` means in these tests. `merge.assemble` now runs
+critique-clarity's own `scripts/checks.py` on `artifact` itself, so the scripted lane in every
+envelope below comes from that run, not from anything in `findings`. `findings` is now the judged
+lane only, and a finding's criterion, not its own `lane` field, decides where it lands: a criterion
+in critique-clarity's `checks.scripted` (SKILL.md) is dropped (D1), one in `checks.judged` is kept as
+judged regardless of what `lane` it claims (D2/D3). `skills/_shared/tests/test_merge_lanes.py` covers
+that routing across every registered skill; the tests here are the CLI plumbing (stdin, a findings
+file, a bare list, an empty input, an invalid envelope) plus the handful of assemble() behaviours
+(histogram, sha256, prose, rubrics) that do not depend on the routing itself.
 """
 
 from __future__ import annotations
@@ -55,9 +65,13 @@ def test_histogram_counts_every_finding_including_the_suppressed_ones(artifact: 
     """The exact failure measured twice on haiku: "histogram total 9 does not equal len(findings)
     (9) plus suppressed_count (2)". The histogram is over everything found; `findings` is the
     bounded subset. Getting that wrong is the single most common way a cell was lost.
+
+    PLAIN-AUDIENCE is a declared judged criterion (skills/critique-clarity/SKILL.md), so each of
+    these 8 findings is kept, at a distinct location so the contract's uniqueItems rule on
+    findings[] is satisfied once bounding narrows the set to 5.
     """
     # 8 low-severity findings, so bounding keeps 5 and suppresses 3.
-    findings = [_finding(f"PLAIN-C{i}", 1) for i in range(8)]
+    findings = [_finding("PLAIN-AUDIENCE", 1, location=f"paragraph {i}") for i in range(8)]
 
     envelope = merge.assemble(
         skill="critique-clarity", artifact=artifact, findings=findings, repo_root=REPO_ROOT
@@ -69,21 +83,27 @@ def test_histogram_counts_every_finding_including_the_suppressed_ones(artifact: 
     assert envelope["summary"]["suppressed_count"] == 3
 
 
-def test_a_scripted_finding_is_forced_to_high_confidence(artifact: Path) -> None:
-    """The other measured failure: `findings[4].confidence: 'high' was expected`.
-
-    The contract pins this because "scripted-lane findings are always high confidence or they are
-    bugs" (methodology section 5). A scripted finding came from a deterministic check, so high IS
-    the truth, and a model claiming otherwise is stating something false about its own lane rather
-    than expressing a real doubt. Correcting it is not a judgment call.
+def test_a_model_finding_on_a_scripted_criterion_is_dropped(artifact: Path) -> None:
+    """D1 option A. PLAIN-ACTIVE is a declared scripted criterion, so the model's copy of it -
+    whatever confidence or lane it claims - is dropped rather than merged in: the scripted lane is
+    critique-clarity's own checks.py, run on `artifact`, and only that. The trivial fixture artifact
+    trips no real PLAIN-ACTIVE check, so a clean envelope here is itself the assertion that the copy
+    was dropped, not kept at a corrected confidence.
     """
     findings = [_finding("PLAIN-ACTIVE", 2, lane="scripted", confidence="medium")]
+    diagnostics: dict = {}
 
     envelope = merge.assemble(
-        skill="critique-clarity", artifact=artifact, findings=findings, repo_root=REPO_ROOT
+        skill="critique-clarity",
+        artifact=artifact,
+        findings=findings,
+        repo_root=REPO_ROOT,
+        diagnostics=diagnostics,
     )
 
-    assert envelope["findings"][0]["confidence"] == "high"
+    assert envelope["findings"] == []
+    assert diagnostics["dropped_scripted_criteria"] == {"PLAIN-ACTIVE": 1}
+    assert diagnostics["dropped_count"] == 1
 
 
 def test_a_judged_findings_confidence_is_left_alone(artifact: Path) -> None:
@@ -98,9 +118,11 @@ def test_a_judged_findings_confidence_is_left_alone(artifact: Path) -> None:
 
 
 def test_the_assembled_envelope_is_contract_valid(artifact: Path) -> None:
+    """PLAIN-ACTIVE is scripted, so the model's copy of it is dropped (D1); WILLIAMS-CHARACTER-ACTION
+    is declared judged, so it is kept. The envelope is valid either way."""
     findings = [
         _finding("PLAIN-ACTIVE", 3, lane="scripted"),
-        _finding("WILLIAMS-COHESION", 2, lane="judged"),
+        _finding("WILLIAMS-CHARACTER-ACTION", 2, lane="judged"),
     ]
 
     envelope = merge.assemble(
@@ -113,10 +135,13 @@ def test_the_assembled_envelope_is_contract_valid(artifact: Path) -> None:
 
 def test_rubrics_are_derived_from_the_criteria_actually_cited(artifact: Path) -> None:
     """run.rubrics must cover every namespace the findings draw on, or the validator's
-    rubrics-cover-findings rule fails. Deriving it removes one more thing to get wrong."""
+    rubrics-cover-findings rule fails. Deriving it removes one more thing to get wrong.
+
+    Both PLAIN-AUDIENCE and WILLIAMS-CHARACTER-ACTION are declared judged criteria, so both are
+    kept (unlike a scripted criterion's copy, which D1 drops before it could cite a namespace)."""
     findings = [
-        _finding("PLAIN-ACTIVE", 2, lane="scripted"),
-        _finding("WILLIAMS-COHESION", 2, lane="judged"),
+        _finding("PLAIN-AUDIENCE", 2, lane="judged"),
+        _finding("WILLIAMS-CHARACTER-ACTION", 2, lane="judged"),
     ]
 
     envelope = merge.assemble(
@@ -140,9 +165,10 @@ def test_the_artifact_sha256_is_computed_not_supplied(artifact: Path) -> None:
 
 def test_prose_is_normalised_so_a_stray_dash_cannot_invalidate_the_envelope(artifact: Path) -> None:
     """Same rule bench/baseline/postprocess.py applies, for the same reason: the model was never
-    told the house style, and a stray dash should not cost a whole run."""
+    told the house style, and a stray dash should not cost a whole run. PLAIN-AUDIENCE is a
+    declared judged criterion, so, unlike a scripted criterion's copy, this finding is kept."""
     em = chr(0x2014)
-    findings = [_finding("PLAIN-ACTIVE", 2, violation=f"Two readers{em}staff and public{em}at once.")]
+    findings = [_finding("PLAIN-AUDIENCE", 2, violation=f"Two readers{em}staff and public{em}at once.")]
 
     envelope = merge.assemble(
         skill="critique-clarity", artifact=artifact, findings=findings, repo_root=REPO_ROOT
@@ -268,10 +294,12 @@ def test_the_cli_fails_loudly_rather_than_printing_an_invalid_envelope(artifact:
     """Never print something that does not validate: a downstream reader cannot tell a broken
     envelope from a real one, and runner.py already holds this line for the scripted lane.
 
-    Severity 7 rather than an odd criterion name, because an unrecognised namespace is legal: the
-    contract supports user-supplied BYOR rubrics that declare their own.
+    Severity 7 on PLAIN-AUDIENCE, a declared judged criterion, rather than an odd criterion name:
+    since D2 (requirement 5), an undeclared, non-BYOR criterion is its own rejection (MergeError,
+    naming the ID) rather than reaching the schema validator at all; this test wants the schema
+    validator's own failure path, which a declared criterion with an out-of-range severity reaches.
     """
-    payload = json.dumps({"findings": [_finding("PLAIN-ACTIVE", 7)]})
+    payload = json.dumps({"findings": [_finding("PLAIN-AUDIENCE", 7)]})
 
     proc = subprocess.run(
         [
