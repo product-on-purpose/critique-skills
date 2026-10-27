@@ -58,6 +58,23 @@ def test_verify_against_nonexistent_corpus_directory_reports_everything_missing(
     assert result.extra  # everything regenerated counts as "extra" vs nothing committed
 
 
+def test_verify_excludes_a_frozen_file_from_missing_and_extra(tmp_path):
+    """`bench/corpus/_frozen/` holds byte-identical copies the generator
+    deliberately never regenerates (see `bench/corpus/_frozen/README.md`).
+    A file there must be neither "missing" (the scratch build never
+    produces it) nor "extra" (it is not regenerated, so it can never
+    appear on that side either)."""
+    build(tmp_path, (toy.DOMAIN,))
+    frozen_dir = tmp_path / "_frozen" / "v1" / "toy"
+    frozen_dir.mkdir(parents=True)
+    (frozen_dir / "toy-001.md").write_bytes(b"frozen copy\n")
+    result = verify_corpus(tmp_path, domains=(toy.DOMAIN,))
+    assert result.ok
+    assert "_frozen/v1/toy/toy-001.md" not in result.missing
+    assert "_frozen/v1/toy/toy-001.md" not in result.extra
+    assert "_frozen/v1/toy/toy-001.md" not in result.matched
+
+
 def test_report_string_mentions_every_kind_of_mismatch(tmp_path):
     build(tmp_path, (toy.DOMAIN,))
     (tmp_path / "toy" / "toy-001.manifest.json").unlink()

@@ -83,7 +83,7 @@ Every figure below is location-level, both pinned model tiers, k=5, against a se
 
 ### `critique-accessibility` · WCAG 2.2 AA · v0.1.1
 
-Reviews HTML pages and fragments (markdown where mappable) for contrast, alt text, heading hierarchy, link text, and keyboard and screen-reader access. It checks 22 of WCAG 2.2's 55 Level A and AA success criteria, so a clean report is not a conformance claim.
+Reviews HTML pages and fragments (markdown where mappable) for contrast, alt text, heading hierarchy, link text, and keyboard and screen-reader access. It checks 27 of WCAG 2.2's 55 Level A and AA success criteria, so a clean report is not a conformance claim.
 
 **Try:** `review this page for accessibility problems`
 **Not this skill:** general interface flow, controls, and states, which is [`critique-usability`](#critique-usability--nielsens-10-usability-heuristics--v010).
@@ -158,7 +158,7 @@ Reviews HTML or markdown UI specs, wireframe write-ups, and page mockups for sys
 
 | Skill | Reviews | Rubric | Version |
 |---|---|---|---|
-| [`critique-accessibility`](skills/critique-accessibility/SKILL.md) | Reviews HTML pages and fragments (markdown where mappable) against 22 of the 55 WCAG 2.2 Level A and AA success criteria: contrast, alt text, heading hierarchy for screen readers, link text, and keyboard and screen-reader access. Judges conformance against WCAG, not an interface's general usability, flow, or controls (critique-usability covers that), or how much effort a form's fields cost to fill in on a phone (critique-forms covers that). | WCAG | 0.1.1 |
+| [`critique-accessibility`](skills/critique-accessibility/SKILL.md) | Reviews HTML pages and fragments (markdown where mappable) against 27 of the 55 WCAG 2.2 Level A and AA success criteria: contrast, alt text, heading hierarchy for screen readers, link text, input purpose, target size, orientation, focus visibility, status messages, and keyboard and screen-reader access. Judges conformance against WCAG, not an interface's general usability, flow, or controls (critique-usability covers that), or how much effort a form's fields cost to fill in on a phone (critique-forms covers that). | WCAG | 0.1.1 |
 | [`critique-argument`](skills/critique-argument/SKILL.md) | Reviews argumentative prose - essays, proposals, position papers, recommendation memos, strategy docs, and op-eds - against the Toulmin model of argument: whether the claim, grounds, warrant, backing, qualifier, and rebuttal are present, explicit, and actually hold together. Judges the argument's structure, not prose readability or sentence mechanics (critique-clarity covers that). | TOULMIN | 0.1.0 |
 | [`critique-clarity`](skills/critique-clarity/SKILL.md) | Reviews markdown or plain-text prose for clarity against the Federal Plain Language Guidelines and Williams' Style: readability, passive voice, sentence length, and nominalization density. Judges sentence- and passage-level readability, not whether an argument's claim is supported or its structure holds together (critique-argument covers that). | PLAIN, WILLIAMS | 0.1.0 |
 | [`critique-docs`](skills/critique-docs/SKILL.md) | Reviews technical documentation pages and page trees written in markdown against the Diataxis framework: tutorial, how-to, reference, and explanation mode fit, plus heading structure, orphaned pages, cross-mode linking, and navigation-list length. | DIATAXIS | 0.1.0 |
@@ -234,7 +234,7 @@ flowchart LR
 
 **The four-pass protocol.** Inventory without judging, sweep the rubric in fixed ID order, assign severities as a separate pass, then rank and bound. Fixed ordering suppresses fixation drift; separating severity from discovery stops severity inflation.
 
-**Two lanes.** Of 120 criteria, **60 run as deterministic scripts** and **60 require judgment**. Scripted findings are bit-for-bit reproducible; judged findings are not, and the library claims only that they are measured.
+**Two lanes.** Of 125 criteria, **61 run as deterministic scripts** and **64 require judgment**. Scripted findings are bit-for-bit reproducible; judged findings are not, and the library claims only that they are measured.
 
 **Bounded output.** All severity 3 and 4 findings plus at most five below that, with the suppressed count reported. Verbosity is variance, and unbounded runs cannot be compared.
 
@@ -306,7 +306,7 @@ Everything on the site is a rendering of something in this repo. Nothing lives o
 |---|---|
 | **Current version** | v0.2.0 |
 | **Skills** | 7, across design, communication, and documentation |
-| **Criteria** | 120 (60 scripted, 60 judged), each with a permanent ID |
+| **Criteria** | 125 (61 scripted, 64 judged), each with a permanent ID |
 | **Subagents** | 1 (`critique-critic`, clean-context) |
 | **Conformance** | convergent (Silver), 0 errors / 0 warnings; reproduce with `node scripts/check.mjs` |
 | **Measurement** | 851 committed run envelopes, k=5, two pinned model tiers, 27-artifact seeded corpus |

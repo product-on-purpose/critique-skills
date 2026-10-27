@@ -3,8 +3,9 @@
 Artifact type: html. Namespace: WCAG. See bench/generator/README.md for the
 domain-plugin API this module implements, and skills/critique-accessibility/
 SKILL.md and references/WCAG.md for the criterion registry this module
-seeds (13 scripted, 4 of the 9 judged criteria, matching the S-05 spec's
-'>=3 judged-lane criteria' floor).
+seeds (14 scripted, 8 judged criteria, matching the S-05 spec's '>=3
+judged-lane criteria' floor; E67 (2026-10-27) added WCAG-1.3.5 scripted and
+WCAG-2.5.8, WCAG-1.3.4, WCAG-2.4.7, WCAG-4.1.3 judged).
 
 No bench/generator/html.py shared composition module exists yet (this is
 the first html-artifact domain to land; see bench/generator/leak.py's own
@@ -247,11 +248,12 @@ def _paragraph(rng) -> str:
 def compose(rng, shape: Mapping[str, object]) -> Doc:
     """Structure below is fixed (declared by this function itself, not by
     `shape`): every recipe composes the same rich page skeleton, wide
-    enough to host all 17 planted criteria at a distinct, named slot. The
-    one thing `shape` varies is filler paragraph counts per section, kept
-    here rather than hardcoded so the convention 'structure from shape,
-    words from rng' still holds for the one axis that legitimately
-    varies."""
+    enough to host all 22 planted criteria at a distinct, named slot. The
+    two things `shape` varies are filler paragraph counts per section and
+    whether a `<style>` element exists at all (the `stylesheet` key,
+    accessibility-005 only), kept here rather than hardcoded so the
+    convention 'structure from shape, words from rng' still holds for the
+    axes that legitimately vary."""
     p1, p2, p3 = shape["paragraphs"]
 
     title_text = rng.choice(PAGE_TITLES)
@@ -272,19 +274,33 @@ def compose(rng, shape: Mapping[str, object]) -> Doc:
         _el("p", slot=f"s3.p{i}", children=(_paragraph(para_rng.child(3, i)),)) for i in range(1, p3 + 1)
     ]
 
-    head = _el(
-        "head",
-        slot="head",
-        children=(
-            _el("meta", slot="head.charset", attrs=(("charset", "utf-8"),)),
-            _el(
-                "meta",
-                slot="head.viewport",
-                attrs=(("name", "viewport"), ("content", "width=device-width, initial-scale=1")),
-            ),
-            _el("title", slot="head.title", children=(title_text,)),
+    head_children: list[El] = [
+        _el("meta", slot="head.charset", attrs=(("charset", "utf-8"),)),
+        _el(
+            "meta",
+            slot="head.viewport",
+            attrs=(("name", "viewport"), ("content", "width=device-width, initial-scale=1")),
         ),
-    )
+        _el("title", slot="head.title", children=(title_text,)),
+    ]
+    if shape.get("stylesheet"):
+        # Opt-in via the `stylesheet` shape key, absent from `_SHAPE`, so
+        # 001-004 (which do not set it) compose no `<style>` element and
+        # stay byte-identical apart from the builder fix above. No rng
+        # draw is spent here: the text is static, neutral boilerplate
+        # that matches no selector anything else in this document carries,
+        # so it cannot by itself trip any existing scripted check. A
+        # recipe that plants WCAG-1.3.4 overwrites this text with its own
+        # injector; a recipe that only wants the slot to exist gets this
+        # inert default.
+        head_children.append(
+            _el(
+                "style",
+                slot="head.style",
+                children=(".visually-hidden { position: absolute; left: -9999px; }",),
+            )
+        )
+    head = _el("head", slot="head", children=tuple(head_children))
 
     nav_links = tuple(
         _el("a", slot=f"nav.link{i + 1}", attrs=(("href", href),), children=(label,))
@@ -335,7 +351,7 @@ def compose(rng, shape: Mapping[str, object]) -> Doc:
     statuscard = _el(
         "div",
         slot="s3.statuscard",
-        attrs=(("class", "status-card"),),
+        attrs=(("class", "status-card"), ("role", "status")),
         children=(_static("p", children=(_paragraph(para_rng.child("statuscard")),)),),
     )
     button1 = _el(
@@ -386,24 +402,37 @@ def compose(rng, shape: Mapping[str, object]) -> Doc:
     email_label = _el(
         "label", slot="s3.form.email.label", attrs=(("for", "email"),), children=("Email address",)
     )
-    email_input = _el("input", slot="s3.form.email", attrs=(("id", "email"), ("type", "email")))
+    email_input = _el(
+        "input",
+        slot="s3.form.email",
+        attrs=(("id", "email"), ("type", "email"), ("autocomplete", "email")),
+    )
     phone_label = _el(
         "label",
         slot="s3.form.phone.label",
         attrs=(("for", "phone"),),
         children=("Phone number (required)",),
     )
-    phone_input = _el("input", slot="s3.form.phone", attrs=(("id", "phone"), ("type", "tel")))
+    phone_input = _el(
+        "input",
+        slot="s3.form.phone",
+        attrs=(("id", "phone"), ("type", "tel"), ("autocomplete", "tel")),
+    )
     promo_label = _el(
         "label", slot="s3.form.promo.label", attrs=(("for", "promo"),), children=("Promo code",)
     )
     promo_input = _el(
         "input", slot="s3.form.promo", attrs=(("id", "promo"), ("type", "text"), ("aria-invalid", "true"))
     )
+    # This error span sits beside aria-invalid="true" with no live region,
+    # which is exactly the pattern WCAG-4.1.3's severity-2 anchor names. A
+    # clean artifact has to be clean against every judged criterion too,
+    # not only the ones a recipe plants, so the shared builder gives this
+    # span a live region unconditionally rather than per recipe.
     promo_error = _el(
         "span",
         slot="s3.form.promo.error",
-        attrs=(("class", "error-text"),),
+        attrs=(("class", "error-text"), ("aria-live", "polite")),
         children=("Enter a 6 character code using letters and numbers only.",),
     )
     submit_button = _el(
@@ -754,6 +783,88 @@ def inject_unnamed_custom_control(rng, doc, target):
     )
 
 
+# --- E67: five WCAG 2.2 AA additions. WCAG-1.3.5 is scripted in the
+# skill's checks.py; the other four are judged. -------------------------
+
+
+@injector("WCAG-1.3.5")
+def inject_missing_autocomplete(rng, doc, target):
+    """Remove the autocomplete attribute the shared builder otherwise
+    gives an email input, so its purpose is no longer programmatically
+    identified."""
+    slot = target.element
+    doc2 = doc.with_attrs(slot, {"autocomplete": None})
+    return InjectionResult(
+        composed=doc2,
+        slot=slot,
+        severity_expected=2,
+        description="An email input's autocomplete attribute is removed entirely, leaving its purpose unidentified.",
+    )
+
+
+@injector("WCAG-4.1.3")
+def inject_silent_status_update(rng, doc, target):
+    """Remove the status card's role="status" and replace its content
+    with a status update that appears with no focus change, so
+    assistive technology is never told anything changed."""
+    slot = target.element
+    doc2 = doc.with_attrs(slot, {"role": None})
+    doc2 = doc2.with_text(slot, "Your changes are saved.")
+    return InjectionResult(
+        composed=doc2,
+        slot=slot,
+        severity_expected=2,
+        description="A status card's role is removed and its text is replaced with a status update that appears with no programmatic announcement and no focus change.",
+    )
+
+
+@injector("WCAG-2.4.7")
+def inject_suppressed_focus_indicator(rng, doc, target):
+    """Suppress a standalone link's focus outline with no replacement
+    indicator (WCAG technique F78)."""
+    slot = target.element
+    doc2 = doc.with_attrs(slot, {"style": "outline:none"})
+    return InjectionResult(
+        composed=doc2,
+        slot=slot,
+        severity_expected=2,
+        description="A standalone link's focus outline is suppressed with no replacement focus indicator.",
+    )
+
+
+@injector("WCAG-2.5.8")
+def inject_undersized_target(rng, doc, target):
+    """Shrink the icon-only custom control below the minimum target
+    size, keeping its role, tabindex, and accessible name intact so
+    WCAG-4.1.2 stays clean on this same element."""
+    slot = target.element
+    doc2 = doc.with_attrs(slot, {"style": "width:16px;height:16px"})
+    return InjectionResult(
+        composed=doc2,
+        slot=slot,
+        severity_expected=2,
+        description="A custom control's declared size falls below the minimum target size, with no exception that would excuse it.",
+    )
+
+
+@injector("WCAG-1.3.4")
+def inject_orientation_lock(rng, doc, target):
+    """Replace the page's stylesheet text with an orientation media
+    query that hides the main content in portrait, restricting the page
+    to a single display orientation."""
+    slot = target.element
+    doc2 = doc.with_text(
+        slot,
+        "@media (orientation: portrait) { #main-content { display: none; } }",
+    )
+    return InjectionResult(
+        composed=doc2,
+        slot=slot,
+        severity_expected=3,
+        description="The page's stylesheet hides the main content in portrait orientation, restricting operation to one display orientation.",
+    )
+
+
 # ---------------------------------------------------------------------------
 # 5. Addressing. Called by the harness after every injection, on the
 #    final composition. Every slotted element already carries a
@@ -786,6 +897,7 @@ _NOUN_BY_TAG = {
     "span": "element",
     "p": "paragraph",
     "form": "form",
+    "style": "stylesheet",
 }
 
 
@@ -797,15 +909,17 @@ def address(doc: Doc, slot: str, sentence=None) -> Location:
 
 
 # ---------------------------------------------------------------------------
-# 6. Recipes. Four artifacts, one of them clean, matching bench/README.md's
-#    corpus design table (accessibility: 4 artifacts, 1 clean). Every
-#    scripted-lane criterion in checks.py's IMPLEMENTED_CRITERIA (13) plus
-#    four judged-lane criteria (>=3 required by S-05) get exactly one
-#    planted instance each, spread across the three seeded recipes so
-#    every recipe stays readable.
+# 6. Recipes. Five artifacts, one of them clean, matching bench/README.md's
+#    corpus design table (accessibility: 5 artifacts, 1 clean). Every
+#    scripted-lane criterion in checks.py's IMPLEMENTED_CRITERIA (14, since
+#    E67 added WCAG-1.3.5 as scripted) plus eight judged-lane criteria
+#    (>=3 required by S-05; E67 added four more) get exactly one planted
+#    instance each, spread across the four seeded recipes so every recipe
+#    stays readable.
 # ---------------------------------------------------------------------------
 
 _SHAPE = {"paragraphs": (2, 1, 2)}
+_SHAPE_WITH_STYLE = {**_SHAPE, "stylesheet": True}
 
 RECIPES = (
     Recipe(
@@ -844,6 +958,17 @@ RECIPES = (
         ),
     ),
     Recipe(id="accessibility-004", shape=_SHAPE, plants=()),
+    Recipe(
+        id="accessibility-005",
+        shape=_SHAPE_WITH_STYLE,
+        plants=(
+            Plant("WCAG-2.4.7", Target(section=0, element="nav.link1"), severity_expected=2),
+            Plant("WCAG-1.3.4", Target(section=0, element="head.style"), severity_expected=3),
+            Plant("WCAG-1.3.5", Target(section=3, element="s3.form.email"), severity_expected=2),
+            Plant("WCAG-2.5.8", Target(section=3, element="s3.customcontrol"), severity_expected=2),
+            Plant("WCAG-4.1.3", Target(section=3, element="s3.statuscard"), severity_expected=2),
+        ),
+    ),
 )
 
 DOMAIN = Domain(

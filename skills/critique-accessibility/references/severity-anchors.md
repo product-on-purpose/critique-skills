@@ -24,7 +24,7 @@ user's ability to complete the task at all, or forces them to guess with no way 
 reaches severity 3: body text below the contrast minimum across a page whose whole purpose is reading,
 a form section with no labels on any of its fields, a modal that traps focus with no way out. Severity
 4 is reserved for defects that make the artifact fully non-functional for a whole class of user, such
-as a page with no way to reach its content at all without a mouse; none of this skill's 22 criteria are
+as a page with no way to reach its content at all without a mouse; none of this skill's 27 criteria are
 anchored at severity 4 by default; a 4 is a finding-level judgment about a specific artifact, not a
 property of a criterion.
 
@@ -60,7 +60,7 @@ re-deriving a severity by hand, grades the same defect the same way the script d
 mechanical reading of that criterion's own two anchor rows, not an independent policy.
 
 - **Recurrence, for the criteria whose two anchors differ in how many places the defect appears**
-  (WCAG-1.1.1, the heading-skip half of WCAG-1.3.1, WCAG-1.4.12, WCAG-2.4.4, WCAG-2.5.3,
+  (WCAG-1.1.1, the heading-skip half of WCAG-1.3.1, WCAG-1.3.5, WCAG-1.4.12, WCAG-2.4.4, WCAG-2.5.3,
   WCAG-3.3.2): one instance in the artifact is severity 2, two or more is severity 3, and every
   instance in a run carries the escalated value rather than only the second one onward. The reader
   never gets relief from a defect that recurs, which is the calibration in "Frequency and persistence"
@@ -86,7 +86,10 @@ mechanical reading of that criterion's own two anchor rows, not an independent p
   once, so there is no lesser branch to grade.
 
 A judged-lane finding has no equivalent table, by construction: its severity comes from the weighing
-order applied to that criterion's own two anchor rows. What the list above prevents is the opposite
+order applied to that criterion's own two anchor rows. WCAG-1.3.4 is the one named exception: its
+severity 2 anchor in `references/WCAG.md` reads "Not assigned" rather than an example, so that
+criterion carries only one anchor row, and every instance of its failure is graded severity 3
+directly, with no lesser branch to weigh against. What the list above prevents is the opposite
 failure, a scripted finding and a judged finding on comparable defects landing at different levels
 because only one of them had a stated boundary.
 

@@ -49,7 +49,7 @@ The namespace each skill draws its criterion IDs from, per [S-05 (skills slate)]
 | Skill | Status | Namespace(s) | Rubric source |
 |---|---|---|---|
 | critique-clarity | core | `PLAIN`, `WILLIAMS` | US Federal Plain Language Guidelines (open standard); Williams, *Style: Lessons in Clarity and Grace* (paraphrased) |
-| critique-accessibility | core | `WCAG` | WCAG 2.2, 22 of its 55 Level A and AA success criteria (open standard, upstream IDs) |
+| critique-accessibility | core | `WCAG` | WCAG 2.2, 27 of its 55 Level A and AA success criteria (open standard, upstream IDs) |
 | critique-usability | core | `NNG` | Nielsen's 10 usability heuristics (paraphrased) |
 | critique-docs | stretch | `DIATAXIS` | Diataxis (open standard) |
 | critique-microcopy | stretch | `NNG` | NN/g error-message guidelines (paraphrased) |

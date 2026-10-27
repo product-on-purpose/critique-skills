@@ -7,7 +7,7 @@
       "skill_version": "0.1.1",
       "contract_version": "1.0.0",
       "artifact": "skills/critique-accessibility/examples/artifacts/golden-03.html",
-      "artifact_sha256": "b8dad615b091dfaf4aa5ff65ae5388e3733383d5d5d38fe4e6906ccbba6d64f6",
+      "artifact_sha256": "2e042aeabf91f270b309b5e7ae7f6fed3ecb2a5efafe3ab782ad7ab50db64d26",
       "model": "none",
       "timestamp": "2026-07-31T18:05:06Z",
       "rubrics": ["WCAG"]
@@ -20,5 +20,5 @@
       "severity_3_threshold": 0
     }
   },
-  "note": "golden-03.html is this skill's clean control, deliberately built to graze every scripted check without tripping it: a specific, non-placeholder title; a well-formed lang=\"en\"; a viewport meta with no user-scalable or maximum-scale restriction; a main landmark plus a leading skip link; a photo with a real descriptive alt attribute; a two-column table using scoped th cells; a heading sequence that steps down one level at a time; link text that names its destination rather than a generic phrase; a form input matched to its label by id; and a submit button whose border resolves to roughly 10:1 contrast against white, with no aria-label to conflict with its visible text. The scripted lane correctly returns zero findings and a passing gate, which is what demonstrates it does not hallucinate defects on an artifact that plants none."
+  "note": "golden-03.html is this skill's clean control, deliberately built to graze every scripted check without tripping it: a specific, non-placeholder title; a well-formed lang=\"en\"; a viewport meta with no user-scalable or maximum-scale restriction; a main landmark plus a leading skip link; a photo with a real descriptive alt attribute; a two-column table using scoped th cells; a heading sequence that steps down one level at a time; link text that names its destination rather than a generic phrase; a form input matched to its label by id; and a submit button whose border resolves to roughly 10:1 contrast against white, with no aria-label to conflict with its visible text. The ZIP field also carries autocomplete=\"postal-code\" explicitly: cue-word matching now puts a bare id=\"zip\" in scope for WCAG-1.3.5 (its cue word maps to postal-code) where the exact-token path alone used to miss it, so staying clean here means carrying a valid token rather than relying on a scope gap that no longer exists. The scripted lane correctly returns zero findings and a passing gate, which is what demonstrates it does not hallucinate defects on an artifact that plants none."
 }

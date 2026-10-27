@@ -221,6 +221,11 @@ At k=5 on two pinned tiers, that is 270 skill envelopes. The `critique-forms` di
 `37091134037` also re-ran the baseline inside its own run set; its directory holds a `baseline/`
 folder beside `critique-forms/`. Doing the same here adds 270 baseline envelopes.
 
+[E67 (accessibility expansion)](../E67_accessibility-expansion/spec.md), built after this spec, adds
+an eighth artifact, `accessibility-005`, raising this corpus to 28 artifacts and this math to 280
+skill envelopes and 280 baseline envelopes, 560 in total; see that spec's "Measurement and
+sequencing with E73."
+
 **The sequencing.** E67 (accessibility expansion) also needs a paid re-measure of
 `critique-accessibility` on both tiers. If E73 lands before E67's build and both are in one release,
 one dispatch measures both changes. In the other order, the first paid run measures a merge step
@@ -451,7 +456,9 @@ re-measure rule then applies to whichever skills move.
 
 **Context.** `ROADMAP.md` line 40 requires a re-measure through the current harness when a release
 changes a skill. One dispatch for all seven skills is 270 skill envelopes, or 540 with a re-run
-baseline. A replay over committed envelopes calls no model, and it would size the change before the
+baseline. (This corpus count predates [E67 (accessibility expansion)](../E67_accessibility-expansion/spec.md);
+see "Measurement and sequencing with E67" above for the post-E67 figures of 28 artifacts and 560
+envelopes.) A replay over committed envelopes calls no model, and it would size the change before the
 money is spent. It cannot restore suppressed findings, and it cannot predict how a model responds to
 the new pass-4 text.
 

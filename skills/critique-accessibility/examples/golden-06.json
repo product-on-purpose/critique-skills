@@ -1,0 +1,80 @@
+{
+  "kind": "golden",
+  "artifact": "skills/critique-accessibility/examples/artifacts/golden-06.html",
+  "expected_envelope": {
+    "run": {
+      "skill": "critique-accessibility",
+      "skill_version": "0.1.1",
+      "contract_version": "1.0.0",
+      "artifact": "skills/critique-accessibility/examples/artifacts/golden-06.html",
+      "artifact_sha256": "85caec1b97a83b4c223e3e343b1e78ffb7739dc3d7a7a003bb1e37c0389aa478",
+      "model": "illustrative",
+      "timestamp": "2026-10-27T12:00:00Z",
+      "rubrics": ["WCAG"]
+    },
+    "findings": [
+      {
+        "id": "F-001",
+        "criterion": "WCAG-1.3.4",
+        "lane": "judged",
+        "severity": 3,
+        "location": "#secondary-widget, the usage-chart widget, line 25",
+        "evidence": "<div id=\"secondary-widget\">, hidden by @media (orientation: portrait) { #secondary-widget { display: none; } } with no stated reason",
+        "violation": "This secondary usage-chart widget is hidden outright in portrait orientation by a declared media query, with nothing in the page stating a reason a single orientation is essential, so a reader whose device is in portrait cannot reach it at all.",
+        "fix": "Remove the orientation-only display:none rule, or restyle the widget to fit portrait instead of hiding it, unless a stated reason makes landscape essential.",
+        "confidence": "medium"
+      },
+      {
+        "id": "F-002",
+        "criterion": "WCAG-1.3.5",
+        "lane": "scripted",
+        "severity": 2,
+        "location": "#email, <input> field, input purpose email, line 32",
+        "evidence": "<input id=\"email\" type=\"email\">",
+        "violation": "This field's type, name, or id identifies the email input purpose, but it carries no autocomplete token, so the purpose is not programmatically determinable.",
+        "fix": "Set the field's autocomplete attribute to email, or the matching standard token for this input purpose.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-003",
+        "criterion": "WCAG-2.4.7",
+        "lane": "judged",
+        "severity": 2,
+        "location": "#footer-link, the accessibility-statement link, line 41",
+        "evidence": "<a id=\"footer-link\" href=\"/accessibility\">, styled by #footer-link:focus { outline: none; } with no replacement focus style anywhere in the page",
+        "violation": "This link's focus outline is removed by a declared :focus rule with nothing put in its place, so a keyboard user tabbing to it cannot see that it is focused.",
+        "fix": "Remove the outline:none rule, or add a visible replacement focus style, such as a changed border or background, to the same rule.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-004",
+        "criterion": "WCAG-2.5.8",
+        "lane": "judged",
+        "severity": 2,
+        "location": "#icon-btn, the refresh button, line 34",
+        "evidence": "<button id=\"icon-btn\" type=\"button\">Refresh</button>, styled by #icon-btn { width: 18px; height: 18px; padding: 0; margin: 0; }, sitting flush against <button id=\"undo-btn\" type=\"button\">Undo</button> inside #icon-group { display: flex; gap: 0; } with no gap between them",
+        "violation": "This button renders at 18 by 18 CSS pixels, under the 24 by 24 conformance floor, and sits immediately adjacent to another control with no gap between them, so the standard's spacing exception does not excuse it either; no equivalent full-size control performs the same function elsewhere on the page, and no stated essential reason excuses the size.",
+        "fix": "Enlarge the button to at least 24 by 24 CSS pixels, including any padding, or add enough spacing from neighbouring controls if the size itself cannot change.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-005",
+        "criterion": "WCAG-4.1.3",
+        "lane": "judged",
+        "severity": 2,
+        "location": "#save-status, the save-confirmation text, line 36",
+        "evidence": "<p id=\"save-status\">Changes saved</p>, no role, aria-live, or other live-region attribute anywhere on the element",
+        "violation": "This save-confirmation text appears without moving keyboard focus and carries no role or aria-live attribute, so a screen-reader user is never told the save happened unless they revisit the element.",
+        "fix": "Add role=\"status\" or aria-live=\"polite\" to this element so assistive technology announces it without the user navigating to it.",
+        "confidence": "medium"
+      }
+    ],
+    "summary": {
+      "by_severity": {"0": 0, "1": 0, "2": 4, "3": 1, "4": 0},
+      "suppressed_count": 0,
+      "gate": "fail",
+      "severity_3_threshold": 0
+    }
+  },
+  "note": "golden-06.html is E67's (accessibility expansion) dedicated fixture: one instance of each of the five criteria the expansion added, nothing else. WCAG-1.3.5 is the only scripted finding, so it is identical to what scripts/checks.py actually emits: the email field's id and type both name the email input purpose, and it carries no autocomplete attribute, a single in-scope field, so it lands at severity 2 under the recurrence anchor. The other four are judged. WCAG-1.3.4 fires at severity 3 whenever it fires at all, per its own anchor row in references/WCAG.md (its severity-2 anchor reads 'Not assigned', the one exception references/severity-anchors.md now names): the usage-chart widget is hidden outright by a portrait-only media query with no stated essential reason, so a reader stuck in portrait cannot reach it, full stop, with no lesser branch to grade; its confidence is medium rather than high, because a hidden-by-media-query reading of static markup is an inference about what a reader actually experiences, not a measured fact. WCAG-2.4.7 fires because the accessibility-statement link's #footer-link:focus rule removes its outline with nothing put in its place; the checks.py CSS engine matches no pseudo-class selector, so this is a reading of the stylesheet text, not something the scripted lane could have caught. WCAG-2.5.8 fires because the refresh button's declared width and height are both 18 CSS pixels, under the 24 by 24 conformance floor, and the button sits immediately adjacent to a second, full-size button with no gap between them: WCAG's own spacing exception excuses an undersized target only when its 24 CSS pixel circle meets no other target's, so an isolated small button would have been excused, which is why this fixture makes the button abut a neighbour instead of standing alone. No equivalent full-size control performs the refresh function elsewhere on the page, and no stated essential reason excuses the size. WCAG-4.1.3 fires because the save-confirmation paragraph appears with no live-region mechanism, so a screen-reader user who just saved is not told; its confidence is medium for the same reason as WCAG-1.3.4, an inference from static markup rather than a measured fact. The page is otherwise clean against every one of the other thirteen scripted checks: a real title, a well-formed lang, a main landmark, a correctly labeled email field, no low-contrast text or borders, no fixed width or clipped height, and no generic link text, which is why only these five findings appear. The lone severity-3 finding fails the gate against the default zero threshold."
+}

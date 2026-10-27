@@ -1544,8 +1544,9 @@ and the repository did not have.
   carry receipts. It also sets a deliberate overlap with N2: both skills will test `autocomplete`
   (accessibility for conformance, forms for autofill and conversion) and touch-target size (24px
   conformance minimum against forms' larger mobile-usability sizes). The library already carries
-  one such overlap, unrecorded (`WCAG-3.3.2` and `NNG-H6-LABELED` both test label presence); these
-  are recorded.
+  one such overlap, unrecorded (`WCAG-3.3.2` and `NNG-H6-LABELED` both test label presence). The
+  two this item adds are recorded in both skills' reference files: `WCAG-1.3.5` beside
+  `FORMS-AUTOCOMPLETE`, and `WCAG-2.5.8` beside `FORMS-TOUCH-TARGET`.
 - **Evidence:** the lane manifest in `skills/critique-accessibility/SKILL.md` (13 scripted, 9
   judged); its scope paragraph and `references/WCAG.md`, "Scope"; the WCAG 2.2 Recommendation
   at `https://www.w3.org/TR/WCAG22/`, read 2026-09-25.
@@ -1555,7 +1556,8 @@ and the repository did not have.
 - **Blocks:** Nothing now. It blocked E68 until the maintainer ruled on 2026-10-15 that E68
   lands first.
 - **Depends on:** Nothing
-- **Rank at intake:** unranked (added 2026-09-25). **Status:** ruled 2026-09-25; needs a spec.
+- **Rank at intake:** unranked (added 2026-09-25). **Status:** built 2026-10-27; the version move
+  and the paid re-measure wait for the maintainer's go.
 - **Ruled 2026-10-15 by the maintainer:** moves to v0.3.0 at the v0.2.0 cut. The v0.2.0 exit gate,
   re-cut on 2026-09-14, never named this item, and the release does not wait on it. E68 (narrow the
   accessibility scope claim) closed the same day without it, and `references/WCAG.md` lists this
@@ -1563,6 +1565,19 @@ and the repository did not have.
 - **Ruled 2026-10-16 by the maintainer: named in `ROADMAP.md` under "Next: v0.3.0"**, as the
   bullet "Accessibility expansion". Until then the backlog tagged it v0.3.0 while the roadmap did
   not mention it. The paid re-measure still needs its own approval before it runs.
+- **Built 2026-10-27.** The maintainer ruled the spec's nine decisions on 2026-10-27. WCAG-1.3.5 is
+  scripted in `checks.py`; WCAG-2.5.8, WCAG-1.3.4, WCAG-2.4.7 and WCAG-4.1.3 are judged. The
+  measurement-design question above resolved the other way: the four existing artifacts did
+  change, because each carried two real WCAG-1.3.5 failures, email and phone fields with no
+  `autocomplete` token, from one shared builder. An adversarial review found a third base defect of
+  the same WCAG-4.1.3 shape, the builder's promo-code error span carrying no live region. The
+  builder now sets both `autocomplete` tokens, gives the status card `role="status"`, and gives
+  the promo-code error span `aria-live="polite"`, four attributes in total; a new
+  `accessibility-005` carries the five plants, and a frozen copy of the old four under
+  `bench/corpus/_frozen/v1/` keeps the committed run sets scorable. See
+  [E67's spec](../release-plans/_unassigned/E67_accessibility-expansion/spec.md). **Still open:**
+  the version move to 0.2.0 and the paid re-measure, which happen together with E73's and need the
+  maintainer's own separate go.
 
 ## E68 - Narrow critique-accessibility's scope claim to the criteria it actually checks
 

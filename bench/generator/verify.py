@@ -45,15 +45,27 @@ class VerifyResult:
         return "\n".join(lines)
 
 
-def _corpus_files(corpus_dir: Path) -> dict[str, Path]:
+def _corpus_files(corpus_dir: Path, *, exclude_frozen: bool = False) -> dict[str, Path]:
     """Every regular file under corpus_dir, keyed by its path relative to
-    corpus_dir, POSIX-separated so the comparison is stable across OSes."""
+    corpus_dir, POSIX-separated so the comparison is stable across OSes.
+
+    `exclude_frozen` leaves out anything under a top-level `_frozen/`
+    directory. Frozen copies (`bench/corpus/_frozen/README.md`) are
+    deliberately never regenerated, so they would otherwise report as
+    "missing" on every run: present in the committed corpus, absent from
+    the scratch directory this module builds fresh each time. Used only
+    for the committed side of the comparison; a scratch build never has
+    a `_frozen/` directory to begin with."""
     files: dict[str, Path] = {}
     if not corpus_dir.exists():
         return files
     for path in corpus_dir.rglob("*"):
-        if path.is_file():
-            files[path.relative_to(corpus_dir).as_posix()] = path
+        if not path.is_file():
+            continue
+        rel = path.relative_to(corpus_dir).as_posix()
+        if exclude_frozen and (rel == "_frozen" or rel.startswith("_frozen/")):
+            continue
+        files[rel] = path
     return files
 
 
@@ -76,7 +88,7 @@ def verify_corpus(
         scratch_root = Path(tmp)
         build(scratch_root, domains)
         regenerated_files = _corpus_files(scratch_root)
-        committed_files = _corpus_files(corpus_dir)
+        committed_files = _corpus_files(corpus_dir, exclude_frozen=True)
 
         result = VerifyResult()
         for rel in sorted(set(regenerated_files) | set(committed_files)):
