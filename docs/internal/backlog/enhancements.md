@@ -293,7 +293,7 @@ and the repository did not have.
 - **Size:** M. **Release:** v0.3.0 (was v0.2.0). **Category:** decision. **Confidence:** speculative.
 - **Blocks:** E45; the honesty of Option B
 - **Depends on:** Nothing; it is itself a prerequisite decision
-- **Rank at intake:** 10 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Rank at intake:** 10 of 64. **Status:** ruled 2026-10-24 (recorded 2026-09-11); see ADR 0039 (BYOR measured by parity).
 - **Ruled 2026-10-15 by the maintainer:** moves to v0.3.0 at the v0.2.0 cut. The v0.2.0 exit gate,
   re-cut on 2026-09-14, never named this item, and the release does not wait on it.
 - **Ruled 2026-10-23 and 2026-10-24 by the maintainer: BYOR is measured by parity.** The flagship's
@@ -1164,7 +1164,8 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.3.0. **Category:** decision. **Confidence:** speculative.
 - **Blocks:** N4
 - **Depends on:** Nothing
-- **Rank at intake:** 55 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Rank at intake:** 55 of 64. **Status:** ruled 2026-10-25 (recorded 2026-09-11); see ADR 0040 (the revision loop pauses with a
+  revision brief).
 - **Ruled 2026-10-25 by the maintainer: the chain pauses at revise and hands over a revision brief.**
   A person, or a tool the person runs, writes the next version, and the library never writes the
   artifact. The auto-fix exclusion and methodology section 10 stand unchanged. The iteration count
@@ -1734,7 +1735,8 @@ and the repository did not have.
   reproduced.
 - **Blocks:** Nothing directly. Every future paid run inherits the defect until it lands.
 - **Depends on:** Nothing. It changes every skill's protocol, so it wants a spec before a build.
-- **Rank at intake:** unranked (added 2026-10-05). **Status:** backlog.
+- **Rank at intake:** unranked (added 2026-10-05). **Status:** built 2026-10-26; the version moves
+  and the paid re-measure wait for the maintainer's go.
 - **Ruled 2026-10-15 by the maintainer: leads the next cycle, v0.3.0, instead of v0.2.0.** It changes
   every skill's protocol, which probably means version bumps and paid re-measurement. The v0.2.0
   exit gate is met without it, and

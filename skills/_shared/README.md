@@ -31,8 +31,11 @@ skill.
   was a Python function, so it did pass 4 in its head from instructions. It did not do it reliably:
   measured 2026-08-09, 2 of 7 benchmark cells produced a contract-valid envelope, failing on a
   histogram that did not total `len(findings)` plus `suppressed_count` and on a `scripted` finding
-  claiming less than `high` confidence. Findings in on stdin, one validated envelope out, and
-  nothing at all on stdout if it would not validate.
+  claiming less than `high` confidence. Since E73 (merge runs the scripted lane itself), it takes only
+  the judged lane's findings, from `--findings <file>` or stdin. It runs the skill's own
+  `scripts/checks.py` for the scripted lane, and files each finding by the lane `SKILL.md` declares
+  for its criterion. One validated envelope comes out, and nothing at all on stdout if it would not
+  validate.
 - `tests/` - pytest suite for this library, including the determinism comparison
   (`test_runner.py::test_same_artifact_twice_produces_identical_findings_and_summary`) that the
   template's "What determinism does and does not cover" section points at.
