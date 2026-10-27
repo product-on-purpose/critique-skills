@@ -26,7 +26,7 @@ much of the truth that process actually recovers.
 flowchart TD
   subgraph authored["Authored, stable"]
     rubric["Published rubric<br/>WCAG 2.2, Nielsen, Diataxis,<br/>Toulmin, Plain Language"]:::src
-    skill["skills/critique-*<br/>120 criteria, each with a permanent ID"]:::comp
+    skill["skills/critique-*<br/>125 criteria, each with a permanent ID"]:::comp
   end
   subgraph runtime["Runtime"]
     critic["agents/critique-critic<br/>clean-context runner"]:::comp

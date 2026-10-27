@@ -2,8 +2,8 @@
 Level A and AA, with nothing counted twice and nothing missing.
 
 what-it-is:   the coverage guard for critique-accessibility's scope statement
-what-it-does: reads the 22 registered criteria from SKILL.md's checks.scripted and checks.judged,
-              and the unchecked criteria from references/WCAG.md's "The 33 criteria this skill
+what-it-does: reads the 27 registered criteria from SKILL.md's checks.scripted and checks.judged,
+              and the unchecked criteria from references/WCAG.md's "The 28 criteria this skill
               does not check" table, and asserts the two sets are disjoint and together equal the
               55 Level A and AA success criteria of the WCAG 2.2 Recommendation
 why:          until 2026-10-15 the scope statement claimed A and AA coverage while 29 criteria
@@ -21,7 +21,7 @@ from pathlib import Path
 SKILL_DIR = Path(__file__).resolve().parents[2]
 SKILL_MD = SKILL_DIR / "SKILL.md"
 WCAG_MD = SKILL_DIR / "references" / "WCAG.md"
-UNCHECKED_HEADING = "### The 33 criteria this skill does not check"
+UNCHECKED_HEADING = "### The 28 criteria this skill does not check"
 
 # Every Level A and AA success criterion in the WCAG 2.2 W3C Recommendation,
 # https://www.w3.org/TR/WCAG22/, checked against its text on 2026-10-15: 31 at A and 24 at AA.
@@ -63,9 +63,9 @@ def test_the_reference_set_is_the_whole_of_wcag22_a_and_aa() -> None:
     assert not WCAG22_LEVEL_A & WCAG22_LEVEL_AA
 
 
-def test_the_registry_is_22_criteria_all_inside_a_and_aa() -> None:
+def test_the_registry_is_27_criteria_all_inside_a_and_aa() -> None:
     registry = _registry()
-    assert len(registry) == 22
+    assert len(registry) == 27
     assert registry <= WCAG22_LEVEL_A | WCAG22_LEVEL_AA
 
 

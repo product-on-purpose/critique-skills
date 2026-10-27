@@ -23,8 +23,10 @@ from bench.generator.rng import CORPUS_SEED, root_seed
 
 # Matches library.json's version for this release. Recorded in
 # corpus.lock.json so a reader can tell which generator produced a corpus
-# without recomputing every hash first.
-GENERATOR_VERSION = "0.1.0"
+# without recomputing every hash first. Bumped to 0.2.0 by E67
+# (2026-10-27): the accessibility domain's shared builder changed and a
+# fifth accessibility recipe was added, so existing recipe output changed.
+GENERATOR_VERSION = "0.2.0"
 
 CORPUS_LOCK_FILENAME = "corpus.lock.json"
 

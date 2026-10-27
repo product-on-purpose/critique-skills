@@ -1,4 +1,4 @@
-"""Tests for this skill's scripts/checks.py scripted lane: the 13
+"""Tests for this skill's scripts/checks.py scripted lane: the 14
 WCAG 2.2 AA criteria in SKILL.md's checks.scripted.
 
 what-it-is:   the unit suite for critique-accessibility's scripted lane
@@ -103,7 +103,7 @@ CLEAN_PAGE = """<!DOCTYPE html>
 <h2>Contact</h2>
 <form>
 <label for="email">Email address</label>
-<input id="email" type="text">
+<input id="email" type="text" autocomplete="email">
 </form>
 </main>
 </body>
@@ -254,6 +254,119 @@ def test_data_table_with_th_is_not_flagged():
 def test_single_row_table_is_not_flagged():
     html = "<table><tr><td>Only</td><td>Row</td></tr></table>"
     findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.1")
+    assert findings == []
+
+
+# ---------------------------------------------------------------------------
+# WCAG-1.3.5: identify input purpose
+# ---------------------------------------------------------------------------
+
+
+def test_in_scope_field_with_no_autocomplete_is_flagged_missing():
+    html = '<form><input id="email" type="email"></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert len(findings) == 1
+    assert findings[0].severity == 2
+    assert "carries no autocomplete attribute" in findings[0].violation
+
+
+def test_in_scope_field_with_invalid_autocomplete_is_flagged():
+    html = '<form><input type="tel" autocomplete="mobile-number"></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert len(findings) == 1
+    assert "not a valid autofill detail" in findings[0].violation
+
+
+def test_in_scope_field_with_a_valid_token_is_not_flagged():
+    html = '<form><input id="email" type="email" autocomplete="email"></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert findings == []
+
+
+def test_field_outside_the_closed_vocabulary_is_not_flagged():
+    """id="zip" is a common real-world spelling, but the closed list names
+    only the literal token postal-code, so this field is silently out of
+    reach (references/WCAG.md, "no broader synonym table"), exactly as
+    examples/artifacts/golden-03.html relies on to stay clean."""
+    html = '<form><input id="zip" type="text"></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert findings == []
+
+
+def test_autocomplete_off_on_an_in_scope_field_is_flagged():
+    html = '<form><input id="email" type="email" autocomplete="off"></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert len(findings) == 1
+    assert "autocomplete is switched off" in findings[0].violation
+
+
+def test_form_level_autocomplete_off_propagates_to_a_tokenless_field():
+    html = '<form autocomplete="off"><input id="email" type="email"></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert len(findings) == 1
+    assert "autocomplete is switched off" in findings[0].violation
+
+
+def test_field_level_autocomplete_wins_over_a_form_level_off():
+    html = '<form autocomplete="off"><input id="email" type="email" autocomplete="email"></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert findings == []
+
+
+def test_id_matching_is_case_and_separator_insensitive():
+    """givenName, given_name and given-name all normalize to the same
+    token (references/WCAG.md's Operational test), so an id spelled in
+    camelCase still lands in scope."""
+    html = '<form><input id="givenName" type="text"></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert len(findings) == 1
+    assert "given-name" in findings[0].violation
+
+
+def test_name_attribute_alone_can_put_a_field_in_scope():
+    html = '<form><input name="postal-code" type="text"></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert len(findings) == 1
+    assert "postal-code" in findings[0].violation
+
+
+def test_a_select_element_can_be_in_scope():
+    html = '<form><select id="country"><option>UK</option><option>US</option></select></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert len(findings) == 1
+
+
+def test_one_time_code_is_outside_wcags_input_purpose_list():
+    """one-time-code is a valid HTML autofill field name but is not one of
+    WCAG 2.2 section 7's input purposes, so a field naming it is never in
+    scope for this criterion (references/WCAG.md, the scope-vs-grammar
+    distinction)."""
+    html = '<form><input id="one-time-code" type="text"></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert findings == []
+
+
+def test_two_or_more_flagged_fields_escalate_to_severity_3():
+    html = (
+        '<form>'
+        '<input id="email" type="email">'
+        '<input id="given-name" type="text">'
+        '</form>'
+    )
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert len(findings) == 2
+    assert all(f.severity == 3 for f in findings)
+
+
+def test_disabled_in_scope_field_is_not_flagged():
+    html = '<form><input id="email" type="email" disabled></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert findings == []
+
+
+def test_hidden_in_scope_field_is_not_flagged():
+    html = '<form><input id="email" type="email" hidden></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
     assert findings == []
 
 

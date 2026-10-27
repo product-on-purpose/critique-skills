@@ -559,19 +559,21 @@ test("criterionPattern comes from the frozen contract schema, not a copy of it",
 
 // --- the real skills --------------------------------------------------------
 
-test("the shipped skills carry exactly 60 scripted and 60 judged criteria", () => {
+test("the shipped skills carry exactly 61 scripted and 64 judged criteria", () => {
   // Hard-coded on purpose. In this repository a criterion is added, removed, or moved between
   // lanes only by a deliberate, versioned change to a skill, so this test breaking is the
   // correct alarm and not friction: it means the site's headline figure moved and the README's
-  // hand-typed sentence ("60 run as deterministic scripts and 60 require judgment") is stale.
+  // hand-typed sentence ("61 run as deterministic scripts and 64 require judgment") is stale.
   // Moved from 42, 54 and 96 when critique-forms went active (ADR 0037), adding 18 and 6.
+  // Moved from 60, 60 and 120 when critique-accessibility added five criteria (E67), adding 1
+  // scripted (WCAG-1.3.5) and 4 judged.
   const skills = loadSkills();
   assert.equal(skills.length, 7);
   const scripted = skills.reduce((n, s) => n + s.scripted.length, 0);
   const judged = skills.reduce((n, s) => n + s.judged.length, 0);
-  assert.equal(scripted, 60, "scripted lane");
-  assert.equal(judged, 60, "judged lane");
-  assert.equal(scripted + judged, 120, "total criteria");
+  assert.equal(scripted, 61, "scripted lane");
+  assert.equal(judged, 64, "judged lane");
+  assert.equal(scripted + judged, 125, "total criteria");
 });
 
 test("every shipped criterion ID is unique and matches the contract grammar", () => {
@@ -584,7 +586,7 @@ test("every shipped criterion ID is unique and matches the contract grammar", ()
       seen.add(id);
     }
   }
-  assert.equal(seen.size, 120);
+  assert.equal(seen.size, 125);
 });
 
 test("every skill version agrees with library.json", () => {

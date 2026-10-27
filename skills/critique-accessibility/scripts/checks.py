@@ -1,4 +1,4 @@
-"""critique-accessibility scripted lane: the 13 WCAG 2.2 AA criteria in
+"""critique-accessibility scripted lane: the 14 WCAG 2.2 AA criteria in
 SKILL.md's checks.scripted, against `references/WCAG.md`'s own
 Operational test column for each. See docs/internal/skill-template.md,
 "Wiring scripts/checks.py", for the pattern this file follows.
@@ -110,6 +110,7 @@ from skills._shared.findings import RawFinding
 IMPLEMENTED_CRITERIA = frozenset({
     "WCAG-1.1.1",
     "WCAG-1.3.1",
+    "WCAG-1.3.5",
     "WCAG-1.4.3",
     "WCAG-1.4.4",
     "WCAG-1.4.10",
@@ -1486,6 +1487,187 @@ def _check_form_labels(tree):
 
 
 # ---------------------------------------------------------------------------
+# WCAG-1.3.5: identify input purpose
+#
+# Scoped and matched exactly as references/WCAG.md's row states, and
+# deliberately narrower than references/FORMS.md's purpose inference
+# (skills/critique-forms/scripts/checks.py, `_purpose`): only a field's own
+# `type`, `name`, or `id` attribute decides whether it is in scope, after
+# folding case and separator differences to one hyphenated form; label and
+# placeholder text are never read. Two vocabularies, not one:
+#
+#   - WCAG_INPUT_PURPOSE_TOKENS is WCAG 2.2 section 7's own closed list of
+#     input purposes (53 tokens, confirmed against the W3C Recommendation
+#     text on 2026-10-27), and decides SCOPE: which fields this criterion
+#     reaches at all.
+#   - AUTOFILL_FIELD_NAMES / AUTOFILL_CONTACT_FIELD_NAMES / _parse_autofill
+#     are the HTML standard's full autofill grammar (whatwg-html-autofill,
+#     4.10.18.7), mirrored verbatim from
+#     skills/critique-forms/scripts/checks.py so this file stays
+#     self-contained, and decide VALIDITY: whether a present autocomplete
+#     value actually parses. The HTML grammar is a superset of WCAG's input
+#     purposes list: it also allows `one-time-code`, the `section-*` and
+#     shipping/billing prefixes, a contact-type modifier, and a trailing
+#     `webauthn`, none of which WCAG 2.2 section 7 names as an input
+#     purpose (a one-time code is a transient security value, not personal
+#     data the standard asks a page to identify). A present token is
+#     therefore judged against the wider grammar, never against the
+#     narrower scope list.
+# ---------------------------------------------------------------------------
+
+AUTOFILL_FIELD_NAMES = frozenset({
+    "name", "honorific-prefix", "given-name", "additional-name", "family-name",
+    "honorific-suffix", "nickname", "organization-title", "username", "new-password",
+    "current-password", "one-time-code", "organization", "street-address",
+    "address-line1", "address-line2", "address-line3", "address-level4",
+    "address-level3", "address-level2", "address-level1", "country", "country-name",
+    "postal-code", "cc-name", "cc-given-name", "cc-additional-name", "cc-family-name",
+    "cc-number", "cc-exp", "cc-exp-month", "cc-exp-year", "cc-csc", "cc-type",
+    "transaction-currency", "transaction-amount", "language", "bday", "bday-day",
+    "bday-month", "bday-year", "sex", "url", "photo",
+})
+AUTOFILL_CONTACT_FIELD_NAMES = frozenset({
+    "tel", "tel-country-code", "tel-national", "tel-area-code", "tel-local",
+    "tel-local-prefix", "tel-local-suffix", "tel-extension", "email", "impp",
+})
+AUTOFILL_CONTACT_TYPES = frozenset({"home", "work", "mobile", "fax", "pager"})
+
+# WCAG 2.2 section 7's closed list of input purposes: the autofill grammar
+# above, minus `one-time-code`, the one field name the HTML standard adds
+# that section 7 does not list. Fixed and closed, per the module comment
+# above; a field whose type, name, and id all miss this list is never
+# flagged, no matter how it reads to a person.
+WCAG_INPUT_PURPOSE_TOKENS = (AUTOFILL_FIELD_NAMES | AUTOFILL_CONTACT_FIELD_NAMES) - {"one-time-code"}
+
+NON_PURPOSE_INPUT_TYPES = frozenset({
+    "hidden", "submit", "reset", "button", "image", "checkbox", "radio", "file", "range", "color",
+})
+
+
+def _parse_autofill(tokens):
+    """The field name of a valid autofill detail value, or None when the
+    tokens are not one: [section-*] [shipping|billing] [contact type before
+    a contact field name] field-name [webauthn], case-insensitively. Mirrors
+    skills/critique-forms/scripts/checks.py's function of the same name."""
+    i, n = 0, len(tokens)
+    if i < n and tokens[i].startswith("section-"):
+        i += 1
+    if i < n and tokens[i] in ("shipping", "billing"):
+        i += 1
+    if i < n and tokens[i] in AUTOFILL_CONTACT_TYPES:
+        i += 1
+        if i >= n or tokens[i] not in AUTOFILL_CONTACT_FIELD_NAMES:
+            return None
+    elif i >= n or tokens[i] not in (AUTOFILL_FIELD_NAMES | AUTOFILL_CONTACT_FIELD_NAMES):
+        return None
+    field_name = tokens[i]
+    i += 1
+    if i < n and tokens[i] == "webauthn":
+        i += 1
+    return field_name if i == n else None
+
+
+def _normalize_purpose_candidate(value):
+    """`value`, folded to one lowercase, hyphenated form: a camelCase
+    boundary, an underscore, or whitespace all become a hyphen, so
+    givenName, given_name and given-name all read as given-name. This is
+    the only normalization WCAG_INPUT_PURPOSE_TOKENS membership allows; no
+    broader synonym table sits behind it (unlike references/FORMS.md's
+    purpose inference), which is what keeps this a closed-vocabulary
+    lookup rather than a cue-word match."""
+    value = re.sub(r"([a-z0-9])([A-Z])", r"\1-\2", value or "")
+    value = re.sub(r"[\s_]+", "-", value)
+    return value.strip("-").lower()
+
+
+def _input_purpose_token(node):
+    """The WCAG input-purpose token this control's own `type`, `name`, or
+    `id` names after normalization, or None when none of the three lands
+    in WCAG_INPUT_PURPOSE_TOKENS. Checked in that order, but the order
+    carries no precedence here (unlike references/FORMS.md's four-signal
+    purpose inference): at most one of the three is ever a non-empty
+    attribute value that also happens to be a token, so the three cannot
+    disagree on a real field."""
+    for attr_name in ("type", "name", "id"):
+        candidate = _normalize_purpose_candidate(node.attrs.get(attr_name) or "")
+        if candidate in WCAG_INPUT_PURPOSE_TOKENS:
+            return candidate
+    return None
+
+
+def _form_autocomplete_off(node):
+    """Whether the nearest ancestor <form> declares autocomplete=off, which
+    the HTML standard applies to every field inside it that sets no token
+    of its own (references/FORMS.md, FORMS-AUTOCOMPLETE's own reading of
+    the same cascade)."""
+    n = node.parent
+    while n is not None:
+        if n.tag == "form":
+            return (n.attrs.get("autocomplete") or "").strip().lower() == "off"
+        n = n.parent
+    return False
+
+
+def _check_input_purpose(tree):
+    flagged = []
+    for node in tree.iter():
+        if node.tag not in ("input", "select", "textarea"):
+            continue
+        if node.tag == "input" and (node.attrs.get("type") or "text").strip().lower() in NON_PURPOSE_INPUT_TYPES:
+            continue
+        if "disabled" in node.attrs:
+            continue
+        if _is_hidden(node):
+            continue
+
+        token = _input_purpose_token(node)
+        if token is None:
+            continue
+
+        own_value = (node.attrs.get("autocomplete") or "").strip().lower()
+        if own_value:
+            value, inherited_off = own_value, False
+        else:
+            inherited_off = _form_autocomplete_off(node)
+            value = "off" if inherited_off else ""
+
+        if not value:
+            flagged.append((node, token, "missing"))
+        elif value == "off":
+            flagged.append((node, token, "off"))
+        elif _parse_autofill(value.split()) is None:
+            flagged.append((node, token, "invalid"))
+
+    severity = _severity_for_count(len(flagged))
+    findings = []
+    for node, token, kind in flagged:
+        if kind == "missing":
+            violation = (
+                f"This field's type, name, or id identifies the {token} input purpose, but it "
+                "carries no autocomplete attribute, so the purpose is not programmatically determinable."
+            )
+        elif kind == "off":
+            violation = (
+                f"This field's type, name, or id identifies the {token} input purpose, but "
+                "autocomplete is switched off, so the purpose is not programmatically determinable."
+            )
+        else:
+            violation = (
+                f"This field's type, name, or id identifies the {token} input purpose, but its "
+                "declared autocomplete value is not a valid autofill detail in the HTML standard."
+            )
+        findings.append(RawFinding(
+            criterion="WCAG-1.3.5",
+            severity=severity,
+            location=_loc(node, f"<{node.tag}> field, input purpose {token}"),
+            evidence=_truncate(node.raw),
+            violation=violation,
+            fix=f"Set the field's autocomplete attribute to {token}, or the matching standard token for this input purpose.",
+        ))
+    return findings
+
+
+# ---------------------------------------------------------------------------
 # Aggregation and CLI
 # ---------------------------------------------------------------------------
 
@@ -1500,6 +1682,7 @@ def check(artifact):
     findings = []
     findings.extend(_check_alt_text(tree))
     findings.extend(_check_structure(tree))
+    findings.extend(_check_input_purpose(tree))
     findings.extend(_check_text_contrast(tree, rules))
     findings.extend(_check_viewport_zoom(tree))
     findings.extend(_check_fixed_width_reflow(tree, rules))

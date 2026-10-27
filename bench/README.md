@@ -52,6 +52,10 @@ bench/
     <domain>/<recipe>.<ext>
     <domain>/<recipe>.manifest.json
     corpus.lock.json            root seed, generator version, sha256 of every manifest
+    _frozen/<version>/<domain>/<recipe>.<ext>, <recipe>.manifest.json
+                                 byte-identical snapshots the generator no longer produces in
+                                 their original form, kept so old run envelopes stay scorable.
+                                 See `bench/corpus/_frozen/README.md`.
   results/
     runs/<skill>/<artifact>/*.json       contract-valid run envelopes, run set `p3-2026-07-31`
     runs-cal1/<skill>/<artifact>/*.json  contract-valid run envelopes, run set `cal1-2026-08-01`
@@ -66,17 +70,21 @@ bench/
 ```
 
 Nothing in `corpus/` is hand-edited, ever. It is generator output, and a hand edit breaks the
-determinism check on the next CI run, which is the intended behaviour.
+determinism check on the next CI run, which is the intended behaviour. `corpus/_frozen/` is the one
+exception to "generator output": it holds past generator output the generator no longer produces,
+kept byte-identical on purpose. `bench/generator/verify.py` excludes it from the determinism check
+for exactly that reason; see `bench/corpus/_frozen/README.md`.
 
 ## Corpus design
 
-27 scored artifacts: 23 across the six launch domains and 4 in the `forms` domain, added for
-`critique-forms` (N2), plus 3 unscored `toy` fixtures.
+28 scored artifacts: 24 across the six launch domains and 4 in the `forms` domain, added for
+`critique-forms` (N2), plus 3 unscored `toy` fixtures. Accessibility grew from 4 to 5 artifacts on
+2026-10-27 (E67), when `critique-accessibility` added five more WCAG 2.2 AA criteria.
 
 | Domain | Skill | Status | Artifacts | Clean | Artifact type | Namespaces |
 |---|---|---|---|---|---|---|
 | clarity | critique-clarity | core | 4 | 1 | `markdown-prose` | `PLAIN`, `WILLIAMS` |
-| accessibility | critique-accessibility | core | 4 | 1 | `html` | `WCAG` |
+| accessibility | critique-accessibility | core | 5 | 1 | `html` | `WCAG` |
 | usability | critique-usability | core | 4 | 1 | `html` | `NNG` |
 | docs | critique-docs | stretch | 4 | 1 | `markdown-tree` | `DIATAXIS` |
 | microcopy | critique-microcopy | stretch | 4 | 1 | `markdown-prose` | `NNG` |
@@ -111,6 +119,12 @@ must be paired with a constraint that keeps it that shape.
 | No defect `description` shares a 6-token shingle with its artifact | S-03 AC-8: the defect must not be findable by string search |
 | Every artifact has a schema-valid manifest, and `defects` is present even when empty | An empty array asserts "clean"; a missing key asserts only "not recorded" |
 | Artifact bytes are UTF-8, no BOM, LF, one trailing newline, NFC | Byte-identity across platforms |
+
+A frozen copy under `corpus/_frozen/` already satisfied every one of these invariants at the build
+that produced it, and `bench/tests/test_frozen_corpus.py` re-checks the ones that still apply
+(schema-valid manifest, hash matches its own bytes). It is exempt only from re-verification against
+the current generator, because the current generator no longer produces it; see
+`bench/corpus/_frozen/README.md`.
 
 ### Prerequisites
 

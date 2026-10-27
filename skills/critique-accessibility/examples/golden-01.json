@@ -15,6 +15,28 @@
     "findings": [
       {
         "id": "F-001",
+        "criterion": "WCAG-1.3.5",
+        "lane": "scripted",
+        "severity": 3,
+        "location": "\"html > body > main > form > input:nth-of-type(2)\", <input> field, input purpose tel, line 30",
+        "evidence": "<input type=\"tel\" placeholder=\"Phone number\">",
+        "violation": "This field's type, name, or id identifies the tel input purpose, but it carries no autocomplete attribute, so the purpose is not programmatically determinable.",
+        "fix": "Set the field's autocomplete attribute to tel, or the matching standard token for this input purpose.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-002",
+        "criterion": "WCAG-1.3.5",
+        "lane": "scripted",
+        "severity": 3,
+        "location": "#email, <input> field, input purpose email, line 28",
+        "evidence": "<input id=\"email\" type=\"email\">",
+        "violation": "This field's type, name, or id identifies the email input purpose, but it carries no autocomplete attribute, so the purpose is not programmatically determinable.",
+        "fix": "Set the field's autocomplete attribute to email, or the matching standard token for this input purpose.",
+        "confidence": "high"
+      },
+      {
+        "id": "F-003",
         "criterion": "WCAG-1.1.1",
         "lane": "scripted",
         "severity": 2,
@@ -25,7 +47,7 @@
         "confidence": "high"
       },
       {
-        "id": "F-002",
+        "id": "F-004",
         "criterion": "WCAG-2.4.4",
         "lane": "scripted",
         "severity": 2,
@@ -36,7 +58,7 @@
         "confidence": "high"
       },
       {
-        "id": "F-003",
+        "id": "F-005",
         "criterion": "WCAG-2.5.3",
         "lane": "scripted",
         "severity": 2,
@@ -47,7 +69,7 @@
         "confidence": "high"
       },
       {
-        "id": "F-004",
+        "id": "F-006",
         "criterion": "WCAG-3.3.2",
         "lane": "scripted",
         "severity": 2,
@@ -59,11 +81,11 @@
       }
     ],
     "summary": {
-      "by_severity": {"0": 0, "1": 0, "2": 4, "3": 0, "4": 0},
+      "by_severity": {"0": 0, "1": 0, "2": 4, "3": 2, "4": 0},
       "suppressed_count": 0,
-      "gate": "pass",
+      "gate": "fail",
       "severity_3_threshold": 0
     }
   },
-  "note": "golden-01.html plants four single-occurrence defects: the crew photo carries no alt attribute and is not marked decorative (WCAG-1.1.1), the outage-history link's only text is the generic phrase click here (WCAG-2.4.4), the submit button's aria-label Send form now drops the visible word Submit so a voice-control user cannot activate it by the label they see (WCAG-2.5.3), and the phone input has no label, aria-label, aria-labelledby, or title of any kind (WCAG-3.3.2). Every other control in the form (the topic select and email input) is correctly labeled, and the page has a valid title, a well-formed lang attribute, and a main landmark, which is why none of those checks also fire. Each defect is a single instance, so all four sit at severity 2 per references/WCAG.md's anchor rows, and the gate passes because nothing reaches severity 3."
+  "note": "golden-01.html plants six single-occurrence defects, after E67 (accessibility expansion) added WCAG-1.3.5: the email field and the phone field each identify an input purpose (email by its id and type, tel by its type) but carry no autocomplete attribute, so neither purpose is programmatically determinable, which with two in-scope fields failing escalates both WCAG-1.3.5 findings to severity 3 per references/WCAG.md's recurrence anchor. The remaining four are the original single-occurrence defects, each still severity 2: the crew photo carries no alt attribute and is not marked decorative (WCAG-1.1.1), the outage-history link's only text is the generic phrase click here (WCAG-2.4.4), the submit button's aria-label Send form now drops the visible word Submit so a voice-control user cannot activate it by the label they see (WCAG-2.5.3), and the phone input has no label, aria-label, aria-labelledby, or title of any kind (WCAG-3.3.2). The topic select is correctly labeled and out of WCAG-1.3.5's closed vocabulary (its id names no input purpose), and the page has a valid title, a well-formed lang attribute, and a main landmark, which is why no other check fires. The gate now fails, because the two WCAG-1.3.5 findings reach severity 3."
 }

@@ -1,6 +1,6 @@
 ---
 name: critique-accessibility
-description: "Reviews HTML pages and fragments (markdown where mappable) against 22 of the 55 WCAG 2.2 Level A and AA success criteria: contrast, alt text, heading hierarchy for screen readers, link text, and keyboard and screen-reader access. Judges conformance against WCAG, not an interface's general usability, flow, or controls (critique-usability covers that), or how much effort a form's fields cost to fill in on a phone (critique-forms covers that). Use when the user asks for an accessibility review, feedback, a second opinion, a red-line pass, an a11y audit, or a pre-launch quality check on a page or component."
+description: "Reviews HTML pages and fragments (markdown where mappable) against 27 of the 55 WCAG 2.2 Level A and AA success criteria: contrast, alt text, heading hierarchy for screen readers, link text, input purpose, target size, orientation, focus visibility, status messages, and keyboard and screen-reader access. Judges conformance against WCAG, not an interface's general usability, flow, or controls (critique-usability covers that), or how much effort a form's fields cost to fill in on a phone (critique-forms covers that). Use when the user asks for an accessibility review, feedback, a second opinion, a red-line pass, an a11y audit, or a pre-launch quality check on a page or component."
 metadata:
   version: 0.1.1
 license: Apache-2.0
@@ -14,6 +14,7 @@ checks:
   scripted:
     - WCAG-1.1.1
     - WCAG-1.3.1
+    - WCAG-1.3.5
     - WCAG-1.4.3
     - WCAG-1.4.4
     - WCAG-1.4.10
@@ -28,24 +29,28 @@ checks:
   judged:
     - WCAG-1.3.2
     - WCAG-1.3.3
+    - WCAG-1.3.4
     - WCAG-1.4.1
     - WCAG-2.4.3
     - WCAG-2.4.5
     - WCAG-2.4.6
+    - WCAG-2.4.7
+    - WCAG-2.5.8
     - WCAG-3.1.2
     - WCAG-3.3.1
     - WCAG-4.1.2
+    - WCAG-4.1.3
 ---
 
 # critique-accessibility
 
 Reviews an HTML page or fragment (markdown where its structure maps cleanly to HTML, such as headings,
-links, and images) against 22 of the 55 WCAG 2.2 Level A and AA success criteria. AA conformance
+links, and images) against 27 of the 55 WCAG 2.2 Level A and AA success criteria. AA conformance
 requires all 55, so a report from this skill with no findings is not a conformance claim. The
 artifact claim is narrow and static: this skill evaluates markup and declared CSS as text, never a
-rendered page, a running application, or live keyboard and pointer interaction. Most of the 33
+rendered page, a running application, or live keyboard and pointer interaction. Most of the 28
 criteria it does not check need one of those, or time-based media, or more than one page. Some could
-be checked from markup and declared CSS, wholly or in part, and are not implemented. None of the 33
+be checked from markup and declared CSS, wholly or in part, and are not implemented. None of the 28
 is in this skill's registry; `references/WCAG.md`, "Scope", lists every one with the reason.
 
 ## Contract
@@ -98,7 +103,9 @@ Follow these four passes in order. Do not skip ahead to severity or fixes while 
    Sweep each judged criterion against every element it governs, not against the first one that
    looks wrong: every custom control for WCAG-4.1.2, every label, state marker, and error message
    for WCAG-1.4.1 and WCAG-3.3.1, every sequence whose order carries meaning for WCAG-1.3.2, every
-   heading and label for WCAG-2.4.6. Name the element you are judging, by `id`, as you judge it. A
+   heading and label for WCAG-2.4.6, every orientation-locking rule for WCAG-1.3.4, every focus
+   style for WCAG-2.4.7, every tappable control for WCAG-2.5.8, and every status region for
+   WCAG-4.1.3. Name the element you are judging, by `id`, as you judge it. A
    criterion with nothing to report has still been swept; a criterion is never skipped because the
    scripted lane already reported something nearby, and the scripted lane's silence on a judged
    criterion means only that no script was asked to look.

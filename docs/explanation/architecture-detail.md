@@ -14,7 +14,7 @@ one says why they are shaped that way, and what happens if you change them.
 ## 1. The two-lane split, and what decides the line
 
 Every skill declares its criteria in two sets in `SKILL.md` frontmatter: `checks.scripted` and
-`checks.judged`. Across the seven skills that is 60 scripted and 60 judged, 120 total.
+`checks.judged`. Across the seven skills that is 61 scripted and 64 judged, 125 total.
 
 | Skill | Scripted | Judged | Rubric sources |
 |---|---:|---:|---|
@@ -103,7 +103,7 @@ that are actually there, how many does a skill recover, and how repeatably?**
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'primaryColor':'#eef2ff','primaryBorderColor':'#c7d2fe','lineColor':'#6366f1','fontFamily':'system-ui, sans-serif'}}}%%
 flowchart LR
-  gen["bench/generator<br/>deterministic, seeded"]:::det --> corpus["27 artifacts<br/>+ ground-truth manifests"]:::data
+  gen["bench/generator<br/>deterministic, seeded"]:::det --> corpus["28 artifacts<br/>+ ground-truth manifests"]:::data
   corpus --> staging["staging copy<br/>manifests stripped"]:::data
   staging --> runs["measurement grid<br/>k=5, two pinned tiers,<br/>skill + baseline"]:::run
   runs --> env["502 run envelopes<br/>immutable"]:::data
