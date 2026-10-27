@@ -20,7 +20,7 @@
         "severity": 3,
         "location": "\"html > body > main > form > input:nth-of-type(2)\", <input> field, input purpose tel, line 30",
         "evidence": "<input type=\"tel\" placeholder=\"Phone number\">",
-        "violation": "This field's type, name, or id identifies the tel input purpose, but it carries no autocomplete attribute, so the purpose is not programmatically determinable.",
+        "violation": "This field's type, name, or id identifies the tel input purpose, but it carries no autocomplete token, so the purpose is not programmatically determinable.",
         "fix": "Set the field's autocomplete attribute to tel, or the matching standard token for this input purpose.",
         "confidence": "high"
       },
@@ -31,7 +31,7 @@
         "severity": 3,
         "location": "#email, <input> field, input purpose email, line 28",
         "evidence": "<input id=\"email\" type=\"email\">",
-        "violation": "This field's type, name, or id identifies the email input purpose, but it carries no autocomplete attribute, so the purpose is not programmatically determinable.",
+        "violation": "This field's type, name, or id identifies the email input purpose, but it carries no autocomplete token, so the purpose is not programmatically determinable.",
         "fix": "Set the field's autocomplete attribute to email, or the matching standard token for this input purpose.",
         "confidence": "high"
       },
@@ -87,5 +87,5 @@
       "severity_3_threshold": 0
     }
   },
-  "note": "golden-01.html plants six single-occurrence defects, after E67 (accessibility expansion) added WCAG-1.3.5: the email field and the phone field each identify an input purpose (email by its id and type, tel by its type) but carry no autocomplete attribute, so neither purpose is programmatically determinable, which with two in-scope fields failing escalates both WCAG-1.3.5 findings to severity 3 per references/WCAG.md's recurrence anchor. The remaining four are the original single-occurrence defects, each still severity 2: the crew photo carries no alt attribute and is not marked decorative (WCAG-1.1.1), the outage-history link's only text is the generic phrase click here (WCAG-2.4.4), the submit button's aria-label Send form now drops the visible word Submit so a voice-control user cannot activate it by the label they see (WCAG-2.5.3), and the phone input has no label, aria-label, aria-labelledby, or title of any kind (WCAG-3.3.2). The topic select is correctly labeled and out of WCAG-1.3.5's closed vocabulary (its id names no input purpose), and the page has a valid title, a well-formed lang attribute, and a main landmark, which is why no other check fires. The gate now fails, because the two WCAG-1.3.5 findings reach severity 3."
+  "note": "golden-01.html plants six defects, after E67 (accessibility expansion) added WCAG-1.3.5: two of the six are the recurring pair that criterion catches, not single-occurrence ones, since the email field and the phone field each identify an input purpose (email by its id and type, tel by its type) but carry no autocomplete attribute, so neither purpose is programmatically determinable, and two in-scope fields failing escalates both WCAG-1.3.5 findings to severity 3 per references/WCAG.md's recurrence anchor. The remaining four are single-occurrence defects, each still severity 2: the crew photo carries no alt attribute and is not marked decorative (WCAG-1.1.1), the outage-history link's only text is the generic phrase click here (WCAG-2.4.4), the submit button's aria-label Send form now drops the visible word Submit so a voice-control user cannot activate it by the label they see (WCAG-2.5.3), and the phone input has no label, aria-label, aria-labelledby, or title of any kind (WCAG-3.3.2). The topic select is correctly labeled and out of WCAG-1.3.5's closed vocabulary (its id names no input purpose and no cue word either), and the page has a valid title, a well-formed lang attribute, and a main landmark, which is why no other check fires. The gate fails, because the two WCAG-1.3.5 findings reach severity 3."
 }

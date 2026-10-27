@@ -3,7 +3,12 @@ already-committed run envelopes bound to the old accessibility bytes stay scorab
 
 See bench/corpus/_frozen/README.md for why this directory exists, what it holds, and which
 committed run sets bind to it. No test here regenerates or edits anything under _frozen/; that
-directory's whole point is to never change.
+directory's whole point is to never change. `FROZEN_FILE_SHA256` pins each frozen manifest's and
+each frozen html's own file hash to a literal, on top of `test_frozen_manifest_artifact_hashes_to_
+its_recorded_sha`'s check that a manifest's `artifact_sha256` field matches its artifact's bytes: a
+silent edit to a manifest's description or severity, or to an html file's content, changes neither
+`artifact_sha256` nor `artifact` and so passes every other test in this file, but it changes the
+file's own hash and fails here.
 """
 
 from __future__ import annotations
@@ -22,6 +27,23 @@ FROZEN_DIR = CORPUS_DIR / "_frozen"
 RESULTS_DIR = REPO_ROOT / "bench" / "results"
 
 FROZEN_MANIFEST_PATHS = sorted(FROZEN_DIR.rglob("*.manifest.json"))
+FROZEN_HTML_PATHS = sorted(FROZEN_DIR.rglob("*.html"))
+
+# Literal sha256 of every frozen manifest and every frozen html, computed once against the
+# committed bytes and pinned here so a silent edit to either (a changed description, a changed
+# severity, a reworded defect) fails this test even though it may leave `artifact_sha256` and
+# `artifact` untouched. Recomputing these after a deliberate change to a frozen file is a
+# contradiction in terms: see bench/corpus/_frozen/README.md, "The rule".
+FROZEN_FILE_SHA256 = {
+    "v1/accessibility/accessibility-001.html": "f620e43c2035d9380934dbe1b09dba438bb38bc1fb7f1feeb58010af44eaf176",
+    "v1/accessibility/accessibility-001.manifest.json": "163a693f708bc001b14e0d29dfdfabadccbce627d9fd868c539bf08130db2c82",
+    "v1/accessibility/accessibility-002.html": "b49ce74681df60732a6ef3b5309ce82264ad1b6ad48c6fa8b85989f2c712f113",
+    "v1/accessibility/accessibility-002.manifest.json": "869aee89c5b7b7bb3ff093628e1237c6870cc6dbc34967a7c9c3f734cb22e57b",
+    "v1/accessibility/accessibility-003.html": "69ff628078a107c11bd403359666e3fafdba2d4ab204fdec80881f7db5374db6",
+    "v1/accessibility/accessibility-003.manifest.json": "8721b44985432b8caad1dd959b1ce9449b81dd812c3b53b894a0e157e1b1324e",
+    "v1/accessibility/accessibility-004.html": "393fe58fac52d6953cd372944cd352ef9181df5c42ae778bd6d17214acb080c7",
+    "v1/accessibility/accessibility-004.manifest.json": "a5ab580752f1900d52cbf330c1511a6c49e8ac2204afa069a3463e9a0545c07a",
+}
 
 # Every directory under bench/results/ that holds committed run envelopes, by the same "runs*"
 # convention bench/variance.py and bench/README.md use. results.json and variance.json live
@@ -41,6 +63,27 @@ def _committed_envelope_paths() -> list[Path]:
 
 def test_frozen_directory_is_not_empty():
     assert FROZEN_MANIFEST_PATHS, "expected at least one frozen manifest under bench/corpus/_frozen/"
+
+
+def test_frozen_file_pins_cover_exactly_the_discovered_manifests_and_htmls():
+    """Guards FROZEN_FILE_SHA256 itself: an added or removed frozen manifest or html, which
+    bench/corpus/_frozen/README.md's "The rule" says should never happen, fails here rather
+    than silently being skipped by the parametrized test below."""
+    discovered = {
+        p.relative_to(FROZEN_DIR).as_posix() for p in (*FROZEN_MANIFEST_PATHS, *FROZEN_HTML_PATHS)
+    }
+    assert discovered == set(FROZEN_FILE_SHA256)
+
+
+@pytest.mark.parametrize(
+    "rel_path", sorted(FROZEN_FILE_SHA256), ids=lambda p: p
+)
+def test_frozen_file_hash_matches_its_pinned_literal(rel_path):
+    """Pins each frozen manifest's and each frozen html's own file hash, so a silent edit to a
+    manifest's description or severity, or to an html file's content, fails here even when it
+    leaves `artifact_sha256` and `artifact` untouched (see the module docstring)."""
+    digest = hashlib.sha256((FROZEN_DIR / rel_path).read_bytes()).hexdigest()
+    assert digest == FROZEN_FILE_SHA256[rel_path]
 
 
 @pytest.mark.parametrize(

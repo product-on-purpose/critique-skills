@@ -964,10 +964,17 @@ python -m bench.report table --results bench/results/results.json --check
 ```
 
 **Reproducing the scripted lane with no API key.** The dominant contributor to the accessibility
-figures is deterministic and needs no model. `python skills/critique-accessibility/scripts/checks.py
-bench/corpus/accessibility/accessibility-001.html` emits the same findings, byte for byte, that the
-cal1 envelopes carry on the scripted lane, in 39 of 40 cases (the exception is in
-[Limitations](#limitations)).
+figures is deterministic and needs no model. `bench/corpus/accessibility/accessibility-001.html` no
+longer holds the bytes cal1 measured; E67 (accessibility expansion) changed those bytes on
+2026-10-27, and the pre-fix bytes are kept at `bench/corpus/_frozen/v1/accessibility/` for exactly
+this reason (see `bench/corpus/_frozen/README.md`). `python
+skills/critique-accessibility/scripts/checks.py
+bench/corpus/_frozen/v1/accessibility/accessibility-001.html` emits the same findings, byte for byte,
+that the cal1 envelopes carry on the scripted lane, in 39 of 40 cases (the exception is in
+[Limitations](#limitations)), with one further caveat: WCAG-1.3.5 post-dates cal1. Today's
+`checks.py`, run against those frozen bytes, also reports two WCAG-1.3.5 findings per artifact, on
+the shared builder's pre-fix email and phone fields, that no cal1 envelope carries, because
+WCAG-1.3.5 did not exist when cal1 was measured.
 
 **Reproducing the exact-truth-node probe (cut B).** Monkeypatch `bench.metrics.resolve_html.is_hit` to
 `lambda doc, resolved, truth: (lambda t: t is not None and any(c == t for c in resolved.candidates))(

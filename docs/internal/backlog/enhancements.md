@@ -1569,9 +1569,12 @@ and the repository did not have.
   scripted in `checks.py`; WCAG-2.5.8, WCAG-1.3.4, WCAG-2.4.7 and WCAG-4.1.3 are judged. The
   measurement-design question above resolved the other way: the four existing artifacts did
   change, because each carried two real WCAG-1.3.5 failures, email and phone fields with no
-  `autocomplete` token, from one shared builder. The builder now sets those tokens and gives the
-  status card `role="status"`, a new `accessibility-005` carries the five plants, and a frozen
-  copy of the old four under `bench/corpus/_frozen/v1/` keeps the committed run sets scorable. See
+  `autocomplete` token, from one shared builder. An adversarial review found a third base defect of
+  the same WCAG-4.1.3 shape, the builder's promo-code error span carrying no live region. The
+  builder now sets both `autocomplete` tokens, gives the status card `role="status"`, and gives
+  the promo-code error span `aria-live="polite"`, four attributes in total; a new
+  `accessibility-005` carries the five plants, and a frozen copy of the old four under
+  `bench/corpus/_frozen/v1/` keeps the committed run sets scorable. See
   [E67's spec](../release-plans/_unassigned/E67_accessibility-expansion/spec.md). **Still open:**
   the version move to 0.2.0 and the paid re-measure, which happen together with E73's and need the
   maintainer's own separate go.

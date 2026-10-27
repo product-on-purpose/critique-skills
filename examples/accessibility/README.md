@@ -22,7 +22,7 @@ trust this skill before running it on their own work.
   the correct output" reference the skill's own test suite is calibrated against, not a live model
   run. It represents the full critique (scripted lane plus a judged lane swept by a reviewer or the
   `critique-critic` subagent), not only the scripted lane. As it happens, every finding in it is
-  scripted, because this particular fixture was deliberately built clean on the nine judged
+  scripted, because this particular fixture was deliberately built clean on the thirteen judged
   criteria, so its full, correct output and its scripted-lane output are the same six findings.
   That is stated plainly below, not left for you to discover.
 - The **findings tour** and the **disposition log** are curated illustration: plain-language
@@ -46,7 +46,7 @@ From the repository root:
 python skills/critique-accessibility/scripts/checks.py examples/accessibility/artifact.html
 ```
 
-This is the deterministic half of the skill: thirteen mechanical checks (`checks.scripted` in
+This is the deterministic half of the skill: fourteen mechanical checks (`checks.scripted` in
 [`SKILL.md`](../../skills/critique-accessibility/SKILL.md)) run directly against the markup and
 declared CSS as text, no model call involved. We ran this exact command against this exact file
 before writing this page. It produced six findings and a failing gate, matching `envelope.json`
@@ -58,7 +58,7 @@ for yourself; that comparison is the whole point of shipping the command alongsi
 ## Running the full critique
 
 The scripted lane alone only covers part of the rubric. To get the full critique, which also
-sweeps the nine judged criteria a script cannot check mechanically (things like whether a heading
+sweeps the thirteen judged criteria a script cannot check mechanically (things like whether a heading
 actually describes its section, or whether an error message is specific enough), ask Claude Code
 to run it in natural language, in a session with this repository open:
 
@@ -71,7 +71,8 @@ particular artifact, per the validated golden fixture, the judged lane turns up 
 clears the reporting bar, so a full run's findings match the six scripted-lane findings below. A
 different artifact would not necessarily be that clean on the judged side; see
 [`skills/critique-accessibility/examples/golden-05.json`](../../skills/critique-accessibility/examples/golden-05.json)
-for a fixture that is clean on every scripted check and carries judged-only findings instead.
+for a fixture that carries judged findings on four separate criteria, alongside two scripted
+WCAG-1.3.5 findings of its own.
 
 ## Findings tour
 

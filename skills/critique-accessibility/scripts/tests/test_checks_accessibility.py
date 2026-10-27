@@ -267,7 +267,7 @@ def test_in_scope_field_with_no_autocomplete_is_flagged_missing():
     findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
     assert len(findings) == 1
     assert findings[0].severity == 2
-    assert "carries no autocomplete attribute" in findings[0].violation
+    assert "carries no autocomplete token" in findings[0].violation
 
 
 def test_in_scope_field_with_invalid_autocomplete_is_flagged():
@@ -283,14 +283,188 @@ def test_in_scope_field_with_a_valid_token_is_not_flagged():
     assert findings == []
 
 
-def test_field_outside_the_closed_vocabulary_is_not_flagged():
-    """id="zip" is a common real-world spelling, but the closed list names
-    only the literal token postal-code, so this field is silently out of
-    reach (references/WCAG.md, "no broader synonym table"), exactly as
-    examples/artifacts/golden-03.html relies on to stay clean."""
-    html = '<form><input id="zip" type="text"></form>'
+@pytest.mark.parametrize(
+    "attrs",
+    [
+        'id="account-number"',  # FORMS purpose "account number" names no WCAG token
+        'name="qty"',  # "qty" is not a quantity cue FORMS itself matches, and quantity names no token either way
+        'id="county"',  # FORMS purpose "county" names no WCAG token
+        'id="topic"',  # not a cue for any purpose at all
+        'id="day"',  # a bare date part, with no birth cue present, stays out of scope (fix 1)
+    ],
+)
+def test_fields_outside_the_closed_vocabulary_are_not_flagged(attrs):
+    """Each of these names a FORMS purpose this criterion deliberately
+    never maps to a WCAG token (references/WCAG.md's WCAG-1.3.5 row), or
+    names no purpose at all, so the field stays silently out of reach."""
+    html = f'<form><input {attrs} type="text"></form>'
     findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
     assert findings == []
+
+
+def test_cue_word_id_without_an_exact_token_is_in_scope():
+    """id="zip" is a common real-world spelling that is not itself a WCAG
+    token, but it is a FORMS cue word for the postal-code purpose, which
+    does map to a WCAG token, so cue-word matching (fix 1) puts it in
+    scope even though the exact-token path alone would miss it. This is
+    the known consequence examples/artifacts/golden-03.html now carries an
+    explicit autocomplete="postal-code" to stay clean against."""
+    html = '<form><input id="zip" type="text"></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert len(findings) == 1
+    assert "postal-code" in findings[0].violation
+
+
+@pytest.mark.parametrize(
+    ("attrs", "token"),
+    [
+        ('id="first-name"', "given-name"),
+        ('id="last-name"', "family-name"),
+        ('id="middle-name"', "additional-name"),
+        ('id="full-name"', "name"),
+        ('name="phone" type="text"', "tel"),
+        ('id="website"', "url"),
+        ('id="town"', "address-level2"),
+        ('id="province"', "address-level1"),
+        ('id="country"', "country"),
+        ('id="login"', "username"),
+        ('id="street-name" type="text"', "street-address"),
+    ],
+)
+def test_cue_word_matching_covers_the_fix_1_mapping_table(attrs, token):
+    html = f'<form><input {attrs}></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert len(findings) == 1
+    assert token in findings[0].violation
+
+
+def test_birth_cue_with_no_date_unit_word_maps_to_bare_bday():
+    html = '<form><input id="birthday" type="text"></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert len(findings) == 1
+    assert "bday" in findings[0].violation
+
+
+@pytest.mark.parametrize(
+    ("field_id", "token"),
+    [("dob-day", "bday-day"), ("dob-month", "bday-month"), ("dob-year", "bday-year")],
+)
+def test_birth_cue_with_a_date_unit_word_in_the_same_signal_is_in_scope(field_id, token):
+    """A birth cue (dob) and a date-part word (day/month/year) in the SAME
+    id combine to the specific bday unit; the bare date-part test above
+    shows the same word alone, with no birth cue, staying out of scope."""
+    html = f'<form><input id="{field_id}" type="text"></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert len(findings) == 1
+    assert token in findings[0].violation
+
+
+def test_cue_word_match_never_reads_a_label_or_placeholder():
+    """ruling D2: only type, name, and id are ever read. A label reading
+    "Email address" and a placeholder reading "Phone number" on a field
+    whose own id names no purpose at all must not put it in scope."""
+    html = (
+        '<form><label for="f1">Email address</label>'
+        '<input id="f1" type="text" placeholder="Phone number"></form>'
+    )
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert findings == []
+
+
+def test_textarea_resolves_to_street_address_or_nothing():
+    """A textarea holds several lines, and street address is the only
+    multi-line WCAG input purpose, mirroring references/FORMS.md's
+    `_purpose`. A textarea whose id cues a single-line purpose (phone)
+    must not be flagged for it."""
+    html = '<form><textarea id="phone"></textarea></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert findings == []
+
+
+def test_textarea_with_a_street_address_cue_is_in_scope():
+    html = '<form><textarea id="street-address"></textarea></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert len(findings) == 1
+    assert "street-address" in findings[0].violation
+
+
+# ---------------------------------------------------------------------------
+# WCAG-1.3.5: scope exclusions (fix 2, S7/N2)
+# ---------------------------------------------------------------------------
+
+
+def test_type_search_is_not_flagged():
+    html = '<form><input type="search" name="email"></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert findings == []
+
+
+def test_field_inside_a_search_element_is_not_flagged():
+    html = '<search><input id="email" type="text"></search>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert findings == []
+
+
+def test_field_inside_a_role_search_container_is_not_flagged():
+    html = '<form role="search"><input id="email" type="text"></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert findings == []
+
+
+def test_readonly_in_scope_field_is_not_flagged():
+    html = '<form><input id="email" type="email" readonly></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert findings == []
+
+
+def test_field_inside_a_disabled_fieldset_is_not_flagged():
+    html = '<form><fieldset disabled><input id="email" type="email"></fieldset></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert findings == []
+
+
+# ---------------------------------------------------------------------------
+# WCAG-1.3.5: signal precedence when type, name, and id disagree (S8)
+# ---------------------------------------------------------------------------
+
+
+def test_id_wins_over_type_when_the_two_signals_disagree():
+    """A prior version of this file's docstring claimed type, name, and id
+    "cannot disagree" on a real field; this is the field that disproves
+    it. id must win over type for the suggested token (S8)."""
+    html = '<form><input type="email" id="username"></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert len(findings) == 1
+    assert "username" in findings[0].violation
+    assert "email input purpose" not in findings[0].violation
+
+
+def test_name_wins_over_type_when_the_two_signals_disagree():
+    html = '<form><input type="email" name="username"></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert len(findings) == 1
+    assert "username" in findings[0].violation
+
+
+# ---------------------------------------------------------------------------
+# WCAG-1.3.5: autocomplete="" and autocomplete="on" (N1)
+# ---------------------------------------------------------------------------
+
+
+def test_empty_autocomplete_attribute_is_reported_as_empty_not_missing():
+    html = '<form><input id="email" type="email" autocomplete=""></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert len(findings) == 1
+    assert "autocomplete attribute is empty" in findings[0].violation
+    assert "carries no autocomplete token" not in findings[0].violation
+
+
+def test_autocomplete_on_is_treated_as_the_missing_case_not_invalid():
+    html = '<form><input id="email" type="email" autocomplete="on"></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert len(findings) == 1
+    assert "carries no autocomplete token" in findings[0].violation
+    assert "not a valid autofill detail" not in findings[0].violation
 
 
 def test_autocomplete_off_on_an_in_scope_field_is_flagged():
@@ -368,6 +542,47 @@ def test_hidden_in_scope_field_is_not_flagged():
     html = '<form><input id="email" type="email" hidden></form>'
     findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
     assert findings == []
+
+
+# ---------------------------------------------------------------------------
+# N3: the mirrored HTML-standard autofill grammar (AUTOFILL_* sets and
+# _parse_autofill's own parse behaviour) must not drift from
+# skills/critique-forms/scripts/checks.py's own copy of the same grammar.
+# ---------------------------------------------------------------------------
+
+_FORMS_CHECKS_PATH = _REPO_ROOT / "skills" / "critique-forms" / "scripts" / "checks.py"
+
+
+def _load_forms_checks_module():
+    spec = importlib.util.spec_from_file_location("forms_checks_under_test", _FORMS_CHECKS_PATH)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+forms_checks = _load_forms_checks_module()
+
+
+def test_autofill_grammar_sets_are_identical_to_critique_forms():
+    assert checks.AUTOFILL_FIELD_NAMES == forms_checks.AUTOFILL_FIELD_NAMES
+    assert checks.AUTOFILL_CONTACT_FIELD_NAMES == forms_checks.AUTOFILL_CONTACT_FIELD_NAMES
+    assert checks.AUTOFILL_CONTACT_TYPES == forms_checks.AUTOFILL_CONTACT_TYPES
+
+
+_AUTOFILL_PARSE_SAMPLES = [
+    "email", "tel", "given-name", "shipping street-address", "billing postal-code",
+    "home tel", "work email", "section-shipping shipping street-address",
+    "cc-number webauthn", "new-password webauthn", "on", "off", "nonsense",
+    "mobile-number", "", "shipping", "home", "section-foo email", "one-time-code",
+]
+
+
+@pytest.mark.parametrize("value", _AUTOFILL_PARSE_SAMPLES)
+def test_parse_autofill_behavior_is_identical_to_critique_forms(value):
+    tokens = value.split()
+    assert checks._parse_autofill(tokens) == forms_checks._parse_autofill(tokens)
 
 
 # ---------------------------------------------------------------------------

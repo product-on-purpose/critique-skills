@@ -424,10 +424,15 @@ def compose(rng, shape: Mapping[str, object]) -> Doc:
     promo_input = _el(
         "input", slot="s3.form.promo", attrs=(("id", "promo"), ("type", "text"), ("aria-invalid", "true"))
     )
+    # This error span sits beside aria-invalid="true" with no live region,
+    # which is exactly the pattern WCAG-4.1.3's severity-2 anchor names. A
+    # clean artifact has to be clean against every judged criterion too,
+    # not only the ones a recipe plants, so the shared builder gives this
+    # span a live region unconditionally rather than per recipe.
     promo_error = _el(
         "span",
         slot="s3.form.promo.error",
-        attrs=(("class", "error-text"),),
+        attrs=(("class", "error-text"), ("aria-live", "polite")),
         children=("Enter a 6 character code using letters and numbers only.",),
     )
     submit_button = _el(

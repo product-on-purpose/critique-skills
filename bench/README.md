@@ -79,7 +79,8 @@ for exactly that reason; see `bench/corpus/_frozen/README.md`.
 
 28 scored artifacts: 24 across the six launch domains and 4 in the `forms` domain, added for
 `critique-forms` (N2), plus 3 unscored `toy` fixtures. Accessibility grew from 4 to 5 artifacts on
-2026-10-27 (E67), when `critique-accessibility` added five more WCAG 2.2 AA criteria.
+2026-10-27 ([E67 (accessibility expansion)](../docs/internal/backlog/enhancements.md)), when
+`critique-accessibility` added five more WCAG 2.2 AA criteria.
 
 | Domain | Skill | Status | Artifacts | Clean | Artifact type | Namespaces |
 |---|---|---|---|---|---|---|

@@ -30,10 +30,13 @@ maintainer's go
 **Last updated:** 2026-10-27 by Claude, build
 **Linked plan:** not yet planned
 **Open questions:** 0 (all nine were decided 2026-10-27; see Open Questions / Decisions)
-**Revisions:** 1 (2026-10-27: moved from the local draft; D1's Option D, presented in the walk, added
+**Revisions:** 2 (2026-10-27: moved from the local draft; D1's Option D, presented in the walk, added
 to its options list; Scope, Non-Goals, Requirement 6, "What changes in each file", "Measurement and
 sequencing", AC-5, AC-9 and "What I do not know" rewritten to the ruling; AC checklist updated to the
-build)
+build. 2026-10-27, adversarial-review fixes: a third base defect, the promo-code error span's
+missing live region, found and fixed, moving the live-vs-frozen diff from three attributes to four;
+Requirement 7 and AC-3 reworded to name the coverage guard's own literals that did change; a new
+"Build notes" section; D9's free local check recorded as run, not planned)
 
 ### Acceptance Criteria Fulfillment
 
@@ -42,7 +45,8 @@ build)
 - [x] **AC-2** - Each new criterion's row in `references/WCAG.md` carries all seven required columns,
   with zero quotation marks in Operationalization
 - [x] **AC-3** - `test_wcag_scope_accessibility.py` passes with no edit to its own level-A/AA constant
-  sets, only to `SKILL.md` and `WCAG.md`
+  sets; its `UNCHECKED_HEADING` string and `len(registry) == 27` literal change along with
+  `SKILL.md` and `WCAG.md`
 - [x] **AC-4** - Every criterion kept scripted gets a `checks.py` function and a passing test case;
   every criterion kept judged gets neither
 - [x] **AC-5** - D1's Option D is built: the shared form fixed, `accessibility-005` added, and
@@ -81,8 +85,9 @@ built it [S16].
 - `skills/critique-accessibility/references/severity-anchors.md`: a new bullet per scripted
   criterion's threshold, in "Thresholds the scripted lane applies".
 - `bench/generator/domains/accessibility.py` and `bench/corpus/accessibility/`: D1's Option D. The
-  shared form builder gives the email and phone fields `autocomplete` tokens and the status card
-  `role="status"`, and a new `accessibility-005` carries the five plants.
+  shared form builder gives the email and phone fields `autocomplete` tokens, the status card
+  `role="status"`, and the promo-code error span `aria-live="polite"`, and a new
+  `accessibility-005` carries the five plants.
 - `bench/corpus/_frozen/v1/accessibility/`: a frozen copy of today's `accessibility-001` to `004`
   artifacts and manifests, so the committed run sets still score. `bench/generator/verify.py`
   leaves it out of regeneration, and a test guards its integrity.
@@ -140,11 +145,13 @@ ruling lives.
    `SKILL.md`, the `library.json` entry (currently `0.1.1`, line 11), and `checks.py`'s
    `skill_version="0.1.1"` argument. This build does not move them. The move lands with the shared
    paid re-measure, for the reason E73's spec gives under "Versions". [S16, S20]
-7. **The coverage guard stays self-updating.** `test_wcag_scope_accessibility.py` already asserts
-   that the registry and the unchecked table are disjoint and together equal all 55 Level A and AA
-   criteria, reading both from the live files rather than from a count anyone has to update by hand
-   [S17]. This spec's build moves rows between the two tables; it does not touch the test's own
-   constant sets.
+7. **The coverage guard's criteria sets stay self-updating; its own string and count literals do
+   not.** `test_wcag_scope_accessibility.py`'s `WCAG22_LEVEL_A` and `WCAG22_LEVEL_AA` constant sets,
+   which name all 55 Level A and AA criteria, need no edit as the registry grows: the
+   disjoint-and-complete assertion reads the registry and the unchecked table from the live files
+   rather than from a count anyone has to update by hand [S17]. The test's own `UNCHECKED_HEADING`
+   string and its `len(registry) == 27` literal are not self-updating in that sense, and this
+   build's row-moves between the two tables do change both.
 8. **The corpus question is this spec's to frame, not the backlog's to answer.** The 2026-09-25
    ruling named it explicitly as open: "a measurement-design question to settle in the spec, not
    here" [S1]. D1 frames it.
@@ -192,11 +199,16 @@ builder. The clean `accessibility-004` was among them. The bench counts a correc
 finding against precision [S10], so leaving them would have charged the new scripted check eight
 false positives per pass over the four, two of them on the clean artifact. The same builder's status
 card sits beside a "Refresh status" button with no live-region role, which a model judging
-WCAG-4.1.3 could flag on every artifact. The build fixes both in the builder, so each of the four
-artifacts changes by those three attributes and nothing else. Editing an artifact changes its
-`artifact_sha256`, and scoring joins an envelope to its manifest by that hash, silently skipping an
-envelope it cannot match [S23]. The frozen copy keeps today's bytes and manifests, so every committed
-run set still scores and still reproduces `results.json` and `variance.json`.
+WCAG-4.1.3 could flag on every artifact. An adversarial review after the first pass found a third
+instance of the same WCAG-4.1.3 shape: the builder's promo-code error span sits beside
+`aria-invalid="true"` with no live region either, on every live artifact including the clean
+`accessibility-004`, which is exactly the pattern WCAG-4.1.3's severity-2 anchor names. The build
+fixes all three in the builder, so each of the four artifacts changes by those four attributes and
+nothing else: both `autocomplete` tokens, the status card's `role="status"`, and the promo-code
+error span's `aria-live="polite"`. Editing an artifact changes its `artifact_sha256`, and scoring
+joins an envelope to its manifest by that hash, silently skipping an envelope it cannot match [S23].
+The frozen copy keeps today's bytes and manifests, so every committed run set still scores and still
+reproduces `results.json` and `variance.json`.
 
 **What a replay cannot do here.** E73's own D5 ran a free replay over committed envelopes before
 paying for a dispatch, because the merge-step fix could be sized from historical data with no model
@@ -207,11 +219,34 @@ shared dispatch runs; it cannot preview how a model performs on the five new one
 
 **The shared paid dispatch, drafted (AC-10).** One dispatch measures all seven skills after E73's build
 and this one: 28 corpus artifacts, k=5, on the two pinned tiers, with E73's baseline re-run inside it,
-for 280 skill envelopes and 280 baseline envelopes, 560 in total [S16]. Before it runs, D9's free local
-check runs `checks.py` against every live accessibility artifact and confirms WCAG-1.3.5 fires only
-where it is planted. **The dispatch needs the maintainer's own explicit go before
-`bench/run_bench.py` runs without `--dry-run`.** Until it runs, envelopes produced from `main` carry the
-new criteria under the skill's old version number, so no other dispatch should run first.
+for 280 skill envelopes and 280 baseline envelopes, 560 in total [S16]. D9's free local check has
+run, as D9 ruled, ahead of this dispatch's approval: `checks.py` against every live accessibility
+artifact. On each of the five, the scripted lane's findings equal exactly the planted scripted defects, with
+WCAG-1.3.5 firing once, on `accessibility-005`'s `#email`
+(`bench/tests/test_accessibility_scripted_precision.py` now holds this as a standing regression
+guard). The same `checks.py` run against the four frozen copies, which keep the pre-fix bytes on
+purpose, draws two WCAG-1.3.5 findings each, on the shared builder's old email and phone fields with
+no `autocomplete` token, the base defect the corpus fix removed from every live artifact. **The
+dispatch needs the maintainer's own explicit go before `bench/run_bench.py` runs without
+`--dry-run`.** Until it runs, envelopes produced from `main` carry the new criteria under the skill's
+old version number, so no other dispatch should run first.
+
+## Build notes
+
+- **WCAG-2.4.7's plant uses an inline style, not a `:focus` rule.** D5's maintainer follow-up asked
+  for "an `outline: none` rule on `:focus`"; `accessibility-005`'s plant instead sets
+  `style="outline:none"` directly on a standalone link (technique F78), which the Operational
+  test covers: it reads the stylesheet and inline styles alike. `checks.py`'s CSS engine matches
+  no pseudo-class selector at all, so a scripted test could never see a `:focus` rule either way, and
+  the judged lane reads declared styles, inline or in a stylesheet, the same way.
+- **The build fixed a third base defect beyond D1's Option D: the promo-code error span's missing
+  live region.** An adversarial review, after the first build pass, found that span sitting beside
+  `aria-invalid="true"` with no live region on every live artifact, including the clean
+  `accessibility-004`, which is exactly the pattern WCAG-4.1.3's severity-2 anchor names (see "Why
+  the existing four were edited and also kept"). The shared builder now gives that span
+  `aria-live="polite"` unconditionally, the same way it already fixed the autocomplete and
+  `role="status"` gaps, so the four live artifacts differ from their frozen counterparts by exactly
+  four attribute additions, not three.
 
 ## Acceptance Criteria
 
@@ -225,17 +260,20 @@ Severity 2 anchor, Severity 3 anchor, Lane, Lane rationale), with zero quotation
 Operationalization column. [S4, S14]
 
 AC-3: `scripts/tests/test_wcag_scope_accessibility.py` passes after the build, with no edit to its
-own `WCAG22_LEVEL_A` or `WCAG22_LEVEL_AA` constant sets: only `SKILL.md`'s frontmatter and `WCAG.md`'s
-unchecked-criteria table change, and the disjoint-and-complete assertion still holds over all 55
-criteria. [S17]
+own `WCAG22_LEVEL_A` or `WCAG22_LEVEL_AA` constant sets. `SKILL.md`'s frontmatter and `WCAG.md`'s
+unchecked-criteria table change, and so do two of the test's own literals that name a count rather
+than deriving one, its `UNCHECKED_HEADING` string and its `len(registry) == 27` assertion; the
+disjoint-and-complete assertion still holds over all 55 criteria. [S17]
 
 AC-4: Every criterion D2 through D6 keep scripted gets a `scripts/checks.py` function, entered in
 `IMPLEMENTED_CRITERIA`, and a passing case in `scripts/tests/test_checks_accessibility.py`; every
 criterion kept judged gets neither, and is swept instead in `SKILL.md`'s protocol pass 2. [S5, S7]
 
 AC-5: D1's Option D is built. The shared form builder gives the email and phone fields `autocomplete`
-tokens and the status card `role="status"`, and those three attributes are the only change to
-`accessibility-001` through `004`. A new `accessibility-005` carries one planted instance of each of
+tokens, the status card `role="status"`, and the promo-code error span `aria-live="polite"` (a third
+WCAG-4.1.3 base defect an adversarial review found after the first pass), and those four attributes
+are the only change to `accessibility-001` through `004`. A new `accessibility-005` carries one
+planted instance of each of
 the five criteria, consistent with "At most one planted defect per criterion per section, or per
 top-level `<section>` in HTML." Today's four artifacts and manifests are kept under
 `bench/corpus/_frozen/v1/accessibility/`, and the documented variance command still reproduces the
@@ -812,8 +850,10 @@ unverified until the one expensive run has already happened.
 
 - Whether the pinned models can find the four judged criteria at all. No committed envelope has ever
   been judged against them, so the shared dispatch is their first measurement.
-- Whether a judged sweep flags WCAG-2.5.8 on the shared page's nav links or icon control, or
-  WCAG-4.1.3 on its inline promo-code error, on the clean `accessibility-004`. The build fixed the two
-  base defects it could confirm, and these are the ones it could not rule out from static markup.
+- Whether a judged sweep flags WCAG-2.5.8 on the shared page's nav links or icon control, on the
+  clean `accessibility-004`. A later review found and fixed a third base defect of the same
+  WCAG-4.1.3 shape, on the promo-code error span (see "Build notes"), so that question is settled;
+  WCAG-2.5.8's nav-link and icon-control sizing is the one this build could not rule out from static
+  markup.
 - The dollar cost of the shared paid dispatch at 560 envelopes. Translating envelopes to a dollar
   figure needs per-token pricing that neither this spec nor E73's states.

@@ -86,7 +86,10 @@ mechanical reading of that criterion's own two anchor rows, not an independent p
   once, so there is no lesser branch to grade.
 
 A judged-lane finding has no equivalent table, by construction: its severity comes from the weighing
-order applied to that criterion's own two anchor rows. What the list above prevents is the opposite
+order applied to that criterion's own two anchor rows. WCAG-1.3.4 is the one named exception: its
+severity 2 anchor in `references/WCAG.md` reads "Not assigned" rather than an example, so that
+criterion carries only one anchor row, and every instance of its failure is graded severity 3
+directly, with no lesser branch to weigh against. What the list above prevents is the opposite
 failure, a scripted finding and a judged finding on comparable defects landing at different levels
 because only one of them had a stated boundary.
 

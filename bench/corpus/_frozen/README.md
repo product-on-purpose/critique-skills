@@ -6,14 +6,19 @@ can still be scored.
 
 ## Why this exists
 
-On 2026-10-27, `critique-accessibility` added five new WCAG 2.2 AA criteria (E67). A pre-work check
-found a problem in the shared builder, `bench/generator/domains/accessibility.py`. The builder built
-an email input and a phone input with no `autocomplete` attribute. It also built a status card with
-no `role="status"`. The new WCAG-1.3.5 criterion covers autocomplete. The new WCAG-4.1.3 criterion
-covers status messages. Once those criteria existed, every artifact from that shared builder would
-trip them, including the one artifact meant to be clean. The fix adds the missing attributes to the
-builder itself. That fix changes the rendered bytes of `accessibility-001.html` through
-`accessibility-004.html`, and therefore changes their `artifact_sha256`.
+On 2026-10-27, `critique-accessibility` added five new WCAG 2.2 AA criteria
+([E67 (accessibility expansion)](../../../docs/internal/backlog/enhancements.md)). A pre-work check
+found two problems in the shared builder, `bench/generator/domains/accessibility.py`. The builder
+built an email input and a phone input with no `autocomplete` attribute. It also built a status card
+with no `role="status"`. The new WCAG-1.3.5 criterion covers autocomplete. The new WCAG-4.1.3
+criterion covers status messages. Once those criteria existed, every artifact from that shared
+builder would trip them, including the one artifact meant to be clean. An adversarial review after
+the first fix found a third problem of the same WCAG-4.1.3 shape: the builder's promo-code error span
+sits beside `aria-invalid="true"` with no live region either. The fix adds the missing attributes to
+the builder itself, four in total: both `autocomplete` tokens, the status card's `role="status"`, and
+the promo-code error span's `aria-live="polite"`. That fix changes the rendered bytes of
+`accessibility-001.html` through `accessibility-004.html`, and therefore changes their
+`artifact_sha256`.
 
 Scoring joins a run envelope to its manifest by `artifact_sha256`. See `bench/metrics/__main__.py`,
 `build_results`. `bench/variance.py` skips an envelope whose sha matches no manifest, rather than
@@ -34,6 +39,12 @@ unchanged.
 No other domain is frozen here. Only accessibility's shared builder changed in a way that altered
 already-shipped artifact bytes.
 
+`bench/results/measurement-manifest.json`, the staging record for the p3-2026-07-31 run set, is left
+unchanged on purpose: it is a historical record of what was staged and hashed at the time, not a live
+pointer. Its `originalPath` entries for `accessibility-001.html` through `accessibility-004.html`
+name `bench/corpus/accessibility/...`, the live path those bytes held when that record was written;
+the same bytes are now kept here, under `v1/accessibility/`.
+
 ## Which committed run sets this binds
 
 Three directories under `bench/results/` hold committed envelopes whose `run.artifact_sha256`
@@ -50,9 +61,7 @@ envelopes scored against the accessibility domain, or both:
   were scored against the same pre-fix bytes.
 
 `bench/results/runs-dispatch-37091134037/` (run set `bench-2026-10-03`) does not bind here. It holds
-`critique-forms` and `baseline-generic`-on-forms envelopes, not accessibility. An earlier description
-of this effort named that directory as the third accessibility-binding run set. That was wrong, and
-this corrects it.
+`critique-forms` and `baseline-generic`-on-forms envelopes, not accessibility.
 
 ## Why no flag or exclusion is needed to keep scoring working
 

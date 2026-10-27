@@ -1489,17 +1489,20 @@ def _check_form_labels(tree):
 # ---------------------------------------------------------------------------
 # WCAG-1.3.5: identify input purpose
 #
-# Scoped and matched exactly as references/WCAG.md's row states, and
-# deliberately narrower than references/FORMS.md's purpose inference
-# (skills/critique-forms/scripts/checks.py, `_purpose`): only a field's own
-# `type`, `name`, or `id` attribute decides whether it is in scope, after
-# folding case and separator differences to one hyphenated form; label and
-# placeholder text are never read. Two vocabularies, not one:
+# Ruling D2: scripted, with the same closed-vocabulary, fixed-field-purpose
+# approach FORMS-AUTOCOMPLETE (skills/critique-forms/scripts/checks.py)
+# already uses: check only fields the script can name a purpose for (by
+# type, name, or id matching a closed list drawn from WCAG's own Input
+# Purposes), flag a missing or invalid autocomplete token, and stay silent
+# on any field outside that closed list rather than guessing. Label and
+# placeholder text are never read, on any field, which is what keeps this
+# narrower than references/FORMS.md's own purpose inference even though
+# the matching mechanism below mirrors it. Two vocabularies, not one:
 #
 #   - WCAG_INPUT_PURPOSE_TOKENS is WCAG 2.2 section 7's own closed list of
 #     input purposes (53 tokens, confirmed against the W3C Recommendation
-#     text on 2026-10-27), and decides SCOPE: which fields this criterion
-#     reaches at all.
+#     text on 2026-10-27), and, together with WCAG_PURPOSE_CUES below,
+#     decides SCOPE: which fields this criterion reaches at all.
 #   - AUTOFILL_FIELD_NAMES / AUTOFILL_CONTACT_FIELD_NAMES / _parse_autofill
 #     are the HTML standard's full autofill grammar (whatwg-html-autofill,
 #     4.10.18.7), mirrored verbatim from
@@ -1512,7 +1515,30 @@ def _check_form_labels(tree):
 #     purpose (a one-time code is a transient security value, not personal
 #     data the standard asks a page to identify). A present token is
 #     therefore judged against the wider grammar, never against the
-#     narrower scope list.
+#     narrower scope list, so a field correctly marked autocomplete="tel"
+#     is never flagged for naming the "wrong" purpose (references/WCAG.md's
+#     WCAG-1.3.5 row states this as one of the check's own limits).
+#
+# Scope matching mirrors critique-forms's own cue-word matching (`_words`,
+# `_matches`, `PURPOSE_CUES`, `TYPE_PURPOSE`), narrowed twice per D2:
+#
+#   1. Only a field's own `type`, `name`, or `id` attribute is ever read;
+#      critique-forms's label and placeholder signals never are.
+#   2. Only a FORMS purpose that maps onto one of WCAG's own input-purpose
+#      tokens is matched at all. One-time code, account number, search,
+#      quantity, house number, and county name no WCAG token and are never
+#      matched; a bare date part (day, month, year) is matched only when a
+#      birth cue (birth, date of birth, dob, born, birthday) also appears
+#      in the SAME attribute value, since reading a birth trio across
+#      sibling fields or a fieldset legend, the way critique-forms's own
+#      date-format checks do, needs structure beyond one field's own
+#      type, name, or id.
+#
+# A field's own `type`, `name`, or `id` is checked against the exact
+# closed-token list first, and only when that misses is the cue-word match
+# tried; see `_input_purpose_token`, below, for the exact precedence among
+# the three attributes (S8's regression test covers the case where they
+# disagree).
 # ---------------------------------------------------------------------------
 
 AUTOFILL_FIELD_NAMES = frozenset({
@@ -1535,12 +1561,13 @@ AUTOFILL_CONTACT_TYPES = frozenset({"home", "work", "mobile", "fax", "pager"})
 # WCAG 2.2 section 7's closed list of input purposes: the autofill grammar
 # above, minus `one-time-code`, the one field name the HTML standard adds
 # that section 7 does not list. Fixed and closed, per the module comment
-# above; a field whose type, name, and id all miss this list is never
-# flagged, no matter how it reads to a person.
+# above; a field whose type, name, and id all miss this list, exactly and
+# by cue word both, is never flagged, no matter how it reads to a person.
 WCAG_INPUT_PURPOSE_TOKENS = (AUTOFILL_FIELD_NAMES | AUTOFILL_CONTACT_FIELD_NAMES) - {"one-time-code"}
 
 NON_PURPOSE_INPUT_TYPES = frozenset({
     "hidden", "submit", "reset", "button", "image", "checkbox", "radio", "file", "range", "color",
+    "search",
 })
 
 
@@ -1571,41 +1598,212 @@ def _normalize_purpose_candidate(value):
     """`value`, folded to one lowercase, hyphenated form: a camelCase
     boundary, an underscore, or whitespace all become a hyphen, so
     givenName, given_name and given-name all read as given-name. This is
-    the only normalization WCAG_INPUT_PURPOSE_TOKENS membership allows; no
-    broader synonym table sits behind it (unlike references/FORMS.md's
-    purpose inference), which is what keeps this a closed-vocabulary
-    lookup rather than a cue-word match."""
+    the exact-match half of input-purpose matching: `value` folds, as a
+    whole, to one of WCAG_INPUT_PURPOSE_TOKENS or it does not, with no
+    synonym table behind it. `_cue_purpose_token`, below, is the cue-word
+    half, mirrored from references/FORMS.md's own purpose inference for
+    the same three attributes (fix 1, ruling D2); the two together are
+    what `_attr_purpose_token` tries, exact first."""
     value = re.sub(r"([a-z0-9])([A-Z])", r"\1-\2", value or "")
     value = re.sub(r"[\s_]+", "-", value)
     return value.strip("-").lower()
 
 
-def _input_purpose_token(node):
-    """The WCAG input-purpose token this control's own `type`, `name`, or
-    `id` names after normalization, or None when none of the three lands
-    in WCAG_INPUT_PURPOSE_TOKENS. Checked in that order, but the order
-    carries no precedence here (unlike references/FORMS.md's four-signal
-    purpose inference): at most one of the three is ever a non-empty
-    attribute value that also happens to be a token, so the three cannot
-    disagree on a real field."""
-    for attr_name in ("type", "name", "id"):
-        candidate = _normalize_purpose_candidate(node.attrs.get(attr_name) or "")
-        if candidate in WCAG_INPUT_PURPOSE_TOKENS:
-            return candidate
+def _words(text):
+    """Lower-case words, split at case changes, digits and anything that
+    is not a letter or digit (hyphens, underscores, punctuation, spaces).
+    Mirrors skills/critique-forms/scripts/checks.py's function of the
+    same name."""
+    text = re.sub(r"([a-z])([A-Z])", r"\1 \2", text or "")
+    text = re.sub(r"([A-Za-z])(\d)|(\d)([A-Za-z])", lambda m: " ".join(g for g in m.groups() if g), text)
+    return re.sub(r"[^A-Za-z0-9]+", " ", text).lower().split()
+
+
+def _cue_matches(cue, words):
+    """A cue matches as a whole-word run, or with its spaces removed as one
+    word, so firstname reads as first name and zipcode as zip code. Mirrors
+    skills/critique-forms/scripts/checks.py's `_matches`."""
+    cue_words = _words(cue)
+    n = len(cue_words)
+    if any(words[i:i + n] == cue_words for i in range(len(words) - n + 1)):
+        return True
+    return n > 1 and "".join(cue_words) in words
+
+
+# references/FORMS.md's own birth-date cues (critique-forms's BIRTH_CUES),
+# mirrored here because a birth cue and a bare date-part word inside the
+# SAME type/name/id signal is the one cross-word combination this
+# criterion's scope reads (fix 1). A birth trio spread across sibling
+# fields or named only by a fieldset legend, the way critique-forms's own
+# date-format checks read it, needs structure beyond one field's own
+# attributes and stays out of scope, per D2.
+BIRTH_CUES = ("birth", "date of birth", "dob", "born", "birthday")
+_DATE_UNIT_WORD_TOKEN = {"day": "bday-day", "month": "bday-month", "year": "bday-year"}
+
+
+def _birth_cue_token(words):
+    """bday-day, bday-month, or bday-year when `words` carries both a birth
+    cue and a day/month/year word; bare bday when it carries a birth cue
+    alone; None when no birth cue is present, which is what keeps a bare
+    date part (references/FORMS.md's "date part" purpose, which names no
+    WCAG token of its own) out of scope here."""
+    if not any(_cue_matches(cue, words) for cue in BIRTH_CUES):
+        return None
+    for word, token in _DATE_UNIT_WORD_TOKEN.items():
+        if word in words:
+            return token
+    return "bday"
+
+
+# references/FORMS.md's own cue table (critique-forms's PURPOSE_CUES),
+# mirrored for the type/name/id signal only and narrowed to the purposes
+# that map onto one of WCAG 2.2 section 7's own input-purpose tokens (fix
+# 1). Every FORMS purpose left out here - one-time code, account number,
+# search, quantity, house number, and county - names no WCAG token at all,
+# per references/WCAG.md's WCAG-1.3.5 row, and is never matched no matter
+# how plainly a field's type, name, or id names it.
+WCAG_PURPOSE_CUES = (
+    ("postal-code", ("postcode", "post code", "postal code", "zip", "zip code")),
+    ("email", ("email", "e-mail", "email address")),
+    ("tel", ("phone", "telephone", "tel", "mobile", "cell", "phone number", "mobile number", "telephone number")),
+    ("url", ("website", "url", "homepage", "web address")),
+    ("username", ("username", "user name", "login", "user id")),
+    ("street-address", ("address", "street", "address line")),
+    ("address-level2", ("city", "town")),
+    ("address-level1", ("state", "province", "region")),
+    ("country", ("country",)),
+    ("given-name", ("first name", "given name", "forename")),
+    ("family-name", ("last name", "surname", "family name")),
+    ("additional-name", ("middle name",)),
+    ("name", ("full name", "your name")),
+)
+
+
+def _cue_purpose_token(value):
+    """The WCAG input-purpose token `value`'s cue words name: the birth-date
+    combiner first, since it is the one purpose two cue words decide
+    together, then WCAG_PURPOSE_CUES in order; None when nothing matches.
+    `value` is one field's own type, name, or id attribute value; label and
+    placeholder text are never read (ruling D2)."""
+    words = _words(value)
+    if not words:
+        return None
+    birth = _birth_cue_token(words)
+    if birth is not None:
+        return birth
+    for token, cues in WCAG_PURPOSE_CUES:
+        if any(_cue_matches(cue, words) for cue in cues):
+            return token
     return None
+
+
+def _attr_purpose_token(value):
+    """The WCAG input-purpose token one attribute value names: the exact
+    closed-token match first (`value` folds, as a whole, to one of
+    WCAG_INPUT_PURPOSE_TOKENS), and only when that misses, the cue-word
+    match."""
+    normalized = _normalize_purpose_candidate(value)
+    if normalized in WCAG_INPUT_PURPOSE_TOKENS:
+        return normalized
+    return _cue_purpose_token(value)
+
+
+def _input_purpose_token(node):
+    """The WCAG input-purpose token this control's own `name`, `id`, or
+    `type` names, or None when none of the three does. Checked in that
+    order. A prior version of this docstring claimed the three signals
+    "cannot disagree"; `<input type="email" id="username">` disproves it
+    (S8). When they do disagree, `name` or `id` wins over `type` for the
+    suggested token, which is what this order gives for free, rather than
+    `type` winning as it used to.
+
+    A textarea holds several lines, and street address is the only
+    multi-line WCAG input purpose (references/FORMS.md's `_purpose` makes
+    the same call for the same reason), so a textarea resolves to
+    street-address or nothing, never whatever single-line purpose its
+    name, id, or type would otherwise suggest."""
+    token = None
+    for attr_name in ("name", "id", "type"):
+        token = _attr_purpose_token(node.attrs.get(attr_name) or "")
+        if token:
+            break
+    if node.tag == "textarea" and token != "street-address":
+        return None
+    return token
 
 
 def _form_autocomplete_off(node):
     """Whether the nearest ancestor <form> declares autocomplete=off, which
     the HTML standard applies to every field inside it that sets no token
     of its own (references/FORMS.md, FORMS-AUTOCOMPLETE's own reading of
-    the same cascade)."""
+    the same cascade). A field associated to a form elsewhere in the
+    document through its own `form="id"` attribute, rather than by being
+    that form's descendant, is not followed here; references/WCAG.md's
+    WCAG-1.3.5 row states this as one of the check's own limits."""
     n = node.parent
     while n is not None:
         if n.tag == "form":
             return (n.attrs.get("autocomplete") or "").strip().lower() == "off"
         n = n.parent
     return False
+
+
+def _is_excluded_from_input_purpose(node):
+    """Scope exclusions beyond the input-purpose vocabulary itself (fix 2,
+    S7/N2): a disabled or readonly field never collects anything from this
+    reader, a field inside a `<fieldset disabled>` is disabled the same
+    way, and a field inside a search landmark (a `<search>` element, or any
+    element carrying `role="search"`) is a query field WCAG's own Input
+    Purposes list was never written to cover, the same reason
+    `type="search"` is excluded by NON_PURPOSE_INPUT_TYPES above. This
+    narrows scope; it does not decide whether a field collects information
+    about the reader at all, which is WCAG's own scope question for this
+    criterion and stays a human judgment call this script never makes."""
+    if "disabled" in node.attrs or "readonly" in node.attrs:
+        return True
+    n = node.parent
+    while n is not None:
+        if n.tag == "fieldset" and "disabled" in n.attrs:
+            return True
+        if n.tag == "search" or (n.attrs.get("role") or "").strip().lower() == "search":
+            return True
+        n = n.parent
+    return False
+
+
+def _autocomplete_kind(node):
+    """Which bucket this control's own-or-inherited autocomplete value
+    falls into, or None when a present, parseable, non-off value means no
+    finding at all:
+
+    - "missing": no autocomplete attribute is present at all, or its value
+      is the literal "on", which the HTML standard treats as carrying no
+      usable token either way, the same bucket FORMS-AUTOCOMPLETE
+      (skills/critique-forms/scripts/checks.py, `_check_autocomplete`)
+      gives both conditions (N1); a present "on" is deliberately not
+      graded as "invalid" here.
+    - "empty": the attribute is present with an empty value after
+      trimming, kept distinct from "missing" because a page that writes
+      autocomplete="" deliberately cleared the attribute, which is not the
+      same fact as never having set it (N1).
+    - "off": the field's own value is off, or it sets no token and the
+      nearest ancestor <form> declares autocomplete="off".
+    - "invalid": a present, non-empty, non-on, non-off value that does not
+      parse under the HTML standard's autofill grammar (`_parse_autofill`).
+    """
+    raw = node.attrs.get("autocomplete")
+    if raw is None:
+        return "off" if _form_autocomplete_off(node) else "missing"
+    value = raw.strip().lower()
+    if value == "":
+        return "empty"
+    if value == "on":
+        return "missing"
+    if value == "off":
+        return "off"
+    if _parse_autofill(value.split()) is None:
+        return "invalid"
+    return None
 
 
 def _check_input_purpose(tree):
@@ -1615,7 +1813,7 @@ def _check_input_purpose(tree):
             continue
         if node.tag == "input" and (node.attrs.get("type") or "text").strip().lower() in NON_PURPOSE_INPUT_TYPES:
             continue
-        if "disabled" in node.attrs:
+        if _is_excluded_from_input_purpose(node):
             continue
         if _is_hidden(node):
             continue
@@ -1624,19 +1822,9 @@ def _check_input_purpose(tree):
         if token is None:
             continue
 
-        own_value = (node.attrs.get("autocomplete") or "").strip().lower()
-        if own_value:
-            value, inherited_off = own_value, False
-        else:
-            inherited_off = _form_autocomplete_off(node)
-            value = "off" if inherited_off else ""
-
-        if not value:
-            flagged.append((node, token, "missing"))
-        elif value == "off":
-            flagged.append((node, token, "off"))
-        elif _parse_autofill(value.split()) is None:
-            flagged.append((node, token, "invalid"))
+        kind = _autocomplete_kind(node)
+        if kind is not None:
+            flagged.append((node, token, kind))
 
     severity = _severity_for_count(len(flagged))
     findings = []
@@ -1644,7 +1832,12 @@ def _check_input_purpose(tree):
         if kind == "missing":
             violation = (
                 f"This field's type, name, or id identifies the {token} input purpose, but it "
-                "carries no autocomplete attribute, so the purpose is not programmatically determinable."
+                "carries no autocomplete token, so the purpose is not programmatically determinable."
+            )
+        elif kind == "empty":
+            violation = (
+                f"This field's type, name, or id identifies the {token} input purpose, but its "
+                "autocomplete attribute is empty, so the purpose is not programmatically determinable."
             )
         elif kind == "off":
             violation = (

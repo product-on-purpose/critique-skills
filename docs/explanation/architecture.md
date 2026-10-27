@@ -30,8 +30,8 @@ flowchart TD
   end
   subgraph runtime["Runtime"]
     critic["agents/critique-critic<br/>clean-context runner"]:::comp
-    scripted["Scripted lane<br/>scripts/checks.py<br/>42 criteria"]:::det
-    judged["Judged lane<br/>model reads the rubric<br/>54 criteria"]:::mod
+    scripted["Scripted lane<br/>scripts/checks.py<br/>61 criteria"]:::det
+    judged["Judged lane<br/>model reads the rubric<br/>64 criteria"]:::mod
   end
   subgraph frozen["Frozen contract"]
     schema["contract/critique-contract.schema.json<br/>finding + envelope + disposition log"]:::contract
@@ -58,9 +58,9 @@ flowchart TD
   classDef out fill:#eef2ff,stroke:#818cf8,color:#312e81
 ```
 
-In text: a published rubric is operationalized into a skill carrying 120 permanent criterion IDs.
+In text: a published rubric is operationalized into a skill carrying 125 permanent criterion IDs.
 The `critique-critic` subagent runs that skill in clean context, splitting the work into a scripted
-lane (42 criteria, deterministic Python) and a judged lane (54 criteria, model judgment against the
+lane (61 criteria, deterministic Python) and a judged lane (64 criteria, model judgment against the
 rubric text). Both lanes emit into one frozen JSON Schema contract. The resulting record goes to a
 person to dispose, and is separately measured against a seeded-defect benchmark.
 
