@@ -107,24 +107,29 @@ Follow these four passes in order. Do not skip ahead to severity or fixes while 
    `docs/reference/severity-scale.md` (impact, then frequency, then persistence) and this skill's
    own `references/severity-anchors.md`. Do not assign severity while still discovering problems;
    that inflates it.
-4. **Assemble the envelope. Do not do this pass by hand.** Write every finding from both lanes to
-   one JSON file, then hand that file to the library's own assembler. Two steps, in this order:
+4. **Assemble the envelope. Do not do this pass by hand.** Write your judged-lane findings only to
+   one JSON file, then hand that file to the library's own assembler; it runs this skill's own
+   scripted lane itself, from `scripts/checks.py` against the same artifact, so there is no script
+   finding to copy into this file. Two steps, in this order:
 
    ```
-   # 1. Write the combined pool. Use an ABSOLUTE path; you are about to change directory.
+   # 1. Write the judged-lane pool. Use an ABSOLUTE path; you are about to change directory.
    cat > /absolute/path/to/findings.json << 'EOF'
-   {"findings": [ ...every finding from both lanes... ]}
+   {"findings": [ ...every judged-lane finding... ]}
    EOF
 
    # 2. Assemble, from this skill's directory, exactly as you ran scripts/checks.py in pass 2.
    python3 scripts/merge.py --artifact <the SAME artifact path you gave checks.py> --findings /absolute/path/to/findings.json
    ```
 
-   It ranks by severity, applies the output bound (every severity 3 and 4 finding, plus at most
-   five below that threshold), assigns `F-NNN` ids after ranking, counts everything suppressed into
-   `summary.suppressed_count` so nothing disappears uncounted, builds `summary.by_severity` over
-   **everything found** rather than only what survived bounding, computes the gate, normalises
-   prose to the contract's rules, and validates before printing.
+   It runs the scripted lane itself and merges it with your judged-lane findings, ranks the
+   combined pool by severity, applies the output bound (every severity 3 and 4 finding, plus at
+   most five below that threshold), assigns `F-NNN` ids after ranking, counts everything
+   suppressed into `summary.suppressed_count` so nothing disappears uncounted, builds
+   `summary.by_severity` over **everything found** rather than only what survived bounding,
+   computes the gate, normalises prose to the contract's rules, and validates before printing. A
+   finding your file carries on a scripted criterion is dropped rather than merged in: the scripted
+   lane is `checks.py`'s own output, and only that.
 
    `scripts/merge.py` sits beside `scripts/checks.py` and is run the same way, from the same
    directory, so if pass 2 worked then this works. It knows its own skill name from its own

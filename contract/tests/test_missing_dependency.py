@@ -97,6 +97,27 @@ def test_contract_cli_reports_the_remedy(without_jsonschema: str, gate: bool) ->
     assert proc.returncode == (4 if gate else 1)
 
 
+def test_skill_merge_shim_reports_the_remedy(without_jsonschema: str, tmp_path: Path) -> None:
+    """E73 (merge runs the scripted lane itself): scripts/merge.py now loads a skill's own
+    checks.py and calls check() in-process, the same chain test_skill_scripted_lane_reports_the_remedy
+    above exercises, plus its own call to contract.validate.validate_document. Neither call may
+    let a missing jsonschema reach the caller as a traceback. merge.py has no --gate flag, so (unlike
+    checks.py and the contract CLI above) it always uses the plain, non-gate exit code.
+    """
+    findings_file = tmp_path / "findings.json"
+    findings_file.write_text('{"findings": []}', encoding="utf-8")
+    args = [
+        "skills/critique-clarity/scripts/merge.py",
+        "--artifact",
+        str(ARTIFACT),
+        "--findings",
+        str(findings_file),
+    ]
+    proc = _run(args, without_jsonschema)
+    _assert_actionable(proc)
+    assert proc.returncode == 1
+
+
 def test_importing_the_skill_chain_no_longer_fails_at_import_time(without_jsonschema: str) -> None:
     """The chain must load cleanly; the error belongs at the point of use, not at import.
 

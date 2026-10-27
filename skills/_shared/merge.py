@@ -1,4 +1,4 @@
-"""Assemble one contract-valid run envelope from a critique's merged findings.
+"""Assemble one contract-valid run envelope from a critique's scripted and judged findings.
 
 WHY THIS EXISTS. `skills/_shared/envelope.py` has carried the deterministic assembly logic from the
 start, and `assemble_envelope`'s own docstring names its intended callers as "skills/_shared/
@@ -20,6 +20,16 @@ Both are arithmetic and recall, not judgment. This module turns them into a subp
 already has the tools to run, so the four passes of the protocol stay the critic's work and the
 bookkeeping stops being.
 
+E73 (2026-10-26) removed a second kind of trust this module used to extend to the model: it no
+longer accepts the model's own copy of the scripted lane, or the model's own claim about which lane
+a finding belongs to. This module now runs the skill's own `scripts/checks.py` `check(artifact)`
+itself, in-process, exactly as `skills/_shared/runner.py`'s `_run` does, and that is the entire
+scripted lane. A model finding's lane comes from the skill's own `SKILL.md` declaration
+(`checks.scripted` / `checks.judged`), never from a `lane` field the model wrote: a finding on a
+scripted criterion is dropped (the script already covers it, and the drop is reported on standard
+error), and a finding on an undeclared criterion is rejected unless it is marked
+`rubric_source: byor`. See `docs/internal/decisions/0041-merge-runs-the-scripted-lane-itself.md`.
+
 Everything derivable is derived rather than asked for: the artifact hash is computed from the file,
 `rubrics` from the namespaces the findings actually cite, and the skill version from its SKILL.md.
 Each one is a field a critic could otherwise transcribe wrongly.
@@ -27,14 +37,16 @@ Each one is a field a critic could otherwise transcribe wrongly.
 Usage:
     python skills/_shared/merge.py --skill critique-clarity --artifact path/to/file.md < findings.json
 
-`findings.json` is either {"findings": [...]} or a bare [...]. Prints one envelope to stdout, and
-prints nothing at all if it would not validate.
+`findings.json` is either {"findings": [...]} or a bare [...], and holds the judged lane only: the
+scripted lane comes from running `checks.py` on `--artifact`, not from this file. Prints one envelope
+to stdout, and prints nothing at all if it would not validate.
 """
 
 from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import re
 import sys
@@ -54,7 +66,8 @@ ROOT = _find_repo_root(Path(__file__).resolve())
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from contract.validate import validate_document  # noqa: E402
+from contract.validate import MissingDependencyError, validate_document  # noqa: E402
+from skills._shared.artifact import Artifact  # noqa: E402
 from skills._shared.envelope import assemble_envelope  # noqa: E402
 from skills._shared.findings import RawFinding  # noqa: E402
 
@@ -114,6 +127,78 @@ def read_skill_version(skill_md_text: str) -> str:
     raise ValueError("SKILL.md frontmatter declares no metadata.version")
 
 
+_skill_selftest_module_cache: dict[str, Any] = {}
+
+
+def _skill_selftest_parse_frontmatter(repo_root: Path):
+    """Load `scripts/skill-selftest.py` as a module and return its `parse_frontmatter` function.
+
+    Cached per resolved path, since the module defines nothing that depends on call-time state and
+    reloading it on every `read_lane_manifest` call would cost a file read and a parse for nothing.
+    """
+    path = repo_root / "scripts" / "skill-selftest.py"
+    key = str(path.resolve()) if path.exists() else str(path)
+    module = _skill_selftest_module_cache.get(key)
+    if module is None:
+        if not path.is_file():
+            raise MergeError(f"{path} does not exist")
+        module_name = "_critique_skills_skill_selftest"
+        spec = importlib.util.spec_from_file_location(module_name, path)
+        if spec is None or spec.loader is None:
+            raise MergeError(f"could not load {path} as a module")
+        module = importlib.util.module_from_spec(spec)
+        # Registered before exec_module for the same reason `_load_check_fn` registers a skill's
+        # checks.py: this file's `@dataclass(frozen=True)` resolves its own module by this name.
+        sys.modules[module_name] = module
+        spec.loader.exec_module(module)
+        _skill_selftest_module_cache[key] = module
+    return module.parse_frontmatter
+
+
+def read_lane_manifest(
+    skill_md_text: str, *, repo_root: Path = ROOT
+) -> tuple[frozenset[str], frozenset[str]]:
+    """Return `(scripted, judged)` criterion ID sets from a SKILL.md's `checks.scripted` and
+    `checks.judged` frontmatter declaration (docs/internal/skill-template.md, "Lane manifest").
+
+    This is what requirement 3 means by "a model finding's lane comes from the declaration": this
+    function is the declaration, and a finding's own `lane` field never overrides it.
+
+    Delegates to `scripts/skill-selftest.py`'s own `parse_frontmatter`, the parser that gates every
+    SKILL.md in CI (`scripts/tests/test_skills_conformance.py`), rather than a second, hand-rolled
+    reader of the same block. The hand-rolled reader this replaced disagreed with that parser on
+    three inputs every SKILL.md author could plausibly write: a quoted ID kept its quotes (so
+    `"A-ONE"` never matched the bare `A-ONE` a finding cites), a list item with a trailing inline
+    comment was dropped outright, and a `checks:` sibling key other than `scripted`/`judged` (a
+    `notes:` block, say) leaked its items into whichever lane preceded it. All seven shipped
+    `SKILL.md` files and the template fixture happened to avoid every one of those shapes, so the
+    disagreement was latent. Importing the real parser means a future change to it changes this
+    function too, instead of leaving two readers to drift apart unnoticed.
+    """
+    parse_frontmatter = _skill_selftest_parse_frontmatter(repo_root)
+    try:
+        frontmatter = parse_frontmatter(skill_md_text.lstrip("﻿"))
+    except Exception as exc:
+        raise ValueError(f"SKILL.md: {exc}") from exc
+
+    checks = frontmatter.get("checks") if isinstance(frontmatter, dict) else None
+    if not isinstance(checks, dict):
+        raise ValueError("SKILL.md frontmatter declares no checks.scripted or checks.judged manifest")
+
+    def _ids(key: str) -> list[str]:
+        value = checks.get(key)
+        if value in (None, []):
+            return []
+        if not isinstance(value, list):
+            raise ValueError(f"SKILL.md frontmatter's checks.{key} is not a list")
+        return [str(item) for item in value]
+
+    scripted, judged = _ids("scripted"), _ids("judged")
+    if not scripted and not judged:
+        raise ValueError("SKILL.md frontmatter declares no checks.scripted or checks.judged manifest")
+    return frozenset(scripted), frozenset(judged)
+
+
 class MergeError(RuntimeError):
     """Raised when the input cannot be turned into an envelope at all."""
 
@@ -135,19 +220,20 @@ def _sanitize_prose(text: str, *, max_length: int) -> str:
     return text
 
 
-def _to_raw(finding: Mapping[str, Any], *, index: int) -> RawFinding:
+def _to_raw_judged(finding: Mapping[str, Any], *, index: int) -> RawFinding:
+    """Build a RawFinding for one kept model finding. Lane is always "judged": a finding only
+    reaches here because its criterion is in `checks.judged`, or it carries
+    `rubric_source: byor` (D2 option A) - never because its criterion is in `checks.scripted`,
+    which is dropped before this function is called (D1 option A). Confidence defaults to
+    "medium" when the model states none (D3 option A); a stated value, including "high", is left
+    alone, because it is the model's own claim, not a scripted fact.
+    """
     missing = [k for k in ("criterion", "severity", "location", "evidence", "violation", "fix") if k not in finding]
     if missing:
         raise MergeError(f"finding {index}: missing required field(s) {', '.join(missing)}")
 
-    lane = str(finding.get("lane", "scripted"))
-    confidence = str(finding.get("confidence", "high"))
-    if lane == "scripted" and confidence != "high":
-        # Not a judgment call. A scripted finding came from a deterministic check, so "high" is
-        # simply true, and the contract pins it on those grounds (methodology section 5: scripted
-        # findings "are always high confidence or they are bugs"). A model claiming otherwise is
-        # stating something false about its own lane, not expressing a real doubt.
-        confidence = "high"
+    confidence = finding.get("confidence")
+    confidence = str(confidence) if confidence else "medium"
 
     try:
         severity = int(finding["severity"])
@@ -161,12 +247,104 @@ def _to_raw(finding: Mapping[str, Any], *, index: int) -> RawFinding:
         evidence=_sanitize_prose(str(finding["evidence"]), max_length=_PROSE_FIELD_MAX_LENGTH["evidence"]),
         violation=_sanitize_prose(str(finding["violation"]), max_length=_PROSE_FIELD_MAX_LENGTH["violation"]),
         fix=_sanitize_prose(str(finding["fix"]), max_length=_PROSE_FIELD_MAX_LENGTH["fix"]),
-        lane=lane,
+        lane="judged",
         confidence=confidence,
         instances=tuple(finding.get("instances") or ()),
         rubric_source=finding.get("rubric_source"),
         selector=finding.get("selector"),
     )
+
+
+def _route_model_findings(
+    findings: Sequence[Mapping[str, Any]],
+    *,
+    scripted_ids: frozenset[str],
+    judged_ids: frozenset[str],
+) -> tuple[list[RawFinding], dict[str, int]]:
+    """Requirements 3-6 (D1, D2, D3): file each model finding under the lane its criterion is
+    declared in, never the lane the model wrote in its own `lane` field.
+
+    Returns the kept, judged-lane findings and a `{criterion: dropped_count}` map, which is D1's
+    "report the count on standard error" (requirement 4); the caller decides how to report it.
+    Raises MergeError naming every undeclared, non-BYOR criterion at once (D2 option A, requirement
+    5), rather than failing on the first one, so one merge run reports every bad ID it saw.
+    """
+    kept: list[RawFinding] = []
+    dropped: dict[str, int] = {}
+    undeclared: list[str] = []
+
+    for index, finding in enumerate(findings):
+        if not isinstance(finding, Mapping):
+            raise MergeError(f"finding {index}: expected an object, got {type(finding).__name__}")
+        criterion = finding.get("criterion")
+        if criterion is None:
+            raise MergeError(f"finding {index}: missing required field(s) criterion")
+        criterion = str(criterion)
+
+        if criterion in scripted_ids:
+            # D1 option A: the scripted lane is check()'s output and only that. A model's copy of
+            # a scripted criterion - whatever it claims about severity, location or its own lane -
+            # is dropped, not merged in, which is also what makes the old pass 4 (requirement 8)
+            # give the same envelope as the new one: its script-finding copies all land here.
+            dropped[criterion] = dropped.get(criterion, 0) + 1
+            continue
+
+        if criterion in judged_ids or finding.get("rubric_source") == "byor":
+            # D2 option A: a BYOR finding is judged whatever its namespace; a declared judged
+            # criterion is judged because that is what the declaration says.
+            kept.append(_to_raw_judged(finding, index=index))
+            continue
+
+        undeclared.append(criterion)
+
+    if undeclared:
+        named = ", ".join(sorted(set(undeclared)))
+        raise MergeError(
+            "finding criterion(s) are not declared in SKILL.md's checks.scripted or checks.judged, "
+            f"and not marked rubric_source: byor: {named}"
+        )
+
+    return kept, dropped
+
+
+def _load_check_fn(skill: str, *, repo_root: Path):
+    """Load the skill's own `scripts/checks.py` as a module and return its `check` function.
+
+    A unique module name per skill keeps two skills loaded in the same process (as the parametrized
+    tests do) from overwriting each other in `sys.modules`. The module is registered in
+    `sys.modules` before `exec_module` runs, which several `checks.py` files need: a dataclass
+    defined under `from __future__ import annotations` resolves its own module by that name.
+    """
+    checks_path = repo_root / "skills" / skill / "scripts" / "checks.py"
+    if not checks_path.is_file():
+        raise MergeError(f"{checks_path} does not exist; is --skill spelled correctly?")
+    module_name = f"_critique_skills_checks__{skill.replace('-', '_')}"
+    spec = importlib.util.spec_from_file_location(module_name, checks_path)
+    if spec is None or spec.loader is None:
+        raise MergeError(f"could not load {checks_path} as a module")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    spec.loader.exec_module(module)
+    check_fn = getattr(module, "check", None)
+    if check_fn is None:
+        raise MergeError(f"{checks_path} defines no check(artifact) function")
+    return check_fn
+
+
+def run_script_checks(skill: str, artifact: Artifact, *, repo_root: Path = ROOT) -> list[RawFinding]:
+    """Requirement 1: run the skill's own scripted lane in-process, the way
+    `skills/_shared/runner.py`'s `_run` does, rather than trusting a model's copy of it.
+
+    Returns the raw, unranked, unbounded findings `check()` emits. Requirement 2: every one enters
+    the merged pool as `scripted`, exactly as emitted - that is `RawFinding`'s own default, and no
+    `check()` function sets `lane` to anything else, so nothing further is needed here to make that
+    true. Running `checks.py` as a subprocess would not do: its own output is already bounded
+    (`skills/_shared/runner.py`'s `_run` calls `rank_and_bound` before printing), so a finding below
+    severity 3 beyond the fifth would already be lost before this module could merge it with the
+    judged lane and bound the combined pool.
+    """
+    check_fn = _load_check_fn(skill, repo_root=repo_root)
+    return list(check_fn(artifact))
 
 
 _CRITERION_RE = re.compile(r"^    - (\S+)\s*$", re.MULTILINE)
@@ -206,14 +384,28 @@ def _relative_label(artifact: Path) -> str:
         return resolved.name
 
 
-def _skill_version(skill: str, *, repo_root: Path) -> str:
+def _read_artifact_bytes(artifact: Path) -> tuple[bytes, str]:
+    """Read `artifact` once, and decode it once. The same `raw` bytes are what `run.artifact_sha256`
+    hashes and what `check()` reads as `artifact.text` (requirement 7): there is exactly one read of
+    the `--artifact` file, so a findings file has no way to make the two disagree about which bytes
+    were critiqued. `utf-8-sig` matches `skills/_shared/artifact.py`'s own decoding convention.
+    """
+    try:
+        raw = artifact.read_bytes()
+    except OSError as exc:
+        raise MergeError(f"{artifact}: {exc}") from exc
+    try:
+        text = raw.decode("utf-8-sig")
+    except UnicodeDecodeError as exc:
+        raise MergeError(f"{artifact} is not valid UTF-8: {exc}") from exc
+    return raw, text
+
+
+def _skill_md_text(skill: str, *, repo_root: Path) -> str:
     skill_md = repo_root / "skills" / skill / "SKILL.md"
     if not skill_md.is_file():
         raise MergeError(f"{skill_md} does not exist; is --skill spelled correctly?")
-    try:
-        return read_skill_version(skill_md.read_text(encoding="utf-8"))
-    except ValueError as exc:
-        raise MergeError(f"{skill_md}: {exc}") from exc
+    return skill_md.read_text(encoding="utf-8")
 
 
 def assemble(
@@ -226,21 +418,49 @@ def assemble(
     timestamp: str | None = None,
     severity_3_threshold: int = 0,
     artifact_label: str | None = None,
+    diagnostics: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Build one contract-valid envelope from `findings`, doing every deterministic step for the
-    caller: prose normalisation, ranking, bounding, id assignment, the histogram over everything
-    found, the suppressed count, and the gate.
+    """Build one contract-valid envelope from the skill's own scripted lane plus `findings`, the
+    judged lane a model wrote, doing every deterministic step for the caller: running `checks.py`,
+    routing each model finding to the lane its criterion declares (D1-D3), prose normalisation,
+    ranking, bounding, id assignment, the histogram over everything found, the suppressed count,
+    and the gate.
+
+    `diagnostics`, when passed a dict, is filled with `dropped_scripted_criteria` (a
+    `{criterion: count}` map) and `dropped_count`: D1's "report the count on standard error",
+    reported as data so a caller (`main`, below, or a test) decides how to say it.
     """
     if not artifact.is_file():
         raise MergeError(f"{artifact} does not exist")
 
-    raw_findings = [_to_raw(f, index=i) for i, f in enumerate(findings)]
-    digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
+    raw_bytes, text = _read_artifact_bytes(artifact)
+    digest = hashlib.sha256(raw_bytes).hexdigest()
+    artifact_path = artifact_label or _relative_label(artifact)
+    artifact_obj = Artifact(path=artifact_path, text=text, sha256=digest, disk_path=artifact.resolve())
+
+    skill_md_text = _skill_md_text(skill, repo_root=repo_root)
+    try:
+        skill_version = read_skill_version(skill_md_text)
+    except ValueError as exc:
+        raise MergeError(f"{skill} SKILL.md: {exc}") from exc
+    try:
+        scripted_ids, judged_ids = read_lane_manifest(skill_md_text, repo_root=repo_root)
+    except ValueError as exc:
+        raise MergeError(f"{skill} SKILL.md: {exc}") from exc
+
+    script_raw = run_script_checks(skill, artifact_obj, repo_root=repo_root)
+    model_raw, dropped = _route_model_findings(findings, scripted_ids=scripted_ids, judged_ids=judged_ids)
+
+    if diagnostics is not None:
+        diagnostics["dropped_scripted_criteria"] = dict(sorted(dropped.items()))
+        diagnostics["dropped_count"] = sum(dropped.values())
+
+    raw_findings = list(script_raw) + model_raw
 
     return assemble_envelope(
         skill=skill,
-        skill_version=_skill_version(skill, repo_root=repo_root),
-        artifact_path=artifact_label or _relative_label(artifact),
+        skill_version=skill_version,
+        artifact_path=artifact_path,
         artifact_sha256=digest,
         model=model,
         timestamp=timestamp or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -279,7 +499,7 @@ def main(argv: list[str] | None = None) -> int:
         "--findings",
         default=None,
         type=Path,
-        help="JSON file of findings. Omit to read them from stdin instead.",
+        help="JSON file of judged-lane findings. Omit to read them from stdin instead.",
     )
     parser.add_argument(
         "--artifact-label",
@@ -312,6 +532,7 @@ def main(argv: list[str] | None = None) -> int:
                 )
                 return 1
 
+        diagnostics: dict[str, Any] = {}
         envelope = assemble(
             skill=args.skill,
             artifact=args.artifact,
@@ -320,14 +541,37 @@ def main(argv: list[str] | None = None) -> int:
             timestamp=args.timestamp,
             severity_3_threshold=args.severity_3_threshold,
             artifact_label=args.artifact_label,
+            diagnostics=diagnostics,
         )
     except MergeError as exc:
         print(f"merge: {exc}", file=sys.stderr)
         return 1
+    except MissingDependencyError as exc:
+        # Same guard skills/_shared/runner.py's run_scripted_lane uses: a missing jsonschema is a
+        # fresh-install state, not a bug, and the point of running checks.py in-process (requirement
+        # 1) is defeated if that state now reaches the caller as a traceback instead.
+        print(str(exc), file=sys.stderr)
+        return 1
+
+    if diagnostics.get("dropped_count"):
+        # D1's "report the count on standard error" (requirement 4): every model finding on a
+        # scripted criterion was dropped, not merged in, and this is the only trace of that left.
+        criteria = ", ".join(
+            f"{criterion} x{count}" for criterion, count in diagnostics["dropped_scripted_criteria"].items()
+        )
+        print(
+            f"merge: dropped {diagnostics['dropped_count']} model finding(s) on scripted "
+            f"criterion(s), because the scripted lane is checks.py's output and only that: {criteria}",
+            file=sys.stderr,
+        )
 
     # Never print something that does not validate: a downstream reader cannot tell a broken
     # envelope from a real one. runner.py holds the same line for the scripted lane.
-    result = validate_document(envelope)
+    try:
+        result = validate_document(envelope)
+    except MissingDependencyError as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
     if not result.ok:
         print("merge: the assembled envelope is not contract-valid:", file=sys.stderr)
         for error in result.errors[:5]:

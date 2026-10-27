@@ -934,6 +934,14 @@ and the repository did not have.
   for their skills' next versions and one for the critic subagent's. Two are left for the
   maintainer: the empty `keywords` and the missing icon. The other six need no change. Every finding and its disposition is in
   `docs/internal/execution/E35-validator-run.md`.
+- **R2, R3, R4, V1 and V2 fixed in E73's build (2026-10-26), per D6 of
+  [E73's spec](../release-plans/_unassigned/E73_merge-runs-scripted-lane/spec.md).** critique-clarity's
+  scope list now names `critique-forms`; critique-microcopy's frontmatter lane lists are now in
+  ascending ID order; critique-docs's one `docs/reference/severity-scale.md` citation now matches
+  the six siblings' plain-path form (R4 and V1 together); the critic's `run.model` wording no
+  longer says "pinned". `docs/internal/execution/E35-validator-run.md` records each updated
+  disposition. **R1 (critique-docs's description) still waits** for its own change, measured by the
+  trigger evals rather than the bench.
 - **Rank at intake:** 35 of 64. **Status:** closed 2026-10-23.
 
 ## E36 - Confirm or deprecate the reserved selector field per ADR 0012's own RC question
@@ -1717,3 +1725,14 @@ and the repository did not have.
   exit gate is met without it, and
   [ADR 0038 (per-tier consistency floors)](../decisions/0038-consistency-threshold-v2-per-tier-floors.md)
   already reports the scripted lane without gating on it.
+- **Ruled 2026-10-23 by the maintainer: D1 through D6, all the recommended option.** See
+  [E73's spec](../release-plans/_unassigned/E73_merge-runs-scripted-lane/spec.md) for the full
+  decisions.
+- **Built 2026-10-26.** `merge.py` runs each skill's own `scripts/checks.py` and takes the scripted
+  lane only from that output; a model finding's lane now comes from `SKILL.md`'s `checks.scripted`
+  / `checks.judged` declaration (D1-D3), tested with no model call in
+  `skills/_shared/tests/test_merge_lanes.py`, parametrized over every registered skill. See
+  [ADR 0041 (merge runs the scripted lane itself)](../decisions/0041-merge-runs-the-scripted-lane-itself.md)
+  and [E73's spec](../release-plans/_unassigned/E73_merge-runs-scripted-lane/spec.md). **Still open:**
+  the version moves (D4) and the paid re-measure (D5, AC-9), both ruled to happen together with
+  E67's accessibility expansion and both needing the maintainer's own separate go.
