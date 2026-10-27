@@ -2,8 +2,9 @@
 // what-it-does: copies scripts/check-release-versions.mjs and scripts/lib/version-manifest.mjs
 //               into an isolated temp fixture tree (mirroring the real repo's relative layout, since
 //               the script resolves its root from its own file location), writes crafted
-//               package.json / library.json / .claude-plugin/plugin.json fixtures, and runs the
-//               copied script as a child process against them
+//               package.json / library.json / .claude-plugin/plugin.json fixtures plus the two
+//               real prose-pinned files (docs/how-to/gate-in-ci.md, examples/recipes/gate-in-ci.md),
+//               and runs the copied script as a child process against them
 // why:          this is the tag guard the family release pattern depends on to stop a mismatched
 //               tag from ever reaching a published GitHub Release (S-07 CI-pipeline spec, AC-4);
 //               before this file, "npm test" collected zero tests and reported green regardless of
@@ -39,9 +40,23 @@ function writeManifests(root, { pkg, lib, plugin }) {
   writeFileSync(resolve(root, ".claude-plugin", "plugin.json"), JSON.stringify({ name: "fixture", version: plugin }));
 }
 
-test("version guard passes when every manifest agrees with the tag", (t) => {
+/**
+ * Write the two real prose-pinned files at their real repo-relative paths inside the fixture
+ * root, with the given version and a distractor `# v7.0.1`-style actions/checkout comment, so
+ * they are read by the real, copied version-manifest.mjs entries (not a stand-in path).
+ */
+function writeProseFiles(root, version) {
+  const prose = `uses: actions/checkout@abc # v7.0.1\nThe example pins \`v${version}\`, see below.\n  ref: v${version}\n`;
+  mkdirSync(resolve(root, "docs", "how-to"), { recursive: true });
+  writeFileSync(resolve(root, "docs", "how-to", "gate-in-ci.md"), prose);
+  mkdirSync(resolve(root, "examples", "recipes"), { recursive: true });
+  writeFileSync(resolve(root, "examples", "recipes", "gate-in-ci.md"), prose);
+}
+
+test("version guard passes when every manifest, including both prose pins, agrees with the tag", (t) => {
   const { root, scriptPath } = buildFixture(t);
   writeManifests(root, { pkg: "1.2.3", lib: "1.2.3", plugin: "1.2.3" });
+  writeProseFiles(root, "1.2.3");
 
   const { status, stdout } = runNode(scriptPath, ["1.2.3"], { cwd: root });
 
@@ -49,12 +64,15 @@ test("version guard passes when every manifest agrees with the tag", (t) => {
   assert.match(stdout, /ok: package\.json = 1\.2\.3/);
   assert.match(stdout, /ok: library\.json = 1\.2\.3/);
   assert.match(stdout, /ok: \.claude-plugin[\\/]plugin\.json = 1\.2\.3/);
+  assert.match(stdout, /ok: docs[\\/]how-to[\\/]gate-in-ci\.md = 1\.2\.3/);
+  assert.match(stdout, /ok: examples[\\/]recipes[\\/]gate-in-ci\.md = 1\.2\.3/);
   assert.match(stdout, /version guard passed: every version-bearing manifest agrees with tag v1\.2\.3/);
 });
 
 test("version guard strips a leading 'v' from the tag before comparing", (t) => {
   const { root, scriptPath } = buildFixture(t);
   writeManifests(root, { pkg: "1.2.3", lib: "1.2.3", plugin: "1.2.3" });
+  writeProseFiles(root, "1.2.3");
 
   const { status, stdout } = runNode(scriptPath, ["v1.2.3"], { cwd: root });
 
@@ -65,23 +83,76 @@ test("version guard strips a leading 'v' from the tag before comparing", (t) => 
 test("version guard fails when one manifest disagrees with the tag, and still reports every file", (t) => {
   const { root, scriptPath } = buildFixture(t);
   writeManifests(root, { pkg: "1.2.3", lib: "1.2.3", plugin: "1.2.4" });
+  writeProseFiles(root, "1.2.3");
 
   const { status, stdout, stderr } = runNode(scriptPath, ["1.2.3"], { cwd: root });
 
   assert.equal(status, 1);
-  // the two agreeing files are still checked and reported, not short-circuited on first failure
+  // the other agreeing files are still checked and reported, not short-circuited on first failure
   assert.match(stdout, /ok: package\.json = 1\.2\.3/);
   assert.match(stdout, /ok: library\.json = 1\.2\.3/);
+  assert.match(stdout, /ok: docs[\\/]how-to[\\/]gate-in-ci\.md = 1\.2\.3/);
   assert.match(stderr, /\.claude-plugin[\\/]plugin\.json version "1\.2\.4" does not match tag "1\.2\.3"/);
   assert.match(stderr, /version guard failed: tag\/version mismatch; aborting before publishing a release/);
 });
 
+test("version guard fails naming both prose files when they are stale, alongside the JSON manifests", (t) => {
+  const { root, scriptPath } = buildFixture(t);
+  writeManifests(root, { pkg: "0.2.1", lib: "0.2.1", plugin: "0.2.1" });
+  // both prose files still pin the old release
+  writeProseFiles(root, "0.2.0");
+
+  const { status, stderr } = runNode(scriptPath, ["0.2.1"], { cwd: root });
+
+  assert.equal(status, 1);
+  assert.match(
+    stderr,
+    /docs[\\/]how-to[\\/]gate-in-ci\.md version "0\.2\.0" does not match tag "0\.2\.1"/,
+  );
+  assert.match(
+    stderr,
+    /examples[\\/]recipes[\\/]gate-in-ci\.md version "0\.2\.0" does not match tag "0\.2\.1"/,
+  );
+});
+
+test("version guard fails on a prose file whose two pins disagree with each other", (t) => {
+  const { root, scriptPath } = buildFixture(t);
+  writeManifests(root, { pkg: "1.2.3", lib: "1.2.3", plugin: "1.2.3" });
+  writeProseFiles(root, "1.2.3");
+  // hand-corrupt just the "ref:" pin in one prose file so its two pins disagree with each other
+  const docPath = resolve(root, "docs", "how-to", "gate-in-ci.md");
+  writeFileSync(
+    docPath,
+    "uses: actions/checkout@abc # v7.0.1\nThe example pins `v1.2.3`, see below.\n  ref: v9.9.9\n",
+  );
+
+  const { status, stderr } = runNode(scriptPath, ["1.2.3"], { cwd: root });
+
+  assert.equal(status, 1);
+  assert.match(
+    stderr,
+    /docs[\\/]how-to[\\/]gate-in-ci\.md pins disagree with each other: 1\.2\.3, 9\.9\.9/,
+  );
+});
+
+test("version guard ignores an actions/checkout '# vX.Y.Z' comment near a real prose pin", (t) => {
+  const { root, scriptPath } = buildFixture(t);
+  writeManifests(root, { pkg: "1.2.3", lib: "1.2.3", plugin: "1.2.3" });
+  writeProseFiles(root, "1.2.3"); // each file's "# v7.0.1" distractor must not be read as a pin
+
+  const { status, stdout } = runNode(scriptPath, ["1.2.3"], { cwd: root });
+
+  assert.equal(status, 0);
+  assert.match(stdout, /ok: docs[\\/]how-to[\\/]gate-in-ci\.md = 1\.2\.3/);
+});
+
 test("version guard fails clearly when a listed manifest file is missing", (t) => {
   const { root, scriptPath } = buildFixture(t);
-  // write only two of the three; library.json is never created
+  // write only two of the three JSON manifests; library.json is never created
   writeFileSync(resolve(root, "package.json"), JSON.stringify({ version: "1.2.3" }));
   mkdirSync(resolve(root, ".claude-plugin"), { recursive: true });
   writeFileSync(resolve(root, ".claude-plugin", "plugin.json"), JSON.stringify({ version: "1.2.3" }));
+  writeProseFiles(root, "1.2.3");
 
   const { status, stderr } = runNode(scriptPath, ["1.2.3"], { cwd: root });
 
@@ -89,9 +160,26 @@ test("version guard fails clearly when a listed manifest file is missing", (t) =
   assert.match(stderr, /error: library\.json:/);
 });
 
+test("version guard fails clearly when a listed prose file is missing", (t) => {
+  const { root, scriptPath } = buildFixture(t);
+  writeManifests(root, { pkg: "1.2.3", lib: "1.2.3", plugin: "1.2.3" });
+  // only one of the two prose files is written; examples/recipes/gate-in-ci.md is never created
+  mkdirSync(resolve(root, "docs", "how-to"), { recursive: true });
+  writeFileSync(
+    resolve(root, "docs", "how-to", "gate-in-ci.md"),
+    "The example pins `v1.2.3`, see below.\n  ref: v1.2.3\n",
+  );
+
+  const { status, stderr } = runNode(scriptPath, ["1.2.3"], { cwd: root });
+
+  assert.equal(status, 1);
+  assert.match(stderr, /error: examples[\\/]recipes[\\/]gate-in-ci\.md:/);
+});
+
 test("version guard exits 2 with a usage message when no tag is given and GITHUB_REF_NAME is unset", (t) => {
   const { root, scriptPath } = buildFixture(t);
   writeManifests(root, { pkg: "1.2.3", lib: "1.2.3", plugin: "1.2.3" });
+  writeProseFiles(root, "1.2.3");
 
   const { status, stderr } = runNode(scriptPath, [], {
     cwd: root,
@@ -105,6 +193,7 @@ test("version guard exits 2 with a usage message when no tag is given and GITHUB
 test("version guard falls back to GITHUB_REF_NAME when no tag argument is given", (t) => {
   const { root, scriptPath } = buildFixture(t);
   writeManifests(root, { pkg: "1.2.3", lib: "1.2.3", plugin: "1.2.3" });
+  writeProseFiles(root, "1.2.3");
 
   const { status, stdout } = runNode(scriptPath, [], {
     cwd: root,

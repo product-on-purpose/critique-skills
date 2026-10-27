@@ -17,11 +17,17 @@ Python half.
   exception excuses only the advisory it names and gates again on its expiry date, a dependent
   package is not counted as a second advisory, and every committed exception lasts at most 31 days.
 - `check-release-versions.test.mjs` - the release tag-vs-manifest version guard: passes when every
-  manifest agrees with the tag, fails (and still reports every file) when one disagrees, fails
-  clearly when a listed file is missing, and the usage/`GITHUB_REF_NAME`-fallback paths.
+  manifest, including the two prose-pinned files, agrees with the tag, fails (and still reports
+  every file) when one disagrees, fails naming both prose files when they are stale, fails on a
+  prose file whose two pins disagree with each other, ignores an `actions/checkout` `# vX.Y.Z`
+  comment near a real prose pin, fails clearly when a listed JSON or prose file is missing, and the
+  usage/`GITHUB_REF_NAME`-fallback paths.
 - `version-manifest.test.mjs` - the single version-bearing-file enumeration: shape and completeness
-  of `lib/version-manifest.mjs`, every listed file resolvable on disk, and a live check that the
-  real repo's version-bearing files currently agree with each other.
+  of `lib/version-manifest.mjs` (three JSON `pointer` entries, two prose `pattern` entries), every
+  listed file resolvable on disk, `readEntryVersions()` returning exactly one version per entry
+  against the real repo, a live check that the real repo's version-bearing files currently agree
+  with each other, a `pattern` matching nothing throwing by name, and a `pattern` entry's two pins
+  deduping when they agree or returning both distinct versions when they disagree.
 - `extract-release-notes.test.mjs` - the `RELEASE-NOTES.md` section extractor: returns the right
   section, fails on a missing heading, fails when a heading has no content under it (including
   whitespace-only content), and the output-path/`GITHUB_REF_NAME`-fallback paths.
