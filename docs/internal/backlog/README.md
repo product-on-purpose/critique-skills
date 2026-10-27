@@ -147,8 +147,17 @@ v0.1.x finished are both discharged.
   does not gate N1 (critique-deck); N1's hard dependencies are E30, E2 and a corpus module. N1 gates
   N2, which gates N3, which additionally needs a chart-spec generator mode that does not exist.
 - **BYOR.** E10 (the measurement ruling) gates E45 (the build) gates every later skill's BYOR support.
+  E10 was ruled on 2026-10-24
+  ([ADR 0039 (BYOR measured by parity)](../decisions/0039-byor-measured-by-parity.md)), so E45 is
+  unblocked.
 - **Gold tier.** E52 (who performs revise) gates N4 (the revision-loop chain) gates E55 (G1 and G3
-  coverage) gates any tier declaration above Convergent.
+  coverage) gates any tier declaration above Convergent. E52 was ruled on 2026-10-25
+  ([ADR 0040 (the revision loop pauses with a revision brief)](../decisions/0040-revision-loop-pauses-with-a-revision-brief.md)),
+  so N4 is unblocked.
+- **The v0.3.0 re-measure.** E73 (merge runs the scripted lane itself) and E67 (accessibility
+  expansion) are built, and one shared paid dispatch measures both: 560 envelopes across all seven
+  skills. It gates both items' version moves and E67's exit-gate condition, and it needs the
+  maintainer's own go.
 - **v1.0.0.** E48 (disposition telemetry) is the true critical path, because it needs calendar time
   for real dispositions to accumulate before a pruning pass can run, in parallel with E56's external
   adoption. No amount of session throughput buys either.
@@ -171,7 +180,7 @@ one item, and several are worth more than the items that expose them.
    subsection, prevents the whole class.
 3. **Self-imposed RC checkpoints are written well and never swept at release time.** ADR 0012's
    selector question (E36), ADR 0017's false-positive check (E37), ADR 0028's id-poor measurement
-   (E38), S-07 AC-1 and AC-4 (E15, E16), S-03 AC-3 (E32), the external validators (E35). Six releases
+   (E38), S-07 AC-1 and AC-4 (E15, E16), S-03 AC-3 (E32), the external validators (E35, since run and closed 2026-10-23). Six releases
    shipped past all of them. A release-checklist step that greps ADRs and specs for "before v0.2",
    "at RC" and unchecked AC boxes would have caught every one.
 4. **The sonnet tier is half the published measurement basis and has never produced an envelope

@@ -95,7 +95,7 @@ bounded-output rule are the ones this run follows; they are not restated here
    [severity-scale.md](../docs/reference/severity-scale.md) plus the skill's own
    `references/severity-anchors.md`.
 5. Write your judged-lane findings only to a JSON file and **assemble the envelope with the
-   library's own assembler rather than by hand**. It runs this skill's own scripted lane itself,
+   library's own assembler rather than by hand**. It runs the named skill's own scripted lane itself,
    from `scripts/checks.py` against the same artifact, so there is no script finding to copy into
    this file:
 
