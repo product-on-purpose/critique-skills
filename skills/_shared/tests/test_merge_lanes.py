@@ -136,11 +136,17 @@ def test_every_script_finding_is_listed_or_suppressed(skill: dict[str, Any]) -> 
     envelope = merge.assemble(
         skill=skill["name"], artifact=_artifact_path(skill), findings=[], repo_root=REPO_ROOT
     )
-    kept_pairs = {(f["criterion"], f["location"]) for f in envelope["findings"]}
+    kept = {(f["criterion"], f["location"]): f for f in envelope["findings"]}
+    kept_pairs = set(kept)
 
     high = [raw for raw in script_raw if raw.severity >= 3]
     missing_high = [raw for raw in high if (raw.criterion, raw.location) not in kept_pairs]
     assert not missing_high, f"{skill['name']}: severity>=3 script finding(s) dropped: {missing_high}"
+
+    # Requirement 2: every one of check()'s own findings enters the pool as "scripted", exactly
+    # as emitted, so each of those kept here must still carry that lane.
+    wrong_lane = [raw for raw in high if kept[(raw.criterion, raw.location)]["lane"] != "scripted"]
+    assert not wrong_lane, f"{skill['name']}: script finding(s) relabeled out of scripted: {wrong_lane}"
 
     below = [raw for raw in script_raw if raw.severity < 3]
     missing_below = [raw for raw in below if (raw.criterion, raw.location) not in kept_pairs]
@@ -312,22 +318,18 @@ def test_old_pass_4_findings_give_the_same_envelope_as_judged_only(skill: dict[s
 def test_the_skill_shim_drops_a_scripted_copy_and_refiles_a_mislabeled_judgment(
     skill: dict[str, Any], tmp_path: Path
 ) -> None:
-    """AC-7, run through the actual entry point every SKILL.md documents
-    (`skills/<skill>/scripts/merge.py`), not only the shared module.
+    """AC-7's Given/When/Then, run through the actual entry point every SKILL.md documents
+    (`skills/<skill>/scripts/merge.py`), not only the shared module: one scripted-criterion finding
+    the model wrote (D1: dropped, reported on standard error) and one judged-criterion finding
+    mislabeled "scripted" (refiled as judged, at its stated confidence)."""
+    scripted_ids, judged_ids = _lane_ids(skill)
 
-    A model's findings file that OMITS a script finding no longer matters either way: this module
-    runs checks.py itself (requirement 1), so every real scripted finding reaches the envelope (or
-    is counted suppressed) regardless of what the findings file says. What this test shows is the
-    other half of AC-7: a judged-criterion finding mislabeled "scripted" is refiled as judged, at
-    its stated confidence, by the actual per-skill entry point every SKILL.md documents.
-    """
-    _scripted_ids, judged_ids = _lane_ids(skill)
-
+    scripted_copy = _finding(sorted(scripted_ids)[0], 2, location="shim scripted-copy case")
     mislabeled = _finding(
         sorted(judged_ids)[0], 3, location="shim mislabeled-judgment case", lane="scripted", confidence="medium"
     )
     findings_file = tmp_path / "findings.json"
-    findings_file.write_text(json.dumps({"findings": [mislabeled]}), encoding="utf-8")
+    findings_file.write_text(json.dumps({"findings": [scripted_copy, mislabeled]}), encoding="utf-8")
 
     shim = REPO_ROOT / skill["path"] / "scripts" / "merge.py"
     proc = subprocess.run(
@@ -339,7 +341,13 @@ def test_the_skill_shim_drops_a_scripted_copy_and_refiles_a_mislabeled_judgment(
     )
 
     assert proc.returncode == 0, proc.stderr
+    assert "dropped" in proc.stderr and scripted_copy["criterion"] in proc.stderr, proc.stderr
     envelope = json.loads(proc.stdout)
+
+    assert all(
+        f["criterion"] != scripted_copy["criterion"] or f["location"] != scripted_copy["location"]
+        for f in envelope["findings"]
+    ), "the model's scripted-criterion copy must not reach the envelope verbatim"
 
     matches = [
         f
@@ -377,6 +385,10 @@ def test_the_skill_shim_restores_a_script_finding_the_findings_file_omits(
     )
 
     assert proc.returncode == 0, proc.stderr
+    if script_copies:
+        # Every finding still in the file is itself a scripted-criterion copy (D1), so it is
+        # dropped too, same as the one this test omitted outright.
+        assert "dropped" in proc.stderr, proc.stderr
     envelope = json.loads(proc.stdout)
 
     pairs = {(f["criterion"], f["location"]) for f in envelope["findings"]}
