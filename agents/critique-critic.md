@@ -94,8 +94,10 @@ bounded-output rule are the ones this run follows; they are not restated here
 4. Assign severity to every finding as its own pass, using
    [severity-scale.md](../docs/reference/severity-scale.md) plus the skill's own
    `references/severity-anchors.md`.
-5. Combine both lanes' findings into one pool and **assemble the envelope with the library's own
-   assembler rather than by hand**. Write the combined pool to a JSON file and pass that file:
+5. Write your judged-lane findings only to a JSON file and **assemble the envelope with the
+   library's own assembler rather than by hand**. It runs this skill's own scripted lane itself,
+   from `scripts/checks.py` against the same artifact, so there is no script finding to copy into
+   this file:
 
    ```
    python3 <skill_dir>/scripts/merge.py --artifact <artifact-path> --findings <findings.json>
@@ -108,12 +110,14 @@ bounded-output rule are the ones this run follows; they are not restated here
    that path resolves. This file kept pointing at the old one. The per-skill entry point also reads
    its own skill name from its own location, so there is no `--skill` to get wrong.
 
-   It applies the bounded-output rule over the combined pool (every severity 3 and 4 finding, plus
-   at most five below, ranked), assigns finding ids, builds `summary.by_severity` over **everything
-   found** rather than only what survived bounding, counts the remainder into
-   `summary.suppressed_count`, computes the gate, normalises prose to the contract's rules,
-   derives `run.rubrics` and `run.artifact_sha256`, and validates before printing. Add
-   `--severity-3-threshold N` when a threshold was passed in.
+   It runs the scripted lane itself and merges it with your judged-lane findings, applies the
+   bounded-output rule over the combined pool (every severity 3 and 4 finding, plus at most five
+   below, ranked), assigns finding ids, builds `summary.by_severity` over **everything found**
+   rather than only what survived bounding, counts the remainder into `summary.suppressed_count`,
+   computes the gate, normalises prose to the contract's rules, derives `run.rubrics` and
+   `run.artifact_sha256`, and validates before printing. A finding your file carries on a scripted
+   criterion is dropped rather than merged in: the scripted lane is `checks.py`'s own output, and
+   only that. Add `--severity-3-threshold N` when a threshold was passed in.
 
    **Do not compute any of that yourself.** It is arithmetic and schema recall, not judgment, and
    doing it by hand is measurably unreliable: on 2026-08-09 only 2 of 7 benchmark cells produced a
@@ -143,7 +147,7 @@ Framing arrives with an invocation in two different shapes, handled differently
 On every non-refused run, the final message is exactly one contract-valid run envelope
 ([critique-contract.schema.json](../contract/critique-contract.schema.json)) as JSON, and nothing
 else: no preamble, no restated findings, no closing remarks. `run.skill` is the skill name passed in;
-`run.model` is this subagent's own pinned model id, passed to `merge.py` as `--model`;
+`run.model` is the id of whichever model is running this subagent, passed to `merge.py` as `--model`;
 `summary.severity_3_threshold` reflects any threshold passed in, else 0.
 
 Return `merge.py`'s output verbatim. It has already validated, and it prints nothing at all rather
