@@ -2,7 +2,7 @@
 id: E73
 title: "The merge step runs the scripted lane itself, instead of trusting the model's copy"
 type: spec
-status: fulfilled
+status: committed
 created: 2026-10-23
 updated: 2026-10-26
 linked-effort: docs/internal/backlog/enhancements.md
@@ -28,8 +28,9 @@ version moves wait with it.
 **Last updated:** 2026-10-26 by Claude, build
 **Linked plan:** not yet planned
 **Open questions:** 0 (all six were decided 2026-10-23; see Open Questions / Decisions)
-**Revisions:** 1 (2026-10-26: moved from the local draft, ruled text unchanged, AC checklist and
-Task Summary updated to the build)
+**Revisions:** 1 (2026-10-26: moved from the local draft; D1-D3's Context paragraphs reworded from
+present to past tense ("Today" to "Before this build"); a Build status line added after D4, D5 and
+D6, outside each maintainer-decision quote; AC checklist and Task Summary updated to the build)
 
 ### Acceptance Criteria Fulfillment
 
@@ -439,8 +440,10 @@ re-measure rule then applies to whichever skills move.
 > * **Status:** Decided
 > * **Choice:** Option A. A patch move for every skill and the critic, in one release with E67, with accessibility moving once to carry both.
 > * **Reasoning:** The maintainer answered "Ok", accepting the recommendation. The change is in every skill's output path, and ADR 0027 is the precedent for a version move over a non-rubric change.
-> * **Follow-up:** Move each version in the three places this spec's "Versions" section names, in the release that carries E67 (accessibility expansion). Not done in this build; see "Versions" above.
+> * **Follow-up:** Move each version in the three places this spec's "Versions" section names, in the release that carries E67 (accessibility expansion).
 > * **Decided by / date:** jprisant / 2026-10-23
+
+**Build status:** Not done in this build; see "Versions" above.
 
 ### D5: How the change is measured before release (Decided)
 
@@ -474,8 +477,10 @@ published figure comes from a real run.
 > * **Status:** Decided
 > * **Choice:** Option A. A replay over committed envelopes first, then one paid dispatch shared with E67, whose results are published.
 > * **Reasoning:** The maintainer answered "Ok", accepting the recommendation. The replay costs nothing and gives the paid run an expected result to check against.
-> * **Follow-up:** Build the replay after E73's build, then draft the shared dispatch; AC-9 in this spec tracks the measurement. The paid dispatch still needs its own explicit go when it is drafted. Neither the replay nor the dispatch is built in this change.
+> * **Follow-up:** Build the replay after E73's build, then draft the shared dispatch; AC-9 in this spec tracks the measurement. The paid dispatch still needs its own explicit go when it is drafted.
 > * **Decided by / date:** jprisant / 2026-10-23
+
+**Build status:** Neither the replay nor the dispatch is built in this change.
 
 ### D6: Whether the E35 findings ride the same version move (Decided)
 
@@ -511,5 +516,7 @@ by the trigger evals, not by the bench.
 > * **Status:** Decided
 > * **Choice:** Option B. R2, R3, R4, V1 and V2 ride the D4 version move; R1 waits for its own change.
 > * **Reasoning:** The maintainer answered "Ok", accepting the recommendation. Five of the six are wording or ordering fixes that do not change what a skill reports, and R1 changes triggering, which the trigger evals measure.
-> * **Follow-up:** Fix R2, R3, R4, V1 and V2 in E73's build, and update their dispositions in `docs/internal/execution/E35-validator-run.md` in the same change. R1 waits for a change of its own with a trigger-eval run. Done in this build; see `docs/internal/execution/E35-validator-run.md` for the updated dispositions.
+> * **Follow-up:** Fix R2, R3, R4, V1 and V2 in E73's build, and update their dispositions in `docs/internal/execution/E35-validator-run.md` in the same change. R1 waits for a change of its own with a trigger-eval run.
 > * **Decided by / date:** jprisant / 2026-10-23
+
+**Build status:** Done in this build; see `docs/internal/execution/E35-validator-run.md` for the updated dispositions.
