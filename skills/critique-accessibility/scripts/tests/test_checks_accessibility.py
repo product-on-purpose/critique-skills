@@ -290,7 +290,7 @@ def test_in_scope_field_with_a_valid_token_is_not_flagged():
         'name="qty"',  # "qty" is not a quantity cue FORMS itself matches, and quantity names no token either way
         'id="county"',  # FORMS purpose "county" names no WCAG token
         'id="topic"',  # not a cue for any purpose at all
-        'id="day"',  # a bare date part, with no birth cue present, stays out of scope (fix 1)
+        'id="day"',  # a bare date part, with no birth cue present, stays out of scope
     ],
 )
 def test_fields_outside_the_closed_vocabulary_are_not_flagged(attrs):
@@ -305,7 +305,7 @@ def test_fields_outside_the_closed_vocabulary_are_not_flagged(attrs):
 def test_cue_word_id_without_an_exact_token_is_in_scope():
     """id="zip" is a common real-world spelling that is not itself a WCAG
     token, but it is a FORMS cue word for the postal-code purpose, which
-    does map to a WCAG token, so cue-word matching (fix 1) puts it in
+    does map to a WCAG token, so cue-word matching puts it in
     scope even though the exact-token path alone would miss it. This is
     the known consequence examples/artifacts/golden-03.html now carries an
     explicit autocomplete="postal-code" to stay clean against."""
@@ -371,6 +371,20 @@ def test_cue_word_match_never_reads_a_label_or_placeholder():
     assert findings == []
 
 
+@pytest.mark.parametrize(
+    "attrs",
+    ['id="address-search"', 'id="q"', 'name="search-city"', 'id="account-number-email"', 'id="house-number"'],
+)
+def test_an_earlier_purpose_with_no_wcag_token_claims_the_field(attrs):
+    """FORMS's cue table is ordered, and the earlier purpose wins. Search,
+    account number and house number name no WCAG token, but they still
+    come before street address, city and email, so a field they claim
+    stays silent instead of reading as the later purpose."""
+    html = f'<form><input {attrs} type="text"></form>'
+    findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
+    assert findings == []
+
+
 def test_textarea_resolves_to_street_address_or_nothing():
     """A textarea holds several lines, and street address is the only
     multi-line WCAG input purpose, mirroring references/FORMS.md's
@@ -389,7 +403,7 @@ def test_textarea_with_a_street_address_cue_is_in_scope():
 
 
 # ---------------------------------------------------------------------------
-# WCAG-1.3.5: scope exclusions (fix 2, S7/N2)
+# WCAG-1.3.5: scope exclusions
 # ---------------------------------------------------------------------------
 
 
@@ -424,14 +438,14 @@ def test_field_inside_a_disabled_fieldset_is_not_flagged():
 
 
 # ---------------------------------------------------------------------------
-# WCAG-1.3.5: signal precedence when type, name, and id disagree (S8)
+# WCAG-1.3.5: signal precedence when type, name, and id disagree
 # ---------------------------------------------------------------------------
 
 
 def test_id_wins_over_type_when_the_two_signals_disagree():
     """A prior version of this file's docstring claimed type, name, and id
     "cannot disagree" on a real field; this is the field that disproves
-    it. id must win over type for the suggested token (S8)."""
+    it. id must win over type for the suggested token."""
     html = '<form><input type="email" id="username"></form>'
     findings = _by_criterion(checks.check(_artifact(html)), "WCAG-1.3.5")
     assert len(findings) == 1
@@ -447,7 +461,7 @@ def test_name_wins_over_type_when_the_two_signals_disagree():
 
 
 # ---------------------------------------------------------------------------
-# WCAG-1.3.5: autocomplete="" and autocomplete="on" (N1)
+# WCAG-1.3.5: autocomplete="" and autocomplete="on"
 # ---------------------------------------------------------------------------
 
 
