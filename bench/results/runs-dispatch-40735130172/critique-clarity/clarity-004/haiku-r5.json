@@ -1,0 +1,84 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal.",
+      "fix": "Separate employee-facing content from internal process documentation, or clearly signal where each audience's instructions begin and end within the section",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "lines 49-54 (Terminology Notes section)",
+      "severity": 3,
+      "violation": "Section addresses both employee audience (using 'you' for employee actions) and internal process audience (describing Finance and Payroll roles) within the same section without clear separation, making it unclear which instructions are for the employee to act on"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Similarly, the policy applies to one device per category per employee. (line 47) contrasts with 'equipment cost' (line 23) and 'equipment category' (line 27) used consistently elsewhere",
+      "fix": "Replace 'device' with 'equipment' on line 47, or establish in a definitions section that 'device' and 'equipment' are synonymous in this policy",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "line 47 (Restrictions and Exceptions section)",
+      "severity": 2,
+      "violation": "The document refers to the item being requested using 'equipment' throughout (lines 5, 7, 23, 27) but uses 'device' once (line 47) to refer to the same concept, forcing the reader to verify whether 'device' and 'equipment' are identical or represent different categories"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Section order is: How to Apply (line 18) → Required Documentation (line 31) → Restrictions and Exceptions (line 43). Eligibility is early but restrictions come late, after procedural instructions",
+      "fix": "Reorder sections to place Restrictions and Exceptions before How to Apply, so readers understand constraints before beginning the application process",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Sections 3-7: How to Apply (line 18), Required Documentation (line 31), Restrictions and Exceptions (line 43)",
+      "severity": 2,
+      "violation": "Required Documentation and Restrictions and Exceptions sections appear after How to Apply, but readers need to know what qualifies and what they need before being told how to apply. Current structure does not match the reader's actual task sequence"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "The stipend covers one claim per employee per benefit year (line 12) / The portal walks through each step in order (line 20) / However, an incomplete request pauses the timeline (line 29) / the policy applies to one device per category (line 47)",
+      "fix": "Replace abstract subjects with named real-world actors or direct address: change 'The stipend covers' to 'You are eligible for', 'The portal walks through' to 'The system guides you', 'an incomplete request pauses' to 'Your approval pauses if', 'eligibility applies' to 'You are eligible only'",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Multiple instances: line 12, line 15, line 20, line 29, line 47",
+      "severity": 2,
+      "violation": "Multiple sentences throughout the document use abstract nouns as grammatical subjects instead of naming the real-world actor: 'The stipend covers', 'The portal walks through', 'an incomplete request pauses', 'eligibility applies', 'the policy applies'. Instances are scattered rather than concentrated in a single passage"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal. The shift from 'You record' to 'Finance reconciles' has no connector; 'Also' before 'you submit' is a weak signal",
+      "fix": "Add explicit transition words ('However', 'Meanwhile', 'In addition') or restructure to separate employee-facing instructions from internal process descriptions",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "lines 49-54 (Terminology Notes section)",
+      "severity": 2,
+      "violation": "Section shifts subjects and topics without signals connecting them. Moves from employee action to internal process (Finance, Payroll) and back to employee action, requiring the reader to re-orient at each boundary without explicit connectors"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T18:19:53Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

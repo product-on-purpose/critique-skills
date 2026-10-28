@@ -1,0 +1,106 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "The document contains two Overview sections (lines 3-7 and 59-61 with nearly identical content). The Request Steps section (lines 55-57) appears before Overview but duplicates guidance from How to Apply. The document interleaves internal process descriptions (Program Coordination, Review Responsibility, Questions and Updates) with employee-facing sections without clear delineation, so an employee reading sequentially encounters content about what the benefits team does before understanding the full application process.",
+      "fix": "Reorganize the document to follow the reader's actual task sequence: Eligibility → How to Apply → Approval Timeline → Reimbursement Amounts → Restrictions → Required Documentation. Remove duplicate sections and consolidate team-focused content into a separate 'For Administrators' section or appendix.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Document structure, spanning lines 3-74",
+      "severity": 3,
+      "violation": "Sections and their order track an internal process workflow and administrative concerns rather than the reader's actual task sequence of determining eligibility, applying, waiting for approval, and receiving reimbursement."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "evidence": "36-word sentence, 4 subordinate-clause markers: Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 3",
+      "severity": 3,
+      "violation": "The sentence runs to 36 words with 4 subordinate-clause markers, longer than the reader can hold in mind on a single pass."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ACTIVE",
+      "evidence": "The request is reviewed within two business days.",
+      "fix": "Rewrite the sentence in active voice, naming the actor that performs the action.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence uses a be-verb plus past-participle passive construction in a context where the actor is recoverable and worth naming directly."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "The How to Apply section (lines 19-23) opens with employee instructions ('Employees start a stipend request...', 'Employees can return...') but then pivots to internal operational information: 'Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.' This sentence describes staffing problems and internal handoff failures the employee neither caused nor can act on.",
+      "fix": "Move the sentence about the review timeline and staffing coverage issues to a separate administrative section or remove it from employee-facing instructions. If included, frame it as a disclaimer about expected delays, not as internal problem-solving.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "How to Apply section, line 23",
+      "severity": 2,
+      "violation": "The section addresses two audiences (employees applying and administrators explaining delays) within the same paragraph without signaling which instruction is meant for whom, making the employee's role in the described scenario unclear."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONCISE",
+      "evidence": "Also, the deposit happens in order to offset costs the employee already paid at this point in time.",
+      "fix": "Replace the wordy phrase with its plain equivalent (for example, because for due to the fact that).",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "Reimbursement Amounts, paragraph 2",
+      "severity": 2,
+      "violation": "The sentence uses a wordy construction from the fixed wordy-phrase list that a shorter equivalent would carry with no loss of meaning."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "The document uses multiple different names for what appear to be the same or related entities: 'benefits team' (lines 7, 61, 63, 65), 'people operations office' (line 5), 'IT asset group' (line 8), 'finance office' (line 69), and 'payroll' (line 51). It is never made explicit whether these are separate departments or different names for overlapping functions. Additionally, 'stipend' and 'benefit' are used interchangeably (e.g., 'home-office equipment stipend' in title, but 'benefit year' in line 11 and 'benefits team' in line 7).",
+      "fix": "Create a brief defined-terms section or opening clarification: 'The benefits team (also called the people operations office) manages stipend requests. The IT asset group tracks the budget. The finance office reviews requests over $200. Payroll processes reimbursements.' Use 'benefit year' for time periods and 'stipend' for the allowance itself throughout, or consistently choose one pair.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Terminology throughout, concentrated in lines 5-8 and 51-73",
+      "severity": 2,
+      "violation": "Different terms that appear to refer to the same or overlapping organizational functions are used without a defined-terms section or explicit equivalence statement, forcing the reader to check whether each new name names the same department or a different one."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-DOUBLE-NEGATIVE",
+      "evidence": "However, reimbursement is not available without a completed receipt.",
+      "fix": "Restate the sentence with at most one negation, or recast it as a positive statement.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Eligibility, paragraph 2",
+      "severity": 2,
+      "violation": "2 negation markers from the fixed negation list co-occur in one clause, so the reader has to work out the statement's logical sign before understanding it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-001.md",
+    "artifact_sha256": "32ee3fed58b3e9b931565041a2e195dade8e2d19c9e9172fe28b38bdb5f6ef2c",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T17:26:26Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 9,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 4
+  }
+}

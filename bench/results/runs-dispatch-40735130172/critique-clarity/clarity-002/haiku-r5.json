@@ -1,0 +1,128 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Lines 17-23 (How to Apply) address employees with 'Employees must submit'; lines 25-27 (Approval Timeline) address managers with 'The manager reviews'; lines 51 (Terminology Notes) address both simultaneously with 'You record...Finance reconciles...Payroll releases.'",
+      "fix": "Clearly separate content by audience: create distinct sections for employee instructions and internal process documentation, or explicitly flag each section with who it is written for.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Throughout document; most egregious in Terminology Notes (lines 49-53)",
+      "severity": 3,
+      "violation": "The document addresses multiple distinct audiences - employees, managers, finance staff, people operations - without clear separation. These audiences are interleaved throughout sections, so an employee cannot easily tell which instructions apply to them and which describe what other roles perform. The Terminology Notes section is particularly problematic, mixing employee instructions ('You record...you submit') with descriptions of internal staff actions ('Finance reconciles...Payroll releases')."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Line 11: 'Full-time employees...are eligible'; Line 45: 'The applicant must keep'; Line 53: 'you submit.' Also: Lines 5 and 7 introduce two different entities - 'benefits team' and 'people operations office' - that may be the same department but are never clarified.",
+      "fix": "Define a consistent term for each concept: choose one term for the employee reader (e.g., 'you' throughout) and one for each organization, and use only those terms throughout the document. Consider a definitions section if multiple organizations are genuinely distinct.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Throughout document",
+      "severity": 3,
+      "violation": "Multiple terms are used interchangeably for the same concepts without defined equivalence, forcing the reader to check whether terms refer to the same thing. Employees are variously called 'employees' (line 11), 'staff' (line 5), 'the applicant' (line 45), 'the requester' (line 29), 'the employee' (line 23), and 'you' (line 53). Organizations are called 'benefits team' (line 5), 'people operations office' (line 7), 'finance office' (line 39), 'finance liaison' (line 61), 'Finance' (line 51), and 'Payroll' (line 51) with no mapping of whether these are the same or different entities."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "evidence": "71-word sentence, 5 subordinate-clause markers: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "severity": 3,
+      "violation": "The sentence runs to 71 words with 5 subordinate-clause markers, longer than the reader can hold in mind on a single pass."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-SHAPE",
+      "evidence": "71-word sentence: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "fix": "Move subordinate clauses and modifiers after the main clause, not between its subject and verb.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "severity": 3,
+      "violation": "At 71 words, with 0 comma-set-off clause(s) and 5 subordinate-clause marker(s), the sentence stacks interruptions between its subject and its main verb instead of holding the main clause together."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-LISTS",
+      "evidence": "Employees must submit the receipt, the manager's approval form, and the original purchase order before the review begins.",
+      "fix": "Reformat the inline items as a numbered or bulleted list.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence embeds three or more comma- or semicolon-separated parallel items inline rather than presenting them as a formatted list."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-MUST",
+      "evidence": "Additionally, employees shall retain receipts for one year after the purchase date.",
+      "fix": "Restate the requirement using must.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "Required Documentation, paragraph 2",
+      "severity": 2,
+      "violation": "The sentence states a binding requirement using shall or an indirect requirement phrasing instead of must."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-NOMINALIZATION",
+      "evidence": "The finance office conducts an evaluation of every submitted receipt before it approves the amount.",
+      "fix": "Restate the nominalized noun as the sentence's main verb.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Reimbursement Amounts, paragraph 1",
+      "severity": 2,
+      "violation": "The action is buried inside the noun 'evaluation', carried by a generic support verb, instead of stated as the sentence's own main verb."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-PARAGRAPH",
+      "evidence": "165 words in one paragraph.",
+      "fix": "Split the paragraph so each part covers one topic.",
+      "id": "F-008",
+      "lane": "scripted",
+      "location": "Eligibility, paragraph 3",
+      "severity": 2,
+      "violation": "The paragraph exceeds the 150-word scannability threshold."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-PRONOUNS",
+      "evidence": "The applicant must keep the equipment in good working condition and this office may ask for a brief photo check once a year.",
+      "fix": "Address the reader as you and the writer's organization as we.",
+      "id": "F-009",
+      "lane": "scripted",
+      "location": "Restrictions and Exceptions, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence routes the reader or the writer's organization through a third-person institutional substitute instead of direct address."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-002.md",
+    "artifact_sha256": "7fd910197f585ef10416cde2ed6b94fa48de539377a1082d82e29ccee509e6df",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T17:50:19Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 9,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 4
+  }
+}

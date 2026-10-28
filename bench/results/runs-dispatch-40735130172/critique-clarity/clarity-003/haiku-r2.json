@@ -1,0 +1,117 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the reimbursable item against the request log each month. Payroll releases the covered purchase amount after that monthly review. Also, you submit the request in the portal. Countersign the employee request within two business days. You track its status there until the payment clears.",
+      "fix": "Rewrite Terminology Notes to address employees consistently, or move manager/finance instructions to a separate section labeled for that audience.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Terminology Notes, paragraphs 1-2",
+      "severity": 3,
+      "violation": "The section shifts from addressing employees to directly addressing managers and finance staff, breaking audience consistency throughout the document."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-PARAGRAPH",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout.",
+      "fix": "Rewrite the opening sentence to state the topic the rest of the paragraph covers.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "The paragraph's opening sentence shares almost no vocabulary with the rest of the paragraph, so it does not preview the paragraph's actual topic."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout. A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.",
+      "fix": "Remove sentences about travel expenses and office coffee budget. Focus the Program Coordination section exclusively on stipend-related coordination.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "The paragraph opens on the document's main topic but then introduces and dwells on unrelated topics (travel expenses, coffee budget), breaking passage coherence."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "A photo of the receipt is enough for most requests. Additionally, employees must retain receipts for one year after the purchase date. ... You record the stipend item on the request form. Finance reconciles the reimbursable item against the request log each month.",
+      "fix": "Choose one term - either 'receipt', 'stipend item', or 'reimbursable item' - and use it consistently throughout.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Required Documentation (lines 33-35) and Terminology Notes (line 51)",
+      "severity": 2,
+      "violation": "The term 'reimbursable item' appears once; elsewhere 'receipt', 'stipend item', or 'item' is used inconsistently."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "The benefits team publishes the equipment catalog on the first business day of the month. Every entry carries a date stamp so the record stays easy to audit. (lines 5-6) ... The IT asset group updates the equipment catalog after every open enrollment period. Every entry carries a date stamp so the record stays easy to audit. (lines 61-62) ... The finance liaison publishes the vendor list on the first business day of the month. The most recent version supersedes the one that came before it. (line 73, repeating lines 7-8)",
+      "fix": "Consolidate repeated information into one location or clarify what is genuinely new in each restatement.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Program Overview (lines 5-8), Special Cases (lines 61-62), Questions and Updates (line 73)",
+      "severity": 2,
+      "violation": "Information appears in multiple sections verbatim or near-verbatim, confusing readers about whether they are encountering new content or redundant restatement."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SUBJECT-VERB-OBJECT",
+      "evidence": "Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.",
+      "fix": "Move the interrupting clause elsewhere, or split it into its own sentence.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 2",
+      "severity": 2,
+      "violation": "3 comma-set-off clause(s) totalling 14 words intervene between the sentence's apparent subject and its verb."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-TRANSITIONS",
+      "evidence": "An incomplete request pauses the timeline until the missing item arrives. The...",
+      "fix": "Open the paragraph with a transition word that states its relationship to the prior paragraph.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 2",
+      "severity": 2,
+      "violation": "The paragraph opens with none of the fixed transition words, so the reader is not told how it relates to the paragraph before it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-PARALLELISM",
+      "evidence": "Completing the request begins with confirming eligibility, and the uploaded receipt.",
+      "fix": "Restate every item in the series with the same grammatical form.",
+      "id": "F-008",
+      "lane": "scripted",
+      "location": "Request Steps, paragraph 1",
+      "severity": 2,
+      "violation": "The series' 2 items mix grammatical forms (gerund, other) at their head words instead of sharing one form."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T17:54:51Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

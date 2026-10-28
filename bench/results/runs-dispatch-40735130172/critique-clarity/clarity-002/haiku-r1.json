@@ -1,0 +1,106 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "evidence": "71-word sentence, 5 subordinate-clause markers: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "severity": 3,
+      "violation": "The sentence runs to 71 words with 5 subordinate-clause markers, longer than the reader can hold in mind on a single pass."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-SHAPE",
+      "evidence": "71-word sentence: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "fix": "Move subordinate clauses and modifiers after the main clause, not between its subject and verb.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "severity": 3,
+      "violation": "At 71 words, with 0 comma-set-off clause(s) and 5 subordinate-clause marker(s), the sentence stacks interruptions between its subject and its main verb instead of holding the main clause together."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Lines 49 - 53 define 'stipend item' (used throughout lines 35 - 51), 'request' (used throughout), and 'status' (line 53), but no explanation is given for why these terms warrant a dedicated section while other policy terms (workspace, eligibility, approval) do not.",
+      "fix": "Delete 'Terminology Notes' or replace it with genuinely new definitions that are not already explained in the document's main sections.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Terminology Notes",
+      "severity": 2,
+      "violation": "The section lists terms already explained in context, leaving its purpose ambiguous and creating uncertainty about what makes these three terms special."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "'Employee' dominates (lines 11, 13, 21, 33, 35, 45), but 'applicant' appears suddenly in line 45 ('The applicant must keep the equipment'), 'requester' in line 29, and 'staff' in lines 5 and 61.",
+      "fix": "Choose one term for the primary audience (e.g., 'employee') and use it consistently throughout.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Restrictions and Exceptions, paragraph 1",
+      "severity": 2,
+      "violation": "The document uses 'employee,' 'applicant,' 'requester,' and 'staff' interchangeably to refer to the audience, forcing readers to track role definitions."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-LISTS",
+      "evidence": "Employees must submit the receipt, the manager's approval form, and the original purchase order before the review begins.",
+      "fix": "Reformat the inline items as a numbered or bulleted list.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence embeds three or more comma- or semicolon-separated parallel items inline rather than presenting them as a formatted list."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "evidence": "'How to Apply' (lines 17 - 23) precedes 'Required Documentation' (lines 31 - 35), but a reader following the application flow needs to know 'keep proof of purchase' and 'retain receipts for one year' before or alongside the process steps.",
+      "fix": "Move 'Required Documentation' before or immediately after 'How to Apply', or integrate the key documentation requirements into the 'How to Apply' section.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "How to Apply and Required Documentation sections",
+      "severity": 2,
+      "violation": "Documentation requirements come after the application process, forcing readers to learn steps before learning what documents are needed."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-MUST",
+      "evidence": "Additionally, employees shall retain receipts for one year after the purchase date.",
+      "fix": "Restate the requirement using must.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Required Documentation, paragraph 2",
+      "severity": 2,
+      "violation": "The sentence states a binding requirement using shall or an indirect requirement phrasing instead of must."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-002.md",
+    "artifact_sha256": "7fd910197f585ef10416cde2ed6b94fa48de539377a1082d82e29ccee509e6df",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T17:39:20Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 12,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 7
+  }
+}
