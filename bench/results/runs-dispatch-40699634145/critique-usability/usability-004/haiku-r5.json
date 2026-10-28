@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "Button element: <button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>. No target state, navigation, or outcome defined in artifact.",
+      "fix": "Define what happens when duplicate button is clicked: does it create a new project, show a confirmation dialog, or navigate to a duplication state?",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "project-settings section, duplicate button",
+      "severity": 3,
+      "violation": "Action trigger (duplicate button) is specified but no outcome, next state, or result feedback is specified."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "Text content: \"You can restore it at any time from the archived projects list.\" Artifact does not show archived projects list or any restoration interface.",
+      "fix": "Either remove the statement about restoration, or add a screen showing the archived projects list with a restore control.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "archive-confirm section",
+      "severity": 3,
+      "violation": "Archive action is stated as reversible but the artifact does not show how or where to perform the reversal."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "Form element: <button id=\"notification-settings-save-btn\" type=\"submit\">Save</button>. Artifact defines no following state or feedback message.",
+      "fix": "Define the state users see after clicking Save: success message, confirmation screen, or return to project-settings.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "notification-settings section, Save button",
+      "severity": 2,
+      "violation": "Action trigger (Save button) is specified but no in-progress or result feedback is specified for the form submission."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "Form element: <button id=\"project-settings-save-btn\" type=\"submit\">Save</button>. Artifact defines no following state or feedback message.",
+      "fix": "Define the state users see after clicking Save: success message, confirmation screen, error handling, or next screen.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "project-settings section, Save button",
+      "severity": 2,
+      "violation": "Action trigger (Save button) is specified but no in-progress or result feedback is specified for the form submission."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "Error message: \"The last import finished with 4 rows skipped: each referenced a project that does not exist in this workspace. Rows 35, 71, 78, and 83 were skipped; every other row was imported.\" Message identifies the problem but suggests no next action.",
+      "fix": "Add guidance to the error message: suggest retrying the import, editing the source file, or reviewing the specific rows that failed.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "import-status section",
+      "severity": 2,
+      "violation": "Error message identifies what failed but does not name or point to a recovery action for the user to take."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:40:12Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

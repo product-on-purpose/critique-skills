@@ -1,0 +1,60 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-EXIT",
+      "evidence": "The section contains a <form> with an <input type=\"email\"> and <button type=\"submit\">Save</button>, followed by separate <a> links for Continue (href=\"#invite-sent\") and Cancel (href=\"#project-settings\"). The relationship between form submission and the Continue exit is unspecified, making the exit's effect unpredictable.",
+      "fix": "Clarify the interaction model: either make the Continue link submit the form (combining the two actions), or remove the form and collect email through a separate confirmation step, or explicitly label what happens to entered work when the user clicks Continue or Cancel without Save.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"invite-member\" section",
+      "severity": 2,
+      "violation": "The invite-member section presents both a form with a Save button and separate Continue and Cancel links. The interaction model is ambiguous: it is unclear whether the user must submit the form before clicking Continue, and whether work already entered (the email address) is preserved or lost if the user clicks Continue without clicking Save."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H4-CONTROL-NAMING",
+      "evidence": "control labeled \"Save\"",
+      "fix": "Pick one label for this commit action, for example \"Save\", and use it everywhere the action appears.",
+      "id": "F-002",
+      "instances": [
+        {
+          "evidence": "control labeled \"Save\"",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "control labeled \"Submit\"",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "This artifact uses 2 different labels for what reads as the same commit action: \"Save\", \"Submit\". A user cannot tell from the label alone whether these controls perform the same action or different ones."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:09:20Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

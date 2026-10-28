@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "The project-settings form and notification-settings form both define Save submit buttons but do not specify any visible feedback (success message, confirmation state, loading indicator, or target screen) when the user activates them. The artifact jumps from the button to either silence or an undefined next state.",
+      "fix": "For each form submission, specify either a success message, a change to the control state, an inline confirmation, or a named target screen that confirms the action completed.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"project-settings\" section (Save button in the project name form) and the \"notification-settings\" section (Save button in the digest frequency form)",
+      "severity": 3,
+      "violation": "The artifact specifies state-changing actions (form submissions) but does not specify visible feedback that the user can see while the action runs or once it completes."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-DEADEND",
+      "evidence": "the \"invite-sent\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+      "fix": "Add a control inside the \"invite-sent\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "the \"invite-sent\" section",
+      "severity": 3,
+      "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-LABELED",
+      "evidence": "<button> with no text content and no accessible-name attribute",
+      "fix": "Add visible text to this control, or an aria-label attribute naming what it does.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "This control has neither visible text nor an accessible-name attribute, so nothing on screen names what the control does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H8",
+      "evidence": "The workspace-overview section includes a div element with the text 'Invite 3 teammates this month to unlock the advanced reporting add-on.' This promotional message appears as a block element between the project list and the navigation links, directly competing for visual prominence with the primary task (viewing the list of projects).",
+      "fix": "Move the promotional message to a visually secondary location (below the fold, de-emphasized styling, or a corner banner) so the project list and task-relevant navigation take precedence.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"workspace-overview\" section, the promotional message (id=\"workspace-overview-promo-referral\")",
+      "severity": 2,
+      "violation": "The screen places a secondary promotional element where it ranks equally with elements serving the screen's primary task."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T13:48:39Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

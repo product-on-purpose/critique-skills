@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced this morning.\" but the list below contains only 3 items: Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot",
+      "fix": "Either add one more project to the list or change the text to \"This workspace holds 3 projects, synced this morning.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"Your projects\" section, opening paragraph",
+      "severity": 3,
+      "violation": "The stated project count does not match the number of projects actually listed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>` has no text content between the tags",
+      "fix": "Add visible text inside the button, like `<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\">Duplicate</button>`, or include an icon with descriptive content.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "project-settings section, duplicate button",
+      "severity": 3,
+      "violation": "The button is empty and provides no visible label for sighted users, relying entirely on the aria-label for understanding."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The section contains both a form with a submit button (`id=\"invite-member-save-btn\"`) and a separate \"Continue\" link (`id=\"invite-member-continue-link\"`) that both appear to advance the workflow",
+      "fix": "Remove the separate Continue link and ensure the form's submit button action navigates to the next state, or restructure so the Continue link only becomes visible after successful form submission.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "invite-member section",
+      "severity": 3,
+      "violation": "It is unclear whether the form submission or the separate Continue link triggers the next step, and showing both simultaneously creates ambiguity in the intended user flow."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T14:24:43Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

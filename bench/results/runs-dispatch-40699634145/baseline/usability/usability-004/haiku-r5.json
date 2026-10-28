@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced last week.\" vs. the list below shows only 3 items",
+      "fix": "Either add a fourth project to the list or change \"4 projects\" to \"3 projects\".",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "workspace-overview section, paragraph text",
+      "severity": 3,
+      "violation": "The text states 4 projects but only 3 projects are listed in the ul element."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "No `<meta name=\"viewport\">` tag present",
+      "fix": "Add `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">` to the head section.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "head section",
+      "severity": 3,
+      "violation": "The document lacks a viewport meta tag, which is essential for responsive design and proper scaling on mobile devices."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>` with no visible content or child elements",
+      "fix": "Add an icon or visible text inside the button (e.g., `<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\">⋮</button>` or similar).",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "project-settings section, project-settings-duplicate-btn button",
+      "severity": 3,
+      "violation": "The button is empty with no visible text or icon, relying only on aria-label for accessibility, making it unclear to sighted users."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"notification-settings-digest-input\">` with three `<option>` elements, none marked as selected",
+      "fix": "Add `selected` attribute to the first option or whichever should be the default: `<option selected>Daily</option>`.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "notification-settings section, notification-settings-digest-input select",
+      "severity": 3,
+      "violation": "The select element has no default selected option, so the field appears empty when the form loads."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"archive-confirm-archive-link\" href=\"#project-archived\">Archive</a>`",
+      "fix": "Replace with `<button id=\"archive-confirm-archive-btn\" type=\"button\">Archive</button>` (with appropriate form structure or JavaScript handler).",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "archive-confirm section, archive-confirm-archive-link",
+      "severity": 3,
+      "violation": "A destructive action (archiving a project) is implemented as an anchor link rather than a button, which violates semantic HTML conventions and could bypass form validation or confirmation mechanisms."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Form contains `<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` followed by a separate `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>`",
+      "fix": "Either make \"Continue\" the form's submit button and remove \"Save\", or remove \"Continue\" and let form submission navigate to the next step via JavaScript.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "invite-member section",
+      "severity": 3,
+      "violation": "The form flow is unclear - users must submit the form with \"Save\" but then separately click \"Continue\" to proceed, which breaks the expected form submission pattern."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T14:40:38Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "The artifact defines a Save button in project-settings form for updating project name, a Save button in notification-settings form for changing digest frequency, and a Save button in invite-member form for sending an invite. Each action changes state but the artifact specifies no loading indicator, progress message, or success confirmation. Similarly, the Duplicate project button (id=\"project-settings-duplicate-btn\") is defined with no description of what feedback appears when clicked.",
+      "fix": "For each Save button and the Duplicate button, add specification of feedback: either a loading/progress state with a result message (success or error), or explicit documentation of the resulting state change and how the user perceives it (e.g., 'clicking Save returns the user to project-settings with the project name updated' and indicates success to the user).",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "project-settings (Save button), notification-settings (Save button), invite-member (Save button), project-settings (Duplicate button)",
+      "severity": 3,
+      "violation": "NNG-H1 requires that for every state-changing action the artifact names, it must also specify what the user sees while the action runs and once it finishes. The artifact omits all in-progress and result feedback for these actions."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "The invite-sent section states: 'An invite was sent to the address entered above. It expires in 5 days if not accepted.' The phrase 'entered above' refers to the previous screen (invite-member) but does not display the actual email address value.",
+      "fix": "Display the email address on the invite-sent confirmation screen. For example: 'An invite was sent to user@example.com. It expires in 5 days if not accepted.' This allows the user to verify the recipient without navigating away.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "invite-sent screen",
+      "severity": 2,
+      "violation": "NNG-H6-RECALL requires that the information a user needs at a given step is present at that step, not held over from an earlier screen or expected to be remembered. Confirming the invite was sent to the correct recipient requires the user to recall or navigate back to see the email address."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:37:11Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

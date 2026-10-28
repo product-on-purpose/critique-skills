@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced this morning.\" but only 3 projects listed below",
+      "fix": "Change \"4 projects\" to \"3 projects\" or add a fourth project to the list.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<section id=\"workspace-overview\">` paragraph",
+      "severity": 3,
+      "violation": "The stated project count does not match the number of projects displayed in the list."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"project-settings-name-input\" type=\"text\" value=\"Vendor Onboarding\">`",
+      "fix": "Add `name=\"project_name\"` to the input element.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">` form input",
+      "severity": 3,
+      "violation": "The input is missing a `name` attribute, which is required for form submission."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"invite-member-email-input\" type=\"email\">`",
+      "fix": "Add `name=\"email\"` to the input element.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`<section id=\"invite-member\">` form input",
+      "severity": 3,
+      "violation": "The input is missing a `name` attribute, which is required for form submission."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"notification-settings-digest-input\">`",
+      "fix": "Add `name=\"digest_frequency\"` to the select element.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`<section id=\"notification-settings\">` form select",
+      "severity": 3,
+      "violation": "The select element is missing a `name` attribute, which is required for form submission."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T14:22:30Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "The archive action is available in project-settings (link with id: project-settings-archive-link), confirmed in archive-confirm section, and completed with result shown in project-archived section. After archiving, the artifact provides no path back or unarchive option.",
+      "fix": "Define where users can view archived projects and how to restore them. Either add an 'Archived projects' view to the workspace overview with an unarchive action, or add an unarchive option to the project-archived state.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "project-settings, archive-confirm, and project-archived sections",
+      "severity": 3,
+      "violation": "The artifact specifies an archive action for a project but does not name a reversal path or undo mechanism. Archive is a reasonably reversible action in this product, but the artifact shows no way to unarchive a project."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "The invite-member form contains a save button (id: invite-member-save-btn), but no defined state or message showing what happens when the user submits the form. The separate continue link makes the relationship between save and proceeding unclear.",
+      "fix": "Define a visual feedback state after the save button is clicked, either as a loading state or success message. Clarify whether save must be clicked before continue, or specify what save accomplishes separately from the continue action.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "invite-member section",
+      "severity": 2,
+      "violation": "The artifact specifies a save button on the invite-member form but does not specify what visual feedback the user receives after clicking save, such as a loading indicator or success message."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "The notification-settings form contains a save button (id: notification-settings-save-btn), but no defined state or message showing what happens when the user submits the form.",
+      "fix": "Define a visual feedback state after the save button is clicked, such as a loading state, a success message confirming the save, or specification that the form remains on screen with updated values visible.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "notification-settings section",
+      "severity": 2,
+      "violation": "The artifact specifies a save button in the notification settings form but does not specify what visual feedback the user receives after clicking save, such as a loading indicator, success message, or confirmation that the settings were updated."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "The project-settings form contains a save button (id: project-settings-save-btn), but no defined state or message showing what happens when the user submits the form.",
+      "fix": "Define a visual feedback state after the save button is clicked, such as a loading state with a spinner, a success message confirming the save, or a validation error state if the input is invalid.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "project-settings section",
+      "severity": 2,
+      "violation": "The artifact specifies a save button in the project settings form but does not specify what visual feedback the user receives after clicking save, such as a loading indicator, success message, or confirmation that the name was updated."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "The invite-sent screen displays the message 'An invite was sent to the address entered above. It expires in 5 days if not accepted.' However, the email address input is not displayed on this screen, requiring the user to recall it from the previous screen.",
+      "fix": "Display the email address on the invite-sent confirmation screen so the user can verify that the invite was sent to the correct address without having to remember or go back.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "invite-sent section",
+      "severity": 2,
+      "violation": "The artifact specifies a confirmation message that refers to 'the address entered above,' but the address is not shown on the invite-sent screen. The user must remember or navigate back to verify which email address received the invite."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H9-IDENTIFY",
+      "evidence": "The import-status section displays: 'Import failed. Error code IMP-500. Contact support if this continues.' This message indicates failure occurred but does not identify what specifically failed or what the user did wrong.",
+      "fix": "Specify what aspect of the import failed (e.g., 'File format not supported,' 'File size exceeds 100MB limit,' 'Invalid data in column 5'). Give the user a specific cause they can address.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "import-status section",
+      "severity": 2,
+      "violation": "The artifact specifies an import error message that reports only that the import failed with a code, but does not specifically identify what went wrong or which aspect of the import (file format, size, permissions, content) caused the failure."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:15:33Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

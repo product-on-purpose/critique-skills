@@ -1,0 +1,19 @@
+Location: workspace-overview section, paragraph stating project count
+Evidence: "This workspace holds 5 projects" but the list below contains only 4 items
+Problem: The stated number of projects (5) does not match the number of projects listed in the ul element (4).
+Fix: Either add a 5th project to the list or change the paragraph to read "This workspace holds 4 projects".
+
+Location: project-settings section, archive project link
+Evidence: `href="#project-archived"` on the archive-link element
+Problem: The link skips the confirmation screen and goes directly to the archived state, but the document includes an archive-confirm section that should be shown first.
+Fix: Change the href to "#archive-confirm" so users see the confirmation dialog before archiving.
+
+Location: project-settings section, duplicate project button
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button contains no visible text, only an aria-label, so sighted users cannot see what the button does.
+Fix: Add visible text content to the button, such as "Duplicate" or "Duplicate project".
+
+Location: invite-member section, form navigation
+Evidence: The form contains a "Save" submit button, but the section also has a separate "Continue" link to #invite-sent
+Problem: Users are presented with both a form submit button and a separate continue link, creating an unclear workflow about which action to take.
+Fix: Remove the "Continue" link and rely on the form's submit button to navigate to the invite-sent state, or restructure to clarify the intended sequence.

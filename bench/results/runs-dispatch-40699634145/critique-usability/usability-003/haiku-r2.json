@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "The artifact defines an archive action (line 54) that transitions to project-archived state (line 56), which confirms the project is now in archived projects with no further navigation. No unarchive, restore, or edit path is shown anywhere in the artifact",
+      "fix": "Add an unarchive action reachable from the project-archived state, or reachable from within the archived projects view, so users can restore a misarchived project",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "archive-confirm screen, Archive button; project-archived result state",
+      "severity": 3,
+      "violation": "NNG-H3-UNDO requires reversible actions to show a path back; archiving a project is a reasonable candidate for reversal but none is specified"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H9-IDENTIFY",
+      "evidence": "The error message reads exactly: 'Import failed. Error code IMP-500. Contact support if this continues.' The raw code 'IMP-500' is shown without explanation of what condition caused the failure",
+      "fix": "Replace or augment the error code with a plain-language explanation: e.g., 'Import failed: the file could not be read (IMP-500). Check that the file is in CSV format and try again' or identify the specific failure mode",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "import-status screen (line 61), error message text (line 63)",
+      "severity": 3,
+      "violation": "NNG-H9-IDENTIFY requires error text to say in plain language what went wrong and where, specifically enough that the user can tell which action caused it"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "The form contains a Save button (line 27) but the artifact defines no next state after submission: no success confirmation, no error state, no loading indicator specified",
+      "fix": "Add a success confirmation state that users see after clicking Save, showing that the project name was updated, or specify an error state for failed submissions",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "project-settings screen, Save button for project name",
+      "severity": 2,
+      "violation": "NNG-H1 requires that state-changing actions specify visible feedback about outcome; this action's feedback is entirely absent"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "The project-settings screen shows 'Vendor Onboarding' (line 26), but when user navigates to invite-member (line 35), the screen shows only 'Email address' input with no reference to which project. The invite-sent confirmation (line 47) also omits the project name",
+      "fix": "Add a line to both invite-member and invite-sent screens stating which project the invitation is for, e.g., 'Inviting a member to Vendor Onboarding' or similar",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "invite-member screen (line 35) and invite-sent screen (line 45)",
+      "severity": 2,
+      "violation": "NNG-H6-RECALL requires information users need at each step to be present there, not held in memory from earlier screens"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "The message suggests 'Contact support if this continues' but the screen (line 61 - 65) provides only a 'Back to your projects' link; no support email, link, or contact method is available",
+      "fix": "Add a support contact link or email address to the import-status screen, or replace 'Contact support if this continues' with an actionable suggestion such as 'Try uploading again' or 'Check the file format'",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "import-status screen (line 61), error message (line 63)",
+      "severity": 2,
+      "violation": "NNG-H9-RECOVER requires error states to point to a next step the user can take, with the control or route available where the message appears"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:18:20Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
