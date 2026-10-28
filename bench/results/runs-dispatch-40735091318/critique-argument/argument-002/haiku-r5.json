@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-CLAIM-MARKER",
+      "evidence": "0 conclusion-marker phrases found across 401 words.",
+      "fix": "Add an explicit conclusion-signalling phrase at the point the artifact states its central claim, for example \"therefore\" or \"we recommend\".",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "severity": 3,
+      "violation": "No phrase from the conclusion-marker lexicon (therefore, thus, hence, it follows that, we recommend, this paper argues, I argue that, the conclusion is, in conclusion, we should, the case for) appears anywhere in the artifact, so a reader scanning rather than reading straight through has no signpost to where the conclusion is asserted."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-HEDGE-DENSITY",
+      "evidence": "10 of 14 sentences (0.71) carry at least one hedging term.",
+      "fix": "Remove the hedge from sentences whose claim the evidence actually supports, reserving qualification for the claims that genuinely need it.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "severity": 3,
+      "violation": "More than 0.35 of the artifact's sentences carry a term from the hedging lexicon (may, might, could, possibly, perhaps, arguably, somewhat, relatively, it seems, appears to, tends to, to a degree), spread across the whole document rather than concentrated where the evidence actually underdetermines the claim."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "TOULMIN-CLAIM",
+      "evidence": "Line 17: 'the stronger choice is a systemwide end to overdue fines across all ten consortium branches, effective at the start of the next fiscal year.' Line 19: 'the recommended change is about making things better for patrons going forward, in whatever way the consortium finds workable.'",
+      "fix": "Remove or replace line 19. If a clarification is needed, keep only concrete specifications of what 'eliminating fines' means (line 21), not the vague 'in whatever way the consortium finds workable.'",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "line 19, in the Recommendation section",
+      "severity": 2,
+      "violation": "The recommendation is stated specifically in line 17 as a systemwide end to fines, but line 19 retreats to stating the change is 'about making things better for patrons going forward, in whatever way the consortium finds workable.' This restatement is so vague that no reader could disagree with it - a reader finishing the Recommendation section cannot tell whether the ask is the specific proposal in line 17 or the vacuous aspiration in line 19."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "TOULMIN-REBUTTAL",
+      "evidence": "The grounds in lines 13-14 and 27 refer to results from 'the pilot branches' and 'fourteen library systems.' The recommendation (line 17) calls for systemwide implementation across 'all ten consortium branches,' but no passage addresses whether the 4-branch pilot result would hold for the remaining 6 branches or across all branch types.",
+      "fix": "In the Why the Pilot Result Applies Systemwide section, address whether and why the 4-branch pilot result is expected to hold across all ten branches. This could reference branch similarity, demographic uniformity, or other factors that support generalization.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the whole document, specifically lines 24-28 in Why the Pilot Result Applies Systemwide and lines 30-34 in Addressing the Revenue Concern",
+      "severity": 2,
+      "violation": "The document addresses one objection (the revenue concern in lines 30-34) but does not raise or address a major condition its own grounds expose: whether results from a 4-branch pilot generalize across all 10 consortium branches. The generalization risk is implicit in the scope of the grounds (pilot data) but not named or answered."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "TOULMIN-WARRANT",
+      "evidence": "Line 25-26 states the result of removing fines, and line 27-28 cites research supporting that result, but nowhere does the artifact state an explicit principle like 'a policy change that succeeds in a pilot should be implemented systemwide' or 'pilot success is sufficient evidence to generalize to the full organization.'",
+      "fix": "Explicitly state the principle connecting pilot success to systemwide implementation. For example: 'Because the pilot branches and all consortium branches serve similar patron populations and operate under the same cost structure, the positive results from the pilot support systemwide adoption' or 'Positive outcomes in a controlled pilot are sufficient evidence to generalize to the full system.'",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "lines 24-28, in the Why the Pilot Result Applies Systemwide section",
+      "severity": 2,
+      "violation": "The artifact states the principle that removing fines increases return rates and participation (lines 25-26), supported by external research (lines 27-28). However, it does not state the general principle that licenses moving from 'the pilot succeeded' to 'implement systemwide.' The connection - why a positive pilot result justifies systemwide rollout - is left implicit."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/argument/argument-002.md",
+    "artifact_sha256": "0322bc2ebeb48318c56473186a8cb1f1e78d8667b99cfaf75ee7bb84f82fcfa2",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "TOULMIN"
+    ],
+    "skill": "critique-argument",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T17:49:53Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
