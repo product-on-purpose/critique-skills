@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-SEVERITY-CONTAINER",
+      "evidence": "Container: toast; Placement: in a dialog centered on the password reset step, over the new password field it blocks",
+      "fix": "Present this as a modal dialog that persists until dismissed, matching the Placement and Signal description already given, rather than a self-clearing toast.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Password reset, new password, message 2",
+      "severity": 3,
+      "violation": "A fully blocking failure (an expired reset link that prevents completing the password reset at all, described as a centered dialog that blocks the field) is tagged as a self-clearing toast, which could disappear before the reader reads the one message explaining why they cannot proceed."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-EXPLAIN",
+      "evidence": "This field takes a maximum of 30 characters. Shorten the entry and save again.",
+      "fix": "Add a short reason the 30-character limit exists (e.g. what field or system it feeds), or drop the claim that a reason is missing if none applies.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Checkout form, shipping address, message 1",
+      "severity": 2,
+      "violation": "States a field-length limit the reader will meet again with no reason attached, and knowing the reason would cost nothing to add."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-GRACE",
+      "evidence": "The last changes were not saved and cannot be recovered. Contact support for assistance.",
+      "fix": "Add a brief acknowledgment of the loss (e.g. an apology or an explicit statement of what was lost) alongside the contact-support instruction, rather than stating the loss and the instruction with no softening.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Account settings, username, message 1",
+      "severity": 2,
+      "violation": "Reports a completed, unrecoverable loss as a bare technical notice with no acknowledgment of what that loss costs the reader, even though no other block on this screen offers a way forward and the suggested fix is none."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-PLAIN-LANGUAGE",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "fix": "Replace the code or jargon term with a plain-language sentence a non-technical reader can act on.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "Checkout form, shipping address, message 2",
+      "severity": 2,
+      "violation": "The message text carries an internal error code, a code-style token, or an engineering-jargon term standing in for a plain-language explanation."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-PREVENT",
+      "evidence": "Receipts upload as PDF or PNG only, the two formats the expense system can read. Change this file to one of those formats and upload it again, or select a different receipt.",
+      "fix": "Validate the file's format as soon as it is selected and warn before submission, rather than waiting for on-submit to report it.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "File upload, receipts, message 2",
+      "severity": 2,
+      "violation": "Fires only on-submit for a predictable mistake (wrong file format) that the product already knows at file-selection time, with nothing earlier in the flow warning the reader before they submit."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-PROXIMITY",
+      "evidence": "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page",
+      "fix": "Move the message to sit directly beside or below the password field it concerns, instead of at the top of the form.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Password reset, new password, message 1",
+      "severity": 2,
+      "violation": "The message sits at the top of a long form rather than beside the password field it concerns, requiring the reader to scroll up and away from the field to read it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T12:53:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 7,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 2
+  }
+}

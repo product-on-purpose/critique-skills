@@ -1,0 +1,59 @@
+Location: Checkout form, shipping address — second message block (Error code 502)
+Evidence: "Placement: directly below the shipping address block" vs. "Signal: bold text set above the address block at a larger size than its labels, icon"
+Problem: Placement says the message sits below the address block while the signal description says the bold text is set above it — these two fields contradict each other about where the message actually appears.
+Fix: Make Placement and Signal agree on one location (e.g., both "directly above the shipping address block").
+
+Location: Checkout form, shipping address — second message block (Error code 502)
+Evidence: "Please correct the highlighted field. Error code: 502."
+Problem: A 502 is a server/gateway failure, not something the user can "correct" by editing a field, and the raw status code is exposed without any plain-language explanation — inconsistent with every other message in the document, which explains the cause in user terms.
+Fix: Rewrite the message to explain the actual failure in plain language (e.g., a temporary server issue) and offer a retry action, dropping the technical error code or the "correct the highlighted field" framing.
+
+Location: Checkout form, shipping address — second message block (Error code 502)
+Evidence: "Predictable mistake: yes"
+Problem: A 502 server error is an infrastructure failure, not a predictable user mistake, so this classification is wrong given the message content.
+Fix: Change to "Predictable mistake: no" or revise the message so it actually describes a user-caused, predictable error.
+
+Location: Checkout form, shipping address — second message block (Error code 502)
+Evidence: "Please correct the highlighted field." placed "directly below the shipping address block"
+Problem: The address block contains multiple fields, but the message refers vaguely to "the highlighted field" (singular) without identifying which one, and is positioned below the whole block rather than next to the specific field at fault.
+Fix: Name the specific field in the message and place it directly below that field rather than below the entire block.
+
+Location: File upload, receipts — first message block (10 MB limit)
+Evidence: "Suggested fix: described, names the one available alternative but requires the reader to enter it by hand" vs. message text "Reduce the file size and upload it again."
+Problem: The metadata claims the fix "names the one available alternative," but the message itself gives no specific alternative (no compression method, target size, or tool) for the reader to act on.
+Fix: Either update the message to name a concrete alternative (e.g., "compress the PDF" or a target size), or correct the Suggested fix description to say no alternative is named.
+
+Location: File upload, receipts — second message block (PDF/PNG format)
+Evidence: "Suggested fix: selectable, offers a convert and retry action in place of the message" vs. message text "Change this file to one of those formats and upload it again, or select a different receipt."
+Problem: The message is written as instructions for the user to manually convert and re-upload the file, which contradicts the "Suggested fix" claim that a selectable convert-and-retry action replaces the message entirely.
+Fix: Either replace the message with the actual button/action copy, or change the Suggested fix field to "described" to match the manual-instruction wording that's actually shown.
+
+Location: Password reset, new password — first message block (8-character minimum)
+Evidence: "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page"
+Problem: An after-field-complete validation message is disconnected from the field it describes, forcing the user to scroll away from the field they just edited to find out what's wrong with it.
+Fix: Move the message to appear directly below (or above) the password field itself, consistent with the placement pattern used for other after-field-complete errors in this document.
+
+Location: Password reset, new password — second message block (expired link)
+Evidence: "Container: toast" vs. "Placement: in a dialog centered on the password reset step, over the new password field it blocks"
+Problem: "Toast" and "dialog" describe different UI patterns (a transient, non-blocking notification versus a centered, blocking modal), so the container type and the placement description contradict each other.
+Fix: Pick one pattern and make both fields consistent — either label it "Container: dialog/modal," or change the placement to describe a non-blocking toast.
+
+Location: Password reset, new password — second message block (expired link)
+Evidence: "Fires: on-focus" combined with placement "over the new password field it blocks"
+Problem: If the dialog already blocks/covers the field per the placement description, the user cannot focus that field to trigger an on-focus event — the fire condition presupposes an interaction the blocking overlay prevents.
+Fix: Change the trigger to something that doesn't depend on interacting with the blocked field, such as "on-load" of the password reset step.
+
+Location: Account settings, username — message block
+Evidence: "The last changes were not saved and cannot be recovered." vs. "Input on resubmission: preserved"
+Problem: The message asserts the changes are irrecoverably lost, but the metadata says the input is preserved for resubmission — if the data is still there for the user to resubmit, it contradicts the claim that it "cannot be recovered."
+Fix: Reconcile the two: either state that the data was lost and the field is now empty, or soften the message to reflect that the entry is still present and can be resubmitted.
+
+Location: Account settings, username — message block
+Evidence: "Predictable mistake: yes"
+Problem: An unexplained save failure requiring the user to contact support describes a system/infrastructure failure, not a predictable user mistake, so this classification doesn't match the message.
+Fix: Change to "Predictable mistake: no," consistent with how the similarly system-caused expired-link error elsewhere in the document is marked "no."
+
+Location: Account settings, username — message block
+Evidence: "Signal: bold text set larger than the field label, icon" and "Suggested fix: none" for a message reading "Contact support for assistance."
+Problem: This is the document's most severe case (irreversible data loss) yet it receives the same low-intensity inline signal as minor validation errors like the 30-character limit, and "Suggested fix: none" leaves "contact support" with no actual link or action for the user to take.
+Fix: Escalate the signal (e.g., a blocking dialog) to match the severity, and provide an actual support contact action (link, button, or ticket) rather than leaving the fix as "none."

@@ -1,0 +1,44 @@
+Location: Checkout form, shipping address — second entry (Error code 502 message), Placement vs. Signal lines
+Evidence: "Placement: directly below the shipping address block" / "Signal: bold text set above the address block at a larger size than its labels, icon"
+Problem: The two fields contradict each other on where the message renders — one says below the address block, the other says above it.
+Fix: Make Placement and Signal agree on a single position (confirm the actual implementation and correct whichever field is wrong).
+
+Location: Checkout form, shipping address — second entry (Error code 502 message), Message vs. Predictable mistake lines
+Evidence: "Please correct the highlighted field. Error code: 502." / "Predictable mistake: yes"
+Problem: A 502 status code signals a server/gateway failure, not a user input error, so framing it as a field the user should "correct" and labeling it a predictable user mistake conflates a backend outage with client-side validation.
+Fix: Show a distinct system-error message (e.g., "Something went wrong on our end — try again") instead of implying the user mistyped something, and mark "Predictable mistake" as no.
+
+Location: File upload, receipts — first entry (10 MB limit), Message vs. Suggested fix lines
+Evidence: Message: "Reduce the file size and upload it again." / Suggested fix: "described, names the one available alternative but requires the reader to enter it by hand"
+Problem: The Suggested fix classification claims the message names an available alternative, but the message only gives a generic instruction without naming any specific method or alternative.
+Fix: Either revise the message to name the actual alternative (e.g., a compression step) or correct the Suggested fix field to reflect that no alternative is actually named.
+
+Location: File upload, receipts — second entry (PDF/PNG only), Message vs. Suggested fix lines
+Evidence: Full message text is listed, while Suggested fix reads "selectable, offers a convert and retry action in place of the message"
+Problem: "In place of the message" implies the button replaces the text, yet the entry still presents the full message as what fires, leaving it unclear whether the user sees text or a button.
+Fix: Decide whether the convert-and-retry control replaces or supplements the text message, and update the entry so the two fields describe one coherent design.
+
+Location: Password reset, new password — first entry (8 character minimum), Placement vs. Suggested fix lines
+Evidence: "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page" / "Suggested fix: none"
+Problem: Placing the error far from the visible field it concerns is a clear usability defect, yet the Suggested fix field offers no remedy for it.
+Fix: Move the message inline next to the password field, matching the field-adjacent placement used elsewhere in this document, and update Suggested fix accordingly instead of "none."
+
+Location: Password reset, new password — second entry (expired link), Container vs. Placement/Signal lines
+Evidence: "Container: toast" / "Placement: in a dialog centered on the password reset step... Signal: bold heading text at the top of the dialog"
+Problem: Container labels this a toast while Placement and Signal both describe a centered modal dialog — toasts and dialogs are distinct, mutually exclusive container types.
+Fix: Correct "Container: toast" to "Container: dialog" so it matches the blocking, centered description given elsewhere in the row.
+
+Location: Password reset, new password — second entry (expired link), Placement vs. Fires lines
+Evidence: "over the new password field it blocks" / "Fires: on-focus"
+Problem: If the dialog blocks the password field, the user cannot focus that field to trigger the message, making an on-focus trigger impossible given the stated placement.
+Fix: Change the trigger to one that doesn't require focusing a blocked field, such as on-page-load or on-step-entry.
+
+Location: Account settings, username — Message vs. Predictable mistake lines
+Evidence: "The last changes were not saved and cannot be recovered. Contact support for assistance." / "Predictable mistake: yes"
+Problem: An unrecoverable save failure is a system/data-persistence fault, not a predictable user input mistake (unlike the character-limit or format errors elsewhere), so "yes" mischaracterizes the failure type.
+Fix: Change "Predictable mistake" to "no," consistent with how the expired-link entry (also a system-caused event) is marked.
+
+Location: Account settings, username — Input on resubmission vs. Message/Suggested fix lines
+Evidence: "Input on resubmission: preserved" alongside "cannot be recovered. Contact support for assistance." and "Suggested fix: none"
+Problem: If the user's input is preserved on screen, the obvious fix is to simply resave it, which contradicts telling the user the change is unrecoverable and must go through support — and no such retry fix is offered.
+Fix: Either revise the message to acknowledge the preserved input can be resaved, or add a "save again" action as the Suggested fix instead of "none."

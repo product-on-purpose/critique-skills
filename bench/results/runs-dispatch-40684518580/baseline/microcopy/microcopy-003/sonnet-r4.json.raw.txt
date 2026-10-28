@@ -1,0 +1,44 @@
+Location: Document-wide, field labels (Placement, Container, Signal, Fires, Predictable mistake, Input on resubmission)
+Evidence: These terms are used throughout with no definitions anywhere in the document
+Problem: Values like "Predictable mistake: no" or "Fires: on-focus" cannot be verified for correctness without knowing what the field means, making the matrix impossible to audit consistently.
+Fix: Add a short legend at the top defining each field and its allowed values.
+
+Location: Search results, no matches — first entry ("This request timed out before it could finish.")
+Evidence: Entry sits under the heading "Search results, no matches" but the message describes a timeout, not an empty result set
+Problem: A failed/timed-out request is a different state from "no matches found," so filing it under this heading miscategorizes the scenario.
+Fix: Move this entry to a separate "Search results, error" section, or broaden the heading to cover both empty-result and error states.
+
+Location: Search results, no matches — first entry, Suggested fix field
+Evidence: "Suggested fix: none"
+Problem: A timeout is a transient, recoverable failure, but no retry action is proposed, leaving the user with a dead end.
+Fix: Change the suggested fix to add a retry ("Try again") action.
+
+Location: Search results, no matches — first entry, Input on resubmission field
+Evidence: "Fires: on-submit" paired with "Input on resubmission: not-applicable"
+Problem: Since the message only appears after a search is submitted, there is submitted input (the query) a retry would need to reuse; calling resubmission handling "not-applicable" contradicts that the message is itself produced by a submission.
+Fix: Specify whether the original query/filters persist when the user retries, instead of marking it not-applicable.
+
+Location: Search results, no matches — first entry, Message field
+Evidence: "This request timed out before it could finish."
+Problem: Unlike the other two entries, which both end with explicit next-step instructions, this message gives the user no guidance on what to do next.
+Fix: Append an actionable instruction, e.g., "Try your search again."
+
+Location: Search results, no matches — second entry ("No orders fall inside the selected date range...")
+Evidence: Signal: "styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action"; Suggested fix: "selectable, offers a clear filters button beside the message"
+Problem: The documented defect (the message is visually indistinguishable from passive banners) is not resolved by the suggested fix, which only adds a button but leaves the discoverability problem in place.
+Fix: Update the suggested fix to also change the visual treatment (distinct styling or icon), not just add a button.
+
+Location: Search results, no matches — second entry, Predictable mistake field
+Evidence: "Predictable mistake: no"
+Problem: Choosing a date range that excludes all orders is a common, foreseeable user action, unlike the sibling entry's genuine server timeout, yet both are labeled "no," suggesting this value is likely wrong or the criterion is being applied inconsistently.
+Fix: Mark this entry "yes," or clarify the "Predictable mistake" criterion so it distinguishes foreseeable filter-driven empty states from true system failures.
+
+Location: Notification center, sync status — Message field
+Evidence: "Sync is paused while this device is on a metered connection, so syncing does not spend a data allowance. Select resume to sync now."
+Problem: The message explains that pausing avoids spending the data allowance, then invites the user to resume without warning that resuming will use that same metered allowance — an internal inconsistency that could lead to unexpected data charges.
+Fix: Add a caveat to the resume instruction, e.g., "Select resume to sync now — this will use your data allowance."
+
+Location: Notification center, sync status — Fires field
+Evidence: "Fires: on-focus"
+Problem: "On-focus" is a trigger suited to form-field validation messages, not a persistent notification-list status row; it doesn't convey when the sync-paused message actually first appears (e.g., at the moment sync is paused versus only when the user focuses the list).
+Fix: Replace or supplement with a trigger reflecting the real cause, such as "on state change" (when sync pauses).

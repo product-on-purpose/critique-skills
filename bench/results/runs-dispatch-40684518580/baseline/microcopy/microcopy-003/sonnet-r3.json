@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Message: This request timed out before it could finish.\" listed under the heading \"Search results, no matches\"",
+      "fix": "Give the timeout case its own heading (e.g., \"Search results, request failed\") separate from the no-matches case, or broaden the section heading to explicitly cover both states.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" section, first entry",
+      "severity": 3,
+      "violation": "This entry describes a request timeout, not a \"no matches\" result, so it is filed under a heading that doesn't describe its content and conflates a technical failure with a genuine empty result set."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: none\"",
+      "fix": "Add a suggested fix that offers a retry/try again action.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "first entry, \"Suggested fix\" field",
+      "severity": 3,
+      "violation": "A timed-out search leaves the user with no way to retry, yet no recovery action is proposed, unlike the sibling no-matches entry which offers a \"clear filters\" button."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Signal: bold heading text where the first result would sit, text-label\" together with \"Predictable mistake: no\"",
+      "fix": "Visually distinguish the timeout state from the no-matches state (e.g., different icon or color), or change \"Predictable mistake\" to \"yes\" and address it.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "first entry, \"Signal\" and \"Predictable mistake\" fields",
+      "severity": 3,
+      "violation": "Because the timeout message occupies the same visual slot and style as a \"no results\" message would, users are likely to mistake a transient failure for a genuine empty result set, contradicting the claim that this isn't a predictable mistake."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-submit\" paired with \"Input on resubmission: not-applicable\"",
+      "fix": "State explicitly whether the search input is preserved when the user retries after a timeout.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "first entry, \"Input on resubmission\" field",
+      "severity": 3,
+      "violation": "Since the message appears after a submitted search and recovery would involve resubmitting that same query, whether the query input is retained is applicable and should be answered, not marked not-applicable."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action\"",
+      "fix": "Extend the suggested fix to also give this message a distinct visual treatment so it reads as actionable, not just informational.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "second entry (\"No orders fall inside the selected date range\"), \"Signal\" field",
+      "severity": 3,
+      "violation": "The signal description itself identifies that the message lacks a visual cue indicating it needs action, but the paired \"Suggested fix\" only adds a button and never addresses this missing visual distinction."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: selectable, offers a clear filters button beside the message\" versus \"Input on resubmission: not-applicable\"",
+      "fix": "Specify what happens to the date range/filter inputs once \"clear filters\" is selected and the search resubmits.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "second entry, \"Input on resubmission\" field",
+      "severity": 3,
+      "violation": "The suggested fix introduces a resubmission path (clearing filters and re-searching), so marking input-on-resubmission as not applicable contradicts the behavior the fix itself proposes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: in the notification list, directly under the sync status row\" versus \"Signal: bold text at the top of the notification list, icon\"",
+      "fix": "Reconcile these fields to state one consistent location for the message.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "\"Notification center, sync status\" entry, \"Placement\" vs \"Signal\" fields",
+      "severity": 3,
+      "violation": "Placement puts the message below the sync status row while Signal puts it at the top of the list, describing two different positions for the same message."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Signal: bold text at the top of the notification list, icon\"",
+      "fix": "Either describe the icon being used or correct the tag to \"text-label\" to match the actual description.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "same entry, \"Signal\" field",
+      "severity": 3,
+      "violation": "The description only mentions \"bold text,\" but the entry is tagged with type \"icon,\" and no icon is described anywhere in the message or signal text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-focus\"",
+      "fix": "Change \"Fires\" to reflect the real trigger (e.g., when sync pauses, or when the notification center opens), consistent with its described persistent placement.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "same entry, \"Fires\" field",
+      "severity": 3,
+      "violation": "Unlike the other two entries, which fire \"on-submit\" in response to a user action, this message is tied to a background connectivity state change, so \"on-focus\" is an inconsistent trigger and conflicts with Signal's claim that it's persistently shown at the top of the list."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message ends \"Select resume to sync now.\" while Suggested fix says \"offers a resume now action\"",
+      "fix": "Use one consistent action label across both the message text and the suggested fix description.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "same entry, message text vs \"Suggested fix\" field",
+      "severity": 3,
+      "violation": "The action label referenced in the message (\"resume\") doesn't match the action name given in the suggested fix (\"resume now\"), leaving the actual control label ambiguous."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T13:12:58Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

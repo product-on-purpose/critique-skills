@@ -1,0 +1,44 @@
+Location: Two-factor setup, verification code — first message block ("5 digits" message)
+Evidence: "Predictable mistake: yes" paired with "Suggested fix: none"
+Problem: The mistake is flagged as predictable (foreseeable and preventable), but no fix is suggested to prevent it at entry time — the audit stops at detection instead of prevention.
+Fix: Add a suggested fix such as constraining the field to a 6-digit input mask/maxlength so a 5-digit entry can't be submitted in the first place.
+
+Location: Two-factor setup, verification code — second message block (expired code)
+Evidence: "This verification code expired 10 minutes after it was sent, which stops an intercepted code from being reused later."
+Problem: The clause explaining the security rationale for the expiry is extraneous to helping the user recover and breaks the pattern of the other three messages, which state only the fact and the needed action.
+Fix: Cut the "which stops... reused later" clause, leaving "This verification code expired 10 minutes after it was sent."
+
+Location: Two-factor setup, verification code — second message block, Suggested fix field
+Evidence: "selectable, offers a resend code button in place of the message"
+Problem: "In place of the message" is ambiguous — it's unclear whether the resend button replaces the explanatory text entirely (losing the reason the code failed) or is positioned where the message was while the text remains.
+Fix: Rewrite the suggested fix to state explicitly whether the button is added alongside the existing text or replaces it, e.g., "add a resend-code button below the existing message text."
+
+Location: Two-factor setup, verification code — second message block, Input on resubmission field
+Evidence: "Input on resubmission: preserved"
+Problem: The expired code can never become valid again, so preserving it in the field serves no purpose and risks the user mistakenly resubmitting the same dead code.
+Fix: Change this to "cleared" so the field is empty and the user must enter the newly requested code.
+
+Location: Billing, promo code — first message block (expired promo)
+Evidence: "This promo code ended on 30 June."
+Problem: The date omits the year, making it ambiguous whether the code expired this year, last year, or some other year — relevant for a promo that could recur annually.
+Fix: Include the year, e.g., "This promo code ended on 30 June 2026."
+
+Location: Billing, promo code — comparing both message blocks' "Predictable mistake" field
+Evidence: expired-code block reads "Predictable mistake: no"; plan-mismatch block reads "Predictable mistake: yes"
+Problem: Both are the same kind of situation — a code failing a business rule the user had no way of knowing in advance — yet they are classified inconsistently with no stated reason for the difference.
+Fix: Apply one consistent definition of "predictable mistake" across both entries, or add a note explaining why plan-mismatch is considered more foreseeable than expiration.
+
+Location: Billing, promo code — second message block (plan mismatch), Suggested fix field
+Evidence: "Predictable mistake: yes" paired with "Suggested fix: none"
+Problem: A predictable mistake is logged with no preventive fix suggested, even though the document suggests an actionable UI fix (the resend button) elsewhere for a case marked non-predictable.
+Fix: Suggest a preventive fix, e.g., hiding/disabling annual-only promo codes when a monthly plan is selected, or offering a one-tap "switch to annual" action.
+
+Location: Billing, promo code — second message block (plan mismatch), Fires field
+Evidence: "Fires: on-blur" together with the instruction "Change the plan to annual, or remove the code."
+Problem: The error depends on two fields (promo code and plan selector), but the trigger is scoped only to blurring the promo code field, so it's unspecified what happens to the message if the user instead changes the plan as instructed.
+Fix: Specify an additional trigger so the message re-evaluates or clears when the plan selection changes, not only on blur of the promo code field.
+
+Location: All four message blocks, Signal field
+Evidence: "Signal: bold text set larger than the field label, icon" repeated identically in every block
+Problem: The same visual signal is used for a hard-blocking error (wrong-length 2FA code) and a soft, dismissible notice (expired promo code, which the user may bypass by continuing without one), so the styling doesn't communicate differing severity.
+Fix: Differentiate the signal by severity — e.g., a stronger icon/color for blocking errors and a lighter treatment for advisory notices like the promo-code messages.
