@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "FORMS-DATE-SELECTS",
+      "evidence": "<select id=\"dob-day-select\" autocomplete=\"bday-day\" required=\"\"> <select id=\"dob-month-select\" autocomplete=\"bday-month\" required=\"\"> <select id=\"dob-year-select\" autocomplete=\"bday-year\" required=\"\">",
+      "fix": "Use three short text fields for day, month and year, with the numeric input mode.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "#dob-day-select, <select> field, label 'Day', line 77",
+      "severity": 3,
+      "violation": "A date the person knows by heart is picked from three drop-downs, the year from 60 options."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required=\"\"> required on the same new-account sign-up form.",
+      "fix": "Remove the account number field from sign-up, or generate the account number as part of account creation instead of asking the person for it.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#acctnum-input, <input> field, label 'Account number', line 45",
+      "severity": 3,
+      "violation": "An account number required to create an account is circular: the form's own task is to create the account that would issue this number, so a genuinely new joiner has no value to supply."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required=\"\"> on a page titled 'Join Meridian Outfitters' whose heading reads 'Create your account'.",
+      "fix": "Drop the membership number field from account creation, or mark it optional and explain that it is only for people who already hold a membership.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#member-input, <input> field, label 'Membership number (8 digits)', line 41",
+      "severity": 3,
+      "violation": "The task this form performs is creating a new account, but it requires an 8-digit membership number, a value a person joining for the first time does not yet have, so the field's answer is not one the task can use from a new joiner."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-WIDTH",
+      "evidence": "<input id=\"postal-input\" name=\"postal_code\" type=\"text\" autocomplete=\"postal-code\" required=\"\" size=\"3\"> (size=3)",
+      "fix": "Size the field to show at least 5 characters.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "#postal-input, <input> field, label 'Postal code', line 49",
+      "severity": 3,
+      "violation": "This postal code field shows 3 characters, too few to show a typical value whole while it is typed and checked."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FORMAT-TOLERANCE",
+      "evidence": "pattern=[0-9]+",
+      "fix": "Loosen the pattern to accept every valid way of writing the value, and normalise it after submission.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "#phone2-input, <input> field, label 'Secondary phone (optional)', line 33",
+      "severity": 3,
+      "violation": "The pattern on this phone field rejects valid values such as +44 20 7946 0958; 020 7946 0958."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button> sits between the Preferred contact time field and the date of birth fieldset, while the primary submit, <button id=\"submit-btn\" type=\"submit\">Create account</button>, carries no style attribute at all.",
+      "fix": "Move the View details control out of the field column, for example beside or below the primary action, and style the primary Create account button as the visually dominant one of the two.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> 'View details', between row-contacttime and the row-dob fieldset",
+      "severity": 2,
+      "violation": "A secondary action is styled more prominently (explicit 12px/20px padding and a 16px font) than the primary submit, which is left to the browser default, and it sits inside the run of fields rather than where the fields end, ahead of the date of birth group."
+    },
+    {
+      "confidence": "low",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\"> required during account creation, with no contact yet scheduled.",
+      "fix": "Make the field optional, or move it to a later step such as a contact-preferences settings page reached after the account exists.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "#contacttime-input, <input> field, label 'Preferred contact time', line 71",
+      "severity": 2,
+      "violation": "Creating the account does not use a preferred contact time; the answer serves a later step, if and when the person is actually contacted, and could be asked then instead of being required now."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"legalname-label\" for=\"legalname-input\">Your name</label><input id=\"legalname-input\" name=\"legal_name\" type=\"text\" autocomplete=\"name\" required=\"\"> appears after <label id=\"name-label\" for=\"name-input\">Full name</label><input id=\"name-input\" name=\"full_name\" type=\"text\" autocomplete=\"name\" required=\"\"> earlier in the same form.",
+      "fix": "Keep one name field, or if a separate legal name is genuinely needed, label it to say how it differs from the full name already collected.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label 'Your name', line 63",
+      "severity": 2,
+      "violation": "Both fields resolve to the same name purpose, so the form asks the person to type their name twice under two different labels, Full name and Your name, with no stated reason the two should differ."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-INPUT-FONT-SIZE",
+      "evidence": "font-size: 13px declared by its inline style",
+      "fix": "Set the field's font size to at least 16 pixels.",
+      "id": "F-009",
+      "lane": "scripted",
+      "location": "#org-input, <input> field, label 'Organization name', line 67",
+      "severity": 2,
+      "violation": "The text in this field is 13 pixels, below the 16 pixels at which a phone stops zooming the page on focus."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-INPUT-TYPE",
+      "evidence": "<input id=\"website-input\" name=\"website\" required=\"\" type=\"text\">",
+      "fix": "Set type=url on the field.",
+      "id": "F-010",
+      "lane": "scripted",
+      "location": "#website-input, <input> field, label 'Company website', line 37",
+      "severity": 2,
+      "violation": "This web address field is type text, so a phone does not show the keyboard built for it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-002.html",
+    "artifact_sha256": "e39d0a6e9175987711e114d2ce5edd568205f5aecafb2d271246e6036a16457f",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T10:47:23Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

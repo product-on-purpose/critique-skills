@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"acctnum-label\" for=\"acctnum-input\">Account number</label><input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required=\"\">",
+      "fix": "Remove the account_number field from account creation entirely; if an account number is assigned on signup, display it afterward instead of requiring it as input, or move it to a 'link an existing account' flow that is clearly separate from new signup.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#acctnum-input, <input> field, label 'Account number', line 45",
+      "severity": 4,
+      "violation": "The task this form performs is creating a new account ('Create your Meridian Outfitters account' / submit label 'Create account'), yet a required field demands the account number of an account that, by definition, does not exist until this form is submitted. No person completing this task for the first time can supply a valid value."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"website-label\" for=\"website-input\">Company website</label><input id=\"website-input\" name=\"website\" type=\"url\" required=\"\">",
+      "fix": "Remove the website field from the general signup form, or make it optional and only present it when the person has indicated they are signing up on behalf of a business.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#website-input, <input> field, label 'Company website', line 37",
+      "severity": 3,
+      "violation": "Nothing elsewhere on the page indicates this is a business or wholesale account; the heading and submit label describe an ordinary consumer signup ('Set up your account', 'Create account'). A required, URL-validated company website field asks for an answer the stated task does not use and that an ordinary consumer does not have."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button><button id=\"submit-btn\" type=\"submit\">Create account</button>; #submit-btn carries no style attribute at all.",
+      "fix": "Remove the inline padding/font-size styling from #viewdetails-btn, or apply it to #submit-btn instead so the primary action is visibly the most prominent control, and/or move the secondary action to a visibly lesser style (e.g. text link or outline button).",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> 'View details', beside #submit-btn, <button> 'Create account'",
+      "severity": 2,
+      "violation": "The secondary action (View details) carries explicit, generous padding and a declared 16px font, while the primary submit (Create account) has no declared styling at all, so the declared CSS gives the secondary action equal or greater visual weight than the primary action."
+    },
+    {
+      "confidence": "low",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"contacttime-label\" for=\"contacttime-input\" style=\"display:block\">Preferred contact time</label><input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">",
+      "fix": "Remove this field from account creation, or ask it only at the point where contact is actually being scheduled.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#contacttime-input, <input> field, label 'Preferred contact time', line 71",
+      "severity": 2,
+      "violation": "A preferred time to be contacted is only useful once there is a reason to contact the person; account creation itself gives no such reason, so this answer could be collected later, when a contact need actually arises."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"legalname-label\" for=\"legalname-input\">Your name</label><input id=\"legalname-input\" name=\"legal_name\" type=\"text\" autocomplete=\"name\" required=\"\">, earlier in the same form: <label id=\"name-label\" for=\"name-input\">Full name</label><input id=\"name-input\" name=\"full_name\" type=\"text\" autocomplete=\"name\" required=\"\">",
+      "fix": "Remove the duplicate legal_name field, or merge it with full_name if a legal name distinct from a display name is genuinely needed, and label that distinction explicitly.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label 'Your name', line 63",
+      "severity": 2,
+      "violation": "The form already asked for the person's name in #name-input ('Full name'); #legalname-input asks again under a different label ('Your name') for the same purpose (both carry autocomplete=name), doubling the work for no stated reason."
+    },
+    {
+      "confidence": "low",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"member-label\" for=\"member-input\">Membership number (8 digits)</label><input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required=\"\">",
+      "fix": "State in the form why a pre-existing membership number is needed to create an account, or remove it if it is not genuinely required for every new signup.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#member-input, <input> field, label 'Membership number (8 digits)', line 41",
+      "severity": 2,
+      "violation": "This form requires both a membership number and a separate account number (#acctnum-input) to create one new account; a person who has neither an existing membership nor an existing account cannot tell which, if either, the task actually needs."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"org-label\" for=\"org-input\">Organization name</label><input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required=\"\">",
+      "fix": "Remove the organization field from the general signup form, or make it optional, or only show it when the person selects a business account type.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "#org-input, <input> field, label 'Organization name', line 67",
+      "severity": 2,
+      "violation": "Required alongside #website-input on an otherwise consumer-facing signup form, with no indication the task is a business account; an individual consumer has no organization name to supply."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T12:18:52Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 7,
+      "3": 1,
+      "4": 1
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 2
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<meta charset=\"utf-8\">` is present but there is no `<meta name=\"viewport\">` tag",
+      "fix": "Add `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">` to the `<head>`.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "<head> section",
+      "severity": 3,
+      "violation": "Without a viewport meta tag, the form will not scale or lay out correctly on mobile browsers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"form\">` has no `method` or `action` attribute",
+      "fix": "Add `method=\"post\"` (and the appropriate `action` URL) to the form tag.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<form id=\"form\">` opening tag",
+      "severity": 3,
+      "violation": "A form with no explicit method defaults to GET, which would submit the password field as a plaintext URL query parameter, exposing it in browser history and server logs."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`minlength=\"6\"`",
+      "fix": "Raise `minlength` to at least 8 - 10 and add complexity guidance in the UI, not just the attribute.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-password, `password-input`",
+      "severity": 3,
+      "violation": "A 6-character minimum is a weak password policy for an account that also stores payment/account numbers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<p>Thanks for signing up.</p>` embedded inside the phone number field's div, before the form has been submitted",
+      "fix": "Remove the stray `<p>Thanks for signing up.</p>` from row-phone (or move it to an actual post-submit confirmation view).",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-phone",
+      "severity": 3,
+      "violation": "This looks like leftover success-page/confirmation copy accidentally left inside the in-progress signup form, which will confuse users who haven't submitted anything yet."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "both `phone-input` and `phone2-input` use `autocomplete=\"tel\"`",
+      "fix": "Differentiate the tokens, e.g. keep `tel` on the primary field and use `tel` with a distinguishing `autocomplete` section prefix (or omit autocomplete) on the secondary field, per the HTML autofill spec's multi-field conventions.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "row-phone2, `phone2-input`",
+      "severity": 3,
+      "violation": "Using the identical autocomplete token for primary and secondary phone fields means browsers can't distinguish them and may autofill the same number into both."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no `pattern`, `maxlength`, or visible helper text",
+      "fix": "Add visible helper text (not just a placeholder) and enforce the format with `pattern=\"\\d{8}\"` and `maxlength=\"8\"`.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "row-member, `member-input`",
+      "severity": 3,
+      "violation": "The 8-digit requirement is only communicated via placeholder text, which disappears once the user types and is not reliably read by all assistive tech, and nothing actually enforces the 8-digit format."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" required=\"\">`",
+      "fix": "Clarify the field's purpose with helper text and, if it is sensitive financial data, treat it with the same care as the password field (and reconsider whether it belongs on this form at all).",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "row-acctnum, `acctnum-input`",
+      "severity": 3,
+      "violation": "A plain, unlabeled-as-sensitive \"account number\" field with no autocomplete, masking, or explanation is collected on a signup form alongside a password, which is unusual and will confuse users about what number is being requested (bank account? existing loyalty account?)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "only `street-input` (`address-line1`) and `postal-input` (`postal-code`) exist",
+      "fix": "Add city and state/region inputs with `autocomplete=\"address-level2\"` and `autocomplete=\"address-level1\"` respectively.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "between row-street and row-postal (address fields overall)",
+      "severity": 3,
+      "violation": "The address fields are incomplete - there is no city or state/region field, so a full mailing address cannot be captured."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`given-input` (`given_name`) and `family-input` (`family_name`) appear after `name-input` (`full_name`) already collected in row-name",
+      "fix": "Remove one of the two representations - either use a single `full_name` field or split into `given_name`/`family_name` only, not both.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "row-legalname",
+      "severity": 3,
+      "violation": "The form collects a full name once and then separately collects first/last name again, creating redundant, potentially conflicting data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "two label/input pairs (`given-label`/`given-input` and `family-label`/`family-input`) share a single wrapping `<div id=\"row-legalname\">`, unlike every other row which wraps one label/input pair per div",
+      "fix": "Split into two divs (e.g. `row-given`, `row-family`) matching the pattern used elsewhere, or rename the wrapper to reflect its contents.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "row-legalname",
+      "severity": 3,
+      "violation": "This breaks the document's consistent one-field-per-row structure, making styling and layout handling inconsistent and the div's name (\"legalname\") mismatched with the actual fields (given/family name)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"font-size:16px\"`",
+      "fix": "Move this to a CSS rule (e.g. a class applied to all text inputs) rather than an inline style on a single field.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "row-org, `org-input`",
+      "severity": 3,
+      "violation": "This is the only input with an ad hoc inline style in the entire form, creating inconsistent, hard-to-maintain styling instead of a shared stylesheet rule."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"display:block\"`",
+      "fix": "Apply `display:block` via a shared CSS rule for all labels, or remove it if block-level label layout is intended globally.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "row-contacttime, `contacttime-label`",
+      "severity": 3,
+      "violation": "Like the org field, this is a one-off inline style not applied consistently to other labels, indicating ad hoc styling rather than a consistent rule."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Use a `<select>` with defined time ranges or an `<input type=\"time\">`/time-range picker instead of unconstrained text.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "row-contacttime, `contacttime-input`",
+      "severity": 3,
+      "violation": "A free-text field for \"preferred contact time\" has no structure or validation, so values will be inconsistent and hard to use programmatically."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"padding:1px 2px;font-size:11px\"`",
+      "fix": "Increase padding/font-size to meet accessible touch-target sizing and add visible text or aria-label clarifying what \"View details\" does.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "`viewdetails-btn`",
+      "severity": 3,
+      "violation": "This button's tap target and text are far smaller than accessible touch-target/readability guidelines (commonly ≥24 - 44px), and its purpose is never explained anywhere in the form."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-003.html",
+    "artifact_sha256": "df62d7b38659529bf26df03102d3e7969a1c47b7c66e72bc8d3cf208f082bc1f",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T11:35:36Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 14,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

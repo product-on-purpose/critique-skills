@@ -1,0 +1,182 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "No `<meta name=\"viewport\" content=\"...\">` tag is present anywhere in the `<head>`.",
+      "fix": "Add `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">` to the `<head>`.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<head>` section",
+      "severity": 3,
+      "violation": "Without a viewport meta tag, mobile browsers will render the page at desktop width and let users pinch-zoom, defeating the mobile-specific font-size fix applied later on the organization input."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"form\">` has no `action` or `method` attribute.",
+      "fix": "Add `method=\"post\"` (and an appropriate `action`) to the form tag.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<form id=\"form\">`",
+      "severity": 3,
+      "violation": "Without `method=\"post\"`, the form defaults to GET on submit, which would send the password field's value as plaintext in the URL query string, browser history, and server logs."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`street-input` (autocomplete=\"address-line1\") appears right after the password field, while `postal-input` (autocomplete=\"postal-code\") appears much later, separated by phone, website, membership number, and account number fields.",
+      "fix": "Move the postal code field next to the street address field.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-street and row-postal",
+      "severity": 3,
+      "violation": "Splitting the street address from the postal code with unrelated fields breaks the logical address grouping and can confuse browser autofill, which expects address fields to be adjacent."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"website-label\" for=\"website-input\">Company website</label>` with `required=\"\"`.",
+      "fix": "Make this field optional, or remove it unless this form is specifically for business accounts.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-website",
+      "severity": 3,
+      "violation": "Requiring a company website to create what otherwise looks like a personal shopping account will block individual customers from completing signup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"member-input\" ... placeholder=\"Must be 8 digits\" required=\"\">` has no `pattern` or `maxlength` attribute.",
+      "fix": "Add `pattern=\"\\d{8}\"` and `maxlength=\"8\"` to enforce and communicate the format beyond the placeholder.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "row-member",
+      "severity": 3,
+      "violation": "The only indication of the 8-digit requirement is placeholder text, which disappears once the user starts typing and is not enforced by any validation attribute, so users can submit the wrong length and only find out on the server."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"acctnum-label\" for=\"acctnum-input\">Account number</label>` with no placeholder, pattern, or length hint, unlike the adjacent membership number field.",
+      "fix": "Add helper text or a placeholder describing the expected format, and clarify in the label how this differs from the membership number.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "row-acctnum",
+      "severity": 3,
+      "violation": "Users have no indication of the expected format for this required numeric field, and its purpose relative to \"Membership number\" is unexplained, creating ambiguity about which number to enter where."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Overnight</option>` and `<option>Next-day</option>` both appear in the same `<select>`.",
+      "fix": "Remove one of the duplicate/overlapping options or rename them to be clearly distinct (e.g., \"Next-day\" vs \"2-day\").",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "row-shipspeed",
+      "severity": 3,
+      "violation": "\"Overnight\" and \"Next-day\" shipping typically mean the same thing, so offering both as distinct choices is confusing and ambiguous for the user."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"legalname-label\" for=\"legalname-input\">Your name</label>` with `autocomplete=\"name\"`, duplicating `row-name`'s \"Full name\" field which also uses `autocomplete=\"name\"`.",
+      "fix": "Remove the duplicate \"legal name\" field or merge it with \"Full name\" if a distinct legal name is actually needed, with a label that explains the difference.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "row-legalname",
+      "severity": 3,
+      "violation": "The form asks for the user's name twice under different labels (\"Full name\" and \"Your name\"/legal_name), which is redundant and will likely cause the browser to autofill both fields identically, confusing users about why two name fields exist."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"org-label\" for=\"org-input\">Organization name</label>` with `required=\"\"`.",
+      "fix": "Make this field optional or remove it unless the form is intended for business accounts only.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "row-org",
+      "severity": 3,
+      "violation": "Requiring an organization name for a consumer account signup (alongside personal name/address/phone fields) will block individual shoppers who have no organization."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"org-input\" ... style=\"font-size:16px\" required=\"\">` is the only text input in the form with an inline `font-size` style.",
+      "fix": "Apply the same `font-size:16px` (or an equivalent CSS rule) consistently to all text inputs, ideally via a shared stylesheet rule rather than inline styles.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "row-org",
+      "severity": 3,
+      "violation": "Applying a mobile-zoom-prevention font size to only one input, while all other text inputs lack it, means the rest of the form will still trigger unwanted zoom on focus in mobile Safari."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">` with its label using `style=\"display:block\"`.",
+      "fix": "Replace the text input with a `<select>` of fixed time ranges or a `<input type=\"time\">`, and remove the stray inline style in favor of consistent CSS applied to all labels.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "row-contacttime",
+      "severity": 3,
+      "violation": "A free-text field for \"Preferred contact time\" invites inconsistent, unparseable input (e.g., \"morning\" vs \"9am\" vs \"AM\"), and the one-off inline `display:block` style on this label is inconsistent with how every other label in the form is styled."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>` sits between the form fields and the submit button with no indication of what details it shows.",
+      "fix": "Either remove the button, or give it a descriptive label (e.g., \"View membership details\") and wire it to a clearly associated element.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "viewdetails-btn",
+      "severity": 3,
+      "violation": "The button's purpose is unclear in context - it's not tied to any visible panel, modal, or section, so users won't know what clicking it does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`viewdetails-btn` has inline styling `style=\"padding:12px 20px;font-size:16px\"` while the adjacent `submit-btn` has no styling at all.",
+      "fix": "Style both buttons consistently (preferably via shared CSS classes rather than inline styles), visually distinguishing the primary \"Create account\" action.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "viewdetails-btn vs submit-btn",
+      "severity": 3,
+      "violation": "The two buttons sitting side by side will render with inconsistent size/appearance, making it unclear which is the primary action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Fourteen input rows (name, email, password, street, phone, phone2, website, membership, account number, postal, shipping speed, legal name, organization, contact time) are placed in a flat sequence with no `<fieldset>`/`<legend>` grouping.",
+      "fix": "Wrap related rows in `<fieldset>` elements with descriptive `<legend>` labels (e.g., \"Contact information,\" \"Shipping address,\" \"Account details\").",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "overall `<form>` structure",
+      "severity": 3,
+      "violation": "Related fields (e.g., address fields, account/membership fields) are not grouped, which hurts both visual scanability and screen-reader navigation of a long form."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:06:49Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 14,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

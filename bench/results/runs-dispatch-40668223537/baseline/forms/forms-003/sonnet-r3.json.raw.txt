@@ -1,0 +1,69 @@
+Location: <head> section
+Evidence: `<meta charset="utf-8">` is present but there is no `<meta name="viewport">` tag
+Problem: Without a viewport meta tag, the form will not scale or lay out correctly on mobile browsers.
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to the `<head>`.
+
+Location: `<form id="form">` opening tag
+Evidence: `<form id="form">` has no `method` or `action` attribute
+Problem: A form with no explicit method defaults to GET, which would submit the password field as a plaintext URL query parameter, exposing it in browser history and server logs.
+Fix: Add `method="post"` (and the appropriate `action` URL) to the form tag.
+
+Location: row-password, `password-input`
+Evidence: `minlength="6"`
+Problem: A 6-character minimum is a weak password policy for an account that also stores payment/account numbers.
+Fix: Raise `minlength` to at least 8–10 and add complexity guidance in the UI, not just the attribute.
+
+Location: row-phone
+Evidence: `<p>Thanks for signing up.</p>` embedded inside the phone number field's div, before the form has been submitted
+Problem: This looks like leftover success-page/confirmation copy accidentally left inside the in-progress signup form, which will confuse users who haven't submitted anything yet.
+Fix: Remove the stray `<p>Thanks for signing up.</p>` from row-phone (or move it to an actual post-submit confirmation view).
+
+Location: row-phone2, `phone2-input`
+Evidence: both `phone-input` and `phone2-input` use `autocomplete="tel"`
+Problem: Using the identical autocomplete token for primary and secondary phone fields means browsers can't distinguish them and may autofill the same number into both.
+Fix: Differentiate the tokens, e.g. keep `tel` on the primary field and use `tel` with a distinguishing `autocomplete` section prefix (or omit autocomplete) on the secondary field, per the HTML autofill spec's multi-field conventions.
+
+Location: row-member, `member-input`
+Evidence: `placeholder="Must be 8 digits"` with no `pattern`, `maxlength`, or visible helper text
+Problem: The 8-digit requirement is only communicated via placeholder text, which disappears once the user types and is not reliably read by all assistive tech, and nothing actually enforces the 8-digit format.
+Fix: Add visible helper text (not just a placeholder) and enforce the format with `pattern="\d{8}"` and `maxlength="8"`.
+
+Location: row-acctnum, `acctnum-input`
+Evidence: `<input id="acctnum-input" name="account_number" type="text" required="">`
+Problem: A plain, unlabeled-as-sensitive "account number" field with no autocomplete, masking, or explanation is collected on a signup form alongside a password, which is unusual and will confuse users about what number is being requested (bank account? existing loyalty account?).
+Fix: Clarify the field's purpose with helper text and, if it is sensitive financial data, treat it with the same care as the password field (and reconsider whether it belongs on this form at all).
+
+Location: between row-street and row-postal (address fields overall)
+Evidence: only `street-input` (`address-line1`) and `postal-input` (`postal-code`) exist
+Problem: The address fields are incomplete — there is no city or state/region field, so a full mailing address cannot be captured.
+Fix: Add city and state/region inputs with `autocomplete="address-level2"` and `autocomplete="address-level1"` respectively.
+
+Location: row-legalname
+Evidence: `given-input` (`given_name`) and `family-input` (`family_name`) appear after `name-input` (`full_name`) already collected in row-name
+Problem: The form collects a full name once and then separately collects first/last name again, creating redundant, potentially conflicting data.
+Fix: Remove one of the two representations — either use a single `full_name` field or split into `given_name`/`family_name` only, not both.
+
+Location: row-legalname
+Evidence: two label/input pairs (`given-label`/`given-input` and `family-label`/`family-input`) share a single wrapping `<div id="row-legalname">`, unlike every other row which wraps one label/input pair per div
+Problem: This breaks the document's consistent one-field-per-row structure, making styling and layout handling inconsistent and the div's name ("legalname") mismatched with the actual fields (given/family name).
+Fix: Split into two divs (e.g. `row-given`, `row-family`) matching the pattern used elsewhere, or rename the wrapper to reflect its contents.
+
+Location: row-org, `org-input`
+Evidence: `style="font-size:16px"`
+Problem: This is the only input with an ad hoc inline style in the entire form, creating inconsistent, hard-to-maintain styling instead of a shared stylesheet rule.
+Fix: Move this to a CSS rule (e.g. a class applied to all text inputs) rather than an inline style on a single field.
+
+Location: row-contacttime, `contacttime-label`
+Evidence: `style="display:block"`
+Problem: Like the org field, this is a one-off inline style not applied consistently to other labels, indicating ad hoc styling rather than a consistent rule.
+Fix: Apply `display:block` via a shared CSS rule for all labels, or remove it if block-level label layout is intended globally.
+
+Location: row-contacttime, `contacttime-input`
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: A free-text field for "preferred contact time" has no structure or validation, so values will be inconsistent and hard to use programmatically.
+Fix: Use a `<select>` with defined time ranges or an `<input type="time">`/time-range picker instead of unconstrained text.
+
+Location: `viewdetails-btn`
+Evidence: `style="padding:1px 2px;font-size:11px"`
+Problem: This button's tap target and text are far smaller than accessible touch-target/readability guidelines (commonly ≥24–44px), and its purpose is never explained anywhere in the form.
+Fix: Increase padding/font-size to meet accessible touch-target sizing and add visible text or aria-label clarifying what "View details" does.

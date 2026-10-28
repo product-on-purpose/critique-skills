@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "The form's heading is 'Set up your account' and 'Create your Meridian Outfitters account', and its submit button is 'Create account', yet #member-input requires an 8-digit membership number and #acctnum-input separately requires an account number, with no field or text on the page explaining either as something a new signee could already hold.",
+      "fix": "Drop both fields from account creation and assign the membership or account number automatically once the account exists, or, if the form is actually meant for existing members migrating online, say so and mark the fields optional for everyone else.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#member-input, <input> field, label 'Membership number (8 digits)', row-member",
+      "severity": 3,
+      "violation": "Requires an identifying number the task of creating a new account cannot itself supply, and asks for a second, unexplained identifying number immediately after it: a person signing up for the first time has neither."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "The page offers no indication this is a business account: the heading reads 'Create your Meridian Outfitters account' and 'Set up your account', yet #org-input (Organization name) and #website-input (Company website) are both required, with no field asking whether the signee represents a business at all.",
+      "fix": "Remove the organization and website fields from account creation, or make them optional and conditional on a 'Signing up on behalf of a business' choice, so an individual customer is not forced to invent a company website to finish.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#org-input, <input> field, label 'Organization name', row-org",
+      "severity": 3,
+      "violation": "Requires business information the stated task, creating a personal retail account, has no use for, and blocks completion for any individual signee who has no organization or company website to supply."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "#viewdetails-btn declares style=\"padding:12px 20px;font-size:16px\" (text 'View details'); #submit-btn, the form's primary action (text 'Create account'), declares no style at all and renders with default browser button styling.",
+      "fix": "Give #submit-btn the visually dominant, filled treatment and style #viewdetails-btn as the visibly lesser action, for example by removing the enlarging padding and font size from #viewdetails-btn or applying an equivalent or stronger treatment to #submit-btn.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#submit-btn, <button> field, compared with #viewdetails-btn",
+      "severity": 2,
+      "violation": "The secondary action carries deliberate, enlarging styling while the primary action carries none, so nothing in the declared markup makes the primary action the more prominent of the two, the opposite of the expected hierarchy."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "#contacttime-input (Preferred contact time) is required at account creation, but nothing in creating an account, as named by the form's heading and submit button, uses a preferred contact time; that answer is only useful at the moment someone actually needs to be contacted.",
+      "fix": "Move the preferred-contact-time question to account settings or to the point where contact is actually scheduled, and drop it from sign-up.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#contacttime-input, <input> field, label 'Preferred contact time', row-contacttime",
+      "severity": 2,
+      "violation": "Asks now for an answer that a later step, an actual contact attempt, would use just as well, forcing it into the account-creation task instead."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "Full name is asked at #name-input (label 'Full name', name=\"full_name\") and the form asks again at #legalname-input (label 'Your name', name=\"legal_name\"), with nothing in either label or the surrounding text explaining why the two are different.",
+      "fix": "Remove the duplicate name field, or if a distinct legal name is genuinely needed for this account type, label it to say so, such as 'Legal name (if different from the name above)', so the person does not retype the same answer by mistake.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label 'Your name', row-legalname",
+      "severity": 2,
+      "violation": "Asks again for information the form already collected: a second whole-name field with no stated reason it differs from the first."
+    },
+    {
+      "confidence": "low",
+      "criterion": "FORMS-TOUCH-TARGET",
+      "evidence": "#viewdetails-btn and #submit-btn are consecutive <button> elements inside #form with no margin, gap, or container styling declared between them anywhere in the markup.",
+      "fix": "Add explicit spacing between #viewdetails-btn and #submit-btn, for example a declared margin of at least 8 to 12 CSS pixels, so a fingertip aimed at one cannot land on the other.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> field, adjacent to #submit-btn",
+      "severity": 2,
+      "violation": "Two adjacent tappable controls with no declared separation, one of which submits the form, giving a mistaken tap near the shared boundary no built-in protection."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T12:00:33Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
