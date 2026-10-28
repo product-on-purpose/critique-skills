@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message: \"Something went wrong. Contact support if this continues.\" Behavior: \"staying on screen until another method is chosen\"",
+      "fix": "Update the message to clarify the issue is method-specific: \"This payment method isn't working right now. Try a different one, or contact support if this continues.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Checkout form, payment method, first message",
+      "severity": 3,
+      "violation": "The message implies a generic system error requiring support contact, but the behavior indicates the issue is specific to the chosen payment method and recoverable by selection another one."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message: \"You keep entering the wrong value. Re-enter it to continue.\"",
+      "fix": "Provide specific guidance on the accepted format or validation rule, e.g., \"Enter a 10-digit phone number\" or \"Phone numbers must follow the format (XXX) XXX-XXXX.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Profile settings, phone number, first message",
+      "severity": 3,
+      "violation": "The message doesn't explain what value is wrong or what format is required, leaving users unable to correct the error without trial-and-error."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message: \"The connection dropped before this finished.\" Suggested fix: \"selectable, offers the one available next step as a direct action\"",
+      "fix": "Replace with \"provides a Retry button\" to clearly specify the intended action.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Signup form, email field, first message, suggested fix",
+      "severity": 3,
+      "violation": "For a connection error, \"the one available next step\" is vague - it's unclear whether this means retry, resume, or something else."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Signup form uses \"one step bolder and larger than the field label\"; checkout form uses \"bold text set larger than the surrounding form labels\"; other sections use \"bold text set larger than the field label\"",
+      "fix": "Standardize on a single descriptive formula, e.g., \"bold text and 2 points larger than [baseline]\" for all messages.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Signal specifications throughout document",
+      "severity": 3,
+      "violation": "Inconsistent terminology across the specification makes it unclear whether these descriptions indicate the same visual treatment or different levels of prominence."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-001.md",
+    "artifact_sha256": "0580399008ca4517da0a1b1f620180b68a4cfb24e596be279a5f782cde325fc7",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:06:21Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

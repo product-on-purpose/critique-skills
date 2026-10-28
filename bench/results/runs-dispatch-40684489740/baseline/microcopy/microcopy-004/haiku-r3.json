@@ -1,0 +1,50 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Check the message again and enter all six.\"",
+      "fix": "Be explicit: \"Make sure you entered all 6 digits from the code you received\" or \"Re-enter all 6 digits from your verification code.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code, first message",
+      "severity": 3,
+      "violation": "The phrase \"Check the message again\" is ambiguous about which message the user should check (the original verification code, the error message, or the form field itself)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Request a new code and enter it here.\"",
+      "fix": "Specify how to request a new code. Revise to \"Request a new code using the button below\" once the button is implemented, or make the message itself clickable to trigger code resend.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code, second message",
+      "severity": 3,
+      "violation": "The message instructs the user to \"Request a new code\" but describes no mechanism for how to do so. The placement \"directly below the verification code field\" implies the button is not visible in the current description."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-004.md",
+    "artifact_sha256": "c8f58456a4deb36595b0ac00fe364b68e80445e939d7293d2db8d8f1a42ac91b",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:43:48Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

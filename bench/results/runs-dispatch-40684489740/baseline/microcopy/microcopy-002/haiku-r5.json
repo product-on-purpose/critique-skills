@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: after-field-complete\"",
+      "fix": "Either reposition the message to stay in viewport when fired, or change the trigger to \"on-focus\" so the user sees the message before attempting the field.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Password reset, new password, first message, \"Fires\" field",
+      "severity": 3,
+      "violation": "A message that requires scrolling to read cannot fire reliably when the user completes the field, since the completed field will remain visible but the message position scrolls away."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Container: toast\" paired with location description \"in a dialog centered on the password reset step, over the new password field it blocks\"",
+      "fix": "Either change Container to \"dialog\" or \"modal\" if it blocks content, or change the placement to a true toast position at screen edge.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Password reset, new password, second message, \"Container\" field",
+      "severity": 3,
+      "violation": "A toast is a non-blocking notification, typically at screen edge; the description indicates a centered blocking dialog, which is not a toast."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Signal: bold text set larger than the field label, icon\"",
+      "fix": "Add directional placement: \"bold text set above/below the postal code field at a larger size than the field label, icon\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Checkout form, shipping address, first message, \"Signal\" field",
+      "severity": 3,
+      "violation": "This signal description lacks directional placement (above/below) unlike similar messages in file upload and the second checkout message, making it ambiguous where the message appears relative to the field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Both messages are placed \"directly below the upload control\" and \"after-field-complete\" or \"on-submit\" triggers, but have different \"Suggested fix\" approaches",
+      "fix": "Clarify the trigger timing and fix availability so users can predict which error leads to which outcome.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "File upload, receipts, both messages, overall section",
+      "severity": 3,
+      "violation": "The two errors are triggered at different times and offer different fix strategies (one requires manual action, one offers an automated action), but their similar placement and signal styling suggest they should follow the same pattern."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Values include \"described\", \"selectable\", \"none\"; some entries expand these with commas and additional description",
+      "fix": "Add a legend at the top of the document defining each possible \"Suggested fix\" value.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Throughout document, \"Suggested fix\" field",
+      "severity": 3,
+      "violation": "The document uses \"described\" and \"selectable\" without defining what these values mean or how they differ in user experience."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:27:42Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

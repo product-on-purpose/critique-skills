@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Message: Please correct the highlighted field. Error code: 502.\"",
+      "fix": "Change the message to explain it's a server error and suggest a retry, such as \"The server encountered an error (502). Please try again, or contact support if the problem persists.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Checkout form, shipping address, second message",
+      "severity": 3,
+      "violation": "A 502 error is a server error (Bad Gateway), not a user input validation error. The message misleads the user by implying they can correct their input when in fact the problem is on the server."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" (for the 502 error message)",
+      "fix": "Change to \"Predictable mistake: no\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Checkout form, shipping address, second message",
+      "severity": 3,
+      "violation": "A 502 server error is not a predictable user mistake; it's a system failure. Marking it as \"yes\" mischaracterizes the error type."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: none\" (for the 502 error message)",
+      "fix": "Add \"Suggested fix: selectable, offers a retry or contact support action\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Checkout form, shipping address, second message",
+      "severity": 3,
+      "violation": "A server error should suggest a recovery action. With no suggested fix, the user is left without guidance on how to proceed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page\"",
+      "fix": "Change placement to directly below the password field, or use a fixed position that stays visible when the field is in view",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Password reset, new password, first message",
+      "severity": 3,
+      "violation": "The error message is not visible when the user is looking at the field it applies to. This breaks the principle that error messages should appear near the field being validated."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Message: The last changes were not saved and cannot be recovered. Contact support for assistance.\"",
+      "fix": "Provide context about the failure, such as \"A database error prevented your changes from saving. Please try again or contact support if the error persists.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Account settings, username, error message",
+      "severity": 3,
+      "violation": "The message states that changes cannot be recovered but does not explain what caused the failure or why recovery is impossible. This leaves the user confused about what happened."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:22:35Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-GRACE",
+      "evidence": "The last changes were not saved and cannot be recovered. Contact support for assistance.",
+      "fix": "Rewrite with human acknowledgment of the loss, e.g., 'We're sorry - your changes didn't save and can't be recovered. Our support team is here to help. Contact us with details about what you were saving and we'll do our best to assist.'",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Account settings, username, message 1",
+      "severity": 3,
+      "violation": "A total, unrecoverable data-loss message with no acknowledgment of the reader's situation and only a cold instruction to 'Contact support for assistance.' No sincere tone or human touch."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-SEVERITY-CONTAINER",
+      "evidence": "Container: toast; Placement: in a dialog centered on the password reset step, over the new password field it blocks",
+      "fix": "Change the container from toast to modal so the message stays on screen and prevents the reader from overlooking the expired-link error.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Password reset, new password, message 2",
+      "severity": 3,
+      "violation": "The placement indicates the message blocks the new password field, but the container is 'toast' (self-clearing) rather than 'modal' (blocking). A blocking failure requires a modal, not a self-clearing toast."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-SPECIFIC",
+      "evidence": "The last changes were not saved and cannot be recovered. Contact support for assistance.",
+      "fix": "Name the cause (e.g., 'Your changes didn't save due to a connection error') and clarify the scope (e.g., 'Your username update is lost' or 'Everything you've edited in this session is gone').",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Account settings, username, message 1",
+      "severity": 3,
+      "violation": "The message doesn't specify what 'last changes' were or why they weren't saved (network error, server problem, etc.), leaving the reader without understanding what was lost or how to prevent it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-SPECIFIC",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "fix": "Replace the server error code with a plain-language explanation of the actual server-side problem, and revise the instruction to match (e.g., 'Something went wrong on our end. Please try again in a moment.').",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Checkout form, shipping address, message 2",
+      "severity": 3,
+      "violation": "The message states 'Please correct the highlighted field' but error code 502 indicates a server problem, not a field validation issue. The actual problem is not named."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-PLAIN-LANGUAGE",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "fix": "Replace the code or jargon term with a plain-language sentence a non-technical reader can act on.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "Checkout form, shipping address, message 2",
+      "severity": 2,
+      "violation": "The message text carries an internal error code, a code-style token, or an engineering-jargon term standing in for a plain-language explanation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-PREVENT",
+      "evidence": "Receipts upload as PDF or PNG only, the two formats the expense system can read. Change this file to one of those formats and upload it again, or select a different receipt.",
+      "fix": "Warn the reader of unsupported file types at file selection or as the filename is entered, not only on submission.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "File upload, receipts, message 2",
+      "severity": 2,
+      "violation": "A common file-format error could be caught when the file is selected or named, rather than only reported on form submission."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-PROXIMITY",
+      "evidence": "at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page",
+      "fix": "Move the message directly below or adjacent to the password field, or use a tooltip anchored to the field so the message and field appear together without scrolling.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Password reset, new password, message 1",
+      "severity": 2,
+      "violation": "The password-requirement message appears at the top of a long form requiring the reader to scroll to see it, even though the field it concerns stays visible."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T12:16:09Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-submit\"",
+      "fix": "Change to \"Fires: on-error\" or \"Fires: on-timeout\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Search results, no matches - first message, \"Fires: on-submit\"",
+      "severity": 3,
+      "violation": "Request timeouts don't fire on-submit; they fire when the request fails during processing, after the submit has already completed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: not-applicable\" paired with \"Fires: on-submit\"",
+      "fix": "Change to \"retained\" (input persists for user to resubmit) or clarify if resubmission is genuinely not supported",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Search results, no matches - first message, \"Input on resubmission: not-applicable\"",
+      "severity": 3,
+      "violation": "If the error fires as a result of the user's submit action, they would naturally want to resubmit; marking input disposition as \"not-applicable\" contradicts this recovery pattern."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-focus\"",
+      "fix": "Change to \"Fires: on-change\" or \"Fires: on-status-change\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Notification center, sync status - \"Fires: on-focus\"",
+      "severity": 3,
+      "violation": "A notification about changed sync status should fire when the status changes to paused, not when the notification center receives focus; this would delay the user learning about the pause."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: not-applicable\"",
+      "fix": "Remove this field or replace with a relevant field like \"Dismissible\" or \"Persistent\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Notification center, sync status - \"Input on resubmission: not-applicable\"",
+      "severity": 3,
+      "violation": "The \"Input on resubmission\" field is inapplicable to a sync-status notification, where there is no resubmission scenario; this appears to be copy-pasted from a search or form template."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:36:27Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

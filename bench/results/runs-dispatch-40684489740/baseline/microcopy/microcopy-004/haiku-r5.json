@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"this one has 5\"",
+      "fix": "Reword to \"you entered 5 digits\" or \"your code has 5 digits instead of 6\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - first message",
+      "severity": 3,
+      "violation": "The phrasing is ambiguous about what the user entered. \"This one\" could refer to the code or the input."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Predictable mistake: yes; Suggested fix: none",
+      "fix": "Provide a suggested fix, or change \"Predictable mistake\" to \"no\" if no fix is appropriate.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - first message",
+      "severity": 3,
+      "violation": "These fields contradict each other. A predictable mistake should come with a suggested fix to prevent recurrence."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"which stops an intercepted code from being reused later\"",
+      "fix": "Remove the clause. Reword to: \"This verification code expired. Request a new code and enter it.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - second message",
+      "severity": 3,
+      "violation": "This parenthetical provides unnecessary security explanation. Error messages should be concise and action-focused, not educational."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This promo code ended on 30 June.\"",
+      "fix": "Include the year: \"This promo code ended on 30 June 2026\" (or the correct year).",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Billing, promo code - first message",
+      "severity": 3,
+      "violation": "The date lacks a year, leaving it ambiguous whether this is past or future."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Predictable mistake: yes; Suggested fix: none",
+      "fix": "Provide a suggested fix (for example, \"selectable, offers to switch to annual plan\"), or change \"Predictable mistake\" to \"no\".",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Billing, promo code - second message",
+      "severity": 3,
+      "violation": "These fields contradict each other. A predictable mistake should come with a suggested fix."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-004.md",
+    "artifact_sha256": "c8f58456a4deb36595b0ac00fe364b68e80445e939d7293d2db8d8f1a42ac91b",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:46:56Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

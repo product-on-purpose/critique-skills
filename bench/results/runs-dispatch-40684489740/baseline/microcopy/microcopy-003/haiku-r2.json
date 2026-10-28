@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: none\"",
+      "fix": "Provide a suggested fix such as \"retryable, offers a retry button\" or explicitly document the intended user workflow after seeing this timeout.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Search results, no matches - First message (timeout), Suggested fix",
+      "severity": 3,
+      "violation": "An error message that prevents access to search results provides no suggested resolution or next action, making the user experience incomplete."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: not-applicable\"",
+      "fix": "Replace with a field appropriate to notifications such as \"Dismissable,\" \"Auto-dismiss,\" or \"Repeats,\" or remove this field from notification documentation.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Notification center, sync status - Input on resubmission field",
+      "severity": 3,
+      "violation": "This field describes form-submission behavior and has no meaningful application to a notification context where no form exists."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message says \"Select resume to sync now\" but Signal is \"bold text at the top of the notification list, icon\"",
+      "fix": "Update the Signal field to reflect interactivity (e.g., \"bold text with resume button, icon\") to match the message's instruction and the Suggested fix.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Notification center, sync status - Message vs. Signal mismatch",
+      "severity": 3,
+      "violation": "The message directs users to select an action, but the Signal description does not indicate the notification is interactive or contains a clickable element."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-focus\"",
+      "fix": "Change to \"Fires: on-metered-connection\" or another label that describes when the notification actually appears.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Notification center, sync status - Fires field",
+      "severity": 3,
+      "violation": "A sync-pause notification fires when the device switches to a metered connection, not when the user focuses on the notification center, making this timing label inaccurate."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:32:18Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

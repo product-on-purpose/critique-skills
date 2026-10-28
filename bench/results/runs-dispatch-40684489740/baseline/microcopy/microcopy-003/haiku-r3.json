@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: none\"",
+      "fix": "Add a suggested fix such as \"offers a retry button and links to search help\" or \"suggests simplifying the search query.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Search results, no matches - \"This request timed out...\" message, Suggested fix field",
+      "severity": 3,
+      "violation": "Timeout errors should provide users with recovery steps or next actions. Without a suggested fix, this message leaves users without guidance on how to proceed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action\"",
+      "fix": "Update the signal styling to visually indicate this message demands action, such as using a warning-level color or adding a prominent action button.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Search results, no matches - \"No orders fall inside...\" message, Signal field",
+      "severity": 3,
+      "violation": "The message content instructs users to take action (\"Change the date range, or clear the filters\"), but the visual treatment is neutral/informational, creating unclear urgency about whether action is actually necessary."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-focus\"",
+      "fix": "Change the trigger to \"fires: on-sync-pause\" or \"fires: on-state-changed\" to fire when the underlying condition occurs.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Notification center, sync status - Fires field",
+      "severity": 3,
+      "violation": "A notification triggered by a state change (sync paused) should fire when that state changes, not when the user focuses on the notification. Users may miss the notification entirely if it only appears on-focus."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Select resume to sync now\" paired with \"Suggested fix: selectable, offers a resume now action inside the notification\"",
+      "fix": "Make the resume action immediately selectable in the notification, or reword the message to describe what users can actually do right now.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Notification center, sync status - Message and Suggested fix",
+      "severity": 3,
+      "violation": "The message instructs users to \"Select resume,\" but the suggested fix indicates the resume action is not currently selectable, making the instruction impossible to follow."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:34:38Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

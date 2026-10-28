@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message about \"maximum of 30 characters\" placed \"directly below the postal code field\"",
+      "fix": "Verify which field this message actually applies to and move it to the correct location, or clarify if this postal code field has unusual length requirements.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - first message",
+      "severity": 3,
+      "violation": "Postal codes in most countries have much shorter limits (typically 5-10 characters). Either this message belongs on a different field or the field type is wrong."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Please correct the highlighted field. Error code: 502.\"",
+      "fix": "Replace this message with guidance appropriate for a server error (e.g., \"The server is temporarily unavailable. Please try again in a few moments.\") and remove the suggestion to correct a field.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - second message",
+      "severity": 3,
+      "violation": "HTTP 502 is a server error (Bad Gateway), not a validation error. Users cannot fix a server error by correcting a form field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Placement described as \"requiring the reader to scroll up to see it, though the field itself stays visible on the page\"",
+      "fix": "Reposition this message inline with the password field so users can see both the requirement and the field simultaneously.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Password reset, new password - first message",
+      "severity": 3,
+      "violation": "This placement creates a usability problem where the message is outside the visible area while the field requiring the information is visible, forcing users to scroll to understand the requirement."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message text says \"Change this file to one of those formats and upload it again\" but Suggested fix states \"offers a convert and retry action in place of the message\"",
+      "fix": "Update the message to explicitly offer the conversion action: \"Receipts upload as PDF or PNG only. Convert this file to one of those formats, or select a different receipt.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "File upload, receipts - second message",
+      "severity": 3,
+      "violation": "The message tells users to convert the file format but doesn't mention that a conversion tool is available, creating a gap between the message and the intended solution."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:19:08Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,24 @@
+Location: Checkout form, shipping address, second message
+Evidence: "Message: Please correct the highlighted field. Error code: 502."
+Problem: A 502 error is a server error (Bad Gateway), not a user input validation error. The message misleads the user by implying they can correct their input when in fact the problem is on the server.
+Fix: Change the message to explain it's a server error and suggest a retry, such as "The server encountered an error (502). Please try again, or contact support if the problem persists."
+
+Location: Checkout form, shipping address, second message
+Evidence: "Predictable mistake: yes" (for the 502 error message)
+Problem: A 502 server error is not a predictable user mistake; it's a system failure. Marking it as "yes" mischaracterizes the error type.
+Fix: Change to "Predictable mistake: no"
+
+Location: Checkout form, shipping address, second message
+Evidence: "Suggested fix: none" (for the 502 error message)
+Problem: A server error should suggest a recovery action. With no suggested fix, the user is left without guidance on how to proceed.
+Fix: Add "Suggested fix: selectable, offers a retry or contact support action"
+
+Location: Password reset, new password, first message
+Evidence: "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page"
+Problem: The error message is not visible when the user is looking at the field it applies to. This breaks the principle that error messages should appear near the field being validated.
+Fix: Change placement to directly below the password field, or use a fixed position that stays visible when the field is in view
+
+Location: Account settings, username, error message
+Evidence: "Message: The last changes were not saved and cannot be recovered. Contact support for assistance."
+Problem: The message states that changes cannot be recovered but does not explain what caused the failure or why recovery is impossible. This leaves the user confused about what happened.
+Fix: Provide context about the failure, such as "A database error prevented your changes from saving. Please try again or contact support if the error persists."

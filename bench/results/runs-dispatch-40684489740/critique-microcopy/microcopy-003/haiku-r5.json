@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-CONSTRUCTIVE",
+      "evidence": "This request timed out before it could finish.",
+      "fix": "Add a concrete next step: name the action the reader should take to resolve this.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "Search results, no matches, message 1",
+      "severity": 3,
+      "violation": "The message states that a problem exists with no imperative instruction or named next step anywhere in the text."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-GRACE",
+      "evidence": "Message: 'This request timed out before it could finish.' Suggested fix: none. No other recovery path offered on the screen for this failure.",
+      "fix": "Add a sincere acknowledgment of the inconvenience or a pointer to support, e.g., 'The search timed out. Please try again, or contact support if this continues.'",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Search results, no matches, message 1",
+      "severity": 3,
+      "violation": "The message reports a complete failure with no path forward (Suggested fix is none, no other recovery message on this screen), yet offers no acknowledgment of what this means for the reader, leaving them without goodwill when the failure is total."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-SALIENT",
+      "evidence": "Signal field: 'styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action, text-label'. The message requires the reader to act (change date range or clear filters) but is visually indistinguishable from passive information.",
+      "fix": "Apply visual styling that distinguishes action-required messages from informational ones: stronger contrast, different color or background, or a different container type (e.g., alert-style box instead of banner).",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Search results, no matches, message 2",
+      "severity": 3,
+      "violation": "The message is styled identically to informational banners elsewhere on the page with no visual cue that this one demands action, so a reader scanning at normal speed may not perceive that a change is required."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T12:37:45Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
