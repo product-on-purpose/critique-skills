@@ -1,0 +1,117 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-PARAGRAPH",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout.",
+      "fix": "Rewrite the opening sentence to state the topic the rest of the paragraph covers.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "The paragraph's opening sentence shares almost no vocabulary with the rest of the paragraph, so it does not preview the paragraph's actual topic."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Line 6: 'Every entry carries a date stamp so the record stays easy to audit.' Line 21: 'the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.' Line 29: 'An incomplete request pauses the timeline until the missing item arrives.' Line 39: 'The stipend pays up to 500 dollars per benefit year.' Line 41: 'unused stipend amounts do not roll over to the next benefit year.' Line 65: 'Federal guidance on remote work continues to evolve each year.'",
+      "fix": "Name the actor: 'The team dates every entry,' 'Finance moves the request to final processing,' 'Missing information pauses the timeline,' 'The program provides up to 500 dollars,' 'The policy does not allow stipend rollover,' 'Federal agencies update guidance.'",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Program Overview (line 6), How to Apply (line 21), Approval Timeline (line 29), Reimbursement Amounts (lines 39, 41), Program Coordination (line 65)",
+      "severity": 3,
+      "violation": "Multiple sentences use abstract nouns as subjects instead of naming the real actor performing the action, leaving responsibility unclear."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "Line 65: 'The benefits team coordinates every stipend request from intake to payout. A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.'",
+      "fix": "Remove the three unrelated sentences, or move them to a separate section if they belong in the document at all. Keep 'Program Coordination' focused solely on how the stipend program is managed.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "The 'Program Coordination' section opens with its stated topic (benefits team coordinates stipend requests) but then introduces three unrelated facts - an audit of travel expenses, federal remote-work guidance, and office coffee budget reset - that have nothing to do with stipend coordination, destroying the section's coherence."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Lines 51 - 53: 'You record the stipend item on the request form. Finance reconciles the reimbursable item against the request log each month. Payroll releases the covered purchase amount after that monthly review. Also, you submit the request in the portal. Countersign the employee request within two business days. You track its status there until the payment clears.'",
+      "fix": "Move internal process descriptions (Finance reconciles, Payroll releases) to a separate section labeled for internal use, or clearly label each sentence with its intended audience.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Terminology Notes, paragraph 2",
+      "severity": 2,
+      "violation": "The 'Terminology Notes' section addresses multiple distinct audiences without clear separation, mixing employee instructions with internal staff instructions, so readers cannot tell which audience each sentence is for."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Line 31: 'Employees keep proof of purchase for every stipend item.' Line 33: 'A photo of the receipt is enough for most requests.' Line 5: 'The benefits team publishes the equipment catalog on the first business day of the month.' Line 73: 'The finance liaison publishes the vendor list on the first business day of the month.'",
+      "fix": "Use a single term consistently: either 'receipt' or 'proof of purchase' throughout. Clarify in a defined-terms section whether 'equipment catalog' and 'vendor list' refer to the same list or two different systems.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Required Documentation, paragraphs 1 - 2 and Program Overview vs. Questions and Updates",
+      "severity": 2,
+      "violation": "The document uses different terms for identical or closely related concepts without clarifying equivalence: 'proof of purchase' and 'receipt' appear in the same section, and 'equipment catalog' (line 5) and 'vendor list' (line 73) may refer to the same system."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SUBJECT-VERB-OBJECT",
+      "evidence": "Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.",
+      "fix": "Move the interrupting clause elsewhere, or split it into its own sentence.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 2",
+      "severity": 2,
+      "violation": "3 comma-set-off clause(s) totalling 14 words intervene between the sentence's apparent subject and its verb."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-TRANSITIONS",
+      "evidence": "An incomplete request pauses the timeline until the missing item arrives. The...",
+      "fix": "Open the paragraph with a transition word that states its relationship to the prior paragraph.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 2",
+      "severity": 2,
+      "violation": "The paragraph opens with none of the fixed transition words, so the reader is not told how it relates to the paragraph before it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "Lines 51 - 53: 'You record the stipend item on the request form. Finance reconciles the reimbursable item against the request log each month. Payroll releases the covered purchase amount after that monthly review. Also, you submit the request in the portal. Countersign the employee request within two business days. You track its status there until the payment clears.'",
+      "fix": "Separate employee-facing instructions from internal process descriptions; within each, maintain consistent subject focus so consecutive sentences build on the prior one.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Terminology Notes, paragraph 2",
+      "severity": 2,
+      "violation": "The 'Terminology Notes' section shifts subjects erratically - employee to Finance to Payroll and back to employee - without topic continuity, forcing the reader to reorient at nearly every sentence."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T07:31:44Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

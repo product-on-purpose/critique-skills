@@ -1,0 +1,50 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\"",
+      "fix": "Change \"Predictable mistake: yes\" to \"Predictable mistake: no\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Signup form, email field, first message (\"The connection dropped before this finished.\")",
+      "severity": 3,
+      "violation": "A connection error is not a predictable user mistake. All other technical errors in the document are correctly marked \"no\" (e.g., \"Something went wrong\" in Checkout), so this should be \"no\" as well."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Signup messages use \"one step bolder and larger than the field label\" while all Checkout and Profile messages use \"bold text set larger than the field label\"",
+      "fix": "Standardize to \"bold text set larger than the field label\" throughout the document.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Signal descriptions in Signup form section",
+      "severity": 3,
+      "violation": "Inconsistent terminology for the same visual treatment reduces clarity and suggests possible design inconsistencies."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-001.md",
+    "artifact_sha256": "0580399008ca4517da0a1b1f620180b68a4cfb24e596be279a5f782cde325fc7",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:14:11Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

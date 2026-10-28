@@ -1,0 +1,50 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 5 projects, synced last week.\" but the list below contains only 4 items",
+      "fix": "Either add a 5th project to the list or change the text to \"This workspace holds 4 projects, synced last week.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "workspace-overview section, p element",
+      "severity": 3,
+      "violation": "The stated count of 5 projects does not match the 4 projects actually listed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a>`",
+      "fix": "Change href to \"#archive-confirm\" so users see the confirmation dialog before archiving.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "project-settings section, archive link",
+      "severity": 3,
+      "violation": "This link skips the confirmation dialog and goes directly to the archived state, bypassing the archive-confirm section that exists in the document."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T14:04:34Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

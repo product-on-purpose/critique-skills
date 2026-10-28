@@ -1,0 +1,82 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "the Duplicate button is defined with aria-label=\"Duplicate project\", but the artifact defines no state or outcome after duplication",
+      "fix": "Define an outcome state for the duplicate action: show a success message naming the duplicated project, transition to a new project view, or display the duplicate in the projects list with clear indication it is new.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 3,
+      "violation": "The artifact names a duplicate action but specifies no outcome, so a user cannot tell whether duplication succeeded, where the copy appears, or what to do next."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "the Save button is defined on the project-settings form, but the artifact does not define a feedback state or message confirming the save succeeded",
+      "fix": "Define a success message, confirmation state, or control-state change that appears immediately after the Save button is clicked to confirm the update completed.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 3,
+      "violation": "The user has no feedback confirming that the project name was saved, so they cannot tell whether their edit persisted or failed."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H4-CONTROL-NAMING",
+      "evidence": "control labeled \"Save\"",
+      "fix": "Pick one label for this commit action, for example \"Save\", and use it everywhere the action appears.",
+      "id": "F-003",
+      "instances": [
+        {
+          "evidence": "control labeled \"Save\"",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "control labeled \"Submit\"",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "This artifact uses 2 different labels for what reads as the same commit action: \"Save\", \"Submit\". A user cannot tell from the label alone whether these controls perform the same action or different ones."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H5-PREVENT",
+      "evidence": "<input type=\"text\" value=\"Customer Migration\"> with no visible maxlength, pattern, required attribute, or validation message shown",
+      "fix": "Add validation constraints visible on the control itself: a maxlength attribute, a required indicator, placeholder text showing expected format, or define an error message the form displays if the user tries to save with an empty name.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-name-input\" field",
+      "severity": 2,
+      "violation": "The project name input accepts any free-text entry without constraint, so a user could save an empty string or invalid value without being prevented at entry time."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:11:35Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

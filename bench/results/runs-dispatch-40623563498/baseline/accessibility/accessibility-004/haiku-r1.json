@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Three divs with class \"step\" containing \"Choose a plan\", \"Enter payment details\", \"Confirm your order\" with no heading, role, or aria-current attributes",
+      "fix": "Add `role=\"group\" aria-label=\"Multi-step process\"` to the wizard-steps container and add appropriate structure like headings or aria-current to indicate the current step",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<div class=\"wizard-steps\" id=\"s3-wizard\">` containing three step divs in the Fare adjustments section",
+      "severity": 3,
+      "violation": "The wizard section lacks semantic markup and ARIA attributes to convey its multi-step nature to assistive technology"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"/fares/history\" id=\"s3-link1\">read the accessibility improvements list</a>`",
+      "fix": "Either change the link text to match the destination (e.g., \"read the fare adjustment history\") or update the href to an accessibility improvements page",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Link text in the paragraph with id \"s3-linkpara\" in the Fare adjustments section",
+      "severity": 3,
+      "violation": "The link text says \"accessibility improvements list\" but the href points to \"/fares/history\", creating a semantic mismatch between what the user expects to find and the destination"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"phone\">Phone number (required)</label>` paired with `<input id=\"phone\" type=\"tel\" autocomplete=\"tel\">` with no required attribute",
+      "fix": "Add the `required` attribute to the input: `<input id=\"phone\" type=\"tel\" autocomplete=\"tel\" required>`",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Phone input field in the form in the Fare adjustments section",
+      "severity": 3,
+      "violation": "The label text indicates the field is required but the input element lacks the `required` attribute or `aria-required=\"true\"`, causing a mismatch between visual indication and programmatic requirement"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">` immediately followed by always-visible error text `<span class=\"error-text\">Enter a 6 character code using letters and numbers only.</span>`",
+      "fix": "Remove `aria-invalid=\"true\"` from the input and either hide the error message by default with `hidden` attribute or convert the text to helper text in a `<small>` element without error styling or aria-invalid",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Promo code input field in the form in the Fare adjustments section",
+      "severity": 3,
+      "violation": "The input has `aria-invalid=\"true\"` set unconditionally, marking it as invalid to assistive technology even though the user has not yet interacted with it; this misleads users and screen reader users about the field's actual validation state"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "4febe21b95880d7b0b385588ebdc9c800b2c010b439206d51d6b790cb76d11c3",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:27:38Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

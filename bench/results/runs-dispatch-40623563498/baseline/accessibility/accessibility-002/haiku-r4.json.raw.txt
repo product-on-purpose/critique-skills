@@ -1,0 +1,39 @@
+Location: s1-p1 paragraph
+Evidence: `style="color:#999999"` applied to "Passengers should review the updated schedule at any station kiosk."
+Problem: Gray text (#999999) de-emphasizes important information that should be prominent in a service announcement.
+Fix: Remove the inline style or use a darker color that maintains proper contrast while still differentiating the paragraph visually.
+
+Location: s3-form, Route field label and input
+Evidence: `<label for="topic-alt"...>` but `<select id="topic">`
+Problem: The label's `for` attribute references "topic-alt" while the select element has id="topic", so the label does not associate with the input.
+Fix: Change the label's `for` attribute to `for="topic"` to match the select's id.
+
+Location: s3-form, Phone number field
+Evidence: `<label for="phone"...>Phone number (required)</label>` with `<input id="phone" type="tel">` lacking a required attribute
+Problem: The label indicates the field is required, but the input element has no `required` attribute, creating an inconsistency between the UI label and the actual form validation.
+Fix: Add `required` attribute to the phone input: `<input id="phone" type="tel" autocomplete="tel" required>`.
+
+Location: s3-form, Promo code field
+Evidence: `<input id="promo" type="text" aria-invalid="true">` without `aria-describedby` linking to the error message
+Problem: The input is permanently marked as invalid even before the user interacts with it, and the error message span is not linked to the input for screen readers.
+Fix: Remove `aria-invalid="true"` from the input and add `aria-describedby="s3-form-promo-error"` to link the error message, then set `aria-invalid="true"` only when validation fails.
+
+Location: s3-statuscard div
+Evidence: `<div class="status-card" role="status" id="s3-statuscard" style="height:60px;overflow:hidden">`
+Problem: The fixed height of 60px with overflow:hidden will cut off the paragraph content below, hiding important information about reporting service issues.
+Fix: Remove the `height:60px;overflow:hidden` inline styles to allow the content to display fully.
+
+Location: s3-customcontrol div
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Problem: A div with role="button" must handle Enter and Space key events for keyboard accessibility, but there are no event handlers defined in the HTML.
+Fix: Add keyboard event handlers (JavaScript) or replace this with a proper `<button>` element.
+
+Location: s3-wizard div
+Evidence: `<div class="wizard-steps" id="s3-wizard">` containing three step divs with no ARIA attributes
+Problem: The wizard structure lacks proper ARIA attributes such as role="group" and aria-label to describe its purpose and help screen reader users understand the step progression.
+Fix: Add `role="group" aria-label="Checkout steps"` to the wizard div and consider adding aria-current="step" to the active step.
+
+Location: s3-linkpara, link text
+Evidence: In the "Weekend service" section, link text reads `read the accessibility improvements list`
+Problem: The link text references "accessibility improvements" but this is the "Weekend service" section—the link text does not match the section's topic.
+Fix: Change the link text to reflect the section content, such as `read the full list of upcoming service adjustments`.

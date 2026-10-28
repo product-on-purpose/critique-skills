@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential.\"",
+      "fix": "Explain what each policy does, such as \"linear: retries at fixed intervals; exponential: retries with increasing delays between attempts.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "retry_policy section",
+      "severity": 3,
+      "violation": "The three retry policy options are listed but not explained, so users cannot understand what distinguishes linear from exponential retry behavior or when to use each."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The signing_secret field accepts a string used to verify the payload signature on receipt.\"",
+      "fix": "Specify the signing algorithm, such as \"HMAC-SHA256\" and briefly describe how verification should be performed.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "signing_secret section",
+      "severity": 3,
+      "violation": "The description does not specify which algorithm is used to sign and verify payloads, so users implementing signature verification cannot determine how to do so correctly."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The endpoint_url field accepts an HTTPS URL\"",
+      "fix": "Explicitly state whether HTTP is unsupported, such as \"The endpoint_url field must be an HTTPS URL\" or \"accepts an HTTPS or HTTP URL.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "endpoint_url section",
+      "severity": 3,
+      "violation": "The phrase \"HTTPS URL\" is ambiguous - it does not clarify whether HTTP is forbidden or merely not the default."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "No field indicates whether it is required or optional",
+      "fix": "Add \"(required)\" or \"(optional)\" after each field name or in the description.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "All field descriptions",
+      "severity": 3,
+      "violation": "Users cannot determine which fields must be configured and which are optional when setting up a webhook."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "No examples provided for endpoint_url, signing_secret, or retry_policy values",
+      "fix": "Provide at least one example value for each field, such as \"Example: https://api.example.com/webhooks\" for endpoint_url.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "All field sections",
+      "severity": 3,
+      "violation": "Users lack concrete examples to verify their configuration values match the expected format."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-004.md",
+    "artifact_sha256": "7f41536ab3c3f7bc93a3dde86b8e81cee5dab0339f2b1d472e9222a20b42d7ae",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T09:29:57Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

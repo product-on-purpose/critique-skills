@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.10",
+      "evidence": "declared width: 960px",
+      "fix": "Cap the element's width with a relative max-width (a percentage or viewport unit), or add a media query that shrinks it below 320px.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "#s3-banner, <div> element, line 37",
+      "severity": 3,
+      "violation": "A fixed width of 960px forces horizontal scrolling once the viewport narrows to 320px, with no responsive override."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.3",
+      "evidence": "text color #999999 on background #ffffff, contrast ratio 2.85:1",
+      "fix": "Darken the text or lighten the background until the ratio reaches at least 4.5:1.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "#s1-p1, <p> element, text 'Passengers should review the updated schedule at any station kiosk. Updates p...', line 20",
+      "severity": 3,
+      "violation": "Contrast ratio 2.85:1 is below the 4.5:1 AA minimum for normal text."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.4",
+      "evidence": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\" id=\"head-viewport\">",
+      "fix": "Remove user-scalable=no so readers can zoom the page.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "#head-viewport, <meta> viewport element, line 5",
+      "severity": 3,
+      "violation": "The viewport meta tag sets user-scalable=no, disabling browser zoom entirely."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "The only wayfinding on the page is a two-link header nav (\"Accessibility\", \"Fares and passes\") and a two-link footer (\"Privacy policy\", \"Terms of service\"); no search form, sitemap link, or breadcrumb trail appears anywhere, and this page is not one step in a linear process.",
+      "fix": "Add a second independent wayfinding mechanism, such as a site search form or a breadcrumb trail showing this page's place in the site, so a reader who lands here directly still has more than one way to find related pages.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#nav, <nav> element, line 11 (page's only navigation mechanism)",
+      "severity": 3,
+      "violation": "Fewer than two independent mechanisms exist for locating this page among the site's set of pages: the header nav and footer links are the sole path, with no site search, sitemap, or breadcrumb offering a second, independent route here."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "Under the heading \"Weekend service\" sit a fare-adjustment notice, a service-issue reporting notice, a static status card, a \"Refresh status\" button, a custom delete control, a three-step \"Choose a plan / Enter payment details / Confirm your order\" wizard, a link labeled \"read the accessibility improvements list\", and an unrelated contact form (route, email, phone, promo code fields) with its own submit button.",
+      "fix": "Split this section under headings that name what each part actually is (for example \"Report a service issue\", \"Choose a plan\", \"Contact us\"), so a heading scan predicts the content beneath it.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#s3-h, <h2> element, text \"Weekend service\", line 34",
+      "severity": 3,
+      "violation": "The heading's wording gives no indication of the section's actual contents: a reader scanning headings to find, for example, the plan-and-payment wizard or the contact form has no way to predict that either lives under \"Weekend service\" without opening the section and reading all of it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.11",
+      "evidence": "boundary color #9d9d9d against adjacent background #ffffff, contrast ratio 2.71:1",
+      "fix": "Darken the border or outline color, or change the adjacent background, until the ratio reaches at least 3:1.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "#s3-button1, <button> element boundary, line 43",
+      "severity": 2,
+      "violation": "Component boundary contrast ratio 2.71:1 is below the 3:1 AA minimum."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.4.12",
+      "evidence": "height: 60px; overflow: hidden",
+      "fix": "Remove the fixed height so the element grows with its content, or replace the clipped overflow with visible or auto.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "#s3-statuscard, <div> element, line 40",
+      "severity": 2,
+      "violation": "A fixed height combined with clipped overflow truncates this element's text once a reader applies wider line, paragraph, letter, or word spacing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "The section headed \"Accessibility improvements\" contains only: \"Passengers should review the updated schedule at any station kiosk...\" and \"Local residents may request a fare adjustment through the mobile app...\", plus a photo of a platform-door inspection; nothing in the section describes an accessibility feature or improvement.",
+      "fix": "Retitle the heading to match its actual content (for example \"Schedule and fare updates\"), or move genuine accessibility-improvement content into this section.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "#s1-h, <h2> element, text \"Accessibility improvements\", line 19",
+      "severity": 2,
+      "violation": "The heading's wording does not describe the content that actually follows it: a reader scanning headings for information about accessibility improvements would expect accessibility-feature content, not schedule-lookup and fare-adjustment instructions."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-3.3.2",
+      "evidence": "<select id=\"topic\">",
+      "fix": "Add a <label for> pointing at this control's id, wrap the control in a <label>, or set aria-label.",
+      "id": "F-009",
+      "lane": "scripted",
+      "location": "#topic, <select> control, line 61",
+      "severity": 2,
+      "violation": "No label, aria-label, aria-labelledby, or title identifies what this control expects."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-002.html",
+    "artifact_sha256": "77a0e7586bb29a0807dde74bad599c5697360ab159315d8c672e432e2dedf0fd",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T03:50:32Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

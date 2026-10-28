@@ -1,0 +1,193 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<p>Thanks for signing up.</p>`",
+      "fix": "Remove this paragraph from the form body and show a thank-you message only after successful submission.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`row-phone` div, inside the phone number field",
+      "severity": 3,
+      "violation": "A post-submission thank-you message is hard-coded into the middle of the form, before the user has submitted anything."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`minlength=\"6\"`",
+      "fix": "Raise the minimum (e.g. 8+ characters), and add visible helper text near the field describing the requirement.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`password-input` in `row-password`",
+      "severity": 3,
+      "violation": "A 6-character minimum with no complexity requirement is a weak password policy, and no visible hint tells the user any requirement exists."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"website-input\" name=\"website\" type=\"url\" required=\"\">`",
+      "fix": "Make this field optional, or remove it if it isn't actually needed for individual membership.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`website-input` in `row-website`",
+      "severity": 3,
+      "violation": "\"Company website\" is marked required on what appears to be an individual membership signup, which will block anyone without a company site from completing the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no `pattern`, `minlength`, or `maxlength`",
+      "fix": "Add `pattern=\"\\d{8}\"` plus `minlength=\"8\" maxlength=\"8\"`, and move the instruction into persistent helper text rather than relying on the placeholder alone.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`member-input` in `row-member`",
+      "severity": 3,
+      "violation": "The 8-digit requirement is communicated only via placeholder text (which disappears once the user types) and isn't enforced by any validation attribute."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"acctnum-label\" for=\"acctnum-input\">Account number</label>` required on an account-creation form",
+      "fix": "Remove this field, or clarify what it refers to (e.g. an existing loyalty/customer number) and make it optional.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`acctnum-input` in `row-acctnum`",
+      "severity": 3,
+      "violation": "Requiring an \"account number\" on a form whose purpose is to create the account is contradictory - the user doesn't have one yet."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`name=\"full_name\"` ... later `name=\"given_name\"` / `name=\"family_name\"`",
+      "fix": "Pick one representation of name and remove the other.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`row-name` vs `row-legalname`",
+      "severity": 3,
+      "violation": "The form collects the user's name twice in two different, potentially inconsistent formats (one combined field, one split pair)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Two `<label>`/`<input>` pairs (`given-input`, `family-input`) inside a single row div, unlike every other row which holds exactly one field",
+      "fix": "Split into two separate row divs (e.g. `row-given`, `row-family`) matching the pattern used elsewhere.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`row-legalname` div",
+      "severity": 3,
+      "violation": "This breaks the one-field-per-row convention used everywhere else in the form, making the markup structurally inconsistent."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"font-size:16px\"` present only on this input",
+      "fix": "Apply a consistent minimum font-size (via a shared stylesheet rule, not scattered inline styles) to all text inputs.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "`org-input` in `row-org`",
+      "severity": 3,
+      "violation": "This looks like a fix for the mobile-Safari auto-zoom bug (inputs under 16px trigger zoom on focus), but it's applied to only one field, leaving every other text input susceptible to the same issue."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"padding:1px 2px;font-size:11px\"`",
+      "fix": "Increase padding/font-size to meet at least a 24x24px (ideally 44x44px) touch target.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "`viewdetails-btn`",
+      "severity": 3,
+      "violation": "This tap target is far below accessible minimum size guidelines (effectively a few pixels), making it very hard to tap reliably, especially on touch devices."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" ...>View details</button>` with no `<script>` anywhere in the document",
+      "fix": "Either add the script that gives this button a function, or remove it until that logic exists.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "`viewdetails-btn`",
+      "severity": 3,
+      "violation": "The button has no attached behavior since the document contains no JavaScript at all, so it is currently a dead control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Only `street_address` and `postal_code` fields exist; no city, state/region, or country field",
+      "fix": "Add city and state/region (and country, if international) fields alongside street address and postal code.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Address fields overall (`row-street`, `row-postal`)",
+      "severity": 3,
+      "violation": "The address collected is incomplete for shipping purposes, yet the form also asks for a \"Preferred shipping speed\" (`row-shipspeed`), implying physical shipment."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"form\">` - no `action` or `method` attribute",
+      "fix": "Add explicit `action` and `method` attributes, or confirm and document the JS handler that intercepts submission.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "`<form id=\"form\">` opening tag",
+      "severity": 3,
+      "violation": "Without `action`/`method`, the form's submission destination and HTTP method are undefined, so submit behavior depends entirely on unseen JS."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"submit-btn\" type=\"submit\">Create account</button>` immediately followed by `<button id=\"reset-btn\" type=\"reset\">Clear form</button>`",
+      "fix": "Remove the reset button, or visually separate/de-emphasize it and add a confirmation step before clearing.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "`submit-btn` and `reset-btn`",
+      "severity": 3,
+      "violation": "Placing a reset button directly next to the submit button risks accidental full data loss from a single misclick after filling out a long form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Replace with a `<select>` of defined time ranges or an `<input type=\"time\">`/structured control.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "`contacttime-input` in `row-contacttime`",
+      "severity": 3,
+      "violation": "Using a free-text field for \"Preferred contact time\" invites inconsistent, unparseable values (e.g. \"morning\" vs \"9am\" vs \"AM\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Street address appears right after the password field, while postal code appears much later, separated by phone, phone2, website, membership number, and account number",
+      "fix": "Move `row-postal` to immediately follow `row-street` (and add city/state fields there too) so address information is grouped together.",
+      "id": "F-015",
+      "lane": "judged",
+      "location": "Field order across the form (`row-street` vs `row-postal`)",
+      "severity": 3,
+      "violation": "Splitting the two address-related fields apart with several unrelated fields in between makes the form's logical grouping confusing to fill out."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-003.html",
+    "artifact_sha256": "df62d7b38659529bf26df03102d3e7969a1c47b7c66e72bc8d3cf208f082bc1f",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T11:27:31Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 15,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

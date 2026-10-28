@@ -1,0 +1,76 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "&lt;label id=\"acctnum-label\" for=\"acctnum-input\"&gt;Account number&lt;/label&gt; &lt;input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required=\"\"&gt;, on a page titled 'Create your Meridian Outfitters account' with submit button 'Create account'",
+      "fix": "Remove #acctnum-input from account creation. If the business genuinely assigns an account number, generate and show it to the person after the account is created, rather than requiring them to supply one beforehand.",
+      "id": "F-001",
+      "instances": [
+        {
+          "evidence": "&lt;label id=\"legalname-label\" for=\"legalname-input\"&gt;Your name&lt;/label&gt; &lt;input id=\"legalname-input\" name=\"legal_name\" type=\"text\" autocomplete=\"name\" required=\"\"&gt;, appearing after &lt;label id=\"name-label\" for=\"name-input\"&gt;Full name&lt;/label&gt; earlier in the same form",
+          "location": "#legalname-input, &lt;input&gt; field, label 'Your name', line 63"
+        },
+        {
+          "evidence": "&lt;label id=\"org-label\" for=\"org-input\"&gt;Organization name&lt;/label&gt; &lt;input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required=\"\"&gt;",
+          "location": "#org-input, &lt;input&gt; field, label 'Organization name', line 67"
+        },
+        {
+          "evidence": "&lt;label id=\"website-label\" for=\"website-input\"&gt;Company website&lt;/label&gt; &lt;input id=\"website-input\" name=\"website\" type=\"url\" required=\"\"&gt;",
+          "location": "#website-input, &lt;input&gt; field, label 'Company website', line 37"
+        },
+        {
+          "evidence": "&lt;label id=\"member-label\" for=\"member-input\"&gt;Membership number (8 digits)&lt;/label&gt; &lt;input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required=\"\"&gt;",
+          "location": "#member-input, &lt;input&gt; field, label 'Membership number (8 digits)', line 41"
+        },
+        {
+          "evidence": "&lt;label id=\"shipspeed-label\" for=\"shipspeed-select\"&gt;Preferred shipping speed&lt;/label&gt; &lt;select id=\"shipspeed-select\" required=\"\"&gt;...&lt;/select&gt;, required before any purchase or shipment exists",
+          "location": "#shipspeed-select, &lt;select&gt; field, label 'Preferred shipping speed', line 53"
+        },
+        {
+          "evidence": "&lt;label id=\"contacttime-label\" for=\"contacttime-input\" style=\"display:block\"&gt;Preferred contact time&lt;/label&gt; &lt;input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\"&gt;",
+          "location": "#contacttime-input, &lt;input&gt; field, label 'Preferred contact time', line 71"
+        }
+      ],
+      "lane": "judged",
+      "location": "#acctnum-input, &lt;input&gt; field, label 'Account number', line 45",
+      "severity": 3,
+      "violation": "FORMS-FIELD-NECESSITY: the form's task, named by its heading 'Set up your account' and its submit label 'Create account', is to create an account that does not yet exist, so no account number can exist for the person to supply. The field asks for an answer the task cannot produce, making completion depend on fabricating a value rather than on an answer the task actually uses."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "&lt;button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\"&gt;View details&lt;/button&gt; &lt;button id=\"submit-btn\" type=\"submit\"&gt;Create account&lt;/button&gt;",
+      "fix": "Remove the padding and font-size styling from #viewdetails-btn, or apply an equivalent or stronger filled/prominent style to #submit-btn instead, so the primary action is the visually dominant control and the secondary one is visibly lesser.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#viewdetails-btn, &lt;button&gt; element, text 'View details', line 73",
+      "severity": 2,
+      "violation": "FORMS-ACTION-HIERARCHY: the secondary action #viewdetails-btn declares its own padding and a 16px font size, while the primary submit #submit-btn, sitting immediately after it in the same position in the field column, declares no style at all. The secondary control is therefore sized and styled as prominently as, or more prominently than, the primary one, so the two cannot be told apart by prominence."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T12:05:21Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

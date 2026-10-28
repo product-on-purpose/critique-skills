@@ -1,0 +1,84 @@
+Location: `<html lang="translanguage">`
+Evidence: `lang="translanguage"`
+Problem: "translanguage" is not a valid BCP 47 language code, so assistive technology and translation tools cannot determine the page's language.
+Fix: Set `lang` to the actual language of the content, e.g. `lang="en"`.
+
+Location: `<title id="head-title"></title>`
+Evidence: `<title id="head-title"></title>`
+Problem: The title element is empty, so the browser tab, bookmarks, and screen readers announce no page name.
+Fix: Add a descriptive title, e.g. "Rider service updates".
+
+Location: Section s1, image `s1-img1`
+Evidence: `<img src="/img/platform-update.jpg" id="s1-img1">`
+Problem: The image has no `alt` attribute at all, so screen readers will announce the file name or path instead of meaningful content.
+Fix: Add `alt="..."` describing the image, or `alt=""` if it is purely decorative.
+
+Location: Section s1, paragraphs s1-p1 and s1-p2
+Evidence: Both end with the identical sentence "Station staff can also help with the same request in person."
+Problem: The same boilerplate closing sentence is reused for two different actions (requesting a fare adjustment vs. checking real-time arrivals), making the second instance read as an unedited template rather than content specific to checking arrivals.
+Fix: Write a closing sentence specific to each action, or remove the redundant reuse.
+
+Location: Section s2 heading, `s2-h`
+Evidence: `<h4 id="s2-h">Accessibility improvements</h4>` following an `<h2>` in section s1
+Problem: The heading level jumps from h2 to h4, skipping h3, which breaks the document's heading hierarchy for screen reader navigation.
+Fix: Change `s2-h` to `<h2>` (or `<h3>` if it is meant to be a subsection) to keep heading levels sequential.
+
+Location: Section s2, table `s2-table1`
+Evidence: `<table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>...`
+Problem: The table has no `<caption>` or accessible name, so screen reader users have no context for what the table represents when navigating to it directly.
+Fix: Add a `<caption>` such as "Zone status" inside the table.
+
+Location: Section s2, paragraph `s2-p1`
+Evidence: "Passengers can report a service issue by calling rider services. Updates post to the schedule page within one business day."
+Problem: The second sentence (about schedule-page updates) does not logically follow from reporting a service issue by phone; it appears to be a mismatched template sentence copied from the schedule-update content.
+Fix: Replace the second sentence with one describing what happens after a reported issue (e.g., confirmation or follow-up process).
+
+Location: Section s3, status card `s3-statuscard`
+Evidence: `<div class="status-card" role="status" id="s3-statuscard">`
+Problem: `role="status"` marks the element as a live region for dynamically announced updates, but its content is static page text present at load, so assistive technology semantics are misapplied.
+Fix: Remove `role="status"` unless this content is actually updated dynamically via script.
+
+Location: Section s3, status card `s3-statuscard`
+Evidence: "Local residents can check real time arrivals through the online portal. A confirmation message follows once the request is processed."
+Problem: Checking real-time arrivals is not a submitted request that gets "processed" with a confirmation message; this is the same mismatched closing sentence used in `s3-p1` for an actual issue report, pasted in without adaptation.
+Fix: Write a closing sentence appropriate to checking arrivals (e.g., how often data refreshes) instead of reusing the "confirmation message" sentence.
+
+Location: Section s3, custom control `s3-customcontrol`
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Problem: A `<div>` is reimplemented as a button using `role="button"` and `tabindex="0"` instead of using a native `<button>`, which loses built-in keyboard activation (Enter/Space) and other default button behavior.
+Fix: Replace the div with a native `<button>` element styled with the `icon-delete` class.
+
+Location: Section s3, `s3-wizard`
+Evidence: `<div class="wizard-steps"><div class="step">Choose a plan</div><div class="step">Enter payment details</div><div class="step">Confirm your order</div></div>`
+Problem: The step sequence uses plain, unstyled-semantically divs with no list structure and no indication of which step is current, so screen reader users cannot tell this is an ordered progression or where they are in it.
+Fix: Use an ordered list (`<ol>`) for the steps and mark the active step with `aria-current="step"`.
+
+Location: Section s3, `s3-linkpara`
+Evidence: `<a href="/fares/history" id="s3-link1">click here</a>`
+Problem: "click here" is non-descriptive link text; users navigating by a screen reader's links list get no information about the link's destination or purpose out of context.
+Fix: Change the link text to something descriptive, e.g. "view the full list of upcoming adjustments".
+
+Location: Section s3 form, phone field
+Evidence: `<label for="phone" id="s3-form-phone-label">Phone number (required)</label>` with `<input id="phone" type="tel" autocomplete="tel">`
+Problem: The label text states the field is required, but the input itself has no `required` or `aria-required="true"` attribute, so assistive technology and browser validation won't actually enforce or announce that requirement.
+Fix: Add `required` (and/or `aria-required="true"`) to the `#phone` input.
+
+Location: Section s3 form, promo field
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: `aria-invalid="true"` is hardcoded on page load before any user input or validation has occurred, falsely announcing the field as invalid from the start.
+Fix: Omit `aria-invalid` (or set it to `"false"`) until a validation check actually fails.
+
+Location: Section s3 form, promo field and its error text
+Evidence: `<input id="promo" type="text" aria-invalid="true">` ... `<span class="error-text" aria-live="polite" id="s3-form-promo-error">Enter a 6 character code using letters and numbers only.</span>`
+Problem: The error message is not programmatically associated with the promo input, so screen reader users focused on the field won't hear why it's invalid.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the `#promo` input.
+
+Location: Section s3 form, submit button
+Evidence: `<button type="submit" class="btn-primary" id="s3-form-submit" aria-label="Send form now">Submit</button>`
+Problem: The accessible name ("Send form now") does not contain the visible text ("Submit"), violating the WCAG requirement that a control's accessible name include its visible label, which breaks voice-control users who say the visible text.
+Fix: Remove the `aria-label` (letting the visible "Submit" text serve as the accessible name) or change it to include that text, e.g. `aria-label="Submit form now"`.
+
+Location: `<div id="main-content">`
+Evidence: `<div id="main-content">` wrapping the h1 and all sections
+Problem: The primary content region uses a generic `<div>` instead of the `<main>` landmark element, so screen reader users cannot jump directly to main content via landmark navigation.
+Fix: Change `<div id="main-content">` to `<main id="main-content">`.

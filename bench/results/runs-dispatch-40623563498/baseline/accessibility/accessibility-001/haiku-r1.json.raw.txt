@@ -1,0 +1,34 @@
+Location: Line 2, `<html>` tag
+Evidence: `<html lang="translanguage" id="html">`
+Problem: "translanguage" is not a valid language code. It should be a valid BCP 47 language tag like "en".
+Fix: Change `lang="translanguage"` to `lang="en"`
+
+Location: Line 5, `<title>` tag
+Evidence: `<title id="head-title"></title>`
+Problem: The page title is empty, but every page should have a descriptive title for accessibility and SEO.
+Fix: Add a descriptive title, such as `<title>Rider service updates</title>`
+
+Location: Line 13, image in section s1
+Evidence: `<img src="/img/platform-update.jpg" id="s1-img1">`
+Problem: The image is missing an `alt` attribute, which is required for accessibility.
+Fix: Add an appropriate alt attribute, such as `<img src="/img/platform-update.jpg" id="s1-img1" alt="Platform update illustration">`
+
+Location: Line 17, section s2 heading
+Evidence: `<h4 id="s2-h">Accessibility improvements</h4>`
+Problem: The heading hierarchy is broken; an `<h4>` appears after an `<h1>` and `<h2>` with no intervening `<h3>`.
+Fix: Change `<h4>` to `<h2>`
+
+Location: Line 30, promo input in form
+Evidence: `<input id="promo" type="text" aria-invalid="true">` followed by `<span class="error-text" aria-live="polite" id="s3-form-promo-error">`
+Problem: The input is marked `aria-invalid="true"` but lacks `aria-describedby` to associate it with the error message.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the input element
+
+Location: Line 36, custom button control
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Problem: Using a `<div>` with `role="button"` is not semantic HTML; a native `<button>` element should be used instead.
+Fix: Replace the div with `<button class="icon-delete" aria-label="Delete item" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></button>`
+
+Location: Line 49–50, phone number input in form
+Evidence: `<label for="phone" id="s3-form-phone-label">Phone number (required)</label>` followed by `<input id="phone" type="tel" autocomplete="tel">`
+Problem: The label text indicates the field is required, but the input element lacks the `required` attribute.
+Fix: Add `required` attribute to the input: `<input id="phone" type="tel" autocomplete="tel" required>`

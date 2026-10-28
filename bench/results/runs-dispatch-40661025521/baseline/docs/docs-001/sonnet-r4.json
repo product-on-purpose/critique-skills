@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"A threshold is the numeric boundary that triggers an alert once a metric crosses it.\"",
+      "fix": "Move this definition to an introductory \"Before you begin\" or overview line before the first step, or remove it if the how-to doesn't need concept explanations.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"## Open alert settings\" section, second paragraph",
+      "severity": 3,
+      "violation": "This is a conceptual definition dropped into a how-to procedure instead of an action step, breaking the step-by-step flow and not telling the reader what to do."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"confirm the unit matches the metric in use\"",
+      "fix": "Add detail, e.g. \"check the unit shown next to the metric name in the rule header, and select the matching unit from the dropdown before saving.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"## Set the new threshold\" section, first instruction",
+      "severity": 3,
+      "violation": "The instruction doesn't say where to find the metric's unit or what to do if it doesn't match, making the step unverifiable as written."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This is because the console applies the new threshold to every future evaluation of this rule.\"",
+      "fix": "Either tie the explanation directly to a relevant instruction (e.g., clarify it does not retroactively re-evaluate past data) or remove the sentence.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"## Set the new threshold\" section, second paragraph",
+      "severity": 3,
+      "violation": "This \"because\" clause doesn't logically follow from the preceding sentence about entering a value and matching units - it reads as a non-sequitur explanation detached from the instruction it's supposed to justify."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "No prerequisites or permissions section exists before the first step.",
+      "fix": "Add a brief \"Before you begin\" section noting required permissions and that a rule must already exist (or link to rule-creation docs).",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Document overall, before \"## Open alert settings\"",
+      "severity": 3,
+      "violation": "The how-to assumes the reader already has access to the alerts panel and an existing rule, without stating required permissions or that a rule must already exist."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Save the rule and open the rule list to confirm the new threshold appears there.\"",
+      "fix": "Add a line such as \"If the updated value doesn't appear after a refresh, re-open the rule and confirm the change was saved.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"## Save and verify\" section",
+      "severity": 3,
+      "violation": "The step gives no guidance on what to do if the new threshold does not appear or takes time to propagate, leaving the reader without a recovery path."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-001.md",
+    "artifact_sha256": "b41787144ac8cc1ae14bcce23fa2b574f6ee68f1aaa9cc432628f9f148ddd713",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T09:14:27Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

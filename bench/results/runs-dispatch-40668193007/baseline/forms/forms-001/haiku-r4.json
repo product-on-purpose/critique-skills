@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`autocomplete=\"e-mail\"`",
+      "fix": "Change `autocomplete=\"e-mail\"` to `autocomplete=\"email\"`",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Email address input field",
+      "severity": 3,
+      "violation": "The autocomplete attribute value should be \"email\" (no hyphen), not \"e-mail\"."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Password field has `minlength=\"8\"` but confirm password input has no minlength attribute",
+      "fix": "Add `minlength=\"8\"` to the confirm password input",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Password and confirm password fields",
+      "severity": 3,
+      "violation": "The confirm password field lacks the same length validation as the password field, creating an inconsistency."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Two separate password fields with names \"password\" and \"password_again\" but no validation logic shown",
+      "fix": "Add client-side validation (JavaScript) to verify both password fields contain identical values before form submission",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Form password fields",
+      "severity": 3,
+      "violation": "There is no validation to ensure the two password fields match, which creates a poor user experience if they don't match."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"name-input\" name=\"full_name\"...>` and `<input id=\"legalname-input\" name=\"legal_name\"...>` both ask for names with `autocomplete=\"name\"`",
+      "fix": "Remove the \"Your name\" field (row-legalname) and use only the \"Full name\" field, or clarify why both are needed",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Full name and Your name rows",
+      "severity": 3,
+      "violation": "The form asks for the user's name twice with different field IDs and names, which is confusing and redundant."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required=\"\">`",
+      "fix": "Remove `style=\"font-size:16px\"` and define styling in a CSS file",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Organization name input",
+      "severity": 3,
+      "violation": "Inline style attribute should be defined in a stylesheet, not inline in the HTML."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`autocorrect=\"off\" spellcheck=\"false\"`",
+      "fix": "Remove the `autocorrect=\"off\"` attribute; use only standard HTML attributes",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Your name (legal name) input field",
+      "severity": 3,
+      "violation": "The `autocorrect` attribute is not a standard HTML attribute (it's vendor-specific to iOS) and shouldn't be relied upon for standard HTML validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Change `type=\"text\"` to `type=\"time\"` to provide a proper time picker",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Preferred contact time field",
+      "severity": 3,
+      "violation": "The field uses type=\"text\" but requires a time value, which doesn't provide appropriate input controls or validation for time entry."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>`",
+      "fix": "Either remove this button if it's non-functional, or clarify its purpose and move styling to CSS; if it should expand hidden form sections, add proper aria-attributes and JavaScript",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "View details button",
+      "severity": 3,
+      "violation": "This button is type=\"button\" (not submit) and its purpose within this account creation form is unclear; it also uses inline styles."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Standard</option>` (no value attribute on any option)",
+      "fix": "Add value attributes to each option, e.g., `<option value=\"standard\">Standard</option>`",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Preferred shipping speed select",
+      "severity": 3,
+      "violation": "Select options lack value attributes, so the form will submit the display text instead of standardized values."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Search engine</option>` (no value attribute on any option)",
+      "fix": "Add value attributes to each option, e.g., `<option value=\"search_engine\">Search engine</option>`",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "How did you hear about us select",
+      "severity": 3,
+      "violation": "Select options lack value attributes, so the form will submit the display text instead of standardized values."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-001.html",
+    "artifact_sha256": "531c999912c0ab6c8224cbeb2347e7644d493a84e3a9461a434deaf5f2f09cdd",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T10:07:31Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

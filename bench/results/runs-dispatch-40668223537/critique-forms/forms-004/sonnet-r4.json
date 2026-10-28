@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "#member-input is required with label 'Membership number (8 digits)', on a page titled 'Create your Meridian Outfitters account' and headed 'Set up your account', with nothing on the page explaining where this number comes from.",
+      "fix": "Drop the membership-number field from account creation, or mark it optional with text explaining it only applies to existing members linking a prior account, so a first-time applicant can still complete sign-up.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#member-input, <input> field, label 'Membership number (8 digits)'",
+      "severity": 3,
+      "violation": "The task this form states is creating a new account, which a person who has never dealt with Meridian Outfitters before cannot do if completion requires an existing membership number; the task cannot use an answer the applicant does not yet have."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "#viewdetails-btn carries style=\"padding:12px 20px;font-size:16px\" while #submit-btn carries no style attribute at all.",
+      "fix": "Remove the bespoke padding and font size from #viewdetails-btn, or apply an equal or stronger visual treatment to #submit-btn, so the control that creates the account is the visually dominant one.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#viewdetails-btn, secondary <button> 'View details', beside #submit-btn, primary <button> 'Create account'",
+      "severity": 2,
+      "violation": "The secondary action declares explicit, generous padding and a bumped font size while the primary submit action is left to default browser button chrome, so the secondary control is styled at least as prominently as, and plausibly more prominently than, the primary one. The operational test requires the primary to be the form's most prominent control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "#acctnum-input is a required text field labelled 'Account number', with inputmode=\"numeric\" but no hint text and no autocomplete token, on the same account-creation form as #member-input.",
+      "fix": "Remove the account-number field from account creation, or explain in hint text why a new applicant would already have one.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#acctnum-input, <input> field, label 'Account number'",
+      "severity": 2,
+      "violation": "Alongside the membership-number field, this is a second required identifier that assumes an existing relationship with Meridian Outfitters; the stated task of creating an account cannot use an account number the applicant does not yet have."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "#name-input already collects the person's name under label 'Full name' (name=\"full_name\"), and #legalname-input collects it again under label 'Your name' (name=\"legal_name\"), both with autocomplete=\"name\".",
+      "fix": "Remove one of the two name fields, or, if a legal name genuinely differs from a preferred full name, add hint text beside #legalname-input explaining the distinction and why both are required.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label 'Your name'",
+      "severity": 2,
+      "violation": "The form asks again for data it already asked for: two separate required text fields both resolve to the person's name purpose, with nothing in either label or hint explaining why a second, differently named value is needed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "#shipspeed-select is a required <select> labelled 'Preferred shipping speed', offering Standard, Express, Overnight, Next-day and International, on an account-creation form with no order or cart in view.",
+      "fix": "Remove the shipping-speed question from account creation and ask it during checkout, where the choice has somewhere to apply.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#shipspeed-select, <select> field, label 'Preferred shipping speed'",
+      "severity": 2,
+      "violation": "Choosing a shipping speed is an answer a later ordering or checkout step needs, not account creation; the task named by this form's heading and submit label has no use for it yet."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "#website-input is a required type=\"url\" field labelled 'Company website', alongside personal fields such as 'Full name' and 'Secondary phone (optional)' on the same account-creation form.",
+      "fix": "Remove the company-website field from account creation, or, if this form is in fact for business accounts only, say so in the heading and make the field's purpose explicit.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#website-input, <input> field, label 'Company website'",
+      "severity": 2,
+      "violation": "Creating an account for what the rest of the form treats as an individual customer does not need that individual's company website; the field asks for data the stated task cannot use."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T12:12:26Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

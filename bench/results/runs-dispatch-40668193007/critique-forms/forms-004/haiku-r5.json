@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "Form heading is 'Set up your account' and submit button is 'Create account', but the form requires street address (line 22), postal code (line 48), shipping speed (line 52), membership number (line 40), account number (line 44), organization name (line 66), company website (line 36), and contact preference time (line 71). Full name is requested twice at lines 10 and 62. These fields are not necessary to create an account.",
+      "fix": "Remove unnecessary fields from the account creation form (street address, postal code, shipping speed, membership number, account number, organization name, company website, contact time) and the duplicate name field. Collect shipping and delivery preferences after account creation in a separate step.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#row-street, <div> containing street address field, line 22",
+      "severity": 3,
+      "violation": "Form asks for information unrelated to account creation before completing the signup task, including delivery details and unnecessary personal data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "Button #viewdetails-btn at line 73 carries inline styling 'style=\"padding:12px 20px;font-size:16px\"', while button #submit-btn (the primary submit) at line 74 has no declared styling. The secondary action appears before the primary action in document order.",
+      "fix": "Apply equal styling treatment to both buttons, or explicitly style the primary submit button to be more visually prominent than the secondary action. Position the primary submit button before any secondary actions.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> element, line 73",
+      "severity": 2,
+      "violation": "The secondary 'View details' action is styled with explicit padding and font-size while the primary 'Create account' action has no styling, potentially making the secondary action appear more visually prominent."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-TOUCH-TARGET",
+      "evidence": "Button #viewdetails-btn declares 'padding:12px 20px' and 'font-size:16px'. With standard line-height (~1.2), the rendered height is approximately 12px (top padding) + 19px (text) + 12px (bottom padding) = 43 pixels, which is below the 44-pixel minimum recommendation for mobile touch targets.",
+      "fix": "Increase padding or height to ensure the button renders at least 44 pixels tall. For example, change padding from '12px 20px' to '14px 20px' or add a minimum-height declaration of 44px.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> element, line 73",
+      "severity": 2,
+      "violation": "Control is smaller than the recommended 44-48 CSS pixels in at least one dimension, making accurate finger targeting difficult on mobile devices."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T10:50:14Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

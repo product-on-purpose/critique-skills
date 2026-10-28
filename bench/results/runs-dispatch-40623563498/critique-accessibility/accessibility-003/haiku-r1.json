@@ -1,0 +1,50 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-4.1.2",
+      "evidence": "<div class=\"icon-delete\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div> has no role, no aria-label, and contains only a decorative image with empty alt text.",
+      "fix": "Add role=\"button\" and aria-label=\"Delete\" to the div, or provide a visible label and aria-labelledby.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#s3-customcontrol, <div> containing trash icon, line 44",
+      "severity": 3,
+      "violation": "Custom control missing accessible name and role"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-1.3.2",
+      "evidence": "DOM contains: step3 style=\"order:3\" (Confirm), step2 style=\"order:2\" (Payment), step1 style=\"order:1\" (Plan). CSS reorders for visual display but not for screen reader traversal.",
+      "fix": "Reorder the step divs in the DOM to match the intended visual sequence: Choose a plan (order:1), Enter payment details (order:2), Confirm your order (order:3).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#s3-wizard, <div class=\"wizard-steps\">, lines 47 - 57",
+      "severity": 2,
+      "violation": "Meaningful sequence altered by CSS display order"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "7518497ec47bc70bca9021d0ed190bdfb2f04532e6ef68cc37b662d769e87516",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T03:13:52Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

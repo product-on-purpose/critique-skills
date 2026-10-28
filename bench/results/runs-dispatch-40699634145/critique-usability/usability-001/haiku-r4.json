@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "The Save button in the project-settings form and the Save button in the notification-settings form both trigger state changes but specify neither loading feedback, success message, nor any indication of the result.",
+      "fix": "Add a success message or visible control state that confirms the save completed, such as 'Settings saved' or a temporarily disabled Save button that re-enables after feedback.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the Save button in the project name form; the \"notification-settings\" section, the Save button",
+      "severity": 3,
+      "violation": "The artifact triggers state-changing actions (Save) without naming any visible result or confirmation."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-DEADEND",
+      "evidence": "the \"invite-sent\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+      "fix": "Add a control inside the \"invite-sent\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "the \"invite-sent\" section",
+      "severity": 3,
+      "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-LABELED",
+      "evidence": "<button> with no text content and no accessible-name attribute",
+      "fix": "Add visible text to this control, or an aria-label attribute naming what it does.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "This control has neither visible text nor an accessible-name attribute, so nothing on screen names what the control does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "The invite-sent section states 'An invite was sent to the address entered above' but does not repeat or display the actual email address that was invited.",
+      "fix": "Include the email address in the confirmation message, e.g., 'An invite was sent to user@example.com. It expires in 5 days if not accepted.'",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"invite-sent\" section, the confirmation paragraph",
+      "severity": 2,
+      "violation": "Information needed at this step (the recipient email) is absent; the user must remember it from the previous screen or navigate back."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T13:56:00Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

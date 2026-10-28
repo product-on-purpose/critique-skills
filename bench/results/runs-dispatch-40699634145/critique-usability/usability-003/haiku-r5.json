@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "The 'Project archived' screen (section id='project-archived') states 'Vendor Onboarding' has been moved to archived projects with no appearance in the active list, but no unarchive control or link is named anywhere in the artifact.",
+      "fix": "Add an unarchive action on the project archived confirmation screen or in the project settings section, so a user who archives accidentally or needs to restore an archived project can find the path without external support.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Project archived confirmation screen",
+      "severity": 3,
+      "violation": "Archive action provides no stated way to restore the archived project, so the action appears permanent despite being reversible in typical project management systems."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H9-IDENTIFY",
+      "evidence": "The import-status section shows only 'Import failed. Error code IMP-500. Contact support if this continues.' A user waiting minutes for an import has no way to tell whether the network stalled, the file format was rejected, storage quota was exceeded, or another system component failed.",
+      "fix": "Describe the category of failure in user terms: network connectivity, file format unsupported, quota exceeded, or permissions denied. Example: 'Import failed: file format not supported. Supported formats: CSV, JSON. See documentation for examples.'",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Import status error state",
+      "severity": 3,
+      "violation": "Error message reports only that the import failed and supplies an error code rather than naming what went wrong in user task terms, so the user cannot diagnose whether the failure is temporary, permanent, or their responsibility."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "The import-status screen (section id='import-status') offers only a back link to workspace overview. The error text names support contact as the suggested recovery but provides no contact control, support link, or email address on the screen.",
+      "fix": "Provide at least one of: a direct link to support documentation or contact form, a retry button if the operation is transient, or a step-by-step troubleshooting guide in place. If support contact is the only path, name it clearly and supply a link: 'Contact [Support Team](support-url) with error code IMP-500.'",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Import status error state",
+      "severity": 2,
+      "violation": "Error message suggests recovery ('Contact support if this continues') but offers no actionable step on the screen itself, so a user standing at the error has no immediate next step and must leave the flow."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:26:10Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

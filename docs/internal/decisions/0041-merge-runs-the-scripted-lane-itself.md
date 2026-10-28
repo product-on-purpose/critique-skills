@@ -204,7 +204,9 @@ seven `SKILL.md` files, the critic and the template can say the same, simpler th
   carries the new merge behaviour but the old `skill_version`, indistinguishable from one produced
   before this build by that field alone. `scripts/check-release-versions.mjs` checks a release tag
   against the version manifests, and nothing gates on E73's spec AC-9's checkbox, so a tag could
-  be cut before the version move closes this window.
+  be cut before the version move closes this window. **Closed 2026-10-28:** every skill's
+  version moved with run set `bench-2026-10-28`, which was dispatched from the version-bump branch, so no
+  envelope in it carries the old `skill_version`.
 
 **Neutral:** no change to any `checks.py`, to the contract (the `lane` enum stays `scripted` and
 `judged`), to bounding or ranking in `skills/_shared/envelope.py`, or to the bench harness or its

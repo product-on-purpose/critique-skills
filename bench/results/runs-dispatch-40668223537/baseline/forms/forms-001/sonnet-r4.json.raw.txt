@@ -1,0 +1,74 @@
+Location: `<head>`
+Evidence: `<meta charset="utf-8">` is the only meta tag present
+Problem: There is no `<meta name="viewport" content="width=device-width, initial-scale=1">`, so the form will not scale correctly on mobile browsers.
+Fix: Add a viewport meta tag to the `<head>`.
+
+Location: `<form id="form">` opening tag
+Evidence: `<form id="form">`
+Problem: The form has no `action` or `method` attribute, so submitting it has undefined/default behavior (GET to the current URL) rather than posting to a real endpoint.
+Fix: Add explicit `action` and `method="post"` attributes to the form.
+
+Location: row-email, `email-input`
+Evidence: `autocomplete="e-mail"`
+Problem: "e-mail" is not a valid HTML autocomplete token; the correct value is `"email"`. This breaks browser autofill for the field.
+Fix: Change `autocomplete="e-mail"` to `autocomplete="email"`.
+
+Location: row-confirm-password, `confirm-password-input`
+Evidence: `<input id="confirm-password-input" name="password_again" type="password" autocomplete="new-password" required="">`
+Problem: There is no `minlength`, `pattern`, or script tying this field to the password field, so nothing enforces that the two passwords match or meet the same length requirement.
+Fix: Add matching validation (e.g., JS check on submit, or a `pattern` tied to the password value) and the same `minlength="8"`.
+
+Location: row-housenumber, `housenumber-input`
+Evidence: `<input id="housenumber-input" name="house_number" type="text" required="">`
+Problem: Unlike the adjacent street field (`autocomplete="address-line1"`), this field has no autocomplete token, so browsers can't autofill the house number.
+Fix: Add an appropriate autocomplete value, e.g. `autocomplete="address-line2"`.
+
+Location: row-website, `website-input`
+Evidence: `<label id="website-label" for="website-input">Company website</label> ... required=""`
+Problem: A "Company website" field is irrelevant to a consumer clothing-outfitter signup and is marked required, which will block individual customers from completing registration.
+Fix: Remove the field, or make it optional and only show it for business accounts.
+
+Location: row-phone2, `phone2-input`
+Evidence: `<input id="phone2-input" name="phone_secondary" type="tel" autocomplete="tel">` (same token as `phone-input`)
+Problem: Both the primary and secondary phone fields use `autocomplete="tel"`, so browsers cannot distinguish which field to autofill and may fill both with the same number.
+Fix: Use distinct tokens, e.g. `autocomplete="tel"` for the primary and no autocomplete (or a custom non-conflicting approach) for the secondary.
+
+Location: row-member, `member-input`
+Evidence: `placeholder="Must be 8 digits"` with no `maxlength` or `pattern`
+Problem: The instruction that the membership number must be 8 digits is only shown as a placeholder and is not enforced, so any length/non-numeric input will pass client-side validation.
+Fix: Add `maxlength="8"` and `pattern="\d{8}"` to enforce the stated format.
+
+Location: row-acctnum, `acctnum-input`
+Evidence: `<label id="acctnum-label" for="acctnum-input">Account number</label>`
+Problem: "Account number" is ambiguous (unclear if distinct from the membership number) and requires users to supply a potentially sensitive identifier with no explanation of why it's needed.
+Fix: Either remove this redundant field or add label text/help text clarifying what it is and why it's required.
+
+Location: row-shipspeed, `shipspeed-select`
+Evidence: `<option>Overnight</option> <option>Next-day</option>`
+Problem: "Overnight" and "Next-day" describe the same shipping speed, creating a confusing duplicate option.
+Fix: Remove one of the two redundant options.
+
+Location: row-shipspeed and row-hear select elements
+Evidence: `<select id="shipspeed-select" required="">` and `<select id="hear-select" required="">`, both starting directly with a real option (no blank/placeholder option)
+Problem: Because the first `<option>` is selected by default and there's no empty placeholder, `required` has no effect — a user can submit without ever intentionally choosing a value.
+Fix: Add a disabled, selected placeholder option (e.g. `<option value="" disabled selected>Select one</option>`) to each select.
+
+Location: row-legalname, `legalname-input`
+Evidence: `<label id="legalname-label" for="legalname-input">Your name</label> <input ... name="legal_name" ... autocomplete="name" ... required="">`
+Problem: This duplicates the "Full name" field collected earlier in row-name; both fields use `autocomplete="name"` and ask for the same information under inconsistent labels ("Full name" vs. "Your name"), confusing users and browser autofill.
+Fix: Remove the redundant legal-name field, or rename/clarify its purpose if it is meant to differ from full name (e.g., legal name for billing vs. display name).
+
+Location: row-org, `org-input`
+Evidence: `<input id="org-input" name="organization" type="text" style="font-size:16px" required="">`
+Problem: Organization name is required for what otherwise appears to be an individual consumer signup, blocking non-business customers; it also carries an inline style not used consistently on other inputs.
+Fix: Make the field optional (or remove it) and move any needed font-size fix into a shared stylesheet rule instead of an inline style on one field.
+
+Location: row-contacttime, `contacttime-input`
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: A free-text input is used for what should be a structured time value, with no format hint, making the data unreliable and hard to validate.
+Fix: Use `type="time"` (or a select of time ranges) instead of plain text.
+
+Location: between row-contacttime and row-hear, `viewdetails-btn`
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>`
+Problem: The button has `type="button"` but there is no script anywhere in the document to give it behavior, so clicking it does nothing; its placement mid-form also breaks the logical flow between the contact-time and "how did you hear about us" fields.
+Fix: Either remove the unused button or wire it to actual functionality (e.g., a details modal) and move it outside the main field sequence.

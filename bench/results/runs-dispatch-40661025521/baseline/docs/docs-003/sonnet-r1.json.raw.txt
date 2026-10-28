@@ -1,0 +1,24 @@
+Location: ## timeout, first paragraph
+Evidence: "The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000."
+Problem: No default value is stated for the timeout field, even though every other field in this document documents a default.
+Fix: Add the actual default value (e.g., "defaults to 5000ms") to this paragraph.
+
+Location: ## timeout, second paragraph
+Evidence: "Leaving this field at its default is the right choice for most teams"
+Problem: This sentence refers to "its default," but the timeout field's default was never stated anywhere in the document, making the guidance unverifiable.
+Fix: State the default value explicitly in the first paragraph before referring to it here.
+
+Location: ## timeout
+Evidence: "the validator rejects any value below 1000"
+Problem: Only a lower bound is given for timeout; unlike retries (which specifies both 0 and 10 as bounds), no upper bound is documented, leaving the valid range incomplete.
+Fix: Document the maximum allowed timeout value, or state explicitly that there is no upper bound.
+
+Location: ## timeout, retries, logging sections
+Evidence: "The timeout field takes a duration in milliseconds..." / "The retries field takes an integer from 0 to 10..." / "The logging field accepts one of debug, info, warn, or error..."
+Problem: Each field's type, range, and default are documented, but none of the sections explain what the field actually controls (e.g., timeout of what operation, what is retried, what is logged).
+Fix: Add a one-sentence purpose description for each field before its validation rules.
+
+Location: ## Related pages
+Evidence: "- Metric catalog reference"
+Problem: All nine related-page entries are plain unlinked text, so a reader cannot navigate to them despite this being a reference document.
+Fix: Convert each list item into an actual markdown link or path to the corresponding page.

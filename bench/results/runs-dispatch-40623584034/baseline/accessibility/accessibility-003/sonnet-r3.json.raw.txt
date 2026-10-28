@@ -1,0 +1,69 @@
+Location: s1-p1 ("Accessibility improvements" section)
+Evidence: "Riders may request a fare adjustment through the mobile app. Station staff can also help with the same request in person."
+Problem: This fare-adjustment content has nothing to do with the "Accessibility improvements" heading, and it is a near-verbatim duplicate of s2-p1 in a different section.
+Fix: Replace with content actually describing the accessibility improvements, and remove the duplicate text from one of the two sections.
+
+Location: s1-p2
+Evidence: "Passengers can check real time arrivals by calling rider services. Updates post to the schedule page within one business day."
+Problem: This is a near-duplicate of the status-card paragraph in s3, and it doesn't relate to the "Accessibility improvements" heading it sits under.
+Fix: Remove the duplicate and keep the real-time-arrivals instructions in a single relevant section.
+
+Location: s1-img1
+Evidence: alt="Crews repainting the accessible parking spaces near the station entrance."
+Problem: The image's described content (parking lot repainting) has no corresponding text anywhere in the section, which only discusses fare adjustments and arrival times.
+Fix: Add a caption or paragraph describing the parking work shown, or move the image to a section whose text discusses it.
+
+Location: s2-p1 ("Weekend service" section)
+Evidence: "Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person."
+Problem: Nearly word-for-word duplicate of s1-p1 and unrelated to "Weekend service"; the section gives no actual weekend-service information besides the table.
+Fix: Replace with content describing weekend service changes and delete the duplicated fare-adjustment text.
+
+Location: s3-p1 ("Schedule changes" section)
+Evidence: "Local residents should review the updated schedule through the mobile app. Station staff can also help with the same request in person."
+Problem: "the same request" has no antecedent — the preceding sentence describes reviewing a schedule, not making a request, so the two sentences don't logically connect.
+Fix: Rewrite the second sentence, e.g. "Station staff can also help riders review the schedule in person."
+
+Location: s3-p2
+Evidence: "Passengers should review the updated schedule through the mobile app. The change takes effect on the following service day."
+Problem: Duplicates the first sentence of s3-p1 immediately above it.
+Fix: Merge the two paragraphs into one and remove the redundant sentence.
+
+Location: s3-statuscard
+Evidence: "Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day."
+Problem: Verbatim duplicate (aside from the subject noun) of s1-p2, placed in an unrelated "Schedule changes" section.
+Fix: Remove one instance and keep real-time arrival instructions in a single, topically appropriate location.
+
+Location: s3-customcontrol
+Evidence: `<div class="icon-delete" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></div>`
+Problem: This appears to be an interactive delete control implemented as a non-interactive div with an empty-alt icon, giving it no accessible name, role, or keyboard focusability.
+Fix: Replace with a `<button>` element carrying a visible label or `aria-label="Delete"`.
+
+Location: s3-wizard (s3-step3, s3-step2, s3-step1)
+Evidence: `id="s3-step3" style="order:3"` appears first in the markup, before `id="s3-step2" style="order:2"` and `id="s3-step1" style="order:1"`
+Problem: CSS `order` makes the visible sequence "Choose a plan → Enter payment details → Confirm your order," but the DOM/reading order is the reverse, so screen readers and sequential keyboard navigation encounter the steps backwards.
+Fix: Put the elements in the DOM in the same order they should be read/navigated, rather than reordering visually with CSS.
+
+Location: s3-linkpara / s3-link1
+Evidence: `<a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>` inside "For the full list of upcoming adjustments..."
+Problem: The link text says "accessibility improvements list," but it sits in the "Schedule changes" section discussing schedule adjustments and points to "/fares/history" — the text matches neither the surrounding content nor the destination.
+Fix: Change the link text to accurately describe the destination (e.g., "read the full list of upcoming schedule changes") and verify the href points to the correct page.
+
+Location: s3-form-phone-label
+Evidence: `<label for="phone" id="s3-form-phone-label" style="color:#cc0000">Phone number</label>`
+Problem: Red text is the only signal that this field differs from the others (presumably required), which conveys no information to colorblind users or screen reader users.
+Fix: Add a text indicator such as "(required)" or an asterisk with an accessible label, and set `required`/`aria-required="true"` on the input.
+
+Location: s3-form promo input and error span
+Evidence: `<input id="promo" type="text" aria-invalid="true">` ... `<span class="error-text" aria-live="polite" id="s3-form-promo-error">Error.</span>`
+Problem: The field is marked invalid statically with no prior user input or validation trigger, and it lacks `aria-describedby` linking it to the error span, so screen reader users get no explanation tied to the field.
+Fix: Only apply `aria-invalid="true"` after a failed validation, add `aria-describedby="s3-form-promo-error"` to the input, and replace "Error." with a specific message like "Promo code is invalid."
+
+Location: s3-form (select#topic, input#email, input#phone, input#promo)
+Evidence: `<select id="topic">`, `<input id="email" type="email" autocomplete="email">`, `<input id="phone" type="tel" autocomplete="tel">`, `<input id="promo" type="text" aria-invalid="true">`
+Problem: None of the form controls has a `name` attribute, so their values won't be submitted with the form.
+Fix: Add `name` attributes (e.g. `name="topic"`, `name="email"`, `name="phone"`, `name="promo"`) to each control.
+
+Location: s2-table1
+Evidence: `<table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>...`
+Problem: The table has no `<caption>` identifying what it reports, leaving screen reader users without context for the data.
+Fix: Add a `<caption>` such as "Weekend service status by zone."

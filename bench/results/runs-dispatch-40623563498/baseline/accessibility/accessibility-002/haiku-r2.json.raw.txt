@@ -1,0 +1,24 @@
+Location: Form label for Route input (s3-form-topic-label)
+Evidence: `<label for="topic-alt" id="s3-form-topic-label">Route</label>` paired with `<select id="topic">`
+Problem: The label's `for` attribute references "topic-alt" but the select element has `id="topic"`, so the label is not associated with the input.
+Fix: Change `<label for="topic-alt"...>` to `<label for="topic"...>`
+
+Location: Custom delete button control (s3-customcontrol)
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Problem: This div is styled as a button with role="button" and tabindex="0", but lacks keyboard event handlers for Enter and Space keys, breaking expected button behavior for keyboard users.
+Fix: Replace with a `<button>` element, or add JavaScript to handle keydown events for Enter and Space keys.
+
+Location: Link in Weekend service section (s3-link1)
+Evidence: `<a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>` within section about schedule adjustments
+Problem: The link text says "accessibility improvements list" but the surrounding context discusses "upcoming adjustments" to schedules and services, creating a mismatch.
+Fix: Change link text to "read the schedule adjustments list" or "view upcoming changes" to match the context.
+
+Location: Promo code input field (promo)
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: The `aria-invalid="true"` attribute is hardcoded, indicating a perpetual error state that should only exist after failed validation.
+Fix: Set `aria-invalid="false"` initially and update dynamically with JavaScript when validation occurs.
+
+Location: Status card div (s3-statuscard)
+Evidence: `<div class="status-card" role="status" id="s3-statuscard" style="height:60px;overflow:hidden">`
+Problem: The fixed height of 60px combined with overflow:hidden will cut off the paragraph content inside, making it inaccessible to users.
+Fix: Increase the height value, remove the overflow:hidden property, or change to overflow:auto to allow scrolling content.

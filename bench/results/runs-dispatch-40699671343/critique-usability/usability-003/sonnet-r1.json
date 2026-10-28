@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "the project-archived section reads: \"Vendor Onboarding\" has been moved to archived projects. It no longer appears in the active projects list for anyone on the team, and offers only one link, Back to your projects (href #workspace-overview); no section, link, or control anywhere in the artifact names an archived-projects view or a restore or unarchive action",
+      "fix": "Add a path back from this state: a link to an archived-projects view carrying a restore or unarchive control, or at minimum a stated route to reverse the archive.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the project-archived section",
+      "severity": 3,
+      "violation": "Archiving is reasonably reversible in this product, the artifact itself frames it as moving the project to an archived list rather than destroying it, but no reversal path, such as a view of archived projects or an unarchive control, is named anywhere in the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-IDENTIFY",
+      "evidence": "the import-status section reads: Import failed. Error code IMP-500. Contact support if this continues.",
+      "fix": "Name what failed, for example Import failed: 3 rows in vendors.csv had an invalid date format, rather than reporting only the failure and an internal error code.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the import-status section",
+      "severity": 3,
+      "violation": "This message reports only that the import failed and surfaces a raw internal error code, with no indication of which file, record, or step caused the failure, so the user cannot tell which of their own actions or entries to fix before retrying."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "&lt;button id=\"notification-settings-save-btn\" type=\"submit\"&gt;Save&lt;/button&gt;, with no confirmation message or next state defined anywhere in the artifact for after it is activated",
+      "fix": "Add a confirmation of the save next to the form, for example a brief success message shown after Save is activated.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the notification-settings section, the Save button",
+      "severity": 2,
+      "violation": "Saving the digest frequency is a state-changing action with no specified in-progress or result feedback, so a user who clicks Save has no way to tell from the artifact whether the new frequency was stored."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "&lt;button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"&gt;&lt;/button&gt;, with no text content, no href or target, and no description elsewhere in the artifact of what happens once it is activated",
+      "fix": "Define what happens when Duplicate project is activated: a state the duplicate leads to, or at minimum a confirmation message naming the new project it created.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the project-settings section, the Duplicate project button",
+      "severity": 2,
+      "violation": "Duplicating a project is a state-changing action (it creates a new project), but the artifact specifies no in-progress or outcome feedback for it at all: no new state, no confirmation message, no change to anything on screen."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "&lt;button id=\"project-settings-save-btn\" type=\"submit\"&gt;Save&lt;/button&gt;, with no confirmation message, changed field state, or next state defined anywhere in the artifact for after it is activated",
+      "fix": "Add a confirmation of the save next to the form, for example a brief success message shown after Save is activated.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the project-settings section, the Save button",
+      "severity": 2,
+      "violation": "Saving the project name is a state-changing action with no specified in-progress or result feedback, so a user who clicks Save has no way to tell from the artifact whether the rename took effect."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H2-CONVENTIONS",
+      "evidence": "the form's own submit control is labeled Save (id invite-member-save-btn); a separate link outside the form, labeled Continue (id invite-member-continue-link), leads to the invite-sent state, whose own text reads: An invite was sent to the address entered above.",
+      "fix": "Collapse this to one control that sends the invite, for example a single Send invite button, or state explicitly what Save commits and how it relates to Continue sending the invite.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the invite-member section, the Save button and the Continue link",
+      "severity": 2,
+      "violation": "The real-world task on this screen is one action, sending a single invite, but the artifact splits it into two sequential commit-shaped controls, Save then Continue, with no stated relationship between them, which reads as a save-then-advance system step rather than the single action the user came to perform."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "the invite-sent section reads: An invite was sent to the address entered above, without displaying the address itself; the email value entered on the earlier invite-member screen (input id invite-member-email-input) is not repeated, shown, or otherwise retrievable on this screen",
+      "fix": "Show the actual email address on the invite-sent confirmation, for example An invite was sent to [email], instead of referring to it as the address entered above.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "the invite-sent section",
+      "severity": 2,
+      "violation": "The user needs to verify which address the invite went to at this step, but the artifact withholds the one piece of information the confirmation refers to, pointing instead to an earlier screen that no longer shows it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T15:00:25Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

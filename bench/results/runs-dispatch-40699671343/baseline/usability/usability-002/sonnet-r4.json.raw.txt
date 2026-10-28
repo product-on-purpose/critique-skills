@@ -1,0 +1,44 @@
+Location: workspace-overview section, intro paragraph and project list (`<p>` + `<ul>` inside `#workspace-overview-recent`)
+Evidence: "This workspace holds 5 projects, synced last week." followed by a list with only 4 `<li>` entries (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)
+Problem: The stated project count (5) doesn't match the number of projects actually listed (4), and nothing in the visible text indicates the list is partial.
+Fix: Either add the missing fifth project to the list or change the copy to something like "Here are your most recent projects" to signal it's a subset.
+
+Location: project-settings section, name input field
+Evidence: `<input id="project-settings-name-input" type="text" value="Customer Migration">`
+Problem: The project being edited/archived ("Customer Migration") never appears in the workspace's project list in `#workspace-overview`, so the flow is internally inconsistent about which projects exist.
+Fix: Rename one of the four listed projects to "Customer Migration" (or add it as the fifth project) so the detail screens match the overview list.
+
+Location: project-settings section, Save button
+Evidence: `<button id="project-settings-save-btn" type="submit">Save</button>` with no surrounding link or destination anchor
+Problem: Clicking Save has no defined destination or confirmation state, unlike other primary actions in the document (e.g., invite, archive) which lead to a result screen.
+Fix: Add a target section (e.g., a "settings saved" confirmation) and wire the button's action to it, or turn it into a link to that section for consistency with the rest of the prototype.
+
+Location: project-settings section, duplicate button
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text content (only an aria-label) and no destination, so sighted users see an unlabeled, non-functional control.
+Fix: Add visible button text (e.g., "Duplicate") and link/route it to a resulting state, such as a duplicated-project confirmation or the updated project list.
+
+Location: project-settings section, archive link
+Evidence: `<a id="project-settings-archive-link" href="#project-archived">Archive project</a>`
+Problem: This jumps straight to the "Project archived" result, bypassing the "Archive this project?" confirmation screen that was clearly built for this flow (`#archive-confirm`).
+Fix: Change the href to `#archive-confirm` so the confirmation step is actually part of the archive flow.
+
+Location: invite-member section, Save button and Continue link
+Evidence: `<button id="invite-member-save-btn" type="submit">Save</button>` immediately followed by `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>`
+Problem: There are two separate, unexplained controls for completing the same invite action — a submit button that goes nowhere and a "Continue" link that actually advances the flow — which is confusing and inconsistent with single-action forms elsewhere.
+Fix: Remove the redundant Save button or merge its behavior with the Continue link so there is one clear call-to-action that sends the invite.
+
+Location: archive-confirm section
+Evidence: `<section id="archive-confirm">` is never referenced by any `href="#archive-confirm"` elsewhere in the document
+Problem: This confirmation screen is unreachable in the prototype's navigation graph — no other link points to it.
+Fix: Point `project-settings-archive-link` (and any other archive entry point) to `#archive-confirm` so this section becomes reachable.
+
+Location: archive-confirm section, confirmation copy
+Evidence: "You can restore it at any time from the archived projects list."
+Problem: The document never provides an "archived projects list" view, so this reference points to a feature that doesn't exist anywhere in the mockup.
+Fix: Add an archived-projects list section with a restore action, or remove the restore mention if it's out of scope for this mockup.
+
+Location: notification-settings section, Submit button
+Evidence: `<button id="notification-settings-save-btn" type="submit">Submit</button>` with no resulting confirmation state
+Problem: The label "Submit" is inconsistent with the "Save" wording used on equivalent buttons elsewhere (project settings, invite member), and like those, it has no defined destination after clicking.
+Fix: Rename the button to "Save" for consistency and give it a destination, such as a confirmation state or return to project settings with a saved indicator.

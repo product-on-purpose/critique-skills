@@ -1,0 +1,95 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Terminology Notes appears at line 49 after terminology has been used throughout the document without definition. Request Steps (line 57) is a single sentence that contradicts the detailed How to Apply section; the order does not follow the employee's actual task sequence.",
+      "fix": "Reorder sections to follow the employee's actual task sequence: move Terminology Notes to the beginning as a definitions section; expand or remove the undersized Request Steps section; place Required Documentation before Approval Timeline since documentation is needed for approval.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "sections 8-9 (Terminology Notes and Request Steps)",
+      "severity": 3,
+      "violation": "Document structure does not follow reader's task sequence; Terminology Notes comes after terms are already in use; sections appear in organizational order rather than task order."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Lines 11, 19 use third-person ('employees'), while lines 45, 53 use second-person ('you'). Reader cannot determine whether instructions apply to them or describe employee behavior generally.",
+      "fix": "Choose one consistent audience perspective. Either address employees directly throughout using 'you' and 'your', or refer to them consistently as 'employees' and 'their'; do not mix the two within the same document.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "throughout, particularly lines 11-53",
+      "severity": 2,
+      "violation": "Document shifts between third-person and second-person address within the same sections, making it unclear which audience each instruction targets."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Terminology Notes (line 51) defines 'stipend item' but the document predominantly uses 'equipment' (title, lines 11, 27, 33, 39, 47, 61, 73). The terms are used interchangeably without a signal they mean the same thing.",
+      "fix": "Choose one term and use it consistently throughout. If 'equipment' is the plain-language term, use it everywhere and remove the redundant 'stipend item' label. If 'stipend item' is required for internal documentation, define it at first use and use it consistently rather than alternating with 'equipment'.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "lines 23, 27, 39, 51",
+      "severity": 2,
+      "violation": "Terms 'equipment' and 'stipend item' refer to the same concept but are used inconsistently; the formal term is defined only in a mid-document section."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "evidence": "Line 13: 'However, employees on an approved leave...' opens with exception. Line 29: 'However, an incomplete request pauses...' opens with complication. Line 41: 'Also, unused stipend amounts do not roll over...' opens with constraint. Main rules appear after exceptions are introduced.",
+      "fix": "Reorder sentences to state the main rule first, then introduce exceptions: 'Employees remain eligible when they return from approved leave of absence, resuming the stipend clock on their first day back' (line 13). 'The approval timeline resumes once missing documentation arrives' (line 29). 'Unused stipend amounts do not roll over to the next benefit year' as a standalone statement (line 41).",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "lines 13, 29, 41",
+      "severity": 2,
+      "violation": "Multiple sentences and paragraphs open with exceptions or conditions before stating the governing rule, requiring re-reading."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Line 29: 'an incomplete request pauses the timeline' makes the abstract noun 'request' the subject/actor instead of naming who or what system performs the action (the requester, approver, or system).",
+      "fix": "Rewrite to name the actual actor: 'The approval timeline pauses if a request is incomplete' or 'An incomplete request delays the approval process' or name the responsible person: 'The manager pauses the timeline when documentation is missing'.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "line 29",
+      "severity": 2,
+      "violation": "Sentence uses an abstract noun (request) as the actor instead of naming the real-world person or organization responsible."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "Special Cases covers only equipment catalog publication, unrelated to eligibility and application themes. Program Coordination and Review Responsibility describe workflows disconnected from each other and from employee-facing sections. A reader finishing these sections cannot name what they were about.",
+      "fix": "Consolidate back-office sections (Program Coordination, Review Responsibility, Special Cases) into a single 'Behind the Scenes' or 'How We Process Your Request' section that builds one narrative. Move Terminology Notes to the beginning. Restructure employee-facing sections to cover: eligibility, how to apply, documentation needed, approval timeline, and what happens next, in that order.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Special Cases (lines 59-61), Program Coordination (lines 63-65), Review Responsibility (lines 67-69), Terminology Notes (lines 49-53)",
+      "severity": 2,
+      "violation": "Multiple sections pursue unrelated themes with no signal connecting them, preventing reader from identifying the passage's consistent, limited set of themes."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T18:14:58Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

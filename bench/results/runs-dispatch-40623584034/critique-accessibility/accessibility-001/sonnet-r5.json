@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.4.1",
+      "evidence": "<body id=\"body\">; 2 focusable element(s) precede the first heading",
+      "fix": "Add a <main> element wrapping the primary content, or a skip link as the first focusable element linking to it.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "#body, <body> opening tag, line 8",
+      "severity": 3,
+      "violation": "The page provides neither a main landmark (a <main> element or role=\"main\") nor a leading same-page skip link."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.4.2",
+      "evidence": "<title></title>",
+      "fix": "Give the page a specific <title> describing its topic or purpose.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "#head-title, <title> element, line 6",
+      "severity": 3,
+      "violation": "The page has no usable title: the title element is missing or empty."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "<nav id=\"nav\"><a href=\"/plan\">Plan a trip</a><a href=\"/accessibility\">Accessibility</a></nav>; no search form, sitemap link, or breadcrumb trail appears anywhere in the document",
+      "fix": "Add a second, independent way to find this page, such as a site search form or a breadcrumb trail, so a reader who lands here directly (for example from a search engine) is not solely dependent on the primary navigation menu.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#nav, <nav> element, the page's only wayfinding mechanism, line 10",
+      "severity": 3,
+      "violation": "The page exposes exactly one mechanism for locating it within the site, the primary navigation menu. No site search, sitemap link, or breadcrumb trail is present, and the page's own content does not mark it as one step in a linear process, so the two-mechanism minimum this criterion requires is not met."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "<h4 id=\"s2-h\">Accessibility improvements</h4> <p id=\"s2-p1\">Passengers can report a service issue by calling rider services. Updates post to the schedule page within one business day.</p> <table id=\"s2-table1\">...Zone/Status...</table>",
+      "fix": "Rename the heading to describe what the section actually covers, for example 'Service issue reporting and zone status', or replace the section's content with material about actual accessibility improvements.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#s2-h, <h4> heading, 'Accessibility improvements', line 24",
+      "severity": 3,
+      "violation": "The heading reads 'Accessibility improvements' but introduces a paragraph about reporting a service issue and schedule-update timing, followed by a zone status table; none of that content concerns accessibility, so the heading misdescribes the section it introduces rather than merely under-describing it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-3.1.1",
+      "evidence": "<html lang=\"translanguage\" id=\"html\">",
+      "fix": "Set lang to a well-formed BCP 47 tag identifying the page's default language, for example lang=\"en\".",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "#html, <html> element, line 2",
+      "severity": 3,
+      "violation": "The <html> element's lang attribute 'translanguage' is not a well-formed BCP 47 language tag."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.1.1",
+      "evidence": "<img src=\"/img/platform-update.jpg\" id=\"s1-img1\">",
+      "fix": "Add an alt attribute (or aria-label) describing the image, or mark it decorative with alt=\"\".",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "#s1-img1, <img> element, line 21",
+      "severity": 2,
+      "violation": "No text alternative is present and the element is not marked decorative."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.3.1",
+      "evidence": "<h4 id=\"s2-h\">",
+      "fix": "Change this heading to <h3>, or add the missing intervening heading level.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "#s2-h, <h4> heading, 'Accessibility improvements', line 24",
+      "severity": 2,
+      "violation": "Heading level skips from <h2> to <h4> with no intervening level."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.4.4",
+      "evidence": "<a href=\"/fares/history\" id=\"s3-link1\">click here</a>",
+      "fix": "Rewrite the link text to describe its destination or purpose, or add an aria-label.",
+      "id": "F-008",
+      "lane": "scripted",
+      "location": "#s3-link1, <a> link, text 'click here', line 57",
+      "severity": 2,
+      "violation": "The link's accessible name is a generic phrase that gives no clue to its destination out of context."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "<h2 id=\"s1-h\">Fare adjustments</h2> ... <p id=\"s1-p2\">Riders can check real time arrivals at any station kiosk. Station staff can also help with the same request in person.</p>",
+      "fix": "Move the real time arrivals sentence to a section whose heading names that topic, or broaden this heading to cover both topics it introduces.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "#s1-h, <h2> heading, 'Fare adjustments', line 18",
+      "severity": 2,
+      "violation": "The second paragraph under this heading is about checking real time arrivals at a station kiosk, a topic the heading 'Fare adjustments' does not describe, so a reader scanning headings alone would not expect this content here."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.5.3",
+      "evidence": "visible text 'Submit', accessible name 'Send form now'",
+      "fix": "Include the visible label text at the start of the aria-label value, or remove the aria-label and rely on the visible text.",
+      "id": "F-010",
+      "lane": "scripted",
+      "location": "#s3-form-submit, <button> control, visible label 'Submit', line 68",
+      "severity": 2,
+      "violation": "The control's visible text does not appear within its accessible name, so a voice-control user naming the visible label cannot activate it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-001.html",
+    "artifact_sha256": "9077f0b4d4061075fc6497a8cd5b91b94b2af4f536abadbd41a62d9f86cd85d2",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T03:19:57Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

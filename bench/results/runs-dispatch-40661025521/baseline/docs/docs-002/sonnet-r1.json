@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"## Open the test console\" is followed by \"#### Check the sidebar updated\"",
+      "fix": "Change \"#### Check the sidebar updated\" to \"### Check the sidebar updated\" or merge it into the \"Open the test console\" section as regular text.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Heading \"#### Check the sidebar updated\"",
+      "severity": 3,
+      "violation": "The heading level jumps from H2 to H4, skipping H3, breaking the document's heading hierarchy."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Look at the sidebar and confirm the rule count now includes the sample rule.\"",
+      "fix": "Either clarify that the sample rule is newly added to the account's rule list when first selected, or change this check to something that actually results from selecting the rule (e.g., confirm the rule is highlighted/selected in the sidebar).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"Check the sidebar updated\" section",
+      "severity": 3,
+      "violation": "The previous step only selects a pre-existing sample alert rule; selecting an existing rule should not change the rule count, so this verification doesn't logically follow from the action described."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "section ends with \"...now includes the sample rule.\" followed immediately by \"Click Trigger sample alert...\"",
+      "fix": "Add a transition sentence such as \"Return to the test console\" before the trigger instruction.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Between \"Check the sidebar updated\" and \"## Trigger the sample alert\"",
+      "severity": 3,
+      "violation": "The reader's attention was just directed to the sidebar, but there's no instruction to return to the test console before clicking \"Trigger sample alert,\" leaving a gap in navigation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The first step splits the action (\"Open the test console\") and its verification (\"Check the sidebar updated\") into two separate headings, while later steps combine action and verification under one heading.",
+      "fix": "Either give every step its own verification subheading, or fold \"Check the sidebar updated\" into the \"Open the test console\" section like the other steps.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Overall document structure (compare \"Open the test console\" vs. \"Trigger the sample alert\" and \"Check the delivery log\" sections)",
+      "severity": 3,
+      "violation": "Inconsistent section granularity makes the tutorial's structure unpredictable for the reader."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Check the sidebar updated\"",
+      "fix": "Reword to \"Check that the sidebar updated\" or \"Check the sidebar update.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Heading \"Check the sidebar updated\"",
+      "severity": 3,
+      "violation": "The phrase is grammatically incomplete/awkward - missing \"that\" or a verb form change."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Click Trigger sample alert and wait for the status indicator to change to Sent.\" vs. \"Open the delivery log and check that the test alert shows a Sent status\"",
+      "fix": "Apply a consistent capitalization convention for all UI element names throughout the document.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "\"Trigger the sample alert\" and \"Check the delivery log\" sections",
+      "severity": 3,
+      "violation": "UI element names are capitalized inconsistently - \"Trigger sample alert\" (button) and \"Sent\" (status) are capitalized, but \"delivery log\" and \"test console\" are not, even though they also appear to be named UI elements."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"select the sample alert rule provided for new accounts\"",
+      "fix": "Add a note on what to do if the sample rule isn't present, or clarify the account prerequisite at the top of the document.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "\"Open the test console\" section",
+      "severity": 3,
+      "violation": "This assumes every reader has a \"new account\" with this sample rule available; there's no guidance for readers whose account doesn't have it (e.g., existing accounts or accounts where the sample rule was deleted)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "No introductory text exists before the first heading.",
+      "fix": "Add a short introductory paragraph summarizing what the tutorial accomplishes and any prerequisites (e.g., account type, permissions).",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Document start (before \"## Open the test console\")",
+      "severity": 3,
+      "violation": "The tutorial has no introduction stating its goal, prerequisites, or expected outcome, leaving readers without context before starting."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Document ends at \"check that the test alert shows a Sent status with a timestamp.\" with no closing statement.",
+      "fix": "Add a brief closing line confirming the tutorial is complete and optionally pointing to a next step or related document.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "End of document, \"Check the delivery log\" section",
+      "severity": 3,
+      "violation": "The tutorial ends abruptly without confirming overall success or suggesting next steps, leaving the reader uncertain if they're done."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-002.md",
+    "artifact_sha256": "25c4dd0ebb76ed338a3330329de0387044967be4fa65c3db44b1e3042d579c91",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T09:19:42Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

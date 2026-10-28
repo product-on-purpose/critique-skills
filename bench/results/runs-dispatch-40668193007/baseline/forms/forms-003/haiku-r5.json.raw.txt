@@ -1,0 +1,24 @@
+Location: Inside `<div id="row-phone">`, after the phone input
+Evidence: `<p>Thanks for signing up.</p>`
+Problem: This confirmation message appears in the middle of the form before submission, which will confuse users. It should only display after the form is successfully submitted.
+Fix: Remove this paragraph from the form; display it via JavaScript after form submission or on a success page.
+
+Location: Form contains both `<div id="row-name">` and `<div id="row-legalname">`
+Evidence: Full name field (`name="full_name"`) and separate first/last name fields (`name="given_name"`, `name="family_name"`)
+Problem: The form collects the same information twice—once as a single full name and again as separate first and last names—which is redundant and creates data inconsistency.
+Fix: Remove either the full name field or the first/last name fields, depending on your data model requirements.
+
+Location: `<div id="row-member">` membership number input
+Evidence: `placeholder="Must be 8 digits" required=""` with no validation constraints
+Problem: The placeholder promises 8-digit validation but the input lacks minlength, maxlength, or pattern attributes to enforce it.
+Fix: Add `minlength="8" maxlength="8" pattern="\d{8}"` to the input.
+
+Location: `<div id="row-contacttime">` preferred contact time input
+Evidence: `name="contact_time" type="text" required=""`
+Problem: Contact time should use a time input type, not text, to ensure consistent formatting and provide a time picker.
+Fix: Change `type="text"` to `type="time"`.
+
+Location: `<select id="shipspeed-select">` inside row-shipspeed
+Evidence: `<option>Standard</option>`, `<option>Express</option>`, `<option>Overnight</option>`
+Problem: The option elements lack value attributes, so the form will submit the display text instead of clean values.
+Fix: Add value attributes: `<option value="standard">Standard</option>`, `<option value="express">Express</option>`, `<option value="overnight">Overnight</option>`.

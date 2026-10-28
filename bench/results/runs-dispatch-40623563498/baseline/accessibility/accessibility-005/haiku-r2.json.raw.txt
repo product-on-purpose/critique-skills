@@ -1,0 +1,34 @@
+Location: `<style>` tag in `<head>`
+Evidence: `@media (orientation: portrait) { #main-content { display: none; } }`
+Problem: The media query completely hides the main content when viewing in portrait orientation, making the page unusable on mobile phones and portrait-oriented tablets.
+Fix: Remove the media query or modify it to maintain usability in all orientations, such as adjusting layout instead of hiding content.
+
+Location: Custom delete button, section 3
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Problem: A div element is used with role="button" instead of a native <button> element, which lacks built-in keyboard handling and semantic meaning.
+Fix: Replace with a proper button element: `<button class="icon-delete" aria-label="Delete item">`
+
+Location: Wizard steps section, section 3
+Evidence: `<div class="wizard-steps" id="s3-wizard"><div class="step">...`
+Problem: The wizard steps are plain divs without ARIA attributes or semantic markup to indicate they represent a progress indicator or step sequence.
+Fix: Add appropriate ARIA roles and attributes, such as `role="list"` to the container and `role="listitem"` to each step, or use a structured list element.
+
+Location: Link in section 3
+Evidence: `<a href="/fares/history">check the current station closures</a>`
+Problem: The link text "check the current station closures" does not match the URL destination "/fares/history", which appears to be about fare history rather than station closures.
+Fix: Either update the URL to the correct path for station closures, or change the link text to reflect the actual destination (e.g., "check the fare history").
+
+Location: Phone number input field in form
+Evidence: `<label for="phone">Phone number (required)</label>` with `<input id="phone" type="tel" autocomplete="tel">`
+Problem: The label indicates the field is required, but the input element is missing the `required` attribute, creating an inconsistency between visual and programmatic indication.
+Fix: Add the `required` attribute to the input: `<input id="phone" type="tel" autocomplete="tel" required>`
+
+Location: Promo code input field in form
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: The `aria-invalid="true"` attribute is set on an empty, unvalidated input field, incorrectly indicating the field is in an invalid state before any user input or validation.
+Fix: Remove the `aria-invalid` attribute, or set it to `false`, and only set it to `true` after validation has actually failed.
+
+Location: Promo code error message in form
+Evidence: `<input id="promo" type="text" aria-invalid="true">` followed by `<span class="error-text" aria-live="polite" id="s3-form-promo-error">Enter a 6 character code...</span>`
+Problem: The error message span is not explicitly associated with the input field using the `aria-describedby` attribute, reducing clarity for screen reader users.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the promo input element to explicitly link it to the error message.

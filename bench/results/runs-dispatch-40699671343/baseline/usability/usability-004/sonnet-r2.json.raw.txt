@@ -1,0 +1,49 @@
+Location: workspace-overview section, intro paragraph and project list
+Evidence: "This workspace holds 4 projects" followed by a `<ul>` listing only 3 items (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp)
+Problem: The stated project count doesn't match the number of items shown, and nothing labels the list as a subset (e.g., "recent"), so a reader can't tell whether the count or the list is wrong.
+Fix: Either add the missing 4th project to the list, correct the stated count to 3, or add a visible label like "Recently viewed" to clarify the list is only a subset.
+
+Location: workspace-overview section, "Open project settings" link
+Evidence: `id="workspace-overview-projects-link"` with link text "Open project settings"
+Problem: The id implies the link relates generically to "projects," but the link text and destination are about project *settings*, so the id doesn't match its own control.
+Fix: Rename the id to "workspace-overview-settings-link" to match the link's text and destination.
+
+Location: project-settings section, project name form
+Evidence: `<button id="project-settings-save-btn" type="submit">Save</button>` inside a `<form>` with no action attribute and no linked confirmation section
+Problem: Clicking Save has no defined destination or confirmation state, unlike the Invite and Archive flows in the same document, which transition to explicit confirmation screens.
+Fix: Add a confirmation state (or visible success message) that Save transitions to, matching the pattern used elsewhere in the mockup.
+
+Location: project-settings section, duplicate button
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text or icon content, so sighted users see an empty, unlabeled control even though it has an aria-label for assistive tech.
+Fix: Add visible text (e.g., "Duplicate") or an icon inside the button, keeping the aria-label as a supplement.
+
+Location: project-settings section, duplicate button
+Evidence: `<button id="project-settings-duplicate-btn" ...></button>` has no associated target section
+Problem: Unlike "Archive project," which leads to an archive-confirm section, "Duplicate project" has no corresponding confirmation or result page, making it a dead end in the mockup.
+Fix: Add a duplicate-confirm (or duplicate-result) section and link the button to it, mirroring the archive flow.
+
+Location: project-settings section, archive link
+Evidence: `<a id="project-settings-archive-link" href="#archive-confirm">Archive project</a>`
+Problem: A destructive, state-changing action is implemented as an anchor link rather than a button, which is semantically incorrect since links imply navigation, not performing an action.
+Fix: Change this control to a `<button>` instead of an `<a>`.
+
+Location: invite-member section
+Evidence: `<button id="invite-member-save-btn" type="submit">Save</button>` and separately `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>`
+Problem: Two controls appear to both finalize the invite (an undefined Save submit, and a Continue link that actually navigates to "invite sent"), making it unclear what Save does or how it differs from Continue.
+Fix: Remove the redundant Save button or give it a distinct, clarified purpose (e.g., "Save as draft"), leaving one clear control that sends the invite.
+
+Location: invite-sent section
+Evidence: "An invite was sent to the address entered above."
+Problem: "above" refers to the email input on the previous, now separate, screen, which no longer appears above this confirmation message, making the reference disorienting.
+Fix: Reword to "An invite was sent to the email address you entered" without relying on spatial position.
+
+Location: archive-confirm section
+Evidence: "You can restore it at any time from the archived projects list."
+Problem: No "archived projects list" page or link exists anywhere in the document, so this references a feature that isn't actually part of the mockup.
+Fix: Add an archived-projects-list section reachable from project-archived/workspace-overview, or remove the claim if out of scope.
+
+Location: notification-settings section
+Evidence: `<button id="notification-settings-save-btn" type="submit">Save</button>` inside a `<form>` with no action attribute and no linked confirmation section
+Problem: As with the project name form, clicking Save has no defined outcome, giving the user no feedback that their digest frequency choice was saved.
+Fix: Add a confirmation message or state transition after Save, consistent with other completed actions in the mockup.

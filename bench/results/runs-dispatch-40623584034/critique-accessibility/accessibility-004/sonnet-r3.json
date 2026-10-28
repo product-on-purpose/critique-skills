@@ -1,0 +1,50 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "<nav id=\"nav\"> contains exactly two links, <a href=\"/plan\" id=\"nav-link1\">Plan a trip</a> and <a href=\"/accessibility\" id=\"nav-link2\">Accessibility</a>; the document has no search form, no sitemap link, and no breadcrumb list anywhere, and nothing in the content marks this page as one step of a linear process.",
+      "fix": "Add a second, independent way to locate this page or its sibling pages, such as a site search form or a sitemap link, distinct from the two links already in #nav.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#nav, <nav> element, the page's only navigation mechanism",
+      "severity": 3,
+      "violation": "Fails WCAG-2.4.5 Multiple Ways: only one navigation mechanism, the primary nav, is present, so a reader who lands on this page directly has exactly one way to find any other page on the site, where the criterion requires at least two independently-capable mechanisms unless the page is a step in a linear process, which this is not."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "<label for=\"topic\" id=\"s3-form-topic-label\">Route</label> labels <select id=\"topic\"><option>Northbound</option><option>Southbound</option></select>, whose two options are travel directions, not named transit routes.",
+      "fix": "Relabel the control to match what it actually offers, for example \"Direction\", or change the label to \"Route\" only once the options list named routes rather than directions.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#s3-form-topic-label, <label> for select #topic, text \"Route\"",
+      "severity": 2,
+      "violation": "Fails WCAG-2.4.6 Headings and Labels: the label \"Route\" tells a reader scanning labels to expect a choice among distinct routes, but the control it introduces actually offers only a direction, misdescribing the content that follows it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "4febe21b95880d7b0b385588ebdc9c800b2c010b439206d51d6b790cb76d11c3",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T04:37:51Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

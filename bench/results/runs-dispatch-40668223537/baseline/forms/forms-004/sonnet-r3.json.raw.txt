@@ -1,0 +1,69 @@
+Location: `<head>` section
+Evidence: No `<meta name="viewport" content="...">` tag is present anywhere in the `<head>`.
+Problem: Without a viewport meta tag, mobile browsers will render the page at desktop width and let users pinch-zoom, defeating the mobile-specific font-size fix applied later on the organization input.
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to the `<head>`.
+
+Location: `<form id="form">`
+Evidence: `<form id="form">` has no `action` or `method` attribute.
+Problem: Without `method="post"`, the form defaults to GET on submit, which would send the password field's value as plaintext in the URL query string, browser history, and server logs.
+Fix: Add `method="post"` (and an appropriate `action`) to the form tag.
+
+Location: row-street and row-postal
+Evidence: `street-input` (autocomplete="address-line1") appears right after the password field, while `postal-input` (autocomplete="postal-code") appears much later, separated by phone, website, membership number, and account number fields.
+Problem: Splitting the street address from the postal code with unrelated fields breaks the logical address grouping and can confuse browser autofill, which expects address fields to be adjacent.
+Fix: Move the postal code field next to the street address field.
+
+Location: row-website
+Evidence: `<label id="website-label" for="website-input">Company website</label>` with `required=""`.
+Problem: Requiring a company website to create what otherwise looks like a personal shopping account will block individual customers from completing signup.
+Fix: Make this field optional, or remove it unless this form is specifically for business accounts.
+
+Location: row-member
+Evidence: `<input id="member-input" ... placeholder="Must be 8 digits" required="">` has no `pattern` or `maxlength` attribute.
+Problem: The only indication of the 8-digit requirement is placeholder text, which disappears once the user starts typing and is not enforced by any validation attribute, so users can submit the wrong length and only find out on the server.
+Fix: Add `pattern="\d{8}"` and `maxlength="8"` to enforce and communicate the format beyond the placeholder.
+
+Location: row-acctnum
+Evidence: `<label id="acctnum-label" for="acctnum-input">Account number</label>` with no placeholder, pattern, or length hint, unlike the adjacent membership number field.
+Problem: Users have no indication of the expected format for this required numeric field, and its purpose relative to "Membership number" is unexplained, creating ambiguity about which number to enter where.
+Fix: Add helper text or a placeholder describing the expected format, and clarify in the label how this differs from the membership number.
+
+Location: row-shipspeed
+Evidence: `<option>Overnight</option>` and `<option>Next-day</option>` both appear in the same `<select>`.
+Problem: "Overnight" and "Next-day" shipping typically mean the same thing, so offering both as distinct choices is confusing and ambiguous for the user.
+Fix: Remove one of the duplicate/overlapping options or rename them to be clearly distinct (e.g., "Next-day" vs "2-day").
+
+Location: row-legalname
+Evidence: `<label id="legalname-label" for="legalname-input">Your name</label>` with `autocomplete="name"`, duplicating `row-name`'s "Full name" field which also uses `autocomplete="name"`.
+Problem: The form asks for the user's name twice under different labels ("Full name" and "Your name"/legal_name), which is redundant and will likely cause the browser to autofill both fields identically, confusing users about why two name fields exist.
+Fix: Remove the duplicate "legal name" field or merge it with "Full name" if a distinct legal name is actually needed, with a label that explains the difference.
+
+Location: row-org
+Evidence: `<label id="org-label" for="org-input">Organization name</label>` with `required=""`.
+Problem: Requiring an organization name for a consumer account signup (alongside personal name/address/phone fields) will block individual shoppers who have no organization.
+Fix: Make this field optional or remove it unless the form is intended for business accounts only.
+
+Location: row-org
+Evidence: `<input id="org-input" ... style="font-size:16px" required="">` is the only text input in the form with an inline `font-size` style.
+Problem: Applying a mobile-zoom-prevention font size to only one input, while all other text inputs lack it, means the rest of the form will still trigger unwanted zoom on focus in mobile Safari.
+Fix: Apply the same `font-size:16px` (or an equivalent CSS rule) consistently to all text inputs, ideally via a shared stylesheet rule rather than inline styles.
+
+Location: row-contacttime
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">` with its label using `style="display:block"`.
+Problem: A free-text field for "Preferred contact time" invites inconsistent, unparseable input (e.g., "morning" vs "9am" vs "AM"), and the one-off inline `display:block` style on this label is inconsistent with how every other label in the form is styled.
+Fix: Replace the text input with a `<select>` of fixed time ranges or a `<input type="time">`, and remove the stray inline style in favor of consistent CSS applied to all labels.
+
+Location: viewdetails-btn
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>` sits between the form fields and the submit button with no indication of what details it shows.
+Problem: The button's purpose is unclear in context — it's not tied to any visible panel, modal, or section, so users won't know what clicking it does.
+Fix: Either remove the button, or give it a descriptive label (e.g., "View membership details") and wire it to a clearly associated element.
+
+Location: viewdetails-btn vs submit-btn
+Evidence: `viewdetails-btn` has inline styling `style="padding:12px 20px;font-size:16px"` while the adjacent `submit-btn` has no styling at all.
+Problem: The two buttons sitting side by side will render with inconsistent size/appearance, making it unclear which is the primary action.
+Fix: Style both buttons consistently (preferably via shared CSS classes rather than inline styles), visually distinguishing the primary "Create account" action.
+
+Location: overall `<form>` structure
+Evidence: Fourteen input rows (name, email, password, street, phone, phone2, website, membership, account number, postal, shipping speed, legal name, organization, contact time) are placed in a flat sequence with no `<fieldset>`/`<legend>` grouping.
+Problem: Related fields (e.g., address fields, account/membership fields) are not grouped, which hurts both visual scanability and screen-reader navigation of a long form.
+Fix: Wrap related rows in `<fieldset>` elements with descriptive `<legend>` labels (e.g., "Contact information," "Shipping address," "Account details").

@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<html lang=\"translanguage\" id=\"html\">`",
+      "fix": "Change `lang=\"translanguage\"` to `lang=\"en\"`",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Line 2, `<html>` tag",
+      "severity": 3,
+      "violation": "\"translanguage\" is not a valid language code. It should be a valid BCP 47 language tag like \"en\"."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<title id=\"head-title\"></title>`",
+      "fix": "Add a descriptive title, such as `<title>Rider service updates</title>`",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Line 5, `<title>` tag",
+      "severity": 3,
+      "violation": "The page title is empty, but every page should have a descriptive title for accessibility and SEO."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<img src=\"/img/platform-update.jpg\" id=\"s1-img1\">`",
+      "fix": "Add an appropriate alt attribute, such as `<img src=\"/img/platform-update.jpg\" id=\"s1-img1\" alt=\"Platform update illustration\">`",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Line 13, image in section s1",
+      "severity": 3,
+      "violation": "The image is missing an `alt` attribute, which is required for accessibility."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<h4 id=\"s2-h\">Accessibility improvements</h4>`",
+      "fix": "Change `<h4>` to `<h2>`",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Line 17, section s2 heading",
+      "severity": 3,
+      "violation": "The heading hierarchy is broken; an `<h4>` appears after an `<h1>` and `<h2>` with no intervening `<h3>`."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">` followed by `<span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">`",
+      "fix": "Add `aria-describedby=\"s3-form-promo-error\"` to the input element",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Line 30, promo input in form",
+      "severity": 3,
+      "violation": "The input is marked `aria-invalid=\"true\"` but lacks `aria-describedby` to associate it with the error message."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">`",
+      "fix": "Replace the div with `<button class=\"icon-delete\" aria-label=\"Delete item\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></button>`",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Line 36, custom button control",
+      "severity": 3,
+      "violation": "Using a `<div>` with `role=\"button\"` is not semantic HTML; a native `<button>` element should be used instead."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"phone\" id=\"s3-form-phone-label\">Phone number (required)</label>` followed by `<input id=\"phone\" type=\"tel\" autocomplete=\"tel\">`",
+      "fix": "Add `required` attribute to the input: `<input id=\"phone\" type=\"tel\" autocomplete=\"tel\" required>`",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Line 49 - 50, phone number input in form",
+      "severity": 3,
+      "violation": "The label text indicates the field is required, but the input element lacks the `required` attribute."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-001.html",
+    "artifact_sha256": "9077f0b4d4061075fc6497a8cd5b91b94b2af4f536abadbd41a62d9f86cd85d2",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T02:55:45Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

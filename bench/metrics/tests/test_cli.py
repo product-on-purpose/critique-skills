@@ -130,7 +130,7 @@ def test_lanes_partition_the_overall_claim_set() -> None:
     results = json.loads(results_path.read_text(encoding="utf-8"))
     by_cell: dict[tuple[str, ...], dict[str, dict]] = {}
     for e in results["entries"]:
-        by_cell.setdefault((e["skill"], e["skill_version"], e["model"], e["domain"]), {})[e["lane"]] = e
+        by_cell.setdefault((e["run_set"], e["skill"], e["skill_version"], e["model"], e["domain"]), {})[e["lane"]] = e
 
     assert by_cell, "committed results.json carries no entries"
     for cell, lanes in by_cell.items():

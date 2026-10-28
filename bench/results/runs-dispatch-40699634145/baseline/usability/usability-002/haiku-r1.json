@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 5 projects\" but only 4 projects are listed in the ul below (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)",
+      "fix": "Change \"5 projects\" to \"4 projects\", or add a fifth project to the list.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "workspace-overview section, paragraph beginning \"This workspace holds\"",
+      "severity": 3,
+      "violation": "The stated project count (5) does not match the number shown in the list (4)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>` with no visible text content",
+      "fix": "Add visible text or a symbol inside the button, such as \"Duplicate\" or \"⧉\".",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "project-settings section, the duplicate button element",
+      "severity": 3,
+      "violation": "The button appears blank in the mockup, making it visually unclear what action it performs."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a>` links directly to #project-archived",
+      "fix": "Change the href attribute from \"#project-archived\" to \"#archive-confirm\".",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "project-settings section, archive project link",
+      "severity": 3,
+      "violation": "Clicking this link skips the archive-confirm section and goes straight to the project-archived section, bypassing the confirmation dialog."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Form with `<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` followed by `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>`",
+      "fix": "Remove the separate continue link, or clarify if the Save and Continue serve different purposes (as other forms in the mockup use only one navigation element per action).",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "invite-member section, after the form element",
+      "severity": 3,
+      "violation": "The form has both a Save submit button and a separate Continue link, creating two redundant ways to proceed to the same destination."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T14:01:55Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required> on the same account creation form",
+      "fix": "Remove this field from account creation. Collect an account number, if ever needed, only after the account exists.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#acctnum-input, <input> field, label 'Account number', line 45",
+      "severity": 4,
+      "violation": "Same defect as the membership number field: the form's task is to create an account, so no account number exists yet for a new customer to supply, yet the field is required. This is the second of two fields that demand information the task itself has not yet produced, blocking completion for the class of person the form is for."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required> on a form headed 'Create your account' with submit button 'Create account'",
+      "fix": "Remove the membership number field from account creation, or make it optional and used only to link an existing loyalty membership after the account is created.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#member-input, <input> field, label 'Membership number (8 digits)', line 41",
+      "severity": 4,
+      "violation": "The form's own task, named by its heading and its submit button, is to create an account that does not yet exist, yet this field requires an 8 digit membership number before that account exists. A person opening their first account has no membership number to supply, so the task the form states cannot use this field's answer, and the field blocks completion for every new customer."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-DATE-SELECTS",
+      "evidence": "<select id=\"dob-day-select\" autocomplete=\"bday-day\" required=\"\"> <select id=\"dob-month-select\" autocomplete=\"bday-month\" required=\"\"> <select id=\"dob-year-select\" autocomplete=\"bday-year\" required=\"\">",
+      "fix": "Use three short text fields for day, month and year, with the numeric input mode.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "#dob-day-select, <select> field, label 'Day', line 77",
+      "severity": 3,
+      "violation": "A date the person knows by heart is picked from three drop-downs, the year from 60 options."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "label 'Your name' with autocomplete=\"name\" (#legalname-input), appearing after label 'Full name' with autocomplete=\"name\" (#name-input) earlier in the same form",
+      "fix": "Remove the Your name field. If it is meant to capture something distinct from Full name, such as a legal name that differs from a preferred name, relabel it to say so instead of asking the same question twice.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label 'Your name', line 63",
+      "severity": 3,
+      "violation": "The form already asked for the person's name in the Full name field; Your name asks the same question again under a different label, so the task does not need this field's answer on top of the first."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "Required fields for street address, phone, secondary phone, company website, postal code, preferred shipping speed, organization name, preferred contact time and date of birth all sit on a form headed 'Create your account' with submit button 'Create account'",
+      "fix": "Remove these fields from account creation. Ask for delivery and checkout details, such as street address, phone, postal code and shipping speed, during checkout instead, and drop company website, organization name, preferred contact time and date of birth unless a stated reason needs them at sign-up.",
+      "id": "F-005",
+      "instances": [
+        {
+          "location": "#phone-input, <input> field, label 'Phone number', line 28"
+        },
+        {
+          "location": "#phone2-input, <input> field, label 'Secondary phone (optional)', line 33"
+        },
+        {
+          "location": "#website-input, <input> field, label 'Company website', line 37"
+        },
+        {
+          "location": "#postal-input, <input> field, label 'Postal code', line 49"
+        },
+        {
+          "location": "#shipspeed-select, <select> field, label 'Preferred shipping speed', line 53"
+        },
+        {
+          "location": "#org-input, <input> field, label 'Organization name', line 67"
+        },
+        {
+          "location": "#contacttime-input, <input> field, label 'Preferred contact time', line 71"
+        },
+        {
+          "location": "#dob-day-select, <select> field, label 'Day', fieldset legend 'Date of birth', line 77"
+        }
+      ],
+      "lane": "judged",
+      "location": "#street-input, <input> field, label 'Street address', line 24",
+      "severity": 3,
+      "violation": "The task this form states, named by its heading and its submit button, is to create an account, which needs a name, an email address and a password. Street address, phone number, postal code and preferred shipping speed are delivery and checkout information the account creation task does not use and that could be asked when an order is placed; company website, organization name and preferred contact time serve no stated purpose on this form at all; and date of birth is required with no reason given. None of these answers is used by the task of creating an account."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-WIDTH",
+      "evidence": "<input id=\"postal-input\" name=\"postal_code\" type=\"text\" autocomplete=\"postal-code\" required=\"\" size=\"3\"> (size=3)",
+      "fix": "Size the field to show at least 5 characters.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "#postal-input, <input> field, label 'Postal code', line 49",
+      "severity": 3,
+      "violation": "This postal code field shows 3 characters, too few to show a typical value whole while it is typed and checked."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FORMAT-TOLERANCE",
+      "evidence": "pattern=[0-9]+",
+      "fix": "Loosen the pattern to accept every valid way of writing the value, and normalise it after submission.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "#phone2-input, <input> field, label 'Secondary phone (optional)', line 33",
+      "severity": 3,
+      "violation": "The pattern on this phone field rejects valid values such as +44 20 7946 0958; 020 7946 0958."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>, placed after the Preferred contact time field and before the Date of birth fieldset",
+      "fix": "Move this button out of the field flow, such as above the heading or beside whatever content it refers to, so no action sits among the fields before the primary submit at the end.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> element, text 'View details', line 73",
+      "severity": 2,
+      "violation": "The primary action should sit where the fields end, in line with them, with no action above the fields. This button sits in the middle of the field list, above the three date of birth fields, so a person who reaches it before finishing the form can mistake it for the form's end."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-INPUT-FONT-SIZE",
+      "evidence": "font-size: 13px declared by its inline style",
+      "fix": "Set the field's font size to at least 16 pixels.",
+      "id": "F-009",
+      "lane": "scripted",
+      "location": "#org-input, <input> field, label 'Organization name', line 67",
+      "severity": 2,
+      "violation": "The text in this field is 13 pixels, below the 16 pixels at which a phone stops zooming the page on focus."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-INPUT-TYPE",
+      "evidence": "<input id=\"website-input\" name=\"website\" required=\"\" type=\"text\">",
+      "fix": "Set type=url on the field.",
+      "id": "F-010",
+      "lane": "scripted",
+      "location": "#website-input, <input> field, label 'Company website', line 37",
+      "severity": 2,
+      "violation": "This web address field is type text, so a phone does not show the keyboard built for it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-002.html",
+    "artifact_sha256": "e39d0a6e9175987711e114d2ce5edd568205f5aecafb2d271246e6036a16457f",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T10:55:07Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 5,
+      "4": 2
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

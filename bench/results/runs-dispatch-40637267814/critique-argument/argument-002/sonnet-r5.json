@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-CLAIM-MARKER",
+      "evidence": "0 conclusion-marker phrases found across 401 words.",
+      "fix": "Add an explicit conclusion-signalling phrase at the point the artifact states its central claim, for example \"therefore\" or \"we recommend\".",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "severity": 3,
+      "violation": "No phrase from the conclusion-marker lexicon (therefore, thus, hence, it follows that, we recommend, this paper argues, I argue that, the conclusion is, in conclusion, we should, the case for) appears anywhere in the artifact, so a reader scanning rather than reading straight through has no signpost to where the conclusion is asserted."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-GROUNDS",
+      "evidence": "\"Given the return-rate and avoidance-survey results above, the stronger choice is...\" and \"...the pilot's return-rate and avoidance-survey results, taken together, support ending fines for the whole consortium...\" Neither sentence is preceded or followed anywhere in the document by an actual return-rate figure, percentage, or count; the only pilot measurement given anywhere in the artifact is the avoidance-survey figure (\"dropped from 20 percent of respondents before the pilot to 3 percent after it\").",
+      "fix": "Add the actual on-time return-rate figures from the pilot (e.g., the before/after return percentages at the pilot branches) alongside the avoidance-survey figures, or remove \"return-rate\" from both references so the stated grounds match the evidence the artifact actually supplies.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"Recommendation\" section's opening clause and the \"Why the Pilot Result Applies Systemwide\" section's first sentence",
+      "severity": 3,
+      "violation": "TOULMIN-GROUNDS requires each claim's cited evidence to actually be present and checkable. \"Return-rate results\" is invoked twice as part of the grounds for the central claim, but the artifact never states what those results were anywhere, so a reader cannot check, or even locate, roughly half of the evidence the central claim is said to rest on."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-HEDGE-DENSITY",
+      "evidence": "10 of 14 sentences (0.71) carry at least one hedging term.",
+      "fix": "Remove the hedge from sentences whose claim the evidence actually supports, reserving qualification for the claims that genuinely need it.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "severity": 3,
+      "violation": "More than 0.35 of the artifact's sentences carry a term from the hedging lexicon (may, might, could, possibly, perhaps, arguably, somewhat, relatively, it seems, appears to, tends to, to a degree), spread across the whole document rather than concentrated where the evidence actually underdetermines the claim."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-QUALIFIER",
+      "evidence": "\"This recommendation removes every overdue-related charge permanently, for every item the consortium owns, without qualification.\" The grounds behind it: a self-reported avoidance survey showing a drop \"from 20 percent of respondents before the pilot to 3 percent after it\", administered \"at the same pilot branches immediately before and twelve months into the pilot\", at what the \"Addressing the Revenue Concern\" section identifies as \"the four pilot branches\".",
+      "fix": "Replace \"permanently ... without qualification\" with language scoped to what the pilot evidence supports, for example committing to the systemwide change with a defined review point after a stated period, rather than foreclosing any future adjustment.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"Recommendation\" section, third sentence",
+      "severity": 3,
+      "violation": "TOULMIN-QUALIFIER requires the claim's asserted strength to match what its grounds establish. \"Permanently\", \"every item\", and \"without qualification\" assert unconditional, perpetual certainty, but the grounds are a single self-reported survey at four of the ten branches over one twelve-month window, with the return-rate half of the cited evidence absent entirely. The grounds support a confident recommendation; they do not support an unqualified, permanent, no-exceptions one."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-CLAIM",
+      "evidence": "\"the stronger choice is a systemwide end to overdue fines across all ten consortium branches, effective at the start of the next fiscal year.\" is immediately followed by \"Specifically, the recommended change is about making things better for patrons going forward, in whatever way the consortium finds workable.\" and then by \"This recommendation removes every overdue-related charge permanently, for every item the consortium owns, without qualification.\"",
+      "fix": "Delete or rewrite the \"Specifically\" sentence so it restates the first sentence's scope exactly rather than loosening it, and bring the third sentence's scope and duration language in line with the first sentence rather than broadening it further.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"Recommendation\" section, its first three sentences",
+      "severity": 2,
+      "violation": "The artifact flags its second sentence with \"Specifically\" as the specification of the ask, but that sentence is vaguer than the first (\"making things better ... in whatever way the consortium finds workable\" names no concrete action), and the third sentence then restates the ask again in broader, more absolute terms (\"every overdue-related charge\", \"permanently\", \"without qualification\") than the first sentence used. The three do not reduce to one claim, so a reader cannot tell which version is the actual ask: the scoped fine-elimination policy, an open-ended commitment to \"whatever is workable\", or an unconditional permanent removal of every charge."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-REBUTTAL",
+      "evidence": "The only objection the artifact raises is: \"a skeptic on the board points to overdue fines as a source of materials-replacement funding, and argues that eliminating them systemwide will leave a shortfall\", answered with finance-record figures. Elsewhere, the artifact's own grounds state the pilot covered \"the four pilot branches\" for \"twelve months\", while the \"Recommendation\" section asks for a change across \"all ten consortium branches\" made \"permanently\" and \"without qualification\"; no passage anywhere raises or answers whether a four-branch, twelve-month pilot licenses a permanent, ten-branch, unconditional rollout.",
+      "fix": "Add a passage addressing the branch-scope and duration gap directly: why a four-branch, twelve-month pilot justifies a permanent, ten-branch, unconditional rollout, either with evidence that closes the gap (e.g., branch-level comparability data) or by qualifying the recommendation's scope or duration accordingly.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the \"Addressing the Revenue Concern\" section, and the absence of any comparable section elsewhere in the document",
+      "severity": 2,
+      "violation": "TOULMIN-REBUTTAL requires the argument to name and address the conditions its own grounds leave open. The artifact's own stated scope (four of ten branches, twelve months) versus its own stated claim (ten branches, permanent, unconditional) is exactly such a condition, and it is never raised, even though a narrower objection (revenue) is raised and answered in the same document."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/argument/argument-002.md",
+    "artifact_sha256": "0322bc2ebeb48318c56473186a8cb1f1e78d8667b99cfaf75ee7bb84f82fcfa2",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "TOULMIN"
+    ],
+    "skill": "critique-argument",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T06:15:48Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 3 projects, synced last week.\" followed by a list with 2 items",
+      "fix": "Either add a third project to the list or change \"3 projects\" to \"2 projects\".",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "workspace-overview, paragraph",
+      "severity": 3,
+      "violation": "The count states 3 projects but only 2 are listed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\"></button>`",
+      "fix": "Add visible text content or an aria-label attribute describing what the button does.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "project-settings section, duplicate button",
+      "severity": 3,
+      "violation": "The button contains no text, label, or aria-label to indicate its purpose."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Form with `<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` followed by `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>`",
+      "fix": "Either remove the Continue link and let the form submission navigate to the success state, or clearly document what Save does versus what Continue does if they serve different purposes.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "invite-member section",
+      "severity": 3,
+      "violation": "The form includes both a Save submit button and a separate Continue link that navigate to the same destination, creating an unclear user flow."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T13:54:24Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<meta charset=\"utf-8\">` followed directly by `<title>Join Meridian Outfitters</title>` with no other meta tags",
+      "fix": "Add `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">` to the `<head>`.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<head>` section",
+      "severity": 3,
+      "violation": "There is no viewport meta tag, so the form will not scale correctly on mobile browsers and may render zoomed out or with incorrect tap-target sizing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"form\">`",
+      "fix": "Add explicit `action=\"/signup\"` and `method=\"post\"` attributes (or document that submission is handled entirely via JavaScript).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<form id=\"form\">` opening tag",
+      "severity": 3,
+      "violation": "The form has no `action` or `method` attribute, so a native (non-JS) submission has no defined destination or HTTP verb."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"website-input\" name=\"website\" required=\"\" type=\"text\">`",
+      "fix": "Make the field optional (or remove it for a consumer signup flow) and change `type=\"text\"` to `type=\"url\"`.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-website (`Company website`)",
+      "severity": 3,
+      "violation": "A personal \"Join\" signup form forces every user to supply a company website, which doesn't apply to individual customers, and the field uses `type=\"text\"` instead of `type=\"url\"`, so no URL format is validated even when one is entered."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no `pattern` or `maxlength` attribute on `#member-input`",
+      "fix": "Add `pattern=\"[0-9]{8}\"` and `maxlength=\"8\"`, move the format hint into persistent helper text, and clarify whether this field only applies to existing members (making it optional otherwise).",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-member (`Membership number (8 digits)`)",
+      "severity": 3,
+      "violation": "The 8-digit requirement is communicated only through placeholder text, which disappears once typing starts, and is not enforced by any `pattern`/`maxlength`, so non-conforming values can be submitted. It's also contradictory to require an existing membership number on a form titled \"Create your account\"/\"Join.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required=\"\">`",
+      "fix": "Either remove this field or add explanatory text about what it refers to, make it optional if not universally applicable, and add a `pattern`/`maxlength` matching the expected format.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "row-acctnum (`Account number`)",
+      "severity": 3,
+      "violation": "A brand-new signup form requiring a mandatory \"Account number\" is both unexplained (account number for what system?) and has no format constraint despite being numeric, and asking for this on account creation reads as a sensitive/suspicious data request with no stated purpose."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"postal-input\" name=\"postal_code\" type=\"text\" autocomplete=\"postal-code\" required=\"\" size=\"3\">`",
+      "fix": "Remove the `size` attribute or increase it to at least 10, and let CSS control width instead.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "row-postal (`Postal code`)",
+      "severity": 3,
+      "violation": "`size=\"3\"` renders a visible input box of only ~3 characters, far too small for most postal codes (e.g., 5-digit US ZIP codes or longer alphanumeric UK/Canadian postcodes), causing poor usability."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Standard</option><option>Express</option><option>Overnight</option><option>Next-day</option><option>International</option>`",
+      "fix": "Collapse \"Overnight\"/\"Next-day\" into one option and move \"International\" to a separate shipping-destination field (or remove it from this list).",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "row-shipspeed (`Preferred shipping speed`)",
+      "severity": 3,
+      "violation": "\"Overnight\" and \"Next-day\" are overlapping/duplicate concepts, and \"International\" describes a destination, not a shipping speed, making the option set internally inconsistent."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"legalname-input\" name=\"legal_name\" type=\"text\" autocomplete=\"name\" ...>` duplicating `<input id=\"name-input\" name=\"full_name\" type=\"text\" autocomplete=\"name\" ...>` in row-name",
+      "fix": "Remove one of the two name fields, or rename/repurpose \"legal_name\" with a distinct `autocomplete` value (e.g., `off`) and a label that clarifies why it differs from \"Full name.\"",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "row-legalname (`Your name`)",
+      "severity": 3,
+      "violation": "Two separate required fields both collect the user's name with identical `autocomplete=\"name\"`, which is redundant, will confuse browser autofill (both may populate from the same source), and burdens the user with entering the same data twice."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"org-input\" name=\"organization\" type=\"text\" required=\"\" style=\"font-size:13px\">`",
+      "fix": "Remove the inline `style=\"font-size:13px\"` and let it inherit the same font size as other inputs.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "row-org (`Organization name`)",
+      "severity": 3,
+      "violation": "This input is styled with a smaller font size than every other field on the form via an inline style, creating inconsistent visual hierarchy and reduced legibility."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"contacttime-label\" for=\"contacttime-input\" style=\"display:inline-block;float:left;width:140px\">Preferred contact time</label>` followed by `<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Replace the free-text input with a `<select>` of defined time ranges (consistent with the shipping-speed pattern), and remove the inline style in favor of the same styling approach used by other labels.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "row-contacttime (`Preferred contact time`)",
+      "severity": 3,
+      "violation": "This is a required free-text field with no format guidance (e.g., no placeholder, pattern, or time picker), inviting inconsistent data like \"mornings\" vs \"9am-12pm\"; additionally its label uses one-off inline float/width styling not used by any other label in the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>` placed directly between row-contacttime and the row-dob fieldset, with no surrounding row div and no script in the document wiring it up",
+      "fix": "Either implement its intended behavior (e.g., a details modal/toggle) or remove it; if kept, wrap it in a row div consistent with other elements and move it away from the submit flow.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "`#viewdetails-btn`",
+      "severity": 3,
+      "violation": "This button has no associated behavior anywhere in the document (it's `type=\"button\"` with no handler), so clicking it does nothing; it also breaks the form's consistent div-per-field structure and sits oddly among input rows right before the submit button, risking accidental clicks."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "year options list only `1950` through `2009`",
+      "fix": "Generate the year list dynamically relative to the current year (e.g., current year minus 100 through current year minus a minimum age threshold) instead of a hardcoded range.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "row-dob, `#dob-year-select`",
+      "severity": 3,
+      "violation": "This arbitrarily excludes any customer born before 1950 (age 76+ in 2026) and anyone born after 2009, incorrectly preventing valid adult customers from completing signup."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-002.html",
+    "artifact_sha256": "e39d0a6e9175987711e114d2ce5edd568205f5aecafb2d271246e6036a16457f",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T11:14:19Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 12,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

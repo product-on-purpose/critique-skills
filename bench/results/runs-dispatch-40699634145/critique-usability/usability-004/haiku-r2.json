@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "A form with a Submit button labeled 'Save' for the digest frequency field has no specified result state.",
+      "fix": "Specify what screen or state the user sees after clicking Save - either return to the prior screen, a success confirmation, or an updated view showing the selected frequency.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "notification-settings section, Save button",
+      "severity": 2,
+      "violation": "The user has no indication of whether the preference change was saved successfully."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "A form with a Submit button labeled 'Save' for the project name field has no specified result: no next screen, no success message, no confirmation of state change.",
+      "fix": "Specify what screen or state the user sees after clicking Save - either a success confirmation and return to project-settings, or an updated project-settings view with the new name displayed.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "project-settings section, Save button",
+      "severity": 2,
+      "violation": "The user has no indication of whether the save action succeeded, what the resulting state is, or what to do next."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "A button with aria-label='Duplicate project' is specified, but the artifact does not define what screen or state results from clicking it.",
+      "fix": "Specify the outcome of clicking Duplicate - whether it creates a copy with a modified name, shows a confirmation dialog, or transitions to another state where the user can confirm the duplication.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "project-settings section, duplicate button",
+      "severity": 2,
+      "violation": "The user cannot predict what will happen when they click the Duplicate button."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "The archive-confirm section states 'You can restore it at any time from the archived projects list,' but the artifact contains no screen for viewing archived projects or accessing a restore control.",
+      "fix": "Add a screen showing archived projects with a restore control, and link to it from the project-archived confirmation or from project-settings.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "archive-confirm and project-archived sections",
+      "severity": 2,
+      "violation": "A reversible action describes the possibility of reversal but provides no interface in the artifact to perform it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "The invite-sent confirmation states 'An invite was sent to the address entered above,' but does not display the email address itself.",
+      "fix": "Display the email address on the invite-sent confirmation screen so the user can verify it without going back.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "invite-sent section",
+      "severity": 2,
+      "violation": "Information needed at this step - the email address that received the invite - is not available on the screen."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:31:35Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

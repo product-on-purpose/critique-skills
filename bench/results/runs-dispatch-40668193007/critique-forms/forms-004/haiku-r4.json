@@ -1,0 +1,50 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "The secondary action button at line 73 carries inline styles (padding:12px 20px;font-size:16px) that make it appear more visually prominent than the primary submit button at line 74, which has no styling.",
+      "fix": "Either remove the explicit styling from the secondary button or apply matching or lesser styling compared to the primary submit button. The primary action should be visually most prominent.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> element",
+      "severity": 2,
+      "violation": "Secondary action more prominently styled than primary. The \"View details\" button has explicit padding (12px 20px) and font-size (16px) declarations, while the primary \"Create account\" submit button has no styling."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "Line 12: <input id=\"name-input\" name=\"full_name\" type=\"text\" ... autocomplete=\"name\" ... >. Line 62: <input id=\"legalname-input\" name=\"legal_name\" type=\"text\" ... autocomplete=\"name\" ... >. Both fields serve the same purpose and force duplicate entry.",
+      "fix": "Remove one of the two name fields. If distinct fields are needed (e.g., one for display and one for legal documents), label them clearly and explain why both are needed. Otherwise, use a single name field.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label 'Your name', line 62",
+      "severity": 2,
+      "violation": "The form asks for the person's name twice. The \"Full name\" field (#name-input, line 12) and \"Your name\" field (#legalname-input, line 62) both request a person's name with identical autocomplete=\"name\" attributes, requiring the person to fill the same information twice."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T10:47:21Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

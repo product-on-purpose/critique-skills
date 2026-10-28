@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The connection dropped before this finished.\"",
+      "fix": "Name the action explicitly, e.g. \"The connection dropped before your sign-up could be sent.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Signup form, email field - first message entry, Message field",
+      "severity": 3,
+      "violation": "The pronoun \"this\" has no clear antecedent, so the user can't tell what action failed (the page load, the submission, a validation check) or what to retry."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-blur\" paired with \"The connection dropped before this finished.\"",
+      "fix": "Change Fires to on-submit (or whichever event actually initiates the network request this message refers to).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Signup form, email field - first message entry, Fires field",
+      "severity": 3,
+      "violation": "A dropped-connection error implies a network call was in flight, but on-blur fires from simply leaving the field with no network call involved, so the stated trigger can't actually produce this failure."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" on \"The connection dropped before this finished.\"",
+      "fix": "Change to \"Predictable mistake: no\" to match the equivalent system-failure entry.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Signup form, email field - first message entry, Predictable mistake field",
+      "severity": 3,
+      "violation": "A dropped connection is a system/infrastructure failure, not a user mistake, so classifying it as a predictable mistake is inconsistent with the parallel checkout entry \"Something went wrong...\" which is marked \"no\" for the same kind of system-level failure."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Signal: one step bolder and larger than the field label, none\"",
+      "fix": "Add an icon (or color cue) consistent with the other entries so the error isn't communicated through text weight/size alone.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Signup form, email field - second message entry, Signal field",
+      "severity": 3,
+      "violation": "This is the only entry in the document with no icon, relying solely on a one-step increase in weight/size to signal an error - a weaker, less accessible signal than every other entry uses, for what is likely the first validation error a new user ever sees."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Placement: \"in a banner directly above the payment method selector, staying on screen until another method is chosen\" / Container: \"inline\"",
+      "fix": "Set Container to \"banner\" to match the described placement (or correct the placement text if \"inline\" is intended).",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Checkout form, payment method - first message entry, Container and Placement fields",
+      "severity": 3,
+      "violation": "The placement explicitly describes a banner, but the Container field labels it \"inline,\" which directly contradicts the placement description."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: mid-keystroke\" on \"The expiry date on this card has passed.\"",
+      "fix": "Change Fires to on-blur (or trigger only once month and year are both complete).",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Checkout form, payment method - second message entry, Fires field",
+      "severity": 3,
+      "violation": "Whether an expiry date has passed can't be determined until both month and year are fully entered, so firing mid-keystroke will flag the card as expired while the user is still typing a valid date."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You keep entering the wrong value. Re-enter it to continue.\" / Suggested fix: none",
+      "fix": "Replace with a specific description of the actual validation failure, e.g. \"Enter your phone number with a country code, like +1 555-123-4567,\" and update Suggested fix accordingly.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Profile settings, phone number - first message entry, Message and Suggested fix fields",
+      "severity": 3,
+      "violation": "The message doesn't state what is actually wrong with the value (format, length, missing country code, etc.) and blames the user (\"you keep\") instead of explaining the issue, yet it's marked as needing no fix even though it's flagged as a predictable mistake, which should get a specific, actionable message."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: cleared\"",
+      "fix": "Change to \"preserved\" to match the pattern used in all other entries.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Profile settings, phone number - second message entry, Input on resubmission field",
+      "severity": 3,
+      "violation": "Every other entry in the document preserves user input on resubmission; clearing the phone number here is inconsistent and forces the user to retype a value that wasn't even the problem, since the fix requires action elsewhere (removing it from the other account or contacting support), not re-entering the number."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-001.md",
+    "artifact_sha256": "0580399008ca4517da0a1b1f620180b68a4cfb24e596be279a5f782cde325fc7",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:08:02Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

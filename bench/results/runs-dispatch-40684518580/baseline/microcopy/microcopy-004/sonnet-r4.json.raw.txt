@@ -1,0 +1,44 @@
+Location: Two-factor setup, verification code — first message, Message field
+Evidence: "Check the message again and enter all six."
+Problem: "the message" has no clear antecedent on screen — it assumes the code arrived via a rereadable text/email message, which may not hold if the code comes from an authenticator app, and nothing tells the user which "message" is meant.
+Fix: Name the source explicitly (e.g., "Check the text message we sent and enter all 6 digits") or drop the assumption and simply say "Enter all 6 digits of the code."
+
+Location: Two-factor setup, verification code — first message, Signal field
+Evidence: "Signal: bold text set larger than the field label, icon"
+Problem: Making the error larger and bolder than the field label it describes inverts the expected label/error visual hierarchy, and this identical heavy treatment is reused for all four messages regardless of severity, giving a minor digit-count slip the same visual weight as a security-relevant expired-code warning.
+Fix: Scale signal strength to severity — keep low-stakes format errors no larger than the label, and reserve stronger treatment for security/account-risk messages.
+
+Location: Two-factor setup, verification code — first message, Predictable mistake / Suggested fix fields
+Evidence: "Predictable mistake: yes" ... "Suggested fix: none"
+Problem: Marking a mistake "predictable" is normally the cue for a preventive fix (e.g., limiting the field to 6 numeric characters), yet none is proposed here, while the "no" (expired code) case below does get a concrete suggested fix.
+Fix: Propose a preventive fix such as input length limiting/masking on the code field, or state why none is warranted.
+
+Location: Two-factor setup, verification code — second message, Input on resubmission field
+Evidence: "Input on resubmission: preserved"
+Problem: The code is expired and cannot be reused, so preserving the stale value in the field alongside a "Resend code" action leaves an invalid value sitting in the input, inviting the user to resubmit the same dead code.
+Fix: Clear the field (or mark its contents invalid) once a new code is requested, instead of preserving the expired value.
+
+Location: Two-factor setup, verification code — second message, Suggested fix field
+Evidence: "selectable, offers a resend code button in place of the message"
+Problem: The text is a sentence fragment — "selectable" has no subject or clear referent — so the recommendation isn't actionable as written.
+Fix: Rewrite as a complete recommendation, e.g., "Replace the message with a 'Resend code' button."
+
+Location: Billing, promo code — first message, Message field
+Evidence: "This promo code ended on 30 June."
+Problem: No year is given, so the expiration date is ambiguous — the user can't tell whether the code lapsed this year or a previous year.
+Fix: Include the year, e.g., "This promo code ended on 30 June 2026."
+
+Location: Billing, promo code — first message, Fires field
+Evidence: "Fires: on-blur"
+Problem: This expiration check fires on-blur, while the verification code's expiration check above fires on-submit, even though both are the same kind of time-based validity lookup; no reason is given for the different timing, and on-blur also means the error can re-fire every time the user tabs through other billing fields and back without changing the code.
+Fix: Apply one consistent timing rule for expiry checks across both screens, and only re-check on-blur when the code value has actually changed.
+
+Location: Billing, promo code — first message, Predictable mistake field
+Evidence: "Predictable mistake: no"
+Problem: Entering a stale promo code (from an old email or expired ad) is a common, foreseeable mistake, yet it's marked "no" while the plan/code mismatch in the next message is marked "yes" — the expired-code case seems at least as predictable, making the classification inconsistent.
+Fix: Re-apply the "predictable mistake" criterion consistently across both messages, or document what distinguishes them.
+
+Location: Billing, promo code — first message, Suggested fix field
+Evidence: "Suggested fix: none"
+Problem: This message is structurally identical to the expired verification-code message (same kind of expiry failure), which received a concrete suggested fix (a resend button), but no analogous fix is proposed here, with no explanation for the different treatment.
+Fix: Propose an analogous fix (e.g., a "browse current codes" link or a one-click remove-code action) or explain why this case doesn't need one.

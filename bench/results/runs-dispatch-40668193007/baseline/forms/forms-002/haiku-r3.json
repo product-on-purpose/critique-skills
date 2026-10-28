@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`type=\"text\"` on website input",
+      "fix": "Change to `type=\"url\"`.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "id=\"row-website\"",
+      "severity": 3,
+      "violation": "The website field uses type=\"text\" instead of type=\"url\", missing built-in validation and URL formatting support."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no pattern attribute",
+      "fix": "Add `pattern=\"[0-9]{8}\"` to validate exactly 8 digits.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "id=\"row-member\"",
+      "severity": 3,
+      "violation": "The field claims to require exactly 8 digits but has no validation pattern to enforce this constraint."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`size=\"3\"` attribute",
+      "fix": "Remove the `size=\"3\"` attribute.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "id=\"row-postal\"",
+      "severity": 3,
+      "violation": "The visual width is limited to 3 characters, which will truncate longer postal codes like ZIP+4 format."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Your name\" label with name=\"legal_name\" appearing after \"Full name\" field with name=\"full_name\"",
+      "fix": "Remove one of the duplicate name fields or clearly distinguish their purposes (e.g., \"Legal name\" vs. \"Display name\").",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "id=\"row-legalname\"",
+      "severity": 3,
+      "violation": "The form contains two separate fields asking for a person's name, making it unclear what the difference between them should be."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Only street address field present, no city or state/province fields",
+      "fix": "Add city and state/province input fields after the street address field.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "id=\"row-street\"",
+      "severity": 3,
+      "violation": "The address is incomplete, missing city and state/province fields necessary for a valid mailing address."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`type=\"text\"` for contact_time input",
+      "fix": "Replace with `type=\"time\"` or a select element with predefined contact time options (e.g., \"Morning\", \"Afternoon\", \"Evening\").",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "id=\"row-contacttime\"",
+      "severity": 3,
+      "violation": "Using a text field for preferred contact time is ambiguous - no expected format is specified and users may enter varying formats."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`type=\"button\"` with no onclick handler or script",
+      "fix": "Either remove the button or add an onclick handler with defined behavior.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "id=\"viewdetails-btn\"",
+      "severity": 3,
+      "violation": "The button has no associated functionality or clear purpose in the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Year options range from 1950 to 2009",
+      "fix": "Update the year range to reflect current age requirements, or replace the three separate dropdowns with `type=\"date\"` for better usability.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "id=\"dob-year-select\"",
+      "severity": 3,
+      "violation": "The maximum year allows only people aged 17 or older (as of 2026), suggesting an outdated range that may not reflect intended age requirements."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-002.html",
+    "artifact_sha256": "e39d0a6e9175987711e114d2ce5edd568205f5aecafb2d271246e6036a16457f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T10:15:55Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

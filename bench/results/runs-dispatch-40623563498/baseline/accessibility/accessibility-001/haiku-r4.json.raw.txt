@@ -1,0 +1,24 @@
+Location: Line 1, html element
+Evidence: `<html lang="translanguage" id="html">`
+Problem: "translanguage" is not a valid BCP 47 language code.
+Fix: Change `lang="translanguage"` to a valid code like `lang="en"` or the appropriate language for the document.
+
+Location: Line 7, title element
+Evidence: `<title id="head-title"></title>`
+Problem: The title element is empty and provides no descriptive content for the page.
+Fix: Add descriptive text between the tags, such as `<title>Rider Service Updates</title>`.
+
+Location: Section s1, image element
+Evidence: `<img src="/img/platform-update.jpg" id="s1-img1">`
+Problem: The image is missing a required alt attribute for accessibility.
+Fix: Add an alt attribute describing the image content, for example: `<img src="/img/platform-update.jpg" id="s1-img1" alt="Platform update screenshot">`.
+
+Location: Section s2, heading element
+Evidence: `<h4 id="s2-h">Accessibility improvements</h4>` appearing after `<h2 id="s1-h">Fare adjustments</h2>`
+Problem: Heading hierarchy skips from h2 directly to h4, violating proper semantic structure which should use sequential levels.
+Fix: Change `<h4>` to `<h3>`.
+
+Location: Section s3, promo code input element
+Evidence: `<input id="promo" type="text" aria-invalid="true">` with error message `<span class="error-text" aria-live="polite" id="s3-form-promo-error">`
+Problem: The input has `aria-invalid="true"` but is not connected to the error message element that describes the validation error.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the input element to link it to the error message.

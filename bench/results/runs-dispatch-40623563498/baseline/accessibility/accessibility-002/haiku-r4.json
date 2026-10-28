@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"color:#999999\"` applied to \"Passengers should review the updated schedule at any station kiosk.\"",
+      "fix": "Remove the inline style or use a darker color that maintains proper contrast while still differentiating the paragraph visually.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "s1-p1 paragraph",
+      "severity": 3,
+      "violation": "Gray text (#999999) de-emphasizes important information that should be prominent in a service announcement."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"topic-alt\"...>` but `<select id=\"topic\">`",
+      "fix": "Change the label's `for` attribute to `for=\"topic\"` to match the select's id.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "s3-form, Route field label and input",
+      "severity": 3,
+      "violation": "The label's `for` attribute references \"topic-alt\" while the select element has id=\"topic\", so the label does not associate with the input."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"phone\"...>Phone number (required)</label>` with `<input id=\"phone\" type=\"tel\">` lacking a required attribute",
+      "fix": "Add `required` attribute to the phone input: `<input id=\"phone\" type=\"tel\" autocomplete=\"tel\" required>`.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "s3-form, Phone number field",
+      "severity": 3,
+      "violation": "The label indicates the field is required, but the input element has no `required` attribute, creating an inconsistency between the UI label and the actual form validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">` without `aria-describedby` linking to the error message",
+      "fix": "Remove `aria-invalid=\"true\"` from the input and add `aria-describedby=\"s3-form-promo-error\"` to link the error message, then set `aria-invalid=\"true\"` only when validation fails.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "s3-form, Promo code field",
+      "severity": 3,
+      "violation": "The input is permanently marked as invalid even before the user interacts with it, and the error message span is not linked to the input for screen readers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"status-card\" role=\"status\" id=\"s3-statuscard\" style=\"height:60px;overflow:hidden\">`",
+      "fix": "Remove the `height:60px;overflow:hidden` inline styles to allow the content to display fully.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "s3-statuscard div",
+      "severity": 3,
+      "violation": "The fixed height of 60px with overflow:hidden will cut off the paragraph content below, hiding important information about reporting service issues."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">`",
+      "fix": "Add keyboard event handlers (JavaScript) or replace this with a proper `<button>` element.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "s3-customcontrol div",
+      "severity": 3,
+      "violation": "A div with role=\"button\" must handle Enter and Space key events for keyboard accessibility, but there are no event handlers defined in the HTML."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"wizard-steps\" id=\"s3-wizard\">` containing three step divs with no ARIA attributes",
+      "fix": "Add `role=\"group\" aria-label=\"Checkout steps\"` to the wizard div and consider adding aria-current=\"step\" to the active step.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "s3-wizard div",
+      "severity": 3,
+      "violation": "The wizard structure lacks proper ARIA attributes such as role=\"group\" and aria-label to describe its purpose and help screen reader users understand the step progression."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "In the \"Weekend service\" section, link text reads `read the accessibility improvements list`",
+      "fix": "Change the link text to reflect the section content, such as `read the full list of upcoming service adjustments`.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "s3-linkpara, link text",
+      "severity": 3,
+      "violation": "The link text references \"accessibility improvements\" but this is the \"Weekend service\" section - the link text does not match the section's topic."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-002.html",
+    "artifact_sha256": "77a0e7586bb29a0807dde74bad599c5697360ab159315d8c672e432e2dedf0fd",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:11:11Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

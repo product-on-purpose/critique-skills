@@ -1,0 +1,69 @@
+Location: <head> section
+Evidence: `<meta charset="utf-8">` is the only meta tag present
+Problem: There is no `<meta name="viewport">` tag, so the form will not scale or lay out correctly on mobile browsers.
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to the `<head>`.
+
+Location: row-password, `password-input`
+Evidence: `minlength="6"`
+Problem: A 6-character minimum password length is weak and falls below common security baselines (typically 8+ characters).
+Fix: Raise `minlength` to at least 8 and consider adding complexity guidance or a strength meter.
+
+Location: row-phone
+Evidence: `<p>Thanks for signing up.</p>` appears inside the phone number row, before the form has been submitted
+Problem: A post-submission thank-you message is shown mid-form while the user is still filling it out, which is confusing and suggests leftover/misplaced content.
+Fix: Remove this paragraph from the form, or move equivalent confirmation text to a post-submit success state.
+
+Location: row-street / row-postal
+Evidence: Fields present are `street_address` (`address-line1`) and `postal_code`, with no corresponding city field
+Problem: The address block is incomplete — there is no city (or state/region) field, which is needed alongside street and postal code for a valid mailing/shipping address.
+Fix: Add a city field (and state/region if applicable) with `autocomplete="address-level2"`.
+
+Location: row-website, `website-input`
+Evidence: `<input id="website-input" name="website" type="url" required="">`
+Problem: Company website is marked required, but this is a personal account signup form (full name, personal email, phone) — not every signing-up user will have a company website.
+Fix: Make the website field optional, or remove it unless the form is specifically for business accounts.
+
+Location: row-member, `member-input`
+Evidence: `placeholder="Must be 8 digits"` with `type="text"` and `inputmode="numeric"` but no `pattern`, `minlength`, or `maxlength`
+Problem: The placeholder states a validation rule that is never actually enforced, so any text passes validation despite the stated requirement.
+Fix: Add `pattern="\d{8}"` and `maxlength="8"`/`minlength="8"` to enforce the stated 8-digit format.
+
+Location: row-acctnum, `acctnum-input`
+Evidence: `<input id="acctnum-input" name="account_number" type="text" required="">`
+Problem: A bare "Account number" field with no explanation of what it refers to is collected as required, with no `autocomplete` attribute and no context — this looks like scope creep collecting sensitive financial/identifying data on a signup form.
+Fix: Either remove this field, make it optional, or add label/help text clarifying what account number is being requested and why it's needed at signup.
+
+Location: row-legalname (`given-input`, `family-input`) vs row-name (`name-input`)
+Evidence: row-name collects `full_name`, while row-legalname separately collects `given_name` and `family_name`
+Problem: The form collects the user's name twice in two different, redundant formats (one free-text full name field and separate first/last name fields), creating duplicate and potentially inconsistent data.
+Fix: Pick one representation (preferably split given/family name) and remove the other.
+
+Location: row-org, `org-input`
+Evidence: `<input id="org-input" name="organization" type="text" style="font-size:16px" required="">`
+Problem: This is the only input with an inline `font-size:16px` style (likely to avoid iOS auto-zoom), which is inconsistent with every other text input in the form and signals an unaddressed mobile-zoom issue elsewhere; the field is also marked required despite this being a consumer signup form.
+Fix: Apply a consistent base font-size (≥16px) to all form inputs via CSS rather than one inline style, and reconsider whether organization name should be required.
+
+Location: row-contacttime, `contacttime-input`
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: "Preferred contact time" is a free-text required field with no format hint, placeholder, or constraint, making it impossible for users to know what input is expected and impossible to parse reliably.
+Fix: Replace with a `<select>` of time ranges or a `<input type="time">`/structured control, and add a placeholder or help text describing the expected format.
+
+Location: row-shipspeed, `shipspeed-select`
+Evidence: `<select id="shipspeed-select" required="">` with first `<option>Standard</option>` having no empty/placeholder option
+Problem: Since the first option is already a valid value, the `required` attribute has no effect — users can submit without ever consciously choosing a shipping speed, silently defaulting to "Standard".
+Fix: Add a disabled, selected placeholder option (e.g., `<option value="" disabled selected>Select shipping speed</option>`) so `required` actually forces an explicit choice.
+
+Location: `viewdetails-btn`
+Evidence: `style="padding:1px 2px;font-size:11px"`
+Problem: The button's tiny padding and font size produce a touch/click target far below accessible minimums (e.g., WCAG 2.5.5 recommends 44×44px), making it hard to tap, especially on mobile.
+Fix: Increase padding and font-size to match the other buttons' sizing, or set an explicit min-width/min-height.
+
+Location: `submit-btn` and `reset-btn`
+Evidence: `<button id="submit-btn" type="submit">Create account</button>` immediately followed by `<button id="reset-btn" type="reset">Clear form</button>`
+Problem: Placing a full-form reset button directly adjacent to the submit button risks accidental activation, wiping all entered data with no confirmation step.
+Fix: Remove the reset button, or visually separate it and add a confirmation prompt before clearing the form.
+
+Location: `<form id="form">`
+Evidence: `<form id="form">` has no `action` or `method` attribute
+Problem: Without an `action`/`method` (or equivalent JS submit handler indicated), the form has no defined submission target and will not actually send data anywhere on a plain HTML submit.
+Fix: Add `action="/signup"` and `method="post"` (or confirm a JS handler intercepts `submit` and document that dependency).

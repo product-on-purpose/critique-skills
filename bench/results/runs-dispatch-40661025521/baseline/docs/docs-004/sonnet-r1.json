@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert.\"",
+      "fix": "Add a line specifying whether endpoint_url is required and, if optional, what the default behavior is when it's unset.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "## endpoint_url",
+      "severity": 3,
+      "violation": "The field's required/optional status and default value (if any) are never stated, leaving readers unable to tell whether omitting it is valid."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"accepts an HTTPS URL\"",
+      "fix": "State explicitly what happens when a non-HTTPS URL is supplied (e.g. \"requests with an http:// URL are rejected with a validation error\").",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "## endpoint_url",
+      "severity": 3,
+      "violation": "It's not stated whether a non-HTTPS (e.g. plain HTTP) URL is rejected with an error, silently coerced, or merely discouraged, which is ambiguous for an integration relying on this reference."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"a string used to verify the payload signature on receipt\"",
+      "fix": "Document the signing algorithm, the exact header name the signature is sent in, and the construction of the signed string (e.g. HMAC-SHA256 of the raw body using signing_secret as key, sent in X-Signature header).",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "## signing_secret",
+      "severity": 3,
+      "violation": "The signing mechanism itself is undocumented - there's no mention of the signing algorithm (e.g. HMAC-SHA256), which header carries the resulting signature, or how the secret combines with the payload, making it impossible to actually implement verification from this reference."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The signing_secret field accepts a string\"",
+      "fix": "State whether signing_secret is required, what the default is if omitted (e.g. unsigned payloads), and any length/format constraints.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "## signing_secret",
+      "severity": 3,
+      "violation": "No required/optional status or default is given, and no constraints (minimum length, allowed characters) are specified, unlike guidance typically expected for a secret field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"accepts one of none, linear, or exponential, and the default value is exponential\"",
+      "fix": "Add a definition for each value (e.g. \"none: single delivery attempt, no retries\"; \"linear: retries every N seconds up to M attempts\"; \"exponential: backoff starting at N seconds, doubling up to M attempts\").",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "## retry_policy",
+      "severity": 3,
+      "violation": "The three enum values are named but never individually defined - there is no description of the actual retry schedule, interval, or maximum attempt count for any of them, so a reader cannot predict delivery behavior."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential.\"",
+      "fix": "Add a sentence describing the terminal behavior after retries are exhausted.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "## retry_policy",
+      "severity": 3,
+      "violation": "There is no mention of what happens once all retries are exhausted (e.g. whether the webhook is disabled, an alert is raised, or the event is dropped), which is a core part of \"delivery\" behavior implied by the document's title."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-004.md",
+    "artifact_sha256": "7f41536ab3c3f7bc93a3dde86b8e81cee5dab0339f2b1d472e9222a20b42d7ae",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T09:47:55Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

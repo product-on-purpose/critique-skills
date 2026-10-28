@@ -1,0 +1,74 @@
+Location: row-password, `password-input`
+Evidence: `<input id="password-input" name="password" type="password" autocomplete="new-password" minlength="8" required="">`
+Problem: The 8-character minimum is enforced only via the `minlength` attribute; there is no visible text telling the user the password requirement before they submit and get a validation error.
+Fix: Add visible helper text under the password field (e.g. "At least 8 characters") similar to the helper text used under the phone field.
+
+Location: row-phone2, `phone2-input`
+Evidence: `<input id="phone2-input" name="phone_secondary" type="tel" autocomplete="tel" pattern="[0-9]+">`
+Problem: Both the primary phone (`phone-input`) and secondary phone (`phone2-input`) use the identical `autocomplete="tel"` token, so browser autofill cannot distinguish them and may fill both fields with the same number.
+Fix: Differentiate the tokens, e.g. use `autocomplete="tel"` for the primary and remove/alter autocomplete (or use `"tel-national"`/no autocomplete) for the secondary field.
+
+Location: row-website, `website-input`
+Evidence: `<input id="website-input" name="website" required="" type="text">`
+Problem: A "Company website" field is marked required on a consumer account-creation form, which will block signups from users who have no company website; it also uses `type="text"` with no `autocomplete="url"` instead of the appropriate URL input type.
+Fix: Make the field optional (remove `required`) and change to `type="url" autocomplete="url"`, or remove the field entirely if it doesn't belong on a consumer signup form.
+
+Location: row-member, `member-input`
+Evidence: `placeholder="Must be 8 digits"` with no `maxlength` or `pattern` attribute
+Problem: The "must be 8 digits" requirement is communicated only via placeholder text (which disappears on focus) and is not actually enforced by any validation attribute.
+Fix: Add `maxlength="8"` and `pattern="[0-9]{8}"` so the constraint is enforced, and keep persistent helper text rather than relying solely on the placeholder.
+
+Location: row-acctnum, `acctnum-input`
+Evidence: `<input id="acctnum-input" name="account_number" type="text" inputmode="numeric" required="">`
+Problem: The form collects a sensitive "Account number" with no explanation of what it's for and no autocomplete/privacy handling, which is an unusual and risky data request during basic account creation.
+Fix: Either remove this field from the signup form or add explanatory text about why it's needed and how it will be protected, and reconsider whether it belongs here at all.
+
+Location: row-postal, `postal-input`
+Evidence: `size="3"`
+Problem: The postal code input is sized to show only 3 characters, which is too narrow for valid postal codes (e.g. 5-digit US ZIP codes or longer international formats), causing the entered text to scroll out of view.
+Fix: Increase `size` to at least 10, or remove the `size` attribute and control width via CSS.
+
+Location: row-shipspeed, `shipspeed-select`
+Evidence: `<select id="shipspeed-select" required="">`
+Problem: The select element has no `name` attribute, so the chosen shipping speed will never be included in the submitted form data.
+Fix: Add a `name` attribute, e.g. `name="shipping_speed"`.
+
+Location: row-shipspeed, `shipspeed-select` options
+Evidence: `<option>Overnight</option>` and `<option>Next-day</option>`
+Problem: "Overnight" and "Next-day" are redundant/synonymous shipping-speed options, which will confuse users about what distinguishes them.
+Fix: Remove one of the duplicate options or clarify how they differ (e.g. delivery time cutoffs).
+
+Location: row-legalname, `legalname-input`
+Evidence: `<label id="legalname-label" for="legalname-input">Your name</label> <input ... name="legal_name" autocomplete="name" ...>`
+Problem: This field duplicates the "Full name" field already collected in `row-name`, with the same `autocomplete="name"` token, forcing users to enter their name twice with no clear distinction between the two.
+Fix: Remove the redundant field, or if a legally distinct name is genuinely needed, relabel it clearly (e.g. "Legal name, if different from above") and explain the difference.
+
+Location: row-org, `org-input`
+Evidence: `<input id="org-input" name="organization" type="text" required="" style="font-size:13px">`
+Problem: "Organization name" is required on what otherwise appears to be a personal consumer signup form, which will block individual customers from completing registration; the inline `font-size:13px` style also makes this field visually inconsistent with the rest of the form.
+Fix: Make the field optional, and move the font-size styling into a shared stylesheet so all inputs render consistently.
+
+Location: row-contacttime, `contacttime-label`
+Evidence: `style="display:inline-block;float:left;width:140px"`
+Problem: The label is floated and width-constrained but the adjacent input has no matching layout styling, which will cause the label and input to misalign or overlap.
+Fix: Remove the ad hoc inline float/width styling and lay out the label/input pair consistently with the rest of the form (e.g. via a shared CSS class).
+
+Location: row-contacttime, `contacttime-input`
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: "Preferred contact time" is a required free-text field with no format guidance (e.g. "9am–5pm"), so submitted values will be inconsistent and hard to use.
+Fix: Replace with a constrained input such as a `<select>` of time ranges, or add a placeholder/pattern specifying the expected format.
+
+Location: `viewdetails-btn`
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>`
+Problem: This button sits between the contact-time field and the date-of-birth fieldset with no apparent purpose or associated handler, interrupting the form's field flow and tab order.
+Fix: Remove the button if unused, or move it out of the field sequence (e.g. into a header/info section) and give it a clear, documented purpose.
+
+Location: row-dob fieldset, `dob-day-select`, `dob-month-select`, `dob-year-select`
+Evidence: `<select id="dob-day-select" autocomplete="bday-day" required="">` (and the month/year selects have the same pattern)
+Problem: None of the three date-of-birth `<select>` elements have a `name` attribute, so the selected day, month, and year will never be submitted with the form.
+Fix: Add `name` attributes, e.g. `name="dob_day"`, `name="dob_month"`, `name="dob_year"`.
+
+Location: row-dob fieldset, `dob-year-select` options
+Evidence: `<option>1950</option>` ... `<option>2009</option>`
+Problem: The year options only span 1950–2009, excluding anyone born before 1950 (older than 76 in 2026) or after 2009 (younger than 17), and since there's no blank default option, a `required` select pre-selects the first option (1950) so a user could submit an unintended birth year without actively choosing one.
+Fix: Expand the year range to cover realistic customer ages, and add a disabled/blank default option (e.g. "Year") so the field isn't silently pre-filled with a valid-looking value.

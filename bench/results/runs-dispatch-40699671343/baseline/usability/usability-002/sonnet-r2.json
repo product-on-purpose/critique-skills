@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 5 projects, synced last week.\" followed by a `<ul>` with only 4 `<li>` entries (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)",
+      "fix": "Either add the missing fifth project to the list, correct the count to \"4 projects,\" or add a visible label (e.g., \"Recently viewed\") clarifying the list is not exhaustive.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<section id=\"workspace-overview\">`, intro paragraph and list",
+      "severity": 3,
+      "violation": "The stated project count (5) doesn't match the number of projects actually listed (4), and nothing in the visible text indicates the list is a partial/\"recent\" subset."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"project-settings-name-input\" type=\"text\" value=\"Customer Migration\">` (and similarly for the email input and the digest select) - none carry a `name` attribute",
+      "fix": "Add appropriate `name` attributes to every form input/select (e.g., `name=\"project_name\"`, `name=\"email\"`, `name=\"digest_frequency\"`).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<input id=\"project-settings-name-input\">`, `<input id=\"invite-member-email-input\">`, `<select id=\"notification-settings-digest-input\">`",
+      "severity": 3,
+      "violation": "None of the form controls have a `name` attribute, so if these forms were submitted, their values would not be included in the submitted data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible text (e.g., \"Duplicate\") or an icon with appropriate alt/visually-hidden text so the control is perceivable to all users.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, duplicate button",
+      "severity": 3,
+      "violation": "The button has no visible text and no icon, so it renders with no visible content - sighted users have no way to know it exists or what it does, even though it has an accessible name for screen readers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The link jumps directly to `#project-archived`, while a separate `<section id=\"archive-confirm\">` (\"Archive this project?\") exists but is never linked to from anywhere in the document",
+      "fix": "Change `project-settings-archive-link`'s href to `#archive-confirm` so the confirmation screen is shown before the project is archived.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`<a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a>`",
+      "severity": 3,
+      "violation": "Archiving a project is a destructive, team-wide action, but the actual flow skips the confirmation step entirely, making the `archive-confirm` section dead/unreachable content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` and, separately, `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>`",
+      "fix": "Remove the redundant control - either make \"Continue\" the form's submit button, or have the Save button itself navigate to `#invite-sent` on success.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`<section id=\"invite-member\">`",
+      "severity": 3,
+      "violation": "There are two competing ways to leave the form (a Save submit button and a Continue link that navigates to the \"Invite sent\" screen), with no indication that Continue depends on Save having been triggered, so a user could reach \"Invite sent\" without the invite actually being saved/sent."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\" / \"It no longer appears in the active projects list for anyone on the team.\"",
+      "fix": "Either add an \"archived projects list\" section with a restore action and link to it, or remove the references to a feature that isn't present in this mockup.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`<p id=\"archive-confirm-copy\">` and `<section id=\"project-archived\">`",
+      "severity": 3,
+      "violation": "Both passages reference an \"archived projects list\" view where restoration happens, but no such page, section, or link exists anywhere in the document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Other equivalent form-save actions use \"Save\" (`project-settings-save-btn`, `invite-member-save-btn`), while this one uses \"Submit\"",
+      "fix": "Rename the button to \"Save\" to match the labeling convention used elsewhere.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`<button id=\"notification-settings-save-btn\" type=\"submit\">Submit</button>`",
+      "severity": 3,
+      "violation": "Inconsistent labeling for the same type of action (saving a settings form) creates unnecessary terminology drift across the workspace."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T14:34:23Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

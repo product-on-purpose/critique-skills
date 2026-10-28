@@ -1,0 +1,29 @@
+Location: workspace-overview section, paragraph text
+Evidence: "This workspace holds 4 projects, synced last week." vs. the list below shows only 3 items
+Problem: The text states 4 projects but only 3 projects are listed in the ul element.
+Fix: Either add a fourth project to the list or change "4 projects" to "3 projects".
+
+Location: head section
+Evidence: No `<meta name="viewport">` tag present
+Problem: The document lacks a viewport meta tag, which is essential for responsive design and proper scaling on mobile devices.
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to the head section.
+
+Location: project-settings section, project-settings-duplicate-btn button
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>` with no visible content or child elements
+Problem: The button is empty with no visible text or icon, relying only on aria-label for accessibility, making it unclear to sighted users.
+Fix: Add an icon or visible text inside the button (e.g., `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project">⋮</button>` or similar).
+
+Location: notification-settings section, notification-settings-digest-input select
+Evidence: `<select id="notification-settings-digest-input">` with three `<option>` elements, none marked as selected
+Problem: The select element has no default selected option, so the field appears empty when the form loads.
+Fix: Add `selected` attribute to the first option or whichever should be the default: `<option selected>Daily</option>`.
+
+Location: archive-confirm section, archive-confirm-archive-link
+Evidence: `<a id="archive-confirm-archive-link" href="#project-archived">Archive</a>`
+Problem: A destructive action (archiving a project) is implemented as an anchor link rather than a button, which violates semantic HTML conventions and could bypass form validation or confirmation mechanisms.
+Fix: Replace with `<button id="archive-confirm-archive-btn" type="button">Archive</button>` (with appropriate form structure or JavaScript handler).
+
+Location: invite-member section
+Evidence: Form contains `<button id="invite-member-save-btn" type="submit">Save</button>` followed by a separate `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>`
+Problem: The form flow is unclear—users must submit the form with "Save" but then separately click "Continue" to proceed, which breaks the expected form submission pattern.
+Fix: Either make "Continue" the form's submit button and remove "Save", or remove "Continue" and let form submission navigate to the next step via JavaScript.

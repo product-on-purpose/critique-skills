@@ -1,0 +1,39 @@
+Location: <section id="workspace-overview"> — "Your projects" paragraph and list
+Evidence: "This workspace holds 5 projects, synced last week." followed by a `<ul>` containing only 4 `<li>` items.
+Problem: The stated project count (5) doesn't match the number of projects actually listed (4), and nothing visible on the page explains the discrepancy (e.g., no "recent" label is shown to the user).
+Fix: Either correct the count to "4 projects" or add a visible heading/label clarifying this is a partial/recent list, and/or list the missing 5th project.
+
+Location: <section id="project-settings"> — name input
+Evidence: `<input id="project-settings-name-input" type="text" value="Customer Migration">`
+Problem: "Customer Migration" is not one of the projects shown in the workspace-overview list (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp), even though this settings page is reached directly from that overview via "Open project settings."
+Fix: Make the project name consistent — either add "Customer Migration" to the workspace-overview list, or change the settings page to reference one of the listed project names.
+
+Location: <section id="project-settings"> — duplicate button
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text content and no icon, only an aria-label, so sighted users see a blank, unlabeled control.
+Fix: Add visible text (e.g., "Duplicate") or an icon plus visible label, retaining the aria-label only as supplementary screen-reader text if needed.
+
+Location: <section id="project-settings"> — archive link
+Evidence: `<a id="project-settings-archive-link" href="#project-archived">Archive project</a>`
+Problem: This link jumps straight to the terminal "Project archived" state instead of going through the "archive-confirm" confirmation dialog that exists elsewhere in the document for this exact action.
+Fix: Change the href to `#archive-confirm` so users see the confirmation step before the project is archived.
+
+Location: <section id="invite-member">
+Evidence: `<button id="invite-member-save-btn" type="submit">Save</button>` and `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>` both present in the same section.
+Problem: Two separate controls appear to both advance the invite flow (a form submit button and a navigation link) with no indication of how they differ, creating a confusing duplicate affordance.
+Fix: Remove one of the controls — e.g., drop the separate "Save" button and make "Continue" the form's single submit action leading to `#invite-sent`.
+
+Location: <section id="invite-sent">
+Evidence: "An invite was sent to the address entered above."
+Problem: The invite-sent page displays no email address field or value, so "entered above" refers to nothing visible on this page.
+Fix: Reword to something that doesn't depend on page position, e.g., "An invite was sent to the email address you provided," or display the actual address that was entered.
+
+Location: <section id="archive-confirm">
+Evidence: `<section id="archive-confirm">` — no other element in the document contains `href="#archive-confirm"`.
+Problem: This confirmation section is unreachable; no link in the document ever navigates to it, making it dead/orphaned content.
+Fix: Link to it from "project-settings-archive-link" (see related finding) so the confirmation screen is actually part of the navigable flow.
+
+Location: <section id="notification-settings"> — save button
+Evidence: `<button id="notification-settings-save-btn" type="submit">Submit</button>`
+Problem: This form's submit action is labeled "Submit," while the equivalent action is labeled "Save" in both the project-settings and invite-member forms, an inconsistent terminology for the same kind of action.
+Fix: Rename the button to "Save" to match the labeling convention used elsewhere in the document.

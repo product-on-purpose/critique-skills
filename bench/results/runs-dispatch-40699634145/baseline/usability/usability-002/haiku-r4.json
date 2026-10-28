@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 5 projects\" but the list below contains only 4 items",
+      "fix": "Either add a 5th project to the list or change the paragraph to read \"This workspace holds 4 projects\".",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "workspace-overview section, paragraph stating project count",
+      "severity": 3,
+      "violation": "The stated number of projects (5) does not match the number of projects listed in the ul element (4)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`href=\"#project-archived\"` on the archive-link element",
+      "fix": "Change the href to \"#archive-confirm\" so users see the confirmation dialog before archiving.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "project-settings section, archive project link",
+      "severity": 3,
+      "violation": "The link skips the confirmation screen and goes directly to the archived state, but the document includes an archive-confirm section that should be shown first."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible text content to the button, such as \"Duplicate\" or \"Duplicate project\".",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "project-settings section, duplicate project button",
+      "severity": 3,
+      "violation": "The button contains no visible text, only an aria-label, so sighted users cannot see what the button does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The form contains a \"Save\" submit button, but the section also has a separate \"Continue\" link to #invite-sent",
+      "fix": "Remove the \"Continue\" link and rely on the form's submit button to navigate to the invite-sent state, or restructure to clarify the intended sequence.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "invite-member section, form navigation",
+      "severity": 3,
+      "violation": "Users are presented with both a form submit button and a separate continue link, creating an unclear workflow about which action to take."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T14:09:43Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

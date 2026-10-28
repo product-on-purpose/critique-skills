@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "First message shows \"Signal: one step bolder and larger than the field label, icon\"; second message shows \"Signal: one step bolder and larger than the field label, none\"",
+      "fix": "Either add an icon to the second email message or remove it from the first to establish consistent signal handling for the same field",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Signup form, email field, Message signals",
+      "severity": 3,
+      "violation": "Both validation messages for the same field use the same placement and container, but one includes an icon and the other doesn't, creating an inconsistent visual treatment for equally important validation feedback"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: cleared\" (vs all other messages showing \"Input on resubmission: preserved\")",
+      "fix": "Change to \"Input on resubmission: preserved\" to match the behavior of all other validation messages",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Profile settings, phone number, second message",
+      "severity": 3,
+      "violation": "This is the only message across all screens that clears input on resubmission, creating unpredictable behavior where users won't know why this error differs from others"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You keep entering the wrong value. Re-enter it to continue.\"",
+      "fix": "Add specific format guidance, for example: \"Enter a valid phone number, for example: (123) 456-7890\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Profile settings, phone number, first message",
+      "severity": 3,
+      "violation": "This message provides no guidance on what format or validation rule is required, unlike the email field message which specifies the format explicitly"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "First email message uses \"one step bolder and larger than the field label\" while other messages use \"bold text set larger than the field label\"",
+      "fix": "Standardize all signal descriptions to use consistent language, for example: \"bold text larger than the field label, with icon\" or \"bold text larger than the field label, no icon\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Entire document, Signal descriptions",
+      "severity": 3,
+      "violation": "Inconsistent terminology for describing visual treatments makes it unclear whether these represent different visual intensities or are simply different word choices"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: in a banner directly above the payment method selector, staying on screen until another method is chosen\"",
+      "fix": "Move behavioral details to a separate field or add a \"Behavior\" section for all messages that have persistent or conditional visibility",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Checkout form, payment method, first message placement",
+      "severity": 3,
+      "violation": "This placement description includes behavioral information (\"staying on screen until...\") while all other placement fields describe only location, creating inconsistent specification detail"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-001.md",
+    "artifact_sha256": "0580399008ca4517da0a1b1f620180b68a4cfb24e596be279a5f782cde325fc7",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:08:23Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

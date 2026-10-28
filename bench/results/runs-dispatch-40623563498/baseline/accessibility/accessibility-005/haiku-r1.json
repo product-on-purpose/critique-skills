@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "@media (orientation: portrait) { #main-content { display: none; } }",
+      "fix": "Remove this media query rule or replace it with a responsive layout that adapts content for portrait screens rather than hiding it entirely.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "head > style",
+      "severity": 3,
+      "violation": "The CSS rule hides all main content when the viewport is in portrait orientation, breaking the page on mobile devices where portrait is the standard orientation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a href=\"/accessibility\" id=\"nav-link1\" style=\"outline:none\">Accessibility</a>",
+      "fix": "Remove the style=\"outline:none\" attribute; let the browser's default or CSS-defined focus styles remain visible.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "header > nav > first link",
+      "severity": 3,
+      "violation": "The inline style removes the focus outline, making the link invisible to keyboard users navigating with the Tab key."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\" ...>",
+      "fix": "Replace the div with a button element: <button class=\"icon-delete\" id=\"s3-customcontrol\" aria-label=\"Delete item\">.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "s3-customcontrol",
+      "severity": 3,
+      "violation": "A div is being used as a button instead of the semantic button element, which makes it harder for assistive technology to recognize and interact with."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<select id=\"topic\"><option>Northbound</option>...</select>, <input id=\"email\" type=\"email\">, <input id=\"phone\" type=\"tel\">, <input id=\"promo\" type=\"text\">",
+      "fix": "Add name attributes to each field: name=\"topic\", name=\"email\", name=\"phone\", name=\"promo\".",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "s3-form",
+      "severity": 3,
+      "violation": "All form fields (select and inputs) lack name attributes and will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> paired with <span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the promo input element.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "s3-form > promo input",
+      "severity": 3,
+      "violation": "The input is marked invalid but does not reference its error message; the aria-describedby attribute is missing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<label for=\"phone\">Phone number (required)</label> paired with <input id=\"phone\" type=\"tel\" autocomplete=\"tel\">",
+      "fix": "Add the required attribute to the input: <input id=\"phone\" type=\"tel\" autocomplete=\"tel\" required>.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "s3-form > phone input",
+      "severity": 3,
+      "violation": "The label indicates the field is required, but the input element lacks the required attribute."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a href=\"/fares/history\" id=\"s3-link1\">check the current station closures</a>",
+      "fix": "Change the link text to match its destination, such as \"view the fare history\", or change the href to point to the actual station closures page.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "s3-linkpara",
+      "severity": 3,
+      "violation": "The link text says \"check the current station closures\" but the href points to \"/fares/history\", which is about fares, not station closures."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-005.html",
+    "artifact_sha256": "0f8493f220745495c0706928266e57a6f8d8bacbcd1737ff17dc3965ce55df7b",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:39:01Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "How to Apply (line 19-23) describes the application process. Required Documentation (line 31-35) appears later. A reader beginning the application at line 19 would not learn until line 31 that they need proof of purchase and receipts. Additionally, Request Steps (line 57) presents 'confirming eligibility, and uploading the receipt' as the initial steps, contradicting the portal-driven process described in How to Apply without clarifying the relationship between these two sets of instructions.",
+      "fix": "Move Required Documentation immediately after Eligibility section and before How to Apply. Integrate Request Steps directly into How to Apply or reference it clearly from that section to avoid duplicated and contradictory step descriptions.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "{'section': 'How to Apply', 'line': 19}",
+      "severity": 3,
+      "violation": "Required Documentation section appears after How to Apply and Approval Timeline sections, forcing readers to begin the application process before learning what documents they must gather; Request Steps section later introduces steps without integrating into How to Apply sequence."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Line 11 'equipment stipend', line 31 'equipment cost', line 45 'equipment in good working condition' use 'equipment'. Line 47 uses 'one device per category per employee' to describe the same limitation. Line 51 uses 'stipend item' three times without defining what it refers to. A reader must work out whether 'device', 'equipment', and 'item' all mean the same thing.",
+      "fix": "Choose one term (recommend 'equipment') and use it consistently throughout. Define 'stipend item' explicitly in the Terminology Notes section, or replace it with the chosen consistent term. Clarify whether 'claim' and 'stipend request' are synonymous or distinct concepts.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "{'section': 'Eligibility and throughout', 'line': '11, 47'}",
+      "severity": 2,
+      "violation": "The terms 'equipment' and 'device' refer to the same concept but are used inconsistently; 'item' is used repeatedly (Terminology Notes, line 51) without clear definition; 'claim' (line 11) and 'stipend request' are used interchangeably."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Line 29: 'However, an incomplete request pauses the timeline until the missing item arrives.' The subject 'request' (an abstraction) performs the action 'pauses'. The real actor - the review team, the system, or the manager - is never named, leaving ambiguity about who is actually responsible for the pause.",
+      "fix": "Name the real actor: 'However, the team pauses the timeline when a request is incomplete, until the missing item arrives' or 'However, an incomplete request causes a pause in the timeline until the missing item arrives' (if the system automatically pauses). Or: 'However, the reviewer pauses timeline processing if the request is incomplete.'",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "{'section': 'Approval Timeline', 'line': 29}",
+      "severity": 2,
+      "violation": "An incomplete request is named as the grammatical subject performing an action, obscuring who is actually responsible for pausing the timeline."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "Lines 5-7 state: 'The IT asset group updates the reimbursement log at the start of the fiscal year. A copy of each update goes to the shared benefits folder the same day. Similarly, the IT asset group tracks the equipment catalog on the first business day of the month. A copy of each update goes to the shared benefits folder the same day.' A reader who has read only these sentences cannot articulate what this section is overviewing - is it about the policy itself, or about backend bookkeeping?",
+      "fix": "Replace the backend-logistics focus with a reader-facing overview: 'This stipend covers equipment up to $500 per fiscal year for full-time employees. The request process takes [timeline], and reimbursement arrives [how].' Or relocate the IT asset group tasks to a Program Coordination section where internal workflows belong.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "{'section': 'Program Overview', 'line': '5-7'}",
+      "severity": 2,
+      "violation": "The Program Overview section describes IT administrative tasks (updating logs and catalogs) without making clear how these internal workflows connect to the stipend policy a reader needs to understand."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T07:48:34Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

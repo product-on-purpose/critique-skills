@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\"",
+      "fix": "Change this row's \"Predictable mistake\" value to \"no\" to match the convention used for other non-user-caused failures.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Signup form, email field, first entry (\"The connection dropped before this finished.\")",
+      "severity": 3,
+      "violation": "A dropped connection is a transient system/network failure, not something caused by a predictable user mistake; the equivalent system-error entry in Checkout (\"Something went wrong\") is correctly marked \"no.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-blur\"",
+      "fix": "Change Fires to \"on-submit,\" matching the trigger used for the analogous Checkout \"Something went wrong\" entry.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Signup form, email field, first entry (\"The connection dropped before this finished.\")",
+      "severity": 3,
+      "violation": "A connection-drop message reports a failed submission attempt, which can't be detected by leaving the field - it can only be known after a submit action occurs."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Signal: one step bolder and larger than the field label, none\"",
+      "fix": "Either add an icon to match the rest of the document, or add a note explaining why format errors are exempt from the icon treatment.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Signup form, email field, second entry (format validation message)",
+      "severity": 3,
+      "violation": "Every other entry in the document pairs its text emphasis with an icon, but this entry specifies \"none\" with no stated rationale, breaking the pattern without explanation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Container: inline\" paired with Placement \"in a banner directly above the payment method selector, staying on screen until another method is chosen\"",
+      "fix": "Reclassify this row's Container as \"banner\" (or similar) and move the dismissal clause into its own field so Placement across all rows consistently describes location only.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Checkout form, payment method, first entry (\"Something went wrong.\")",
+      "severity": 3,
+      "violation": "A persistent banner spanning the whole selector, with its own dismissal rule, doesn't match \"inline\" as used elsewhere (anchored to one field, cleared when that field is corrected), and no other row's Placement field carries a dismissal condition, so the rows aren't structurally comparable."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"staying on screen until another method is chosen\" combined with \"Predictable mistake: no\"",
+      "fix": "Make the dismissal condition cause-neutral (e.g., \"until resubmission succeeds\") instead of implying the payment method was at fault.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Checkout form, payment method, first entry (\"Something went wrong.\")",
+      "severity": 3,
+      "violation": "Tying the error's dismissal specifically to choosing a different payment method implies the method was the known cause, which contradicts both the generic wording of the message and the \"no\" predictable-mistake classification."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: mid-keystroke\"",
+      "fix": "Change Fires to \"on-blur,\" consistent with the analogous email-format check, so validation runs only once the full value is entered.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Checkout form, payment method, second entry (expired card)",
+      "severity": 3,
+      "violation": "Determining whether an expiry date \"has passed\" requires a complete date value; firing mid-keystroke will flag the field as expired before the user has finished typing a valid date."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You keep entering the wrong value. Re-enter it to continue.\"",
+      "fix": "Rewrite to state the expected format, e.g. \"Enter a phone number with your country code, for example +1 555-123-4567,\" matching the specificity of the email format message.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Profile settings, phone number, first entry",
+      "severity": 3,
+      "violation": "The message blames the user (\"you keep\") rather than stating what is wrong or what format is expected, giving no actionable guidance despite being marked a predictable mistake."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: cleared\"",
+      "fix": "Change to \"preserved,\" consistent with every other row, so the user retains the number needed for the follow-up steps.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Profile settings, phone number, second entry (\"already on another account\")",
+      "severity": 3,
+      "violation": "This is the only row in the document where input is cleared; the entered number is valid (just linked to another account), so clearing it forces the user to retype a correct value they'll likely need again for either suggested action (removing it elsewhere or giving it to support)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "five of six rows read \"Suggested fix: none,\" while the one row with a concrete suggested fix is the \"connection dropped\" entry, which is arguably the least predictable (system) error of the set",
+      "fix": "Apply a consistent rule, e.g. supply a suggested fix wherever \"Predictable mistake: yes,\" and add one to the format, expiry, and repeated-value entries as well.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Suggested fix field, across all six entries",
+      "severity": 3,
+      "violation": "There is no discernible rule for when a suggested fix is supplied - it doesn't track with \"Predictable mistake\" or any other field, so the one row given a concrete next-step action is the least predictable one while every row marked a predictable mistake gets none."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Signup entries read \"one step bolder and larger than the field label,\" Checkout/Profile entries read \"bold text set larger than the field label\" (Checkout's first entry: \"than the surrounding form labels\")",
+      "fix": "Standardize on one phrasing for the signal attribute throughout the document, or explicitly note why the Checkout banner's signal differs from the field-level signal used elsewhere.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Signal field, across sections",
+      "severity": 3,
+      "violation": "The same emphasis/signal concept is described with three different phrasings across sections, leaving it unclear whether the actual visual treatment is identical or intentionally different between forms."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-001.md",
+    "artifact_sha256": "0580399008ca4517da0a1b1f620180b68a4cfb24e596be279a5f782cde325fc7",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:13:47Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

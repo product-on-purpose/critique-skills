@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Shorten the entry and save again.\" with \"Fires: after-field-complete\"",
+      "fix": "Change \"save again\" to \"try again\" or remove the save reference entirely, since the validation is automatic.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Checkout form, shipping address, Message 1",
+      "severity": 3,
+      "violation": "The instruction to \"save again\" is confusing when the error fires automatically after field completion, implying no manual save action was taken. The user didn't initiate a save action to redo."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Please correct the highlighted field. Error code: 502.\"",
+      "fix": "Either replace 502 with an appropriate validation error code, or confirm this message should only appear for actual server errors, not field validation.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Checkout form, shipping address, Message 2",
+      "severity": 3,
+      "violation": "HTTP error code 502 (Bad Gateway) is a server error, not a validation error. This message appears to be showing the wrong error code or is being displayed in the wrong context for field validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page\" with \"Fires: after-field-complete\"",
+      "fix": "Move the message to appear directly below or inline with the password field itself, not at the top of the form.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Password reset, new password, Message 1",
+      "severity": 3,
+      "violation": "The message fires after the user completes the password field, but its placement at the top of the form means users won't see it immediately - they'll need to scroll up after typing, creating a disconnect between action and feedback."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"long enough that a guessing attack cannot work through every combination\"",
+      "fix": "Replace with an accurate explanation, such as \"long enough to resist common password attacks\" or reference industry standards like NIST guidelines.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Password reset, new password, Message 1",
+      "severity": 3,
+      "violation": "This explanation is technically misleading. An 8-character password can still be guessed through combinations relatively quickly with modern computing. The security benefit of length is real but not because it prevents attackers from trying combinations."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Container: toast\" with \"in a dialog centered on the password reset step, over the new password field it blocks\"",
+      "fix": "Clarify whether this is a toast or a modal dialog, and update the container field to match the actual implementation.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Password reset, new password, Message 2",
+      "severity": 3,
+      "violation": "The container type and description are contradictory. A toast is a brief, non-blocking notification; a centered dialog that blocks interaction is a modal. These are different UI patterns."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The last changes were not saved and cannot be recovered.\" with \"Input on resubmission: preserved\"",
+      "fix": "Either change the message to acknowledge that input is preserved and can be resubmitted, or confirm the input is actually not preserved and update the metadata.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Account settings, username",
+      "severity": 3,
+      "violation": "The message claims changes \"cannot be recovered,\" but the metadata indicates user input is preserved on resubmission. These statements contradict each other - if input is preserved, it can be recovered and resubmitted."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:16:30Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

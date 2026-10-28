@@ -1,0 +1,156 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required=\"\">",
+      "fix": "Remove the field from account creation, or make it optional for people who already have one.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#acctnum-input, <input> field, label 'Account number', line 53",
+      "severity": 4,
+      "violation": "Same defect as #member-input: an account-creation form requires an account number before the account exists, which nobody starting their first account can supply."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required=\"\">",
+      "fix": "Remove both fields from account creation. If an existing membership can be linked, do it as an optional step after the account exists, not as a blocking requirement to create one.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#member-input, <input> field, label 'Membership number (8 digits)', line 49",
+      "severity": 4,
+      "violation": "The form's task, named by its heading 'Create your account' and its submit button, is creating a new account, but it requires both a membership number and an account number (#acctnum-input) to do so. Nobody creating an account for the first time has either value yet, so this pair of required fields cannot be satisfied by the form's entire intended audience of new customers."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-ADDRESS-FORMAT",
+      "evidence": "<input id=\"housenumber-input\" name=\"house_number\" type=\"text\" required=\"\">",
+      "fix": "Collect the house number and street together in one address-line field.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "#housenumber-input, <input> field, label 'House number', line 28",
+      "severity": 3,
+      "violation": "The house number has its own field separate from the street, and it is required, so an address with no number cannot be entered."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-AUTOCOMPLETE",
+      "evidence": "<input id=\"email-input\" name=\"email\" type=\"email\" required=\"\" autocomplete=\"e-mail\">",
+      "fix": "Replace it with the standard token for this field, for example email.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "#email-input, <input> field, label 'Email address', line 16",
+      "severity": 3,
+      "violation": "The autocomplete value e-mail is not a valid autofill detail in the HTML standard, so autofill is broken for this field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"website-input\" name=\"website\" type=\"url\" required=\"\">",
+      "fix": "Drop the website, organization name, and 'how did you hear about us' fields, or make them optional; move shipping speed and preferred contact time to the order or contact flow where they apply.",
+      "id": "F-005",
+      "instances": [
+        {
+          "evidence": "<select id=\"shipspeed-select\" required=\"\">",
+          "location": "#shipspeed-select, <select> field, label 'Preferred shipping speed', line 61"
+        },
+        {
+          "evidence": "<input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required=\"\">",
+          "location": "#org-input, <input> field, label 'Organization name', line 75"
+        },
+        {
+          "evidence": "<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">",
+          "location": "#contacttime-input, <input> field, label 'Preferred contact time', line 79"
+        },
+        {
+          "evidence": "<select id=\"hear-select\" required=\"\">",
+          "location": "#hear-select, <select> field, label 'How did you hear about us?', line 84"
+        }
+      ],
+      "lane": "judged",
+      "location": "#website-input, <input> field, label 'Company website', line 45",
+      "severity": 3,
+      "violation": "Creating a personal shopping account does not need a company website, an organization name, a preferred shipping speed, a preferred contact time, or how the person heard about the service; each is either unrelated to the task of creating the account or, for shipping speed and contact time, an answer that applies to a later order or contact and could be asked then. All five are required, so every person signing up must answer all of them before the account exists."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>",
+      "fix": "Remove 'View details' from between the fields, or move it to sit beside the primary action after the last field, styled visibly less prominent than Submit.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> button, text 'View details', line 81",
+      "severity": 2,
+      "violation": "This button sits between the 'Preferred contact time' field and the 'How did you hear about us' select, above two fields and the primary submit button that still follow it, rather than only at the end in line with the fields. It also carries its own declared padding and font size, while the form's actual primary action, #submit-btn, carries no declared style at all, so the unrelated mid-form button can read as more deliberately made than the button that submits the form."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-ACTION-LABEL",
+      "evidence": "<button id=\"submit-btn\" type=\"submit\">",
+      "fix": "Label the button with the action it performs, such as Create account or Send message.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "#submit-btn, <button> button, text 'Submit', line 92",
+      "severity": 2,
+      "violation": "The form's primary button is labelled Submit, a generic word that says nothing about what pressing it does."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-AUTOCORRECT",
+      "evidence": "<input id=\"name-input\" name=\"full_name\" type=\"text\" autocomplete=\"name\" required=\"\">",
+      "fix": "Add autocorrect=off and spellcheck=false.",
+      "id": "F-008",
+      "lane": "scripted",
+      "location": "#name-input, <input> field, label 'Full name', line 12",
+      "severity": 2,
+      "violation": "On this name field, autocorrection and spellchecking stay on, so a phone keyboard can change a value it does not know."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-CONFIRM-PASSWORD",
+      "evidence": "<input id=\"confirm-password-input\" name=\"password_again\" type=\"password\" autocomplete=\"new-password\" required=\"\">",
+      "fix": "Remove the confirmation field and offer a control that shows the password as typed.",
+      "id": "F-009",
+      "lane": "scripted",
+      "location": "#confirm-password-input, <input> field, label 'Confirm password', line 24",
+      "severity": 2,
+      "violation": "The form asks for the new password a second time to confirm it, doubling the typing for every person."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"legalname-input\" name=\"legal_name\" type=\"text\" autocomplete=\"name\" autocorrect=\"off\" spellcheck=\"false\" required=\"\">",
+      "fix": "Remove the second name field, or, if a legal name genuinely differs from a display name, label both fields to say so and explain why both are required.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label 'Your name', line 71",
+      "severity": 2,
+      "violation": "The form already asked for the person's name under 'Full name' (#name-input). 'Your name' asks again under a different label and field name, so the person must type the same answer a second time with nothing distinguishing why a second name is needed."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-001.html",
+    "artifact_sha256": "531c999912c0ab6c8224cbeb2347e7644d493a84e3a9461a434deaf5f2f09cdd",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T10:04:14Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 3,
+      "4": 2
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

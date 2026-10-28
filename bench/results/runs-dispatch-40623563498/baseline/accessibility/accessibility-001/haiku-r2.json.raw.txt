@@ -1,0 +1,39 @@
+Location: `<html>` opening tag
+Evidence: `lang="translanguage"`
+Problem: "translanguage" is not a valid language code. Valid codes are BCP 47 tags like "en", "es", "fr", etc.
+Fix: Change `lang="translanguage"` to `lang="en"` or the appropriate language code for the content.
+
+Location: `<title>` element in head
+Evidence: `<title id="head-title"></title>`
+Problem: The page title is empty, providing no meaningful information to users or search engines about the page content.
+Fix: Add descriptive text between the tags, such as `<title>Rider Service Updates</title>`.
+
+Location: Section s2 heading
+Evidence: `<h4 id="s2-h">Accessibility improvements</h4>`
+Problem: The heading hierarchy skips from h2 (in s1) directly to h4, breaking proper document outline structure.
+Fix: Change `<h4>` to `<h2>` to maintain sequential heading hierarchy.
+
+Location: Section s1 image
+Evidence: `<img src="/img/platform-update.jpg" id="s1-img1">`
+Problem: The image has no alt attribute, making it inaccessible to screen reader users and providing no fallback text.
+Fix: Add an alt attribute with descriptive text, such as `<img src="/img/platform-update.jpg" alt="Platform update diagram" id="s1-img1">`.
+
+Location: Section s3, custom delete control
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Problem: This is a non-interactive `<div>` styled as a button but lacks keyboard event handlers; users cannot activate it with Enter or Space keys without JavaScript.
+Fix: Replace with a proper `<button>` element: `<button type="button" class="icon-delete" aria-label="Delete item" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></button>`.
+
+Location: Section s3, status card div
+Evidence: `<div class="status-card" role="status" id="s3-statuscard">`
+Problem: The `role="status"` should only be used for dynamic content that updates to announce live messages; static text should not use this role.
+Fix: Remove `role="status"` or replace with `role="region" aria-label="Status information"` if the intent is to group related status content.
+
+Location: Form phone input
+Evidence: `<label for="phone" id="s3-form-phone-label">Phone number (required)</label>` followed by `<input id="phone" type="tel" autocomplete="tel">`
+Problem: The label indicates the field is required but the input element lacks the `required` attribute, creating a mismatch between the visual label and form validation.
+Fix: Add the `required` attribute: `<input id="phone" type="tel" autocomplete="tel" required>`.
+
+Location: Form promo code input
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: The input is marked with `aria-invalid="true"` by default, incorrectly signaling to assistive technology that the field contains an error before the user has even entered anything.
+Fix: Remove `aria-invalid="true"` or only add it dynamically after validation fails.

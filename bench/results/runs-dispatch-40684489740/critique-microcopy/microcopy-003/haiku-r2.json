@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-CONSTRUCTIVE",
+      "evidence": "This request timed out before it could finish.",
+      "fix": "Add a concrete next step: name the action the reader should take to resolve this.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "Search results, no matches, message 1",
+      "severity": 3,
+      "violation": "The message states that a problem exists with no imperative instruction or named next step anywhere in the text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-GRACE",
+      "evidence": "This request timed out before it could finish.",
+      "fix": "Add a sincere acknowledgment of the impact on the reader (e.g., 'Your search encountered a temporary issue') or suggest a concrete next step like retrying with different search parameters.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Search results, no matches, message 1",
+      "severity": 3,
+      "violation": "The message is a bare technical notice with no acknowledgment of the reader's situation, and no other message or selectable fix offers a way forward in this total, unrecoverable failure."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-SALIENT",
+      "evidence": "styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action",
+      "fix": "Distinguish this message visually from passive informational banners: use a different color, an alert icon, or a contrasting border to signal that action is required.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Search results, no matches, message 2",
+      "severity": 3,
+      "violation": "The message is styled identically to informational banners elsewhere on the page, so a reader has no visual cue that this one demands action."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T12:31:07Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

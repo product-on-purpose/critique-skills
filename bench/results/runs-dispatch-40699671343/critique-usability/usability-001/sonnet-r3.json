@@ -1,0 +1,115 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-DEADEND",
+      "evidence": "the \"invite-sent\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+      "fix": "Add a control inside the \"invite-sent\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "the \"invite-sent\" section",
+      "severity": 3,
+      "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "\"You can restore it at any time from the archived projects list.\" - no section, link, or control anywhere in the artifact leads to or defines an \"archived projects list.\"",
+      "fix": "Add the archived-projects-list state the copy promises, with a restore control on each archived project, and link to it from somewhere the user can reach (for example, from workspace-overview).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"archive-confirm\" section, the \"archive-confirm-copy\" paragraph",
+      "severity": 3,
+      "violation": "The artifact treats archiving as a committed action and states a reversal exists, but names no reachable path to it: the only control the artifact promises as the way back is not instantiated anywhere, leaving an archived project with no actual restore path in the design as specified."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button> with no action attribute on its form and no success, failure, or changed-state indication defined anywhere in the artifact.",
+      "fix": "Specify what the user sees after Save is activated: a saved confirmation message, a transient status indicator, or an explicit statement that the field's own displayed value is the only confirmation.",
+      "id": "F-003",
+      "instances": [
+        {
+          "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>, same unconfirmed-commit pattern.",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button>, same unconfirmed-commit pattern.",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "The artifact specifies a commit action (saving the project name) but names no visible indication of what the system is doing or what the outcome was once Save is activated, breaching NNG-H1's requirement that a state-changing action be paired with a status indication."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-EXIT",
+      "evidence": "<a id=\"project-settings-back-link\" href=\"#workspace-overview\">Back to your projects</a>, sitting alongside a project-name input the artifact lets the user edit, with no statement of what becomes of an edited-but-unsaved name on exit. The same gap recurs at the \"notification-settings\" section's \"notification-settings-back-link\" (<a id=\"notification-settings-back-link\" href=\"#project-settings\">Back to project settings</a>), beside the unsaved digest-frequency select.",
+      "fix": "State whether leaving via this link discards an unsaved name edit or carries it forward, or disable/warn on the link while the field holds an unsaved change.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-back-link\" link",
+      "severity": 2,
+      "violation": "The exit is visible and its label predicts where it goes, but the artifact never says what happens to a project-name edit entered before this control is used, breaching NNG-H3-EXIT's requirement that an exit cost the user nothing already entered. The same unstated fate for unsaved input recurs on the notification-settings screen's back link."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H4-INTERNAL",
+      "evidence": "The form containing the email input submits via <button id=\"invite-member-save-btn\" type=\"submit\">Save</button>, but the actual path to \"invite-sent\" is a separate <a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a> outside the form, unlike project-settings and notification-settings where the Save button is the only commit control and is the one that matters.",
+      "fix": "Either remove the Save button from the invite-member form and let Continue be the single commit control, or state what Save does on this screen if it is kept.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button",
+      "severity": 2,
+      "violation": "The same form-plus-Save-button pattern that is the actual commit action on the other two settings screens does nothing toward the invite here, since the invite is only sent by a separate Continue control; one interaction pattern carries two different meanings in the artifact with no cue distinguishing them, breaching NNG-H4-INTERNAL."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-LABELED",
+      "evidence": "<button> with no text content and no accessible-name attribute",
+      "fix": "Add visible text to this control, or an aria-label attribute naming what it does.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "This control has neither visible text nor an accessible-name attribute, so nothing on screen names what the control does."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "\"An invite was sent to the address entered above.\" - the invite-sent section displays no email address; the value lives only on the prior invite-member screen.",
+      "fix": "Display the actual email address on the invite-sent screen instead of referring to it as \"entered above.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "the \"invite-sent\" section",
+      "severity": 2,
+      "violation": "The confirmation needs the entered email address to let the user verify which address the invite went to, but the artifact shows it only on the earlier screen and does not repeat, reference by value, or retrieve it in place, breaching NNG-H6-RECALL."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:07:50Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 7,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 2
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects\" followed by a `<ul>` listing only 3 items (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp)",
+      "fix": "Either add the missing 4th project to the list, correct the stated count to 3, or add a visible label like \"Recently viewed\" to clarify the list is only a subset.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "workspace-overview section, intro paragraph and project list",
+      "severity": 3,
+      "violation": "The stated project count doesn't match the number of items shown, and nothing labels the list as a subset (e.g., \"recent\"), so a reader can't tell whether the count or the list is wrong."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`id=\"workspace-overview-projects-link\"` with link text \"Open project settings\"",
+      "fix": "Rename the id to \"workspace-overview-settings-link\" to match the link's text and destination.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "workspace-overview section, \"Open project settings\" link",
+      "severity": 3,
+      "violation": "The id implies the link relates generically to \"projects,\" but the link text and destination are about project *settings*, so the id doesn't match its own control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>` inside a `<form>` with no action attribute and no linked confirmation section",
+      "fix": "Add a confirmation state (or visible success message) that Save transitions to, matching the pattern used elsewhere in the mockup.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "project-settings section, project name form",
+      "severity": 3,
+      "violation": "Clicking Save has no defined destination or confirmation state, unlike the Invite and Archive flows in the same document, which transition to explicit confirmation screens."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible text (e.g., \"Duplicate\") or an icon inside the button, keeping the aria-label as a supplement.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "project-settings section, duplicate button",
+      "severity": 3,
+      "violation": "The button has no visible text or icon content, so sighted users see an empty, unlabeled control even though it has an aria-label for assistive tech."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" ...></button>` has no associated target section",
+      "fix": "Add a duplicate-confirm (or duplicate-result) section and link the button to it, mirroring the archive flow.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "project-settings section, duplicate button",
+      "severity": 3,
+      "violation": "Unlike \"Archive project,\" which leads to an archive-confirm section, \"Duplicate project\" has no corresponding confirmation or result page, making it a dead end in the mockup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"project-settings-archive-link\" href=\"#archive-confirm\">Archive project</a>`",
+      "fix": "Change this control to a `<button>` instead of an `<a>`.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "project-settings section, archive link",
+      "severity": 3,
+      "violation": "A destructive, state-changing action is implemented as an anchor link rather than a button, which is semantically incorrect since links imply navigation, not performing an action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` and separately `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>`",
+      "fix": "Remove the redundant Save button or give it a distinct, clarified purpose (e.g., \"Save as draft\"), leaving one clear control that sends the invite.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "invite-member section",
+      "severity": 3,
+      "violation": "Two controls appear to both finalize the invite (an undefined Save submit, and a Continue link that actually navigates to \"invite sent\"), making it unclear what Save does or how it differs from Continue."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An invite was sent to the address entered above.\"",
+      "fix": "Reword to \"An invite was sent to the email address you entered\" without relying on spatial position.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "invite-sent section",
+      "severity": 3,
+      "violation": "\"above\" refers to the email input on the previous, now separate, screen, which no longer appears above this confirmation message, making the reference disorienting."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\"",
+      "fix": "Add an archived-projects-list section reachable from project-archived/workspace-overview, or remove the claim if out of scope.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "archive-confirm section",
+      "severity": 3,
+      "violation": "No \"archived projects list\" page or link exists anywhere in the document, so this references a feature that isn't actually part of the mockup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button>` inside a `<form>` with no action attribute and no linked confirmation section",
+      "fix": "Add a confirmation message or state transition after Save, consistent with other completed actions in the mockup.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "notification-settings section",
+      "severity": 3,
+      "violation": "As with the project name form, clicking Save has no defined outcome, giving the user no feedback that their digest frequency choice was saved."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T15:47:08Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

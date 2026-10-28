@@ -1,0 +1,39 @@
+Location: Document start, before "## Open alert settings"
+Evidence: The document opens directly with "Open the alerts panel from the console sidebar and select the rule you want to adjust."
+Problem: A how-to for a settings change gives no prerequisites (e.g., required permissions, which alert types support thresholds), so a user without the right access will fail partway through with no explanation.
+Fix: Add a brief "Before you begin" note stating required permissions/role and any applicable rule types.
+
+Location: "## Open alert settings" — heading vs. body text
+Evidence: Heading "Open alert settings" but body says "Open the alerts panel from the console sidebar"
+Problem: The heading and the instruction use different names ("alert settings" vs. "alerts panel") for what appears to be the same UI location, which can make readers unsure whether they're the same place.
+Fix: Use one consistent name throughout (e.g., rename the heading to "Open the alerts panel" or change the body text to match "alert settings").
+
+Location: "## Open alert settings", second sentence
+Evidence: "A threshold is the numeric boundary that triggers an alert once a metric crosses it."
+Problem: This is a conceptual definition, not an instruction or action, and it interrupts a procedural step list in a document declared as `mode: how-to`.
+Fix: Remove this sentence from the procedure (or move definitional content to a separate conceptual/reference doc) and keep this section limited to the navigation action.
+
+Location: "## Set the new threshold", first sentence
+Evidence: "Enter the updated threshold value in the field provided"
+Problem: "the field provided" is vague — it doesn't name or identify the field, leaving the user to guess which UI element to use.
+Fix: Name the specific field (e.g., "Enter the value in the Threshold field").
+
+Location: "## Set the new threshold", first sentence
+Evidence: "confirm the unit matches the metric in use"
+Problem: The instruction tells the user to "confirm" a match but gives no method for checking it or any remedy if the unit doesn't match.
+Fix: Add explicit steps, e.g., "Check the unit dropdown next to the field; if it doesn't match the metric's unit, select the correct one before saving."
+
+Location: "## Set the new threshold", second sentence
+Evidence: "This is because the console applies the new threshold to every future evaluation of this rule."
+Problem: "This" has no clear antecedent — the preceding sentence was about entering a value and matching units, not about future rule evaluations, so the explanation is a non-sequitur and also breaks the how-to format by explaining rationale instead of giving an action.
+Fix: Either delete this sentence or rewrite it to clearly justify a specific preceding instruction (e.g., why the unit must match), and move general rationale to an explanation doc if needed.
+
+Location: "## Save and verify", first sentence
+Evidence: "open the rule list to confirm the new threshold appears there"
+Problem: "rule list" is introduced here without connecting it to the previously named "alerts panel," leaving it unclear whether this is the same screen the user started on or a different one.
+Fix: Reuse the established term (e.g., "return to the alerts panel") or explicitly state the relationship between the two.
+
+Location: "## Save and verify", first sentence
+Evidence: "confirm the new threshold appears there"
+Problem: Confirming that a value merely "appears" doesn't verify it's correct or that the rule is active, so a failed or partial save could go unnoticed.
+Fix: Instruct the user to confirm both that the displayed value matches what was entered and that the rule's status is active/enabled.

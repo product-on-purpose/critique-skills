@@ -489,7 +489,7 @@ def check(artifact):
 def main(argv=None):
     return run_scripted_lane(
         skill_name="critique-microcopy",
-        skill_version="0.1.0",
+        skill_version="0.1.1",
         # The criterion namespace, not the rubric_sources.id: NNG-EM-* IDs
         # carry namespace NNG (the text before the FIRST hyphen), shared on
         # purpose with critique-usability's NNG-H* IDs. See

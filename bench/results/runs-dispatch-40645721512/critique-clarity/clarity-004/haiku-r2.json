@@ -1,0 +1,84 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Document structure places 'Terminology Notes' (lines 49-53) between 'Restrictions' and 'Request Steps,' interrupting workflow. 'Request Steps' itself (lines 56-57) is a single sentence buried after six other sections, forcing readers to reverse-engineer the process from earlier sections.",
+      "fix": "Move 'Request Steps' to immediately after 'Eligibility' and before 'How to Apply.' Delete or merge 'Terminology Notes' into relevant sections where terms are first used; do not use a separate section.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section: Terminology Notes (lines 49-53) and Request Steps (lines 56-57)",
+      "severity": 3,
+      "violation": "PLAIN-ORGANIZE: sections not in logical order for employee audience"
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "Five roles named across document: IT asset group (lines 5-7), benefits team (lines 65-66), finance office (lines 39, 69), manager (lines 27-29), employee/requester/you (scattered). No section explains each role or delineates boundaries. Lines 65-66 suggest benefits team 'coordinates every stipend request from intake to payout,' but Approval Timeline (lines 27-29) assigns manager review; Required Documentation (lines 33-35) assigns employee record-keeping; Reimbursement (line 39) assigns finance office deposit.",
+      "fix": "Add a 'Roles and Responsibilities' section immediately after 'Eligibility' that defines each role (Employee, Manager, Benefits Team, Finance Office, IT Asset Group) and lists the specific tasks that role performs. Update each later section to reference this role definition rather than introducing the role's name inline without context.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Lines 5-7, 27-29, 33-35, 39, 65-66, 69",
+      "severity": 3,
+      "violation": "WILLIAMS-COHERENCE: unclear relationships between actors and their responsibilities across sections"
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Program Overview (lines 5-7): 'IT asset group updates the reimbursement log...A copy goes to the shared benefits folder...IT asset group tracks the equipment catalog...A copy goes to the shared benefits folder.' Program Coordination (lines 65-66): 'The benefits team coordinates every stipend request...The team logs each request...The team routes...Once approved, the team schedules the reimbursement.' Overlaps blur who owns what process.",
+      "fix": "Merge the overlapping content into one section. Assign each process (reimbursement log updates, catalog tracking, request routing, reimbursement scheduling) to exactly one team, and name that team consistently throughout the document. Delete the duplicate process descriptions.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Program Overview section (lines 5-7) and Program Coordination section (lines 65-66)",
+      "severity": 2,
+      "violation": "PLAIN-CONSISTENT-TERMS: inconsistent role naming and overlapping responsibility descriptions"
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Lines 5-7, 19, 23 use imperative or passive; line 45 shifts to 'You must keep'; lines 51-54 use 'you submit,' 'you track'; but majority uses third-person passive ('The manager reviews,' 'Employees keep'). No consistent model of who acts.",
+      "fix": "Choose one consistent voice for the entire document: either address the employee directly as 'you' throughout, or consistently refer to 'the employee' or 'the requester' in the third person. Apply the chosen voice to every section.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Lines 5-7, 19, 23, 45, 51-54",
+      "severity": 2,
+      "violation": "WILLIAMS-CHARACTER-ACTION: inconsistent character focus and agency"
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-STRESS",
+      "evidence": "Line 41: 'Also, unused stipend amounts do not roll over to the next benefit year.' Appears as the second sentence of Reimbursement Amounts section, immediately after the $500 limit. Phrased as an afterthought ('Also') and lacks any stress or heading that would flag it as consequential policy. No earlier mention of one-claim-per-year limit (line 11) is foregrounded as a key restriction.",
+      "fix": "Rephrase line 41 to lead: 'The stipend does not roll over to the next benefit year.' Replace 'Also,' with a period or semicolon. Add a 'Key Limits' bullet list in the Eligibility section that states both 'One claim per employee per benefit year' and 'No rollover of unused amounts to the next year' as highlighted restrictions.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Reimbursement Amounts section (line 41) and Eligibility section (line 11)",
+      "severity": 2,
+      "violation": "WILLIAMS-STRESS: important information not placed in stress position; phrased as afterthought with 'Also'"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T07:41:46Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

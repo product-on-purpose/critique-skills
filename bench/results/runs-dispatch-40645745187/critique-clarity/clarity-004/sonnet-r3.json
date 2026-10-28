@@ -1,0 +1,73 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Program Overview: the IT asset group tracks the equipment catalog on the first business day of the month. Special Cases: The finance liaison publishes the equipment catalog at the start of the fiscal year. Questions and Updates: The benefits team reviews the equipment catalog at the start of the fiscal year.",
+      "fix": "State the catalog's owner and update cadence once, in one place, and if IT asset group, finance liaison, and benefits team genuinely perform different catalog-related actions, name each action distinctly instead of describing all three as tracking, publishing, or reviewing the same catalog.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Program Overview (lines 7), Special Cases (line 61), and Questions and Updates (line 73)",
+      "severity": 3,
+      "violation": "PLAIN-CONSISTENT-TERMS requires one concept to be named and attributed consistently; here the single recurring concept of who maintains the equipment catalog and how often is given three different owners (IT asset group, finance liaison, benefits team) and two different cadences (monthly versus fiscal-year start) with no signal whether these are the same activity described three times or three distinct activities, so a reader checking which equipment categories are approved cannot tell which statement to rely on."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "How to Apply describes starting a request in the portal, saving drafts, and reviewing a confirmation summary. Thirty-five lines and five sections later, Request Steps states only: Completing the request begins with confirming eligibility, and uploading the receipt. Separately, Review Responsibility states the finance office reviews every stipend request over 200 dollars before it pays out, a step never mentioned in Approval Timeline, which already told the reader the manager reviews the request within two business days.",
+      "fix": "Merge Request Steps into How to Apply as the single ordered list of steps, and move the 200-dollar finance-review trigger into Approval Timeline immediately after the two-business-day manager review, so the reader learns the whole timeline in one place.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Request Steps section (line 57), versus How to Apply (lines 17-23) and Review Responsibility (lines 69)",
+      "severity": 3,
+      "violation": "PLAIN-ORGANIZE requires the document's section order to follow the reader's actual task sequence rather than scattering information the reader needs to assemble one task. The request process is split across two non-adjacent, apparently inconsistent step lists (How to Apply and Request Steps), and the approval timeline the reader needs to plan around is stated in full in Approval Timeline before the added finance review threshold that can extend it is disclosed four sections later in Review Responsibility."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Completing the request begins with confirming eligibility, and uploading the receipt.",
+      "fix": "Rewrite as: The employee begins the request by confirming eligibility and uploading the receipt.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Request Steps section, line 57",
+      "severity": 2,
+      "violation": "The sentence's subject is the abstraction Completing the request rather than the employee who actually confirms eligibility and uploads the receipt, so the reader has to supply the real actor themselves even though the sentence is grammatically active."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-STRESS",
+      "evidence": "The finance office reviews every stipend request over 200 dollars before it pays out.",
+      "fix": "Reorder so the threshold lands last: Before paying out, the finance office reviews every stipend request over 200 dollars.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Review Responsibility section, line 69, first sentence",
+      "severity": 2,
+      "violation": "The sentence's newest and most important element, the 200 dollar review threshold, lands in the middle, and the sentence instead ends on before it pays out, a fact the reader already infers from reviews preceding payouts, so the end position is occupied by already-known information rather than the new threshold."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T08:46:39Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "Archiving \"Q3 Roadmap\" will remove it from the active projects list for everyone on the team. You can restore it at any time from the archived projects list.",
+      "fix": "Define the archived projects list as a reachable state with a restore control, or remove the restoration claim if no such path is in scope.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Archive this project? screen (#archive-confirm), confirmation copy (#archive-confirm-copy)",
+      "severity": 3,
+      "violation": "NNG-H3-UNDO requires that a reasonably reversible action's stated reversal path actually exist in the artifact. The copy promises restoration from an \"archived projects list,\" but no such state, section, or link is defined anywhere in the artifact, and no control anywhere restores an archived project, so the stated way back has no path a user can actually take."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<label for=\"project-settings-name-input\">Project name</label><input id=\"project-settings-name-input\" type=\"text\" value=\"Q3 Roadmap\"><button id=\"project-settings-save-btn\" type=\"submit\">Save</button>",
+      "fix": "Specify what the artifact shows after Save is clicked: an inline confirmation message, a visibly updated field, or a defined next state.",
+      "id": "F-002",
+      "instances": [
+        {
+          "evidence": "<select id=\"notification-settings-digest-input\">...</select><button id=\"notification-settings-save-btn\" type=\"submit\">Save</button>, with no confirmation or result state defined anywhere after it",
+          "location": "Notifications screen (#notification-settings), Save button (#notification-settings-save-btn)"
+        },
+        {
+          "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>, with no action target and no stated effect distinct from the separate Continue control",
+          "location": "Invite a team member screen (#invite-member), Save button (#invite-member-save-btn)"
+        },
+        {
+          "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>, with no target state, new list entry, or any other result named anywhere in the artifact",
+          "location": "Project settings screen (#project-settings), Duplicate project button (#project-settings-duplicate-btn)"
+        }
+      ],
+      "lane": "judged",
+      "location": "Project settings screen (#project-settings), Save button (#project-settings-save-btn)",
+      "severity": 2,
+      "violation": "NNG-H1 requires that a state-changing action's trigger be paired with an in-progress or result indication the artifact specifies. This form's Save control has no defined action target, no success message, and no changed-state indication anywhere in the artifact, so a user who clicks it cannot tell whether the rename took effect."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H4-INTERNAL",
+      "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button> ... <a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>",
+      "fix": "Either remove the Save control if Continue is the only action that sends the invite, or label both distinctly to show what each one does, for example \"Send invite\" for the one that commits.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Invite a team member screen (#invite-member), Save button (#invite-member-save-btn) and Continue link (#invite-member-continue-link)",
+      "severity": 2,
+      "violation": "NNG-H4-INTERNAL requires that the artifact give a reader a cue when two controls might carry one meaning. Save and Continue sit on the same screen with no stated relationship: nothing says whether Save stores a draft, submits the form with no visible effect, or is the control that actually sends the invite that Continue's target screen confirms was sent."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "An invite was sent to the address entered above. It expires in 5 days if not accepted.",
+      "fix": "Interpolate the actual submitted email address into the confirmation text, for example \"An invite was sent to jane@example.com.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Invite sent screen (#invite-sent), confirmation text",
+      "severity": 2,
+      "violation": "NNG-H6-RECALL requires that information the user needs at a step be present at that step rather than held over from an earlier screen. This confirmation refers to \"the address entered above\" without restating the actual email address, so the user cannot verify which address received the invite without navigating back to the previous screen."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "The last import finished with 4 rows skipped: each referenced a project that does not exist in this workspace. Rows 35, 71, 78, and 83 were skipped; every other row was imported.",
+      "fix": "Add a retry or re-import control, or a link to review and fix the four referenced rows, reachable from this screen.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Import status screen (#import-status), status message (#import-status-message)",
+      "severity": 2,
+      "violation": "NNG-H9-RECOVER requires that an error name a next step the user can take from where the message appears. This message identifies exactly which rows failed and why, but offers no control to fix those rows, retry the import, or reach any import-initiating control, which the artifact defines nowhere; the screen's only control exits back to the projects overview."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-EXIT",
+      "evidence": "<a id=\"invite-member-cancel-link\" href=\"#project-settings\">Cancel</a>, directly below <input id=\"invite-member-email-input\" type=\"email\">",
+      "fix": "State in the spec whether returning to project settings via Cancel discards the entered email address.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Invite a team member screen (#invite-member), Cancel link (#invite-member-cancel-link)",
+      "severity": 1,
+      "violation": "NNG-H3-EXIT requires the artifact to say what becomes of work already entered when an exit is taken. The Cancel link is visible and predictably labeled, but the artifact never states whether the email address already typed into the form is discarded or preserved on return."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T15:37:50Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 1,
+      "2": 4,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

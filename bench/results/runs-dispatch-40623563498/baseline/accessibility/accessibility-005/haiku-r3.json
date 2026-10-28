@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "@media (orientation: portrait) { #main-content { display: none; } }",
+      "fix": "Remove this media query entirely or replace with a responsive layout that keeps content visible on all orientations.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Style element in head",
+      "severity": 3,
+      "violation": "This media query hides all main content on portrait orientation, making the page completely inaccessible on mobile devices in portrait mode."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a href=\"/accessibility\" id=\"nav-link1\" style=\"outline:none\">Accessibility</a>",
+      "fix": "Remove the style attribute to allow keyboard focus styles to display.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "First navigation link",
+      "severity": 3,
+      "violation": "The inline style=\"outline:none\" removes the keyboard focus indicator, making this link invisible to keyboard users navigating with Tab."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\" style=\"width:16px;height:16px\">",
+      "fix": "Replace with a button element: <button class=\"icon-delete\" aria-label=\"Delete item\" id=\"s3-customcontrol\" style=\"width:16px;height:16px\">",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Custom control div in section 3",
+      "severity": 3,
+      "violation": "Using a div with role=\"button\" instead of a native button element means it lacks built-in keyboard support for Space and Enter keys without JavaScript."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"wizard-steps\" id=\"s3-wizard\"><div class=\"step\" id=\"s3-step1\">Choose a plan</div>...",
+      "fix": "Add aria-current=\"step\" to the active step and use aria-disabled or similar attributes to indicate state.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Wizard steps section in section 3",
+      "severity": 3,
+      "violation": "The wizard steps have no ARIA attributes indicating which step is current, completed, or pending, reducing accessibility for assistive technology users."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a href=\"/fares/history\" id=\"s3-link1\">check the current station closures</a>",
+      "fix": "Either change link text to match \"/fares/history\" (e.g., \"check the fare history\") or change href to match the text (e.g., \"/closures\").",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Link in section 3 paragraph",
+      "severity": 3,
+      "violation": "The link text says \"check the current station closures\" but href points to \"/fares/history\", creating a mismatch between what users see and where the link goes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\">Phone number (required)</label> followed by <input id=\"phone\" type=\"tel\" autocomplete=\"tel\">",
+      "fix": "Add required attribute: <input id=\"phone\" type=\"tel\" autocomplete=\"tel\" required>",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Phone input in form",
+      "severity": 3,
+      "violation": "The label explicitly marks this field as required, but the input element lacks the required attribute."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\">",
+      "fix": "Remove aria-invalid or set it to aria-invalid=\"false\" initially, only setting to \"true\" after failed validation.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Promo code input in form",
+      "severity": 3,
+      "violation": "The aria-invalid=\"true\" is hard-coded, making the field appear invalid to screen readers on page load before any user interaction or validation."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-005.html",
+    "artifact_sha256": "0f8493f220745495c0706928266e57a6f8d8bacbcd1737ff17dc3965ce55df7b",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:43:43Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

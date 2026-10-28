@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-1.3.2",
+      "evidence": "DOM order: &lt;div class='step' id='s3-step3' style='order:3'&gt;, &lt;div class='step' id='s3-step2' style='order:2'&gt;, &lt;div class='step' id='s3-step1' style='order:1'&gt;. Linearized reading sequence is step3, step2, step1. CSS flexbox order property visually reorders to step1, step2, step3.",
+      "fix": "Reorder the div elements in the DOM to match the intended visual sequence, or remove the CSS order property and use visual reordering only for non-sequential content. For a checkout flow, ensure DOM order reflects the actual decision sequence: Choose a plan (step1), Enter payment details (step2), Confirm your order (step3).",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#s3-wizard, &lt;div&gt; element containing wizard steps, lines 47-57",
+      "severity": 3,
+      "violation": "The wizard steps are arranged in DOM order as step3, step2, step1 (lines 48, 51, 54), but CSS order properties (order:3, order:2, order:1) reverse the visual display to step1, step2, step3. A screen reader reading the linearized DOM encounters the steps in reverse of the visual sequence: Confirm your order, Enter payment details, Choose a plan, when a sighted user sees Choose a plan, Enter payment details, Confirm your order. This reversal of a procedural sequence changes the meaning and decision order."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-4.1.2",
+      "evidence": "Markup: &lt;div class='icon-delete' id='s3-customcontrol'&gt;&lt;img src='/img/trash-icon.svg' alt=''&gt;&lt;/div&gt; (lines 44-46). The div has no role attribute, no aria-label, no aria-labelledby, and no visible text. The img has empty alt text. There is no indication in the markup of what this control does.",
+      "fix": "Add a role and an accessible name to the custom control. For example: &lt;div class='icon-delete' id='s3-customcontrol' role='button' aria-label='Delete item' tabindex='0'&gt;&lt;/div&gt;. Ensure the control is focusable (tabindex='0' or tabindex='-1' if managed programmatically) and is activated by keyboard (e.g., Enter or Space key).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#s3-customcontrol, &lt;div class='icon-delete'&gt; element, line 44-46",
+      "severity": 3,
+      "violation": "This custom control is built from a div element with no role attribute, no accessible name (the nested img carries only empty alt=''), and no visible text label. A screen-reader user has no way to detect this control exists, determine what it does, or activate it from the keyboard. The div's class name 'icon-delete' is styling metadata, not an accessible name."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-1.4.1",
+      "evidence": "Label markup: &lt;label for='phone' id='s3-form-phone-label' style='color:#cc0000'&gt;Phone number&lt;/label&gt;. Red color (#cc0000) is present; no asterisk or (required) text follows the label; no other visual or textual indicator is present.",
+      "fix": "Add a non-color signal to the label, such as an asterisk (*) character, the word '(required)', or a required attribute on the input element. For example: &lt;label for='phone'&gt;Phone number &lt;span aria-label='required'&gt;*&lt;/span&gt;&lt;/label&gt;.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#s3-form-phone-label, &lt;label&gt; element, line 64",
+      "severity": 2,
+      "violation": "The Phone number label is styled with color:#cc0000 (red) as its only visual signal of special status or required state. The label text itself reads only 'Phone number' with no asterisk, no (required) text, and no other non-color indicator. A color-blind user cannot perceive that red and has no alternative signal to distinguish this field as required or important among the form's unlabeled expectations."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "Input: &lt;input id='promo' type='text' aria-invalid='true'&gt; (line 67). Error message: &lt;span class='error-text' aria-live='polite' id='s3-form-promo-error'&gt;Error.&lt;/span&gt; (line 68). The error text 'Error.' is too generic to guide correction.",
+      "fix": "Replace the generic error text with a specific description of what is wrong with the promo code field and how to fix it. For example: 'The promo code must be 6 alphanumeric characters.' or 'Promo code not found. Check spelling and try again.'",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#s3-form-promo-error, &lt;span&gt; element with aria-live='polite', line 68",
+      "severity": 2,
+      "violation": "The error message for the promo input field (aria-invalid='true' on line 67) is paired with error text reading only 'Error.' (line 68). This message is generic and identifies neither which field is in error nor what is wrong with the promo input's value. A user encountering this error has no guidance on how to correct it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "7518497ec47bc70bca9021d0ed190bdfb2f04532e6ef68cc37b662d769e87516",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T03:21:37Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

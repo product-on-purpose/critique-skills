@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.3.2",
+      "evidence": "DOM order is #s3-step3 (\"Confirm your order\"), #s3-step2 (\"Enter payment details\"), #s3-step1 (\"Choose a plan\"); each carries inline style order:3, order:2, order:1 respectively, so the CSS order property restores the visual sequence to Choose a plan, Enter payment details, Confirm your order while the DOM keeps the reversed sequence.",
+      "fix": "Reorder the three .step divs in the DOM to Choose a plan, Enter payment details, Confirm your order, matching the CSS order values, and remove the order property once DOM order already matches the intended sequence.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#s3-wizard, <div class=\"wizard-steps\"> containing three step divs, lines 47-57",
+      "severity": 3,
+      "violation": "WCAG-1.3.2: the markup's reading order no longer matches the sequence the content must be understood in. A screen-reader user hears the confirm-and-pay step narrated before the step that establishes what is being chosen, reversing the actual decision sequence the CSS order property restores only for sighted users."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "The page's only wayfinding mechanisms are the two links inside #nav (\"Plan a trip\", \"Service alerts\") and the two footer links (\"Privacy policy\", \"Terms of service\"); no search form, sitemap link, or breadcrumb trail appears anywhere in the document.",
+      "fix": "Add a second, independent wayfinding mechanism, such as a site search form or a sitemap link, so a reader who does not already know the primary navigation menu's structure can still find this page or its related pages.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#nav, <nav> inside #header",
+      "severity": 3,
+      "violation": "WCAG-2.4.5: fewer than two independent mechanisms exist for locating this page or related pages within the site. A reader arriving directly at this page has exactly one navigational path, the primary menu, and no second mechanism such as search or a sitemap."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-4.1.2",
+      "evidence": "#s3-customcontrol has no role, no tabindex, no aria-label, and no visible text; its only content is an img with src=\"/img/trash-icon.svg\" and alt=\"\", and it sits immediately beside #s3-button1, a native button control.",
+      "fix": "Replace the div with a native button element carrying a visible or aria-label text name such as Delete, or, if it must stay a div, add role=\"button\", a tabindex of 0, a keyboard handler, and an accessible name.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#s3-customcontrol, <div class=\"icon-delete\"> containing an img with alt=\"\"",
+      "severity": 3,
+      "violation": "WCAG-4.1.2: a div styled and named as an action control (class icon-delete, a trash icon) exposes no role, no accessible name, and no keyboard affordance, so a screen-reader or keyboard user cannot detect that it is a control, let alone what activating it would do."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-1.4.1",
+      "evidence": "#s3-form-phone-label carries style color:#cc0000; the sibling Email address and Promo code labels in the same form carry no such styling, and no asterisk, \"required\" text, or icon accompanies the Phone number label.",
+      "fix": "Add a non-color signal alongside the red styling, such as visible required text or an asterisk with an accessible description, or remove the color-only distinction if it conveys no actual state.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#s3-form-phone-label, <label for=\"phone\">, visible text \"Phone number\"",
+      "severity": 2,
+      "violation": "WCAG-1.4.1: the Phone number label is distinguished from its sibling labels by color alone, with no text, icon, or other non-color signal explaining what the red color means, so a color-blind or low-vision reader cannot perceive whatever state the color is meant to convey."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "The section's body, #s1-p1 and #s1-p2, describes requesting a fare adjustment and checking real-time arrivals; the only accessibility-specific content is the alt text of #s1-img1, \"Crews repainting the accessible parking spaces near the station entrance\", a single incidental image caption.",
+      "fix": "Rename the heading to describe the section's actual content, for example Fares and arrival updates, or replace the fare-adjustment and arrival-time paragraphs with content that is actually about accessibility.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#s1-h, <h2>, visible text \"Accessibility improvements\"",
+      "severity": 2,
+      "violation": "WCAG-2.4.6: the heading's wording promises content about accessibility improvements, but the section's actual text content is about fare adjustment and arrival-time information unrelated to accessibility, so a reader scanning headings cannot predict what the section actually covers."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "#promo carries aria-invalid=\"true\"; the adjacent error text, #s3-form-promo-error, reads only \"Error.\"",
+      "fix": "Replace \"Error.\" with text naming the field and the specific problem, for example Promo code not recognized, check for typos or confirm the code has not expired, and associate it to #promo with aria-describedby.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#s3-form-promo-error, <span class=\"error-text\"> associated by position with #promo",
+      "severity": 2,
+      "violation": "WCAG-3.3.1: the error text accompanying the invalid Promo code field names neither the field nor what is wrong with the entered value, so a reader cannot tell what to correct."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "7518497ec47bc70bca9021d0ed190bdfb2f04532e6ef68cc37b662d769e87516",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T03:57:26Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

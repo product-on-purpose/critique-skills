@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"color:#999999\"`",
+      "fix": "Change the color to a darker shade such as #333333 or #666666 to achieve sufficient contrast.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section \"Accessibility improvements\", first paragraph (s1-p1)",
+      "severity": 3,
+      "violation": "Gray text (#999999) on a white background fails WCAG contrast requirements, making it difficult to read and especially inappropriate on a transit accessibility page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"topic-alt\">` paired with `<select id=\"topic\">`",
+      "fix": "Change the label's for attribute from \"topic-alt\" to \"topic\" to match the select element's id.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section \"Weekend service\", form label for Route field (s3-form-topic-label)",
+      "severity": 3,
+      "violation": "The label's for attribute references \"topic-alt\" but the select input has id=\"topic\", breaking the label-input association."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"height:60px;overflow:hidden\"`",
+      "fix": "Remove both the height and overflow styles, or change overflow to \"auto\" to allow scrolling if the content exceeds the height.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section \"Weekend service\", status card (s3-statuscard)",
+      "severity": 3,
+      "violation": "Fixed height with overflow:hidden will truncate any content taller than 60 pixels, potentially hiding important status information."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"icon-delete\" role=\"button\" tabindex=\"0\">`",
+      "fix": "Replace with a native `<button>` element, or add JavaScript event listeners to handle keyboard interactions.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section \"Weekend service\", delete control (s3-customcontrol)",
+      "severity": 3,
+      "violation": "A div with role=\"button\" does not natively handle Enter or Space key presses required for keyboard accessibility."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">` followed by `<span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">`",
+      "fix": "Add `aria-describedby=\"s3-form-promo-error\"` to the input element.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section \"Weekend service\", promo code input and error message (s3-form-promo-error)",
+      "severity": 3,
+      "violation": "The invalid input is not connected to its error message; screen reader users won't know which message describes this field's error."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"/fares/history\">read the accessibility improvements list</a>`",
+      "fix": "Change the link text to \"read the fare history\" or update the href to point to the actual accessibility improvements page.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section \"Weekend service\", link to adjustments list (s3-link1)",
+      "severity": 3,
+      "violation": "The link text \"accessibility improvements list\" does not match the destination \"/fares/history\", creating confusion about where the link leads."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-002.html",
+    "artifact_sha256": "77a0e7586bb29a0807dde74bad599c5697360ab159315d8c672e432e2dedf0fd",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:09:23Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

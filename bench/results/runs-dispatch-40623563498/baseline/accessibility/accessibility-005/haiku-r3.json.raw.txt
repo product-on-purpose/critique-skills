@@ -1,0 +1,34 @@
+Location: Style element in head
+Evidence: @media (orientation: portrait) { #main-content { display: none; } }
+Problem: This media query hides all main content on portrait orientation, making the page completely inaccessible on mobile devices in portrait mode.
+Fix: Remove this media query entirely or replace with a responsive layout that keeps content visible on all orientations.
+
+Location: First navigation link
+Evidence: <a href="/accessibility" id="nav-link1" style="outline:none">Accessibility</a>
+Problem: The inline style="outline:none" removes the keyboard focus indicator, making this link invisible to keyboard users navigating with Tab.
+Fix: Remove the style attribute to allow keyboard focus styles to display.
+
+Location: Custom control div in section 3
+Evidence: <div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol" style="width:16px;height:16px">
+Problem: Using a div with role="button" instead of a native button element means it lacks built-in keyboard support for Space and Enter keys without JavaScript.
+Fix: Replace with a button element: <button class="icon-delete" aria-label="Delete item" id="s3-customcontrol" style="width:16px;height:16px">
+
+Location: Wizard steps section in section 3
+Evidence: <div class="wizard-steps" id="s3-wizard"><div class="step" id="s3-step1">Choose a plan</div>...
+Problem: The wizard steps have no ARIA attributes indicating which step is current, completed, or pending, reducing accessibility for assistive technology users.
+Fix: Add aria-current="step" to the active step and use aria-disabled or similar attributes to indicate state.
+
+Location: Link in section 3 paragraph
+Evidence: <a href="/fares/history" id="s3-link1">check the current station closures</a>
+Problem: The link text says "check the current station closures" but href points to "/fares/history", creating a mismatch between what users see and where the link goes.
+Fix: Either change link text to match "/fares/history" (e.g., "check the fare history") or change href to match the text (e.g., "/closures").
+
+Location: Phone input in form
+Evidence: <label for="phone" id="s3-form-phone-label">Phone number (required)</label> followed by <input id="phone" type="tel" autocomplete="tel">
+Problem: The label explicitly marks this field as required, but the input element lacks the required attribute.
+Fix: Add required attribute: <input id="phone" type="tel" autocomplete="tel" required>
+
+Location: Promo code input in form
+Evidence: <input id="promo" type="text" aria-invalid="true">
+Problem: The aria-invalid="true" is hard-coded, making the field appear invalid to screen readers on page load before any user interaction or validation.
+Fix: Remove aria-invalid or set it to aria-invalid="false" initially, only setting to "true" after failed validation.

@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`lang=\"translanguage\"`",
+      "fix": "Change `lang=\"translanguage\"` to `lang=\"en\"` or the appropriate language code for the content.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<html>` opening tag",
+      "severity": 3,
+      "violation": "\"translanguage\" is not a valid language code. Valid codes are BCP 47 tags like \"en\", \"es\", \"fr\", etc."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<title id=\"head-title\"></title>`",
+      "fix": "Add descriptive text between the tags, such as `<title>Rider Service Updates</title>`.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<title>` element in head",
+      "severity": 3,
+      "violation": "The page title is empty, providing no meaningful information to users or search engines about the page content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<h4 id=\"s2-h\">Accessibility improvements</h4>`",
+      "fix": "Change `<h4>` to `<h2>` to maintain sequential heading hierarchy.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section s2 heading",
+      "severity": 3,
+      "violation": "The heading hierarchy skips from h2 (in s1) directly to h4, breaking proper document outline structure."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<img src=\"/img/platform-update.jpg\" id=\"s1-img1\">`",
+      "fix": "Add an alt attribute with descriptive text, such as `<img src=\"/img/platform-update.jpg\" alt=\"Platform update diagram\" id=\"s1-img1\">`.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section s1 image",
+      "severity": 3,
+      "violation": "The image has no alt attribute, making it inaccessible to screen reader users and providing no fallback text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">`",
+      "fix": "Replace with a proper `<button>` element: `<button type=\"button\" class=\"icon-delete\" aria-label=\"Delete item\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></button>`.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section s3, custom delete control",
+      "severity": 3,
+      "violation": "This is a non-interactive `<div>` styled as a button but lacks keyboard event handlers; users cannot activate it with Enter or Space keys without JavaScript."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"status-card\" role=\"status\" id=\"s3-statuscard\">`",
+      "fix": "Remove `role=\"status\"` or replace with `role=\"region\" aria-label=\"Status information\"` if the intent is to group related status content.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section s3, status card div",
+      "severity": 3,
+      "violation": "The `role=\"status\"` should only be used for dynamic content that updates to announce live messages; static text should not use this role."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"phone\" id=\"s3-form-phone-label\">Phone number (required)</label>` followed by `<input id=\"phone\" type=\"tel\" autocomplete=\"tel\">`",
+      "fix": "Add the `required` attribute: `<input id=\"phone\" type=\"tel\" autocomplete=\"tel\" required>`.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Form phone input",
+      "severity": 3,
+      "violation": "The label indicates the field is required but the input element lacks the `required` attribute, creating a mismatch between the visual label and form validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">`",
+      "fix": "Remove `aria-invalid=\"true\"` or only add it dynamically after validation fails.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Form promo code input",
+      "severity": 3,
+      "violation": "The input is marked with `aria-invalid=\"true\"` by default, incorrectly signaling to assistive technology that the field contains an error before the user has even entered anything."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-001.html",
+    "artifact_sha256": "9077f0b4d4061075fc6497a8cd5b91b94b2af4f536abadbd41a62d9f86cd85d2",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T02:56:56Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

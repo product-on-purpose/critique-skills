@@ -221,6 +221,32 @@ def test_an_undeclared_criterion_fails_the_merge_by_name(skill: dict[str, Any]) 
 
 
 @pytest.mark.parametrize("skill", SKILLS, ids=IDS)
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("location", {"span": [28, 28]}),
+        ("location", {"section": "Recommendation", "quote": "Thus, given the results"}),
+        ("location", ["line 3", "line 4"]),
+        ("evidence", {"quote": "x"}),
+    ],
+    ids=["span-object", "section-quote-object", "list", "evidence-object"],
+)
+def test_a_judged_finding_with_an_object_prose_field_fails_the_merge(
+    skill: dict[str, Any], field: str, value: object
+) -> None:
+    """A structured location used to pass through `str()` as its Python repr, which validates as
+    prose and resolves to nothing. It must fail instead, with a message naming the prose form, so
+    the model can rewrite the finding while it still can."""
+    _scripted_ids, judged_ids = _lane_ids(skill)
+    if not judged_ids:
+        pytest.skip(f"{skill['name']}: no declared judged criterion")
+    findings = [_finding(sorted(judged_ids)[0], 2, **{field: value})]
+
+    with pytest.raises(merge.MergeError, match=rf"{field} must be prose text.*line 84, second sentence"):
+        merge.assemble(skill=skill["name"], artifact=_artifact_path(skill), findings=findings, repo_root=REPO_ROOT)
+
+
+@pytest.mark.parametrize("skill", SKILLS, ids=IDS)
 @pytest.mark.parametrize("criterion", ["BYOR-TEST-CRITERION", "ACME-THING"], ids=["byor-namespace", "other-namespace"])
 def test_a_byor_marked_finding_is_filed_as_judged_whatever_its_namespace(
     skill: dict[str, Any], criterion: str

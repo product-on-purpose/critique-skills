@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`autocomplete=\"e-mail\"`",
+      "fix": "Change `autocomplete=\"e-mail\"` to `autocomplete=\"email\"`",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Line 14, email input `autocomplete` attribute",
+      "severity": 3,
+      "violation": "The autocomplete value should be \"email\", not \"e-mail\". The invalid value will be ignored by browsers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"confirm-password-input\" name=\"password_again\" type=\"password\" autocomplete=\"new-password\" required=\"\">`",
+      "fix": "Add `minlength=\"8\"` to the confirm password input",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Line 20, confirm password input",
+      "severity": 3,
+      "violation": "The confirm password field lacks the `minlength=\"8\"` constraint that the password field has, allowing a mismatch in validation requirements."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">`",
+      "fix": "Add `name=\"preferred_shipping_speed\"` to the select element",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Line 59, shipping speed select element",
+      "severity": 3,
+      "violation": "The select element has no `name` attribute, so the selected value will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Standard</option>` and similar without value attributes",
+      "fix": "Add `value` attributes to each option (e.g., `<option value=\"standard\">Standard</option>`)",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Lines 60 - 64, shipping speed select options",
+      "severity": 3,
+      "violation": "Options lack explicit `value` attributes, which is poor practice and can cause confusion between display text and submitted values."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Change `type=\"text\"` to `type=\"time\"`",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Line 54, contact time input",
+      "severity": 3,
+      "violation": "The field is labeled \"Preferred contact time\" but uses `type=\"text\"` instead of `type=\"time\"`, providing poor user experience and no browser validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"hear-select\" required=\"\">`",
+      "fix": "Add `name=\"heard_about_us\"` to the select element",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Line 66, how you heard about us select element",
+      "severity": 3,
+      "violation": "The select element has no `name` attribute, so the selected value will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Search engine</option>` and similar without value attributes",
+      "fix": "Add `value` attributes to each option (e.g., `<option value=\"search_engine\">Search engine</option>`)",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Lines 67 - 71, how you heard about us select options",
+      "severity": 3,
+      "violation": "Options lack explicit `value` attributes, making it unclear what values will be submitted."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Full name\" (`name=\"full_name\"`) and \"Your name\" (`name=\"legal_name\"`) both required",
+      "fix": "Clarify the purpose of each field with distinct labels (e.g., \"Full name\" and \"Legal name (as it appears on official documents)\"), or remove one if only one is actually required",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Lines 11 and 52, name input fields",
+      "severity": 3,
+      "violation": "Two different name fields with unclear distinction create confusion about why both are needed and what information each should contain."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required=\"\">`",
+      "fix": "Add `minlength=\"8\" maxlength=\"8\" pattern=\"[0-9]{8}\"` to enforce the 8-digit requirement",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Line 46, membership number input",
+      "severity": 3,
+      "violation": "The placeholder promises an 8-digit requirement, but no `minlength`, `maxlength`, or `pattern` attribute enforces this constraint."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-001.html",
+    "artifact_sha256": "531c999912c0ab6c8224cbeb2347e7644d493a84e3a9461a434deaf5f2f09cdd",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T10:09:21Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

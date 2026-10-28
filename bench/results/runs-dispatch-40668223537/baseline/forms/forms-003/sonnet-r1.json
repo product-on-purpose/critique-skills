@@ -1,0 +1,204 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<meta charset=\"utf-8\">` followed directly by `<title>Join Meridian Outfitters</title>` with no other meta tags",
+      "fix": "Add a viewport meta tag to the `<head>`.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<head>` section",
+      "severity": 3,
+      "violation": "There is no `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">` tag, so on mobile browsers the page will render at desktop width and inputs will trigger zoom-on-focus."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"form\">`",
+      "fix": "Add `action=\"/signup\"` (or appropriate endpoint) and `method=\"post\"`.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<form id=\"form\">` opening tag",
+      "severity": 3,
+      "violation": "The form has no `action` or `method` attribute, so submitting it will reload the current page with a GET request instead of sending data anywhere."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`minlength=\"6\"`",
+      "fix": "Raise `minlength` to at least 8 and consider surfacing a strength indicator instead of relying solely on length.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-password, password-input",
+      "severity": 3,
+      "violation": "A 6-character minimum is weaker than modern guidance (e.g. NIST SP 800-63B recommends at least 8 characters), giving users a false sense of adequate password strength."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<p>Thanks for signing up.</p>`",
+      "fix": "Remove this paragraph from the phone row, or move it to a post-submit confirmation view.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-phone",
+      "severity": 3,
+      "violation": "A \"thank you\" confirmation message is rendered inline inside the phone-number field row before the form has been submitted, which is confusing and appears to be leftover/misplaced content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "both `phone-input` and `phone2-input` use `autocomplete=\"tel\"`",
+      "fix": "Disambiguate with section tokens, e.g. `autocomplete=\"tel\"` for the primary and `autocomplete=\"section-secondary tel\"` for the secondary field.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "row-phone and row-phone2",
+      "severity": 3,
+      "violation": "Using the identical autocomplete token for both the primary and secondary phone fields can cause browsers to autofill the same number into both inputs."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"website-input\" name=\"website\" type=\"url\" required=\"\">`",
+      "fix": "Make the website field optional (remove `required`) unless the account type genuinely demands it.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "row-website, website-input",
+      "severity": 3,
+      "violation": "Requiring a company website to create a personal membership account is an unnecessary hard requirement that will block individual users who have none."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no `pattern` or `maxlength` attribute",
+      "fix": "Add `pattern=\"\\d{8}\"` and `maxlength=\"8\"`, and move the instruction into visible helper text rather than relying solely on the placeholder.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "row-member, member-input",
+      "severity": 3,
+      "violation": "The format requirement is communicated only via placeholder text (which disappears once the user types) and is not actually enforced by any validation attribute, so an incorrectly-formatted value can still pass."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" required=\"\">` immediately following the required `membership_number` field",
+      "fix": "Either clarify the distinction with helper text or remove one of the two redundant identifier fields.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "row-acctnum, acctnum-input",
+      "severity": 3,
+      "violation": "The form requires both a \"membership number\" and an \"account number\" with no explanation of how they differ, which is confusing on a signup form where neither may exist yet for a new user."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "row-postal appears after row-acctnum and before row-shipspeed, separated from row-street by five unrelated fields",
+      "fix": "Move row-postal to immediately follow row-street.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "row-postal",
+      "severity": 3,
+      "violation": "Postal code is logically part of the mailing address and should be grouped with street address, but it's placed far away, hurting form scannability and autofill grouping."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">`",
+      "fix": "Add `name=\"shipping_speed\"` to the select element.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "row-shipspeed, shipspeed-select",
+      "severity": 3,
+      "violation": "The `<select>` element has no `name` attribute, so its selected value will not be included in the submitted form data at all."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`given-input` (First name) and `family-input` (Last name) appear as separate required fields after `name-input` (Full name) was already collected",
+      "fix": "Remove the duplicate full-name field and keep only one name-collection scheme (either a single full name field or split given/family fields).",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "row-legalname",
+      "severity": 3,
+      "violation": "The form collects the user's name twice in incompatible formats (one free-text full name field, one split first/last name fields) with no indication of why both are needed, risking inconsistent data and user confusion."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"font-size:16px\"` on `org-input` only",
+      "fix": "Apply a consistent base font-size (e.g. 16px) to all inputs via shared CSS rather than an inline style on one field.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "row-org, org-input",
+      "severity": 3,
+      "violation": "This single input has an inline font-size override not applied to any other input in the form, creating inconsistent styling and suggesting a mobile-zoom workaround that isn't applied consistently elsewhere."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Use a `type=\"time\"` input or a `<select>` of predefined time windows instead of unconstrained free text.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "row-contacttime, contacttime-input",
+      "severity": 3,
+      "violation": "A free-text input with no placeholder, pattern, or format hint is used to capture \"preferred contact time,\" which will produce inconsistent, unparseable data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"padding:1px 2px;font-size:11px\"`",
+      "fix": "Increase padding and font-size to meet a minimum ~44x44px touch target.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "viewdetails-btn",
+      "severity": 3,
+      "violation": "The button's padding and font size make its tap target far smaller than accessible touch-target guidelines (e.g. WCAG 2.5.5 recommends at least 44x44px), making it hard to tap on mobile."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:1px 2px;font-size:11px\">View details</button>` with no `<script>` anywhere in the document",
+      "fix": "Either add the script that wires up this button's intended action, or remove the button if it has no current purpose.",
+      "id": "F-015",
+      "lane": "judged",
+      "location": "viewdetails-btn",
+      "severity": 3,
+      "violation": "The button is `type=\"button\"` (so it does not submit) but there is no JavaScript anywhere in the document to give it any behavior, making it a dead control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"submit-btn\" type=\"submit\">Create account</button>\\n <button id=\"reset-btn\" type=\"reset\">Clear form</button>`",
+      "fix": "Remove the reset button, or visually separate/de-emphasize it and require a confirmation before clearing the form.",
+      "id": "F-016",
+      "lane": "judged",
+      "location": "end of form, submit-btn and reset-btn",
+      "severity": 3,
+      "violation": "Placing a reset button directly next to the submit button is a well-known UX anti-pattern that risks users accidentally wiping all entered data."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-003.html",
+    "artifact_sha256": "df62d7b38659529bf26df03102d3e7969a1c47b7c66e72bc8d3cf208f082bc1f",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T11:21:59Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 16,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

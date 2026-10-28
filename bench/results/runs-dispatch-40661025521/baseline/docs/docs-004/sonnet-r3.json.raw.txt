@@ -1,0 +1,19 @@
+Location: ## retry_policy
+Evidence: "The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential."
+Problem: Documenting the most aggressive retry behavior as the default is a surprising operational choice that isn't explained or justified, and no guidance is given on when to choose the other options.
+Fix: Either confirm this is intentional and add a brief note on why exponential is the safe default (and what none/linear are for), or correct the default if it's actually a documentation error.
+
+Location: ## endpoint_url
+Evidence: "The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert."
+Problem: No constraints are given on URL requirements (e.g., whether redirects are followed, whether non-standard ports are allowed, max length, or what happens if the endpoint is unreachable).
+Fix: Add details on validation rules and failure behavior for endpoint_url, or link to the retry_policy section explaining what happens when delivery fails.
+
+Location: ## signing_secret
+Evidence: "The signing_secret field accepts a string used to verify the payload signature on receipt."
+Problem: The signature verification mechanism itself (algorithm, header name, encoding) is not documented, making this field's description incomplete for actually implementing verification.
+Fix: Specify the signing algorithm (e.g., HMAC-SHA256), which HTTP header carries the signature, and provide an example of computing/verifying it.
+
+Location: Document overall
+Evidence: Entire document consists of three short field descriptions with no other content.
+Problem: There's no description of the payload format, delivery semantics (e.g., at-least-once vs exactly-once), timeout behavior, or retry schedule/backoff intervals for the retry_policy values, which are essential for a "delivery reference."
+Fix: Add sections covering payload schema/example, delivery guarantees, timeout values, and the concrete retry intervals for linear and exponential policies.

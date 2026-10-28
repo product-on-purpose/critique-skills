@@ -1,0 +1,44 @@
+Location: form element
+Evidence: `<form id="form">` with no action or method attributes
+Problem: The form cannot submit without an action attribute specifying the endpoint and a method attribute specifying how to submit.
+Fix: Add `action="/signup"` and `method="post"` attributes to the form element.
+
+Location: row-password (password input)
+Evidence: `minlength="8"` in the input but label text is only "Create a password"
+Problem: The 8-character minimum requirement is enforced but not communicated to users in the visible label.
+Fix: Change the label text to "Create a password (minimum 8 characters)".
+
+Location: row-website (company website field)
+Evidence: `type="text"` and `required=""`
+Problem: The field should use type="url" for proper URL validation and to trigger the URL keyboard on mobile devices.
+Fix: Change `type="text"` to `type="url"`.
+
+Location: row-postal (postal code field)
+Evidence: `size="3"`
+Problem: The size attribute limits the visible field to 3 characters, which is too small for any postal code format (US: 5 digits, Canada: 6 characters, UK: up to 8).
+Fix: Remove the size attribute or set it to a larger value like `size="10"`.
+
+Location: row-member (membership number field)
+Evidence: `placeholder="Must be 8 digits"` with no validation attributes
+Problem: The placeholder states the requirement but there is no pattern or maxlength to actually enforce it.
+Fix: Add `pattern="[0-9]{8}" maxlength="8"` to the input element.
+
+Location: row-phone2 (secondary phone field)
+Evidence: `type="tel"` combined with `pattern="[0-9]+"`
+Problem: The tel input type already has built-in validation that may conflict with the pattern attribute, causing inconsistent validation across browsers.
+Fix: Remove the pattern attribute or change the type to "text" with `inputmode="numeric"`.
+
+Location: row-contacttime (preferred contact time field)
+Evidence: `type="text"` with no format specification
+Problem: No indication of expected format (24-hour time, AM/PM, specific days, etc.) for users filling out this field.
+Fix: Change to `type="time"` or add a placeholder like `placeholder="9:00 AM - 5:00 PM"`.
+
+Location: row-name and row-legalname
+Evidence: row-name label is "Full name" and row-legalname label is "Your name"
+Problem: Both fields ask for the user's name with different labels, creating redundancy and confusion.
+Fix: Remove the row-legalname field entirely as it duplicates the row-name field.
+
+Location: row-shipspeed (preferred shipping speed select)
+Evidence: Options include both "Overnight" and "Next-day"
+Problem: These two options are redundant and unclear about which service is faster or what the distinction is.
+Fix: Keep only one option; for example, remove "Next-day" and keep "Overnight" for fastest delivery.

@@ -1,0 +1,93 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "project-settings-save-btn triggers Save with no feedback state specified. notification-settings-save-btn triggers Submit with no feedback state specified.",
+      "fix": "For each state-changing action, specify a visible indication of what is happening: a loading state, a success confirmation, a failure message, or navigation to a result screen with timing. Make clear what outcome the user should expect.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button and the \"notification-settings\" section, the \"notification-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "The artifact specifies state-changing actions (Save project name, Submit notification settings) but does not specify what the user sees while the action processes or once it completes. No loading state, progress indicator, success message, or result feedback is specified."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-EXIT",
+      "evidence": "The form accepts an email input; the Cancel link navigates back to project-settings. The artifact does not state whether the entered email is discarded, saved, or preserved.",
+      "fix": "Specify what happens to entered work when the user clicks Cancel. If the form is discarded, state this clearly near the Cancel control, or use a confirmation dialog naming the consequence.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"invite-member\" section, the form with email input and the \"invite-member-cancel-link\" Cancel link",
+      "severity": 2,
+      "violation": "The invite-member flow has an exit (Cancel link) but the artifact does not specify what becomes of the email address the user has already entered if they click Cancel. This leaves the user uncertain whether their work is discarded, saved as draft, or held for later."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "The artifact shows the invite-sent confirmation but no controls or states for managing pending invites, revoking them, or undoing the action. The text notes the invite \"expires in 5 days if not accepted\" but does not offer a proactive revocation mechanism.",
+      "fix": "Add a way for the user to revoke an invite before it is accepted. This could be a control on the invite-sent screen, or a manage-invites screen linked from project-settings, allowing users to see and revoke pending invitations.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"invite-sent\" section, after the invite has been sent",
+      "severity": 2,
+      "violation": "After an invite is sent (displayed in the invite-sent state), the artifact provides no way to revoke or recall the invitation. The invite is reasonably reversible in this product, but its reversal path appears nowhere in the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H4-CONTROL-NAMING",
+      "evidence": "control labeled \"Save\"",
+      "fix": "Pick one label for this commit action, for example \"Save\", and use it everywhere the action appears.",
+      "id": "F-004",
+      "instances": [
+        {
+          "evidence": "control labeled \"Save\"",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "control labeled \"Submit\"",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "This artifact uses 2 different labels for what reads as the same commit action: \"Save\", \"Submit\". A user cannot tell from the label alone whether these controls perform the same action or different ones."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H5-PREVENT",
+      "evidence": "The input element has type=\"text\" with no required attribute, no minlength constraint, and no validation feedback specified in the artifact.",
+      "fix": "Constrain the project name field to prevent empty submission. Add a required attribute, set a minimum length, or provide a sensible default. Provide inline feedback if the field becomes empty after having content.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-name-input\" text input field",
+      "severity": 2,
+      "violation": "The project name input is a free-text field with no constraints shown to prevent submission of an empty value. An empty project name would likely be rejected by the system, but the design does not prevent this error at entry time."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:07:34Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

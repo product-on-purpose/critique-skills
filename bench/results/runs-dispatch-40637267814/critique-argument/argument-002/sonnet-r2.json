@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-CLAIM",
+      "evidence": "\"Ending overdue fines is plainly the better path for the consortium\" (What the Pilot Showed); \"the stronger choice is a systemwide end to overdue fines across all ten consortium branches, effective at the start of the next fiscal year\"; \"Specifically, the recommended change is about making things better for patrons going forward, in whatever way the consortium finds workable\"; \"This recommendation removes every overdue-related charge permanently, for every item the consortium owns, without qualification.\"",
+      "fix": "State the recommendation once, in the Recommendation section, with its exact scope (which charges, which items, which branches, effective when), and delete or rewrite the vaguer and the broader restatements so they match that one specification instead of competing with it.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"What the Pilot Showed\" opening sentence and the \"Recommendation\" section, three consecutive sentences",
+      "severity": 3,
+      "violation": "The document states its ask four different ways that do not reduce to one conclusion: a specific, scoped claim (end overdue fines at all ten branches, next fiscal year), a vacuous one introduced with the word \"Specifically\" that commits to nothing beyond making things better in whatever way is workable, and an absolute one that expands scope from \"overdue fines\" to \"every overdue-related charge... for every item... without qualification.\" A reader finishing the Recommendation section cannot tell which of these is the actual ask."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-CLAIM-MARKER",
+      "evidence": "0 conclusion-marker phrases found across 401 words.",
+      "fix": "Add an explicit conclusion-signalling phrase at the point the artifact states its central claim, for example \"therefore\" or \"we recommend\".",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "severity": 3,
+      "violation": "No phrase from the conclusion-marker lexicon (therefore, thus, hence, it follows that, we recommend, this paper argues, I argue that, the conclusion is, in conclusion, we should, the case for) appears anywhere in the artifact, so a reader scanning rather than reading straight through has no signpost to where the conclusion is asserted."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-GROUNDS",
+      "evidence": "\"Given the return-rate and avoidance-survey results above, the stronger choice is...\" and \"the pilot's return-rate and avoidance-survey results, taken together, support ending fines for the whole consortium\"; the only pilot evidence actually stated anywhere in the document is the avoidance-survey figure in \"What the Pilot Showed\" (fear-based avoidance dropping from 20 percent to 3 percent) -- no return-rate figure for the pilot appears anywhere in the artifact.",
+      "fix": "Add the actual pilot return-rate figures (e.g., the percentage-point change in on-time returns at the pilot branches) to \"What the Pilot Showed,\" or remove the references to \"return-rate results\" from the Recommendation and Warrant sections so the stated grounds match what the document actually provides.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Recommendation\" section (\"Given the return-rate and avoidance-survey results above\") and \"Why the Pilot Result Applies Systemwide\" section",
+      "severity": 3,
+      "violation": "Two separate passages cite \"return-rate results\" as part of what grounds the central claim, but the artifact never states any return-rate data anywhere; a reader trying to check that half of the stated evidence has nothing to examine, because it was never supplied rather than merely under-explained."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-HEDGE-DENSITY",
+      "evidence": "10 of 14 sentences (0.71) carry at least one hedging term.",
+      "fix": "Remove the hedge from sentences whose claim the evidence actually supports, reserving qualification for the claims that genuinely need it.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "severity": 3,
+      "violation": "More than 0.35 of the artifact's sentences carry a term from the hedging lexicon (may, might, could, possibly, perhaps, arguably, somewhat, relatively, it seems, appears to, tends to, to a degree), spread across the whole document rather than concentrated where the evidence actually underdetermines the claim."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-QUALIFIER",
+      "evidence": "\"This recommendation removes every overdue-related charge permanently, for every item the consortium owns, without qualification.\" This is asserted on grounds limited to four of ten branches over a twelve-month survey window, and the warrant this claim depends on is itself introduced twice as holding only \"In a somewhat qualified way.\"",
+      "fix": "Qualify the recommendation to match its grounds, for example by framing it as a policy adopted on the strength of the pilot and subject to review, rather than asserting it is permanent and without qualification.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Recommendation\" section, final sentence",
+      "severity": 3,
+      "violation": "The central recommendation is stated as unconditional and permanent with no qualification at all, while its own grounds are a partial, time-bound pilot and its own stated warrant is explicitly hedged as only somewhat qualified; the claim's asserted strength overreaches what the artifact's own evidence supports."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-REBUTTAL",
+      "evidence": "The document raises and answers only the funding objection (\"a skeptic on the board points to overdue fines as a source of materials-replacement funding\"), while separately declaring the change \"permanent\" and \"without qualification\" for all ten branches without ever addressing what happens if the other six branches or later years do not match the four-branch, twelve-month pilot.",
+      "fix": "Add a rebuttal addressing the permanence risk directly, for example by naming a review point or phased rollout tied to monitoring at the newly included branches, rather than leaving the unqualified permanence unaddressed.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "\"Addressing the Revenue Concern\" section, and the absence of any comparable treatment of the recommendation's stated permanence",
+      "severity": 2,
+      "violation": "One foreseeable objection is raised and answered, but the risk created by the recommendation's own unconditional permanence, that results might not hold once six more branches and more than twelve months are added, is never raised or answered anywhere in the document."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/argument/argument-002.md",
+    "artifact_sha256": "0322bc2ebeb48318c56473186a8cb1f1e78d8667b99cfaf75ee7bb84f82fcfa2",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "TOULMIN"
+    ],
+    "skill": "critique-argument",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T05:57:59Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

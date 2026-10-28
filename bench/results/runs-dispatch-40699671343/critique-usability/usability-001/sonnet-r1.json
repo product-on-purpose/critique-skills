@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-DEADEND",
+      "evidence": "the \"invite-sent\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+      "fix": "Add a control inside the \"invite-sent\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "the \"invite-sent\" section",
+      "severity": 3,
+      "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H5-PREVENT",
+      "evidence": "the \"invite-member-email-input\" field carries no required attribute, and \"invite-member-continue-link\" (href=\"#invite-sent\") is a plain link with no stated dependency on that field; \"invite-sent\" then states \"An invite was sent to the address entered above\" unconditionally.",
+      "fix": "Gate the Continue control on the email field holding a value, or route an empty submission to a validation error state that names the missing field, before the flow can reach invite-sent.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"invite-member\" section, the \"invite-member-continue-link\" link",
+      "severity": 3,
+      "violation": "A user can activate Continue without ever entering an email address, and the artifact's own next state asserts an invite was sent to an address that may not exist, with no validation step anywhere in the path that could catch this."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button> commits the digest frequency; the artifact specifies no confirmation message or destination state reached after it is clicked.",
+      "fix": "Specify what the user sees after Save is clicked: a success message, a changed control state, or a defined next state.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "This action changes stored state (the notification digest preference) but the artifact specifies no visible indication, beyond the select's own unchanged value, that the save succeeded or failed."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button> commits the project name field; the artifact specifies no confirmation message, status indicator, or destination state reached after it is clicked.",
+      "fix": "Specify what the user sees after Save is clicked: a success message, a changed control state, or a defined next state.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "This action changes stored state (the project's name) but the artifact specifies no visible indication, beyond the field's own unchanged value, that the save succeeded or failed."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "archive-confirm-copy reads: \"Archiving 'Design System Refresh' will remove it from the active projects list for everyone on the team. You can restore it at any time from the archived projects list.\" No section, link, or control named an archived projects list, or offering a restore action, exists anywhere in the artifact.",
+      "fix": "Define the archived projects list as a state the artifact links to, with a restore control on each archived project, or remove the restore claim from this copy if no such path exists in this spec.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"archive-confirm\" section, the \"archive-confirm-copy\" paragraph",
+      "severity": 2,
+      "violation": "The artifact tells the user archiving is reversible from an archived projects list, but that destination is never defined as a state and no control anywhere links to it, so the design as specified gives no actual path to the restore it promises."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-LABELED",
+      "evidence": "<button> with no text content and no accessible-name attribute",
+      "fix": "Add visible text to this control, or an aria-label attribute naming what it does.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "This control has neither visible text nor an accessible-name attribute, so nothing on screen names what the control does."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H8",
+      "evidence": "the div reading \"Invite 3 teammates this month to unlock the advanced reporting add-on.\" sits in reading order after the project list and before both of this screen's primary links, \"Open project settings\" and \"View last import result\".",
+      "fix": "Move the promotional element below the primary navigation links, or to a location that does not precede the screen's own primary controls.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "the \"workspace-overview\" section, the \"workspace-overview-promo-referral\" div",
+      "severity": 2,
+      "violation": "A promotional upsell is placed ahead of this screen's own primary navigation controls in reading order, competing with the task the screen exists for."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T13:55:14Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

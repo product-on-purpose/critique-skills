@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"form\">`",
+      "fix": "Add `method=\"post\"` to the form element: `<form id=\"form\" method=\"post\">`",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Form element",
+      "severity": 3,
+      "violation": "Form lacks a method attribute, which defaults to GET. Account creation forms containing password fields should use POST to prevent credentials from appearing in browser history or server logs."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"name-input\" name=\"full_name\"...` and `<input id=\"legalname-input\" name=\"legal_name\"...`",
+      "fix": "Remove one of the duplicate fields, or clearly distinguish their purposes in the labels (e.g., rename \"Your name\" to something more specific like \"Legal name on account\").",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Full name field and Your name field",
+      "severity": 3,
+      "violation": "Two separate required fields both collect the user's name with different field names (\"full_name\" vs \"legal_name\"), creating ambiguity about whether they serve different purposes or are duplicates."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Standard</option><option>Express</option><option>Overnight</option><option>Next-day</option><option>International</option>`",
+      "fix": "Add value attributes to each option: `<option value=\"standard\">Standard</option><option value=\"express\">Express</option>` etc.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Preferred shipping speed select (rows containing \"Standard\", \"Express\", etc.)",
+      "severity": 3,
+      "violation": "Option elements have no value attributes, so the form will submit the display text as data instead of normalized values."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"member-label\" for=\"member-input\">Membership number (8 digits)</label>` with `placeholder=\"Must be 8 digits\"`",
+      "fix": "Add `pattern=\"[0-9]{8}\" maxlength=\"8\"` attributes to the input.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Membership number field",
+      "severity": 3,
+      "violation": "The label and placeholder both specify an 8-digit requirement, but the input lacks validation attributes (pattern, maxlength, minlength) to enforce it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"contacttime-label\"...>Preferred contact time</label>` followed by `<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Change `type=\"text\"` to `type=\"time\"`, or replace with a select element offering predefined options like \"Morning\", \"Afternoon\", \"Evening\".",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Preferred contact time field",
+      "severity": 3,
+      "violation": "A text input cannot properly capture a time preference; users have no guidance on format and the field accepts any text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required=\"\">`",
+      "fix": "Move `style=\"font-size:16px\"` to a CSS stylesheet and apply it via a class or selector.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Organization name input",
+      "severity": 3,
+      "violation": "Inline style is applied only to this input; other form fields lack this styling, and it should be managed in CSS for consistency."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"contacttime-label\" for=\"contacttime-input\" style=\"display:block\">`",
+      "fix": "Remove the inline style and apply `display: block` via CSS.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Preferred contact time label",
+      "severity": 3,
+      "violation": "Inline style should be managed in a CSS stylesheet, not embedded in HTML."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>`",
+      "fix": "Move inline styles to CSS and either add an onclick handler, title attribute, or remove the button if it serves no purpose.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "View details button",
+      "severity": 3,
+      "violation": "Button has inline styles while the submit button does not, creating visual inconsistency; additionally, the button's purpose is unclear with no onclick handler visible."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T10:51:16Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 5 projects, synced last week.\" followed by a `<ul>` containing only 4 `<li>` items.",
+      "fix": "Either correct the count to \"4 projects\" or add a visible heading/label clarifying this is a partial/recent list, and/or list the missing 5th project.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "<section id=\"workspace-overview\"> - \"Your projects\" paragraph and list",
+      "severity": 3,
+      "violation": "The stated project count (5) doesn't match the number of projects actually listed (4), and nothing visible on the page explains the discrepancy (e.g., no \"recent\" label is shown to the user)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"project-settings-name-input\" type=\"text\" value=\"Customer Migration\">`",
+      "fix": "Make the project name consistent - either add \"Customer Migration\" to the workspace-overview list, or change the settings page to reference one of the listed project names.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "<section id=\"project-settings\"> - name input",
+      "severity": 3,
+      "violation": "\"Customer Migration\" is not one of the projects shown in the workspace-overview list (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp), even though this settings page is reached directly from that overview via \"Open project settings.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible text (e.g., \"Duplicate\") or an icon plus visible label, retaining the aria-label only as supplementary screen-reader text if needed.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "<section id=\"project-settings\"> - duplicate button",
+      "severity": 3,
+      "violation": "The button has no visible text content and no icon, only an aria-label, so sighted users see a blank, unlabeled control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a>`",
+      "fix": "Change the href to `#archive-confirm` so users see the confirmation step before the project is archived.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "<section id=\"project-settings\"> - archive link",
+      "severity": 3,
+      "violation": "This link jumps straight to the terminal \"Project archived\" state instead of going through the \"archive-confirm\" confirmation dialog that exists elsewhere in the document for this exact action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` and `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>` both present in the same section.",
+      "fix": "Remove one of the controls - e.g., drop the separate \"Save\" button and make \"Continue\" the form's single submit action leading to `#invite-sent`.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "<section id=\"invite-member\">",
+      "severity": 3,
+      "violation": "Two separate controls appear to both advance the invite flow (a form submit button and a navigation link) with no indication of how they differ, creating a confusing duplicate affordance."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An invite was sent to the address entered above.\"",
+      "fix": "Reword to something that doesn't depend on page position, e.g., \"An invite was sent to the email address you provided,\" or display the actual address that was entered.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "<section id=\"invite-sent\">",
+      "severity": 3,
+      "violation": "The invite-sent page displays no email address field or value, so \"entered above\" refers to nothing visible on this page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<section id=\"archive-confirm\">` - no other element in the document contains `href=\"#archive-confirm\"`.",
+      "fix": "Link to it from \"project-settings-archive-link\" (see related finding) so the confirmation screen is actually part of the navigable flow.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "<section id=\"archive-confirm\">",
+      "severity": 3,
+      "violation": "This confirmation section is unreachable; no link in the document ever navigates to it, making it dead/orphaned content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"notification-settings-save-btn\" type=\"submit\">Submit</button>`",
+      "fix": "Rename the button to \"Save\" to match the labeling convention used elsewhere in the document.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "<section id=\"notification-settings\"> - save button",
+      "severity": 3,
+      "violation": "This form's submit action is labeled \"Submit,\" while the equivalent action is labeled \"Save\" in both the project-settings and invite-member forms, an inconsistent terminology for the same kind of action."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T14:42:14Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

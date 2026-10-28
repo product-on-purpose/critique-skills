@@ -1,0 +1,182 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person.\" (identical to s1-p1 under \"Accessibility improvements\")",
+      "fix": "Replace with text actually describing weekend service changes, or remove the paragraph from this section.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "section#s2, paragraph id=\"s2-p1\"",
+      "severity": 3,
+      "violation": "This paragraph is a verbatim duplicate of s1-p1 but appears under the \"Weekend service\" heading, where it has nothing to do with weekend service; the content doesn't match its section."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "alt=\"Crews repainting the accessible parking spaces near the station entrance.\"",
+      "fix": "Either add a caption/paragraph explaining the parking repainting work so the image fits the section, or move the image to a section where it's relevant.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "section#s1, image id=\"s1-img1\"",
+      "severity": 3,
+      "violation": "The image's alt text describes parking-lot repainting, which is unrelated to the surrounding paragraphs about fare adjustments and real-time arrival checks, and isn't clearly tied to \"Accessibility improvements\" either."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<table id=\"s2-table1\"><tr><th scope=\"col\">Zone</th><th scope=\"col\">Status</th></tr>...`",
+      "fix": "Add a `<caption>` (e.g., \"Weekend service status by zone\") inside the table.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "section#s2, table id=\"s2-table1\"",
+      "severity": 3,
+      "violation": "The table has no `<caption>` or accessible name, so screen reader users encounter a table of zone statuses with no description of what it represents."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Local residents should review the updated schedule through the mobile app. Station staff can also help with the same request in person.\"",
+      "fix": "Rewrite with content specific to schedule changes, and remove the dangling \"same request\" phrasing.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "section#s3, paragraph id=\"s3-p1\"",
+      "severity": 3,
+      "violation": "This is the third near-identical copy of the \"mobile app / station staff can also help with the same request\" boilerplate (after s1-p1 and s2-p1), and \"the same request\" has no clear referent since reviewing a schedule isn't a request."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Passengers should review the updated schedule through the mobile app.\" (directly follows s3-p1, which says the same thing)",
+      "fix": "Merge the two paragraphs into one, keeping only the additional detail (\"takes effect on the following service day\").",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "section#s3, paragraph id=\"s3-p2\"",
+      "severity": 3,
+      "violation": "s3-p2 duplicates the instruction already given in s3-p1 within the same section, making the content redundant."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day.\" (matches s1-p2 almost word-for-word)",
+      "fix": "Write distinct content for the status card relevant to schedule changes, or remove the duplicate if real-time arrival info belongs only in section 1.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "section#s3, div id=\"s3-statuscard\"",
+      "severity": 3,
+      "violation": "This duplicates s1-p2 from the \"Accessibility improvements\" section, just swapping \"Passengers\" for \"Local residents,\" indicating copy-pasted content not tailored to this section."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"icon-delete\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>`",
+      "fix": "Implement it as a `<button>` with a descriptive `aria-label` (e.g., \"Delete\") instead of a styled `<div>` with a decorative empty alt.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "section#s3, div id=\"s3-customcontrol\"",
+      "severity": 3,
+      "violation": "This is a custom interactive-looking control (trash/delete icon) implemented as a non-interactive `<div>` with an empty `alt`, giving it no accessible name, no keyboard focusability, and no role - it's unusable via keyboard or screen reader."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "DOM order is step3 (\"Confirm your order\", `order:3`), step2 (\"Enter payment details\", `order:2`), step1 (\"Choose a plan\", `order:1`)",
+      "fix": "Reorder the elements in the HTML source to match the intended visual/logical sequence instead of relying on CSS `order` to resequence them.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "section#s3, div id=\"s3-wizard\"",
+      "severity": 3,
+      "violation": "The CSS `order` property reverses the visual order of the steps relative to their DOM/reading order, so sighted mouse users see \"Choose a plan → Enter payment → Confirm order\" while keyboard and screen reader users navigate \"Confirm order → Enter payment → Choose a plan.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"/fares/history\" id=\"s3-link1\">read the accessibility improvements list</a>` inside \"For the full list of upcoming adjustments, ...\"",
+      "fix": "Make the link text, surrounding sentence, and destination URL all describe the same content (e.g., a schedule-changes list linking to a schedule-history page).",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "section#s3, paragraph id=\"s3-linkpara\", link id=\"s3-link1\"",
+      "severity": 3,
+      "violation": "The link text promises an \"accessibility improvements list,\" the surrounding sentence is about \"upcoming adjustments\" (schedule changes), and the href points to `/fares/history` - three mismatched topics for one link."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label>`",
+      "fix": "Add a textual/semantic indicator (e.g., \"Phone number (required)\" or an asterisk with an accessible description) rather than relying on color alone.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "section#s3, form label id=\"s3-form-phone-label\"",
+      "severity": 3,
+      "violation": "The red color is the only signal differentiating this field (presumably marking it required or important) from the other labels, which fails for colorblind users or anyone who can't perceive the color difference."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">`",
+      "fix": "Set `aria-invalid` dynamically based on actual validation state, defaulting to `false` or omitted until the user submits or edits the field.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "section#s3, form input id=\"promo\"",
+      "severity": 3,
+      "violation": "`aria-invalid=\"true\"` is hard-coded in the markup, so the field is announced as invalid to assistive technology immediately on page load, before the user has entered anything."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Error.\"",
+      "fix": "Replace with a specific message, e.g., \"This promo code is not valid. Check for typos and try again.\"",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "section#s3, error text id=\"s3-form-promo-error\"",
+      "severity": 3,
+      "violation": "The error message gives no information about what is wrong with the promo code, which doesn't meet basic error-identification guidance (e.g., WCAG 3.3.1) and leaves users unable to correct the issue."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"topic\">`, `<input id=\"email\" type=\"email\" ...>`, `<input id=\"phone\" type=\"tel\" ...>`, `<input id=\"promo\" type=\"text\" ...>` - none have a `name` attribute",
+      "fix": "Add appropriate `name` attributes to the select and all three inputs (e.g., `name=\"route\"`, `name=\"email\"`, `name=\"phone\"`, `name=\"promo\"`).",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "section#s3, form id=\"s3-form\"",
+      "severity": 3,
+      "violation": "None of the form controls have `name` attributes, so on submission the browser cannot serialize their values into usable form data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Select options \"Northbound\"/\"Southbound\" vs. the table in section#s2 using \"Zone\" values \"North\"/\"South\"",
+      "fix": "Standardize on one term and one set of values (e.g., use \"Zone: North/South\" consistently, or clarify that routes and zones are distinct concepts).",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "section#s3, form label/select for \"Route\" (id=\"s3-form-topic-label\" / id=\"topic\")",
+      "severity": 3,
+      "violation": "The document uses inconsistent terminology for the same concept - \"Route\" with directional options here versus \"Zone\" with cardinal names in the weekend-service table - which could confuse riders trying to match the two."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "7518497ec47bc70bca9021d0ed190bdfb2f04532e6ef68cc37b662d769e87516",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T04:17:58Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 14,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

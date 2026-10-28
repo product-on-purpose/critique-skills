@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`@media (orientation: portrait) { #main-content { display: none; } }`",
+      "fix": "Remove this media query or change it to hide only non-critical elements like navigation.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "CSS in `<head>`, style rule",
+      "severity": 3,
+      "violation": "This hides the entire main content when the page is viewed in portrait orientation, blocking access to the page's primary content on most mobile devices."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"/accessibility\" id=\"nav-link1\" style=\"outline:none\">Accessibility</a>`",
+      "fix": "Remove the `style=\"outline:none\"` attribute.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Header navigation, first link",
+      "severity": 3,
+      "violation": "The inline style removes the keyboard focus outline, making the link invisible to keyboard users."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">`",
+      "fix": "Replace with `<button type=\"button\" class=\"icon-delete\" aria-label=\"Delete item\" id=\"s3-customcontrol\">` and move the nested `<img>` inside.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section 3, after status card",
+      "severity": 3,
+      "violation": "A `<div>` element is being used as a button without visible click or keyboard event handlers; it should be a semantic `<button>` element."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"/fares/history\" id=\"s3-link1\">check the current station closures</a>`",
+      "fix": "Either change the link text to match the URL (e.g., \"view fare history\") or change the href to match the text (e.g., \"/stations/closures\").",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section 3, link paragraph",
+      "severity": 3,
+      "violation": "The link text says \"station closures\" but the href points to \"/fares/history\", creating a mismatch between the link text and destination."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"s3-form\">`",
+      "fix": "Add `action=\"/submit\"` (or the appropriate endpoint) and `method=\"POST\"` attributes.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section 3, form opening tag",
+      "severity": 3,
+      "violation": "The form element is missing `action` and `method` attributes required for form submission."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"topic\">`, `<input id=\"email\" ...>`, `<input id=\"phone\" ...>`, `<input id=\"promo\" ...>`",
+      "fix": "Add `name` attributes to all inputs: `<select id=\"topic\" name=\"topic\">`, `<input id=\"email\" name=\"email\" ...>`, `<input id=\"phone\" name=\"phone\" ...>`, `<input id=\"promo\" name=\"promo\" ...>`.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section 3, all form inputs (topic select, email input, phone input, promo input)",
+      "severity": 3,
+      "violation": "Form inputs have `id` attributes but are missing `name` attributes, so their values won't be submitted with meaningful keys."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">` followed by `<span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">Enter a 6 character code...</span>`",
+      "fix": "Add `aria-describedby=\"s3-form-promo-error\"` to the input element.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Section 3, promo code input and error message",
+      "severity": 3,
+      "violation": "The input has `aria-invalid=\"true\"` indicating an error, but the error message is not associated via `aria-describedby`."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-005.html",
+    "artifact_sha256": "0f8493f220745495c0706928266e57a6f8d8bacbcd1737ff17dc3965ce55df7b",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:48:25Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

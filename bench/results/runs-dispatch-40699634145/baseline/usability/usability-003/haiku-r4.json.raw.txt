@@ -1,0 +1,14 @@
+Location: "Your projects" section, opening paragraph
+Evidence: "This workspace holds 4 projects, synced this morning." but the list below contains only 3 items: Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot
+Problem: The stated project count does not match the number of projects actually listed.
+Fix: Either add one more project to the list or change the text to "This workspace holds 3 projects, synced this morning."
+
+Location: project-settings section, duplicate button
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>` has no text content between the tags
+Problem: The button is empty and provides no visible label for sighted users, relying entirely on the aria-label for understanding.
+Fix: Add visible text inside the button, like `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project">Duplicate</button>`, or include an icon with descriptive content.
+
+Location: invite-member section
+Evidence: The section contains both a form with a submit button (`id="invite-member-save-btn"`) and a separate "Continue" link (`id="invite-member-continue-link"`) that both appear to advance the workflow
+Problem: It is unclear whether the form submission or the separate Continue link triggers the next step, and showing both simultaneously creates ambiguity in the intended user flow.
+Fix: Remove the separate Continue link and ensure the form's submit button action navigates to the next state, or restructure so the Continue link only becomes visible after successful form submission.

@@ -1,0 +1,170 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required=\"\">, required on a form headed 'Create your account'.",
+      "fix": "Remove the membership number field from account creation. If it applies only to people transferring an existing membership, make it optional and state who should fill it in.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#member-input, <input> field, label 'Membership number (8 digits)', line 49",
+      "severity": 4,
+      "violation": "A required field asks for an 8-digit membership number on the same form that creates the membership. A person who has never signed up before has no such number and no valid value to enter, so the field blocks completion for every genuinely new signer, a whole class of person the form exists to serve."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>, placed after the Preferred contact time field (line 79) and before the How did you hear about us field (line 84). The primary submit button carries no style attribute at all: <button id=\"submit-btn\" type=\"submit\">Submit</button> (line 92).",
+      "fix": "Move #viewdetails-btn out of the field sequence so it sits after the last field alongside #submit-btn, and style it less prominently than the primary submit button, for example as a plain text link or an unfilled outline button.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> button, text 'View details', line 81",
+      "severity": 3,
+      "violation": "The primary action must sit where the fields end, in line with them, and a secondary action must be visibly lesser. #viewdetails-btn sits between two fields rather than after the last one, and its explicit padding and font-size styling make it at least as prominent as the unstyled primary submit button, so it is not visibly lesser."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-ADDRESS-FORMAT",
+      "evidence": "<input id=\"housenumber-input\" name=\"house_number\" type=\"text\" required=\"\">",
+      "fix": "Collect the house number and street together in one address-line field.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "#housenumber-input, <input> field, label 'House number', line 28",
+      "severity": 3,
+      "violation": "The house number has its own field separate from the street, and it is required, so an address with no number cannot be entered."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-AUTOCOMPLETE",
+      "evidence": "<input id=\"email-input\" name=\"email\" type=\"email\" required=\"\" autocomplete=\"e-mail\">",
+      "fix": "Replace it with the standard token for this field, for example email.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "#email-input, <input> field, label 'Email address', line 16",
+      "severity": 3,
+      "violation": "The autocomplete value e-mail is not a valid autofill detail in the HTML standard, so autofill is broken for this field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required=\"\">, required on the same account-creation form that also requires a separate membership number at #member-input (line 49).",
+      "fix": "Remove the account number field from signup. If one is assigned automatically on account creation, show it to the person afterward instead of asking them to supply it.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#acctnum-input, <input> field, label 'Account number', line 53",
+      "severity": 3,
+      "violation": "The task is creating the account, so no account number exists yet for a new signer to provide. This required field asks for an answer that cannot exist before this step completes, duplicating the identifier already required at #member-input."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"housenumber-input\" name=\"house_number\" type=\"text\" required=\"\">, part of a required address block collected on a form headed 'Create your account' with submit label 'Submit'.",
+      "fix": "Remove the house number, street address and postal code fields from the account-creation form, and collect the shipping address later, at checkout or in a post-signup profile step.",
+      "id": "F-006",
+      "instances": [
+        {
+          "evidence": "<input id=\"street-input\" name=\"street_address\" type=\"text\" autocomplete=\"address-line1\" autocorrect=\"off\" spellcheck=\"false\" required=\"\">",
+          "location": "#street-input, <input> field, label 'Street address', line 32"
+        },
+        {
+          "evidence": "<input id=\"postal-input\" name=\"postal_code\" type=\"text\" autocomplete=\"postal-code\" required=\"\">",
+          "location": "#postal-input, <input> field, label 'Postal code', line 57"
+        }
+      ],
+      "lane": "judged",
+      "location": "#housenumber-input, <input> field, label 'House number', line 28",
+      "severity": 3,
+      "violation": "The form's task, named by its heading and submit label, is creating an account, which does not need a postal address. This address data serves a later step, such as checkout or delivery, and could be asked then."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"website-input\" name=\"website\" type=\"url\" required=\"\">, required on a form titled 'Create your Meridian Outfitters account' with no stated business-account context.",
+      "fix": "Remove the required company-website field from the general signup form, or make it optional and visible only on a business-account path.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "#website-input, <input> field, label 'Company website', line 45",
+      "severity": 3,
+      "violation": "The task of creating a personal shopping account does not need a company website. Requiring one as a valid URL blocks any individual signing up who has no business or website of their own."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-ACTION-LABEL",
+      "evidence": "<button id=\"submit-btn\" type=\"submit\">",
+      "fix": "Label the button with the action it performs, such as Create account or Send message.",
+      "id": "F-008",
+      "lane": "scripted",
+      "location": "#submit-btn, <button> button, text 'Submit', line 92",
+      "severity": 2,
+      "violation": "The form's primary button is labelled Submit, a generic word that says nothing about what pressing it does."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-AUTOCORRECT",
+      "evidence": "<input id=\"name-input\" name=\"full_name\" type=\"text\" autocomplete=\"name\" required=\"\">",
+      "fix": "Add autocorrect=off and spellcheck=false.",
+      "id": "F-009",
+      "lane": "scripted",
+      "location": "#name-input, <input> field, label 'Full name', line 12",
+      "severity": 2,
+      "violation": "On this name field, autocorrection and spellchecking stay on, so a phone keyboard can change a value it does not know."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-CONFIRM-PASSWORD",
+      "evidence": "<input id=\"confirm-password-input\" name=\"password_again\" type=\"password\" autocomplete=\"new-password\" required=\"\">",
+      "fix": "Remove the confirmation field and offer a control that shows the password as typed.",
+      "id": "F-010",
+      "lane": "scripted",
+      "location": "#confirm-password-input, <input> field, label 'Confirm password', line 24",
+      "severity": 2,
+      "violation": "The form asks for the new password a second time to confirm it, doubling the typing for every person."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">, required on a form whose task is creating an account, with no stated callback or support-contact feature.",
+      "fix": "Remove this field from account creation, or move it to a support or callback-request flow where the answer is actually used.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "#contacttime-input, <input> field, label 'Preferred contact time', line 79",
+      "severity": 2,
+      "violation": "The account-creation task does not use a preferred contact time, so this required field asks for an answer the stated task cannot use."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<select id=\"hear-select\" required=\"\"> offering Search engine, Social media, Friend or colleague, Advertisement, Other, required on the account-creation form.",
+      "fix": "Remove this field from signup, or make it optional and ask it after the account exists.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "#hear-select, <select> field, label 'How did you hear about us?', line 84",
+      "severity": 2,
+      "violation": "Creating an account does not use an answer about how the person heard of the service; this marketing question could be asked later or made optional, not required at signup."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-001.html",
+    "artifact_sha256": "531c999912c0ab6c8224cbeb2347e7644d493a84e3a9461a434deaf5f2f09cdd",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T10:28:28Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 8,
+      "3": 6,
+      "4": 1
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 3
+  }
+}

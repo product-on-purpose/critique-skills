@@ -1,0 +1,44 @@
+Location: First paragraph in "Accessibility improvements" section
+Evidence: `style="color:#999999"`
+Problem: Gray text on white background may fail WCAG contrast requirements.
+Fix: Use a darker color or remove the gray styling.
+
+Location: "Accessibility improvements" section heading and content
+Evidence: Section titled "Accessibility improvements" contains paragraphs about schedules and fare adjustments.
+Problem: The heading doesn't match the content—accessibility improvements typically refer to ADA features or access accommodations, not schedule or fare information.
+Fix: Retitle the section to "Schedule and fare information" or move the content to the appropriate section.
+
+Location: Delete icon element
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Problem: Using a div with role="button" instead of a native button element reduces keyboard support and screen reader handling.
+Fix: Replace with a native button: `<button class="icon-delete" aria-label="Delete item" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></button>`
+
+Location: Promo banner div
+Evidence: `style="width:960px"`
+Problem: Fixed pixel width does not adapt to viewport, conflicting with the responsive viewport meta tag.
+Fix: Use a responsive unit such as `max-width: 960px` instead of `width: 960px`.
+
+Location: Status card div
+Evidence: `style="height:60px;overflow:hidden"`
+Problem: Fixed height with overflow:hidden will truncate content, especially for users with larger text or zoom settings.
+Fix: Remove the height restriction or use `overflow: auto` to allow scrolling if needed.
+
+Location: Form label and select pairing
+Evidence: `<label for="topic-alt" id="s3-form-topic-label">Route</label>` with `<select id="topic">`
+Problem: The label's for attribute references "topic-alt" but the select has id="topic", so the label will not associate with the input.
+Fix: Change `for="topic-alt"` to `for="topic"`.
+
+Location: Promo code input field
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: aria-invalid is permanently set to true, which should only be set when validation actually fails.
+Fix: Remove aria-invalid or make it dynamic based on actual validation state.
+
+Location: Promo code input and error message
+Evidence: `<input id="promo" type="text" aria-invalid="true">` followed by `<span class="error-text" aria-live="polite" id="s3-form-promo-error">`
+Problem: The input does not have aria-describedby linking to the error message, so screen readers cannot associate them.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the input element.
+
+Location: Link in "Weekend service" section
+Evidence: `<a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>` in the "Weekend service" section
+Problem: The link text references "accessibility improvements" but is located in the "Weekend service" section and points to "/fares/history", creating a semantic mismatch.
+Fix: Either change the link text to match its destination and context (e.g., "view the fare history"), or update the href and placement to match the link text.

@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-CLAIM-MARKER",
+      "evidence": "0 conclusion-marker phrases found across 401 words.",
+      "fix": "Add an explicit conclusion-signalling phrase at the point the artifact states its central claim, for example \"therefore\" or \"we recommend\".",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "severity": 3,
+      "violation": "No phrase from the conclusion-marker lexicon (therefore, thus, hence, it follows that, we recommend, this paper argues, I argue that, the conclusion is, in conclusion, we should, the case for) appears anywhere in the artifact, so a reader scanning rather than reading straight through has no signpost to where the conclusion is asserted."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-HEDGE-DENSITY",
+      "evidence": "10 of 14 sentences (0.71) carry at least one hedging term.",
+      "fix": "Remove the hedge from sentences whose claim the evidence actually supports, reserving qualification for the claims that genuinely need it.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "severity": 3,
+      "violation": "More than 0.35 of the artifact's sentences carry a term from the hedging lexicon (may, might, could, possibly, perhaps, arguably, somewhat, relatively, it seems, appears to, tends to, to a degree), spread across the whole document rather than concentrated where the evidence actually underdetermines the claim."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-QUALIFIER",
+      "evidence": "The evidence is described in lines 12-14 (pilot survey from 'immediately before and twelve months into the pilot') and line 27 (Tri-County research from systems that 'eliminated fines between 2017 and 2022'). No evidence demonstrates that a 12-month pilot justifies permanent, irreversible policy.",
+      "fix": "Either qualify the recommendation ('a permanent end, pending further evaluation if issues arise') or acknowledge that permanence is assumed based on the pilot duration and the success of other systems, rather than proven.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "line 21: 'This recommendation removes every overdue-related charge permanently, for every item the consortium owns, without qualification.'",
+      "severity": 2,
+      "violation": "The claim is stated as permanent and unqualified, but the grounds rest on a 12-month pilot. The strength of the assertion ('permanently, without qualification') exceeds what a pilot result alone supports."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-REBUTTAL",
+      "evidence": "The artifact describes a pilot that ran for 12 months (line 14: 'immediately before and twelve months into the pilot'), yet concludes the recommendation should be permanent (line 21) without discussing the limitations of a 12-month test period.",
+      "fix": "Add a rebuttal section addressing the permanence concern. For example: 'The 12-month pilot duration is short for asserting permanence, but the Tri-County research showing success over years in multiple systems suggests the benefits are durable' or set a review timeline.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "sections 'What the Pilot Showed' and 'Recommendation'",
+      "severity": 2,
+      "violation": "The artifact addresses the revenue objection (lines 30-34) but does not address the permanence objection that its own timeline exposes. A 12-month result does not establish that eliminating fines permanently is safe."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/argument/argument-002.md",
+    "artifact_sha256": "0322bc2ebeb48318c56473186a8cb1f1e78d8667b99cfaf75ee7bb84f82fcfa2",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "TOULMIN"
+    ],
+    "skill": "critique-argument",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T17:47:42Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

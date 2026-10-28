@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person.\"",
+      "fix": "Remove this duplicate paragraph or rewrite it with distinct content relevant to weekend service.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section \"Weekend service\", paragraph 1 (s2-p1)",
+      "severity": 3,
+      "violation": "This paragraph is identical to the one in the \"Accessibility improvements\" section (s1-p1), just with \"Passengers\" instead of \"Riders\"."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day.\"",
+      "fix": "Remove the duplicate or rewrite with content specific to schedule changes.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\", status card (s3-statuscard)",
+      "severity": 3,
+      "violation": "This text is identical to s1-p2, just with \"Local residents\" instead of \"Passengers\"."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<img src=\"/img/trash-icon.svg\" alt=\"\">`",
+      "fix": "Add alt text (e.g., `alt=\"Delete\"`) or add `aria-label=\"Delete\"` to the parent div.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\", icon-delete div (s3-customcontrol)",
+      "severity": 3,
+      "violation": "The image has empty alt text and the parent div has no ARIA label, making this functional control inaccessible to screen reader users."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "HTML source order is step3, step2, step1 but CSS order properties make them display as 1, 2, 3.",
+      "fix": "Reorder the HTML elements so step1 appears first, then step2, then step3, removing the inline style order properties.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\", wizard-steps div (s3-wizard)",
+      "severity": 3,
+      "violation": "The visual order (1 → 2 → 3) doesn't match the HTML source order (3 → 2 → 1), which will confuse screen reader users who navigate in source order."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"/fares/history\">read the accessibility improvements list</a>`",
+      "fix": "Change the href to \"/accessibility\" or similar page that matches the link text, or change the link text to match the destination.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\", link paragraph (s3-linkpara)",
+      "severity": 3,
+      "violation": "The link text says \"accessibility improvements list\" but the href points to \"/fares/history\"."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">`",
+      "fix": "Remove aria-invalid or set it to false; only set it to true after failed validation.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\", form, promo field",
+      "severity": 3,
+      "violation": "The input has aria-invalid=\"true\" set before any validation has occurred, which misleads screen reader users into thinking the field is already invalid."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">` and `<span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">Error.</span>`",
+      "fix": "Add `aria-describedby=\"s3-form-promo-error\"` to the input element.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\", form, promo field and error message",
+      "severity": 3,
+      "violation": "The input with aria-invalid=\"true\" is not connected to the error message span using aria-describedby."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">Error.</span>`",
+      "fix": "Replace with descriptive text such as \"Invalid promo code. Please check your code and try again.\"",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\", form, promo error message (s3-form-promo-error)",
+      "severity": 3,
+      "violation": "The error message is too vague - \"Error.\" doesn't tell users what's wrong or how to fix the promo code field."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "7518497ec47bc70bca9021d0ed190bdfb2f04532e6ef68cc37b662d769e87516",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:14:43Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

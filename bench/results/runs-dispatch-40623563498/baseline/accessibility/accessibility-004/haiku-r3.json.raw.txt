@@ -1,0 +1,34 @@
+Location: Section 1, paragraph 2 (s1-p2)
+Evidence: "Commuters can report a service issue by calling rider services. Station staff can also help with the same request in person."
+Problem: The phrase "the same request" is ambiguous and confusing—it's unclear whether it refers to the schedule inquiry from the previous paragraph or to reporting service issues in this paragraph.
+Fix: Replace the second sentence with "Station staff can also help you report issues in person at any station."
+
+Location: Section 2, paragraph 1 (s2-p1)
+Evidence: "Passengers can check real time arrivals through the online portal. Station staff can also help with the same request in person."
+Problem: This sentence is unclear and redundant since station kiosks already allow checking arrivals; "the same request" is vague.
+Fix: Remove this sentence or replace with "Station staff can provide arrival information at any station kiosk."
+
+Location: Section 3, link (s3-link1)
+Evidence: Link text reads "read the accessibility improvements list" but href="/fares/history"
+Problem: The link text describes accessibility improvements but the destination is fare history—they don't match.
+Fix: Change link text to "read the fare history"
+
+Location: Section 3, custom control (s3-customcontrol)
+Evidence: '<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">'
+Problem: A div with role="button" is not properly keyboard accessible and won't respond to Enter or Space keys without JavaScript event handling.
+Fix: Replace with a real button element: '<button type="button" class="icon-delete" aria-label="Delete item"><img src="/img/trash-icon.svg" alt=""></button>'
+
+Location: Section 3, form promo code field
+Evidence: '<input id="promo" type="text" aria-invalid="true">'
+Problem: The aria-invalid attribute is set to "true" on page load before the user has entered or submitted anything, incorrectly signaling an error state to screen reader users.
+Fix: Remove aria-invalid="true" or change to aria-invalid="false", and set to "true" only after validation fails.
+
+Location: Section 3, form phone number field
+Evidence: Label says "Phone number (required)" but input is '<input id="phone" type="tel" autocomplete="tel">'
+Problem: The field is marked as required in the label text but lacks the HTML required attribute, so the browser won't enforce validation.
+Fix: Add the required attribute: '<input id="phone" type="tel" autocomplete="tel" required>'
+
+Location: Section 3, wizard component (s3-wizard)
+Evidence: Three-step wizard with "Choose a plan", "Enter payment details", and "Confirm your order" in the "Fare adjustments" section
+Problem: This e-commerce checkout flow doesn't fit the context of a transit service fare adjustments page and appears misplaced or unfinished.
+Fix: Remove this component or replace with content appropriate to fare adjustments.

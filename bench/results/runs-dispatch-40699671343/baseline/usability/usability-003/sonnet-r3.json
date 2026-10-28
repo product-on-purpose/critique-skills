@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced this morning.\" followed by a `<ul>` with only 3 `<li>` entries (Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot)",
+      "fix": "Either list all 4 projects, or add a visible label/caption (e.g., \"Recent projects\") and show a count that matches, such as \"Showing 3 of 4 projects.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "section#workspace-overview, <p> element",
+      "severity": 3,
+      "violation": "The stated project count (4) doesn't match the number of items actually listed (3), and nothing marks the list as partial (e.g., \"recent\" or \"3 of 4\"), so it reads as a factual contradiction."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<li>Beta Launch Plan</li>`, `<li>Holiday Campaign Assets</li>`, `<li>Partner Integration Pilot</li>` are plain, non-interactive text, while the single link `workspace-overview-projects-link` (\"Open project settings\") leads to settings for \"Vendor Onboarding\" - a project not even in that list.",
+      "fix": "Make each `<li>` a link to that specific project's settings, or rename/remove the generic \"Open project settings\" link so it doesn't imply it opens one of the listed projects.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "section#workspace-overview, `<ul>` list and \"Open project settings\" link",
+      "severity": 3,
+      "violation": "There's no way to open settings for any of the three listed projects, and the only settings link goes to an unrelated, unlisted project, breaking the implied navigation model."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form><label ...><input ...><button id=\"project-settings-save-btn\" type=\"submit\">Save</button></form>` has no `action` attribute and no script handling submission",
+      "fix": "Add `action=\"#project-settings\"` (or equivalent) or otherwise prevent default submission so Save keeps the user in context.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "section#project-settings, `<form>` wrapping the name input and Save button",
+      "severity": 3,
+      "violation": "Submitting this form with no action will reload the current document via a GET request, stripping the `#project-settings` hash and dropping the user back to the top of the page instead of showing a save result."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible text (e.g., \"Duplicate\") or an icon with accompanying visible label to the button.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "section#project-settings, `project-settings-duplicate-btn`",
+      "severity": 3,
+      "violation": "The button has no visible text or icon content - only an `aria-label` - so sighted users see a blank, unlabeled control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>` has no `href`, `onclick`, or associated target section",
+      "fix": "Link it to a new \"duplicate confirmation\" or \"project duplicated\" state, or remove the control if duplication isn't in scope for this mockup.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "section#project-settings, `project-settings-duplicate-btn`",
+      "severity": 3,
+      "violation": "Unlike every other control in the document, this button doesn't lead anywhere, making it a dead end in the prototype's navigation flow."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Both \"Save\" buttons return to no confirmation state, while the parallel invite flow (section#invite-sent) and archive flow (section#project-archived) each show a dedicated confirmation screen after their primary action",
+      "fix": "Add a brief inline confirmation (e.g., a \"Saved\" message) or a confirmation section for the settings and notification saves, matching the pattern used by invite/archive.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "section#project-settings (project-settings-save-btn) and section#notification-settings (notification-settings-save-btn)",
+      "severity": 3,
+      "violation": "The flow is inconsistent - some actions (invite, archive) confirm success with a dedicated screen, while others (name save, notification save) give no feedback at all."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` inside the form, plus a separate `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>` outside it",
+      "fix": "Combine these into a single \"Send invite\" action that submits the form and navigates to `#invite-sent`, removing the redundant separate \"Continue\" link.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "section#invite-member",
+      "severity": 3,
+      "violation": "Two different controls both imply \"proceed with sending the invite,\" but only \"Continue\" actually advances to the \"Invite sent\" confirmation - \"Save\" appears to do nothing visible, which is confusing dual affordance for a single action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Overview states \"synced this morning\" (implying a successful sync) while the linked \"View last import result\" leads to `<p id=\"import-status-message\">Import failed. Error code IMP-500. Contact support if this continues.</p>`",
+      "fix": "Reflect the failed import on the overview itself (e.g., \"Synced this morning - 1 import failed\") instead of only the generic \"synced this morning\" message.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "section#workspace-overview vs section#import-status",
+      "severity": 3,
+      "violation": "The overview's framing suggests everything synced successfully, which contradicts the import status page reporting a failure - a user following the normal flow would be misled about the workspace's actual sync state."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "archive-confirm-copy reads \"remove it from the active projects list for everyone on the team\" while project-archived reads \"no longer appears in the active projects list for anyone on the team\"",
+      "fix": "Use identical phrasing in both places, e.g., standardize on \"for everyone on the team\" in both the confirmation and the result message.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "section#archive-confirm vs section#project-archived",
+      "severity": 3,
+      "violation": "The two screens describing the same consequence use inconsistent wording (\"everyone\" vs. \"anyone\"), which reads as sloppy copy rather than deliberate variation."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T15:17:14Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

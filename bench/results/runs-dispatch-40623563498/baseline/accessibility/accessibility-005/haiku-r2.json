@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`@media (orientation: portrait) { #main-content { display: none; } }`",
+      "fix": "Remove the media query or modify it to maintain usability in all orientations, such as adjusting layout instead of hiding content.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<style>` tag in `<head>`",
+      "severity": 3,
+      "violation": "The media query completely hides the main content when viewing in portrait orientation, making the page unusable on mobile phones and portrait-oriented tablets."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">`",
+      "fix": "Replace with a proper button element: `<button class=\"icon-delete\" aria-label=\"Delete item\">`",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Custom delete button, section 3",
+      "severity": 3,
+      "violation": "A div element is used with role=\"button\" instead of a native <button> element, which lacks built-in keyboard handling and semantic meaning."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"wizard-steps\" id=\"s3-wizard\"><div class=\"step\">...`",
+      "fix": "Add appropriate ARIA roles and attributes, such as `role=\"list\"` to the container and `role=\"listitem\"` to each step, or use a structured list element.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Wizard steps section, section 3",
+      "severity": 3,
+      "violation": "The wizard steps are plain divs without ARIA attributes or semantic markup to indicate they represent a progress indicator or step sequence."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"/fares/history\">check the current station closures</a>`",
+      "fix": "Either update the URL to the correct path for station closures, or change the link text to reflect the actual destination (e.g., \"check the fare history\").",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Link in section 3",
+      "severity": 3,
+      "violation": "The link text \"check the current station closures\" does not match the URL destination \"/fares/history\", which appears to be about fare history rather than station closures."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"phone\">Phone number (required)</label>` with `<input id=\"phone\" type=\"tel\" autocomplete=\"tel\">`",
+      "fix": "Add the `required` attribute to the input: `<input id=\"phone\" type=\"tel\" autocomplete=\"tel\" required>`",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Phone number input field in form",
+      "severity": 3,
+      "violation": "The label indicates the field is required, but the input element is missing the `required` attribute, creating an inconsistency between visual and programmatic indication."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">`",
+      "fix": "Remove the `aria-invalid` attribute, or set it to `false`, and only set it to `true` after validation has actually failed.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Promo code input field in form",
+      "severity": 3,
+      "violation": "The `aria-invalid=\"true\"` attribute is set on an empty, unvalidated input field, incorrectly indicating the field is in an invalid state before any user input or validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">` followed by `<span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">Enter a 6 character code...</span>`",
+      "fix": "Add `aria-describedby=\"s3-form-promo-error\"` to the promo input element to explicitly link it to the error message.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Promo code error message in form",
+      "severity": 3,
+      "violation": "The error message span is not explicitly associated with the input field using the `aria-describedby` attribute, reducing clarity for screen reader users."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-005.html",
+    "artifact_sha256": "0f8493f220745495c0706928266e57a6f8d8bacbcd1737ff17dc3965ce55df7b",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:41:58Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

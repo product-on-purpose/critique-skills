@@ -1,0 +1,34 @@
+Location: Line 2, `<html lang="translanguage">`
+Evidence: `lang="translanguage"`
+Problem: "translanguage" is not a valid language code. Valid codes are like "en", "es", "fr", etc.
+Fix: Replace with a valid language code, such as `<html lang="en">`
+
+Location: Line 5, `<title id="head-title"></title>`
+Evidence: Title tag is empty
+Problem: The page has no title, which provides no meaningful information to users, screen readers, or search engines
+Fix: Add descriptive content to the title, such as `<title>Rider service updates</title>`
+
+Location: Section 1, `<img src="/img/platform-update.jpg" id="s1-img1">`
+Evidence: Image element has no alt attribute
+Problem: Images must have alt text to be accessible to screen reader users
+Fix: Add an alt attribute with descriptive text, such as `<img src="/img/platform-update.jpg" id="s1-img1" alt="Platform update diagram">`
+
+Location: Section 2, `<h4 id="s2-h">Accessibility improvements</h4>`
+Evidence: Document heading structure is h1 → h2 → h4 → h2
+Problem: Heading hierarchy skips from h2 to h4, violating proper document structure
+Fix: Change `<h4>` to `<h2>` to maintain sequential heading levels
+
+Location: Section 3 form, phone number input
+Evidence: `<label for="phone" id="s3-form-phone-label">Phone number (required)</label>` with `<input id="phone" type="tel" autocomplete="tel">` missing required attribute
+Problem: The label indicates the field is required, but the input has no required attribute to enforce the constraint
+Fix: Add `required` attribute to the input: `<input id="phone" type="tel" autocomplete="tel" required>`
+
+Location: Section 3 form, promo code input
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: The aria-invalid attribute is set to true by default before any user input, which misleads screen readers into reporting the field as invalid
+Fix: Remove `aria-invalid="true"` from the initial input, or add it only via JavaScript when validation actually fails
+
+Location: Section 3, `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Evidence: Interactive control implemented as a div with role="button" instead of a button element
+Problem: A native `<button>` element is the correct semantic choice for interactive buttons, not a div with an aria role
+Fix: Replace the div with `<button class="icon-delete" aria-label="Delete item" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></button>`

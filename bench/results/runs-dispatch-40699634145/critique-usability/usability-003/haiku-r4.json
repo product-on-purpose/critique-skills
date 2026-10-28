@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "Lines 68-74: Form with digest frequency select and Save button. No next screen or feedback state defined after Save.",
+      "fix": "Specify what feedback the user sees after clicking Save: a success confirmation message on the same screen or navigation to a next screen.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "notification-settings, notification-settings-save-btn",
+      "severity": 2,
+      "violation": "Form submit action (Save) has no visible feedback about outcome. Artifact shows notification-settings form with Save button but does not define any feedback state that results from clicking Save."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "Lines 25-27: Form with project name input and Save button. No next screen or feedback state defined after Save.",
+      "fix": "Specify what feedback the user sees after clicking Save: a success confirmation, error state if validation fails, or navigation to a next screen.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "project-settings, project-settings-save-btn",
+      "severity": 2,
+      "violation": "Form submit action (Save) has no visible feedback about outcome. Artifact shows project-settings screen with Save button but does not define any feedback state (success message, next screen, or changed control state) that results from clicking Save."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "Lines 50-59: Archive confirmation flow leads to project-archived state confirming removal from active list, but no unarchive path exists in the artifact.",
+      "fix": "Define an unarchive control or show a separate 'Archived projects' screen with the ability to restore an archived project.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "archive-confirm, archive action and project-archived",
+      "severity": 2,
+      "violation": "Archiving a project is a reasonably reversible action in this product context, but the artifact provides no unarchive control to reverse it. After archiving (project-archived state), no way back to active projects or unarchive button is defined."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:24:14Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

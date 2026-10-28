@@ -1,0 +1,64 @@
+Location: Checkout form, shipping address — first message block ("This field takes a maximum of 30 characters...")
+Evidence: "Placement: directly below the postal code field" paired with "This field takes a maximum of 30 characters."
+Problem: A 30-character maximum is implausibly long for a postal code field, suggesting the error is misattributed to the wrong field or the stated limit doesn't match the field it's placed under.
+Fix: Confirm which field this error belongs to; if it is the postal code field, correct the limit to match real postal code lengths, or move the message under the correct field.
+
+Location: Checkout form, shipping address — second message block ("Please correct the highlighted field. Error code: 502.")
+Evidence: "Please correct the highlighted field. Error code: 502."
+Problem: The message tells the user to fix a highlighted field, but error code 502 is a server/gateway failure unrelated to anything the user entered, so the instruction and the cited cause contradict each other.
+Fix: Split this into two cases — a field-specific message for validation failures, and a separate "something went wrong on our end, try again" message for server errors like 502 that doesn't direct the user to a highlighted field.
+
+Location: Checkout form, shipping address — second message block, Placement and Signal rows
+Evidence: "Placement: directly below the shipping address block" vs. "Signal: bold text set above the address block at a larger size than its labels, icon"
+Problem: Placement says the message sits below the address block while Signal describes the same text as positioned above it — the two rows describe different physical locations.
+Fix: Correct one of the two fields so Placement and Signal agree on where the text actually appears.
+
+Location: Checkout form, shipping address — second message block, Fires row
+Evidence: "Fires: on-blur" for the "Error code: 502" message
+Problem: A 502 can only be known after a round trip to the server, so it cannot plausibly fire on-blur of a field before any request has been made.
+Fix: Change Fires to on-submit (or whenever the failed request response actually arrives).
+
+Location: Checkout form, shipping address — second message block, Predictable mistake row
+Evidence: "Predictable mistake: yes" next to "Error code: 502."
+Problem: A 502 is a server/infrastructure failure, not a predictable user input error, so classifying it as a predictable mistake is inconsistent with its cause.
+Fix: Mark this entry "Predictable mistake: no," matching how the expired-link entry correctly handles a non-user-caused failure.
+
+Location: File upload, receipts — comparing the Fires rows of the two message blocks
+Evidence: "Fires: after-field-complete" (size-limit message) vs. "Fires: on-submit" (format message), both on the same upload control
+Problem: Two validations on the same control fire at different stages with no stated reason — the size error surfaces right after selection, but the format error is withheld until the whole form is submitted, needlessly delaying feedback the system could already give.
+Fix: Make the format check also fire after-field-complete, immediately after file selection, so both problems surface together.
+
+Location: Password reset, new password — message block, Placement row
+Evidence: "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page"
+Problem: Placing the password-rule error at the top of a long form forces the reader to scroll away from the field they're editing, undermining the stated benefit that the field stays visible.
+Fix: Move the message inline, directly below the new-password field, as done for the other inline messages in this document.
+
+Location: Password reset, new password — message block, Suggested fix row
+Evidence: "Predictable mistake: yes" / "Suggested fix: none"
+Problem: A weak-password error is both predictable and detectable as the user types, yet the entry offers no preventive fix (e.g., a live requirements checklist), relying solely on an after-the-fact message.
+Fix: Add a suggested fix such as a real-time password-requirements indicator shown while typing, instead of "none."
+
+Location: Password reset, expired link — message block, Container row vs. Placement/Signal rows
+Evidence: "Container: toast" vs. "Placement: in a dialog centered on the password reset step, over the new password field it blocks" and "Signal: bold heading text at the top of the dialog, icon"
+Problem: Container is labeled "toast," but Placement and Signal both describe a centered, blocking modal dialog — a different and contradictory container type.
+Fix: Change Container to "dialog," since a toast is transient and non-blocking while this message is neither.
+
+Location: Password reset, expired link — message block, Fires row
+Evidence: "Fires: on-focus"
+Problem: Whether the reset link has expired is already known when the page loads with the token in the URL, so waiting until the user focuses the password field needlessly delays a discoverable failure.
+Fix: Change Fires to on-load so the expired-link dialog appears immediately when the page opens.
+
+Location: Account settings, username — message block, Fires row
+Evidence: "Fires: on-blur" for "The last changes were not saved and cannot be recovered."
+Problem: An unrecoverable save failure results from an asynchronous save attempt, not from the user simply blurring the username field, so this trigger doesn't match how such a failure would actually be detected.
+Fix: Change Fires to whenever the save request's failure response arrives (e.g., on-submit or on-save-error), not on-blur.
+
+Location: Account settings, username — message block, Predictable mistake row
+Evidence: "Predictable mistake: yes" next to "The last changes were not saved and cannot be recovered. Contact support for assistance."
+Problem: A failed, unrecoverable save is a system/backend failure, not a predictable user input mistake, making this classification inconsistent (compare the correctly-marked "no" on the expired-link entry for a similarly non-user-caused failure).
+Fix: Mark this entry "Predictable mistake: no."
+
+Location: Account settings, username — message block, Input on resubmission row
+Evidence: "cannot be recovered. Contact support for assistance." vs. "Input on resubmission: preserved"
+Problem: If the user's input is preserved and can be resubmitted, the change is not actually unrecoverable, which directly contradicts the message's claim.
+Fix: Either rewrite the message to say the input is preserved and invite the user to try saving again, or, if the data truly cannot be recovered, mark "Input on resubmission" as not-applicable.

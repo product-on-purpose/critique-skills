@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-EXPLAIN",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "fix": "Explain the 502 error in plain language (e.g., 'A temporary server issue prevented validation. Please try again.').",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Checkout form, shipping address, message 2",
+      "severity": 3,
+      "violation": "The message reports a 502 server error without explaining what it means or why the validation failed, leaving a reader with no understanding of whether to retry, contact support, or take other action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-SELECTABLE-FIX",
+      "evidence": "This receipt is over the 10 MB limit, which keeps uploads quick on slow connections. Reduce the file size and upload it again.",
+      "fix": "Offer a compress-and-retry action in place of or alongside the message.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "File upload, receipts, message 1",
+      "severity": 3,
+      "violation": "The message describes an unambiguous, single fix (reduce file size) but requires the reader to perform the compression manually outside the product rather than offering it as a selectable action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-SPECIFIC",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "fix": "Describe the specific validation issue and which field is affected (e.g., 'The shipping address could not be validated. Please check the address and try again.').",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Checkout form, shipping address, message 2",
+      "severity": 3,
+      "violation": "The message cites only an internal error code instead of describing the actual validation problem or which field caused the failure."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-PLAIN-LANGUAGE",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "fix": "Replace the code or jargon term with a plain-language sentence a non-technical reader can act on.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "Checkout form, shipping address, message 2",
+      "severity": 2,
+      "violation": "The message text carries an internal error code, a code-style token, or an engineering-jargon term standing in for a plain-language explanation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-PROXIMITY",
+      "evidence": "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page",
+      "fix": "Position the message directly below the password field so it appears when the reader reaches the field.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Password reset, new password, message 1",
+      "severity": 2,
+      "violation": "The message appears at the top of the form and requires scrolling to reach it, separating it from the password field it concerns, even though both are on the same screen."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T12:23:55Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

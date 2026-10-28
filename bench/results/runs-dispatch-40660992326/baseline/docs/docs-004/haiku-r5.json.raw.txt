@@ -1,0 +1,24 @@
+Location: retry_policy section
+Evidence: "The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential."
+Problem: The three retry policy options are listed but not explained, so users cannot understand what distinguishes linear from exponential retry behavior or when to use each.
+Fix: Explain what each policy does, such as "linear: retries at fixed intervals; exponential: retries with increasing delays between attempts."
+
+Location: signing_secret section
+Evidence: "The signing_secret field accepts a string used to verify the payload signature on receipt."
+Problem: The description does not specify which algorithm is used to sign and verify payloads, so users implementing signature verification cannot determine how to do so correctly.
+Fix: Specify the signing algorithm, such as "HMAC-SHA256" and briefly describe how verification should be performed.
+
+Location: endpoint_url section
+Evidence: "The endpoint_url field accepts an HTTPS URL"
+Problem: The phrase "HTTPS URL" is ambiguous—it does not clarify whether HTTP is forbidden or merely not the default.
+Fix: Explicitly state whether HTTP is unsupported, such as "The endpoint_url field must be an HTTPS URL" or "accepts an HTTPS or HTTP URL."
+
+Location: All field descriptions
+Evidence: No field indicates whether it is required or optional
+Problem: Users cannot determine which fields must be configured and which are optional when setting up a webhook.
+Fix: Add "(required)" or "(optional)" after each field name or in the description.
+
+Location: All field sections
+Evidence: No examples provided for endpoint_url, signing_secret, or retry_policy values
+Problem: Users lack concrete examples to verify their configuration values match the expected format.
+Fix: Provide at least one example value for each field, such as "Example: https://api.example.com/webhooks" for endpoint_url.

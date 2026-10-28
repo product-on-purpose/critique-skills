@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.3.4",
+      "evidence": "@media (orientation: portrait) { #main-content { display: none; } }",
+      "fix": "Remove the @media rule that hides #main-content in portrait orientation, or restructure the layout to remain accessible in all orientations.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#html, @media rule on <style> block, line 7",
+      "severity": 3,
+      "violation": "The @media (orientation: portrait) rule hides the main content (#main-content) entirely in portrait orientation, restricting the page to landscape viewing only."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.3.5",
+      "evidence": "<input id=\"email\" type=\"email\">",
+      "fix": "Set the field's autocomplete attribute to email, or the matching standard token for this input purpose.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "#email, <input> field, input purpose email, line 64",
+      "severity": 2,
+      "violation": "This field's type, name, or id identifies the email input purpose, but it carries no autocomplete token, so the purpose is not programmatically determinable."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.4.7",
+      "evidence": "<a href=\"/accessibility\" id=\"nav-link1\" style=\"outline:none\">Accessibility</a>",
+      "fix": "Remove the style=\"outline:none\" attribute or provide an alternative visible focus indicator (e.g., a visible border or background color change).",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#nav-link1, <a> element, visible text 'Accessibility', line 13",
+      "severity": 2,
+      "violation": "The navigation link has an inline outline:none style that removes the focus indicator, making it invisible to keyboard users."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.5.8",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\" style=\"width:16px;height:16px\">",
+      "fix": "Increase the target size to at least 24x24 CSS pixels, either by adjusting the element's width and height or by adding padding.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#s3-customcontrol, <div> custom button control, role=\"button\" tabindex=\"0\", line 45",
+      "severity": 2,
+      "violation": "The custom button control has inline styles setting width and height to 16px, which is below the 24x24 CSS pixel minimum target size for touchable controls."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-4.1.3",
+      "evidence": "<div class=\"status-card\" id=\"s3-statuscard\">Your changes are saved.</div>",
+      "fix": "Add aria-live=\"polite\" (or aria-live=\"assertive\" if urgent) to the status message container.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#s3-statuscard, <div> status message container, line 41",
+      "severity": 2,
+      "violation": "The status message 'Your changes are saved.' lacks an aria-live region attribute to announce dynamic status updates to screen reader users."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-005.html",
+    "artifact_sha256": "0f8493f220745495c0706928266e57a6f8d8bacbcd1737ff17dc3965ce55df7b",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T03:45:32Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

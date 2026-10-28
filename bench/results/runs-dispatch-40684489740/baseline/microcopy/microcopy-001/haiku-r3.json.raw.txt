@@ -1,0 +1,24 @@
+Location: Signup form, email field, Message signals
+Evidence: First message shows "Signal: one step bolder and larger than the field label, icon"; second message shows "Signal: one step bolder and larger than the field label, none"
+Problem: Both validation messages for the same field use the same placement and container, but one includes an icon and the other doesn't, creating an inconsistent visual treatment for equally important validation feedback
+Fix: Either add an icon to the second email message or remove it from the first to establish consistent signal handling for the same field
+
+Location: Profile settings, phone number, second message
+Evidence: "Input on resubmission: cleared" (vs all other messages showing "Input on resubmission: preserved")
+Problem: This is the only message across all screens that clears input on resubmission, creating unpredictable behavior where users won't know why this error differs from others
+Fix: Change to "Input on resubmission: preserved" to match the behavior of all other validation messages
+
+Location: Profile settings, phone number, first message
+Evidence: "You keep entering the wrong value. Re-enter it to continue."
+Problem: This message provides no guidance on what format or validation rule is required, unlike the email field message which specifies the format explicitly
+Fix: Add specific format guidance, for example: "Enter a valid phone number, for example: (123) 456-7890"
+
+Location: Entire document, Signal descriptions
+Evidence: First email message uses "one step bolder and larger than the field label" while other messages use "bold text set larger than the field label"
+Problem: Inconsistent terminology for describing visual treatments makes it unclear whether these represent different visual intensities or are simply different word choices
+Fix: Standardize all signal descriptions to use consistent language, for example: "bold text larger than the field label, with icon" or "bold text larger than the field label, no icon"
+
+Location: Checkout form, payment method, first message placement
+Evidence: "Placement: in a banner directly above the payment method selector, staying on screen until another method is chosen"
+Problem: This placement description includes behavioral information ("staying on screen until...") while all other placement fields describe only location, creating inconsistent specification detail
+Fix: Move behavioral details to a separate field or add a "Behavior" section for all messages that have persistent or conditional visibility

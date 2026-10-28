@@ -1,0 +1,79 @@
+Location: `<meta name="viewport" ...>` in `<head>`
+Evidence: `content="width=device-width, initial-scale=1, user-scalable=no"`
+Problem: `user-scalable=no` disables pinch-zoom, preventing low-vision users from magnifying content and violating WCAG 1.4.4 (Resize Text).
+Fix: Remove `user-scalable=no` (and any `maximum-scale` restriction) from the viewport meta tag.
+
+Location: Section "Accessibility improvements", paragraph `s1-p1`
+Evidence: `style="color:#999999"` on "Passengers should review the updated schedule at any station kiosk..."
+Problem: Light gray text (#999999) on a presumably white background yields a contrast ratio of roughly 2.97:1, failing WCAG AA's 4.5:1 minimum for normal text.
+Fix: Change the text color to a value with at least 4.5:1 contrast against the background, or remove the inline color override.
+
+Location: Section "Accessibility improvements", paragraphs `s1-p1` and `s1-p2`
+Evidence: Both paragraphs end with the identical sentence "Updates post to the schedule page within one business day."
+Problem: The duplicated closing sentence, combined with content about kiosk schedules and fare adjustments, has nothing to do with the section heading "Accessibility improvements," suggesting templated/placeholder copy was left in by mistake.
+Fix: Replace both paragraphs with content that actually describes accessibility improvements, and remove the redundant repeated sentence.
+
+Location: Section "Accessibility improvements", image `s1-img1`
+Evidence: `alt="A transit operator inspecting the platform screen doors before the morning shift."`
+Problem: The alt text describes a scene unrelated to the surrounding paragraphs about schedule kiosks and fare adjustments, giving screen reader users no useful connection to the section's content.
+Fix: Either rewrite the alt text to describe content relevant to the accessibility-improvements topic, or replace the image with one that matches the section.
+
+Location: Section "Schedule changes", paragraph `s2-p1`
+Evidence: "Local residents can check real time arrivals through the mobile app. A confirmation message follows once the request is processed."
+Problem: Checking real-time arrivals is not a "request" that gets "processed" with a confirmation message; the second sentence is a non-sequitur, indicating mismatched boilerplate text.
+Fix: Remove or rewrite the second sentence so it accurately describes what happens after checking arrivals (e.g., nothing needs confirming).
+
+Location: Section "Schedule changes", table `s2-table1`
+Evidence: `<table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>...`
+Problem: The table has no `<caption>`, so screen reader users navigating by table have no programmatic description of what the table represents.
+Fix: Add a `<caption>` element, e.g. "Current zone status," inside the table.
+
+Location: Section "Weekend service", paragraph `s3-p1`
+Evidence: "Passengers may request a fare adjustment through the mobile app. The change takes effect on the following service day."
+Problem: This content is about fare adjustments, not weekend service, and is a near-duplicate of the fare-adjustment sentence already given in `s1-p2`.
+Fix: Replace with content specific to weekend service changes, and remove the duplicate fare-adjustment sentence.
+
+Location: Section "Weekend service", paragraph `s3-p2`
+Evidence: "Local residents can report a service issue by calling rider services. Station staff can also help with the same request in person."
+Problem: Reporting a service issue is unrelated to the "Weekend service" heading, and "the same request" is a confusing referent since calling and visiting in person are different actions, not the same request.
+Fix: Move this content to a more relevant section (e.g., a "Contact/Report an issue" section) and reword "the same request" for clarity.
+
+Location: Section "Weekend service", promo banner `s3-banner`
+Evidence: `style="width:960px"`
+Problem: A fixed 960px width will overflow the viewport on mobile devices, causing horizontal scrolling or clipped content, which contradicts the responsive viewport meta tag.
+Fix: Replace the fixed width with a responsive value (e.g., `max-width:960px; width:100%`).
+
+Location: Section "Weekend service", status card `s3-statuscard`
+Evidence: `style="height:60px;overflow:hidden"` on a `role="status"` live region
+Problem: A fixed height with `overflow:hidden` risks visually clipping the status text (especially at larger font sizes or on narrow viewports) even though it is still announced to assistive tech, creating a mismatch between visual and announced content.
+Fix: Remove the fixed height/overflow clipping, or use `min-height` and allow the box to grow with its content.
+
+Location: Section "Weekend service", custom control `s3-customcontrol`
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Problem: A non-semantic `<div>` is used to emulate a button; absent the usual keyboard key-press handling that a native button provides for free, this pattern is fragile. It's also unexplained and out of place in a "Weekend service" announcements section with no visible connection to any list item it would delete.
+Fix: Replace with a native `<button>` element, and add context (or remove the control if it has no purpose on this page).
+
+Location: Section "Weekend service", wizard `s3-wizard`
+Evidence: `<div class="wizard-steps" id="s3-wizard">` containing "Choose a plan," "Enter payment details," "Confirm your order"
+Problem: This multi-step purchase wizard is unrelated to weekend service announcements, has no heading explaining its purpose, and lacks any semantic indication (e.g. `aria-current="step"`) of which step is active.
+Fix: Remove this orphaned component from the page, or if intentional, give it a heading, proper list markup, and `aria-current` on the active step.
+
+Location: Section "Weekend service", link paragraph `s3-linkpara`
+Evidence: `<a href="/fares/history" ...>read the accessibility improvements list</a>` inside the sentence "For the full list of upcoming adjustments..."
+Problem: The link text says "accessibility improvements list," but the surrounding sentence describes "upcoming adjustments" and the href points to `/fares/history` — none of these agree, so the link's purpose is unclear and misleading out of context.
+Fix: Rewrite the link text to accurately describe its destination, e.g. "read the fare adjustment history."
+
+Location: Section "Weekend service", form field `s3-form-topic-label` / `topic`
+Evidence: `<label for="topic-alt" id="s3-form-topic-label">Route</label>` paired with `<select id="topic">`
+Problem: The label's `for` attribute references `topic-alt`, which does not match the select element's actual id `topic`, so the label is not programmatically associated with the control.
+Fix: Change the label's `for` attribute to `topic` (or change the select's id to `topic-alt`) so they match.
+
+Location: Section "Weekend service", form field `phone`
+Evidence: `<label for="phone" ...>Phone number (required)</label>` next to `<input id="phone" type="tel" autocomplete="tel">`
+Problem: The label visually marks the phone field as required, but the input has no `required` or `aria-required="true"` attribute, so assistive technology won't announce it as required and the form could be submitted without it.
+Fix: Add `required` (or `aria-required="true"`) to the phone input.
+
+Location: Section "Weekend service", form field `promo`
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: `aria-invalid="true"` is hardcoded on page load, so the field is announced as invalid before the user has entered anything, which is incorrect and confusing.
+Fix: Set `aria-invalid="false"` (or omit the attribute) by default, and only set it to `true` dynamically after a failed validation.

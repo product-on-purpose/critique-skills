@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-SEVERITY-CONTAINER",
+      "evidence": "This reset link expired an hour after it was sent... Container: toast. Fires: on-focus. The reader cannot complete the password reset without requesting a new link.",
+      "fix": "Use a modal dialog that persists until the reader dismisses it or takes the suggested action (request new link), rather than a self-clearing toast.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Password reset, new password, message 2",
+      "severity": 3,
+      "violation": "A blocking failure (expired reset link prevents form completion) is presented in a self-clearing toast container, so a reader who looks away misses the only message explaining why they cannot proceed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-SPECIFIC",
+      "evidence": "Please correct the highlighted field. Error code: 502. Placement: directly below the shipping address block, but text says only 'the highlighted field'.",
+      "fix": "Name the specific field and the actual problem: for example, 'The shipping address entry failed (error 502). Please re-enter the address and save again.'",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Checkout form, shipping address, message 2",
+      "severity": 3,
+      "violation": "The message names neither the field nor the underlying problem; it relies entirely on visual highlighting to identify which field is wrong, leaving a non-sighted or colorblind reader with only a generic reference and an internal error code."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-PLAIN-LANGUAGE",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "fix": "Replace the code or jargon term with a plain-language sentence a non-technical reader can act on.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "Checkout form, shipping address, message 2",
+      "severity": 2,
+      "violation": "The message text carries an internal error code, a code-style token, or an engineering-jargon term standing in for a plain-language explanation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-PREVENT",
+      "evidence": "Receipts upload as PDF or PNG only... Fires: on-submit. File type validation is a format check the product already knows at file-selection time.",
+      "fix": "Show a format requirement message or pre-filter file selection when the user picks a file, before form submission.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "File upload, receipts, message 2",
+      "severity": 2,
+      "violation": "The message reports a predictable mistake detected at submission, but the product could plausibly have warned about the file type requirement during file selection, before the reader committed the wrong format."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-PROXIMITY",
+      "evidence": "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page.",
+      "fix": "Position the message directly below the password field it concerns, on the same visible area without requiring scrolling.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Password reset, new password, message 1",
+      "severity": 2,
+      "violation": "The message appears at the top of a long form, requiring the reader to scroll away from the field to see it, even though both are on the same screen."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-SELECTABLE-FIX",
+      "evidence": "This receipt is over the 10 MB limit... Reduce the file size and upload it again. Suggested fix: described, names the one available alternative but requires the reader to enter it by hand.",
+      "fix": "Offer a selectable action to compress the file automatically or let the reader choose a compression level, rather than only describing the fix in text.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "File upload, receipts, message 1",
+      "severity": 2,
+      "violation": "The message names a single, unambiguous fix (reduce file size) but only describes it in prose, requiring the reader to manually reduce the file outside the product and re-upload, rather than offering a selectable compress action."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T12:27:14Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

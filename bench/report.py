@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -39,17 +40,18 @@ def render_entries_table(entries: list[dict[str, Any]]) -> str:
     if not entries:
         return "_No run set has been scored yet._"
     header = (
-        "| Skill | Version | Model | Domain | Artifact type | Artifact-runs (k=5) | Recall | Precision | "
+        "| Skill | Version | Model | Domain | Run set | Artifact type | Artifact-runs (k=5) | Recall | Precision | "
         "Clean FP rate | Consistency | Consistency (exact) | Unresolvable | Severity agreement |\n"
-        "|---|---|---|---|---|---|---|---|---|---|---|---|---|"
+        "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"
     )
     rows = [
-        "| {skill} | {version} | {model} | {domain} | {artifact_type} | {n} | {recall} | {precision} | "
+        "| {skill} | {version} | {model} | {domain} | {run_set} | {artifact_type} | {n} | {recall} | {precision} | "
         "{fp} | {cons} | {cons_exact} | {unresolved} | {severity} |".format(
             skill=e["skill"],
             version=e["skill_version"],
             model=e["model"],
             domain=e["domain"],
+            run_set=_run_set(e, "?"),
             artifact_type=e["artifact_type"],
             n=e["artifacts_scored"],
             recall=_fmt_metric(e["recall"]),
@@ -61,7 +63,7 @@ def render_entries_table(entries: list[dict[str, Any]]) -> str:
             # Absent from files written before results_version 1.3.0, which did not score it.
             severity=_fmt_metric(e["severity_agreement"]) if "severity_agreement" in e else "n/a",
         )
-        for e in sorted(entries, key=lambda e: (e["domain"], e["skill"], e["skill_version"], e["model"]))
+        for e in sorted(entries, key=lambda e: (e["domain"], e["skill"], e["skill_version"], e["model"], _run_set(e)))
     ]
     return "\n".join([header, *rows])
 
@@ -69,33 +71,80 @@ def render_entries_table(entries: list[dict[str, Any]]) -> str:
 BASELINE_SKILL = "baseline-generic"
 
 
+CellKey = tuple[str, str, str]  # (skill, skill_version, run_set)
+
+
+def _run_set(entry: dict[str, Any], fallback: str = "") -> str:
+    """An entry's own run set. Files written before results_version 1.2.0 carry none, and every
+    entry in such a file came from the one run set the top-level `run_set` names."""
+    return entry.get("run_set") or fallback
+
+
 def _by_domain_model(
     entries: list[dict[str, Any]],
-) -> dict[tuple[str, str], dict[tuple[str, str], dict[str, Any]]]:
-    """`(domain, model)` to `(skill, skill_version)` to entry.
+) -> dict[tuple[str, str], dict[CellKey, dict[str, Any]]]:
+    """`(domain, model)` to `(skill, skill_version, run_set)` to entry.
 
     Keyed on `(skill, skill_version)` rather than on the skill name alone
     because `results.json` may legitimately carry two versions of the
     same skill in the same `(domain, model)` cell: a run set that
     re-measures one skill after a calibration iteration holds the before
-    and the after side by side, distinguished only by `skill_version`
-    (`results.schema.json`: "one entry per (skill, skill_version, model,
-    domain) group"). Keying on the name alone silently dropped whichever
-    row was inserted first, which would have deleted a published failure
-    from the comparison tables rather than showing it beside its fix.
+    and the after side by side, distinguished only by `skill_version`.
+    Keying on the name alone silently dropped whichever row was inserted
+    first, which would have deleted a published failure from the
+    comparison tables rather than showing it beside its fix.
+
+    Keyed on `run_set` as well (E63), because two run sets can measure the
+    same `(skill, skill_version, model, domain)`: the frozen baseline is
+    re-run inside every dispatch, so `baseline-generic` 1.0.0 appears once
+    per run set that ran it. Without `run_set` in the key, the second
+    silently overwrote the first, the same dropped-row defect as above.
     """
-    by_domain_model: dict[tuple[str, str], dict[tuple[str, str], dict[str, Any]]] = {}
+    by_domain_model: dict[tuple[str, str], dict[CellKey, dict[str, Any]]] = {}
     for e in entries:
-        by_domain_model.setdefault((e["domain"], e["model"]), {})[(e["skill"], e["skill_version"])] = e
+        key = (e["skill"], e["skill_version"], _run_set(e))
+        cell = by_domain_model.setdefault((e["domain"], e["model"]), {})
+        if key in cell:
+            raise ValueError(
+                f"results.json holds two entries for {key} on {e['domain']}/{e['model']}; every "
+                "(run_set, skill, skill_version, model, domain) group must be unique"
+            )
+        cell[key] = e
     return by_domain_model
 
 
-def _find_baseline(skills: dict[tuple[str, str], dict[str, Any]]) -> dict[str, Any] | None:
-    """The `baseline-generic` entry in one `(domain, model)` cell, whatever
-    version it carries. The baseline is frozen, so exactly one is expected;
-    the lowest version is taken if a future run set ever holds more."""
-    candidates = sorted((k for k in skills if k[0] == BASELINE_SKILL))
-    return skills[candidates[0]] if candidates else None
+_RUN_SET_DATE_RE = re.compile(r"(\d{4}-\d{2}-\d{2})$")
+
+
+def _run_set_date(run_set: str) -> str:
+    """The date a run-set label ends with (`p3-2026-07-31` to `2026-07-31`). Every committed label
+    carries one; a label that does not is refused rather than ordered by guesswork."""
+    match = _RUN_SET_DATE_RE.search(run_set)
+    if match is None:
+        raise ValueError(f"run set {run_set!r} does not end in a YYYY-MM-DD date; cannot pair it with a baseline")
+    return match.group(1)
+
+
+def _find_baseline(skills: dict[CellKey, dict[str, Any]], run_set: str) -> dict[str, Any] | None:
+    """The `baseline-generic` entry a skill entry from `run_set` is compared against, within one
+    `(domain, model)` cell.
+
+    The baseline measured in the same run set, when there is one, because that pair ran under the
+    same harness, CLI and date, which is why every dispatch re-runs the baseline at all. A run set
+    that ran no baseline (cal1, a calibration re-run of one skill) is compared against the most
+    recent baseline measured on or before its own date, which is the baseline that existed when it
+    was measured and the one its published verdict was read against."""
+    baselines = {k[2]: e for k, e in skills.items() if k[0] == BASELINE_SKILL}
+    if run_set in baselines:
+        return baselines[run_set]
+    if len(baselines) <= 1:
+        # Nothing to choose between: the cell's one baseline, or none.
+        return next(iter(baselines.values()), None)
+    own_date = _run_set_date(run_set)
+    earlier = sorted(
+        (_run_set_date(rs), rs) for rs in baselines if _run_set_date(rs) <= own_date
+    )
+    return baselines[earlier[-1][1]] if earlier else None
 
 
 def render_criterion_table(entries: list[dict[str, Any]]) -> str:
@@ -115,18 +164,18 @@ def render_criterion_table(entries: list[dict[str, Any]]) -> str:
     """
     rows: list[str] = []
     for (domain, model), skills in sorted(_by_domain_model(entries).items()):
-        for skill_name, skill_version in sorted(skills):
+        for skill_name, skill_version, run_set in sorted(skills):
             if skill_name == BASELINE_SKILL:
                 continue
-            entry = skills[(skill_name, skill_version)]
+            entry = skills[(skill_name, skill_version, run_set)]
             rows.append(
-                f"| {skill_name} | {skill_version} | {domain} | {model} | {_fmt_metric(entry['recall'])} | "
-                f"{_fmt_metric(entry['precision'])} |"
+                f"| {skill_name} | {skill_version} | {domain} | {model} | {run_set or '?'} | "
+                f"{_fmt_metric(entry['recall'])} | {_fmt_metric(entry['precision'])} |"
             )
 
     if not rows:
         return "_No rubric-operationalization figures available yet._"
-    header = "| Skill | Version | Domain | Model | Recall | Precision |\n|---|---|---|---|---|---|"
+    header = "| Skill | Version | Domain | Model | Run set | Recall | Precision |\n|---|---|---|---|---|---|---|"
     return "\n".join([header, *rows])
 
 
@@ -258,19 +307,21 @@ def render_baseline_comparison_location(entries: list[dict[str, Any]]) -> str:
     """
     raw_rows: list[dict[str, Any]] = []
     for (domain, model), skills in sorted(_by_domain_model(entries).items()):
-        baseline = _find_baseline(skills)
-        if baseline is None:
-            continue
-        for skill_name, skill_version in sorted(skills):
+        for skill_name, skill_version, run_set in sorted(skills):
             if skill_name == BASELINE_SKILL:
                 continue
-            entry = skills[(skill_name, skill_version)]
+            baseline = _find_baseline(skills, run_set)
+            if baseline is None:
+                continue
+            entry = skills[(skill_name, skill_version, run_set)]
             raw_rows.append(
                 {
                     "skill": skill_name,
                     "version": skill_version,
                     "domain": domain,
                     "model": model,
+                    "run_set": run_set,
+                    "baseline_run_set": _run_set(baseline),
                     "recall": entry["recall_location"]["value"],
                     "baseline_recall": baseline["recall_location"]["value"],
                     "precision": entry["precision_location"]["value"],
@@ -281,10 +332,11 @@ def render_baseline_comparison_location(entries: list[dict[str, Any]]) -> str:
     if not raw_rows:
         return "_No baseline comparison available yet._"
 
+    def _key(r: dict[str, Any]) -> tuple[str, str, str, str, str]:
+        return (r["skill"], r["version"], r["domain"], r["model"], r["run_set"])
+
     verdicts = {
-        (r["skill"], r["version"], r["domain"], r["model"]): _dominance_verdict(
-            r["recall"], r["baseline_recall"], r["precision"], r["baseline_precision"]
-        )
+        _key(r): _dominance_verdict(r["recall"], r["baseline_recall"], r["precision"], r["baseline_precision"])
         for r in raw_rows
     }
 
@@ -294,27 +346,30 @@ def render_baseline_comparison_location(entries: list[dict[str, Any]]) -> str:
                 continue
             if (other["skill"], other["version"], other["domain"]) != (row["skill"], row["version"], row["domain"]):
                 continue
-            if verdicts[(other["skill"], other["version"], other["domain"], other["model"])] in _QUALIFYING_VERDICTS:
+            if verdicts[_key(other)] in _QUALIFYING_VERDICTS:
                 return _tier_label(other["model"])
         return None
 
     rows: list[str] = []
     for r in raw_rows:
-        verdict = verdicts[(r["skill"], r["version"], r["domain"], r["model"])]
+        verdict = verdicts[_key(r)]
         if verdict == "no pass on this tier":
             sibling_tier = _qualifying_sibling_tier(r)
             if sibling_tier is not None:
                 verdict = f"no pass on this tier (qualifies via {sibling_tier})"
+        run_set = r["run_set"] or "?"
+        if r["baseline_run_set"] != r["run_set"]:
+            run_set += f" (baseline from {r['baseline_run_set'] or '?'})"
         rows.append(
-            f"| {r['skill']} | {r['version']} | {r['domain']} | {r['model']} | "
+            f"| {r['skill']} | {r['version']} | {r['domain']} | {r['model']} | {run_set} | "
             f"{_fmt_value(r['recall'])} | {_fmt_value(r['baseline_recall'])} | "
             f"{_fmt_value(r['precision'])} | {_fmt_value(r['baseline_precision'])} | {verdict} |"
         )
 
     header = (
-        "| Skill | Version | Domain | Model | Skill recall (location) | Baseline recall (location) | "
+        "| Skill | Version | Domain | Model | Run set | Skill recall (location) | Baseline recall (location) | "
         "Skill precision (location) | Baseline precision (location) | Verdict |"
-        "\n|---|---|---|---|---|---|---|---|---|"
+        "\n|---|---|---|---|---|---|---|---|---|---|"
     )
     return "\n".join([header, *rows])
 
@@ -442,22 +497,24 @@ def render_scoreboard(entries: list[dict[str, Any]], active: dict[str, str]) -> 
     losing precision reads as a mixed non-pass rather than a win.
     """
     by_skill: dict[str, dict[str, dict[str, Any]]] = {}
-    baselines: dict[tuple[str, str], dict[str, Any]] = {}
 
     for (domain, model), skills in _by_domain_model(entries).items():
-        baseline = _find_baseline(skills)
-        if baseline is not None:
-            baselines[(domain, model)] = baseline
-        for skill_name, skill_version in skills:
+        for skill_name, skill_version, run_set in skills:
             if skill_name == BASELINE_SKILL:
                 continue
             if active.get(skill_name) != skill_version:
                 continue
-            entry = skills[(skill_name, skill_version)]
-            by_skill.setdefault(skill_name, {})[_tier_label(model)] = {
-                "entry": entry,
-                "domain": domain,
-                "model": model,
+            tier = _tier_label(model)
+            if tier in by_skill.get(skill_name, {}):
+                raise ValueError(
+                    f"{skill_name} {skill_version} has two measured {tier} cells (run sets "
+                    f"{by_skill[skill_name][tier]['run_set']!r} and {run_set!r}); the scoreboard shows "
+                    "one figure per shipped version and tier, so one of them must be retired first"
+                )
+            by_skill.setdefault(skill_name, {})[tier] = {
+                "entry": skills[(skill_name, skill_version, run_set)],
+                "baseline": _find_baseline(skills, run_set),
+                "run_set": run_set,
             }
 
     if not by_skill:
@@ -488,7 +545,7 @@ def render_scoreboard(entries: list[dict[str, Any]], active: dict[str, str]) -> 
             entry = cell["entry"]
             recalls.append(f"| {_fmt_value(entry['recall_location']['value'])} ")
             precisions.append(f"| {_fmt_value(entry['precision_location']['value'])} ")
-            baseline = baselines.get((cell["domain"], cell["model"]))
+            baseline = cell["baseline"]
             verdicts[tier] = _dominance_verdict(
                 entry["recall_location"]["value"],
                 None if baseline is None else baseline["recall_location"]["value"],

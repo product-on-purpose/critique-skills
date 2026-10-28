@@ -1,0 +1,34 @@
+Location: Signup form, email field
+Evidence: First message has "Signal: one step bolder and larger than the field label, icon" and second message has "Signal: one step bolder and larger than the field label, none"
+Problem: The two validation messages for the same field use inconsistent visual signals—one includes an icon and the other doesn't. This inconsistency will confuse users about the relative importance or type of error.
+Fix: Add an icon to the second message or remove it from the first, so both email validation messages use the same signal pattern.
+
+Location: Signup form, email field (first message)
+Evidence: "The connection dropped before this finished."
+Problem: This message describes a transient network error, not an email validation failure. It doesn't relate to the structure or format of an email address, making it out of place in email field validation.
+Fix: Remove this message or move it to a general connection error banner. Replace it with a message specific to email format validation failures.
+
+Location: Checkout form, payment method (first message)
+Evidence: "Something went wrong. Contact support if this continues."
+Problem: This message is too generic and offers no actionable information. Users cannot determine what failed or what steps to take to resolve it.
+Fix: Replace with a specific error message, such as "We couldn't process this card. Try a different payment method, or contact support."
+
+Location: Checkout form, payment method (first message, placement)
+Evidence: "Placement: in a banner directly above the payment method selector, staying on screen until another method is chosen"
+Problem: The error persists until the user selects a different method, even if they want to retry with the original method. This creates confusing behavior where users may change methods unnecessarily just to clear the error.
+Fix: Clear the error when the underlying issue is corrected or after a successful retry, not simply when another method is selected.
+
+Location: Checkout form, card expiry date field
+Evidence: "Fires: mid-keystroke"
+Problem: Validation that fires while the user is still typing is disruptive and prevents them from completing their input uninterrupted. Users expect to finish before seeing feedback.
+Fix: Change the trigger to "on-blur" so validation fires only after the user finishes entering the expiry date.
+
+Location: Profile settings, phone number (first message)
+Evidence: "You keep entering the wrong value. Re-enter it to continue."
+Problem: The message is vague and doesn't specify what format or value is actually required, leaving users unable to know what to correct.
+Fix: Replace with a specific message such as "Phone number must be 10 digits" or "Phone number must be in the format (XXX) XXX-XXXX."
+
+Location: Profile settings, phone number (second message, input behavior)
+Evidence: "This phone number is already on another account. Remove it there first, or contact support to move it across." with "Input on resubmission: cleared"
+Problem: Clearing the input after the user resubmits forces them to re-type the number again, but the underlying issue (number in use elsewhere) isn't resolved by re-entry. This creates friction without solving the problem.
+Fix: Preserve the input field value so users can see what they entered, reference it while contacting support, or attempt alternative resolution paths.

@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.3.4",
+      "evidence": "@media (orientation: portrait) { #main-content { display: none; } }",
+      "fix": "Remove the media query that hides #main-content in portrait, or provide the same content in an alternative accessible layout.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#main-content, main region, line 7",
+      "severity": 4,
+      "violation": "A CSS media query hides the main content in portrait orientation, restricting the page to landscape only."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.4.7",
+      "evidence": "<a href=\"/accessibility\" id=\"nav-link1\" style=\"outline:none\">Accessibility</a>",
+      "fix": "Remove style=\"outline:none\" and use CSS to style the focus state instead of hiding it.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#nav-link1, <a> link, text 'Accessibility', line 13",
+      "severity": 4,
+      "violation": "This link has style=\"outline:none\" which removes the keyboard focus indicator, making it invisible to keyboard users."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.5.8",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\" style=\"width:16px;height:16px\">",
+      "fix": "Increase the target size to at least 44×44 CSS pixels, or add padding around the visual element.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#s3-customcontrol, <div> control, role button 'Delete item', line 45",
+      "severity": 3,
+      "violation": "This custom button control is 16×16 CSS pixels (width:16px;height:16px), below the 44×44 pixel minimum target size."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\">",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the input to link the error message.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#promo, <input> field, line 68",
+      "severity": 3,
+      "violation": "This input has aria-invalid=\"true\" and an associated error message, but the error span is not programmatically linked via aria-describedby."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.3.5",
+      "evidence": "<input id=\"email\" type=\"email\">",
+      "fix": "Set the field's autocomplete attribute to email, or the matching standard token for this input purpose.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "#email, <input> field, input purpose email, line 64",
+      "severity": 2,
+      "violation": "This field's type, name, or id identifies the email input purpose, but it carries no autocomplete token, so the purpose is not programmatically determinable."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-4.1.3",
+      "evidence": "<div class=\"status-card\" id=\"s3-statuscard\">\\nYour changes are saved.\\n</div>",
+      "fix": "Add aria-live=\"polite\" and aria-atomic=\"true\" to announce this status message to screen readers.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#s3-statuscard, <div> region, text 'Your changes are saved.', line 41",
+      "severity": 2,
+      "violation": "This status message lacks aria-live attribute, so screen readers will not announce the saved state to users."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-005.html",
+    "artifact_sha256": "0f8493f220745495c0706928266e57a6f8d8bacbcd1737ff17dc3965ce55df7b",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T03:47:33Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 2,
+      "4": 2
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

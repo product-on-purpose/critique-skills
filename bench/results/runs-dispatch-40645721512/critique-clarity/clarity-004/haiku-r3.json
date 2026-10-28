@@ -1,0 +1,73 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Line 27 refers to 'equipment category matches the approved list'; lines 7, 61, and 73 refer to 'equipment catalog'. A reader cannot tell from these references alone whether 'approved list' and 'equipment catalog' name the same resource.",
+      "fix": "In the Approval Timeline section (line 27), write 'equipment category matches the equipment catalog' or define the terms as equivalent early in the document (e.g., in the Program Overview or Terminology Notes).",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "line 27 and lines 7, 61, 73",
+      "severity": 2,
+      "violation": "Two terms are used interchangeably across the document with no signal that they mean the same thing."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Lines 43-69: 'Restrictions and Exceptions' is followed by 'Terminology Notes' (mixing employee and internal actions), then 'Special Cases', 'Program Coordination', and 'Review Responsibility' describing what benefits teams and finance office do, rather than what employees need to do next.",
+      "fix": "Move internal process sections (Special Cases, Program Coordination, Review Responsibility) to a separate 'Behind the Scenes' appendix, or remove them if not essential for employees. Clarify 'Terminology Notes' to separate what employees do from what happens automatically.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "lines 43-69",
+      "severity": 2,
+      "violation": "Sections describe internal workflows rather than the reader's actual task sequence; internal processes are interleaved with employee-facing guidance."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Reimbursement Amounts section (lines 37-41): 'The stipend pays up to 500 dollars per benefit year' (subject: stipend, real actor: Finance). Also: 'A copy...goes to the shared benefits folder' (lines 5-6), 'eligibility applies only to a dedicated home workspace' (line 15), 'unused stipend amounts do not roll over' (line 39).",
+      "fix": "Replace abstract subjects with real actors: 'Finance provides up to 500 dollars per benefit year' (line 37). For line 39: 'The company does not roll over unused stipend amounts to the next benefit year.' For line 5-6: 'The IT asset group sends a copy of each update to the shared benefits folder.'",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "lines 5-6, 15, 37, 39",
+      "severity": 2,
+      "violation": "Sentences name abstractions as subjects where an identifiable person or organization could instead be named."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "Lines 51-53: 'You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal.' The jump from 'Payroll releases' to 'you submit' lacks a clear temporal relationship; readers must infer whether submission happens before or after Payroll's action.",
+      "fix": "Reorder and clarify timing: 'You record the stipend item on the request form and submit the request in the portal. Behind the scenes, Finance reconciles the item against the request log each month, and Payroll then releases the amount after that monthly review. You can track the request status in the portal until the payment clears.'",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "lines 51-53",
+      "severity": 2,
+      "violation": "Consecutive sentences' subjects shift topic with no signal connecting the new subject back to what came before."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T07:45:23Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,39 @@
+Location: section#workspace-overview, intro paragraph and the list in #workspace-overview-recent
+Evidence: "This workspace holds 4 projects, synced this morning." followed by only three `<li>` items (Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot)
+Problem: The stated project count (4) doesn't match the number of items actually listed (3).
+Fix: Either add the missing fourth project to the list or correct the paragraph to state the actual count shown.
+
+Location: #workspace-overview-projects-link ("Open project settings") and the form in #project-settings
+Evidence: The link sits directly under the three-project list, but the project settings it opens are for "Vendor Onboarding" (`value="Vendor Onboarding"`), a project that appears nowhere in the "Your projects" list.
+Problem: The link implies it opens settings for one of the listed projects, but it actually opens settings for an unlisted, unrelated project with no way for the reader to know which project will open.
+Fix: Either add "Vendor Onboarding" to the visible projects list or make clear (e.g., via link text or placement) that this settings link is independent of the listed projects.
+
+Location: #project-settings-name-input, #invite-member-email-input, #notification-settings-digest-input
+Evidence: `<input id="project-settings-name-input" type="text" value="Vendor Onboarding">` and the other two inputs/select likewise have no `name` attribute.
+Problem: Without `name` attributes, these fields would not be submitted as part of their forms, so the "Save" buttons have no field data to act on.
+Fix: Add appropriate `name` attributes to all form inputs and the select element.
+
+Location: #project-settings-duplicate-btn
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text or icon content, only an `aria-label`, so sighted users have no visual indication of its purpose or that it is interactive.
+Fix: Add visible text (e.g. "Duplicate") or an icon paired with a visible label.
+
+Location: #project-settings-duplicate-btn
+Evidence: The button has `type="button"` with no `href`, no click handler, and no corresponding target section, unlike every other action in the document.
+Problem: Activating "Duplicate project" has no defined outcome in the mockup — no confirmation screen, no new project entry, no feedback.
+Fix: Wire it to a "project duplicated" confirmation state analogous to the archive/invite flows, or remove the control if duplication is out of scope.
+
+Location: #invite-member section, specifically #invite-member-continue-link
+Evidence: `<input id="invite-member-email-input" type="email">` has no value and no `required` attribute, yet `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>` is reachable without using the Save button at all.
+Problem: A user can click "Continue" without ever entering an email address or clicking Save, yet land on "Invite sent," which states "An invite was sent to the address entered above" — a claim that is false on that path.
+Fix: Make the email field required and gate navigation to #invite-sent on a successful save, or combine Save and Continue into one action.
+
+Location: #archive-confirm-copy versus the paragraph in #project-archived
+Evidence: "will remove it from the active projects list for everyone on the team" vs. "no longer appears in the active projects list for anyone on the team"
+Problem: The same fact is described with inconsistent wording ("everyone" vs. "anyone"), reading like unedited copy variants rather than a deliberate stylistic choice.
+Fix: Use identical phrasing in both places, e.g., "for everyone on the team" in both.
+
+Location: #project-settings-save-btn and #notification-settings-save-btn
+Evidence: Both are `type="submit"` inside a `<form>` with no `action` attribute, and neither section leads to any confirmation state, unlike #invite-sent and #project-archived for other committing actions.
+Problem: Clicking Save gives the user no feedback that the change took effect, inconsistent with every other committing action in the document.
+Fix: Add a visible save-confirmation (inline message or dedicated section) for both forms, matching the pattern used for invite and archive actions.

@@ -1433,7 +1433,7 @@ and the repository did not have.
   needed it first: `bench.yml` passes `--results-out "$BENCH_OUT_DIR/results.json"`, and
   `bench/tests/test_bench_workflow.py` holds it. The rest of the item (readers keyed on `run_set`,
   or the amended rule) is still open.
-- **Rank at intake:** unranked (added 2026-09-24). **Status:** backlog.
+- **Rank at intake:** unranked (added 2026-09-24). **Status:** first branch chosen by the maintainer 2026-10-28; reader half done that day. Every reader of `results.json` keys a cell on `run_set` as well, and the 2026-10-28 re-measure's entries are in the file. Still open: the seven older dispatch directories this entry lists are committed as evidence but not pooled, so the "dispatch entries are added" half of Done is not met. Adding them is now additive under the same keying, with a ruling needed on which run set each published table shows.
 - **Ruled 2026-10-15 by the maintainer:** moves to v0.3.0 at the v0.2.0 cut. The v0.2.0 exit gate,
   re-cut on 2026-09-14, never named this item, and the release does not wait on it.
 
@@ -1557,8 +1557,8 @@ and the repository did not have.
 - **Blocks:** Nothing now. It blocked E68 until the maintainer ruled on 2026-10-15 that E68
   lands first.
 - **Depends on:** Nothing
-- **Rank at intake:** unranked (added 2026-09-25). **Status:** built 2026-10-27; the version move
-  and the paid re-measure wait for the maintainer's go.
+- **Rank at intake:** unranked (added 2026-09-25). **Status:** done 2026-10-28. Built 2026-10-27; measured
+  as `critique-accessibility` 0.2.0 on both pinned tiers in run set `bench-2026-10-28`, and the version moved with it.
 - **Ruled 2026-10-15 by the maintainer:** moves to v0.3.0 at the v0.2.0 cut. The v0.2.0 exit gate,
   re-cut on 2026-09-14, never named this item, and the release does not wait on it. E68 (narrow the
   accessibility scope claim) closed the same day without it, and `references/WCAG.md` lists this
@@ -1735,8 +1735,8 @@ and the repository did not have.
   reproduced.
 - **Blocks:** Nothing directly. Every future paid run inherits the defect until it lands.
 - **Depends on:** Nothing. It changes every skill's protocol, so it wants a spec before a build.
-- **Rank at intake:** unranked (added 2026-10-05). **Status:** built 2026-10-26; the version moves
-  and the paid re-measure wait for the maintainer's go.
+- **Rank at intake:** unranked (added 2026-10-05). **Status:** done 2026-10-28. Built 2026-10-26; every
+  skill was re-measured on both pinned tiers in run set `bench-2026-10-28` and its version moved with it, closing AC-9.
 - **Ruled 2026-10-15 by the maintainer: leads the next cycle, v0.3.0, instead of v0.2.0.** It changes
   every skill's protocol, which probably means version bumps and paid re-measurement. The v0.2.0
   exit gate is met without it, and

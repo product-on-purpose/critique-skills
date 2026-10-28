@@ -1,0 +1,54 @@
+Location: Signup form, email field — first message ("The connection dropped...")
+Evidence: "Fires: on-blur" paired with "Message: The connection dropped before this finished."
+Problem: A dropped connection is a submission/network failure, not something detectable when a field loses focus; pairing this message with an on-blur trigger doesn't match how such an error would actually be detected.
+Fix: Change the trigger to on-submit (or whenever the failed request is detected), not on-blur.
+
+Location: Signup form, email field — first message ("The connection dropped...")
+Evidence: "Predictable mistake: yes" for "The connection dropped before this finished."
+Problem: A dropped connection is a system/network failure, not a user mistake, yet it's classified as a predictable mistake — inconsistent with the checkout "Something went wrong" entry, an analogous system-level failure classified as "Predictable mistake: no."
+Fix: Reclassify as "Predictable mistake: no" to match the equivalent system-error entry in the checkout section.
+
+Location: Signup form, email field — first message ("The connection dropped...")
+Evidence: "Suggested fix: selectable, offers the one available next step as a direct action"
+Problem: Unlike every other entry, which uses "none," this field describes an abstract UI pattern without stating what the actual next-step action is (e.g., a named "Retry" button), making it unverifiable and inconsistent with the rest of the document.
+Fix: Either state the concrete action text (e.g., "Retry") or set this field to "none" for consistency with the other entries.
+
+Location: Signup form, email field — second message (email format)
+Evidence: "Enter an email address that includes an at sign and a domain, for example name@example.com, so the confirmation link has somewhere to go."
+Problem: This is a long, comma-heavy, run-on sentence for an inline field error, far more verbose than every other message in the document.
+Fix: Shorten to something like "Enter a valid email address, e.g. name@example.com."
+
+Location: Checkout form, payment method — first message ("Something went wrong...")
+Evidence: "Placement: in a banner directly above the payment method selector..." listed alongside "Container: inline"
+Problem: The placement text explicitly describes a banner, but the Container field labels it "inline," contradicting itself.
+Fix: Set Container to "banner" (or rewrite Placement to describe an inline treatment) so the two fields agree.
+
+Location: Checkout form, payment method — first message ("Something went wrong...")
+Evidence: "Something went wrong. Contact support if this continues."
+Problem: The message gives no specific information about what failed or what the user should do first, which is uninformative compared to the specificity of other messages in the document (e.g., the expiry-date message).
+Fix: Name the actual failure if known (e.g., "We couldn't process your card.") or give a concrete first action before suggesting support.
+
+Location: Checkout form, payment method — first message ("Something went wrong...")
+Evidence: "staying on screen until another method is chosen"
+Problem: The dismissal condition assumes the fix is always switching payment methods, but a generic/system-level error ("Predictable mistake: no") may not be caused by the method chosen, so this condition can trap the user even after the underlying issue resolves.
+Fix: Dismiss the banner on a successful retry as well as on choosing a different method, not solely on method change.
+
+Location: Checkout form, payment method — second message (expired card)
+Evidence: "Fires: mid-keystroke"
+Problem: Validating an expiry date mid-keystroke will flag the field as invalid before the user has finished typing a complete date, producing a premature or flickering error.
+Fix: Change the trigger to on-blur (or once the date field is fully populated), consistent with how the other date/format validations in this document fire.
+
+Location: Profile settings, phone number — first message ("You keep entering the wrong value...")
+Evidence: "You keep entering the wrong value. Re-enter it to continue."
+Problem: The message never states what is actually wrong with the value (format, length, etc.), leaving the user without actionable information, and its "keep entering" framing reads as blaming the user rather than describing the issue.
+Fix: Replace with a specific description of the validation failure (e.g., the required format) stated neutrally, without implying user fault.
+
+Location: Profile settings, phone number — first message ("You keep entering the wrong value...")
+Evidence: "You keep entering the wrong value" vs. "Fires: on-blur"
+Problem: The phrase "keep entering" implies this message only appears after multiple failed attempts, but the trigger is plain on-blur with no stated attempt threshold, so it could fire after a single attempt and misrepresent the situation.
+Fix: Either add an attempt-count condition to the Fires field (e.g., "on-blur, after 2+ failed attempts") or remove "keep" from the message so it's accurate on first failure too.
+
+Location: Profile settings, phone number — second message (number on another account)
+Evidence: "Input on resubmission: cleared"
+Problem: Every other message in the document preserves input on resubmission; clearing the field here forces the user to retype a correctly-formatted phone number for no apparent reason (there's no sensitive-data rationale like a password field), which is an unjustified inconsistency.
+Fix: Set "Input on resubmission" to "preserved" to match the rest of the document, unless there is an explicit security reason to clear it that should be documented here.

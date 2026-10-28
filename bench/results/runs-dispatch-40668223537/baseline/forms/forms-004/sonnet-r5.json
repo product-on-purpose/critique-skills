@@ -1,0 +1,171 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<meta charset=\"utf-8\">` is the only meta tag present",
+      "fix": "Add `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">` to the `<head>`.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "<head> (lines 3 - 6)",
+      "severity": 3,
+      "violation": "There is no `<meta name=\"viewport\">` tag, so the form will not scale or lay out correctly on mobile browsers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Title is \"Create your Meridian Outfitters account\" but the on-page heading is \"Set up your account\"",
+      "fix": "Make the `<h1>` text match (or closely mirror) the `<title>`, e.g. \"Create your Meridian Outfitters account.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<title>` vs `<h1>`",
+      "severity": 3,
+      "violation": "The page title and the visible heading use different wording for the same action, which can read as inconsistent branding/copy."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Both `phone-input` and `phone2-input` use `autocomplete=\"tel\"`",
+      "fix": "Give the secondary field a distinct token, e.g. `autocomplete=\"tel-national\"` or omit autocomplete on the secondary field entirely.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-phone and row-phone2 inputs",
+      "severity": 3,
+      "violation": "Two fields sharing the same autocomplete token causes browsers to autofill the same phone number into both the primary and \"secondary\" phone fields."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label ...>Company website</label> <input ... name=\"website\" type=\"url\" required=\"\">`",
+      "fix": "Remove the field, or make it optional and only show/require it for business accounts.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-website",
+      "severity": 3,
+      "violation": "A required \"company website\" field is out of place on a consumer outfitters account signup and will block individual customers who have no company/website from ever completing registration."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required=\"\">`",
+      "fix": "Add `pattern=\"\\d{8}\"` and `maxlength=\"8\"` and move the digit requirement into persistent helper text rather than relying solely on the placeholder.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "row-member",
+      "severity": 3,
+      "violation": "The \"8 digits\" constraint is only communicated via placeholder text (which disappears on input) and is not enforced with `pattern`/`maxlength`, so invalid lengths can be submitted."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"acctnum-label\" for=\"acctnum-input\">Account number</label>`",
+      "fix": "Either remove the field (it appears to duplicate \"Membership number\") or add helper text clarifying what account number is expected and where to find it.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "row-acctnum",
+      "severity": 3,
+      "violation": "\"Account number\" has no explanatory text, and since the user hasn't created an account yet, it's unclear what number they're supposed to supply here - the field's purpose is ambiguous and it's required."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Only \"Street address\" and \"Postal code\" fields exist; no city, state/province, or country field",
+      "fix": "Add city, state/region, and country fields with appropriate `autocomplete` values (`address-level2`, `address-level1`, `country`).",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Address section (row-street through row-postal)",
+      "severity": 3,
+      "violation": "The address is incomplete - most shipping addresses require a city and state/region (and country, given the \"International\" shipping option below), so orders cannot actually be shipped with the data collected."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Express</option> <option>Overnight</option> <option>Next-day</option>`",
+      "fix": "Remove one of the duplicate options (e.g. keep \"Overnight\" and drop \"Next-day,\" or merge/rename for clarity).",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "row-shipspeed select options",
+      "severity": 3,
+      "violation": "\"Overnight\" and \"Next-day\" describe the same delivery speed, creating a confusing, overlapping choice for the user."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"legalname-label\" for=\"legalname-input\">Your name</label> <input ... name=\"legal_name\" ... autocomplete=\"name\" ...>`",
+      "fix": "Remove this duplicate field, or if a distinct legal name is truly needed, relabel both fields clearly (e.g. \"Preferred name\" vs. \"Legal name\") and explain the distinction.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "row-legalname",
+      "severity": 3,
+      "violation": "This duplicates the \"Full name\" field collected earlier in row-name (same `autocomplete=\"name\"`), forcing the user to enter their name twice with no explanation of how it differs."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required=\"\">`",
+      "fix": "Make the field optional (or remove it for consumer accounts) and move `font-size:16px` into a shared CSS class/stylesheet.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "row-org",
+      "severity": 3,
+      "violation": "A required \"Organization name\" field is unexplained and inappropriate for an individual consumer signup, and it uses an inline style instead of a stylesheet rule, inconsistent with the rest of the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">` with no placeholder or format hint",
+      "fix": "Replace with a `<select>` of defined time ranges, or add a `type=\"time\"`/`placeholder` and explicit format guidance.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "row-contacttime",
+      "severity": 3,
+      "violation": "\"Preferred contact time\" is a free-text required field with no indication of expected format (e.g. \"9am - 12pm\" vs \"weekdays\"), leading to inconsistent, unparseable data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>`",
+      "fix": "Either remove the button or clarify what it does (e.g. link it to terms/shipping details) and move its styling into a stylesheet.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "viewdetails-btn",
+      "severity": 3,
+      "violation": "The button's purpose and target are undefined in the document (no associated content, link, or script reference), making it an orphan control with unclear function, and it uses inline styling instead of shared CSS."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<p>We will text you about delivery updates.</p>` with no accompanying opt-in control",
+      "fix": "Add an explicit opt-in checkbox for SMS notifications separate from the required phone field, or clarify that texts are purely transactional and optional.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "row-phone helper text",
+      "severity": 3,
+      "violation": "The form states it will send texts but provides no consent checkbox, so SMS consent is implied/forced rather than explicitly captured, which is a compliance risk for SMS marketing/notification laws (e.g. TCPA-style consent requirements)."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:20:08Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 13,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

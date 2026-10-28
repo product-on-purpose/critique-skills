@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-1.3.2",
+      "evidence": "DOM order: step3 (Confirm), step2 (Enter payment), step1 (Choose) with CSS order properties 3, 2, 1 respectively, causing visual order 1, 2, 3 (Choose, Enter payment, Confirm). Screen reader users encounter steps in different sequence than sighted users.",
+      "fix": "Remove `style=\"order:X\"` attributes from steps or reorder HTML elements to match intended visual flow.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#s3-wizard",
+      "severity": 4,
+      "violation": "DOM order does not match visual order for a sequence where order has meaning."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "`#s3-form-promo-error` span contains only text \"Error.\" with no explanation of what made the input invalid or how to correct it.",
+      "fix": "Replace \"Error.\" with a specific description (e.g., \"Promo code is invalid or expired\").",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#s3-form-promo-error",
+      "severity": 4,
+      "violation": "Error identification does not help users understand the nature of the error."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-4.1.2",
+      "evidence": "`#s3-customcontrol` is a div with class \"icon-delete\" containing only `<img src=\"/img/trash-icon.svg\" alt=\"\">`. No role, no aria-label, no accessible name, no keyboard event handlers visible in markup.",
+      "fix": "Convert to a `<button>` element with visible or aria-label text, or add `role=\"button\"` with `aria-label=\"Delete\"`, `tabindex=\"0\"`, and keyboard event handlers.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#s3-customcontrol",
+      "severity": 4,
+      "violation": "Custom control lacks name and role attributes required to communicate purpose and function to assistive technology."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-1.4.1",
+      "evidence": "`#s3-form-phone-label` uses inline red color (color:#cc0000), but corresponding `#phone` input has no `required` attribute, no asterisk in label text, and no programmatic indicator.",
+      "fix": "Add `required` attribute to the input and include a non-color indicator in the label (e.g., asterisk or text).",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#s3-form-phone-label",
+      "severity": 3,
+      "violation": "Color is used as the only means of conveying information about field requirement."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "7518497ec47bc70bca9021d0ed190bdfb2f04532e6ef68cc37b662d769e87516",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T03:19:07Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 1,
+      "4": 3
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

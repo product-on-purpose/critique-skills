@@ -1,0 +1,94 @@
+Location: `<head>` section
+Evidence: `<meta charset="utf-8">` followed directly by `<title>Create your Meridian Outfitters account</title>` with no other meta tags
+Problem: There is no `<meta name="viewport">` tag, so the form will not scale correctly on mobile browsers (inputs may render at desktop width or trigger unwanted zooming).
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to the `<head>`.
+
+Location: row-email, email-input
+Evidence: `autocomplete="e-mail"`
+Problem: "e-mail" is not a valid HTML autocomplete token; the valid value is "email". Browsers will ignore the invalid value and fail to offer autofill for this field.
+Fix: Change `autocomplete="e-mail"` to `autocomplete="email"`.
+
+Location: row-confirm-password, confirm-password-input
+Evidence: `<input id="confirm-password-input" name="password_again" type="password" autocomplete="new-password" required="">`
+Problem: Unlike password-input, which has `minlength="8"`, this field has no minlength, so a mismatched/too-short confirmation value isn't caught until server-side validation, and there's no client-side check that the two password fields match.
+Fix: Add `minlength="8"` to confirm-password-input, and add script-based (or `pattern`-based) validation that compares it to password-input's value before submit.
+
+Location: row-housenumber, housenumber-input
+Evidence: `<input id="housenumber-input" name="house_number" type="text" required="">` placed in a row before row-street
+Problem: The house number field has no `autocomplete` attribute and is sequenced before the street field, breaking browser address-autofill heuristics, which expect house number/line2 to follow the main street line.
+Fix: Add an appropriate autocomplete token (e.g. `autocomplete="address-line2"`) and reorder this row after row-street.
+
+Location: address section (row-housenumber, row-street, row-postal)
+Evidence: rows present are `house_number`, `street_address`, and `postal_code` only, with no corresponding "City" field anywhere in the form
+Problem: There is no field to collect the city/town, which is required to produce a deliverable shipping address.
+Fix: Add a "City" input (e.g. `name="city" autocomplete="address-level2"`) between the street and postal code rows.
+
+Location: row-phone
+Evidence: `<input id="phone-input" ...><p>We will text you about delivery updates.</p>`
+Problem: The explanatory paragraph is not programmatically associated with the phone input, so screen reader users won't hear the explanation when focusing the field.
+Fix: Give the `<p>` an id and reference it from phone-input via `aria-describedby`.
+
+Location: row-website, website-input
+Evidence: `<label ...>Company website</label><input id="website-input" name="website" type="url" required="">`
+Problem: A required company website field is out of place on a consumer account-signup form (this is a retail outfitter customer account, not a B2B registration), and blocks signup for any ordinary shopper who has no website.
+Fix: Remove this field, or make it optional and relevant only to a business-account signup path.
+
+Location: row-member, member-input
+Evidence: `placeholder="Must be 8 digits"` with no `pattern` or `maxlength` attribute
+Problem: The 8-digit requirement is only communicated via placeholder text (which disappears on input and isn't a reliable validation mechanism) and is never actually enforced.
+Fix: Add `pattern="\d{8}"` and `maxlength="8"` to member-input, and move the instruction into visible helper text rather than relying solely on the placeholder.
+
+Location: row-acctnum, acctnum-input
+Evidence: `<label id="acctnum-label" for="acctnum-input">Account number</label>` immediately after the membership-number row
+Problem: It's unclear how "account number" differs from "membership number" collected two fields earlier; for a new signup, the purpose of this field is unexplained and likely duplicative.
+Fix: Either remove this field or add helper text clarifying what distinct "account number" refers to (e.g. an existing loyalty account vs. the new membership number).
+
+Location: rows between row-street and row-postal (row-phone, row-phone2, row-website, row-member, row-acctnum)
+Evidence: row-postal (`postal_code`, `autocomplete="postal-code"`) is separated from row-street (`autocomplete="address-line1"`) by five unrelated fields
+Problem: Splitting the address fields apart with unrelated fields breaks browser address-autofill grouping, which relies on address fields being contiguous.
+Fix: Move the postal-code field immediately after the street/house-number fields, keeping all address fields contiguous.
+
+Location: row-shipspeed, shipspeed-select
+Evidence: `<select id="shipspeed-select" required="">`
+Problem: The `<select>` has no `name` attribute, so its selected value will not be included in the form submission at all.
+Fix: Add `name="shipping_speed"` to the select element.
+
+Location: row-shipspeed, shipspeed-select options
+Evidence: `<option>Express</option><option>Overnight</option><option>Next-day</option>`
+Problem: "Overnight" and "Next-day" are redundant/overlapping shipping-speed options that will confuse users about which to pick.
+Fix: Consolidate into a single option (e.g. keep "Overnight" or "Next-day", not both).
+
+Location: row-legalname, legalname-input
+Evidence: `<label id="legalname-label" for="legalname-input">Your name</label><input ... name="legal_name" ... autocomplete="name" ...>`
+Problem: This duplicates the "Full name" field collected earlier in row-name, which also uses `autocomplete="name"`; collecting the same data twice under different labels is redundant and will confuse autofill (two same-page fields claiming the same autocomplete token).
+Fix: Remove this duplicate field, or rename/repurpose it clearly (e.g. "Legal name (if different from above)") and give it a distinct autocomplete value.
+
+Location: row-org, org-input
+Evidence: `<label id="org-label" for="org-input">Organization name</label><input ... required="">`
+Problem: A required "Organization name" field is inappropriate for an individual consumer account-creation form and will block signup for shoppers without an organization.
+Fix: Remove the field or make it optional, scoped to business-account signups only.
+
+Location: row-org, org-input
+Evidence: `style="font-size:16px"` is applied only to org-input, while no other text input in the form has this style
+Problem: Inconsistent inline font-size styling means other inputs may render below 16px, which triggers automatic zoom on focus in mobile Safari — an issue this one field was apparently patched for but others weren't.
+Fix: Apply a consistent font-size (≥16px) across all text inputs via a shared stylesheet rule instead of a one-off inline style.
+
+Location: row-contacttime, contacttime-input
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: "Preferred contact time" is collected as unstructured free text with no format guidance, leading to inconsistent, hard-to-parse values (e.g. "mornings" vs "9am" vs "after 5").
+Fix: Replace with a `<select>` of defined time ranges or a `type="time"` input.
+
+Location: viewdetails-btn, between row-contacttime and row-hear
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>`
+Problem: This button has no associated script anywhere in the document and no clear purpose, sitting in the middle of the signup form with no explanation of what "details" it would show.
+Fix: Remove the button, or implement its intended behavior and clarify its label/purpose in context.
+
+Location: row-hear, hear-select
+Evidence: `<select id="hear-select" required="">`
+Problem: Like shipspeed-select, this `<select>` has no `name` attribute, so its value will be silently dropped from the submitted form data.
+Fix: Add `name="referral_source"` to the select element.
+
+Location: overall `<form>` structure
+Evidence: all rows are flat `<div>`s with no `<fieldset>`/`<legend>`, and only row-phone2's label manually appends "(optional)" while every other field is `required=""` with no visible indicator
+Problem: There's no grouping of related fields (account, address, preferences) for assistive technology, and required/optional status is signaled inconsistently (only one field says "(optional)" in its label text; no asterisks or legend elsewhere).
+Fix: Wrap related field groups in `<fieldset>`/`<legend>` elements and adopt one consistent, visible method (e.g. asterisk + legend note) for marking required vs. optional fields.

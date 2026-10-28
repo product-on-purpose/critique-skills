@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000.\"",
+      "fix": "Add the actual default value (e.g., \"defaults to 5000ms\") to this paragraph.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "## timeout, first paragraph",
+      "severity": 3,
+      "violation": "No default value is stated for the timeout field, even though every other field in this document documents a default."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Leaving this field at its default is the right choice for most teams\"",
+      "fix": "State the default value explicitly in the first paragraph before referring to it here.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "## timeout, second paragraph",
+      "severity": 3,
+      "violation": "This sentence refers to \"its default,\" but the timeout field's default was never stated anywhere in the document, making the guidance unverifiable."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"the validator rejects any value below 1000\"",
+      "fix": "Document the maximum allowed timeout value, or state explicitly that there is no upper bound.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "## timeout",
+      "severity": 3,
+      "violation": "Only a lower bound is given for timeout; unlike retries (which specifies both 0 and 10 as bounds), no upper bound is documented, leaving the valid range incomplete."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The timeout field takes a duration in milliseconds...\" / \"The retries field takes an integer from 0 to 10...\" / \"The logging field accepts one of debug, info, warn, or error...\"",
+      "fix": "Add a one-sentence purpose description for each field before its validation rules.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "## timeout, retries, logging sections",
+      "severity": 3,
+      "violation": "Each field's type, range, and default are documented, but none of the sections explain what the field actually controls (e.g., timeout of what operation, what is retried, what is logged)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"- Metric catalog reference\"",
+      "fix": "Convert each list item into an actual markdown link or path to the corresponding page.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "## Related pages",
+      "severity": 3,
+      "violation": "All nine related-page entries are plain unlinked text, so a reader cannot navigate to them despite this being a reference document."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T09:33:10Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "archive-confirm-copy reads: \"Archiving \\\"Customer Migration\\\" will remove it from the active projects list for everyone on the team. You can restore it at any time from the archived projects list.\" No section, link, or control anywhere in the artifact defines an \"archived projects list\" or any restore control.",
+      "fix": "Add the archived-projects-list state the copy promises, with a restore control that returns a project to workspace-overview, or change the copy to state accurately what recovery (if any) is actually available.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"archive-confirm\" section, \"archive-confirm-copy\"",
+      "severity": 3,
+      "violation": "The artifact's own copy treats archiving as reversible and names a specific recovery path, an archived-projects list with restore, but that path does not exist anywhere in the artifact: no state lists archived projects and no control restores one. A user who archives a project has no path back in the design as specified, despite being told one exists."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H5-CONFIRM",
+      "evidence": "<a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a> targets \"#project-archived\" directly; the \"archive-confirm\" section, which asks \"Archive this project?\" and names the consequence, has no incoming link from anywhere in the artifact",
+      "fix": "Point project-settings-archive-link at #archive-confirm instead of #project-archived, so the archive action commits only after the user sees and accepts the confirmation already defined in the artifact.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-archive-link\" link",
+      "severity": 3,
+      "violation": "The artifact defines a confirmation state for archiving, but the only control that triggers archiving skips straight to the completed \"project-archived\" state without passing through it. A user who clicks Archive project commits the action, which removes the project from the active list for the entire team, on a single click with no confirmation naming the consequence, because the control's own path never reaches the confirmation the artifact otherwise provides."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "the invite-member form contains a submit button labeled \"Save\" with no stated outcome, and a separate link \"Continue\" (id=\"invite-member-continue-link\") that leads to the \"invite-sent\" state, whose copy reads \"An invite was sent to the address entered above\"",
+      "fix": "Either remove the Save button and let Continue be the single commit control for this one-field form, or state explicitly what Save does (e.g. \"saves a draft; Continue sends the invite\") and show a visible result when it is pressed.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button",
+      "severity": 2,
+      "violation": "Two separate controls sit in the same one-field flow, Save and Continue, and the artifact never states what Save does or whether it must be used before Continue. The invite-sent screen's wording implies the invite is sent only once Continue is taken, so a user who presses Save sees no feedback and has no way to tell whether anything was stored, retained, or sent."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button> with no onclick target, no href, and no section elsewhere describing a resulting state",
+      "fix": "Specify what the user sees after Duplicate project is pressed: either a new entry in the workspace-overview project list, a confirmation message naming the new project, or a defined next state, so the outcome is visible where the user is already looking.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "Duplicate project is a state-changing action (it creates a new project) but the artifact specifies no visible indication of what happens when it is pressed: no new project appears in the \"Your projects\" list, no confirmation message, and no new state is defined anywhere in the artifact. A user who presses it cannot tell whether anything happened, and nothing stops them pressing it again."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H4-CONTROL-NAMING",
+      "evidence": "control labeled \"Save\"",
+      "fix": "Pick one label for this commit action, for example \"Save\", and use it everywhere the action appears.",
+      "id": "F-005",
+      "instances": [
+        {
+          "evidence": "control labeled \"Save\"",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "control labeled \"Submit\"",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "This artifact uses 2 different labels for what reads as the same commit action: \"Save\", \"Submit\". A user cannot tell from the label alone whether these controls perform the same action or different ones."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "import-status-message reads: \"The last import finished with 3 rows skipped: each referenced a project that does not exist in this workspace. Rows 63, 71, and 82 were skipped; every other row was imported.\" The only control on this screen is \"Back to your projects\".",
+      "fix": "Add a recovery control reachable from the import-status screen, such as a link to re-upload the corrected rows or to a page where the missing project references can be fixed, rather than only an exit back to the overview.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the \"import-status\" section, \"import-status-message\"",
+      "severity": 2,
+      "violation": "The import-status screen names exactly what went wrong with the three skipped rows, but offers no recovery action: no retry, no link to fix the project reference, no way to re-submit just those rows. The only available control exits the flow entirely, leaving the user to redo the whole import to fix three rows."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:47:09Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 3 projects, synced last week.\" followed by a list with only \"Data Warehouse Cutover\" and \"Mobile App Revamp\"",
+      "fix": "Add the missing third project to the list, or change the text to \"2 projects\".",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "section#workspace-overview, intro paragraph and project list",
+      "severity": 3,
+      "violation": "The stated project count (3) doesn't match the number of projects actually listed (2)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<li>Data Warehouse Cutover</li> and <li>Mobile App Revamp</li> are plain text with no anchors",
+      "fix": "Wrap each list item in an <a> linking to that project's settings (or equivalent detail view).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "section#workspace-overview, #workspace-overview-recent list",
+      "severity": 3,
+      "violation": "Unlike every other navigable item in the mockup, these project names aren't links, so there's no way to open either project from the overview."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "link text \"Open project settings\" leads to a section showing project name \"Design System Refresh\"",
+      "fix": "Either include \"Design System Refresh\" in the recent projects list or make the link context-specific (e.g., per-project settings links) instead of a single generic link.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#workspace-overview-projects-link and section#project-settings",
+      "severity": 3,
+      "violation": "\"Design System Refresh\" is not one of the projects shown in the recent projects list, so it's unclear which project's settings this link opens, and the shown project is inconsistent with the overview."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\"></button>",
+      "fix": "Add a label such as \"Duplicate project\" inside the button element.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "section#project-settings, duplicate button",
+      "severity": 3,
+      "violation": "The button has no visible text label, so its purpose is not communicated to the user."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Section contains only the heading \"Invite sent\" and the expiry paragraph, with no links",
+      "fix": "Add a link back to project settings or workspace overview, consistent with other terminal screens like #project-archived and #import-status.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "section#invite-sent",
+      "severity": 3,
+      "violation": "This is a dead-end screen - there is no way to navigate back to project settings or the workspace overview after an invite is sent."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\"",
+      "fix": "Add an archived-projects-list section with a corresponding link, or remove/adjust the sentence to match what's actually implemented.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "section#archive-confirm, #archive-confirm-copy paragraph",
+      "severity": 3,
+      "violation": "No \"archived projects list\" page or link exists anywhere in the document, so this references a feature that isn't part of the mockup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Invite 3 teammates this month to unlock the advanced reporting add-on.\"",
+      "fix": "Either link this promo to #invite-member or remove the reference to a feature not represented in the mockup.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "section#workspace-overview, #workspace-overview-promo-referral",
+      "severity": 3,
+      "violation": "This references an \"advanced reporting add-on\" that doesn't exist anywhere else in the document, and despite prompting an action, it isn't a link to the invite flow."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T13:56:05Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

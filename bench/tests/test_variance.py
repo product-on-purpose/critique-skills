@@ -142,7 +142,7 @@ def _cells_totalling(defects_matched: int, defects_total: int):
 def test_the_guard_passes_when_repetitions_pool_back_to_the_committed_figure() -> None:
     cells = _cells_totalling(defects_matched=6, defects_total=10)
     committed = {
-        ("critique-toy", "0.1.0", "model-a", "toy"): {
+        ("p3", "critique-toy", "0.1.0", "model-a", "toy"): {
             "recall": {"numerator": 6, "denominator": 10},
             "precision": {"numerator": 6, "denominator": 20},
             "recall_location": {"numerator": 6, "denominator": 10},
@@ -156,12 +156,35 @@ def test_the_guard_passes_when_repetitions_pool_back_to_the_committed_figure() -
     assert (checked, matched) == (4, 4)
 
 
+def test_the_guard_compares_each_run_set_with_its_own_committed_entry() -> None:
+    """E63: the frozen baseline is re-run in every dispatch, so two run sets can commit entries that
+    share skill, version, model and domain. Indexed without run_set, a run set's repetitions were
+    compared with whichever entry loaded last, and a correct decomposition read as a failure."""
+    cells = _cells_totalling(defects_matched=6, defects_total=10)
+    own = {
+        "recall": {"numerator": 6, "denominator": 10},
+        "precision": {"numerator": 6, "denominator": 20},
+        "recall_location": {"numerator": 6, "denominator": 10},
+        "precision_location": {"numerator": 6, "denominator": 20},
+    }
+    other = {name: {"numerator": 1, "denominator": 99} for name in own}
+    committed = {
+        ("p3", "critique-toy", "0.1.0", "model-a", "toy"): own,
+        ("later-run-set", "critique-toy", "0.1.0", "model-a", "toy"): other,
+    }
+
+    failures, checked, matched = _reproduction_failures(cells, committed)
+
+    assert failures == []
+    assert (checked, matched) == (4, 4)
+
+
 def test_the_guard_catches_a_decomposition_that_does_not_sum_back() -> None:
     """A decomposition that does not reproduce the published figure is measuring something else,
     and a band computed on top of it would be a number about nothing."""
     cells = _cells_totalling(defects_matched=6, defects_total=10)
     committed = {
-        ("critique-toy", "0.1.0", "model-a", "toy"): {
+        ("p3", "critique-toy", "0.1.0", "model-a", "toy"): {
             "recall": {"numerator": 7, "denominator": 10},  # the tamper
             "precision": {"numerator": 6, "denominator": 20},
             "recall_location": {"numerator": 6, "denominator": 10},

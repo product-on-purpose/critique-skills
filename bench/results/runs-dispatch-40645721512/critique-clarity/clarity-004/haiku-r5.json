@@ -1,0 +1,95 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal. You track its status there until the payment clears.",
+      "fix": "Separate the Terminology Notes section into two subsections: one titled 'Employee Actions' describing what employees record and submit, and another titled 'Internal Processing' describing what Finance and Payroll do, so the employee reader can skip the internal section.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Terminology Notes section, lines 50-53",
+      "severity": 3,
+      "violation": "Addresses two identifiably different readers (employee and internal staff) within the same section without separation, making it unclear which instructions apply to the employee reader versus which describe internal processes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Required Documentation (lines 31-35) appears after How to Apply (lines 17-23). Program Overview (lines 3-7) contains IT asset group operational details. Program Coordination (lines 63-65) and Review Responsibility (lines 67-69) describe internal workflows. Terminology Notes (lines 49-53) and Request Steps (lines 55-57) appear redundant.",
+      "fix": "Reorganize the document to follow an employee's task sequence: (1) Program Overview; (2) Eligibility; (3) Restrictions and Exceptions; (4) Reimbursement Amounts; (5) Required Documentation; (6) How to Apply; (7) Approval Timeline; (8) Questions and Updates. Move internal process sections (Program Coordination, Review Responsibility, Special Cases) to an appendix or separate 'For Administrators' section. Remove redundant 'Request Steps' or merge it into 'How to Apply.'",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Overall document structure",
+      "severity": 3,
+      "violation": "Section order does not follow the reader's actual task sequence. Documentation requirements that are part of the application process appear after the application process description. Internal operational sections and redundant sections appear scattered throughout, breaking the logical flow an employee reader would follow."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal. You track its status there until the payment clears.",
+      "fix": "Either: (A) Retitle to 'Employee Actions and Internal Processing' and restructure with clear subsections separating employee steps from internal processes, OR (B) Remove this section entirely and integrate its employee-facing content into 'How to Apply' and internal process content into an appendix.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Terminology Notes section, lines 50-53",
+      "severity": 3,
+      "violation": "The section alternates between describing employee actions and organizational internal processes without a unified theme. A reader finishing the section cannot consistently state what the section as a whole is about."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Line 11: 'The stipend covers one claim per employee per benefit year.' Line 19: 'Employees start a stipend request in the benefits portal.' Terms 'claim' and 'request' appear to refer to the same concept but are used interchangeably.",
+      "fix": "Replace 'claim' with 'request' in line 11 to read: 'The stipend covers one request per employee per benefit year.' Alternatively, add a sentence in the Eligibility section stating that 'claim' and 'request' refer to the same submission process.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Lines 11 and 19",
+      "severity": 2,
+      "violation": "Two different terms ('claim' and 'request') are used interchangeably for the same concept without explanation or definition of their equivalence, forcing the reader to verify they mean the same thing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "However, an incomplete request pauses the timeline until the missing item arrives.",
+      "fix": "Rewrite to: 'However, if you submit an incomplete request, the timeline pauses until the missing item arrives.' This names the real actor (you, the employee) performing the action instead of personalizing the request.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Line 29",
+      "severity": 2,
+      "violation": "The grammatical subject 'an incomplete request' is an abstraction standing in for an identifiable person (the employee or requester) who could be named directly instead."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal.",
+      "fix": "Restructure the section with separate subsections for employee vs. organizational actions. Within each subsection, keep subjects consistent and use transition phrases like 'Next' or 'Meanwhile' to signal shifts between processes.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Terminology Notes section, lines 50-53",
+      "severity": 2,
+      "violation": "Successive sentences' subjects shift between unrelated actors (You, Finance, Payroll, You) with no clear connection, requiring the reader to re-orient at sentence boundaries."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T07:51:29Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

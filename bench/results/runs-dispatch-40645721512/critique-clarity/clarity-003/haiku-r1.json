@@ -1,0 +1,106 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout. A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.",
+      "fix": "Delete the sentences about the separate audit, remote-work guidance, and office coffee budget. They belong in a different policy document.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 4,
+      "violation": "The paragraph contains sentences about unrelated topics (travel audit, remote work policy, coffee budget) that have no connection to the home office equipment stipend, undermining the document's coherence and reader trust."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-PARAGRAPH",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout.",
+      "fix": "Rewrite the opening sentence to state the topic the rest of the paragraph covers.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "The paragraph's opening sentence shares almost no vocabulary with the rest of the paragraph, so it does not preview the paragraph's actual topic."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "Lines 5 and 61 both contain: 'Every entry carries a date stamp so the record stays easy to audit.' Lines 7 and 73 both contain: 'The most recent version supersedes the one that came before it.'",
+      "fix": "Remove the duplicate sentences from lines 61 and 73, or clarify why they appear twice if they refer to different catalogs.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Program Overview (lines 5, 7), Special Cases (line 61), Questions and Updates (line 73)",
+      "severity": 3,
+      "violation": "Exact sentence repetition across distant sections without explanation suggests unedited content or mismerged material, confusing readers about whether requirements are identical or redundant."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Line 45: 'You must keep your equipment in good working condition.' Line 51 - 53 mix 'You record', 'You submit', 'Countersign the employee request', 'You track.'",
+      "fix": "Select one consistent audience (employees, managers, or finance staff) and maintain that point of view throughout. Rewrite sections using unclear pronouns to match the chosen perspective.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Restrictions and Exceptions (line 45), Terminology Notes (lines 51 - 54)",
+      "severity": 2,
+      "violation": "The document shifts between second-person 'you' and third-person descriptions inconsistently, making it unclear whether instructions apply to employees, managers, or other roles."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SUBJECT-VERB-OBJECT",
+      "evidence": "Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.",
+      "fix": "Move the interrupting clause elsewhere, or split it into its own sentence.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 2",
+      "severity": 2,
+      "violation": "3 comma-set-off clause(s) totalling 14 words intervene between the sentence's apparent subject and its verb."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-TRANSITIONS",
+      "evidence": "An incomplete request pauses the timeline until the missing item arrives. The...",
+      "fix": "Open the paragraph with a transition word that states its relationship to the prior paragraph.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 2",
+      "severity": 2,
+      "violation": "The paragraph opens with none of the fixed transition words, so the reader is not told how it relates to the paragraph before it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-PARALLELISM",
+      "evidence": "Completing the request begins with confirming eligibility, and the uploaded receipt.",
+      "fix": "Restate every item in the series with the same grammatical form.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Request Steps, paragraph 1",
+      "severity": 2,
+      "violation": "The series' 2 items mix grammatical forms (gerund, other) at their head words instead of sharing one form."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T07:22:07Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 2,
+      "4": 1
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

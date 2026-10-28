@@ -1,0 +1,50 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "Primary navigation menu present at #nav with two links (Plan a trip, Accessibility). No breadcrumb trail, sitemap link, or search form visible. Link to 'accessibility improvements list' in content and footer links (Privacy, Terms) are not site-navigation mechanisms for locating this page within a multi-page site.",
+      "fix": "Add one of: a breadcrumb trail for hierarchical navigation, a sitemap link, or a site-wide search form.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "page",
+      "severity": 3,
+      "violation": "Page provides only one navigation mechanism (primary menu); lacks breadcrumb trail, sitemap, or search form. Reader landing from search results has no way to locate related pages except by knowing to use the navigation menu."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "Input #promo at line 67 has aria-invalid=\"true\". Error text at line 68 in span #s3-form-promo-error reads 'Enter a 6 character code using letters and numbers only.' and carries aria-live=\"polite\", but the input element has no aria-describedby=\"s3-form-promo-error\" attribute to create the programmatic association.",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" to the input#promo element to programmatically link it to the error message.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#promo, <input> field, 'Promo code' label, line 67",
+      "severity": 2,
+      "violation": "Input field marked as invalid with aria-invalid=\"true\" carries no programmatically associated error message via aria-describedby, so a screen-reader user focusing on the field does not automatically receive the error description."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "4febe21b95880d7b0b385588ebdc9c800b2c010b439206d51d6b790cb76d11c3",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T03:26:45Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-CLAIM-MARKER",
+      "evidence": "0 conclusion-marker phrases found across 401 words.",
+      "fix": "Add an explicit conclusion-signalling phrase at the point the artifact states its central claim, for example \"therefore\" or \"we recommend\".",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "severity": 3,
+      "violation": "No phrase from the conclusion-marker lexicon (therefore, thus, hence, it follows that, we recommend, this paper argues, I argue that, the conclusion is, in conclusion, we should, the case for) appears anywhere in the artifact, so a reader scanning rather than reading straight through has no signpost to where the conclusion is asserted."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "TOULMIN-GROUNDS",
+      "evidence": "The recommendation states 'Given the return-rate and avoidance-survey results above,' but the preceding section 'What the Pilot Showed' presents only avoidance-survey results (20% to 3% reduction). Return-rate data from the pilot is claimed but never presented; the return-rate principle is stated in 'Why the Pilot Result Applies Systemwide' as coming from external research, not the pilot itself.",
+      "fix": "Either present the pilot's actual return-rate data with specific figures, or revise the claim to reference only the evidence that was actually provided (the avoidance-survey results and the external research on the principle).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"Recommendation\" section, first paragraph: \"Given the return-rate and avoidance-survey results above\"",
+      "severity": 3,
+      "violation": "The central claim relies on \"return-rate...results\" from the pilot, but only avoidance-survey results from the pilot are presented in the artifact. A reader cannot verify the return-rate claim against pilot data because that data is not shown."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-HEDGE-DENSITY",
+      "evidence": "10 of 14 sentences (0.71) carry at least one hedging term.",
+      "fix": "Remove the hedge from sentences whose claim the evidence actually supports, reserving qualification for the claims that genuinely need it.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "severity": 3,
+      "violation": "More than 0.35 of the artifact's sentences carry a term from the hedging lexicon (may, might, could, possibly, perhaps, arguably, somewhat, relatively, it seems, appears to, tends to, to a degree), spread across the whole document rather than concentrated where the evidence actually underdetermines the claim."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "TOULMIN-REBUTTAL",
+      "evidence": "The artifact raises and addresses one foreseeable objection: that eliminating fine revenue will leave a budget shortfall (answered with data showing fines are <2% of annual materials budget and pilot branches absorbed the loss). No other conditions the artifact's own grounds leave open are raised, such as whether implementation would differ across branches, whether system capacity could be strained, or whether non-financial consequences exist.",
+      "fix": "Raise and address at least one additional foreseeable challenge the grounds do not cover, such as whether all branches have similar operational constraints, or whether monitoring systems should be in place for unintended consequences like damage rates or system strain, or at minimum acknowledge that these risks deserve further study before systemwide rollout.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"Addressing the Revenue Concern\" section, spanning the entire section",
+      "severity": 2,
+      "violation": "The artifact answers the revenue cost objection but leaves other foreseeable challenges unaddressed that the policy itself could create: variation in branch capacity to absorb policy changes, implementation complexity at scale, and potential unintended consequences beyond those measured in the pilot avoidance survey."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/argument/argument-002.md",
+    "artifact_sha256": "0322bc2ebeb48318c56473186a8cb1f1e78d8667b99cfaf75ee7bb84f82fcfa2",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "TOULMIN"
+    ],
+    "skill": "critique-argument",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T05:47:23Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "The section titled 'Restrictions and Exceptions' at line 43 appears after 'How to Apply' (line 17), 'Approval Timeline' (line 25), and 'Required Documentation' (line 31). An employee reader's first question after 'Am I eligible?' should be 'What are the rules?', not after they've already read the complete application procedure.",
+      "fix": "Move 'Restrictions and Exceptions' to immediately after 'Eligibility' (line 9) and before 'How to Apply', so readers understand all constraints before learning the application process.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Restrictions and Exceptions section, starting at line 43",
+      "severity": 3,
+      "violation": "Restrictions and Exceptions section appears after How to Apply, Approval Timeline, and Required Documentation. A reader deciding whether to apply needs to know the restrictions and limitations before committing to the process, but these constraints appear too late in the document sequence."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Lines 25-29 describe manager and employee timelines ('The manager reviews the request within two business days... However, an incomplete request pauses the timeline until the missing item arrives. The requester gets an automatic reminder after three days.') without signaling whose perspective each sentence takes or using 'you' consistently. An employee reading this must infer that 'the manager reviews' is something passive (someone else acts) while 'the requester gets a reminder' happens to them.",
+      "fix": "Clarify audience per sentence or use consistent pronouns: 'Your manager reviews the request within two business days... If your request is incomplete, the timeline pauses until the missing item arrives. You'll get an automatic reminder after three days.' Or preface with 'What happens after you submit:' to signal the manager-perspective content.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Approval Timeline section, lines 25-29",
+      "severity": 2,
+      "violation": "The 'Approval Timeline' section addresses the reader from the manager's perspective without flagging that this section describes what the manager will do, not what the employee will do. An employee reading 'The manager reviews the request' cannot immediately tell if this is something they trigger or something that happens to them."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Line 19: 'The portal walks through each step in order.' The portal is a tool, not an agent who walks through steps; an employee uses the portal to work through steps.",
+      "fix": "Rewrite as 'The portal guides you through each step in order' or 'You work through each step in the portal.' to name the human actor.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "How to Apply section, line 19",
+      "severity": 2,
+      "violation": "A system (the portal) is used as the grammatical subject performing an action, rather than naming the employee as the actor."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "The section titled 'Terminology Notes' at line 49 opens with 'You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount...' then shifts to 'Also, you submit the request in the portal.' A reader finishing this section cannot state what it was actually about - terminology definitions, a process workflow, or employee instructions.",
+      "fix": "Either rename the section to clarify its purpose ('How Your Request Is Processed' or 'Request Timeline and Key Terms') or restructure it to separate terminology definitions from process description, with a clear opening sentence explaining which content addresses which purpose.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Terminology Notes section, lines 50-53",
+      "severity": 2,
+      "violation": "The 'Terminology Notes' section heading signals that it defines terms, but the section actually describes a workflow mixing employee actions, internal finance processes, and portal interactions without explaining its purpose or structure."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T18:09:57Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

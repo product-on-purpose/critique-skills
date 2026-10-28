@@ -1,0 +1,54 @@
+Location: s1-p1
+Evidence: "Riders may request a fare adjustment through the mobile app."
+Problem: This content about fare adjustments does not match the "Accessibility improvements" section title.
+Fix: Replace with content appropriate to accessibility improvements, such as details about accessible parking, elevators, or other accessibility features.
+
+Location: s2-p1
+Evidence: "Passengers may request a fare adjustment through the mobile app."
+Problem: This content about fare adjustments does not match the "Weekend service" section title.
+Fix: Replace with content appropriate to weekend service, such as weekend schedule information or service hours.
+
+Location: s3-link1
+Evidence: <a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>
+Problem: The link text promises "accessibility improvements list" but the href points to "/fares/history", which is unrelated.
+Fix: Either update the href to point to an accessibility page (e.g., "/accessibility") or change the link text to match the destination (e.g., "read the fare history").
+
+Location: s3-wizard (step order)
+Evidence: <div class="step" id="s3-step3" style="order:3">Confirm your order</div><div class="step" id="s3-step2" style="order:2">Enter payment details</div><div class="step" id="s3-step1" style="order:1">Choose a plan</div>
+Problem: The DOM order (Confirm, Enter, Choose) is opposite the visual order (Choose, Enter, Confirm) created by CSS order, breaking screen reader accessibility.
+Fix: Reorder the HTML elements to match the visual order: Choose a plan, Enter payment details, Confirm your order.
+
+Location: s3-form-phone-label
+Evidence: <label for="phone" id="s3-form-phone-label" style="color:#cc0000">Phone number</label>
+Problem: Uses only red color to indicate a required field, which is not accessible to color-blind users.
+Fix: Add a `required` attribute to the input, add a visible required indicator (such as an asterisk), or use `aria-required="true"`.
+
+Location: s3-form (topic select)
+Evidence: <select id="topic"><option>Northbound</option><option>Southbound</option></select>
+Problem: The select element is missing a name attribute, so its value will not be submitted with the form.
+Fix: Add name="topic" (or another appropriate name) to the select element.
+
+Location: s3-form (email input)
+Evidence: <input id="email" type="email" autocomplete="email">
+Problem: The input is missing a name attribute, so its value will not be submitted with the form.
+Fix: Add name="email" to the input element.
+
+Location: s3-form (phone input)
+Evidence: <input id="phone" type="tel" autocomplete="tel">
+Problem: The input is missing a name attribute, so its value will not be submitted with the form.
+Fix: Add name="phone" to the input element.
+
+Location: s3-form (promo input)
+Evidence: <input id="promo" type="text" aria-invalid="true"><span class="error-text" aria-live="polite" id="s3-form-promo-error">Error.</span>
+Problem: The input is marked invalid by default with only a generic "Error." message, appearing as placeholder content rather than genuine validation.
+Fix: Remove aria-invalid="true" if this is not a real validation state, or provide a specific error message. Add name="promo" to the input.
+
+Location: s3-customcontrol
+Evidence: <div class="icon-delete" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></div>
+Problem: This div with an icon is styled as a button but has no role="button", no keyboard accessibility, and no visible event handling.
+Fix: Convert to a proper <button> element, or add role="button", tabindex="0", and keyboard event handlers.
+
+Location: s3-statuscard
+Evidence: <div class="status-card" role="status" id="s3-statuscard"><p>Local residents can check real time arrivals by calling rider services.</p></div>
+Problem: The role="status" indicates a live region that updates dynamically, but the content is static informational text.
+Fix: Remove role="status" unless this element actually updates dynamically as a live region.

@@ -1,0 +1,50 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "DIATAXIS-HEADING-DEPTH",
+      "evidence": "Heading level jumped from 2 (Open the test console) to 4 (Check the sidebar updated) with no intermediate level between them.",
+      "fix": "Insert a level 3 heading between Open the test console and Check the sidebar updated, or promote Check the sidebar updated to level 3.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "the Check the sidebar updated heading",
+      "severity": 2,
+      "violation": "This heading is nested more than one level deeper than the heading immediately before it, so a reader or a tool relying on heading level cannot reconstruct which section this one belongs under."
+    },
+    {
+      "confidence": "high",
+      "criterion": "DIATAXIS-TUTORIAL-ACTION",
+      "evidence": "After the instruction to click \"Trigger sample alert and wait for the status indicator to change to Sent,\" the tutorial includes: \"The status indicator takes a few seconds to update while the delivery pipeline processes the event in the background.\" This is explanatory prose about underlying mechanisms interrupting the action sequence.",
+      "fix": "Move the explanatory prose outside the main step sequence, or integrate it as context before the step rather than as an interruption after it.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the paragraph beginning 'The status indicator takes a few seconds...'",
+      "severity": 2,
+      "violation": "The tutorial pauses the action sequence with explanatory prose before the learner reaches the next visible result, pausing to justify why the status indicator takes time to update."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-002.md",
+    "artifact_sha256": "25c4dd0ebb76ed338a3330329de0387044967be4fa65c3db44b1e3042d579c91",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "DIATAXIS"
+    ],
+    "skill": "critique-docs",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T09:15:50Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

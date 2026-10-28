@@ -232,6 +232,19 @@ def _to_raw_judged(finding: Mapping[str, Any], *, index: int) -> RawFinding:
     if missing:
         raise MergeError(f"finding {index}: missing required field(s) {', '.join(missing)}")
 
+    # The contract's prose fields are strings. `str()` below would turn an object into its Python
+    # repr, which validates as prose and resolves to nothing: on 2026-10-28, 13 of 47 haiku judged
+    # findings on critique-argument carried `{'span': [28, 28]}`-style locations, scored as misses.
+    # Failing here names the expected form to the model while it can still rewrite the finding.
+    not_prose = [k for k in ("location", "evidence", "violation", "fix") if not isinstance(finding[k], str)]
+    if not_prose:
+        raise MergeError(
+            f"finding {index}: {', '.join(not_prose)} must be prose text, not "
+            f"{type(finding[not_prose[0]]).__name__}. Write the location as words a reader can navigate "
+            "by, for example \"Section 2, second paragraph\" or \"line 84, second sentence\", never "
+            "an object such as {\"span\": [28, 28]}"
+        )
+
     confidence = finding.get("confidence")
     confidence = str(confidence) if confidence else "medium"
 

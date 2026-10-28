@@ -1,0 +1,259 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`@media (orientation: portrait) { #main-content { display: none; } }`",
+      "fix": "Remove this rule, or replace it with a rule that doesn't hide the primary content regardless of orientation.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<head>` style block, `#head-style`",
+      "severity": 3,
+      "violation": "This unconditionally hides the entire main content area (`#main-content`) whenever the viewport is in portrait orientation, which is the default orientation for virtually all phone users - making the page appear blank to a large share of mobile visitors."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"#main-content\" id=\"body-skiplink\">Skip to main content</a>`",
+      "fix": "Ensure the skip-link target is never hidden, independent of the portrait media query fix above.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "skip link, `#body-skiplink`",
+      "severity": 3,
+      "violation": "Because `#main-content` is set to `display:none` in portrait orientation (see the `#head-style` rule), the skip link becomes a dead end for exactly the users most likely to need it on a phone."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"/accessibility\" id=\"nav-link1\" style=\"outline:none\">Accessibility</a>`",
+      "fix": "Delete `style=\"outline:none\"`, or replace it with a visible custom focus style (e.g. a focus ring via `:focus-visible`).",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "nav, `#nav-link1`",
+      "severity": 3,
+      "violation": "Removing the focus outline with no replacement focus style makes this link's keyboard focus state invisible, violating WCAG 2.4.7 (Focus Visible) - ironic for a link to the site's accessibility page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Commuters can report a service issue by calling rider services. The change takes effect on the following service day.\" / \"Passengers should review the updated schedule through the mobile app. A confirmation message follows once the request is processed.\"",
+      "fix": "Replace with copy that actually describes the weekend service change (e.g., specific route/times affected).",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "section `#s1` (\"Weekend service\"), paragraphs `#s1-p1` and `#s1-p2`",
+      "severity": 3,
+      "violation": "Neither paragraph says anything about weekend service - they describe generic issue-reporting and confirmation flows unrelated to the \"Weekend service\" heading."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`alt=\"A newly installed tactile paving strip along the platform edge.\"` inside section `#s1` (\"Weekend service\")",
+      "fix": "Move this image into `#s3` (\"Accessibility improvements\").",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "image, `#s1-img1`",
+      "severity": 3,
+      "violation": "A tactile paving accessibility feature is placed under \"Weekend service\" instead of under the \"Accessibility improvements\" section (`#s3`), where it topically belongs."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Station staff can also help with the same request in person.\"",
+      "fix": "Reword to name the action explicitly (e.g., \"Station staff can also provide real-time arrival information in person\") and add content describing the actual schedule changes.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "section `#s2` (\"Schedule changes\"), `#s2-p1`",
+      "severity": 3,
+      "violation": "\"the same request\" has no clear antecedent - the preceding sentence describes checking arrivals, not making a \"request,\" so the reference is confusing, and the paragraph doesn't describe any actual schedule change."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<table id=\"s2-table1\"><tr><th scope=\"col\">Zone</th><th scope=\"col\">Status</th></tr>...`",
+      "fix": "Add `<caption>Zone status</caption>` (or similar) as the first child of the table.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "table, `#s2-table1`",
+      "severity": 3,
+      "violation": "The table has no `<caption>` (or accessible name), so screen reader users navigating by table have no description of what the table represents."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Heading \"Accessibility improvements\" followed by content about schedules, status cards, a delete icon, a payment wizard, and a form - none describing an accessibility feature.",
+      "fix": "Add content describing actual accessibility improvements in `#s3`, and relocate `#s1-img1` here as noted above.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "section `#s3` (\"Accessibility improvements\")",
+      "severity": 3,
+      "violation": "Nothing in this section actually describes an accessibility improvement; the one genuinely accessibility-related item (the tactile paving image) is in a different section entirely."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Local residents should review the updated schedule through the online portal. A confirmation message follows once the request is processed.\"",
+      "fix": "Remove the duplicate or write distinct, section-appropriate content.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "`#s3-p1`",
+      "severity": 3,
+      "violation": "This is a near-duplicate of `#s1-p2` (\"Passengers should review the updated schedule through the mobile app...\") with only the audience and channel swapped, adding no new information and suggesting copy-paste boilerplate."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Riders can report a service issue by calling rider services. Station staff can also help with the same request in person.\"",
+      "fix": "Remove the duplicate or replace with accessibility-specific content.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "`#s3-p2`",
+      "severity": 3,
+      "violation": "This duplicates the substance of `#s1-p1` and `#s2-p1` almost verbatim, again indicating repeated boilerplate rather than content specific to accessibility improvements."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Route adjustments take effect on the posted effective date.\"",
+      "fix": "State the actual effective date, or link to where riders can find it.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "`#s3-banner`",
+      "severity": 3,
+      "violation": "This sentence is circular and uninformative - it says the date is \"the posted effective date\" without stating what that date is or where it's posted."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"status-card\" id=\"s3-statuscard\">Your changes are saved.</div>`",
+      "fix": "Remove this out-of-context card, or if it reflects real state, add `role=\"status\"` (or `aria-live=\"polite\"`) and only render it after a real save action.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "`#s3-statuscard`",
+      "severity": 3,
+      "violation": "This success/status message appears with no preceding user action (no form was submitted) and has no `role=\"status\"` or `aria-live` attribute, so it's both contextually orphaned and invisible to assistive technology if it updates dynamically."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"width:16px;height:16px\"` on a `role=\"button\"` element",
+      "fix": "Increase the clickable area to at least 24×24px (ideally 44×44px), e.g. via padding, while keeping the icon itself small.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "`#s3-customcontrol`",
+      "severity": 3,
+      "violation": "A 16×16px interactive target is far below the WCAG 2.5.8 minimum (24×24px) and the commonly recommended 44×44px touch target, making it hard to activate on touch devices."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" ...>`",
+      "fix": "Replace with a native `<button>` element styled to match, eliminating the need for manual ARIA role/tabindex.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "`#s3-customcontrol`",
+      "severity": 3,
+      "violation": "A generic `<div>` with `role=\"button\"` is used instead of a native `<button>`, requiring manual reimplementation of keyboard activation (Enter/Space) and other built-in button semantics that this markup gives no evidence of providing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"wizard-steps\" id=\"s3-wizard\">` containing \"Choose a plan\", \"Enter payment details\", \"Confirm your order\"",
+      "fix": "Remove this unrelated component, or if intentional, mark the active step with `aria-current=\"step\"` and explain its purpose in context.",
+      "id": "F-015",
+      "lane": "judged",
+      "location": "`#s3-wizard`",
+      "severity": 3,
+      "violation": "A purchase/payment wizard is thematically unrelated to a transit service-announcements page and appears with no indication of which step is current (no `aria-current` or similar marker)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"For the full list of upcoming adjustments, <a href=\"/fares/history\">check the current station closures</a>.\"",
+      "fix": "Make the link text, surrounding sentence, and href all describe the same destination/content.",
+      "id": "F-016",
+      "lane": "judged",
+      "location": "`#s3-linkpara`, `#s3-link1`",
+      "severity": 3,
+      "violation": "The link text (\"check the current station closures\") doesn't match the surrounding sentence's topic (\"full list of upcoming adjustments\"), and the href (`/fares/history`) matches neither - the link's destination is unpredictable from its text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"email\" type=\"email\">` vs. `<input id=\"phone\" type=\"tel\" autocomplete=\"tel\">`",
+      "fix": "Add `autocomplete=\"email\"` to the email input.",
+      "id": "F-017",
+      "lane": "judged",
+      "location": "form, `#email` input",
+      "severity": 3,
+      "violation": "The phone field has `autocomplete=\"tel\"` but the email field has no corresponding `autocomplete=\"email\"`, an inconsistent and incomplete use of autofill hints."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Label text \"Phone number (required)\" on `<input id=\"phone\" type=\"tel\" autocomplete=\"tel\">`",
+      "fix": "Add `required` (and/or `aria-required=\"true\"`) to the `#phone` input.",
+      "id": "F-018",
+      "lane": "judged",
+      "location": "form, `#s3-form-phone-label` / `#phone`",
+      "severity": 3,
+      "violation": "The label visually states the field is required, but the input has no `required` or `aria-required=\"true\"` attribute, so assistive technology and form validation won't treat it as required."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">`",
+      "fix": "Remove the static `aria-invalid=\"true\"` and set it dynamically only after validation fails.",
+      "id": "F-019",
+      "lane": "judged",
+      "location": "form, `#promo`",
+      "severity": 3,
+      "violation": "`aria-invalid=\"true\"` is set statically in the markup, meaning the field is announced as invalid by default before the user has entered anything."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" ...><span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">Enter a 6 character code...</span>`",
+      "fix": "Add `aria-describedby=\"s3-form-promo-error\"` to the `#promo` input.",
+      "id": "F-020",
+      "lane": "judged",
+      "location": "form, `#s3-form-promo-error`",
+      "severity": 3,
+      "violation": "The error text is not programmatically associated with the `#promo` input (no `aria-describedby`), so screen reader users won't know this message pertains to that field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Error text reads \"Enter a 6 character code using letters and numbers only,\" but the input is `<input id=\"promo\" type=\"text\" aria-invalid=\"true\">`",
+      "fix": "Add `maxlength=\"6\"` and a `pattern=\"[A-Za-z0-9]{6}\"` attribute to match the stated rule.",
+      "id": "F-021",
+      "lane": "judged",
+      "location": "form, `#promo`",
+      "severity": 3,
+      "violation": "The stated constraint (6 characters, alphanumeric only) isn't reflected in any input attribute (no `maxlength=\"6\"`, no `pattern`), so the described rule isn't actually enforced or discoverable from the markup."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-005.html",
+    "artifact_sha256": "0f8493f220745495c0706928266e57a6f8d8bacbcd1737ff17dc3965ce55df7b",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T05:12:29Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 21,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

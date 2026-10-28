@@ -1,0 +1,160 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 5 projects, synced last week.\" followed by a <ul> with 4 <li> items (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)",
+      "fix": "Either add the fifth project to the list or correct the paragraph to say 4 projects.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "section#workspace-overview, <p> element",
+      "severity": 3,
+      "violation": "The stated project count (5) does not match the number of projects actually listed (4)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "List shows \"Support Backlog Triage\", \"Beta Launch Plan\", \"Partner Integration Pilot\", \"Mobile App Revamp\"; the settings/archive flow operates on a project named \"Customer Migration\"",
+      "fix": "Add \"Customer Migration\" to the project list, or rename the project used in the settings/invite/archive flow to match one of the listed projects.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "section#workspace-overview, <ul> inside #workspace-overview-recent, compared to section#project-settings",
+      "severity": 3,
+      "violation": "The project being edited and archived throughout the mockup (\"Customer Migration\") never appears in the workspace's own project list, so it's unclear which project \"Open project settings\" is supposed to open."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"synced last week\"",
+      "fix": "Replace with a concrete date or timestamp.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "section#workspace-overview, <p> element",
+      "severity": 3,
+      "violation": "Relative, unanchored time reference, inconsistent with the specific/concrete figures used elsewhere in the doc (e.g., \"5 days\", \"Rows 63, 71, and 82\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible text or an icon with alt text (e.g., \"Duplicate\") inside the button, not just an aria-label.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "section#project-settings, #project-settings-duplicate-btn",
+      "severity": 3,
+      "violation": "The button has no visible text content or icon, only an aria-label, so sighted users see an empty, unlabeled control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Button has no href and is not followed by any resulting state (no \"project duplicated\" section or link)",
+      "fix": "Link or route the duplicate action to a new section (e.g., a \"Project duplicated\" confirmation) or remove the control from the mockup.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "section#project-settings, #project-settings-duplicate-btn",
+      "severity": 3,
+      "violation": "The \"Duplicate project\" action has no defined outcome anywhere in the document, making it a dead-end control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Link text \"Go to notification settings\" points to section#notification-settings, whose heading is \"Notifications\"",
+      "fix": "Change the link text to \"Go to notifications\" or change the heading to \"Notification settings\".",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "section#project-settings, #project-settings-notif-link",
+      "severity": 3,
+      "violation": "The link text doesn't match the destination section's actual heading, creating a naming inconsistency."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a>` while a separate `section#archive-confirm` (\"Archive this project?\") with Cancel/Archive actions exists but is never linked to from anywhere in the document",
+      "fix": "Point #project-settings-archive-link to \"#archive-confirm\" instead of \"#project-archived\" so the confirmation step is actually used.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "section#project-settings, #project-settings-archive-link, compared to section#archive-confirm",
+      "severity": 3,
+      "violation": "The confirmation dialog is orphaned (unreachable) because the actual \"Archive project\" link skips it entirely and archives immediately."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\" / \"It no longer appears in the active projects list for anyone on the team.\"",
+      "fix": "Add an \"archived projects\" section with a way to restore projects, or remove the references to it.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "section#archive-confirm (#archive-confirm-copy) and section#project-archived",
+      "severity": 3,
+      "violation": "Both sections reference an \"archived projects list\" page, but no such section or link exists anywhere in the document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Form contains `<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` as well as a separate `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>`",
+      "fix": "Consolidate into a single action, e.g., make the Save button itself proceed to \"#invite-sent\", and remove the redundant Continue link.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "section#invite-member",
+      "severity": 3,
+      "violation": "Two different controls appear to finish the invite flow (Save vs. Continue) with no explanation of how they differ, which is confusing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"notification-settings-save-btn\" type=\"submit\">Submit</button>` versus \"Save\" used on #project-settings-save-btn and #invite-member-save-btn",
+      "fix": "Use the same label (\"Save\") for all form submission buttons in the document.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "section#notification-settings, #notification-settings-save-btn",
+      "severity": 3,
+      "violation": "Inconsistent labeling for the same kind of action (saving a form) across sections."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form>` tags have no `action` attribute, yet contain `type=\"submit\"` buttons",
+      "fix": "Either remove the `type=\"submit\"` buttons in favor of hash-link anchors consistent with the rest of the mockup, or add `action=\"#...\"` targets that lead to a defined result section.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "All <form> elements (#project-settings, #invite-member, #notification-settings)",
+      "severity": 3,
+      "violation": "Submitting any of these forms would reload the current page via a blank GET request rather than navigating via the hash-link pattern used everywhere else in the mockup, breaking the prototype's navigation flow."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Saving the project name or notification settings has no corresponding result section, unlike the invite flow (\"Invite sent\") and archive flow (\"Project archived\")",
+      "fix": "Add a confirmation state (or at least a visible feedback mechanism) after saving the project name and notification settings, for consistency with the other flows.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "section#project-settings and section#notification-settings",
+      "severity": 3,
+      "violation": "Inconsistent treatment of \"save\" actions - some flows show a confirmation/result state and others don't."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T14:54:05Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 12,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

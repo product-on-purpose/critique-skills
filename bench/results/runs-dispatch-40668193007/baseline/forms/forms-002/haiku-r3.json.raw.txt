@@ -1,0 +1,39 @@
+Location: id="row-website"
+Evidence: `type="text"` on website input
+Problem: The website field uses type="text" instead of type="url", missing built-in validation and URL formatting support.
+Fix: Change to `type="url"`.
+
+Location: id="row-member"
+Evidence: `placeholder="Must be 8 digits"` with no pattern attribute
+Problem: The field claims to require exactly 8 digits but has no validation pattern to enforce this constraint.
+Fix: Add `pattern="[0-9]{8}"` to validate exactly 8 digits.
+
+Location: id="row-postal"
+Evidence: `size="3"` attribute
+Problem: The visual width is limited to 3 characters, which will truncate longer postal codes like ZIP+4 format.
+Fix: Remove the `size="3"` attribute.
+
+Location: id="row-legalname"
+Evidence: "Your name" label with name="legal_name" appearing after "Full name" field with name="full_name"
+Problem: The form contains two separate fields asking for a person's name, making it unclear what the difference between them should be.
+Fix: Remove one of the duplicate name fields or clearly distinguish their purposes (e.g., "Legal name" vs. "Display name").
+
+Location: id="row-street"
+Evidence: Only street address field present, no city or state/province fields
+Problem: The address is incomplete, missing city and state/province fields necessary for a valid mailing address.
+Fix: Add city and state/province input fields after the street address field.
+
+Location: id="row-contacttime"
+Evidence: `type="text"` for contact_time input
+Problem: Using a text field for preferred contact time is ambiguous—no expected format is specified and users may enter varying formats.
+Fix: Replace with `type="time"` or a select element with predefined contact time options (e.g., "Morning", "Afternoon", "Evening").
+
+Location: id="viewdetails-btn"
+Evidence: `type="button"` with no onclick handler or script
+Problem: The button has no associated functionality or clear purpose in the form.
+Fix: Either remove the button or add an onclick handler with defined behavior.
+
+Location: id="dob-year-select"
+Evidence: Year options range from 1950 to 2009
+Problem: The maximum year allows only people aged 17 or older (as of 2026), suggesting an outdated range that may not reflect intended age requirements.
+Fix: Update the year range to reflect current age requirements, or replace the three separate dropdowns with `type="date"` for better usability.

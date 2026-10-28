@@ -1,0 +1,49 @@
+Location: Two-factor setup, verification code — first message entry ("5 digits" message)
+Evidence: "Check the message again and enter all six."
+Problem: "The message" doesn't specify which delivery channel the code was sent through (SMS, email, app), leaving the instruction ambiguous about where to look.
+Fix: Name the actual channel, e.g. "Check the text message we sent and enter all six digits."
+
+Location: Two-factor setup, verification code — first message entry, "Predictable mistake" / "Suggested fix" fields
+Evidence: "Predictable mistake: yes" ... "Suggested fix: none"
+Problem: Flagging a mistake as predictable implies it recurs often enough to warrant prevention, yet no mitigation (e.g., restricting the field to 6 digits) is proposed.
+Fix: Propose a preventive fix such as an input mask/live digit counter that blocks entry past 6 digits, or justify why none is needed.
+
+Location: Two-factor setup, verification code — second message entry (expired code)
+Evidence: "This verification code expired 10 minutes after it was sent, which stops an intercepted code from being reused later."
+Problem: The message justifies the security policy to the user instead of focusing on the needed action, adding irrelevant, oddly technical content to an inline error.
+Fix: Cut the rationale clause and lead with the action: "This code has expired. Request a new one and enter it here."
+
+Location: Two-factor setup, verification code — second message entry, "Suggested fix" field
+Evidence: "selectable, offers a resend code button in place of the message"
+Problem: The fix description is a garbled fragment inconsistent with the terse one-word format used in every other entry, making its meaning and scope unclear.
+Fix: Rewrite as a plain sentence, e.g. "Replace the message with a 'Resend code' button."
+
+Location: Two-factor setup, verification code — second message entry, "Input on resubmission" field
+Evidence: "Input on resubmission: preserved"
+Problem: Preserving the expired code's digits gives no visual indication the value must change, inviting the user to resubmit the same invalid code unchanged.
+Fix: Clear the field (or mark it visibly stale) when the expiry error fires, rather than preserving it as-is.
+
+Location: Billing, promo code — first message entry (expired promo)
+Evidence: "This promo code ended on 30 June."
+Problem: The date omits the year, making the expiration ambiguous for a user revisiting the flow near a year boundary.
+Fix: Include the year, e.g. "This promo code ended on 30 June 2026."
+
+Location: Billing, promo code — first message entry, "Predictable mistake" field
+Evidence: "Predictable mistake: no"
+Problem: Entering a stale/expired promo code (often shared long after it lapses) is at least as foreseeable as the plan-mismatch case below, which is marked "yes" — the criterion is applied inconsistently between the two promo-code entries.
+Fix: Apply a consistent definition of "predictable mistake" across both promo-code messages, or state the reasoning that distinguishes them.
+
+Location: Billing, promo code — second message entry (plan mismatch), "Predictable mistake" / "Suggested fix" fields
+Evidence: "Predictable mistake: yes" ... "Suggested fix: none"
+Problem: As with the digit-count message, a mistake flagged as predictable has no proposed prevention, even though the conflict (code requires annual, plan is monthly) is knowable before submission.
+Fix: Suggest a preventive fix, such as disabling or graying out the promo field when the selected plan is ineligible for the entered code.
+
+Location: Billing, promo code — second message entry, message text
+Evidence: "Change the plan to annual, or remove the code."
+Problem: The instructed fix lives in the plan selector, a different field from the one displaying the message, but only the promo code field carries the error signal — nothing flags the plan selector itself.
+Fix: Add a secondary cue (highlight or link) on the plan selector so the user can locate the field the message refers to.
+
+Location: Across all four entries, "Signal" field
+Evidence: "Signal: bold text set larger than the field label, icon" (identical in all four entries)
+Problem: The same high-intensity visual treatment is used for messages of very different severity (an optional "continue without one" notice vs. a blocking expired-code error), flattening the hierarchy and making urgency hard to triage at a glance.
+Fix: Vary signal weight/icon type by severity, reserving the heaviest treatment for blocking errors and a lighter one for optional or informational notices.

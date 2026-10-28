@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This promo code ended on 30 June.\"",
+      "fix": "Include the year: \"This promo code ended on 30 June 2026\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Billing, promo code (first message)",
+      "severity": 3,
+      "violation": "The year is omitted, making the date ambiguous across year boundaries and potentially confusing for users."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Check the message again and enter all six.\"",
+      "fix": "Replace with \"Enter all six digits\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code (first message)",
+      "severity": 3,
+      "violation": "Unclear what \"message\" refers to - the user may not know whether to check an email, SMS, or elsewhere."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: selectable, offers a resend code button in place of the message\"",
+      "fix": "Clarify terminology; either confirm this is implemented (\"Current behavior:\") or explicitly propose it as an enhancement (\"Recommended fix:\")",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code (second message, Suggested fix field)",
+      "severity": 3,
+      "violation": "Inconsistent with the rest of the document - unclear whether this describes current implementation or a proposed improvement."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" paired with \"Suggested fix: none\"",
+      "fix": "Either add a suggested fix (such as a control to switch plans or a clear explanation of plan requirements) or reclassify as a non-predictable mistake",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Billing, promo code (second message)",
+      "severity": 3,
+      "violation": "Contradicts itself - if the mistake is predictable, users need guidance to resolve or avoid it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-004.md",
+    "artifact_sha256": "c8f58456a4deb36595b0ac00fe364b68e80445e939d7293d2db8d8f1a42ac91b",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:45:15Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

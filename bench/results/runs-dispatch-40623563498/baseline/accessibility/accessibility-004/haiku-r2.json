@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Both paragraphs end with \"Station staff can also help with the same request in person.\"",
+      "fix": "Revise s1-p2 to end with a conclusion that matches its topic, such as \"Station staff can also help you report the issue in person.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section 1 (Station updates), paragraphs s1-p1 and s1-p2",
+      "severity": 3,
+      "violation": "The two paragraphs address different topics (reviewing schedules vs. reporting service issues) but share the same closing statement, creating confusion about what staff assistance applies to each request."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">` with error message `<span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">Enter a 6 character code...</span>`",
+      "fix": "Add `aria-describedby=\"s3-form-promo-error\"` to the promo input element.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section 3 (Fare adjustments), promo code input field",
+      "severity": 3,
+      "violation": "The input is marked as invalid but lacks an aria-describedby attribute connecting it to the error message, making it unclear to screen readers which error applies."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Link text reads \"read the accessibility improvements list\" with href=\"/fares/history\"",
+      "fix": "Change the link text to \"read the fare history\" or update the href to point to an accessibility page.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section 3 (Fare adjustments), link with id s3-link1",
+      "severity": 3,
+      "violation": "The link text and destination URL are semantically mismatched - the text refers to accessibility content but the URL points to fare history."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"phone\" id=\"s3-form-phone-label\">Phone number (required)</label>` paired with `<input id=\"phone\" type=\"tel\" autocomplete=\"tel\">`",
+      "fix": "Add the `required` attribute to the phone input element.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section 3 (Fare adjustments), phone number form field",
+      "severity": 3,
+      "violation": "The field is marked as required only in the label text, not with the HTML required attribute, so browsers won't enforce validation and assistive technology won't properly announce it as required."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\">`",
+      "fix": "Replace with an actual `<button>` element, or add JavaScript to handle Enter and Space key events.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section 3 (Fare adjustments), custom delete control with id s3-customcontrol",
+      "severity": 3,
+      "violation": "Using a div with role=\"button\" requires manual keyboard event handling, but no handlers are implemented, making it inaccessible to keyboard-only users."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Three step divs containing \"Choose a plan\", \"Enter payment details\", \"Confirm your order\"",
+      "fix": "Remove the wizard steps block or integrate it into the form workflow with proper context and navigation.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section 3 (Fare adjustments), wizard steps block with id s3-wizard",
+      "severity": 3,
+      "violation": "This e-commerce checkout flow appears unexplained and disconnected in the middle of a transit fare adjustments section."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "4febe21b95880d7b0b385588ebdc9c800b2c010b439206d51d6b790cb76d11c3",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:29:33Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

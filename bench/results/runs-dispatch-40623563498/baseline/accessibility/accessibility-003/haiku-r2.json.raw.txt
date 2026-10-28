@@ -1,0 +1,44 @@
+Location: Section 2 (Weekend service), paragraph p1
+Evidence: "Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person."
+Problem: This paragraph is nearly identical to section 1, paragraph p1 (except "Passengers" vs "Riders"), indicating duplicated content in different sections.
+Fix: Replace with content specific to weekend service.
+
+Location: Section 3, paragraph p1, second sentence
+Evidence: "Station staff can also help with the same request in person."
+Problem: The sentence implies staff help patrons "request" to review a schedule, which is awkward; reviewing a schedule is not typically requested.
+Fix: Rephrase to clarify staff assistance, such as "Station staff can answer questions about the schedule in person."
+
+Location: Section 3, status-card
+Evidence: "Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day."
+Problem: This content appears to be duplicated from section 1, paragraph p2, and does not clearly fit in the schedule changes section.
+Fix: Replace with content relevant to schedule changes.
+
+Location: Section 3, wizard-steps div
+Evidence: Steps appear in HTML order as "Confirm your order" (order:3), "Enter payment details" (order:2), "Choose a plan" (order:1)
+Problem: HTML source order is reversed from the logical/visual order (specified by CSS order property); screen readers will announce steps in wrong sequence.
+Fix: Reorder HTML elements so they appear in logical sequence without relying on CSS order property.
+
+Location: Section 3, icon-delete div
+Evidence: `<img src="/img/trash-icon.svg" alt="">`
+Problem: Icon image has empty alt text, making it inaccessible to screen reader users.
+Fix: Add descriptive alt text such as `alt="Delete"`.
+
+Location: Section 3, link in paragraph
+Evidence: Link text reads "read the accessibility improvements list" but href is "/fares/history"
+Problem: Link text does not match the destination URL; heading to fare history is not related to accessibility improvements.
+Fix: Change link text to match destination, e.g., "read the fare history" or change href to match context.
+
+Location: Section 3, form phone label
+Evidence: `<label for="phone" id="s3-form-phone-label" style="color:#cc0000">Phone number</label>` with no required or aria-required attribute on the input
+Problem: Red color alone is insufficient to indicate a required field; lacks proper accessibility attributes.
+Fix: Add `required` attribute to the phone input and/or `aria-required="true"` to the label.
+
+Location: Section 3, form promo input
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: aria-invalid is set to true on an empty input, indicating a validation error when none has occurred.
+Fix: Remove `aria-invalid="true"` or only set it dynamically after validation actually fails.
+
+Location: Section 3, form promo error message
+Evidence: `<span class="error-text" aria-live="polite" id="s3-form-promo-error">Error.</span>`
+Problem: Error message is too generic and does not explain what is wrong with the promo code.
+Fix: Replace "Error." with a specific message such as "Invalid promo code" or "This code has expired".

@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced this morning.\" followed by only three `<li>` items (Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot)",
+      "fix": "Either add the missing fourth project to the list or correct the paragraph to state the actual count shown.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "section#workspace-overview, intro paragraph and the list in #workspace-overview-recent",
+      "severity": 3,
+      "violation": "The stated project count (4) doesn't match the number of items actually listed (3)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The link sits directly under the three-project list, but the project settings it opens are for \"Vendor Onboarding\" (`value=\"Vendor Onboarding\"`), a project that appears nowhere in the \"Your projects\" list.",
+      "fix": "Either add \"Vendor Onboarding\" to the visible projects list or make clear (e.g., via link text or placement) that this settings link is independent of the listed projects.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#workspace-overview-projects-link (\"Open project settings\") and the form in #project-settings",
+      "severity": 3,
+      "violation": "The link implies it opens settings for one of the listed projects, but it actually opens settings for an unlisted, unrelated project with no way for the reader to know which project will open."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"project-settings-name-input\" type=\"text\" value=\"Vendor Onboarding\">` and the other two inputs/select likewise have no `name` attribute.",
+      "fix": "Add appropriate `name` attributes to all form inputs and the select element.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#project-settings-name-input, #invite-member-email-input, #notification-settings-digest-input",
+      "severity": 3,
+      "violation": "Without `name` attributes, these fields would not be submitted as part of their forms, so the \"Save\" buttons have no field data to act on."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible text (e.g. \"Duplicate\") or an icon paired with a visible label.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#project-settings-duplicate-btn",
+      "severity": 3,
+      "violation": "The button has no visible text or icon content, only an `aria-label`, so sighted users have no visual indication of its purpose or that it is interactive."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The button has `type=\"button\"` with no `href`, no click handler, and no corresponding target section, unlike every other action in the document.",
+      "fix": "Wire it to a \"project duplicated\" confirmation state analogous to the archive/invite flows, or remove the control if duplication is out of scope.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#project-settings-duplicate-btn",
+      "severity": 3,
+      "violation": "Activating \"Duplicate project\" has no defined outcome in the mockup - no confirmation screen, no new project entry, no feedback."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"invite-member-email-input\" type=\"email\">` has no value and no `required` attribute, yet `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>` is reachable without using the Save button at all.",
+      "fix": "Make the email field required and gate navigation to #invite-sent on a successful save, or combine Save and Continue into one action.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#invite-member section, specifically #invite-member-continue-link",
+      "severity": 3,
+      "violation": "A user can click \"Continue\" without ever entering an email address or clicking Save, yet land on \"Invite sent,\" which states \"An invite was sent to the address entered above\" - a claim that is false on that path."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"will remove it from the active projects list for everyone on the team\" vs. \"no longer appears in the active projects list for anyone on the team\"",
+      "fix": "Use identical phrasing in both places, e.g., \"for everyone on the team\" in both.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "#archive-confirm-copy versus the paragraph in #project-archived",
+      "severity": 3,
+      "violation": "The same fact is described with inconsistent wording (\"everyone\" vs. \"anyone\"), reading like unedited copy variants rather than a deliberate stylistic choice."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Both are `type=\"submit\"` inside a `<form>` with no `action` attribute, and neither section leads to any confirmation state, unlike #invite-sent and #project-archived for other committing actions.",
+      "fix": "Add a visible save-confirmation (inline message or dedicated section) for both forms, matching the pattern used for invite and archive actions.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "#project-settings-save-btn and #notification-settings-save-btn",
+      "severity": 3,
+      "violation": "Clicking Save gives the user no feedback that the change took effect, inconsistent with every other committing action in the document."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T15:09:11Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

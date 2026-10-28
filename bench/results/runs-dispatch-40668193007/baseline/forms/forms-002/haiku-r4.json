@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"form\">` with no action or method attributes",
+      "fix": "Add `action=\"/signup\"` and `method=\"post\"` attributes to the form element.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "form element",
+      "severity": 3,
+      "violation": "The form cannot submit without an action attribute specifying the endpoint and a method attribute specifying how to submit."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`minlength=\"8\"` in the input but label text is only \"Create a password\"",
+      "fix": "Change the label text to \"Create a password (minimum 8 characters)\".",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "row-password (password input)",
+      "severity": 3,
+      "violation": "The 8-character minimum requirement is enforced but not communicated to users in the visible label."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`type=\"text\"` and `required=\"\"`",
+      "fix": "Change `type=\"text\"` to `type=\"url\"`.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-website (company website field)",
+      "severity": 3,
+      "violation": "The field should use type=\"url\" for proper URL validation and to trigger the URL keyboard on mobile devices."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`size=\"3\"`",
+      "fix": "Remove the size attribute or set it to a larger value like `size=\"10\"`.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-postal (postal code field)",
+      "severity": 3,
+      "violation": "The size attribute limits the visible field to 3 characters, which is too small for any postal code format (US: 5 digits, Canada: 6 characters, UK: up to 8)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no validation attributes",
+      "fix": "Add `pattern=\"[0-9]{8}\" maxlength=\"8\"` to the input element.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "row-member (membership number field)",
+      "severity": 3,
+      "violation": "The placeholder states the requirement but there is no pattern or maxlength to actually enforce it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`type=\"tel\"` combined with `pattern=\"[0-9]+\"`",
+      "fix": "Remove the pattern attribute or change the type to \"text\" with `inputmode=\"numeric\"`.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "row-phone2 (secondary phone field)",
+      "severity": 3,
+      "violation": "The tel input type already has built-in validation that may conflict with the pattern attribute, causing inconsistent validation across browsers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`type=\"text\"` with no format specification",
+      "fix": "Change to `type=\"time\"` or add a placeholder like `placeholder=\"9:00 AM - 5:00 PM\"`.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "row-contacttime (preferred contact time field)",
+      "severity": 3,
+      "violation": "No indication of expected format (24-hour time, AM/PM, specific days, etc.) for users filling out this field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "row-name label is \"Full name\" and row-legalname label is \"Your name\"",
+      "fix": "Remove the row-legalname field entirely as it duplicates the row-name field.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "row-name and row-legalname",
+      "severity": 3,
+      "violation": "Both fields ask for the user's name with different labels, creating redundancy and confusion."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Options include both \"Overnight\" and \"Next-day\"",
+      "fix": "Keep only one option; for example, remove \"Next-day\" and keep \"Overnight\" for fastest delivery.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "row-shipspeed (preferred shipping speed select)",
+      "severity": 3,
+      "violation": "These two options are redundant and unclear about which service is faster or what the distinction is."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-002.html",
+    "artifact_sha256": "e39d0a6e9175987711e114d2ce5edd568205f5aecafb2d271246e6036a16457f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T10:18:15Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

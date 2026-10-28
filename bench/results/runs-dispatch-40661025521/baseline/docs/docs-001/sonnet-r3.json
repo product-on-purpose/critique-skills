@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"A threshold is the numeric boundary that triggers an alert once a metric crosses it.\"",
+      "fix": "Move this definition to an introductory \"Overview\" or \"About thresholds\" section before the steps, or remove it if the concept is explained elsewhere.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"## Open alert settings\" section",
+      "severity": 3,
+      "violation": "This is a definition/conceptual aside dropped into a how-to step; it doesn't belong under a step heading about opening settings and breaks the task-oriented flow."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Open the alerts panel from the console sidebar and select the rule you want to adjust.\"",
+      "fix": "Add a brief \"Before you begin\" note on required permissions, or confirm this is intentionally omitted as out of scope.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"## Open alert settings\"",
+      "severity": 3,
+      "violation": "No prerequisites section states what access/permissions are needed to reach the alerts panel, and there's no mention of what to do if multiple rules match or none exist."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Enter the updated threshold value in the field provided and confirm the unit matches the metric in use.\"",
+      "fix": "Name the specific field/label as it appears in the UI, e.g., \"Enter the value in the Threshold field.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"## Set the new threshold\"",
+      "severity": 3,
+      "violation": "\"the field provided\" is vague - it doesn't name the actual UI element (e.g., \"Threshold value\" field), making the step hard to follow without the UI open."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This is because the console applies the new threshold to every future evaluation of this rule.\"",
+      "fix": "Rephrase to stand alone, e.g., \"Note: the console applies the new threshold to every future evaluation of this rule,\" or connect it explicitly to why unit-matching matters.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"## Set the new threshold\"",
+      "severity": 3,
+      "violation": "This explanatory sentence is disconnected - \"This is because\" implies it's answering a preceding question or justifying a prior statement, but no claim was made that it explains. It reads as a non-sequitur."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Save the rule and open the rule list to confirm the new threshold appears there.\"",
+      "fix": "Add a brief note on expected propagation time and what to check if the threshold doesn't display as expected.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"## Save and verify\"",
+      "severity": 3,
+      "violation": "The step doesn't say what to do if the value doesn't appear correctly (no troubleshooting/rollback guidance), and doesn't mention whether saving takes effect immediately or after a delay."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Title \"Configure alert thresholds\" vs. body content",
+      "fix": "Add a scope note at the top clarifying this guide covers editing thresholds on existing rules only, or expand to cover rule creation if in scope.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Whole document",
+      "severity": 3,
+      "violation": "The document only covers editing an existing rule's threshold; it never addresses creating a new alert rule or whether this procedure applies to multiple metric types, leaving scope ambiguous relative to the title."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-001.md",
+    "artifact_sha256": "b41787144ac8cc1ae14bcce23fa2b574f6ee68f1aaa9cc432628f9f148ddd713",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T09:12:28Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

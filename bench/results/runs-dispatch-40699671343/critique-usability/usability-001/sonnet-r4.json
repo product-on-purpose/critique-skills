@@ -1,0 +1,108 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-DEADEND",
+      "evidence": "the \"invite-sent\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+      "fix": "Add a control inside the \"invite-sent\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "the \"invite-sent\" section",
+      "severity": 3,
+      "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button> sits in a <form> with no action attribute; no confirmation text, status region, or next-state link appears anywhere in the \"project-settings\" section.",
+      "fix": "Specify what appears after Save is clicked, for example an inline \"Saved\" confirmation near the form, or state that the button briefly disables and re-enables once the save completes.",
+      "id": "F-002",
+      "instances": [
+        {
+          "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button> sits in a form with no action attribute; the section's separate \"Continue\" link, not this button, is what transitions to \"invite-sent\", leaving Save's own effect undefined.",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button> sits in a form with no action attribute and no stated result anywhere in the section.",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        },
+        {
+          "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\"></button> has no href, no enclosing form, and no stated effect anywhere in the artifact.",
+          "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button"
+        }
+      ],
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "The Save trigger is specified but the artifact names no visible indication of what the system does while saving or once it finishes: no success message, no changed control state, no next screen."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-EXIT",
+      "evidence": "<a id=\"invite-member-cancel-link\" href=\"#project-settings\">Cancel</a> sits beside an email input the user may already have filled in; nothing in the \"invite-member\" section or elsewhere states what becomes of that entered email when Cancel is used.",
+      "fix": "State in the spec that Cancel discards the entered email without sending it, or specify that the value is preserved if the user returns to this screen.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"invite-member\" section, the \"invite-member-cancel-link\" link",
+      "severity": 2,
+      "violation": "The exit is visible and its label is predictable, but the artifact never says whether the entered email address is discarded, so the requirement that the exit cost the user nothing already entered is met only by omission."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "<p id=\"archive-confirm-copy\">...You can restore it at any time from the archived projects list.</p> names a restore path (\"archived projects list\") that is not a section the artifact defines, and no control anywhere links to it.",
+      "fix": "Add an \"archived projects list\" state with a restore control, and link to it from wherever the copy currently only asserts it exists.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"archive-confirm\" section, the \"archive-confirm-copy\" paragraph",
+      "severity": 2,
+      "violation": "Archiving is treated as reasonably reversible by the artifact's own copy, but the reversal path it names is not a reachable state or control anywhere in the artifact, so \"restore it at any time\" is a promise with no path behind it in this spec."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-LABELED",
+      "evidence": "<button> with no text content and no accessible-name attribute",
+      "fix": "Add visible text to this control, or an aria-label attribute naming what it does.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "This control has neither visible text nor an accessible-name attribute, so nothing on screen names what the control does."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "<p>An invite was sent to the address entered above. It expires in 5 days if not accepted.</p> does not repeat the email address itself, and this section defines no link back to the \"invite-member\" screen to re-check it.",
+      "fix": "Interpolate the actual email address into the confirmation text, for example \"An invite was sent to jane@example.com.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the \"invite-sent\" section, its confirmation paragraph",
+      "severity": 2,
+      "violation": "The information the user needs at this step, which address the invite went to, is held over from the previous screen (\"entered above\") rather than shown at this step."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:14:10Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 7,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 2
+  }
+}

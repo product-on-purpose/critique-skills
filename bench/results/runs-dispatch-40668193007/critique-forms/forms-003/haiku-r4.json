@@ -1,0 +1,229 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "&lt;input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\"&gt;",
+      "fix": "Move this field to a later step, such as account settings.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#contacttime-input, &lt;input&gt; field, label 'Preferred contact time', line 71",
+      "severity": 3,
+      "violation": "The form requires preferred contact time during account setup, but this is not necessary for account creation and could be asked later."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "&lt;input id=\"given-input\" name=\"given_name\" type=\"text\" autocomplete=\"given-name\" ...&gt; and &lt;input id=\"family-input\" name=\"family_name\" type=\"text\" autocomplete=\"family-name\" ...&gt;",
+      "fix": "Collect the name in one field, either a single 'Full name' or separate 'First name' and 'Last name' fields, but not both.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#given-input, &lt;input&gt; field, label 'First name', line 61",
+      "severity": 3,
+      "violation": "The form asks for both a full name and separate first and last names, asking the person to provide their name twice."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "&lt;select id=\"shipspeed-select\" required=\"\"&gt;&lt;option&gt;Standard&lt;/option&gt;&lt;option&gt;Express&lt;/option&gt;&lt;option&gt;Overnight&lt;/option&gt;&lt;/select&gt;",
+      "fix": "Move the shipping speed choice to the checkout flow.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#shipspeed-select, &lt;select&gt; field, label 'Preferred shipping speed', line 53",
+      "severity": 3,
+      "violation": "The form asks for preferred shipping speed during account setup, but this is a checkout concern that should be asked when placing an order, not during account creation."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-PHONE-REASON",
+      "evidence": "&lt;input id=\"phone-input\" name=\"phone\" type=\"tel\" autocomplete=\"tel\" required=\"\"&gt;",
+      "fix": "Say beside the field what the number is used for, or make it optional.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "#phone-input, &lt;input&gt; field, label 'Phone number', line 28",
+      "severity": 3,
+      "violation": "A phone number is required with no word beside the field on why it is needed, though the form already asks for an email address."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-PLACEHOLDER-INSTRUCTION",
+      "evidence": "placeholder=Must be 8 digits",
+      "fix": "Move the rule into hint text beside the field, linked with aria-describedby.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "#member-input, &lt;input&gt; field, label 'Membership number', line 41",
+      "severity": 3,
+      "violation": "A format rule appears only in the placeholder, which disappears as soon as typing starts."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-REQUIRED-OPTIONAL",
+      "evidence": "&lt;input id=\"phone2-input\" name=\"phone_secondary\" type=\"tel\" autocomplete=\"tel\"&gt;",
+      "fix": "Mark the optional fields with the word optional in their labels, or mark the required ones and explain the mark.",
+      "id": "F-006",
+      "instances": [
+        {
+          "evidence": "&lt;input id=\"name-input\" name=\"full_name\" type=\"text\" autocomplete=\"name\" autocorrect=\"off\" spellcheck=\"false\" required=\"\"&gt;",
+          "location": "#name-input, &lt;input&gt; field, label 'Full name', line 12"
+        },
+        {
+          "evidence": "&lt;input id=\"email-input\" name=\"email\" type=\"email\" autocomplete=\"email\" required=\"\"&gt;",
+          "location": "#email-input, &lt;input&gt; field, label 'Email address', line 16"
+        },
+        {
+          "evidence": "&lt;input id=\"password-input\" name=\"password\" type=\"password\" autocomplete=\"new-password\" required=\"\" minlength=\"6\"&gt;",
+          "location": "#password-input, &lt;input&gt; field, label 'Create a password', line 20"
+        },
+        {
+          "evidence": "&lt;input id=\"street-input\" name=\"street_address\" type=\"text\" autocomplete=\"address-line1\" autocorrect=\"off\" spellcheck=\"false\" required=\"\"&gt;",
+          "location": "#street-input, &lt;input&gt; field, label 'Street address', line 24"
+        },
+        {
+          "evidence": "&lt;input id=\"phone-input\" name=\"phone\" type=\"tel\" autocomplete=\"tel\" required=\"\"&gt;",
+          "location": "#phone-input, &lt;input&gt; field, label 'Phone number', line 28"
+        },
+        {
+          "evidence": "&lt;input id=\"website-input\" name=\"website\" type=\"url\" required=\"\"&gt;",
+          "location": "#website-input, &lt;input&gt; field, label 'Company website', line 37"
+        },
+        {
+          "evidence": "&lt;input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required=\"\"&gt;",
+          "location": "#member-input, &lt;input&gt; field, label 'Membership number', line 41"
+        },
+        {
+          "evidence": "&lt;input id=\"acctnum-input\" name=\"account_number\" type=\"text\" required=\"\"&gt;",
+          "location": "#acctnum-input, &lt;input&gt; field, label 'Account number', line 45"
+        },
+        {
+          "evidence": "&lt;input id=\"postal-input\" name=\"postal_code\" type=\"text\" autocomplete=\"postal-code\" required=\"\"&gt;",
+          "location": "#postal-input, &lt;input&gt; field, label 'Postal code', line 49"
+        },
+        {
+          "evidence": "&lt;select id=\"shipspeed-select\" required=\"\"&gt;",
+          "location": "#shipspeed-select, &lt;select&gt; field, label 'Preferred shipping speed', line 53"
+        },
+        {
+          "evidence": "&lt;input id=\"given-input\" name=\"given_name\" type=\"text\" autocomplete=\"given-name\" autocorrect=\"off\" spellcheck=\"false\" required=\"\"&gt;",
+          "location": "#given-input, &lt;input&gt; field, label 'First name', line 61"
+        },
+        {
+          "evidence": "&lt;input id=\"family-input\" name=\"family_name\" type=\"text\" autocomplete=\"family-name\" autocorrect=\"off\" spellcheck=\"false\" required=\"\"&gt;",
+          "location": "#family-input, &lt;input&gt; field, label 'Last name', line 63"
+        },
+        {
+          "evidence": "&lt;input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required=\"\"&gt;",
+          "location": "#org-input, &lt;input&gt; field, label 'Organization name', line 67"
+        },
+        {
+          "evidence": "&lt;input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\"&gt;",
+          "location": "#contacttime-input, &lt;input&gt; field, label 'Preferred contact time', line 71"
+        }
+      ],
+      "lane": "scripted",
+      "location": "#phone2-input, &lt;input&gt; field, label 'Secondary phone', line 33",
+      "severity": 3,
+      "violation": "The form mixes 14 required and 1 optional fields and marks none of them, so the person cannot tell which may be left empty."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-RESET-BUTTON",
+      "evidence": "&lt;button id=\"reset-btn\" type=\"reset\"&gt;",
+      "fix": "Remove the reset control.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "#reset-btn, &lt;button&gt; button, text 'Clear form', line 75",
+      "severity": 3,
+      "violation": "A control that clears everything entered sits directly beside the submit button."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-TOUCH-TARGET",
+      "evidence": "&lt;button id=\"viewdetails-btn\" type=\"button\" style=\"padding:1px 2px;font-size:11px\"&gt;View details&lt;/button&gt;",
+      "fix": "Increase the button's size to at least 44 pixels in height. Use padding: 12px 16px and font-size: 16px, or match the sizing of the submit button.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "#viewdetails-btn, &lt;button&gt; button, text 'View details', line 73",
+      "severity": 3,
+      "violation": "The View details button has padding of 1px 2px and font-size of 11px, making it approximately 15-18 pixels tall, much smaller than the recommended 44 to 48 CSS pixels for a mobile fingertip target."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "&lt;input id=\"phone2-input\" name=\"phone_secondary\" type=\"tel\" autocomplete=\"tel\"&gt;",
+      "fix": "Remove the secondary phone field, or ask for it later when the person updates account preferences.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "#phone2-input, &lt;input&gt; field, label 'Secondary phone', line 33",
+      "severity": 2,
+      "violation": "The form asks for a secondary phone number, which is not necessary for account creation."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-LABEL-POSITION",
+      "evidence": "&lt;label id=\"contacttime-label\" for=\"contacttime-input\" style=\"display:block\"&gt;Preferred contact time&lt;/label&gt;",
+      "fix": "Choose one label alignment throughout the form. Either remove the display:block style to make all labels inline, or add display:block to all labels to position them above their fields.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "#contacttime-label, &lt;label&gt; label, line 70",
+      "severity": 2,
+      "violation": "The form mixes label positions: most labels have no declared CSS and sit inline beside their fields, while the 'Preferred contact time' label has display:block and sits above its field."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-NUMERIC-INPUTMODE",
+      "evidence": "&lt;input id=\"acctnum-input\" name=\"account_number\" type=\"text\" required=\"\"&gt;",
+      "fix": "Add inputmode=numeric.",
+      "id": "F-011",
+      "lane": "scripted",
+      "location": "#acctnum-input, &lt;input&gt; field, label 'Account number', line 45",
+      "severity": 2,
+      "violation": "This account number is a text field without the numeric input mode, so a phone shows the full keyboard for digits."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-OPTION-CONTROL",
+      "evidence": "&lt;select id=\"shipspeed-select\" required=\"\"&gt;",
+      "fix": "Offer the options as visible radio buttons.",
+      "id": "F-012",
+      "lane": "scripted",
+      "location": "#shipspeed-select, &lt;select&gt; field, label 'Preferred shipping speed', line 53",
+      "severity": 2,
+      "violation": "A single choice among 3 options sits in a drop-down, so the person must open it to see them."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-PASSWORD-RULES",
+      "evidence": "&lt;input id=\"password-input\" name=\"password\" type=\"password\" autocomplete=\"new-password\" required=\"\" minlength=\"6\"&gt;",
+      "fix": "Require at least eight characters and remove the pattern and any maximum length.",
+      "id": "F-013",
+      "lane": "scripted",
+      "location": "#password-input, &lt;input&gt; field, label 'Create a password', line 20",
+      "severity": 2,
+      "violation": "On this new-password field, the minimum length is only 6."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-003.html",
+    "artifact_sha256": "df62d7b38659529bf26df03102d3e7969a1c47b7c66e72bc8d3cf208f082bc1f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T10:33:02Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

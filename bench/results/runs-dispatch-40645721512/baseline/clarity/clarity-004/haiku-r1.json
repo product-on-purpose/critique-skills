@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You must keep your equipment in good working condition and we may ask for a brief photo check once a year.\"",
+      "fix": "Rewrite as: \"Employees must keep their equipment in good working condition. The company may ask for a brief photo check once a year.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Restrictions and Exceptions, first paragraph",
+      "severity": 3,
+      "violation": "Uses second person pronouns (\"You\", \"we\") while the entire rest of the document consistently uses third person (\"Employees\", \"The manager\", \"The finance office\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You record the stipend item on the request form\" and \"you submit the request in the portal\"",
+      "fix": "Rewrite in third person: \"Employees record the stipend item on the request form\" and \"Employees submit the request in the portal.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Terminology Notes section",
+      "severity": 3,
+      "violation": "Uses second person pronoun \"you\" inconsistent with the document's third-person voice throughout all other sections."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Program Overview states IT asset group \"tracks the equipment catalog on the first business day of the month\"; Special Cases states \"The finance liaison publishes the equipment catalog at the start of the fiscal year\"; Questions and Updates states \"The benefits team reviews the equipment catalog at the start of the fiscal year\"",
+      "fix": "Consolidate into a single clear statement specifying whether the catalog is updated monthly or annually and which department is responsible.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Program Overview, Special Cases, and Questions and Updates sections",
+      "severity": 3,
+      "violation": "Three contradictory statements about who maintains the equipment catalog and when, creating confusion about the actual process."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"However, an incomplete request pauses the timeline until the missing item arrives.\"",
+      "fix": "Clarify specifically what constitutes an incomplete request, for example: \"an incomplete request pauses the timeline until the missing documentation is provided.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Approval Timeline section, second paragraph",
+      "severity": 3,
+      "violation": "\"Missing item\" is vague and ambiguous - unclear whether it refers to missing documentation, a missing receipt, or something else entirely."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Completing the request begins with confirming eligibility, and uploading the receipt.\"",
+      "fix": "Either incorporate receipt upload into the \"How to Apply\" process steps, or clarify whether the receipt is submitted separately after the initial request.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Request Steps section",
+      "severity": 3,
+      "violation": "Contradicts \"How to Apply\" section, which describes the portal request process without mentioning receipt upload. The policy creates confusion about when and how the receipt is submitted."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Approval Timeline describes only manager review; Review Responsibility separately describes finance office review of requests over $200",
+      "fix": "Add the finance office review step to the Approval Timeline section to show the complete approval sequence.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Approval Timeline and Review Responsibility sections",
+      "severity": 3,
+      "violation": "The finance office review is not mentioned in the \"Approval Timeline\" section, leaving the complete approval timeline unclear and potentially misleading readers into thinking approval is complete after manager sign-off."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T07:39:36Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

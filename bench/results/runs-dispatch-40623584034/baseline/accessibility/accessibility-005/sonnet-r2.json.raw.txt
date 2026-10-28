@@ -1,0 +1,89 @@
+Location: `<head>` style block — `#head-style`
+Evidence: `@media (orientation: portrait) { #main-content { display: none; } }`
+Problem: This unconditionally hides the entire main content (including the skip-link target) whenever the viewport is in portrait orientation, which includes most phones — the primary way people would read "service announcements" on the go.
+Fix: Remove this rule, or replace it with a rule that doesn't hide `#main-content` in portrait mode (e.g. only adjust layout/spacing, never `display: none`).
+
+Location: Header nav, `#nav-link1`
+Evidence: `<a href="/accessibility" id="nav-link1" style="outline:none">Accessibility</a>`
+Problem: `outline:none` removes the visible keyboard-focus indicator with no replacement focus style, making the link unusable for keyboard/screen-reader users to locate — ironic given it's the link to the accessibility page.
+Fix: Remove `style="outline:none"` or replace it with a custom visible `:focus` style.
+
+Location: Section "Weekend service", `#s1-p1`
+Evidence: "Commuters can report a service issue by calling rider services. The change takes effect on the following service day."
+Problem: This generic boilerplate doesn't describe any weekend service information and is near-duplicate content of `#s3-p2` ("Riders can report a service issue by calling rider services...") reused under an unrelated heading.
+Fix: Replace with actual weekend service details (affected routes, hours, dates), and de-duplicate the repeated "report an issue" boilerplate across sections.
+
+Location: Section "Weekend service", `#s1-p2`
+Evidence: "Passengers should review the updated schedule through the mobile app. A confirmation message follows once the request is processed."
+Problem: "A confirmation message follows once the request is processed" doesn't logically follow from "review the updated schedule" (reviewing isn't a "request"), and this paragraph is a near-duplicate of `#s3-p1` under a different heading.
+Fix: Rewrite to describe weekend-specific schedule changes, and remove the mismatched "confirmation message" sentence or apply it only where an actual request/submission occurs.
+
+Location: Section "Weekend service", `#s1-img1`
+Evidence: `alt="A newly installed tactile paving strip along the platform edge."`
+Problem: An image about tactile paving (an accessibility feature) is placed in the "Weekend service" section instead of the "Accessibility improvements" section (`#s3`), where it topically belongs.
+Fix: Move this image to the "Accessibility improvements" section or replace it with an image relevant to weekend service changes.
+
+Location: Section "Schedule changes", `#s2-p1`
+Evidence: "Riders can check real time arrivals through the online portal. Station staff can also help with the same request in person."
+Problem: The heading promises "Schedule changes" but the paragraph only describes checking real-time arrivals, not any actual change to the schedule.
+Fix: Replace with content describing what schedule changes occurred, or rename the heading to match the real-time-arrivals content.
+
+Location: Section "Schedule changes", `#s2-table1`
+Evidence: `<tr><td>North</td><td>On time</td></tr><tr><td>South</td><td>On time</td></tr>`
+Problem: A table under "Schedule changes" showing only "On time" for every zone communicates no change at all, contradicting the section heading.
+Fix: Either show actual before/after schedule changes per zone, or move/rename this table as a "Current status" widget outside the "Schedule changes" section.
+
+Location: Section "Accessibility improvements", `#s3-p1`
+Evidence: "Local residents should review the updated schedule through the online portal. A confirmation message follows once the request is processed."
+Problem: This content is about reviewing schedules, not accessibility improvements, and duplicates `#s1-p2` almost verbatim with only nouns swapped.
+Fix: Replace with content actually describing accessibility improvements (e.g., the tactile paving mentioned in `#s1-img1`), and remove the duplicated boilerplate.
+
+Location: Section "Accessibility improvements", `#s3-p2`
+Evidence: "Riders can report a service issue by calling rider services. Station staff can also help with the same request in person."
+Problem: Duplicate of `#s1-p1`'s topic (reporting issues), unrelated to "Accessibility improvements," suggesting content blocks were copy-pasted across sections without adapting to the heading.
+Fix: Replace with accessibility-specific content, or remove this duplicated paragraph.
+
+Location: `#s3-banner`
+Evidence: "Route adjustments take effect on the posted effective date."
+Problem: "the posted effective date" is a vague self-reference with no actual date, and no link or location telling the reader where it is posted.
+Fix: State the actual effective date, or link to the page where it is posted.
+
+Location: `#s3-statuscard`
+Evidence: "Your changes are saved."
+Problem: This message implies the user just completed a save action, but nothing on the page (a static announcements page) precedes it with any editable or submittable content — it reads as leftover/placeholder UI text.
+Fix: Remove this element, or only render it after an actual user-initiated save action.
+
+Location: `#s3-button1`
+Evidence: `<button type="button" class="btn-secondary" id="s3-button1">Refresh status</button>`
+Problem: The button has no indication of what status it refreshes or what UI it updates, and sits disconnected from any status display it would logically affect.
+Fix: Give the button an accessible label or adjacent text clarifying what it refreshes (e.g., "Refresh zone status"), or remove it if non-functional.
+
+Location: `#s3-customcontrol`
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol" ...>`
+Problem: This is a custom `div` with `role="button"` and `tabindex="0"` but no keyboard event handling is present in the markup, so keyboard users can focus it but cannot activate it with Enter/Space; it is also thematically out of place (a generic "Delete item" control with no context) on a transit announcements page.
+Fix: Replace with a real `<button>` element (which gets click/keyboard activation for free), and give it a context-specific label (e.g., "Delete saved route") or remove it if it serves no purpose here.
+
+Location: `#s3-wizard`
+Evidence: `<div class="wizard-steps" id="s3-wizard">` containing "Choose a plan", "Enter payment details", "Confirm your order"
+Problem: This is unrelated e-commerce checkout-flow content embedded in a transit "Accessibility improvements" section, with no semantic list markup and no indication of which step is current.
+Fix: Remove this unrelated wizard block, or if a multi-step flow belongs here, mark it up as an ordered list with `aria-current="step"` on the active step and content relevant to transit accessibility.
+
+Location: `#s3-linkpara`
+Evidence: "For the full list of upcoming adjustments, <a href=\"/fares/history\">check the current station closures</a>."
+Problem: The surrounding text promises "upcoming adjustments," the link text says "station closures," and the href points to `/fares/history` — three different, inconsistent destinations for a single link.
+Fix: Make the link text, surrounding sentence, and href all describe the same destination/content (e.g., link text "view upcoming route adjustments" pointing to an adjustments page).
+
+Location: `#s3-form`, phone field
+Evidence: `<label for="phone" id="s3-form-phone-label">Phone number (required)</label>` paired with `<input id="phone" type="tel" autocomplete="tel">`
+Problem: "(required)" is conveyed only as visible label text; the input itself has no `required` or `aria-required="true"` attribute, so assistive technology and browser validation won't treat it as required.
+Fix: Add `required` (and/or `aria-required="true"`) to the `#phone` input.
+
+Location: `#s3-form`, promo code field
+Evidence: `<input id="promo" type="text" aria-invalid="true">` with error text "Enter a 6 character code using letters and numbers only."
+Problem: `aria-invalid="true"` is hardcoded rather than set conditionally after validation, so the field is announced as invalid to screen reader users even before they've typed anything.
+Fix: Remove the static `aria-invalid="true"` and set it dynamically only after validation fails.
+
+Location: `#s3-form`, promo code field
+Evidence: `<input id="promo" ...>` and `<span class="error-text" aria-live="polite" id="s3-form-promo-error">`
+Problem: The error message span is not associated with the input via `aria-describedby`, so screen reader users focused on the input won't hear the error text.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the `#promo` input.

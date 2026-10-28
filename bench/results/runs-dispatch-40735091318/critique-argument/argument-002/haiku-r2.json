@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-CLAIM",
+      "evidence": "Line 17: 'Given the return-rate and avoidance-survey results above, the stronger choice is a systemwide end to overdue fines across all ten consortium branches, effective at the start of the next fiscal year.' Line 19: 'Specifically, the recommended change is about making things better for patrons going forward, in whatever way the consortium finds workable.'",
+      "fix": "Remove or clarify the vague restatement in line 19. Preserve one unambiguous statement of the recommendation: either the specific commitment to end all fines systemwide, or a more modest statement of intent, but not both.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"Recommendation\" section, lines 15-19",
+      "severity": 3,
+      "violation": "The artifact states its recommendation crisply as \"a systemwide end to overdue fines across all ten consortium branches, effective at the start of the next fiscal year\" but then immediately restates it as a vague aspiration: \"the recommended change is about making things better for patrons going forward, in whatever way the consortium finds workable.\" A reader cannot tell which version is the actual ask."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-CLAIM-MARKER",
+      "evidence": "0 conclusion-marker phrases found across 401 words.",
+      "fix": "Add an explicit conclusion-signalling phrase at the point the artifact states its central claim, for example \"therefore\" or \"we recommend\".",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "severity": 3,
+      "violation": "No phrase from the conclusion-marker lexicon (therefore, thus, hence, it follows that, we recommend, this paper argues, I argue that, the conclusion is, in conclusion, we should, the case for) appears anywhere in the artifact, so a reader scanning rather than reading straight through has no signpost to where the conclusion is asserted."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-HEDGE-DENSITY",
+      "evidence": "10 of 14 sentences (0.71) carry at least one hedging term.",
+      "fix": "Remove the hedge from sentences whose claim the evidence actually supports, reserving qualification for the claims that genuinely need it.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "severity": 3,
+      "violation": "More than 0.35 of the artifact's sentences carry a term from the hedging lexicon (may, might, could, possibly, perhaps, arguably, somewhat, relatively, it seems, appears to, tends to, to a degree), spread across the whole document rather than concentrated where the evidence actually underdetermines the claim."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-GROUNDS",
+      "evidence": "Line 25 states: 'In a somewhat qualified way, removing the financial penalty for late returns predictably increases both on-time return rates and overall program participation, which is the reason the pilot's return-rate and avoidance-survey results, taken together, support ending fines...' but the actual return-rate numbers from the pilot are never given.",
+      "fix": "In the \"What the Pilot Showed\" section, present the actual return-rate data from the pilot branches: the pre-pilot rate, the post-pilot rate, and the change. Include confidence intervals or sample sizes if available, so a reader can evaluate the evidence the recommendation rests on.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"What the Pilot Showed\" section (lines 9-13) and \"Why the Pilot Result Applies Systemwide\" section (lines 25)",
+      "severity": 2,
+      "violation": "The artifact claims that 'the pilot's return-rate and avoidance-survey results, taken together, support ending fines for the whole consortium' but presents only the survey result (20% to 3% reduction in avoidance). The return-rate results are referenced as supporting evidence but never actually presented, leaving a reader unable to check a central piece of the evidentiary base."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-REBUTTAL",
+      "evidence": "The \"Addressing the Revenue Concern\" section is the only place objections are raised and addressed. No other section anticipates skeptical questions.",
+      "fix": "Add sections addressing at least one additional foreseeable objection: either implementation impact (staff retraining, system changes) or fairness to past payers. For each, either explain why it is not a problem or propose a mitigation (e.g., a grace period for recently-paid fines).",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Addressing the Revenue Concern\" section (lines 29-34)",
+      "severity": 2,
+      "violation": "The artifact addresses one foreseeable objection - that eliminating fines will create a budget shortfall - and answers it with data showing fines cover under 2% of materials spending. However, other objections implicit in the artifact's own grounds remain unaddressed: operational and collection-system impacts of ending fines, fairness to patrons who already paid late charges, and whether alternative approaches (sliding-scale fines, forgiveness programs) might achieve similar satisfaction gains with lower implementation cost."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/argument/argument-002.md",
+    "artifact_sha256": "0322bc2ebeb48318c56473186a8cb1f1e78d8667b99cfaf75ee7bb84f82fcfa2",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "TOULMIN"
+    ],
+    "skill": "critique-argument",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T17:40:29Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
