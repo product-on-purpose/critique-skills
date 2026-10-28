@@ -1,0 +1,84 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "The IT asset group updates the reimbursement log at the start of the fiscal year. [...] Finance reconciles the stipend item against the request log each month.",
+      "fix": "Use one name for this record throughout, for example reimbursement log, or add a sentence stating explicitly that the request log and reimbursement log are the same record if that is the intent.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Program Overview, first sentence, compared with Terminology Notes, second sentence",
+      "severity": 2,
+      "violation": "Two different terms, reimbursement log and request log, each appear once for what reads as the same underlying record of stipend requests, with no stated equivalence, so a careful reader cannot tell whether they name the same artifact or two different ones."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "The IT asset group updates the reimbursement log at the start of the fiscal year. A copy of each update goes to the shared benefits folder the same day.",
+      "fix": "Move the internal logging and catalog-update cadence out of the opening section, for example into a reference note near Required Documentation, so Eligibility is the first section the reader reaches.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Program Overview, both paragraphs (document opening)",
+      "severity": 2,
+      "violation": "PLAIN-ORGANIZE requires sections to follow the reader's actual task sequence rather than an internal workflow. The document opens with the IT asset group's internal log and catalog update cadence, which the employee reader cannot act on, before Eligibility, which is the first thing the reader actually needs to know."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Completing the request begins with confirming eligibility, and uploading the receipt.",
+      "fix": "Employees complete the request by confirming eligibility and uploading the receipt.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Request Steps section, its single sentence",
+      "severity": 2,
+      "violation": "The sentence's grammatical subject is the nominalized gerund phrase Completing the request rather than the employee who actually does the completing, confirming, and uploading, so the real actor is never named."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "The IT asset group updates the reimbursement log at the start of the fiscal year. [...] Similarly, the IT asset group tracks the equipment catalog on the first business day of the month.",
+      "fix": "Split the section into two short, separately headed notes, one for the reimbursement log and one for the equipment catalog, or add a sentence explaining why the two updates are reported together.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Program Overview section, both paragraphs",
+      "severity": 2,
+      "violation": "The section covers two distinct artifacts on two distinct cadences (the reimbursement log, annually, and the equipment catalog, monthly), linked only by the shared actor and the connector similarly, so a reader who reads only the section's first and last sentence would take it to be about one update cycle rather than two separate ones."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal. You track its status there until the payment clears.",
+      "fix": "Rename the heading to match the content, for example Payment Processing and Tracking, or move the stipend item reconciliation chain into Reimbursement Amounts and the portal-tracking sentence into How to Apply.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Terminology Notes section",
+      "severity": 2,
+      "violation": "Despite its heading, the section defines no terms; it narrates a payment-reconciliation chain and then an unrelated note about portal submission and tracking, so a reader cannot state, from the heading or from the section's first and last sentence, what the section as a whole is actually about."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T08:40:07Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 7,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 2
+  }
+}

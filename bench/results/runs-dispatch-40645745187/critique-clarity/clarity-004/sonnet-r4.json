@@ -1,0 +1,106 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "home-office equipment stipend (Eligibility); proof of purchase for every stipend item (Required Documentation); one device per category per employee (Restrictions and Exceptions); You record the stipend item on the request form (Terminology Notes).",
+      "fix": "Pick one term, for example equipment, and use it in every section. If device or stipend item is meant to denote something narrower, state that distinction explicitly in Terminology Notes, which currently contains no term definitions at all.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Eligibility line 11, Required Documentation line 33, Restrictions and Exceptions line 47, Terminology Notes line 51",
+      "severity": 3,
+      "violation": "Three different terms, equipment, device, and stipend item, are used across four sections for what appears to be one single purchased item, with no defined-terms statement or stated equivalence anywhere, including in the section titled Terminology Notes, which never actually defines any of the three. A reader cannot tell whether a stipend item is the same thing as a device, or something tracked separately."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "The IT asset group updates the reimbursement log at the start of the fiscal year. A copy of each update goes to the shared benefits folder the same day. Similarly, the IT asset group tracks the equipment catalog on the first business day of the month.",
+      "fix": "Open Program Overview with one or two sentences stating what the stipend covers, who is eligible, and the dollar cap, then move the IT asset group's log and catalog update cadence into Program Coordination or Special Cases, where the other internal process descriptions already live.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Program Overview section, lines 3 to 7",
+      "severity": 3,
+      "violation": "The section a reader checks first for the program's shape covers only internal IT recordkeeping; no sentence anywhere in it states what the stipend is, who qualifies, or how much it pays, so a reader skimming the overview for that one fact has to read the Eligibility and Reimbursement Amounts sections instead, which only make sense once the overview has already failed to orient them."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Completing the request begins with confirming eligibility, and uploading the receipt.",
+      "fix": "Move the Request Steps content into How to Apply, immediately after the portal description, as one numbered list covering the steps consistently: start the request, confirm eligibility, upload the receipt, review the confirmation summary, submit. Delete the separate Request Steps section.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Request Steps section, line 57, against How to Apply section, lines 19 to 23",
+      "severity": 3,
+      "violation": "The concrete step sequence for submitting a request sits in a separate section five headings after How to Apply, which already described the same task in different terms, starting a request, saving a draft, reviewing a confirmation summary. A reader following How to Apply never reaches the step list, and a reader who later finds Request Steps gets only two steps that do not match the fuller flow How to Apply already described."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Completing the request begins with confirming eligibility, and uploading the receipt.",
+      "fix": "Rewrite as: the employee confirms eligibility and uploads the receipt to complete the request, naming the employee as the subject performing both actions.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Request Steps section, line 57",
+      "severity": 2,
+      "violation": "The sentence's subject is the gerund phrase completing the request, an abstraction standing in for the employee, who is never named as the one who confirms eligibility or uploads the receipt, even though the actor is obvious and could be named directly as the sentence's subject."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "the IT asset group tracks the equipment catalog on the first business day of the month; The finance liaison publishes the equipment catalog at the start of the fiscal year; The benefits team reviews the equipment catalog at the start of the fiscal year.",
+      "fix": "Consolidate the three catalog descriptions into one place, for example Program Coordination, stating in one passage who owns the catalog, how often each listed activity happens, and how the activities relate to each other.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Program Overview line 7, Special Cases line 61, Questions and Updates line 73",
+      "severity": 2,
+      "violation": "Three non-adjacent sections each describe near-identical equipment catalog activity, tracking, publishing, and reviewing, attributed to three different owners on two different cadences, with no sentence anywhere tying the three activities into one process. A reader cannot state whether this is one catalog-maintenance process split three ways, or three separate, overlapping ones."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "You must keep your equipment in good working condition and we may ask for a brief photo check once a year. ... You record the stipend item on the request form ... Also, you submit the request in the portal.",
+      "fix": "Pick one register for the whole document. Either address the reader as you throughout, including Eligibility, How to Apply, and Approval Timeline, or keep the third person throughout and rewrite you must keep your equipment and we may ask for a brief photo check as the employee must keep the equipment in good working condition, and the finance office may request a photo check once a year.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Restrictions and Exceptions line 45, and Terminology Notes lines 51 and 53",
+      "severity": 2,
+      "violation": "Every other section addresses the reader in the third person, through the employee, the manager, or the finance office, with no second person anywhere. These two sections switch abruptly to direct you and we address with no signal marking the register change, so the reader has to re-decide, section by section, whether a sentence is speaking to them directly or describing someone else."
+    },
+    {
+      "confidence": "low",
+      "criterion": "WILLIAMS-STRESS",
+      "evidence": "The finance office reviews every stipend request over 200 dollars before it pays out.",
+      "fix": "Reorder to end on the threshold: before paying out, the finance office reviews every stipend request over 200 dollars.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Review Responsibility section, line 69",
+      "severity": 2,
+      "violation": "The sentence's newest and most consequential element, the 200 dollar review threshold, lands mid-sentence, while the sentence closes on before it pays out, information the reader already has from Approval Timeline's description of review preceding payout. The threshold, the one fact a reader checking whether their own request gets the extra review actually needs, does not occupy the position the reader weighs most heavily."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T08:53:47Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
