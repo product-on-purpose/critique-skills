@@ -1,0 +1,303 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`lang=\"translanguage\"`",
+      "fix": "Set `lang` to the actual content language, e.g. `lang=\"en\"`.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<html lang=\"translanguage\" id=\"html\">`",
+      "severity": 3,
+      "violation": "\"translanguage\" is not a valid BCP 47 language code, so the declared document language is meaningless to browsers and assistive technology (affects voice selection, translation prompts, etc.)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<title id=\"head-title\"></title>`",
+      "fix": "Add a descriptive title, e.g. \"Rider Service Updates\".",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<title id=\"head-title\"></title>`",
+      "severity": 3,
+      "violation": "The page title is empty, so browser tabs, bookmarks, history, and screen readers have no name for the page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"/plan\" id=\"nav-link1\">Plan a trip</a>\\n<a href=\"/accessibility\" id=\"nav-link2\">Accessibility</a>`",
+      "fix": "Add a skip link (e.g. `<a href=\"#main-content\">Skip to main content</a>`) as the first focusable element.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`<nav id=\"nav\">`",
+      "severity": 3,
+      "violation": "There is no \"skip to main content\" link before the nav, forcing keyboard and screen-reader users to tab through navigation on every page load before reaching the content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div id=\"main-content\">`",
+      "fix": "Change the wrapper to `<main id=\"main-content\">`.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`<div id=\"main-content\">`",
+      "severity": 3,
+      "violation": "The primary content region is a generic `div` rather than a `<main>` landmark, so assistive technology users can't jump directly to it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "both paragraphs end with \"Station staff can also help with the same request in person.\"",
+      "fix": "Write a distinct, accurate closing sentence for each paragraph (or remove it if station staff can't actually help with real-time arrival checks).",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`s1-p1` and `s1-p2`",
+      "severity": 3,
+      "violation": "The identical trailing sentence is reused for two unrelated actions (fare adjustments vs. checking real-time arrivals), which reads as copy-pasted boilerplate rather than accurate per-topic guidance."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<img src=\"/img/platform-update.jpg\" id=\"s1-img1\">`",
+      "fix": "Add a descriptive `alt` attribute (or `alt=\"\"` if purely decorative).",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`<img src=\"/img/platform-update.jpg\" id=\"s1-img1\">`",
+      "severity": 3,
+      "violation": "The image has no `alt` attribute at all, so screen readers will announce the filename or nothing meaningful."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<h2 id=\"s1-h\">` ... followed later by `<h4 id=\"s2-h\">`",
+      "fix": "Change `s2-h` to an `<h2>` (or add an intervening `<h3>` section) to keep heading levels sequential.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`<h4 id=\"s2-h\">Accessibility improvements</h4>`",
+      "severity": 3,
+      "violation": "The heading level jumps from h2 to h4, skipping h3, which breaks the document outline for screen-reader users navigating by heading level."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "heading \"Accessibility improvements\" followed by content about reporting service issues and an on-time status table",
+      "fix": "Rename the heading to match the actual content (e.g. \"Service status\") or replace the content with genuine accessibility information.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "`<h4 id=\"s2-h\">Accessibility improvements</h4>`",
+      "severity": 3,
+      "violation": "The section heading promises accessibility-related content, but the body text and table are about issue reporting and zone status, unrelated to accessibility."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Updates post to the schedule page within one business day.\" (also appears verbatim in `s3-p2`)",
+      "fix": "Tailor each paragraph's closing sentence to the specific action it follows.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "`s2-p1`",
+      "severity": 3,
+      "violation": "The same sentence is attached both to \"report a service issue\" and to \"review the updated schedule,\" two different actions, making it unclear which process the one-business-day update timeline actually applies to."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<table id=\"s2-table1\">` with no `<caption>`",
+      "fix": "Add a `<caption>` such as \"Current zone status\".",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "`<table id=\"s2-table1\">`",
+      "severity": 3,
+      "violation": "The table has no caption or accessible name, so screen-reader users get no context for what \"Zone/Status\" refers to when landing on the table."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Passengers can report a service issue at any station kiosk.\" vs. `s2-p1`'s \"Passengers can report a service issue by calling rider services.\"",
+      "fix": "Combine into a single statement listing both channels, or explicitly note \"You can also report issues by calling rider services\" for consistency.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "`s3-p1`",
+      "severity": 3,
+      "violation": "The same action (reporting a service issue) is described in two separate sections via two different channels with no cross-reference, implying they may be different procedures rather than two options for the same one."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Route adjustments take effect on the posted effective date.\"",
+      "fix": "State the actual date or link directly to where it's posted.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "`<div class=\"promo-banner\" id=\"s3-banner\">`",
+      "severity": 3,
+      "violation": "\"the posted effective date\" is vague and self-referential - it doesn't say where that date is posted or link to it, giving the reader no way to find the actual date."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Local residents can check real time arrivals through the online portal. A confirmation message follows once the request is processed.\"",
+      "fix": "Replace with wording accurate to a lookup action (no confirmation message), and reconcile with `s1-p2` so the two mentions of checking arrivals are consistent.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "`<div class=\"status-card\" role=\"status\" id=\"s3-statuscard\">`",
+      "severity": 3,
+      "violation": "Checking real-time arrivals is a read-only lookup, not a submitted request, so \"a confirmation message follows once the request is processed\" (copied from `s3-p1`'s issue-reporting flow) doesn't logically apply here; this also duplicates `s1-p2`'s \"check real time arrivals\" topic via yet another channel."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button type=\"button\" class=\"btn-secondary\" id=\"s3-button1\">Refresh status</button>`",
+      "fix": "Associate the button with the status element it updates (e.g. `aria-controls=\"s3-statuscard\"`) and define/implement its action.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "`<button type=\"button\" class=\"btn-secondary\" id=\"s3-button1\">Refresh status</button>`",
+      "severity": 3,
+      "violation": "The button has no associated behavior or indication of what it refreshes (no linked status region via `aria-controls`, no visible effect described)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`aria-label=\"Delete item\"` with no visible text, placed amid station-update content",
+      "fix": "Remove the control if unused, or if intentional, clarify what item it deletes and ensure Enter/Space activation is implemented.",
+      "id": "F-015",
+      "lane": "judged",
+      "location": "`<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">`",
+      "severity": 3,
+      "violation": "A \"Delete item\" control is contextually unrelated to anything else on this rider-updates page, and as a custom `role=\"button\"` it has no evident keyboard-activation handling (Enter/Space) in the document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "three `<div class=\"step\">` entries (\"Choose a plan\", \"Enter payment details\", \"Confirm your order\") with no current-step indicator",
+      "fix": "Mark up as an ordered list with `aria-current=\"step\"` on the active step, and verify this wizard belongs in this section at all.",
+      "id": "F-016",
+      "lane": "judged",
+      "location": "`<div class=\"wizard-steps\" id=\"s3-wizard\">`",
+      "severity": 3,
+      "violation": "The steps use plain `div`s instead of list semantics and have no `aria-current` or similar marker, so screen readers can't convey progress or that these are a sequence; the content (a payment/order wizard) is also unrelated to \"Station updates.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"/fares/history\" id=\"s3-link1\">click here</a>`",
+      "fix": "Change the link text to something descriptive, e.g. \"view the full list of upcoming adjustments\".",
+      "id": "F-017",
+      "lane": "judged",
+      "location": "`<p id=\"s3-linkpara\">`",
+      "severity": 3,
+      "violation": "\"click here\" is non-descriptive link text; users navigating by a screen reader's links list get no indication of the link's destination or purpose."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"s3-form\">` (no `action` or `method` attribute)",
+      "fix": "Add explicit `action` and `method` attributes.",
+      "id": "F-018",
+      "lane": "judged",
+      "location": "`<form id=\"s3-form\">`",
+      "severity": 3,
+      "violation": "The form has no `action` or `method`, so submitting it has undefined/default behavior (typically a GET to the current URL, discarding intended data)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "options \"Northbound\"/\"Southbound\" vs. the table's zones \"North\"/\"South\"",
+      "fix": "Use consistent naming between the table and the form options.",
+      "id": "F-019",
+      "lane": "judged",
+      "location": "`<select id=\"topic\">`",
+      "severity": 3,
+      "violation": "The route selector uses different naming (\"Northbound\"/\"Southbound\") than the status table's zones (\"North\"/\"South\"), making it unclear whether they refer to the same areas."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"topic\">`, `<input id=\"email\" ...>`, `<input id=\"phone\" ...>`, `<input id=\"promo\" ...>` - none have a `name` attribute",
+      "fix": "Add appropriate `name` attributes to each form control.",
+      "id": "F-020",
+      "lane": "judged",
+      "location": "`<form id=\"s3-form\">` inputs/select",
+      "severity": 3,
+      "violation": "None of the form controls have a `name` attribute, so on submission their values won't be included in the submitted form data (only `id` is set, which servers don't read)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "label text \"(required)\" with `<input id=\"phone\" type=\"tel\" autocomplete=\"tel\">` having no `required` or `aria-required` attribute",
+      "fix": "Add `required` (and optionally `aria-required=\"true\"`) to the phone input.",
+      "id": "F-021",
+      "lane": "judged",
+      "location": "`<label for=\"phone\" id=\"s3-form-phone-label\">Phone number (required)</label>`",
+      "severity": 3,
+      "violation": "The label visually/textually indicates the field is required, but nothing in the markup enforces or exposes that to assistive technology or form validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`aria-invalid=\"true\"` present on initial page load, before any user interaction",
+      "fix": "Only set `aria-invalid=\"true\"` dynamically after a failed validation attempt.",
+      "id": "F-022",
+      "lane": "judged",
+      "location": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">`",
+      "severity": 3,
+      "violation": "Marking the field invalid by default tells screen-reader users there's an error before they've even entered anything, which is confusing and incorrect."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">` followed by `<span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">`",
+      "fix": "Add `aria-describedby=\"s3-form-promo-error\"` to the promo input.",
+      "id": "F-023",
+      "lane": "judged",
+      "location": "`<input id=\"promo\" ...>` / `<span class=\"error-text\" ... id=\"s3-form-promo-error\">`",
+      "severity": 3,
+      "violation": "The error message is not programmatically associated with the promo input (no `aria-describedby`), so screen-reader users won't hear it when focusing the field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "error text states \"Enter a 6 character code using letters and numbers only,\" but the input has no `maxlength` or `pattern`",
+      "fix": "Add `maxlength=\"6\"` and a `pattern` (e.g. `pattern=\"[A-Za-z0-9]{6}\"`) matching the stated rule.",
+      "id": "F-024",
+      "lane": "judged",
+      "location": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">`",
+      "severity": 3,
+      "violation": "The stated validation rule isn't enforced anywhere in the markup, so the field will accept any input regardless of the described format."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "visible text \"Submit\" vs. `aria-label=\"Send form now\"`",
+      "fix": "Remove the `aria-label` or change it to include the visible text, e.g. `aria-label=\"Submit form\"`.",
+      "id": "F-025",
+      "lane": "judged",
+      "location": "`<button type=\"submit\" class=\"btn-primary\" id=\"s3-form-submit\" aria-label=\"Send form now\">Submit</button>`",
+      "severity": 3,
+      "violation": "The accessible name (\"Send form now\") doesn't contain the visible label text (\"Submit\"), violating WCAG 2.5.3 Label in Name and breaking voice-control users who speak the visible label."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-001.html",
+    "artifact_sha256": "9077f0b4d4061075fc6497a8cd5b91b94b2af4f536abadbd41a62d9f86cd85d2",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:22:01Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 25,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "#nav contains exactly two links, \"Plan a trip\" and \"Accessibility\"; no search form, sitemap link, or breadcrumb trail appears anywhere else in the document, and nothing in the page's content marks it as one step in a linear process.",
+      "fix": "Add a genuinely independent second wayfinding mechanism site wide, such as a site search form or a sitemap link, or if this page is actually one step in a linear process, state that in its content so the exemption applies.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#nav, <nav> element in header, the page's only wayfinding mechanism",
+      "severity": 3,
+      "violation": "WCAG-2.4.5 requires at least two mechanisms that independently let a reader locate this page within the site, unless the page is one step in a linear process. Only the primary navigation at #nav is present; no second mechanism exists anywhere in the markup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "Under the heading #s3-h \"Fare adjustments\", section #s3 also contains #s3-customcontrol (a \"Delete item\" control with no visible item list), #s3-wizard (a three step \"Choose a plan\" / \"Enter payment details\" / \"Confirm your order\" sequence), and #s3-form (a contact form asking for Route, Email address, Phone number, and Promo code).",
+      "fix": "Give the wizard, the delete control, and the contact form their own heading(s) describing what they actually are, or move them out of the section labeled \"Fare adjustments\" so that heading covers only fare related content.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#s3-h, <h2> heading, visible text 'Fare adjustments'",
+      "severity": 2,
+      "violation": "WCAG-2.4.6 requires a heading's wording to describe what follows well enough that a reader scanning headings alone can predict it. \"Fare adjustments\" describes only the fare related paragraphs and status card; it misdescribes the delete control, the plan and payment wizard, and the contact form that share the same section, none of which a reader would expect from this heading."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> carries no aria-describedby, aria-errormessage, or other association to #s3-form-promo-error, the sibling <span> reading \"Enter a 6 character code using letters and numbers only.\"",
+      "fix": "Add aria-describedby=\"s3-form-promo-error\" (or aria-errormessage) to #promo so the existing error text is programmatically tied to the field.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#promo, <input> control, visible label 'Promo code'",
+      "severity": 2,
+      "violation": "WCAG-3.3.1 requires the error text identifying what is wrong with an invalid field to be associated with that field. #promo is marked aria-invalid=\"true\" but carries no programmatic association to its error text, so assistive technology announces that the field is invalid without exposing why."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-4.1.2",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\"> sits between a \"Refresh status\" button and the wizard-steps block; no list of items, or any other element the label 'Delete item' could refer to, appears anywhere in section #s3.",
+      "fix": "Name the control for what it actually deletes in this context (for example aria-label=\"Remove promo code entry\"), or remove the control if it has no real referent on this page.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#s3-customcontrol, custom button, accessible name 'Delete item'",
+      "severity": 2,
+      "violation": "WCAG-4.1.2 requires a custom control's exposed name to actually convey its purpose, not merely exist. \"Delete item\" names an action but not what item, and the section has no item or list for it to refer to, so the name does not convey what this control actually does."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "4febe21b95880d7b0b385588ebdc9c800b2c010b439206d51d6b790cb76d11c3",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T04:32:20Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

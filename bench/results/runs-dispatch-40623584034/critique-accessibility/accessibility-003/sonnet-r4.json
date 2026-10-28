@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-1.3.2",
+      "evidence": "DOM order is #s3-step3 \"Confirm your order\", then #s3-step2 \"Enter payment details\", then #s3-step1 \"Choose a plan\"; each carries inline style order:3, order:2, order:1 respectively",
+      "fix": "Reorder the three .step divs in the DOM to match the intended visual sequence (Choose a plan, Enter payment details, Confirm your order) instead of relying on the CSS order property to reorder them visually.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#s3-wizard, <div> wizard-steps container, children #s3-step3, #s3-step2, #s3-step1 in that DOM order, lines 47 to 57",
+      "severity": 3,
+      "violation": "The declared CSS order property reverses the visual sequence of the three wizard steps relative to their DOM order, so a linearized reading hears the confirm-and-pay step before the plan-selection step that must happen first, reversing the decision sequence WCAG-1.3.2 requires the DOM order to preserve."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "The page exposes only a two-link primary navigation menu (Plan a trip, Service alerts); no search form, sitemap link, breadcrumb trail, or related-links list appears anywhere in the document, and the page is not marked as one step of a linear process",
+      "fix": "Add a second independent mechanism, such as a site search form, a sitemap link, or a breadcrumb trail that does not just duplicate the primary navigation's own links.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#nav, <nav> element, lines 11 to 14",
+      "severity": 3,
+      "violation": "Fewer than two independent navigation mechanisms are present for a standalone content page, breaching WCAG-2.4.5's requirement that a reader be able to locate the page through more than one mechanism."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-4.1.2",
+      "evidence": "The div wraps only an img with alt=\"\" and carries no role, no aria-label or other accessible name, and no tabindex or other keyboard handling",
+      "fix": "Mark up the control as a native <button> with a visible or aria-label text name (for example \"Delete\"), or add role=\"button\", an accessible name, and keyboard handling if it must remain a div.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#s3-customcontrol, <div> icon-delete, line 44",
+      "severity": 3,
+      "violation": "A custom interactive control built from generic markup exposes no role, no programmatically determinable name, and no keyboard access, breaching WCAG-4.1.2's requirement that every custom component expose its name, role, and state."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-1.4.1",
+      "evidence": "style=\"color:#cc0000\" is the only styling difference between this label and the sibling labels #s3-form-email-label and #s3-form-promo-label, with no asterisk, \"required\" text, icon, or aria-required attribute on #phone accompanying it",
+      "fix": "Add a visible non-color indicator (an asterisk plus required text, or an explanatory instruction) alongside the red label, or remove the color if it is not meant to signal anything.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#s3-form-phone-label, <label> for=\"phone\", line 64",
+      "severity": 2,
+      "violation": "Color alone (red label text) is the only signal distinguishing this field from the others, with no non-color indicator carrying the same information, breaching WCAG-1.4.1's requirement that a second signal accompany any color-coded meaning."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "The heading reads \"Accessibility improvements,\" but the section's own text, #s1-p1 and #s1-p2, describes requesting a fare adjustment and checking real time arrivals by phone, neither of which is an accessibility improvement",
+      "fix": "Rename the heading to match its actual content (for example, \"Fares and real time arrivals\"), or move the fare-adjustment and arrival-time paragraphs elsewhere and give the accessible-parking repainting item its own accurately named heading.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#s1-h, <h2> \"Accessibility improvements\", line 19",
+      "severity": 2,
+      "violation": "The heading's wording misdescribes the content that actually follows it, breaching WCAG-2.4.6's requirement that a heading predict what comes next."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "The heading reads \"Weekend service,\" but the first paragraph under it, #s2-p1, is the same fare-adjustment boilerplate as #s1-p1 and never mentions weekend service, and the following table reports general zone status with no weekend-specific framing",
+      "fix": "Replace the fare-adjustment paragraph with weekend-specific content, or rename the heading to match what the section actually covers.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#s2-h, <h2> \"Weekend service\", line 25",
+      "severity": 2,
+      "violation": "The heading's wording misdescribes the content that actually follows it, breaching WCAG-2.4.6's requirement that a heading predict what comes next."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "The error text reads \"Error.\" for the #promo field, which carries aria-invalid=\"true\"",
+      "fix": "Replace \"Error.\" with specific text naming the field and the problem, for example \"Promo code not recognized. Check the code and try again.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "#s3-form-promo-error, <span> error-text for #promo, line 68",
+      "severity": 2,
+      "violation": "The error text is a generic placeholder that names neither the specific field nor the nature of the problem, breaching WCAG-3.3.1's requirement that error text identify the item and describe what is wrong with it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "7518497ec47bc70bca9021d0ed190bdfb2f04532e6ef68cc37b662d769e87516",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T04:16:45Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

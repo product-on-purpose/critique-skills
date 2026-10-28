@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "nav#nav contains only two links, \"Plan a trip\" and \"Service alerts\"; no other navigation mechanism (search form, sitemap link, breadcrumb trail, related-links list) appears anywhere else in the document, including #header and #footer",
+      "fix": "Add a second independent way to locate this page, such as a site search form or a breadcrumb trail reflecting this page's place in the site.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#nav, <nav> element, line 11",
+      "severity": 3,
+      "violation": "Only one navigation mechanism (the primary nav menu) is available to locate this page within the site, with no second independent mechanism such as search, sitemap, or breadcrumbs, and the page is not one step of a linear process."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "Heading reads \"Accessibility improvements\", but #s1-p1 and #s1-p2 describe requesting a fare adjustment and checking real-time arrivals by phone, and only #s1-img1 (an image of crews repainting accessible parking) touches accessibility at all",
+      "fix": "Retitle the heading to match the section's actual topic (e.g. 'Fare adjustments and real-time arrivals'), or move the fare/arrival paragraphs out of a section titled for accessibility content.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#s1-h, <h2> heading, visible text 'Accessibility improvements', line 19",
+      "severity": 3,
+      "violation": "The heading's wording does not describe the section's actual content; a reader scanning headings would expect accessibility-related guidance and instead finds fare-adjustment and arrival-time information unrelated to accessibility."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-1.4.1",
+      "evidence": "label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label>, the only label in the form carrying this styling; the other three labels (#s3-form-topic-label, #s3-form-email-label, #s3-form-promo-label) have no such style, and #phone carries no required/aria-required attribute, asterisk, or other text cue",
+      "fix": "Add a non-color cue that carries the same meaning as the red styling, such as visible 'required' text or an asterisk with an accessible description, or remove the color-only distinction if none is intended.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#s3-form-phone-label, <label> for #phone, visible text 'Phone number', line 64",
+      "severity": 2,
+      "violation": "Color alone (red label text) distinguishes this field from the others with no accompanying text, icon, or symbol carrying the same signal, so a color-blind reader cannot perceive whatever distinction the red color is meant to convey."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "Heading reads \"Weekend service\", but #s2-p1 is the same generic fare-adjustment boilerplate as #s1-p1, with nothing specific to weekends, and the following table (#s2-table1) reports general zone status rather than anything weekend-specific",
+      "fix": "Replace the generic fare-adjustment paragraph with weekend-specific content, or retitle the heading to describe the zone-status table that actually follows it.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#s2-h, <h2> heading, visible text 'Weekend service', line 25",
+      "severity": 2,
+      "violation": "The heading promises weekend-specific information but the paragraph beneath it is generic fare-adjustment text with no connection to weekends, so a reader scanning the heading cannot predict this section's actual content."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "input#promo carries aria-invalid=\"true\" with no aria-describedby pointing to any error text; the adjacent span#s3-form-promo-error reads only \"Error.\"",
+      "fix": "Replace \"Error.\" with text naming the field and the specific problem (e.g. \"Promo code not recognized\"), and associate it to the input with aria-describedby=\"s3-form-promo-error\".",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#s3-form-promo-error, <span> error text, line 68, paired with #promo input",
+      "severity": 2,
+      "violation": "The error text for the invalid promo-code field is a generic message that names neither the field nor the specific problem, and it is not programmatically associated to #promo via aria-describedby, so assistive technology has no reliable way to tell the reader what is wrong or with which field."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "7518497ec47bc70bca9021d0ed190bdfb2f04532e6ef68cc37b662d769e87516",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T04:22:56Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.3.4",
+      "evidence": "@media (orientation: portrait) { #main-content { display: none; } }",
+      "fix": "Remove the display: none rule from the (orientation: portrait) media query, or replace it with a responsive layout that keeps #main-content visible and operable in both orientations.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#main-content, <main> landmark, hidden by #head-style's portrait media query",
+      "severity": 4,
+      "violation": "The page's declared CSS hides the entire #main-content landmark, which carries every section heading, all body text, the image, the table, and the whole accessibility-improvements form, whenever the viewport is in portrait orientation. No content on the page states a reason any of this is essential to a single orientation. Portrait is the default orientation most phones render in, so for that whole class of reader, visiting this page leaves only the header and footer; none of the page's actual content is reachable at all without rotating the device."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "<nav id=\"nav\"><a href=\"/accessibility\" id=\"nav-link1\">Accessibility</a><a href=\"/fares\" id=\"nav-link2\">Fares and passes</a></nav>",
+      "fix": "Add a second, independent way to locate this page or its related content, such as a site search form, a sitemap link, or a breadcrumb trail, alongside the existing #nav menu.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#nav, <nav> primary navigation, the page's only navigation mechanism",
+      "severity": 3,
+      "violation": "The page exposes exactly one navigation mechanism, the #nav primary menu. It offers no site search, no sitemap link, and no breadcrumb trail; #footer's two links (/privacy, /terms) are utility links, not an independent path to this or related content. Nothing in the page's content marks it as one step in a linear process, so a reader who lands here directly, for example from a search engine, has exactly one way to find any related page on the site."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.3.5",
+      "evidence": "<input id=\"email\" type=\"email\">",
+      "fix": "Set the field's autocomplete attribute to email, or the matching standard token for this input purpose.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "#email, <input> field, input purpose email, line 64",
+      "severity": 2,
+      "violation": "This field's type, name, or id identifies the email input purpose, but it carries no autocomplete token, so the purpose is not programmatically determinable."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.4.7",
+      "evidence": "<a href=\"/accessibility\" id=\"nav-link1\" style=\"outline:none\">Accessibility</a>",
+      "fix": "Remove the inline outline:none, or pair it with a visible replacement focus style, such as a border, background, or box-shadow change applied via a :focus or :focus-visible rule.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#nav-link1, <a> control, visible label 'Accessibility', line 13",
+      "severity": 2,
+      "violation": "This link's inline style sets outline:none, removing its focus indicator. The page's only declared stylesheet (#head-style) adds no replacement border, background, or box-shadow for this link's focus state, so a keyboard user tabbing through #nav cannot see that this link is focused, while the rest of the page's controls remain unaffected."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.5.8",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\" style=\"width:16px;height:16px\">",
+      "fix": "Increase #s3-customcontrol's declared width and height to at least 24 CSS pixels each, or add enough margin around it to satisfy the spacing exception against its neighbouring controls.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#s3-customcontrol, custom <div role=\"button\"> control, accessible name 'Delete item'",
+      "severity": 2,
+      "violation": "This control's declared CSS sets it to 16 by 16 CSS pixels, below the 24 by 24 CSS pixel floor. No margin or padding is declared on it or on its neighbours (#s3-button1 above it, #s3-wizard below it), so the standard's spacing exception, which requires an undersized target's 24-pixel circle to clear every neighbouring target, does not plainly apply. None of the standard's other exceptions apply either: it is a standalone icon control, not inline text, with no stated essential-size reason and no equivalent full-size control elsewhere on the page."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-4.1.3",
+      "evidence": "<div class=\"status-card\" id=\"s3-statuscard\"> Your changes are saved. </div>",
+      "fix": "Add role=\"status\" (or aria-live=\"polite\") to #s3-statuscard so the confirmation is announced automatically when it appears.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#s3-statuscard, <div> status confirmation, visible text 'Your changes are saved.'",
+      "severity": 2,
+      "violation": "This div reports a save confirmation, a status update, but carries no role=\"status\", role=\"alert\", or aria-live attribute, so assistive technology never announces it unless the reader happens to navigate back onto it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-005.html",
+    "artifact_sha256": "0f8493f220745495c0706928266e57a6f8d8bacbcd1737ff17dc3965ce55df7b",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T04:55:26Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 1,
+      "4": 1
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

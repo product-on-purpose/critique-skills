@@ -1,0 +1,79 @@
+Location: s1-p1, "Station updates" section
+Evidence: "Riders should review the updated schedule at any station kiosk. Station staff can also help with the same request in person."
+Problem: "The same request" has no referent — the preceding sentence describes an action ("review the updated schedule"), not a request, so the second sentence doesn't logically follow.
+Fix: Rewrite the second sentence to name the actual action, e.g. "Station staff can also provide the updated schedule in person."
+
+Location: s1-p1 and s1-p2, "Station updates" section
+Evidence: "Station staff can also help with the same request in person." appears verbatim in both s1-p1 and s1-p2
+Problem: The identical boilerplate sentence is reused across unrelated actions (reviewing a schedule vs. reporting an issue), producing templated, redundant copy rather than content specific to each paragraph.
+Fix: Write a distinct, context-specific closing sentence for each paragraph instead of repeating the same template line.
+
+Location: s1-img1, img inside "Station updates" section
+Evidence: src="/img/platform-update.jpg" alt="Crews repainting the accessible parking spaces near the station entrance."
+Problem: The alt text (parking spaces being repainted) does not match the image filename (platform-update) or the surrounding paragraph content about schedules and reporting issues, suggesting the wrong image or wrong alt text was used.
+Fix: Verify which image is actually intended and write alt text that accurately describes that image and relates to the section's topic.
+
+Location: s2-p1, "Schedule changes" section
+Evidence: "Passengers can check real time arrivals through the online portal."
+Problem: The audience noun switches to "Passengers" here after "Riders" and "Commuters" were used in the prior section for the same general audience, creating inconsistent terminology.
+Fix: Standardize on a single term (e.g. "Riders") throughout the document.
+
+Location: s2, table under "Schedule changes" heading
+Evidence: heading "Schedule changes" followed by table rows "North / On time" and "South / On time"
+Problem: A section titled "Schedule changes" presents only current on-time status with no indication of any change, so the content doesn't match the heading's promise.
+Fix: Either rename the heading to something like "Current schedule status" or add actual change information (delays, revised times) to the table.
+
+Location: s3-p1, "Fare adjustments" section
+Evidence: "Riders can report a service issue by calling rider services."
+Problem: This duplicates the content of s1-p2 ("Commuters can report a service issue by calling rider services") almost verbatim, under an unrelated heading ("Fare adjustments" rather than "Station updates"), making the information redundant and misplaced.
+Fix: Remove the duplicate sentence from s3-p1 or replace it with content actually about fare adjustments.
+
+Location: s3-p2, "Fare adjustments" section
+Evidence: "Local residents can check real time arrivals through the online portal."
+Problem: This again duplicates s2-p1's content almost verbatim and introduces yet another audience term ("Local residents"), compounding the terminology inconsistency and redundancy.
+Fix: Delete this duplicate sentence or replace it with fare-adjustment-specific content, and use consistent audience terminology.
+
+Location: s3-banner, promo banner div
+Evidence: "Route adjustments take effect on the posted effective date."
+Problem: The sentence is circular and uninformative — it says the effective date is "the posted effective date" without stating what that date actually is or where to find it.
+Fix: State the actual effective date or link directly to where it is posted.
+
+Location: s3-statuscard, div with role="status"
+Evidence: role="status" wraps "Riders can check real time arrivals at any station kiosk. Updates post to the schedule page within one business day."
+Problem: role="status" is an ARIA live region intended for dynamic updates announced to assistive technology; applying it to static, unchanging informational text is a misuse that causes unnecessary or confusing announcements.
+Fix: Remove role="status" from this div and use a plain container, reserving role="status" for content that actually updates dynamically.
+
+Location: s3-customcontrol, div with role="button" aria-label="Delete item"
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Problem: This is a custom div reimplementing button semantics (role, tabindex, aria-label) instead of using a native `<button>`, and "Delete item" has no corresponding item or context anywhere in the fare-adjustments content, making its purpose unclear.
+Fix: Replace the div with a native `<button>` element, and either remove this control or give it a clear, contextual label tied to an actual deletable item.
+
+Location: s3-wizard, "wizard-steps" div
+Evidence: steps listed: "Choose a plan", "Enter payment details", "Confirm your order"
+Problem: These checkout-style wizard steps are unrelated to the "Fare adjustments" section's content and have no current-step indication, list semantics, or connection to the surrounding text.
+Fix: Remove this unrelated wizard block, or if it is meant to represent a real fare-purchase flow, integrate it with actual step content and mark the current step (e.g. with aria-current and list markup).
+
+Location: s3-linkpara, link inside "Fare adjustments" section
+Evidence: `<a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>`
+Problem: The link text describes "the accessibility improvements list" but the href points to "/fares/history", a mismatch that misleads users (and screen reader users navigating by link text) about the link's destination.
+Fix: Make the link text match the destination, e.g. "read the fare adjustment history," or point the href to the actual accessibility improvements page if that's the intended target.
+
+Location: s3-form, phone number field
+Evidence: `<label for="phone" ...>Phone number (required)</label>` followed by `<input id="phone" type="tel" autocomplete="tel">` with no `required` or `aria-required` attribute
+Problem: The label text tells users the field is required, but the input itself carries no required/aria-required attribute, so assistive technology and form validation won't treat it as required.
+Fix: Add `required` (and/or `aria-required="true"`) to the phone input to match the label text.
+
+Location: s3-form, promo code field
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: aria-invalid="true" is hardcoded in the initial markup, so the field is announced as invalid to assistive technology immediately on page load, before the user has entered anything.
+Fix: Remove the static aria-invalid="true" and set it dynamically only after validation fails.
+
+Location: s3-form-promo-error, error text for promo field
+Evidence: "Enter a 6 character code using letters and numbers only." with input `<input id="promo" type="text" aria-invalid="true">` (no maxlength, minlength, or pattern)
+Problem: The error message describes a specific format constraint (6 characters, alphanumeric), but the input has no corresponding maxlength/minlength/pattern attribute enforcing or validating that format.
+Fix: Add `maxlength="6"` and a `pattern` (e.g. alphanumeric regex) to the promo input so the stated constraint is actually enforced.
+
+Location: s3-form, route select field
+Evidence: `<label for="topic" id="s3-form-topic-label">Route</label>` paired with `<select id="topic">...`
+Problem: The select's id ("topic") does not match its label text ("Route") or its actual purpose (choosing Northbound/Southbound), which is confusing for anyone inspecting or maintaining the markup.
+Fix: Rename the id (and its `for` attribute reference) to something consistent with its purpose, e.g. "route".

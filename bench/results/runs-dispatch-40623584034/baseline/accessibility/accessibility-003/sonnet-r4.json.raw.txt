@@ -1,0 +1,69 @@
+Location: section#s2, paragraph id="s2-p1"
+Evidence: "Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person." (identical to s1-p1 under "Accessibility improvements")
+Problem: This paragraph is a verbatim duplicate of s1-p1 but appears under the "Weekend service" heading, where it has nothing to do with weekend service; the content doesn't match its section.
+Fix: Replace with text actually describing weekend service changes, or remove the paragraph from this section.
+
+Location: section#s1, image id="s1-img1"
+Evidence: alt="Crews repainting the accessible parking spaces near the station entrance."
+Problem: The image's alt text describes parking-lot repainting, which is unrelated to the surrounding paragraphs about fare adjustments and real-time arrival checks, and isn't clearly tied to "Accessibility improvements" either.
+Fix: Either add a caption/paragraph explaining the parking repainting work so the image fits the section, or move the image to a section where it's relevant.
+
+Location: section#s2, table id="s2-table1"
+Evidence: `<table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>...`
+Problem: The table has no `<caption>` or accessible name, so screen reader users encounter a table of zone statuses with no description of what it represents.
+Fix: Add a `<caption>` (e.g., "Weekend service status by zone") inside the table.
+
+Location: section#s3, paragraph id="s3-p1"
+Evidence: "Local residents should review the updated schedule through the mobile app. Station staff can also help with the same request in person."
+Problem: This is the third near-identical copy of the "mobile app / station staff can also help with the same request" boilerplate (after s1-p1 and s2-p1), and "the same request" has no clear referent since reviewing a schedule isn't a request.
+Fix: Rewrite with content specific to schedule changes, and remove the dangling "same request" phrasing.
+
+Location: section#s3, paragraph id="s3-p2"
+Evidence: "Passengers should review the updated schedule through the mobile app." (directly follows s3-p1, which says the same thing)
+Problem: s3-p2 duplicates the instruction already given in s3-p1 within the same section, making the content redundant.
+Fix: Merge the two paragraphs into one, keeping only the additional detail ("takes effect on the following service day").
+
+Location: section#s3, div id="s3-statuscard"
+Evidence: "Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day." (matches s1-p2 almost word-for-word)
+Problem: This duplicates s1-p2 from the "Accessibility improvements" section, just swapping "Passengers" for "Local residents," indicating copy-pasted content not tailored to this section.
+Fix: Write distinct content for the status card relevant to schedule changes, or remove the duplicate if real-time arrival info belongs only in section 1.
+
+Location: section#s3, div id="s3-customcontrol"
+Evidence: `<div class="icon-delete" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></div>`
+Problem: This is a custom interactive-looking control (trash/delete icon) implemented as a non-interactive `<div>` with an empty `alt`, giving it no accessible name, no keyboard focusability, and no role — it's unusable via keyboard or screen reader.
+Fix: Implement it as a `<button>` with a descriptive `aria-label` (e.g., "Delete") instead of a styled `<div>` with a decorative empty alt.
+
+Location: section#s3, div id="s3-wizard"
+Evidence: DOM order is step3 ("Confirm your order", `order:3`), step2 ("Enter payment details", `order:2`), step1 ("Choose a plan", `order:1`)
+Problem: The CSS `order` property reverses the visual order of the steps relative to their DOM/reading order, so sighted mouse users see "Choose a plan → Enter payment → Confirm order" while keyboard and screen reader users navigate "Confirm order → Enter payment → Choose a plan."
+Fix: Reorder the elements in the HTML source to match the intended visual/logical sequence instead of relying on CSS `order` to resequence them.
+
+Location: section#s3, paragraph id="s3-linkpara", link id="s3-link1"
+Evidence: `<a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>` inside "For the full list of upcoming adjustments, ..."
+Problem: The link text promises an "accessibility improvements list," the surrounding sentence is about "upcoming adjustments" (schedule changes), and the href points to `/fares/history` — three mismatched topics for one link.
+Fix: Make the link text, surrounding sentence, and destination URL all describe the same content (e.g., a schedule-changes list linking to a schedule-history page).
+
+Location: section#s3, form label id="s3-form-phone-label"
+Evidence: `<label for="phone" id="s3-form-phone-label" style="color:#cc0000">Phone number</label>`
+Problem: The red color is the only signal differentiating this field (presumably marking it required or important) from the other labels, which fails for colorblind users or anyone who can't perceive the color difference.
+Fix: Add a textual/semantic indicator (e.g., "Phone number (required)" or an asterisk with an accessible description) rather than relying on color alone.
+
+Location: section#s3, form input id="promo"
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: `aria-invalid="true"` is hard-coded in the markup, so the field is announced as invalid to assistive technology immediately on page load, before the user has entered anything.
+Fix: Set `aria-invalid` dynamically based on actual validation state, defaulting to `false` or omitted until the user submits or edits the field.
+
+Location: section#s3, error text id="s3-form-promo-error"
+Evidence: "Error."
+Problem: The error message gives no information about what is wrong with the promo code, which doesn't meet basic error-identification guidance (e.g., WCAG 3.3.1) and leaves users unable to correct the issue.
+Fix: Replace with a specific message, e.g., "This promo code is not valid. Check for typos and try again."
+
+Location: section#s3, form id="s3-form"
+Evidence: `<select id="topic">`, `<input id="email" type="email" ...>`, `<input id="phone" type="tel" ...>`, `<input id="promo" type="text" ...>` — none have a `name` attribute
+Problem: None of the form controls have `name` attributes, so on submission the browser cannot serialize their values into usable form data.
+Fix: Add appropriate `name` attributes to the select and all three inputs (e.g., `name="route"`, `name="email"`, `name="phone"`, `name="promo"`).
+
+Location: section#s3, form label/select for "Route" (id="s3-form-topic-label" / id="topic")
+Evidence: Select options "Northbound"/"Southbound" vs. the table in section#s2 using "Zone" values "North"/"South"
+Problem: The document uses inconsistent terminology for the same concept — "Route" with directional options here versus "Zone" with cardinal names in the weekend-service table — which could confuse riders trying to match the two.
+Fix: Standardize on one term and one set of values (e.g., use "Zone: North/South" consistently, or clarify that routes and zones are distinct concepts).

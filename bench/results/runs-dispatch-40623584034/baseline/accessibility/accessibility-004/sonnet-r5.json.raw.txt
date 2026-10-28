@@ -1,0 +1,59 @@
+Location: Paragraphs s1-p1, s1-p2, and s2-p1
+Evidence: "Station staff can also help with the same request in person." appears verbatim in all three paragraphs
+Problem: The exact same boilerplate sentence is reused across three unrelated requests (reviewing a schedule, reporting an issue, checking arrivals), suggesting templated filler rather than request-specific guidance.
+Fix: Write a distinct, specific second sentence for each paragraph, or remove the filler sentence where it adds no new information.
+
+Location: Image at #s1-img1 (`<img src="/img/platform-update.jpg" ...>`)
+Evidence: alt="Crews repainting the accessible parking spaces near the station entrance."
+Problem: The filename ("platform-update.jpg") and the section ("Station updates") suggest this image should depict a platform, but the alt text describes parking lot repainting — the alt text and image appear mismatched.
+Fix: Verify the correct image is referenced and update either the filename or the alt text so they describe the same content.
+
+Location: Paragraph #s3-p1
+Evidence: "Riders can report a service issue by calling rider services. Updates post to the schedule page within one business day."
+Problem: The second sentence (about schedule-page updates) does not logically follow from the first sentence (about reporting a service issue by phone); it reads as a non-sequitur, likely boilerplate pulled from a different context.
+Fix: Replace the second sentence with one that actually describes what happens after a rider reports a service issue (e.g., expected response time).
+
+Location: Paragraph #s3-p2
+Evidence: "Local residents can check real time arrivals through the online portal. A confirmation message follows once the request is processed."
+Problem: "Local residents" breaks from the "Riders/Passengers/Commuters" terminology used elsewhere, and "a confirmation message... once the request is processed" doesn't fit checking arrivals, which isn't a submitted request.
+Fix: Use consistent audience terminology (e.g., "Riders") and rewrite the second sentence to match the action described (e.g., note that arrival times refresh automatically).
+
+Location: Banner div #s3-banner, inside the "Fare adjustments" section (#s3)
+Evidence: class="promo-banner" containing "Route adjustments take effect on the posted effective date."
+Problem: The banner discusses route adjustments while it sits inside the "Fare adjustments" section, and it is marked up as a promotional banner despite containing a routine policy notice, not a promotion.
+Fix: Move this content to the Schedule changes section if it's about route adjustments, or reword it to be about fare adjustments; rename the class to something like "notice-banner" if it isn't promotional.
+
+Location: Status card #s3-statuscard
+Evidence: "Riders can check real time arrivals at any station kiosk. Updates post to the schedule page within one business day."
+Problem: Checking real-time arrivals at a kiosk is an instant action, so "Updates post to the schedule page within one business day" is a non-sequitur follow-up, and this sentence duplicates the unrelated claim already made in #s3-p1.
+Fix: Rewrite the second sentence to describe what actually happens after checking arrivals at a kiosk, removing the duplicated unrelated sentence.
+
+Location: Custom control #s3-customcontrol
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Problem: This is a "Delete item" control with no associated item anywhere in the Fare adjustments section, so its purpose is unclear and it appears to be stray/misplaced content; it also reimplements button semantics on a div instead of using a native `<button>`, which normally requires extra work to get keyboard activation right.
+Fix: Remove this control if it has no associated item, or move it next to the item it is meant to delete; replace the div/role="button" pattern with a native `<button>` element.
+
+Location: Wizard steps block #s3-wizard
+Evidence: "Choose a plan" / "Enter payment details" / "Confirm your order"
+Problem: This checkout-style step wizard is unrelated to the surrounding "Fare adjustments" content (station schedules, fare history) and has no markup indicating which step is current (no `aria-current`, no list semantics), making it both contextually out of place and inaccessible as a step indicator.
+Fix: Remove this block if it was left over from another page, or if intentional, connect it to the actual fare-purchase flow and add `aria-current="step"` (or similar) plus list semantics (`<ol>`).
+
+Location: Link paragraph #s3-linkpara, link #s3-link1
+Evidence: `href="/fares/history"` with link text "read the accessibility improvements list", inside the sentence "For the full list of upcoming adjustments, ... "
+Problem: The link text refers to an "accessibility improvements list," which doesn't match either the surrounding sentence (about fare adjustments) or the link target (/fares/history).
+Fix: Change the link text to match the destination, e.g., "read the fare adjustment history."
+
+Location: Form field #phone, label #s3-form-phone-label
+Evidence: Label text "Phone number (required)" but `<input id="phone" type="tel" autocomplete="tel">` has no `required` or `aria-required` attribute
+Problem: The label tells users the phone number is required, but the input itself isn't marked required, so validation and assistive technology won't treat it as mandatory.
+Fix: Add `required` (and/or `aria-required="true"`) to the `#phone` input.
+
+Location: Form field #promo
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: `aria-invalid="true"` is hardcoded in the initial markup, so the field is announced as invalid to assistive technology before the user has entered anything or any validation has run.
+Fix: Set `aria-invalid="false"` (or omit the attribute) by default, and only set it to "true" dynamically after validation fails.
+
+Location: Error text #s3-form-promo-error and input #promo
+Evidence: `<input id="promo" type="text" aria-invalid="true">` ... `<span class="error-text" aria-live="polite" id="s3-form-promo-error">Enter a 6 character code...</span>`
+Problem: The error message is not programmatically associated with the promo input (no `aria-describedby` on `#promo` pointing to `#s3-form-promo-error`), so screen reader users won't know this error text applies to that field.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the `#promo` input.

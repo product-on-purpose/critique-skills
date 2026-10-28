@@ -1,0 +1,215 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Riders may request a fare adjustment through the mobile app. Station staff can also help with the same request in person.\"",
+      "fix": "Replace with content that actually describes an accessibility improvement, or move this paragraph to a section about fares.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section \"Accessibility improvements\" (#s1-p1)",
+      "severity": 3,
+      "violation": "This paragraph is about fare adjustments, not accessibility, so it doesn't belong under the \"Accessibility improvements\" heading."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Passengers can check real time arrivals by calling rider services. Updates post to the schedule page within one business day.\"",
+      "fix": "Replace with accessibility-specific content, and remove the duplicate from #s3-statuscard.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section \"Accessibility improvements\" (#s1-p2)",
+      "severity": 3,
+      "violation": "This is about real-time arrival info, which is unrelated to accessibility, and it is also reused almost verbatim later in #s3-statuscard."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "alt=\"Crews repainting the accessible parking spaces near the station entrance.\"",
+      "fix": "Add a visible text sentence describing the accessible parking work, independent of the image.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section \"Accessibility improvements\", image (#s1-img1)",
+      "severity": 3,
+      "violation": "The only actual accessibility-related information on the page is locked inside an image's alt text with no equivalent visible text, so it is lost if the image fails to load and is easy to overlook even when it loads."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person.\"",
+      "fix": "Replace with content about weekend service changes, and remove the duplicated fare-adjustment boilerplate.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section \"Weekend service\" (#s2-p1)",
+      "severity": 3,
+      "violation": "This is a near-verbatim duplicate of #s1-p1 (only \"Riders\"→\"Passengers\" changed) and has nothing to do with weekend service."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<table id=\"s2-table1\"><tr><th scope=\"col\">Zone</th>...`",
+      "fix": "Add a `<caption>` such as \"Weekend zone status\" to the table.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section \"Weekend service\", table (#s2-table1)",
+      "severity": 3,
+      "violation": "The table has no `<caption>` identifying what it reports, so screen reader users landing on it out of context don't know what \"Zone\"/\"Status\" refer to."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Local residents should review the updated schedule through the mobile app. Station staff can also help with the same request in person.\"",
+      "fix": "Rewrite the second sentence to match reviewing a schedule, e.g. \"Station staff can also help riders review the schedule in person.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (#s3-p1)",
+      "severity": 3,
+      "violation": "\"The same request\" has no referent - reviewing a schedule is not a \"request,\" so this is leftover boilerplate copied from the fare-adjustment paragraphs (#s1-p1/#s2-p1) without updating the second sentence."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Passengers should review the updated schedule through the mobile app. The change takes effect on the following service day.\"",
+      "fix": "Merge the unique information (effective date) into #s3-p1 and delete #s3-p2.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\" (#s3-p2)",
+      "severity": 3,
+      "violation": "This paragraph duplicates the first sentence of #s3-p1 almost exactly, making the two adjacent paragraphs redundant."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Route adjustments take effect on the posted effective date.\"",
+      "fix": "State the specific effective date or link to where riders can find it.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\", promo banner (#s3-banner)",
+      "severity": 3,
+      "violation": "This sentence is circular/tautological - it says adjustments take effect on the date they take effect, conveying no actual information (e.g., no actual date or link to one)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day.\"",
+      "fix": "Remove the duplicate paragraph (or make it schedule-specific) and drop `role=\"status\"` unless this element's content is updated dynamically via script.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\", status card (#s3-statuscard)",
+      "severity": 3,
+      "violation": "This duplicates #s1-p2 almost verbatim and is unrelated to \"Schedule changes\"; additionally, `role=\"status\"` is applied to static boilerplate text rather than a region that actually updates dynamically, which is a misuse of that ARIA role."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"icon-delete\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>`",
+      "fix": "Use a `<button>` element with a visible or `aria-label` accessible name (e.g., \"Delete\") instead of a bare div/img.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\", custom control (#s3-customcontrol)",
+      "severity": 3,
+      "violation": "An apparently interactive delete control is built from a `<div>` with a decorative (empty-alt) icon, giving it no accessible name, no keyboard focusability, and no role, making it unusable via keyboard or screen reader."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"step\" id=\"s3-step3\" style=\"order:3\">Confirm your order</div>` appears first in markup, before step1/step2",
+      "fix": "Reorder the elements in the DOM to match the intended visual/reading sequence instead of relying on CSS `order`.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\", wizard steps (#s3-wizard)",
+      "severity": 3,
+      "violation": "The steps are written in DOM order 3, 2, 1 and reordered visually with CSS `order`, so screen reader and keyboard tab order (\"Confirm your order\", \"Enter payment details\", \"Choose a plan\") contradicts the visual reading order (\"Choose a plan\", \"Enter payment details\", \"Confirm your order\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"step\" id=\"s3-step1\" ...>Choose a plan</div>`",
+      "fix": "Mark the steps up as an ordered list (`<ol><li>...</li></ol>`).",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\", wizard steps (#s3-wizard)",
+      "severity": 3,
+      "violation": "The steps are marked up as plain divs rather than a semantic list, so assistive technology has no way to convey that these are sequential, related steps."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Choose a plan\" / \"Enter payment details\" / \"Confirm your order\"",
+      "fix": "Remove the wizard component or replace it with content actually relevant to schedule changes.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\", wizard steps (#s3-wizard)",
+      "severity": 3,
+      "violation": "This is checkout/purchase-flow content (\"choose a plan,\" \"payment details,\" \"confirm your order\"), which is unrelated to a transit route-update page and appears to be leftover template content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"/fares/history\" id=\"s3-link1\">read the accessibility improvements list</a>` inside \"For the full list of upcoming adjustments, ...\"",
+      "fix": "Make the link text, surrounding sentence, and destination consistent (e.g., link text \"read the upcoming schedule adjustments list\" pointing to an actual schedule-adjustments page).",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\", link paragraph (#s3-linkpara)",
+      "severity": 3,
+      "violation": "The link text says \"accessibility improvements list,\" but the surrounding sentence is about \"upcoming adjustments\" (schedule changes) and the href points to `/fares/history` - none of the three agree, so the link is mislabeled and misleading."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label>`",
+      "fix": "Add a visible text/icon indicator (e.g., \"Phone number (required)\") and/or `aria-required=\"true\"` on the input, not color alone.",
+      "id": "F-015",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\", form (#s3-form-phone-label)",
+      "severity": 3,
+      "violation": "Red text color is the only signal distinguishing this field (presumably required) from others, which fails for color-blind users and anyone using a screen reader (color conveys no semantic information)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">` with `<span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">Error.</span>`",
+      "fix": "Set `aria-invalid` dynamically only after validation fails, and add `aria-describedby=\"s3-form-promo-error\"` to the input.",
+      "id": "F-016",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\", form (#s3-form promo input)",
+      "severity": 3,
+      "violation": "`aria-invalid=\"true\"` is hardcoded on page load before the user has interacted with or submitted the form, incorrectly announcing an error on a field nobody has touched yet; additionally the input has no `aria-describedby` pointing to `s3-form-promo-error`, so screen reader users aren't told why the field is invalid."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Error.\"",
+      "fix": "Replace \"Error.\" with a specific message, e.g. \"This promo code is not valid.\"",
+      "id": "F-017",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\", form error text (#s3-form-promo-error)",
+      "severity": 3,
+      "violation": "The error message is uninformative - it doesn't tell the user what is wrong with the promo code (e.g., invalid format, expired, not found)."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "7518497ec47bc70bca9021d0ed190bdfb2f04532e6ef68cc37b662d769e87516",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T04:04:56Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 17,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

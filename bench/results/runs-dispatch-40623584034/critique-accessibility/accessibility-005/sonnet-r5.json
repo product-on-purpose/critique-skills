@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.3.4",
+      "evidence": "@media (orientation: portrait) { #main-content { display: none; } }",
+      "fix": "Remove the orientation-based display:none rule, or replace it with layout-only adjustments that keep #main-content's content and functionality available in both portrait and landscape orientation.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#head-style, <style> media rule targeting #main-content, line 7",
+      "severity": 3,
+      "violation": "The page's own CSS hides the entire #main-content landmark (the h1 and every section, including the form) whenever the viewport is in portrait orientation, with no equivalent content shown in that orientation and no stated reason a single orientation is essential to this content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "<nav id=\"nav\"><a href=\"/accessibility\">Accessibility</a><a href=\"/fares\">Fares and passes</a></nav>",
+      "fix": "Add a second, independent way to locate this page or its related pages, such as a breadcrumb trail distinct from the primary navigation, a site search form, or a sitemap link.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#nav, <nav> element, line 12",
+      "severity": 3,
+      "violation": "This content page exposes only one mechanism for locating it or related pages (the primary navigation menu in #nav): no site search, no sitemap link, and no breadcrumb trail are present anywhere in the page, and nothing in the page's content marks it as one step in a linear process that would exempt it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.3.5",
+      "evidence": "<input id=\"email\" type=\"email\">",
+      "fix": "Set the field's autocomplete attribute to email, or the matching standard token for this input purpose.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "#email, <input> field, input purpose email, line 64",
+      "severity": 2,
+      "violation": "This field's type, name, or id identifies the email input purpose, but it carries no autocomplete token, so the purpose is not programmatically determinable."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.4.7",
+      "evidence": "<a href=\"/accessibility\" id=\"nav-link1\" style=\"outline:none\">Accessibility</a>",
+      "fix": "Remove the outline:none declaration, or replace it with a visible focus style such as a box-shadow or border change that applies when the link is focused.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#nav-link1, <a> control, visible text 'Accessibility', line 13",
+      "severity": 2,
+      "violation": "This link's focus outline is removed by its own inline style with no replacement focus style (no changed border, background, box-shadow, or outline) declared anywhere else for it, so a keyboard user tabbing through the page gets no visible indication that this control is focused."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.5.8",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\" style=\"width:16px;height:16px\">",
+      "fix": "Increase this control's width and height (including any padding) to at least 24 by 24 CSS pixels, or provide an equivalent full-size control elsewhere on the page for the same delete action.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#s3-customcontrol, custom <div role=\"button\"> control, accessible name 'Delete item', line 45",
+      "severity": 2,
+      "violation": "This pointer-operable control's declared CSS renders it at 16 by 16 CSS pixels, below the 24 by 24 CSS pixel minimum, and nothing in the markup establishes that any of the standard's five exceptions (sufficient spacing, an equivalent full-size control elsewhere, inline placement in running text, an essential-size reason, or user-agent-controlled sizing) applies to it; every other control on the page is unaffected."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-4.1.3",
+      "evidence": "<div class=\"status-card\" id=\"s3-statuscard\"> Your changes are saved. </div>",
+      "fix": "Add role=\"status\" (or an aria-live=\"polite\" attribute) to this element so assistive technology announces the confirmation when it appears.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#s3-statuscard, <div class=\"status-card\"> element, line 41",
+      "severity": 2,
+      "violation": "This element reports a status update (a save confirmation) that can appear without a keyboard-focus change, but it carries no live-region mechanism (no role=\"status\", role=\"alert\", or aria-live attribute), so assistive technology does not announce it unless the reader happens to revisit this part of the page."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-005.html",
+    "artifact_sha256": "0f8493f220745495c0706928266e57a6f8d8bacbcd1737ff17dc3965ce55df7b",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T05:16:16Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

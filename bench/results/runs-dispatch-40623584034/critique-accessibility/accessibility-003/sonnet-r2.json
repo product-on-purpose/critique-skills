@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-1.3.2",
+      "evidence": "DOM order is #s3-step3 \"Confirm your order\" (style=\"order:3\"), then #s3-step2 \"Enter payment details\" (style=\"order:2\"), then #s3-step1 \"Choose a plan\" (style=\"order:1\").",
+      "fix": "Reorder the step <div> elements in the DOM itself to match the intended reading sequence (Choose a plan, Enter payment details, Confirm your order) instead of relying on CSS order to resequence them only visually.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#s3-wizard, <div class=\"wizard-steps\"> control, lines 47-57",
+      "severity": 3,
+      "violation": "The CSS order property resequences the three steps for sighted display into Choose a plan, Enter payment details, Confirm your order, while the underlying DOM order presents them in the reverse sequence, so a linearized reading reaches the confirmation step before hearing what is being chosen or paid for."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "The only navigation mechanisms on the page are the header nav (\"Plan a trip\", \"Service alerts\") and the footer links (\"Privacy policy\", \"Terms of service\"); no search form, sitemap link, or breadcrumb trail appears anywhere in the document.",
+      "fix": "Add a second, independent wayfinding mechanism, such as a site search form or a breadcrumb trail reflecting this page's place in the site.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#nav, <nav> control, lines 11-14",
+      "severity": 3,
+      "violation": "Fewer than two independent mechanisms exist to locate this page (\"Rider service updates\") within the site, and the page's own content does not mark it as one step in a linear process that would exempt it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-4.1.2",
+      "evidence": "<div class=\"icon-delete\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>",
+      "fix": "Use a native <button> element, or add role=\"button\", an accessible name such as aria-label=\"Delete\", and keyboard support (tabindex=\"0\" with Enter/Space handling).",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#s3-customcontrol, <div class=\"icon-delete\"> control, line 44",
+      "severity": 3,
+      "violation": "The div exposes no role, no programmatically determinable accessible name, and no keyboard affordance; its only content is an icon marked alt=\"\" (decorative), so nothing identifies this control's existence or purpose to assistive technology."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-1.4.1",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label>, with no asterisk, no \"required\" text, and no other field in the form styled this way.",
+      "fix": "Add a non-color signal alongside the styling, such as a \"required\" suffix or an icon with its own text alternative, or remove the color if no distinction from the other labels is intended.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#s3-form-phone-label, <label> element, line 64",
+      "severity": 2,
+      "violation": "The red color is the only signal distinguishing the \"Phone number\" label from the form's other labels (Route, Email address, Promo code), with no accompanying text, icon, or other non-color signal carrying the same meaning."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "Heading \"Accessibility improvements\" is followed by #s1-p1 (requesting a fare adjustment through the mobile app or in person) and #s1-p2 (checking real-time arrivals by phone), neither of which concerns disability accessibility.",
+      "fix": "Retitle the heading to match its actual content, e.g. \"Fare adjustments and arrival information,\" or move genuinely accessibility-related content under it.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#s1-h, <h2> element, line 19",
+      "severity": 2,
+      "violation": "The heading's wording does not describe the topic of the content that actually follows it, so a reader scanning headings for accessibility-related changes is misled about what this section covers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "Heading \"Weekend service\" is immediately followed by #s2-p1, \"Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person,\" with no weekend-specific content before the table.",
+      "fix": "Move the fare-adjustment paragraph to the section it actually belongs to, or rewrite it to address weekend service specifically.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#s2-h, <h2> element, line 25",
+      "severity": 2,
+      "violation": "The heading's wording does not describe the paragraph that immediately follows it, so a reader scanning headings for weekend-service information is misled about what the section covers."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "<span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">Error.</span>, associated with <input id=\"promo\" type=\"text\" aria-invalid=\"true\">.",
+      "fix": "Replace the message with specific text naming the problem, e.g. \"Promo code not recognized. Check for typos and try again.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "#s3-form-promo-error, <span class=\"error-text\"> control, line 68",
+      "severity": 2,
+      "violation": "The error text is the generic placeholder \"Error.\" and states neither which rule the promo-code value failed nor what to change, leaving the reader only able to infer which field is at fault from its position in the markup."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "7518497ec47bc70bca9021d0ed190bdfb2f04532e6ef68cc37b662d769e87516",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T04:03:30Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

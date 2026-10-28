@@ -1,0 +1,160 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Station staff can also help with the same request in person.\" appears verbatim in all three paragraphs",
+      "fix": "Write a distinct, specific second sentence for each paragraph, or remove the filler sentence where it adds no new information.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Paragraphs s1-p1, s1-p2, and s2-p1",
+      "severity": 3,
+      "violation": "The exact same boilerplate sentence is reused across three unrelated requests (reviewing a schedule, reporting an issue, checking arrivals), suggesting templated filler rather than request-specific guidance."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "alt=\"Crews repainting the accessible parking spaces near the station entrance.\"",
+      "fix": "Verify the correct image is referenced and update either the filename or the alt text so they describe the same content.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Image at #s1-img1 (`<img src=\"/img/platform-update.jpg\" ...>`)",
+      "severity": 3,
+      "violation": "The filename (\"platform-update.jpg\") and the section (\"Station updates\") suggest this image should depict a platform, but the alt text describes parking lot repainting - the alt text and image appear mismatched."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Riders can report a service issue by calling rider services. Updates post to the schedule page within one business day.\"",
+      "fix": "Replace the second sentence with one that actually describes what happens after a rider reports a service issue (e.g., expected response time).",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Paragraph #s3-p1",
+      "severity": 3,
+      "violation": "The second sentence (about schedule-page updates) does not logically follow from the first sentence (about reporting a service issue by phone); it reads as a non-sequitur, likely boilerplate pulled from a different context."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Local residents can check real time arrivals through the online portal. A confirmation message follows once the request is processed.\"",
+      "fix": "Use consistent audience terminology (e.g., \"Riders\") and rewrite the second sentence to match the action described (e.g., note that arrival times refresh automatically).",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Paragraph #s3-p2",
+      "severity": 3,
+      "violation": "\"Local residents\" breaks from the \"Riders/Passengers/Commuters\" terminology used elsewhere, and \"a confirmation message... once the request is processed\" doesn't fit checking arrivals, which isn't a submitted request."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "class=\"promo-banner\" containing \"Route adjustments take effect on the posted effective date.\"",
+      "fix": "Move this content to the Schedule changes section if it's about route adjustments, or reword it to be about fare adjustments; rename the class to something like \"notice-banner\" if it isn't promotional.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Banner div #s3-banner, inside the \"Fare adjustments\" section (#s3)",
+      "severity": 3,
+      "violation": "The banner discusses route adjustments while it sits inside the \"Fare adjustments\" section, and it is marked up as a promotional banner despite containing a routine policy notice, not a promotion."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Riders can check real time arrivals at any station kiosk. Updates post to the schedule page within one business day.\"",
+      "fix": "Rewrite the second sentence to describe what actually happens after checking arrivals at a kiosk, removing the duplicated unrelated sentence.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Status card #s3-statuscard",
+      "severity": 3,
+      "violation": "Checking real-time arrivals at a kiosk is an instant action, so \"Updates post to the schedule page within one business day\" is a non-sequitur follow-up, and this sentence duplicates the unrelated claim already made in #s3-p1."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">`",
+      "fix": "Remove this control if it has no associated item, or move it next to the item it is meant to delete; replace the div/role=\"button\" pattern with a native `<button>` element.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Custom control #s3-customcontrol",
+      "severity": 3,
+      "violation": "This is a \"Delete item\" control with no associated item anywhere in the Fare adjustments section, so its purpose is unclear and it appears to be stray/misplaced content; it also reimplements button semantics on a div instead of using a native `<button>`, which normally requires extra work to get keyboard activation right."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Choose a plan\" / \"Enter payment details\" / \"Confirm your order\"",
+      "fix": "Remove this block if it was left over from another page, or if intentional, connect it to the actual fare-purchase flow and add `aria-current=\"step\"` (or similar) plus list semantics (`<ol>`).",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Wizard steps block #s3-wizard",
+      "severity": 3,
+      "violation": "This checkout-style step wizard is unrelated to the surrounding \"Fare adjustments\" content (station schedules, fare history) and has no markup indicating which step is current (no `aria-current`, no list semantics), making it both contextually out of place and inaccessible as a step indicator."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`href=\"/fares/history\"` with link text \"read the accessibility improvements list\", inside the sentence \"For the full list of upcoming adjustments, ... \"",
+      "fix": "Change the link text to match the destination, e.g., \"read the fare adjustment history.\"",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Link paragraph #s3-linkpara, link #s3-link1",
+      "severity": 3,
+      "violation": "The link text refers to an \"accessibility improvements list,\" which doesn't match either the surrounding sentence (about fare adjustments) or the link target (/fares/history)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Label text \"Phone number (required)\" but `<input id=\"phone\" type=\"tel\" autocomplete=\"tel\">` has no `required` or `aria-required` attribute",
+      "fix": "Add `required` (and/or `aria-required=\"true\"`) to the `#phone` input.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Form field #phone, label #s3-form-phone-label",
+      "severity": 3,
+      "violation": "The label tells users the phone number is required, but the input itself isn't marked required, so validation and assistive technology won't treat it as mandatory."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">`",
+      "fix": "Set `aria-invalid=\"false\"` (or omit the attribute) by default, and only set it to \"true\" dynamically after validation fails.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Form field #promo",
+      "severity": 3,
+      "violation": "`aria-invalid=\"true\"` is hardcoded in the initial markup, so the field is announced as invalid to assistive technology before the user has entered anything or any validation has run."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">` ... `<span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">Enter a 6 character code...</span>`",
+      "fix": "Add `aria-describedby=\"s3-form-promo-error\"` to the `#promo` input.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "Error text #s3-form-promo-error and input #promo",
+      "severity": 3,
+      "violation": "The error message is not programmatically associated with the promo input (no `aria-describedby` on `#promo` pointing to `#s3-form-promo-error`), so screen reader users won't know this error text applies to that field."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "4febe21b95880d7b0b385588ebdc9c800b2c010b439206d51d6b790cb76d11c3",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T04:51:09Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 12,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

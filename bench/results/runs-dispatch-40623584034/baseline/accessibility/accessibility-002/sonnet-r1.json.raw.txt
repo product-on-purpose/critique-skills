@@ -1,0 +1,99 @@
+Location: `<head>` meta viewport tag
+Evidence: `content="width=device-width, initial-scale=1, user-scalable=no"`
+Problem: `user-scalable=no` disables pinch-zoom, preventing low-vision users from magnifying the page — a direct contradiction on a page whose first section is titled "Accessibility improvements."
+Fix: Remove `user-scalable=no` (and avoid capping `maximum-scale` below 5) so users can zoom.
+
+Location: Section "Accessibility improvements", paragraph `s1-p1`
+Evidence: `style="color:#999999"` on white background
+Problem: This gray-on-white text has a contrast ratio of roughly 2.8:1, well below the WCAG AA minimum of 4.5:1 for body text.
+Fix: Remove the inline style or change the color to one that meets at least a 4.5:1 contrast ratio against the background.
+
+Location: Section "Accessibility improvements" (`s1-p1`, `s1-p2`)
+Evidence: Heading "Accessibility improvements" followed by "Passengers should review the updated schedule at any station kiosk" and "Local residents may request a fare adjustment through the mobile app"
+Problem: Neither paragraph in this section is about accessibility; the content describes schedule lookup and fare adjustments, unrelated to the section heading.
+Fix: Replace the paragraphs with content actually describing accessibility improvements, or rename the heading to match the existing content.
+
+Location: `s1-p1` and `s1-p2`
+Evidence: Both end with the identical sentence "Updates post to the schedule page within one business day."
+Problem: The same sentence is reused verbatim across two paragraphs describing unrelated actions (kiosk schedule review vs. fare adjustment requests), suggesting copy-paste boilerplate rather than accurate, topic-specific text.
+Fix: Write a distinct, accurate follow-up sentence for each paragraph, or remove the sentence where it doesn't apply.
+
+Location: `s1-img1`
+Evidence: `alt="A transit operator inspecting the platform screen doors before the morning shift."`
+Problem: This alt text describes platform screen-door maintenance, which has no connection to the "Accessibility improvements" section's text content.
+Fix: Replace the image or alt text with one relevant to accessibility improvements, or move this image to a section about platform/maintenance operations.
+
+Location: Section "Schedule changes", paragraph `s2-p1`
+Evidence: Heading "Schedule changes" followed by "Local residents can check real time arrivals through the mobile app."
+Problem: The paragraph describes real-time arrival lookup, not schedule changes, so the content doesn't match its heading.
+Fix: Replace with text describing actual schedule changes, or rename the heading.
+
+Location: `s2-p1`
+Evidence: "A confirmation message follows once the request is processed."
+Problem: Checking real-time arrivals is a passive lookup, not a submitted "request," so a "confirmation message" and "processed" request don't logically apply here.
+Fix: Remove this sentence or replace it with wording appropriate to checking arrivals (e.g., describing how results are displayed).
+
+Location: `s2-table1`
+Evidence: `<table id="s2-table1">` with only header and data rows, no caption
+Problem: The table has no `<caption>` (or accessible name), so screen reader users aren't told what the table represents before reading its cells.
+Fix: Add a `<caption>` such as "Zone status" inside the table.
+
+Location: Section "Weekend service", paragraph `s3-p1`
+Evidence: Heading "Weekend service" followed by "Passengers may request a fare adjustment through the mobile app."
+Problem: The content is about fare adjustments, not weekend service, so it mismatches the section heading (and duplicates the fare-adjustment topic already used in `s1-p2`).
+Fix: Replace with content describing weekend service changes, or relocate this sentence to a fares-related section.
+
+Location: `s3-banner` div
+Evidence: `style="width:960px"`
+Problem: A fixed 960px width will overflow or require horizontal scrolling on narrower mobile viewports, despite the page declaring a responsive `width=device-width` viewport.
+Fix: Use a fluid width (e.g., `max-width:960px; width:100%`) instead of a fixed pixel width.
+
+Location: `s3-statuscard` div
+Evidence: `style="height:60px;overflow:hidden"` on a `role="status"` element
+Problem: A fixed height with `overflow:hidden` can visually clip the status text if it wraps to more lines than fit, hiding part of the message from sighted users (while it may still be fully announced to screen readers, creating a mismatch).
+Fix: Remove the fixed height/overflow restriction and let the card grow to fit its content.
+
+Location: `s3-button1`
+Evidence: `style="border:1px solid #9d9d9d"` on white background
+Problem: This border color has roughly 2.3:1 contrast against the white background, below the 3:1 minimum WCAG requires for UI component boundaries.
+Fix: Darken the border color to reach at least 3:1 contrast against the background.
+
+Location: `s3-customcontrol`
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" ...>`
+Problem: A delete control is built from a `div` with `role="button"` instead of a native `<button>`, which typically lacks built-in keyboard activation (Enter/Space) and default focus styling that a real button provides.
+Fix: Replace the div with a native `<button>` element, or if a custom element is required, ensure it has an explicit visible focus style and keyboard handlers.
+
+Location: `s3-wizard`
+Evidence: Steps "Choose a plan", "Enter payment details", "Confirm your order"
+Problem: This checkout/purchase wizard content is unrelated to transit service announcements and appears to be leftover or misplaced markup from a different flow (e.g., a payment page).
+Fix: Remove the wizard component from this page, or replace it with content relevant to service announcements.
+
+Location: `s3-wizard`
+Evidence: Three `<div class="step">` elements with no list markup, ordering semantics, or current-step indicator
+Problem: The steps are plain divs with no `<ol>`/`<li>` structure or `aria-current` attribute, so screen reader users can't tell this is a sequential, numbered process or which step is active.
+Fix: Mark the steps up as an ordered list and indicate the current step with `aria-current="step"`.
+
+Location: `s3-linkpara`
+Evidence: `<a href="/fares/history" ...>read the accessibility improvements list</a>` inside "For the full list of upcoming adjustments, ..."
+Problem: The link text says "accessibility improvements list" but the surrounding sentence is about "upcoming adjustments" and the href points to `/fares/history` — the link text doesn't describe its actual destination or purpose, violating link-purpose clarity.
+Fix: Change the link text to something accurate, e.g., "read the full list of upcoming fare adjustments."
+
+Location: `s3-form`, Route field
+Evidence: `<label for="topic-alt" ...>Route</label>` paired with `<select id="topic">`
+Problem: The label's `for` attribute ("topic-alt") doesn't match the select's `id` ("topic"), so the label is not programmatically associated with the control, breaking screen reader and click-to-focus behavior.
+Fix: Change the label's `for` attribute to "topic" to match the select's id.
+
+Location: `s3-form`, phone field
+Evidence: `<label ...>Phone number (required)</label>` paired with `<input id="phone" type="tel" autocomplete="tel">`
+Problem: The label text states the field is required, but the input has no `required` or `aria-required="true"` attribute, so assistive technology and form validation won't actually treat it as required.
+Fix: Add `required` (or `aria-required="true"`) to the phone input to match the label's stated requirement.
+
+Location: `s3-form`, promo code field
+Evidence: `<input id="promo" type="text" aria-invalid="true">` with permanently visible error text
+Problem: `aria-invalid="true"` is hardcoded in the static markup, so the field is announced as invalid before the user has entered anything, which is misleading.
+Fix: Set `aria-invalid="false"` (or omit it) by default and only set it to "true" dynamically after validation fails.
+
+Location: `s3-form` Route options vs. `s2-table1`
+Evidence: Table uses "North"/"South" zone labels; form select offers "Northbound"/"Southbound" route options
+Problem: The two components use inconsistent terminology ("Zone" vs. "Route", "North" vs. "Northbound") for what appear to be related directional concepts, which can confuse users correlating schedule status with their route selection.
+Fix: Use consistent terminology and values between the schedule table and the form's route options.
