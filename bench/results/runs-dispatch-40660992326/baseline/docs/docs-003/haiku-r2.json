@@ -1,0 +1,50 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Leaving this field at its default is the right choice for most teams\"",
+      "fix": "Add a sentence stating the default timeout value, such as \"The default timeout is [value] milliseconds.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "timeout section, second paragraph",
+      "severity": 3,
+      "violation": "The default value for timeout is never explicitly stated, making this reference to \"this field at its default\" unclear to readers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000.\"",
+      "fix": "Specify whether a maximum timeout value exists and include it in the field description, for example \"takes a duration in milliseconds between 1000 and [maximum]\".",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "timeout section, first paragraph",
+      "severity": 3,
+      "violation": "The timeout constraints are incomplete - a minimum of 1000 is specified but no maximum is mentioned, while the retries field explicitly states its full range \"0 to 10\"."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T09:19:06Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

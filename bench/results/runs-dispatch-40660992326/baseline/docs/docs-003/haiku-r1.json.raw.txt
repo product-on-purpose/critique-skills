@@ -1,0 +1,20 @@
+Location: timeout section, second paragraph
+Evidence: "Leaving this field at its default is the right choice for most teams"
+Problem: The default value for timeout is referenced but never specified, unlike retries ("defaults to 3") and logging ("default value is info").
+Fix: Add an explicit statement of the default timeout value (e.g., "and defaults to X milliseconds").
+
+Location: timeout section, first paragraph
+Evidence: "the validator rejects any value below 1000"
+Problem: The minimum constraint is stated in negative form, less clear than the range specification used for retries ("from 0 to 10").
+Fix: Rephrase as "minimum accepted value is 1000 milliseconds" or "accepts values from 1000 milliseconds and above".
+
+Location: timeout section
+Evidence: "The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000."
+Problem: No maximum value is specified, leaving the upper bound of the timeout field undocumented.
+Fix: Add either an explicit maximum value or state that there is no upper limit.
+
+Location: Related pages section
+Evidence: "- Metric catalog reference
+- Notification channel reference"
+Problem: These reference items are formatted as plain text rather than as hyperlinks or with link formatting.
+Fix: Format these items as markdown links or otherwise indicate they are navigable references (e.g., `[Metric catalog reference](path)`).

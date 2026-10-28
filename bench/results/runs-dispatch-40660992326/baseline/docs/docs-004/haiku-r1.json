@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The retry_policy field accepts one of none, linear, or exponential\"",
+      "fix": "Format the values as code: \"one of `none`, `linear`, or `exponential`\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "retry_policy section, second line",
+      "severity": 3,
+      "violation": "The policy values are not formatted as code, making them harder to distinguish from surrounding text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Only retry_policy mentions a default value (\"the default value is exponential\")",
+      "fix": "Add a statement for each field indicating whether it is required or optional.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Document structure",
+      "severity": 3,
+      "violation": "The document doesn't specify whether endpoint_url and signing_secret are required or optional fields, creating ambiguity about field requirements."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"accepts one of none, linear, or exponential, and the default value is exponential\"",
+      "fix": "Add a description for each policy option explaining its retry behavior.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "retry_policy section",
+      "severity": 3,
+      "violation": "The document defines the three retry policy options but does not explain what each option does (e.g., how intervals are calculated, maximum retry counts, or when retries stop)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"a string used to verify the payload signature on receipt\"",
+      "fix": "Add details about the expected format and the signature algorithm used (e.g., \"HMAC-SHA256\").",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "signing_secret section",
+      "severity": 3,
+      "violation": "The document does not specify the format of the signing_secret string (e.g., raw plaintext, hex-encoded, base64-encoded) or the algorithm used for signature verification."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "No mention of endpoint response expectations",
+      "fix": "Add a section explaining expected endpoint responses and what constitutes a successful delivery.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Document as a whole",
+      "severity": 3,
+      "violation": "The document does not specify what HTTP status codes or response the endpoint should return, or how errors are handled."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-004.md",
+    "artifact_sha256": "7f41536ab3c3f7bc93a3dde86b8e81cee5dab0339f2b1d472e9222a20b42d7ae",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T09:23:50Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,19 @@
+Location: ## retry_policy section
+Evidence: "The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential."
+Problem: The valid values are listed but not explained. A reader cannot determine what distinguishes linear from exponential retry behavior, or what none means.
+Fix: Add descriptions for each value, such as: "none means do not retry; linear increases the delay between retries by a fixed amount; exponential increases the delay exponentially."
+
+Location: ## signing_secret section
+Evidence: "The signing_secret field accepts a string used to verify the payload signature on receipt."
+Problem: The verification algorithm is not specified. It does not say whether HMAC-SHA256, HMAC-SHA512, or another standard is used.
+Fix: Specify the algorithm, such as: "The signing_secret field accepts a string used to verify the payload signature via HMAC-SHA256 on receipt."
+
+Location: Document-wide
+Evidence: No field indicates required vs optional status
+Problem: The document does not state which fields are required and which are optional for webhook configuration.
+Fix: Add a required/optional indicator for each field, either inline (e.g., "The endpoint_url field (required) accepts...") or in a separate column/note.
+
+Location: ## retry_policy section
+Evidence: "accepts one of none, linear, or exponential, and the default value is exponential"
+Problem: No timing information is provided. The document does not explain retry limits, backoff intervals, or how long the retry period lasts.
+Fix: Add timing details, such as: "Linear retries every 5 seconds up to 10 attempts. Exponential retries with a 1 second base delay, doubling each attempt, up to 10 attempts or 5 minutes."

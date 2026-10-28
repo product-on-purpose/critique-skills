@@ -1,0 +1,24 @@
+Location: retry_policy section, second line
+Evidence: "The retry_policy field accepts one of none, linear, or exponential"
+Problem: The policy values are not formatted as code, making them harder to distinguish from surrounding text.
+Fix: Format the values as code: "one of `none`, `linear`, or `exponential`"
+
+Location: Document structure
+Evidence: Only retry_policy mentions a default value ("the default value is exponential")
+Problem: The document doesn't specify whether endpoint_url and signing_secret are required or optional fields, creating ambiguity about field requirements.
+Fix: Add a statement for each field indicating whether it is required or optional.
+
+Location: retry_policy section
+Evidence: "accepts one of none, linear, or exponential, and the default value is exponential"
+Problem: The document defines the three retry policy options but does not explain what each option does (e.g., how intervals are calculated, maximum retry counts, or when retries stop).
+Fix: Add a description for each policy option explaining its retry behavior.
+
+Location: signing_secret section
+Evidence: "a string used to verify the payload signature on receipt"
+Problem: The document does not specify the format of the signing_secret string (e.g., raw plaintext, hex-encoded, base64-encoded) or the algorithm used for signature verification.
+Fix: Add details about the expected format and the signature algorithm used (e.g., "HMAC-SHA256").
+
+Location: Document as a whole
+Evidence: No mention of endpoint response expectations
+Problem: The document does not specify what HTTP status codes or response the endpoint should return, or how errors are handled.
+Fix: Add a section explaining expected endpoint responses and what constitutes a successful delivery.
