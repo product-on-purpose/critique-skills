@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<p>Thanks for signing up.</p>` appears mid-form",
+      "fix": "Remove this element from the form; handle the confirmation message with JavaScript after form submission or place it outside the form on a success page.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Inside `<div id=\"row-phone\">`, after the phone input",
+      "severity": 3,
+      "violation": "A confirmation message is placed in the middle of the form instead of appearing after successful submission, creating a confusing user experience."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Full name\" input and separate \"First name\" / \"Last name\" inputs both present",
+      "fix": "Remove either the full name field or the separate first/last name fields, depending on whether the backend needs structured name data.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<div id=\"name-input\">` and `<div id=\"row-legalname\">`",
+      "severity": 3,
+      "violation": "The form collects both a full name and individual given/family names, creating redundant fields that could cause data consistency issues."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">`",
+      "fix": "Add `name=\"shipping_speed\"` (or an appropriate name) to the select element.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`<div id=\"row-shipspeed\">`, the `<select>` element",
+      "severity": 3,
+      "violation": "The select element lacks a name attribute, so its value will not be included when the form is submitted."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Standard</option>` (repeated for all three options)",
+      "fix": "Add value attributes: `<option value=\"standard\">Standard</option>`, `<option value=\"express\">Express</option>`, `<option value=\"overnight\">Overnight</option>`.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`<div id=\"row-shipspeed\">`, the option elements",
+      "severity": 3,
+      "violation": "Option elements lack value attributes, so the form will submit the display text instead of structured data values."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\" required=\"\"` with `type=\"text\"`",
+      "fix": "Add `pattern=\"[0-9]{8}\"` and `minlength=\"8\" maxlength=\"8\"` to enforce the 8-digit requirement.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`<div id=\"row-member\">`, the membership input",
+      "severity": 3,
+      "violation": "The field's placeholder requires 8 digits, but there is no pattern or length validation to enforce this constraint."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Change to `type=\"time\"`, or replace with a select menu if specific contact times are available.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`<div id=\"row-contacttime\">`, the contact time input",
+      "severity": 3,
+      "violation": "\"Preferred contact time\" is a generic text input, which is unclear and does not match the semantic meaning of the field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"contacttime-label\" for=\"contacttime-input\" style=\"display:block\">`",
+      "fix": "Remove `style=\"display:block\"` and apply block display styling to labels in a stylesheet.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`<div id=\"row-contacttime\">`, the label element",
+      "severity": 3,
+      "violation": "The inline style `display:block` is unnecessary and should be handled by external CSS."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"reset-btn\" type=\"reset\">Clear form</button>`",
+      "fix": "Remove the reset button entirely, or change it to `type=\"button\"` with a JavaScript confirmation dialog if clearing the form is truly necessary.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Form buttons section, the reset button",
+      "severity": 3,
+      "violation": "A reset button on a signup form poses a high risk of accidental data loss, degrading the user experience."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:1px 2px;font-size:11px\">`",
+      "fix": "Either implement the button's functionality with an event handler and documentation, or remove it if it is not needed.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Form buttons section, the \"View details\" button",
+      "severity": 3,
+      "violation": "This button has no onclick handler or clear purpose, and its inconsistent inline styling suggests it may be incomplete or vestigial."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-003.html",
+    "artifact_sha256": "df62d7b38659529bf26df03102d3e7969a1c47b7c66e72bc8d3cf208f082bc1f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T10:29:54Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

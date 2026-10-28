@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`pattern=\"[0-9]+\"`",
+      "fix": "Add a maximum length constraint, such as `maxlength=\"15\"` or use `pattern=\"[0-9]{10,15}\"`",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Secondary phone input (row-phone2)",
+      "severity": 3,
+      "violation": "The pattern allows an unlimited number of digits, which is unrealistic for phone numbers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`type=\"text\"`",
+      "fix": "Change `type=\"text\"` to `type=\"url\"`",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Company website input (row-website)",
+      "severity": 3,
+      "violation": "A website field should use type=\"url\" for proper validation and to provide the correct mobile keyboard."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Label says \"Membership number (8 digits)\" and placeholder says \"Must be 8 digits\", but `type=\"text\"` with no validation",
+      "fix": "Add `pattern=\"[0-9]{8}\"` or `maxlength=\"8\"` to enforce the stated requirement",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Membership number input (row-member)",
+      "severity": 3,
+      "violation": "The field promises an 8-digit requirement but has no pattern, minlength, or maxlength to enforce it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`size=\"3\"`",
+      "fix": "Remove the size attribute or increase it to at least 10",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Postal code input (row-postal)",
+      "severity": 3,
+      "violation": "The input is constrained to display only 3 characters, which is too small for most postal code formats (US ZIP: 5 digits, ZIP+4: 9, Canada: 6)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">` with no name attribute; options include both \"Overnight\" and \"Next-day\"",
+      "fix": "Add `name=\"shipping_speed\"` to the select element, and remove or clarify one of the duplicate shipping speed options",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Preferred shipping speed select (row-shipspeed)",
+      "severity": 3,
+      "violation": "The select element is missing a name attribute so the selected value will not be submitted with the form; additionally \"Overnight\" and \"Next-day\" are redundant options."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Label \"Your name\" with `name=\"legal_name\"`; earlier field is labeled \"Full name\" with `name=\"full_name\"`",
+      "fix": "Remove one of the name input fields or clarify why both are required",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Legal name input (row-legalname)",
+      "severity": 3,
+      "violation": "The form asks for a person's name twice under different labels, which is confusing and likely unnecessary duplication."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"font-size:13px\"`",
+      "fix": "Move the styling to a CSS class",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Organization name input (row-org)",
+      "severity": 3,
+      "violation": "Inline styles should be defined in a CSS stylesheet, not embedded in the HTML."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"display:inline-block;float:left;width:140px\"`",
+      "fix": "Move the layout styling to a CSS class",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Preferred contact time label (row-contacttime)",
+      "severity": 3,
+      "violation": "Inline styles should be defined in a CSS stylesheet, not embedded in the HTML."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"padding:12px 20px;font-size:16px\"`",
+      "fix": "Move the button styling to a CSS class",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "View details button",
+      "severity": 3,
+      "violation": "Inline styles should be defined in a CSS stylesheet, not embedded in the HTML."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Three select elements for day, month, and year have no name attributes",
+      "fix": "Add name attributes to each select element: `name=\"dob_day\"`, `name=\"dob_month\"`, and `name=\"dob_year\"`",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Date of birth fieldset (row-dob)",
+      "severity": 3,
+      "violation": "Without name attributes, the date of birth values will not be submitted with the form."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-002.html",
+    "artifact_sha256": "e39d0a6e9175987711e114d2ce5edd568205f5aecafb2d271246e6036a16457f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T10:21:47Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

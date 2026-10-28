@@ -1,0 +1,44 @@
+Location: div id="row-website"
+Evidence: `<input id="website-input" name="website" type="url" required="">`
+Problem: Company website is marked as required, but this field may not be applicable to all customer types (e.g., individual consumers rather than businesses).
+Fix: Either remove the required attribute or implement conditional validation that only requires it for business account types.
+
+Location: div id="row-member"
+Evidence: `placeholder="Must be 8 digits"` with no maxlength, minlength, or pattern validation
+Problem: The field specifies "8 digits" in the placeholder but has no validation to enforce this constraint.
+Fix: Add maxlength="8" and pattern="[0-9]{8}" attributes to enforce the constraint.
+
+Location: div id="row-acctnum"
+Evidence: `<input id="acctnum-input" name="account_number" type="text" inputmode="numeric" required="">`
+Problem: Account number field has no format specification, placeholder, or validation despite being marked as required and numeric.
+Fix: Add a placeholder explaining the expected format and validation attributes (minlength, maxlength, and/or pattern) appropriate to the account number format.
+
+Location: div id="row-shipspeed"
+Evidence: `<option>Standard</option>` and four other options without value attributes
+Problem: Select options lack value attributes and will submit display text (including "Next-day" with a hyphen) as form values instead of normalized identifiers.
+Fix: Add value attributes to each option: `<option value="standard">Standard</option>`, `<option value="express">Express</option>`, etc.
+
+Location: div id="row-legalname" and div id="row-name"
+Evidence: Two separate fields labeled "Full name" (name-input) and "Your name" (legalname-input)
+Problem: The form contains two fields asking for a person's name, which appears redundant and creates user confusion about what to enter in each field.
+Fix: Remove one of the duplicate name fields, or if both are necessary, rename one to clarify its distinct purpose (e.g., "Legal name for contracts").
+
+Location: div id="row-contacttime"
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: Text input is inappropriate for collecting a time preference; the expected format is ambiguous to users.
+Fix: Change to `type="time"` or replace with a select element containing predefined options like Morning, Afternoon, or Evening.
+
+Location: div id="row-org"
+Evidence: `style="font-size:16px"`
+Problem: Inline style attribute should be defined in a CSS stylesheet instead.
+Fix: Remove the inline style and apply the font-size via a CSS class in a stylesheet.
+
+Location: div id="row-contacttime" label element
+Evidence: `style="display:block"`
+Problem: Inline style attribute should be defined in a CSS stylesheet instead.
+Fix: Remove the inline style and apply display:block via a CSS class in a stylesheet.
+
+Location: button id="viewdetails-btn"
+Evidence: `style="padding:12px 20px;font-size:16px"`
+Problem: Inline style attributes should be defined in a CSS stylesheet instead.
+Fix: Remove the inline styles and apply padding and font-size via a CSS class in a stylesheet.

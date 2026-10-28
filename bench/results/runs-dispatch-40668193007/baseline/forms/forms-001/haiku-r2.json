@@ -1,0 +1,149 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"form\">`",
+      "fix": "Add `method=\"POST\"` and `action=\"/api/signup\"` (or appropriate endpoint URL)",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Form element",
+      "severity": 3,
+      "violation": "Missing method and action attributes; form cannot be submitted to a server endpoint"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`autocomplete=\"e-mail\"`",
+      "fix": "Change `autocomplete=\"e-mail\"` to `autocomplete=\"email\"`",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Email address input",
+      "severity": 3,
+      "violation": "Non-standard autocomplete value; correct value is \"email\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"confirm-password-input\" name=\"password_again\" type=\"password\" autocomplete=\"new-password\" required=\"\">`",
+      "fix": "Add `minlength=\"8\"` attribute to match the password field requirement",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Confirm password input",
+      "severity": 3,
+      "violation": "Missing minlength=\"8\" validation; password field requires 8 characters but confirm password doesn't, allowing length mismatches"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with `type=\"text\" inputmode=\"numeric\"`",
+      "fix": "Add `pattern=\"[0-9]{8}\"` and `maxlength=\"8\"` attributes to enforce exactly 8 digits",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Membership number input",
+      "severity": 3,
+      "violation": "Label and placeholder specify 8-digit requirement, but no pattern or maxlength validation enforces it"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">`",
+      "fix": "Add `name=\"shipping_speed\"` attribute to the select element",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Preferred shipping speed select",
+      "severity": 3,
+      "violation": "Missing name attribute; this field's value will not be submitted with the form"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Standard</option>`, `<option>Express</option>`, etc.",
+      "fix": "Add value attributes to each option, e.g., `<option value=\"standard\">Standard</option>`",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Shipping speed select options",
+      "severity": 3,
+      "violation": "Options lack value attributes; form will submit display text instead of normalized values"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"font-size:16px\"`",
+      "fix": "Remove the style attribute and define CSS in a stylesheet",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Organization name input",
+      "severity": 3,
+      "violation": "Inline style should be defined in a stylesheet; inconsistent with other form fields"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"display:block\"`",
+      "fix": "Remove the style attribute and define CSS in a stylesheet",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Preferred contact time label",
+      "severity": 3,
+      "violation": "Inline style should be defined in a stylesheet"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Change `type=\"text\"` to `type=\"time\"`",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Preferred contact time input",
+      "severity": 3,
+      "violation": "Text input is imprecise for time selection; should use dedicated time input type"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"hear-select\" required=\"\">`",
+      "fix": "Add `name=\"hear_about_us\"` attribute to the select element",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "How did you hear about us select",
+      "severity": 3,
+      "violation": "Missing name attribute; this field's value will not be submitted with the form"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Search engine</option>`, `<option>Social media</option>`, etc.",
+      "fix": "Add value attributes to each option, e.g., `<option value=\"search_engine\">Search engine</option>`",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "How did you hear about us select options",
+      "severity": 3,
+      "violation": "Options lack value attributes; form will submit display text instead of normalized values"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-001.html",
+    "artifact_sha256": "531c999912c0ab6c8224cbeb2347e7644d493a84e3a9461a434deaf5f2f09cdd",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T10:02:05Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 11,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

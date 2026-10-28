@@ -1,0 +1,34 @@
+Location: form element
+Evidence: `<form id="form">`
+Problem: The form element is missing action and method attributes required for HTTP form submission.
+Fix: Add `method="post"` and `action="/account/create"` (or the appropriate endpoint) to the form tag.
+
+Location: row-phone div
+Evidence: `<p>Thanks for signing up.</p>` placed inside the phone number field row
+Problem: The thank you message is semantically misplaced inside a form field row instead of being displayed after form submission.
+Fix: Move the paragraph element outside the form, or display it conditionally after successful submission.
+
+Location: row-member input
+Evidence: `placeholder="Must be 8 digits"` with no validation
+Problem: The placeholder indicates an 8-digit requirement, but there is no pattern or maxlength attribute to enforce it.
+Fix: Add `pattern="[0-9]{8}"` or `maxlength="8"` to enforce the stated requirement.
+
+Location: row-shipspeed select element
+Evidence: `<select id="shipspeed-select" required="">`
+Problem: The select element lacks a name attribute, so the selected value will not be submitted with the form.
+Fix: Add `name="shipping_speed"` (or appropriate field name) to the select element.
+
+Location: row-org input
+Evidence: `style="font-size:16px"`
+Problem: Inline CSS styling should be defined in a stylesheet for maintainability and separation of concerns.
+Fix: Remove the inline style and apply it via a CSS class instead.
+
+Location: row-contacttime label
+Evidence: `style="display:block"`
+Problem: Inline CSS styling should be defined in a stylesheet for maintainability and separation of concerns.
+Fix: Remove the inline style and apply it via a CSS class instead.
+
+Location: viewdetails-btn button
+Evidence: `style="padding:1px 2px;font-size:11px"`
+Problem: Inline styles are used instead of CSS classes, and the 11px font size is unusually small and difficult to read.
+Fix: Move styling to a CSS class and increase the font size to at least 12px for readability and accessibility.

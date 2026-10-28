@@ -1,0 +1,149 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`autocomplete=\"e-mail\"`",
+      "fix": "Change `autocomplete=\"e-mail\"` to `autocomplete=\"email\"`",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "email-input",
+      "severity": 3,
+      "violation": "The autocomplete value is non-standard; the correct value is \"email\"."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"confirm-password-input\" ... required=\"\">` (missing minlength attribute)",
+      "fix": "Add `minlength=\"8\"` to the confirm-password-input",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "confirm-password-input",
+      "severity": 3,
+      "violation": "The password field specifies minlength=\"8\", but the confirm password field does not, creating an inconsistent validation constraint."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no pattern, minlength, or maxlength",
+      "fix": "Add `minlength=\"8\" maxlength=\"8\" pattern=\"[0-9]{8}\"` to enforce the stated requirement",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "membership_number input (member-input)",
+      "severity": 3,
+      "violation": "The placeholder promises 8-digit validation, but the input lacks any attributes to enforce this constraint."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`type=\"text\" inputmode=\"numeric\"` with no pattern or validation",
+      "fix": "Either change to `type=\"number\"` or add `pattern=\"[0-9]+\"` to enforce numeric-only input",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "account_number input (acctnum-input)",
+      "severity": 3,
+      "violation": "inputmode=\"numeric\" is only a hint and does not prevent non-numeric input; type=\"text\" allows any characters."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Standard</option>` through `<option>International</option>` (no value attributes)",
+      "fix": "Add value attributes: `<option value=\"standard\">Standard</option>` (and similarly for all other options)",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "shipspeed-select options",
+      "severity": 3,
+      "violation": "Options lack value attributes, causing the form to submit the visible text as the value instead of explicit values."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "First field labeled \"Full name\", later field labeled \"Your name\" (legalname-input)",
+      "fix": "Remove the legalname-input field, or clarify the distinct purpose of each field if both are genuinely required",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Full name and legal name fields (name-input and legalname-input)",
+      "severity": 3,
+      "violation": "The form asks for the user's name twice in different ways, creating redundancy and confusion about whether these should be different values."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"font-size:16px\"`",
+      "fix": "Remove the inline style attribute",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "org-input",
+      "severity": 3,
+      "violation": "Unnecessary inline style that is inconsistent with other form fields and should be defined in a stylesheet."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"display:block\"`",
+      "fix": "Remove the inline style attribute",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "contacttime-label",
+      "severity": 3,
+      "violation": "Unnecessary inline style; labels are already block-level by default and this clutters the HTML."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Change `type=\"text\"` to `type=\"time\"`",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "contacttime-input",
+      "severity": 3,
+      "violation": "The field is labeled \"Preferred contact time\" but uses type=\"text\" instead of the semantically correct type=\"time\"."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>` (no onclick or function)",
+      "fix": "Either remove the button if unused, add an onclick handler to define its action, or provide context explaining its purpose",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "viewdetails-btn",
+      "severity": 3,
+      "violation": "This button has type=\"button\" and no visible onclick handler, making it non-functional and its purpose unclear within the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Search engine</option>` through `<option>Other</option>` (no value attributes)",
+      "fix": "Add value attributes: `<option value=\"search_engine\">Search engine</option>` (and similarly for all other options)",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "hear-select options",
+      "severity": 3,
+      "violation": "Same as shipspeed-select; options lack value attributes, causing form submission of visible text instead of explicit values."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-001.html",
+    "artifact_sha256": "531c999912c0ab6c8224cbeb2347e7644d493a84e3a9461a434deaf5f2f09cdd",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T09:58:52Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 11,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

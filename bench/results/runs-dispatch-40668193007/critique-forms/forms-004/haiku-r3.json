@@ -1,0 +1,50 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "The form requires an account number at account creation time, but account numbers are system-generated after account creation completes, not provided by a user before creation",
+      "fix": "Remove the #acctnum-input field from account creation, or clarify if this is meant for account recovery or linking to an existing account; if needed for linking, relabel and move it to a separate verification flow after account creation",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#acctnum-input, <input> field, label 'Account number'",
+      "severity": 3,
+      "violation": "The form asks for information the task (creating an account) cannot use - an account number only exists after the account is created"
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "#name-input and #legalname-input both have autocomplete=\"name\", and their labels are 'Full name' and 'Your name' respectively",
+      "fix": "Remove the #legalname-input field and use only #name-input for the person's name, or clarify if these serve different purposes (e.g., legal name vs. display name)",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label 'Your name'",
+      "severity": 3,
+      "violation": "The form asks again for something the form already asked - a person's name appears twice in the same form"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T10:44:38Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

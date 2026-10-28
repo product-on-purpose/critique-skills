@@ -1,0 +1,49 @@
+Location: Secondary phone input (row-phone2)
+Evidence: `pattern="[0-9]+"`
+Problem: The pattern allows an unlimited number of digits, which is unrealistic for phone numbers.
+Fix: Add a maximum length constraint, such as `maxlength="15"` or use `pattern="[0-9]{10,15}"`
+
+Location: Company website input (row-website)
+Evidence: `type="text"`
+Problem: A website field should use type="url" for proper validation and to provide the correct mobile keyboard.
+Fix: Change `type="text"` to `type="url"`
+
+Location: Membership number input (row-member)
+Evidence: Label says "Membership number (8 digits)" and placeholder says "Must be 8 digits", but `type="text"` with no validation
+Problem: The field promises an 8-digit requirement but has no pattern, minlength, or maxlength to enforce it.
+Fix: Add `pattern="[0-9]{8}"` or `maxlength="8"` to enforce the stated requirement
+
+Location: Postal code input (row-postal)
+Evidence: `size="3"`
+Problem: The input is constrained to display only 3 characters, which is too small for most postal code formats (US ZIP: 5 digits, ZIP+4: 9, Canada: 6).
+Fix: Remove the size attribute or increase it to at least 10
+
+Location: Preferred shipping speed select (row-shipspeed)
+Evidence: `<select id="shipspeed-select" required="">` with no name attribute; options include both "Overnight" and "Next-day"
+Problem: The select element is missing a name attribute so the selected value will not be submitted with the form; additionally "Overnight" and "Next-day" are redundant options.
+Fix: Add `name="shipping_speed"` to the select element, and remove or clarify one of the duplicate shipping speed options
+
+Location: Legal name input (row-legalname)
+Evidence: Label "Your name" with `name="legal_name"`; earlier field is labeled "Full name" with `name="full_name"`
+Problem: The form asks for a person's name twice under different labels, which is confusing and likely unnecessary duplication.
+Fix: Remove one of the name input fields or clarify why both are required
+
+Location: Organization name input (row-org)
+Evidence: `style="font-size:13px"`
+Problem: Inline styles should be defined in a CSS stylesheet, not embedded in the HTML.
+Fix: Move the styling to a CSS class
+
+Location: Preferred contact time label (row-contacttime)
+Evidence: `style="display:inline-block;float:left;width:140px"`
+Problem: Inline styles should be defined in a CSS stylesheet, not embedded in the HTML.
+Fix: Move the layout styling to a CSS class
+
+Location: View details button
+Evidence: `style="padding:12px 20px;font-size:16px"`
+Problem: Inline styles should be defined in a CSS stylesheet, not embedded in the HTML.
+Fix: Move the button styling to a CSS class
+
+Location: Date of birth fieldset (row-dob)
+Evidence: Three select elements for day, month, and year have no name attributes
+Problem: Without name attributes, the date of birth values will not be submitted with the form.
+Fix: Add name attributes to each select element: `name="dob_day"`, `name="dob_month"`, and `name="dob_year"`

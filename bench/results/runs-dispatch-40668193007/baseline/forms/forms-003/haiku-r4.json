@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"form\">`",
+      "fix": "Add `method=\"post\"` and `action=\"/account/create\"` (or the appropriate endpoint) to the form tag.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "form element",
+      "severity": 3,
+      "violation": "The form element is missing action and method attributes required for HTTP form submission."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<p>Thanks for signing up.</p>` placed inside the phone number field row",
+      "fix": "Move the paragraph element outside the form, or display it conditionally after successful submission.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "row-phone div",
+      "severity": 3,
+      "violation": "The thank you message is semantically misplaced inside a form field row instead of being displayed after form submission."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no validation",
+      "fix": "Add `pattern=\"[0-9]{8}\"` or `maxlength=\"8\"` to enforce the stated requirement.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-member input",
+      "severity": 3,
+      "violation": "The placeholder indicates an 8-digit requirement, but there is no pattern or maxlength attribute to enforce it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">`",
+      "fix": "Add `name=\"shipping_speed\"` (or appropriate field name) to the select element.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-shipspeed select element",
+      "severity": 3,
+      "violation": "The select element lacks a name attribute, so the selected value will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"font-size:16px\"`",
+      "fix": "Remove the inline style and apply it via a CSS class instead.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "row-org input",
+      "severity": 3,
+      "violation": "Inline CSS styling should be defined in a stylesheet for maintainability and separation of concerns."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"display:block\"`",
+      "fix": "Remove the inline style and apply it via a CSS class instead.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "row-contacttime label",
+      "severity": 3,
+      "violation": "Inline CSS styling should be defined in a stylesheet for maintainability and separation of concerns."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"padding:1px 2px;font-size:11px\"`",
+      "fix": "Move styling to a CSS class and increase the font size to at least 12px for readability and accessibility.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "viewdetails-btn button",
+      "severity": 3,
+      "violation": "Inline styles are used instead of CSS classes, and the 11px font size is unusually small and difficult to read."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-003.html",
+    "artifact_sha256": "df62d7b38659529bf26df03102d3e7969a1c47b7c66e72bc8d3cf208f082bc1f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T10:34:11Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

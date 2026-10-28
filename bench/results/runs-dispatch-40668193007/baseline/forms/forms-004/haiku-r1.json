@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"phone-input\" name=\"phone\" type=\"tel\" autocomplete=\"tel\" required=\"\">`",
+      "fix": "Add `pattern=\"[0-9\\-\\+\\(\\)\\s]+\"` or another pattern appropriate to your expected format.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "The `<input>` element with id=\"phone-input\"",
+      "severity": 3,
+      "violation": "The phone input lacks a pattern attribute to validate the expected phone number format."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Label says \"(8 digits)\", placeholder says \"Must be 8 digits\", but the input has no pattern validation",
+      "fix": "Add `pattern=\"[0-9]{8}\"` to the input element.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "The `<input>` element with id=\"member-input\"",
+      "severity": 3,
+      "violation": "The membership number field specifies an 8-digit requirement in the label and placeholder but lacks a pattern attribute to enforce it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required=\"\">`",
+      "fix": "Add a pattern attribute appropriate to your account number format, such as `pattern=\"[0-9]{6,12}\"`.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "The `<input>` element with id=\"acctnum-input\"",
+      "severity": 3,
+      "violation": "The account number field has no pattern attribute to validate its expected format."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"postal-input\" name=\"postal_code\" type=\"text\" autocomplete=\"postal-code\" required=\"\">`",
+      "fix": "Add a pattern attribute appropriate to your postal code format, such as `pattern=\"[0-9]{5}\"` for US ZIP codes.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "The `<input>` element with id=\"postal-input\"",
+      "severity": 3,
+      "violation": "The postal code field has no pattern or validation to enforce the expected format."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">`",
+      "fix": "Add `name=\"shipping_speed\"` to the select tag.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "The `<select>` element with id=\"shipspeed-select\"",
+      "severity": 3,
+      "violation": "The select element is missing a name attribute, so the selected shipping speed will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Standard</option>` (no value attributes)",
+      "fix": "Add value attributes to each option: `<option value=\"standard\">Standard</option>`, `<option value=\"express\">Express</option>`, etc.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "The `<option>` elements within id=\"shipspeed-select\"",
+      "severity": 3,
+      "violation": "The options lack explicit value attributes and will submit their display text instead."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Two separate inputs - one with name=\"full_name\" and one with name=\"legal_name\"",
+      "fix": "Remove one of the duplicate fields, or clarify their different purposes in the labels.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "The form contains both id=\"name-input\" and id=\"legalname-input\"",
+      "severity": 3,
+      "violation": "The form asks for \"Full name\" and separately \"Your name\", which appear to be the same information."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required=\"\">`",
+      "fix": "Remove the inline `style=\"font-size:16px\"` and define consistent form styling in a `<style>` block or external stylesheet.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "The `<input>` element with id=\"org-input\"",
+      "severity": 3,
+      "violation": "The organization input has an inline style attribute while other form fields do not, creating inconsistent styling."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Change to `type=\"time\"` or replace with a `<select>` element containing time options (e.g., \"Morning\", \"Afternoon\", \"Evening\").",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "The `<input>` element with id=\"contacttime-input\"",
+      "severity": 3,
+      "violation": "The \"Preferred contact time\" field uses type=\"text\" instead of type=\"time\", making the expected input format unclear."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T10:39:43Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

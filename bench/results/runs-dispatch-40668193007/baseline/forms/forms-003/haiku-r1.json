@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<p>Thanks for signing up.</p>`",
+      "fix": "Remove this paragraph element from the form; it should only display after successful form submission via JavaScript or a success page.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Inside `<div id=\"row-phone\">`, after the phone input field",
+      "severity": 3,
+      "violation": "A success message appears inside the form before the form is submitted, which is semantically incorrect and appears prematurely."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">` has no `name` attribute",
+      "fix": "Add `name=\"shipping_speed\"` to the select element.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<div id=\"row-shipspeed\">`",
+      "severity": 3,
+      "violation": "The select field lacks a `name` attribute, so its value will not be included in the submitted form data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Contains \"First name\" and \"Last name\" fields, following the earlier \"Full name\" field in `<div id=\"row-name\">`",
+      "fix": "Remove either the \"Full name\" field or the separate \"First name\"/\"Last name\" fields to avoid duplication.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`<div id=\"row-legalname\">`",
+      "severity": 3,
+      "violation": "The form asks for a full name at the top and then separately requests first and last names later, creating redundant and conflicting name fields."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Change the input type to `type=\"time\"` to provide proper time input handling.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`<div id=\"row-contacttime\">`",
+      "severity": 3,
+      "violation": "The field is type=\"text\" but should accept a time value, making it unclear what format users should enter."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required=\"\">`",
+      "fix": "Add `minlength=\"8\" maxlength=\"8\"` or add a `pattern=\"[0-9]{8}\"` attribute to enforce the stated requirement.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`<div id=\"row-member\">`",
+      "severity": 3,
+      "violation": "The placeholder text states \"Must be 8 digits\" as a requirement, but there is no validation (minlength, maxlength, or pattern) to enforce this constraint."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-003.html",
+    "artifact_sha256": "df62d7b38659529bf26df03102d3e7969a1c47b7c66e72bc8d3cf208f082bc1f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T10:24:30Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

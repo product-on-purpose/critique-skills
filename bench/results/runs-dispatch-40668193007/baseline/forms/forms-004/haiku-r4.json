@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"form\">`",
+      "fix": "Add `method=\"POST\" action=\"/api/register\"` (or appropriate endpoint) to the form tag.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Form element, line 8",
+      "severity": 3,
+      "violation": "The form is missing `method` and `action` attributes, so it cannot submit properly or securely (missing method defaults to GET, which is insecure for password fields)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">`",
+      "fix": "Add `name=\"shipping_speed\"` to the select element.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Shipping speed select, line 49",
+      "severity": 3,
+      "violation": "The select element is missing a `name` attribute, so the selected shipping speed will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Standard</option>` through `<option>International</option>`",
+      "fix": "Add `value` attributes to each option: `<option value=\"standard\">Standard</option>`, `<option value=\"express\">Express</option>`, etc.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Shipping speed options, lines 51-55",
+      "severity": 3,
+      "violation": "The option elements lack `value` attributes, so the form will submit the display text instead of consistent internal values."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"name-label\" for=\"name-input\">Full name</label>` and `<label id=\"legalname-label\" for=\"legalname-input\">Your name</label>`",
+      "fix": "Remove one of the duplicate fields, or if both are genuinely needed, clarify their distinct purposes with labels like \"Full name (for login)\" and \"Legal name (for billing)\".",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Full name and legal name fields, lines 10 and 56",
+      "severity": 3,
+      "violation": "The form asks for \"Full name\" and then separately for \"Your name\" (legal name), requesting the same information twice and confusing users about which to fill."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no `maxlength` or `pattern` attribute",
+      "fix": "Add `maxlength=\"8\" pattern=\"[0-9]{8}\"` to enforce the 8-digit requirement.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Membership number field, line 37",
+      "severity": 3,
+      "violation": "The label and placeholder promise an 8-digit constraint, but the input has no validation to enforce it, allowing invalid entries."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Change to `type=\"time\"` for a time picker, or use a `<select>` element if only predefined time slots are acceptable.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Preferred contact time field, line 63",
+      "severity": 3,
+      "violation": "The field is labeled \"Preferred contact time\" but uses type=\"text\", which provides no validation, appropriate mobile keyboard, or time-picker UI."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"contacttime-label\" for=\"contacttime-input\" style=\"display:block\">`",
+      "fix": "Remove the inline style and define label styling in a CSS file instead.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Preferred contact time label, line 63",
+      "severity": 3,
+      "violation": "This label has an inline `style=\"display:block\"` while all other labels lack this, creating inconsistent styling and mixing presentation logic with markup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>`",
+      "fix": "Either remove the button if not needed, or add an `onclick` handler and corresponding JavaScript to reveal the intended details.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "View details button, line 67",
+      "severity": 3,
+      "violation": "The button has no `onclick` handler or associated JavaScript function, making it nonfunctional and its purpose unclear."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T10:48:07Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
