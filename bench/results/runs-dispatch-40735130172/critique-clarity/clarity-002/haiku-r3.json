@@ -1,0 +1,106 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "evidence": "71-word sentence, 5 subordinate-clause markers: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "severity": 3,
+      "violation": "The sentence runs to 71 words with 5 subordinate-clause markers, longer than the reader can hold in mind on a single pass."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-SHAPE",
+      "evidence": "71-word sentence: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "fix": "Move subordinate clauses and modifiers after the main clause, not between its subject and verb.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "severity": 3,
+      "violation": "At 71 words, with 0 comma-set-off clause(s) and 5 subordinate-clause marker(s), the sentence stacks interruptions between its subject and its main verb instead of holding the main clause together."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Lines 5-7 (Program Overview): 'benefits team tracks the stipend budget at the start of the fiscal year... people operations office updates the equipment catalog each quarter.' Lines 61-62 (Special Cases): identical statements. Lines 73-74 (Questions and Updates): identical statements again.",
+      "fix": "Consolidate repeated information into a single location. Remove duplicate statements or clearly differentiate if they describe different contexts.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Program Overview (lines 5-7), Special Cases (lines 61-62), Questions and Updates (lines 73-74)",
+      "severity": 2,
+      "violation": "Budget tracking and equipment catalog information is repeated verbatim in three separate sections without differentiation, creating confusion about scope or relationship between repetitions."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-LISTS",
+      "evidence": "Employees must submit the receipt, the manager's approval form, and the original purchase order before the review begins.",
+      "fix": "Reformat the inline items as a numbered or bulleted list.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence embeds three or more comma- or semicolon-separated parallel items inline rather than presenting them as a formatted list."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "evidence": "Lines 14-15 embed nine conditions sequentially: primary residence requirement, coworking exclusion, occasional-use exclusion, address-matching requirement, roommate exception, equipment-location requirement, address-change handling, confirmation logging, and recency requirement. No punctuation or structure indicates relative importance.",
+      "fix": "Separate workspace requirements into a formatted checklist or bulleted sub-section. Order by logical hierarchy: primary requirements first, followed by exceptions, then verification procedures.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Eligibility, paragraph 3 (lines 14-15)",
+      "severity": 2,
+      "violation": "Workspace eligibility conditions are presented without hierarchy or grouping, mixing primary requirements with exceptions in an undifferentiated list."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-MUST",
+      "evidence": "Additionally, employees shall retain receipts for one year after the purchase date.",
+      "fix": "Restate the requirement using must.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "Required Documentation, paragraph 2",
+      "severity": 2,
+      "violation": "The sentence states a binding requirement using shall or an indirect requirement phrasing instead of must."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-NOMINALIZATION",
+      "evidence": "The finance office conducts an evaluation of every submitted receipt before it approves the amount.",
+      "fix": "Restate the nominalized noun as the sentence's main verb.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Reimbursement Amounts, paragraph 1",
+      "severity": 2,
+      "violation": "The action is buried inside the noun 'evaluation', carried by a generic support verb, instead of stated as the sentence's own main verb."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-002.md",
+    "artifact_sha256": "7fd910197f585ef10416cde2ed6b94fa48de539377a1082d82e29ccee509e6df",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T17:44:33Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 8,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 3
+  }
+}

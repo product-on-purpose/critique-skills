@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The employee receives a confirmation email once processing finishes. Then, the employee reviews the confirmation summary before submitting the final request.\"",
+      "fix": "Clarify the actual sequence and rewrite to ensure the review and submission step occurs either before or after final processing, but not both.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "How to Apply section, third and fourth sentences",
+      "severity": 3,
+      "violation": "The sequence is logically contradictory - the employee cannot review and submit before final processing if the confirmation arrives after processing finishes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You must keep your equipment in good working condition and we may ask for a brief photo check once a year.\"",
+      "fix": "Rewrite in third person: \"Employees must keep equipment in good working condition, and the company may request a brief photo check once a year.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Restrictions and Exceptions section, first sentence",
+      "severity": 3,
+      "violation": "Shifts from third-person point of view used throughout the document to second person (\"you\") and first person plural (\"we\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Also, you submit the request in the portal. Countersign the employee request within two business days. You track its status there until the payment clears.\"",
+      "fix": "Replace ambiguous pronouns with specific roles: \"Employees submit the request in the portal. Managers countersign the employee request within two business days. Employees track its status there until the payment clears.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Terminology Notes section",
+      "severity": 3,
+      "violation": "The pronoun \"you\" has an ambiguous referent, and \"Countersign\" lacks a subject, leaving unclear who performs each action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.\"",
+      "fix": "Remove these off-topic sentences.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Program Coordination section",
+      "severity": 3,
+      "violation": "These sentences about travel expenses, federal guidance, and office coffee are not relevant to the home office equipment stipend policy."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Completing the request begins with confirming eligibility, and the uploaded receipt.\"",
+      "fix": "Rewrite as \"Completing the request begins with confirming eligibility and uploading a receipt.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Request Steps section",
+      "severity": 3,
+      "violation": "Incomplete parallel construction - \"the uploaded receipt\" is not a step parallel to \"confirming eligibility.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Every entry carries a date stamp so the record stays easy to audit.\"",
+      "fix": "Remove this duplicate sentence from Special Cases.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Special Cases section, final two sentences",
+      "severity": 3,
+      "violation": "This sentence is duplicated verbatim from the Program Overview section."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T17:59:52Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

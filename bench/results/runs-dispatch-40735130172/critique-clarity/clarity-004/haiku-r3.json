@@ -1,0 +1,84 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal. You track its status there until the payment clears.",
+      "fix": "Separate the section into subsections: one for employee actions and one for organizational workflow. Or remove Finance/Payroll details if this section addresses employees only.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Terminology Notes section, lines 49-53",
+      "severity": 2,
+      "violation": "Section mixes employee reader (You record, you submit, You track) with descriptions of third-party actions (Finance, Payroll), leaving unclear which reader should perform each step."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Home-office equipment stipend (line 11) vs. every stipend item (line 33) vs. You record the stipend item on the request form (line 51)",
+      "fix": "Choose one term consistently. Either use 'equipment' throughout or 'stipend item' throughout, or add a Terminology section that explicitly states they mean the same thing.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Lines 11, 33, 51 throughout document",
+      "severity": 2,
+      "violation": "Terms 'equipment' and 'stipend item' refer to the identical concept but are used interchangeably with no definition or stated equivalence."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "evidence": "However, employees on an approved leave of absence remain eligible... (line 13) and However, an incomplete request pauses the timeline... (line 29)",
+      "fix": "Remove 'However' and reorder: 'Employees on an approved leave of absence remain eligible once they return to active status.' and 'An incomplete request pauses the timeline until the missing item arrives.'",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Lines 13 and 29",
+      "severity": 2,
+      "violation": "Sentences open with exceptions (However) before stating the main idea, requiring re-reading to understand the rule."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Completing the request begins with confirming eligibility, and uploading the receipt.",
+      "fix": "Either move Request Steps immediately after How to Apply with expanded content, or remove it as redundant to How to Apply.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Request Steps section, lines 56-57",
+      "severity": 2,
+      "violation": "Request Steps section appears after How to Apply has already detailed the process and contains only one sentence, creating unclear redundancy and disrupting document structure."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "The portal walks through each step in order. The portal saves a draft automatically. An incomplete request pauses the timeline.",
+      "fix": "Name the real actors: 'The benefits team walks employees through each step. The system saves a draft automatically. The system pauses the timeline when a request is incomplete.'",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Lines 19, 21, 29",
+      "severity": 2,
+      "violation": "Abstract subjects (portal, request) stand in for real actors instead of naming who actually performs the action."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T18:12:43Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

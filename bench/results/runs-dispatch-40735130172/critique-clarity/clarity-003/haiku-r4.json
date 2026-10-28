@@ -1,0 +1,106 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-PARAGRAPH",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout.",
+      "fix": "Rewrite the opening sentence to state the topic the rest of the paragraph covers.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "The paragraph's opening sentence shares almost no vocabulary with the rest of the paragraph, so it does not preview the paragraph's actual topic."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.",
+      "fix": "Remove sentences about the travel audit, federal guidance, and coffee budget. Either move relevant stipend-coordination details into this paragraph, or delete the irrelevant content.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "Paragraph contains four unrelated sentences: a statement about the benefits team coordinating stipend requests, followed by unrelated information about a travel audit, federal remote-work guidance, and a coffee budget. None of these topics relate to each other or to the stipend policy."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Restrictions: 'You must keep your equipment.' Terminology Notes: 'You record the stipend item.' 'You submit the request.' vs. earlier: 'Employees keep proof of purchase.'",
+      "fix": "Choose one point of view and apply it consistently throughout. If sections target different audiences, use headings or explicit labels ('For Employees:' or 'For Finance Staff:') to signal the change.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Restrictions and Exceptions, Terminology Notes",
+      "severity": 2,
+      "violation": "The document shifts point of view mid-policy without signaling a change in intended audience. Most sections address employees in third person ('employees keep,' 'the employee reviews'), but Restrictions and Exceptions and Terminology Notes switch to direct address ('You must keep,' 'you record,' 'you submit'). Readers cannot determine whether these sections apply only to employees or to other roles."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "How to Apply: 'equipment cost' (line 23); Terminology Notes: 'reimbursable item' (line 51); Request Steps: 'stipend item' (line 57); Restrictions: 'one device per category' (line 47).",
+      "fix": "Standardize on a single term throughout. If 'equipment' is the preferred term, replace all instances of 'item' or 'device' with 'equipment.' Define the term once in Terminology Notes.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "throughout",
+      "severity": 2,
+      "violation": "The terms 'equipment' and 'item' are used interchangeably when referring to stipend purchases, creating ambiguity about whether they refer to the same thing."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "How to Apply (section 3) describes the portal and process steps, but Approval Timeline, Required Documentation, Reimbursement Amounts, Restrictions, and Terminology Notes intervene before Request Steps details the actual steps.",
+      "fix": "Move Request Steps immediately after How to Apply so application instructions flow logically.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Request Steps (section 9)",
+      "severity": 2,
+      "violation": "Request Steps appears after Terminology Notes (section 8), but logically belongs immediately after How to Apply (section 3). This disrupts the natural sequence for readers following application instructions."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SUBJECT-VERB-OBJECT",
+      "evidence": "Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.",
+      "fix": "Move the interrupting clause elsewhere, or split it into its own sentence.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 2",
+      "severity": 2,
+      "violation": "3 comma-set-off clause(s) totalling 14 words intervene between the sentence's apparent subject and its verb."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-TRANSITIONS",
+      "evidence": "An incomplete request pauses the timeline until the missing item arrives. The...",
+      "fix": "Open the paragraph with a transition word that states its relationship to the prior paragraph.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 2",
+      "severity": 2,
+      "violation": "The paragraph opens with none of the fixed transition words, so the reader is not told how it relates to the paragraph before it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T17:59:03Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}
