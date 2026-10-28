@@ -272,7 +272,7 @@ def check(artifact):
 def main(argv=None):
     return run_scripted_lane(
         skill_name="critique-argument",
-        skill_version="0.1.0",
+        skill_version="0.1.1",
         rubrics=["TOULMIN"],
         check_fn=check,
         argv=argv,

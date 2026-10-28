@@ -2,7 +2,7 @@
 name: critique-accessibility
 description: "Reviews HTML pages and fragments (markdown where mappable) against 27 of the 55 WCAG 2.2 Level A and AA success criteria: contrast, alt text, heading hierarchy for screen readers, link text, input purpose, target size, orientation, focus visibility, status messages, and keyboard and screen-reader access. Judges conformance against WCAG, not an interface's general usability, flow, or controls (critique-usability covers that), or how much effort a form's fields cost to fill in on a phone (critique-forms covers that). Use when the user asks for an accessibility review, feedback, a second opinion, a red-line pass, an a11y audit, or a pre-launch quality check on a page or component."
 metadata:
-  version: 0.1.1
+  version: 0.2.0
 license: Apache-2.0
 rubric_sources:
   - id: WCAG

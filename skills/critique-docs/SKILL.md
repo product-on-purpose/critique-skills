@@ -2,7 +2,7 @@
 name: critique-docs
 description: "Reviews technical documentation pages and page trees written in markdown against the Diataxis framework: tutorial, how-to, reference, and explanation mode fit, plus heading structure, orphaned pages, cross-mode linking, and navigation-list length. Use when the user asks for a review, feedback, a second opinion, a red-line pass, or a quality check on a docs site, a README tree, a knowledge base, or any markdown documentation before it ships."
 metadata:
-  version: 0.1.0
+  version: 0.1.1
 license: Apache-2.0
 rubric_sources:
   - id: DIATAXIS

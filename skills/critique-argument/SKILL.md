@@ -2,7 +2,7 @@
 name: critique-argument
 description: "Reviews argumentative prose - essays, proposals, position papers, recommendation memos, strategy docs, and op-eds - against the Toulmin model of argument: whether the claim, grounds, warrant, backing, qualifier, and rebuttal are present, explicit, and actually hold together. Judges the argument's structure, not prose readability or sentence mechanics (critique-clarity covers that). Use when the user asks for a review, feedback, a second opinion, a red-line pass, a quality check, or a critique of whether an argument holds up before it goes out."
 metadata:
-  version: 0.1.0
+  version: 0.1.1
 license: Apache-2.0
 rubric_sources:
   - id: TOULMIN
