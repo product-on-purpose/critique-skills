@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Text states \"3 projects\" but the following list contains only 2 items: \"Data Warehouse Cutover\" and \"Mobile App Revamp\"",
+      "fix": "Change \"3 projects\" to \"2 projects\" or add a third project name to the list.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section workspace-overview, paragraph \"This workspace holds 3 projects, synced last week.\"",
+      "severity": 3,
+      "violation": "The project count does not match the number of projects actually listed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\"></button>`",
+      "fix": "Add text content (e.g., \"Duplicate project\") or an aria-label attribute to describe the button's function.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section project-settings, the empty button element",
+      "severity": 3,
+      "violation": "The button has no visible text or aria-label, making its purpose unclear to users."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"project-settings-name-input\" type=\"text\" value=\"Design System Refresh\">`",
+      "fix": "Add `name=\"project-name\"` to the input element.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section project-settings, the project name input element",
+      "severity": 3,
+      "violation": "The input lacks a name attribute, so this field's value will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"invite-member-email-input\" type=\"email\">`",
+      "fix": "Add `name=\"email\"` to the input element.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section invite-member, the email input element",
+      "severity": 3,
+      "violation": "The input lacks a name attribute, so this field's value will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"notification-settings-digest-input\">`",
+      "fix": "Add `name=\"digest-frequency\"` to the select element.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section notification-settings, the digest frequency select element",
+      "severity": 3,
+      "violation": "The select lacks a name attribute, so this field's value will not be submitted with the form."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T13:50:56Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

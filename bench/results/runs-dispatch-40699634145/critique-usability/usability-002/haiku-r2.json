@@ -1,0 +1,93 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "The notification-settings form with Submit button has no next state specified after submission",
+      "fix": "Specify the outcome state after form submission, such as a success confirmation or return to a parent screen, and make that state change visible to the user.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "The artifact specifies a Submit action on the notification settings form but does not show what the user sees when the submission completes. The user cannot tell whether their preference was saved."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "The project-settings form with Save button has no next state specified after submission",
+      "fix": "Specify the outcome state after form submission, such as a success confirmation or return to a parent screen, and make that state change visible to the user.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "The artifact specifies a Save action on the project name form but does not show what the user sees when the save completes. The user cannot tell whether their action succeeded or failed."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H10-FINDABLE",
+      "evidence": "The archive-confirm message states 'You can restore it at any time from the archived projects list' but the artifact does not show where or how the user accesses the archived projects list",
+      "fix": "Either provide a link to the archived projects list from the project-archived outcome state, or include the restoration path in the artifact specification so the user knows where to find it.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"archive-confirm\" section, archive confirmation message (also shown in \"project-archived\" message)",
+      "severity": 2,
+      "violation": "The artifact mentions that archived projects can be restored from an 'archived projects list' but does not show this list or how to access it. The help is offered but not actionable from any screen shown in the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H4-CONTROL-NAMING",
+      "evidence": "control labeled \"Save\"",
+      "fix": "Pick one label for this commit action, for example \"Save\", and use it everywhere the action appears.",
+      "id": "F-004",
+      "instances": [
+        {
+          "evidence": "control labeled \"Save\"",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "control labeled \"Submit\"",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "This artifact uses 2 different labels for what reads as the same commit action: \"Save\", \"Submit\". A user cannot tell from the label alone whether these controls perform the same action or different ones."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H5-CONFIRM",
+      "evidence": "The 'Archive project' link goes directly to #project-archived without showing the archive-confirm state that is defined in the artifact",
+      "fix": "Wire the archive-confirm state into the flow by making the 'Archive project' link target #archive-confirm, so the user sees the confirmation prompt before the archive happens.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-archive-link\" link",
+      "severity": 2,
+      "violation": "The artifact defines an archive operation that removes a project from the active list for everyone on the team, which is a costly action. The artifact defines a confirmation state (archive-confirm) but does not include it in the user flow, so the archive happens without explicit confirmation."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:04:18Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

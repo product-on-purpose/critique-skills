@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced last week.\" followed by a list of only 3 items",
+      "fix": "Either add a fourth project to the list or change the count to 3.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section \"Your projects\", first paragraph and unordered list",
+      "severity": 3,
+      "violation": "The stated project count (4) does not match the number of projects listed (3)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible text to the button, such as `<button id=\"project-settings-duplicate-btn\" type=\"button\">Duplicate</button>`.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Project settings section, duplicate button",
+      "severity": 3,
+      "violation": "The button contains no visible text content, only an aria-label, making it unclear to sighted users."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`Archiving \"Q3 Roadmap\" will remove it from...`",
+      "fix": "Either update this text dynamically with JavaScript when the name changes, or use a generic message that doesn't reference the project name.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Archive confirmation section, paragraph with id=\"archive-confirm-copy\"",
+      "severity": 3,
+      "violation": "The project name \"Q3 Roadmap\" is hardcoded in the confirmation text; if a user changes the name in the form above, this message would become inconsistent."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form>` without action or method attributes (appears in three forms)",
+      "fix": "Add action and method attributes to each form, for example: `<form action=\"/api/save-project-settings\" method=\"POST\">`.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Project settings, invite member, and notification settings sections",
+      "severity": 3,
+      "violation": "Forms lack action attributes, so they cannot submit data to a server."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T14:32:08Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

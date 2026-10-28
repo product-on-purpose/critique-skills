@@ -1,0 +1,53 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "form submission control with type=\"submit\" and no specified target state or feedback mechanism",
+      "fix": "Specify either the next state this control navigates to, or document that feedback appears in-place (e.g., a success message or the updated form field).",
+      "id": "F-001",
+      "instances": [
+        {
+          "evidence": "action button (type=\"button\") with no specified outcome or next state",
+          "location": "the \"project-settings\" section, the \"Duplicate\" button"
+        },
+        {
+          "evidence": "form submission control with type=\"submit\" and no specified target state or feedback mechanism",
+          "location": "the \"invite-member\" section, the \"Save\" button"
+        },
+        {
+          "evidence": "form submission control with type=\"submit\" and no specified target state or feedback mechanism",
+          "location": "the \"notification-settings\" section, the \"Save\" button"
+        }
+      ],
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"Save\" button",
+      "severity": 2,
+      "violation": "This form submission action changes state (saves the project name) but the artifact does not specify what the user sees after submitting: whether feedback appears on the same screen, whether the page navigates, or what confirmation is provided."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:28:45Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

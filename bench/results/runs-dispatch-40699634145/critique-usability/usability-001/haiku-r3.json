@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "The form contains a submit button labeled \"Save\", but the artifact does not specify what the user sees after clicking it. The success state (invite-sent) is reached via a separate \"Continue\" link, not via the save button, leaving the save button's outcome unspecified.",
+      "fix": "Specify what happens after the save button is clicked: either navigate directly to the invite-sent screen, show a success message, or clarify the relationship between the save and continue actions.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button",
+      "severity": 3,
+      "violation": "This form submit action provides no specified feedback to the user, so the user cannot tell whether the invitation was sent."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "The form contains a submit button labeled \"Save\", but the artifact does not specify what the user sees after clicking it: no success message, loading state, or changed control state.",
+      "fix": "Specify visible feedback for the save action: a success message, a visual confirmation, or a state update confirming the digest frequency preference was saved.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button",
+      "severity": 3,
+      "violation": "This form submit action provides no specified feedback to the user, so the user cannot tell whether their notification preference was saved."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "The form contains a submit button labeled \"Save\", but the artifact does not specify what the user sees after clicking it: no success message, loading state, error state, or changed control state.",
+      "fix": "Specify visible feedback for the save action: a success message, a visual confirmation, a state transition, or a brief status update confirming the project name was saved.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 3,
+      "violation": "This form submit action provides no specified feedback to the user, so the user cannot tell whether the save succeeded."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-DEADEND",
+      "evidence": "the \"invite-sent\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+      "fix": "Add a control inside the \"invite-sent\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "the \"invite-sent\" section",
+      "severity": 3,
+      "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H10-FINDABLE",
+      "evidence": "The select field is labeled \"Digest frequency\" with options \"Daily\" and \"Weekly\". The term \"digest\" is not explained anywhere in the artifact, and no tooltip, help text, or linked explanation is provided.",
+      "fix": "Define the term in place: add a tooltip or help text clarifying what a digest means in this context (e.g., \"A summary of notifications sent to you\"), or reword the label to be more explicit (e.g., \"How often to receive a summary of notifications\").",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"notification-settings\" section, the \"notification-settings-digest-input\" select field",
+      "severity": 2,
+      "violation": "The field uses a term (\"digest\") that is never defined or explained in the artifact, so a user unfamiliar with the product will not understand what the setting controls."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "The text in project-archived states \"You can restore it at any time from the archived projects list\", but no screen in the artifact displays an archived projects list or provides a restore control.",
+      "fix": "Define the restore path within the artifact: add a screen showing the archived projects list with a restore action, or add a restore or undo control in the project-archived success state.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the \"project-archived\" section",
+      "severity": 2,
+      "violation": "The artifact commits to reversibility of the archive action but does not show the reversal path within any defined screen, leaving the user without a clear mechanism to restore the archived project."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-LABELED",
+      "evidence": "&lt;button&gt; with no text content and no accessible-name attribute",
+      "fix": "Add visible text to this control, or an aria-label attribute naming what it does.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "This control has neither visible text nor an accessible-name attribute, so nothing on screen names what the control does."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T13:53:56Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

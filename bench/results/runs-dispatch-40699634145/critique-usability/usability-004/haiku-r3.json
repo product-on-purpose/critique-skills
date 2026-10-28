@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "Form shows email input with type='email' and a Save button. Separately, a Continue link points to invite-sent. The artifact does not specify what happens after clicking Save: whether the form validates, submits to a server, shows an error or confirmation, or what state the user enters.",
+      "fix": "Specify the next state after Save is clicked: either a confirmation or result screen within the artifact itself, or in-place validation feedback showing success or error.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "invite-member section, Save button in email form",
+      "severity": 2,
+      "violation": "The artifact specifies the Save action but does not specify visible feedback (in-progress indicator, validation result, or confirmation) for what happens when the user submits the email form."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "Form shows input with value='Q3 Roadmap' and a Save button, but the artifact does not specify what the user sees after clicking Save: no loading state, success message, error message, or page reload shown.",
+      "fix": "Add specification of what happens after Save: either show the artifact reaching a next screen that the spec defines, or specify an in-place success message or confirmation state.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "project-settings section, Save button in project name form",
+      "severity": 2,
+      "violation": "The artifact specifies the Save action but does not specify visible feedback (in-progress indicator, result message, or changed control state) for what happens after the user clicks it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "Select element shows three options: Daily, Weekly, Monthly. No option element carries a 'selected' attribute, so the artifact does not indicate which frequency is the current setting.",
+      "fix": "Add a 'selected' attribute to one of the three options to indicate the current digest frequency setting, or add explanatory text above the select stating the current value.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "notification-settings section, digest frequency select dropdown",
+      "severity": 2,
+      "violation": "At the notification-settings step, the user needs to know their current digest frequency in order to decide whether to change it. The form does not show which option is currently selected."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:34:35Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

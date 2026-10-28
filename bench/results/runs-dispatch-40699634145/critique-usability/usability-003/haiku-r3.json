@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "The project-archived screen states 'It no longer appears in the active projects list' and the archive-confirm screen explains the consequence, but neither screen nor any other part of the artifact defines how to restore an archived project to active status. The workspace-overview screen shows active projects but does not show a way to view or restore archived ones.",
+      "fix": "Add an unarchive or restore control on the project-archived screen or make archived projects accessible and restorable from the workspace overview (e.g., a filter or link to view archived projects with an unarchive option).",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Archive project flow, project-archived result screen",
+      "severity": 3,
+      "violation": "Archiving is a significant action that removes the project from the active list. While the artifact shows what archiving does (removes from active list), it does not specify any way to reverse this action. No unarchive, restore, or recovery control is shown in the artifact."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "The import-status screen displays 'Contact support if this continues' but provides no link, button, email address, or other control to contact support. The only control on the screen is 'Back to your projects', which does not address the error. A user following the suggestion must leave the application to find support, with no in-place route provided.",
+      "fix": "Add a 'Contact support' link or button on the error screen, or display support contact information (email, phone, help center URL) directly in the error message so the user can take the suggested recovery action without leaving the interface.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Import status screen, error recovery",
+      "severity": 3,
+      "violation": "The error message suggests a recovery action ('Contact support') but the artifact does not provide any control or route on the error screen to actually take that action. The suggested recovery is not available from the screen where the user sees the error."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "The button element has no href, no onclick handler indicated, and no artifact section defined as the target. While other interactive controls in the same artifact (Save buttons, links) are specified with clear targets or actions, this button's outcome is completely undefined.",
+      "fix": "Specify the result of the duplicate action: define the target screen showing the duplicated project, or show a confirmation and/or loading state if the duplication takes time.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Project settings area, Duplicate project button",
+      "severity": 2,
+      "violation": "The artifact defines a button with aria-label='Duplicate project' but does not specify what happens when the button is clicked - no target state, action result, or user-visible feedback is defined."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "The project-settings section contains a form with a Save button, and the notification-settings section contains another form with a Save button. Neither specifies what happens after the user clicks Save. Other actions in the same artifact explicitly show result states (e.g., invite-sent confirmation screen), creating an inconsistency.",
+      "fix": "Define and show the user-visible feedback for the Save action on each screen: either a success confirmation message, a loading state during submission, or a clear indication that the preference was saved (such as navigating to a result screen or displaying a confirmation message).",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Project settings form and notification settings form, Save buttons",
+      "severity": 2,
+      "violation": "Save buttons are defined on two screens but the artifact does not specify what feedback the user sees after submission (no confirmation message, success state, loading indicator, or completion indication)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H9-IDENTIFY",
+      "evidence": "The import-status screen displays: 'Import failed. Error code IMP-500. Contact support if this continues.' This tells the user that something failed but not why - there is no indication of whether the failure was caused by file format, permissions, network connectivity, server-side issue, or another cause. The user cannot determine what action led to the failure or how to correct it.",
+      "fix": "Specify the actual cause of the import failure in plain language (e.g., 'The file format is not supported' or 'Permission denied for this workspace' or 'Connection to the server was lost'). If the specific cause is not determinable at the mockup stage, show what information the user should provide to support (e.g., 'file name, size, and format').",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Import status screen, error message",
+      "severity": 2,
+      "violation": "The error message describes a failure but does not specifically identify what went wrong. It provides a generic message and error code with no explanation of the actual cause of the failure."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:22:14Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

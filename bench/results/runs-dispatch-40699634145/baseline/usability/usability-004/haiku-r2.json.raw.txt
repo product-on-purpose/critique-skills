@@ -1,0 +1,19 @@
+Location: Section "Your projects", first paragraph and unordered list
+Evidence: "This workspace holds 4 projects, synced last week." followed by a list of only 3 items
+Problem: The stated project count (4) does not match the number of projects listed (3).
+Fix: Either add a fourth project to the list or change the count to 3.
+
+Location: Project settings section, duplicate button
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button contains no visible text content, only an aria-label, making it unclear to sighted users.
+Fix: Add visible text to the button, such as `<button id="project-settings-duplicate-btn" type="button">Duplicate</button>`.
+
+Location: Archive confirmation section, paragraph with id="archive-confirm-copy"
+Evidence: `Archiving "Q3 Roadmap" will remove it from...`
+Problem: The project name "Q3 Roadmap" is hardcoded in the confirmation text; if a user changes the name in the form above, this message would become inconsistent.
+Fix: Either update this text dynamically with JavaScript when the name changes, or use a generic message that doesn't reference the project name.
+
+Location: Project settings, invite member, and notification settings sections
+Evidence: `<form>` without action or method attributes (appears in three forms)
+Problem: Forms lack action attributes, so they cannot submit data to a server.
+Fix: Add action and method attributes to each form, for example: `<form action="/api/save-project-settings" method="POST">`.
