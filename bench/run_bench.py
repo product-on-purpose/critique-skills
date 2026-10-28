@@ -427,8 +427,9 @@ def _sanitize_envelope_prose(envelope: dict[str, Any]) -> dict[str, Any]:
             continue
         for field, max_length in _PROSE_FIELD_MAX_LENGTH.items():
             value = finding.get(field)
-            # location is the one field the contract also allows as a structured object; only a
-            # plain string carries prose to normalise.
+            # Only a plain string carries prose to normalise. The contract's location is prose only
+            # (`$defs/locationText`); a structured location is out of contract, and
+            # skills/_shared/merge.py refuses one rather than stringify it.
             if isinstance(value, str):
                 finding[field] = _sanitize_prose(value, max_length=max_length)
         for instance in finding.get("instances") or []:

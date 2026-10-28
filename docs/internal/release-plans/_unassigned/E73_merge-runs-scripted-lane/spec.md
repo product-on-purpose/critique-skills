@@ -2,9 +2,9 @@
 id: E73
 title: "The merge step runs the scripted lane itself, instead of trusting the model's copy"
 type: spec
-status: committed
+status: fulfilled
 created: 2026-10-23
-updated: 2026-10-26
+updated: 2026-10-28
 linked-effort: docs/internal/backlog/enhancements.md
 linked-plan: null
 linked-release: null
@@ -19,13 +19,13 @@ target-release: v0.3.0
 
 Ruled by the maintainer on 2026-10-23 (the six decisions below) and built 2026-10-26. The build
 covers requirements 1 through 9, D1 through D6, and AC-1 through AC-8. AC-9, the paid re-measure,
-stays open until the maintainer gives the dispatch its own go; see "Versions" below for why the
-version moves wait with it.
+closed on 2026-10-28 with run set `bench-2026-10-28`, which moved every skill's version; see "Versions" below for
+why the version moves waited for it.
 
 ## Task Summary
 
-**Status:** built 2026-10-26; AC-9 (the paid re-measure) stays open, pending the maintainer's go
-**Last updated:** 2026-10-26 by Claude, build
+**Status:** fulfilled 2026-10-28; AC-9 (the paid re-measure) closed with run set `bench-2026-10-28`
+**Last updated:** 2026-10-28 by Claude, re-measure
 **Linked plan:** not yet planned
 **Open questions:** 0 (all six were decided 2026-10-23; see Open Questions / Decisions)
 **Revisions:** 1 (2026-10-26: moved from the local draft; D1-D3's Context paragraphs reworded from
@@ -44,7 +44,7 @@ D6, outside each maintainer-decision quote; AC checklist and Task Summary update
 - [x] **AC-6** - The bytes `checks.py` reads are the bytes `run.artifact_sha256` hashes
 - [x] **AC-7** - A test per registered skill shows a dropped and a mislabeled finding both corrected
 - [x] **AC-8** - Pass 4 of every `SKILL.md`, the critic and the skill template say the same thing
-- [ ] **AC-9** - Every skill whose output changed is measured as D5 rules before the release ships
+- [x] **AC-9** - Every skill whose output changed is measured as D5 rules before the release ships (2026-10-28, run set `bench-2026-10-28`: all seven skills, both tiers; `results.json` carries the result)
 
 ## Purpose
 

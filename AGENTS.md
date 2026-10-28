@@ -24,9 +24,11 @@ freeform opinion. See `library.json` for the authoritative name, version, and ti
 
 ## Components
 
-- **Skills:** `critique-accessibility` (v0.1.1, calibrated after P3 measurement; see ADR 0027 and
-  ADR 0028), `critique-argument`, `critique-clarity`, `critique-docs`, `critique-forms`,
-  `critique-microcopy`, `critique-usability` (v0.1.0 each) (all `skills/critique-*`, `active`).
+- **Skills:** `critique-accessibility` (v0.2.0, 27 of WCAG 2.2's 55 A and AA criteria after E67;
+  calibrated at v0.1.1 after P3 measurement, see ADR 0027 and ADR 0028), `critique-argument`,
+  `critique-clarity`, `critique-docs`, `critique-forms`, `critique-microcopy`, `critique-usability`
+  (v0.1.1 each, the first version measured with E73's merge step running the scripted lane itself)
+  (all `skills/critique-*`, `active`).
   `critique-forms` was registered `experimental` until its ship verdict and moved to `active` on
   2026-10-06 (see [ADR 0036](docs/internal/decisions/0036-experimental-status-until-ship-verdict.md)
   and [ADR 0037](docs/internal/decisions/0037-critique-forms-ship-verdict.md)). A skill added after
@@ -198,14 +200,37 @@ number carries a spread. `bench/results/variance.json` supplies it, and with it 
 needs to be failable at all. Regenerate it from committed evidence, calling no model:
 
 ```
-python -m bench.variance --corpus bench/corpus --runs bench/results/runs --run-set p3-2026-07-31 --runs bench/results/runs-cal1 --run-set cal1-2026-08-01 --runs bench/results/runs-dispatch-37091134037 --run-set bench-2026-10-03 --committed bench/results/results.json --out bench/results/variance.json
+python -m bench.variance --corpus bench/corpus \
+  --runs bench/results/runs --run-set p3-2026-07-31 \
+  --runs bench/results/runs-cal1 --run-set cal1-2026-08-01 \
+  --runs bench/results/runs-dispatch-37091134037 --run-set bench-2026-10-03 \
+  --runs bench/results/runs-dispatch-40623563498 --run-set bench-2026-10-28 \
+  --runs bench/results/runs-dispatch-40623584034 --run-set bench-2026-10-28 \
+  --runs bench/results/runs-dispatch-40735091318 --run-set bench-2026-10-28 \
+  --runs bench/results/runs-dispatch-40637267814 --run-set bench-2026-10-28 \
+  --runs bench/results/runs-dispatch-40735130172 --run-set bench-2026-10-28 \
+  --runs bench/results/runs-dispatch-40645745187 --run-set bench-2026-10-28 \
+  --runs bench/results/runs-dispatch-40660992326 --run-set bench-2026-10-28 \
+  --runs bench/results/runs-dispatch-40661025521 --run-set bench-2026-10-28 \
+  --runs bench/results/runs-dispatch-40668193007 --run-set bench-2026-10-28 \
+  --runs bench/results/runs-dispatch-40668223537 --run-set bench-2026-10-28 \
+  --runs bench/results/runs-dispatch-40684489740 --run-set bench-2026-10-28 \
+  --runs bench/results/runs-dispatch-40684518580 --run-set bench-2026-10-28 \
+  --runs bench/results/runs-dispatch-40699634145 --run-set bench-2026-10-28 \
+  --runs bench/results/runs-dispatch-40699671343 --run-set bench-2026-10-28 \
+  --committed bench/results/results.json --out bench/results/variance.json
 ```
 
 `--committed` is what makes the output trustworthy: the command refuses to emit a band unless
 pooling every repetition reproduces `results.json` exactly, and refuses equally if no cell matched
 anything at all. Omitting it produces an unverified file and says so.
 
-Add a run set to this command when its entries join `results.json`. Since variance version 1.1.0,
+Add a run set to this command when its entries join `results.json`. One run set can span several
+dispatch directories under one label, as `bench-2026-10-28` spans fourteen (one per skill per tier),
+because each directory holds distinct cells. Two directories from that re-measure are deliberately
+absent: `runs-dispatch-40637244922` and `runs-dispatch-40645721512`, the first `critique-argument`
+and `critique-clarity` Haiku runs, superseded after a `merge.py` defect (see
+`bench/results/README.md`). Since variance version 1.1.0,
 each cell-metric draws from its own seeded random stream, so adding a run set adds bands and moves
 no existing one.
 

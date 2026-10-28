@@ -732,8 +732,8 @@ function activeVersionMap() {
 
 test("loadResults reads the committed benchmark file and its provenance", () => {
   const results = loadResults();
-  assert.equal(results.entries.length, 30);
-  assert.equal(results.runSet, "p3-2026-07-31-plus-cal1-2026-08-01-plus-bench-2026-10-03");
+  assert.equal(results.entries.length, 58);
+  assert.equal(results.runSet, "p3-2026-07-31-plus-cal1-2026-08-01-plus-bench-2026-10-03-plus-bench-2026-10-28");
   assert.ok(results.generatedAt, "generated_at");
   assert.ok(results.resultsVersion, "results_version");
 });
@@ -743,9 +743,10 @@ test("activeCut drops the baseline and every superseded version, and nothing els
   const active = activeCut(results.entries, activeVersionMap());
   assert.equal(active.length, 14);
   assert.ok(active.every((e) => !isBaseline(e)), "no baseline row survives the cut");
-  // critique-accessibility 0.1.0 is the one superseded version in the dataset, and it must stay
-  // OUT of the floors while staying IN the table: the 0.1.0-to-0.1.1 comparison is the page's
-  // strongest section, so filtering at load rather than here would delete it.
+  // Since bench-2026-10-28 every skill has a superseded version in the dataset. Each must stay
+  // OUT of the floors while staying IN the table: critique-accessibility's 0.1.0-to-0.1.1
+  // comparison is the page's strongest section, so filtering at load rather than here would
+  // delete it.
   assert.ok(
     !active.some((e) => e.skill === "critique-accessibility" && e.skill_version === "0.1.0"),
     "superseded accessibility must not reach the floor strip",
@@ -780,13 +781,15 @@ test("the published floors are what the committed evidence says they are", () =>
   // figures moved and every document quoting them needs re-reading.
   const active = activeCut(loadResults().entries, activeVersionMap());
   const worst = (key) => Math.min(...active.map((e) => e[key].value));
-  assert.equal(worst("consistency"), 0.309, "consistency floor");
-  assert.equal(worst("precision"), 0.169, "criterion-level precision floor");
-  assert.equal(worst("precision_location"), 0.169, "location-level precision floor");
-  assert.equal(worst("recall"), 0.686, "criterion-level recall floor");
-  // 9.8 is critique-forms on sonnet, all of it from the judged lane (ADR 0037). It was 9.4,
-  // critique-clarity on sonnet, until forms went active.
-  assert.equal(Math.max(...active.map((e) => e.clean_fp_rate.value)), 9.8, "worst clean-FP rate");
+  // bench-2026-10-28 (the E73 and E67 re-measure): consistency is critique-argument on haiku;
+  // both precision floors are critique-usability on sonnet; recall is critique-usability on haiku.
+  assert.equal(worst("consistency"), 0.343, "consistency floor");
+  assert.equal(worst("precision"), 0.159, "criterion-level precision floor");
+  assert.equal(worst("precision_location"), 0.159, "location-level precision floor");
+  assert.equal(worst("recall"), 0.633, "criterion-level recall floor");
+  // 7.6 is critique-usability on sonnet. It was 9.8, critique-forms on sonnet, until forms 0.1.1
+  // read 6.6 under E73's merge step.
+  assert.equal(Math.max(...active.map((e) => e.clean_fp_rate.value)), 7.6, "worst clean-FP rate");
 });
 
 test("the baseline scores exactly zero at criterion level, which is structural", () => {
@@ -794,7 +797,7 @@ test("the baseline scores exactly zero at criterion level, which is structural",
   // match at the criterion level whatever it says. The page explains this in place; if a future
   // baseline ever scores non-zero here, that explanation is wrong and must be rewritten.
   const baseline = loadResults().entries.filter(isBaseline);
-  assert.equal(baseline.length, 14);
+  assert.equal(baseline.length, 28);
   for (const entry of baseline) {
     assert.equal(entry.precision.value, 0, `${entry.domain}/${entry.model} precision`);
     assert.equal(entry.recall.value, 0, `${entry.domain}/${entry.model} recall`);

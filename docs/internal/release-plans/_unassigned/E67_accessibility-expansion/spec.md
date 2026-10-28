@@ -2,9 +2,9 @@
 id: E67
 title: "Accessibility expansion: add the WCAG 2.2 Level AA criteria checkable from static markup"
 type: spec
-status: committed
+status: fulfilled
 created: 2026-10-26
-updated: 2026-10-27
+updated: 2026-10-28
 linked-effort: docs/internal/backlog/enhancements.md
 linked-plan: null
 linked-release: null
@@ -19,7 +19,7 @@ target-release: v0.3.0
 
 Ruled by the maintainer on 2026-10-27 (the nine decisions below) and built the same day. The build
 covers requirements 1 through 5, 7 and 8, D1 through D9, and AC-1 through AC-10. Requirement 6, the
-version move, waits for the shared paid re-measure. E73's spec gives the reason under "Versions": the
+version move, landed on 2026-10-28 with the shared paid re-measure, run set `bench-2026-10-28`, as 0.2.0. E73's spec gives the reason under "Versions": the
 site shows only cells measured at a skill's active version, so a move without new results would blank
 the skill's published figures.
 

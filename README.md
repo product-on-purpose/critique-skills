@@ -13,7 +13,7 @@ Every skill operationalizes a published external standard, cites a permanent cri
   <a href="https://product-on-purpose.github.io/critique-skills/contributing/"><img src="https://img.shields.io/badge/tier-convergent%20(Silver)-C0C0C0?style=flat-square" alt="Conformance tier: convergent (Silver)"></a>
   <a href="#-the-shelf"><img src="https://img.shields.io/badge/skills-6-brightgreen?style=flat-square" alt="Skills: 6"></a>
   <a href="https://product-on-purpose.github.io/critique-skills/reference/criteria/"><img src="https://img.shields.io/badge/criteria-120-brightgreen?style=flat-square" alt="Criteria: 120"></a>
-  <a href="#-the-scoreboard"><img src="https://img.shields.io/badge/run%20envelopes-851-purple?style=flat-square" alt="Run envelopes: 851"></a>
+  <a href="#-the-scoreboard"><img src="https://img.shields.io/badge/run%20envelopes-1477-purple?style=flat-square" alt="Run envelopes: 1477"></a>
   <a href="https://agentskills.io/specification"><img src="https://img.shields.io/badge/spec-agentskills.io-orange?style=flat-square" alt="Agent Skills Spec"></a>
 </p>
 
@@ -24,7 +24,7 @@ Every skill operationalizes a published external standard, cites a permanent cri
 | You want to | Start at | Then |
 |---|---|---|
 | **Use it on something** | [Install](#-install), then [the shelf](#-the-shelf): seven skills, what each reviews, one prompt each | [`QUICKSTART.md`](QUICKSTART.md) for one run start to finish, [`examples/`](examples/) for a worked walkthrough per skill |
-| **Decide whether to believe it** | [The scoreboard](#-the-scoreboard): recall and precision per skill, both pinned model tiers | [The receipts explorer](https://product-on-purpose.github.io/critique-skills/receipts/) for all 30 measured cells, `bench/results/runs*/` for all 851 run envelopes, [`bench/results/README.md`](bench/results/README.md) for the narrative, unflattering numbers first |
+| **Decide whether to believe it** | [The scoreboard](#-the-scoreboard): recall and precision per skill, both pinned model tiers | [The receipts explorer](https://product-on-purpose.github.io/critique-skills/receipts/) for all 58 measured cells, `bench/results/runs*/` for all 1477 run envelopes, [`bench/results/README.md`](bench/results/README.md) for the narrative, unflattering numbers first |
 | **Build on it or contribute** | [How a critique runs](#-how-a-critique-runs) and [where this stops](#-where-this-stops) | [The methodology](https://product-on-purpose.github.io/critique-skills/explanation/methodology/), the [Critique Contract](docs/reference/critique-contract.md), and [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 
 > [!NOTE]
@@ -182,20 +182,20 @@ Receipts come before the claim, because that is the order that earns trust.
 
 | Skill | Recall, haiku | Recall, sonnet | Precision, haiku | Precision, sonnet | Versus rubric-free baseline |
 |---|---:|---:|---:|---:|---|
-| `critique-accessibility` 0.1.1 | 0.988 | 0.965 | 0.875 | 0.672 | beats on both tiers |
-| `critique-argument` 0.1.0 | 0.825 | 0.775 | 0.579 | 0.470 | beats on both tiers |
-| `critique-clarity` 0.1.0 | 0.780 | 0.890 | 0.419 | 0.434 | beats on both tiers |
-| `critique-docs` 0.1.0 | 0.933 | 1.000 | 0.875 | 1.000 | ties on both tiers |
-| `critique-forms` 0.1.0 | 0.933 | 0.905 | 0.458 | 0.317 | beats on both tiers |
-| `critique-microcopy` 0.1.0 | 0.920 | 0.960 | 0.831 | 0.911 | beats on both tiers |
-| `critique-usability` 0.1.0 | 0.800 | 0.857 | 0.231 | 0.169 | beats on haiku, no pass on sonnet |
+| `critique-accessibility` 0.2.0 | 0.936 | 0.945 | 0.904 | 0.646 | beats on both tiers |
+| `critique-argument` 0.1.1 | 0.800 | 0.850 | 0.582 | 0.493 | beats on both tiers |
+| `critique-clarity` 0.1.1 | 0.800 | 0.940 | 0.580 | 0.514 | beats on both tiers |
+| `critique-docs` 0.1.1 | 0.885 | 1.000 | 0.821 | 0.938 | ties on both tiers |
+| `critique-forms` 0.1.1 | 0.905 | 0.943 | 0.430 | 0.352 | beats on both tiers |
+| `critique-microcopy` 0.1.1 | 0.840 | 0.947 | 0.829 | 0.910 | beats on haiku, no pass on sonnet |
+| `critique-usability` 0.1.1 | 0.767 | 0.800 | 0.267 | 0.159 | beats on haiku, below baseline on sonnet |
 
-_Location-level, shipped versions only, run set `p3-2026-07-31-plus-cal1-2026-08-01-plus-bench-2026-10-03`. Every figure is computed from `bench/results/results.json`._
+_Location-level, shipped versions only, run set `p3-2026-07-31-plus-cal1-2026-08-01-plus-bench-2026-10-03-plus-bench-2026-10-28`. Every figure is computed from `bench/results/results.json`._
 <!-- bench-scoreboard:end -->
 
-Recall is the flattering half. The lowest run-to-run consistency published is `critique-clarity` on Haiku at **0.309**, the lowest figure any core skill measured, with its judged lane alone at **0.150**. Among shipped skills precision falls to **0.169**, on `critique-usability` at Sonnet. Counting the retired `critique-accessibility` 0.1.0 it falls to **0.155**, which is the version [the failure below](#the-most-instructive-number-is-a-failure) is about. Both cuts are named because they are different questions: what you can install today, and what this library has ever measured.
+Recall is the flattering half. Among shipped skills the lowest run-to-run consistency is `critique-argument` on Haiku at **0.343**, and precision falls to **0.159**, on `critique-usability` at Sonnet. Counting every version this library has measured, consistency falls to **0.309**, on `critique-clarity` 0.1.0 at Haiku, with its judged lane alone at **0.150**, and precision falls to **0.155**, on the retired `critique-accessibility` 0.1.0, which is the version [the failure below](#the-most-instructive-number-is-a-failure) is about. Both cuts are named because they are different questions: what you can install today, and what this library has ever measured.
 
-Every measured cell, with the counts behind every ratio: the [receipts explorer](https://product-on-purpose.github.io/critique-skills/receipts/). Every per-run figure ([`variance.json`](bench/results/variance.json)) and all 851 run envelopes (`bench/results/runs*/`) live in the repo, read unflattering numbers first by [`bench/results/README.md`](bench/results/README.md). Nothing lives only on the site.
+Every measured cell, with the counts behind every ratio: the [receipts explorer](https://product-on-purpose.github.io/critique-skills/receipts/). Every per-run figure ([`variance.json`](bench/results/variance.json)) and all 1477 run envelopes (`bench/results/runs*/`) live in the repo, read unflattering numbers first by [`bench/results/README.md`](bench/results/README.md). Nothing lives only on the site.
 
 ### The most instructive number is a failure
 
@@ -309,7 +309,7 @@ Everything on the site is a rendering of something in this repo. Nothing lives o
 | **Criteria** | 125 (61 scripted, 64 judged), each with a permanent ID |
 | **Subagents** | 1 (`critique-critic`, clean-context) |
 | **Conformance** | convergent (Silver), 0 errors / 0 warnings; reproduce with `node scripts/check.mjs` |
-| **Measurement** | 851 committed run envelopes, k=5, two pinned model tiers, 27-artifact seeded corpus |
+| **Measurement** | 1477 committed run envelopes, k=5, two pinned model tiers, 27-artifact seeded corpus |
 | **Tests** | 1166 Python, 154 Node; reproduce with `python -m pytest -q` and `npm test` |
 | **License** | [Apache-2.0](LICENSE) (code) / CC-BY-4.0 (corpus) |
 

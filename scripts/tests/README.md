@@ -59,9 +59,9 @@ Python half.
   gone stale. Plus `check-generated-untracked.mjs` exercised against an isolated temp git
   repository in all three states: not ignored, ignored, and force-tracked. Also the benchmark
   results reader: both count shapes (numerator/denominator and total_pairs), the clean-FP rate that
-  is not a ratio, the active-version cut that excludes the baseline and the superseded
-  `critique-accessibility` 0.1.0 while leaving both in the dataset, the published floors (0.309
-  consistency, 0.169 precision, 9.40 clean-FP), the baseline's structural criterion-level zeros, and
+  is not a ratio, the active-version cut that excludes the baseline and every superseded version
+  while leaving both in the dataset, the published floors (0.343 consistency, 0.159 precision, 7.6
+  clean-FP, from the bench-2026-10-28 re-measure), the baseline's structural criterion-level zeros, and
   the emitted receipts page: one row per measured cell, the inlined dataset, and the static table
   preceding the enhancer so the page works with JavaScript off. The floor figures are hard-coded for
   the same reason as 42/54/96: results.json changes only by a deliberate evidence merge.
