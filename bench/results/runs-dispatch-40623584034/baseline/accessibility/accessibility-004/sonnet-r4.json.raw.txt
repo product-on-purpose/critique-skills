@@ -1,0 +1,74 @@
+Location: Section "Station updates", first paragraph (s1-p1)
+Evidence: "Riders should review the updated schedule at any station kiosk. Station staff can also help with the same request in person."
+Problem: The second sentence calls reviewing a schedule "the same request," but looking something up isn't a request, making the sentence incoherent — it reads like boilerplate pasted without adjusting to context.
+Fix: Rewrite to something concrete, e.g. "Station staff can also show riders the updated schedule in person," or delete the sentence.
+
+Location: Section "Station updates", second paragraph (s1-p2)
+Evidence: "Commuters can report a service issue by calling rider services. Station staff can also help with the same request in person."
+Problem: The exact same "same request" sentence from s1-p1 is reused verbatim for a completely different action (filing a report vs. reviewing a schedule), indicating templated filler text rather than content tailored to this paragraph.
+Fix: Write a sentence specific to filing a service-issue report in person, and remove the duplicated boilerplate.
+
+Location: Section "Station updates", image (s1-img1)
+Evidence: `<img src="/img/platform-update.jpg" alt="Crews repainting the accessible parking spaces near the station entrance.">`
+Problem: The alt text describes parking-lot repainting, but the filename ("platform-update") and surrounding "Station updates" content suggest the image is actually about platform work — the alt text appears to describe a different image.
+Fix: Confirm what the image actually shows and correct the alt text (or the filename) so they match.
+
+Location: Section "Schedule changes", first paragraph (s2-p1)
+Evidence: "Passengers can check real time arrivals through the online portal. Station staff can also help with the same request in person."
+Problem: This is the third verbatim occurrence of the identical "same request" sentence, now attached to yet another unrelated action, confirming it's unedited template filler rather than meaningful, context-specific content.
+Fix: Remove the repeated boilerplate sentence or replace it with wording specific to checking arrivals in person (e.g., via station displays).
+
+Location: Section "Schedule changes", table (s2-table1)
+Evidence: `<table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>...`
+Problem: The table has no `<caption>` or other accessible name, so screen reader users who navigate to it have no description of what it represents.
+Fix: Add a `<caption>` (e.g. "Zone status") as the first child of the table.
+
+Location: Section "Fare adjustments", first paragraph (s3-p1)
+Evidence: "Riders can report a service issue by calling rider services. Updates post to the schedule page within one business day."
+Problem: The second sentence (about schedule-page updates) doesn't logically follow from calling to report an issue, and it is an identical duplicate of the sentence later used in the status card (s3-statuscard) for an unrelated action, suggesting copy-paste error.
+Fix: Replace the second sentence with information relevant to phoning in a report (e.g., expected response time), or delete it.
+
+Location: Section "Fare adjustments", second paragraph (s3-p2)
+Evidence: "Local residents can check real time arrivals through the online portal. A confirmation message follows once the request is processed."
+Problem: Checking real-time arrivals is not a submitted request that gets "processed" with a confirmation message, so the second sentence doesn't match the action described in the first.
+Fix: Rewrite the second sentence to describe what actually happens when checking arrivals online, or remove it.
+
+Location: Section "Fare adjustments", promo banner (s3-banner)
+Evidence: `<div class="promo-banner" id="s3-banner"><p>Route adjustments take effect on the posted effective date.</p></div>`
+Problem: The class "promo-banner" implies promotional/marketing content, but the text is a neutral operational notice, suggesting a mismatched or reused component.
+Fix: Rename the class to something like "notice-banner" or move the text into a component meant for informational notices.
+
+Location: Section "Fare adjustments", status card (s3-statuscard)
+Evidence: `<div class="status-card" role="status" id="s3-statuscard">...`
+Problem: `role="status"` designates an ARIA live region for dynamically injected announcements, but this div contains static content present at page load, so the role is misapplied and will not behave as intended for assistive technology.
+Fix: Remove `role="status"` from this static content, or reserve it for a container whose contents are actually updated by script in response to user action.
+
+Location: Section "Fare adjustments", custom delete control (s3-customcontrol)
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Problem: A delete action is implemented as a `<div>` with `role="button"` and `tabindex="0"` instead of a native `<button>`, so it lacks built-in keyboard activation (Enter/Space) and other native button semantics unless separately reimplemented.
+Fix: Replace the div with a native `<button type="button" aria-label="Delete item">` wrapping the icon.
+
+Location: Section "Fare adjustments", wizard steps (s3-wizard)
+Evidence: `<div class="wizard-steps" id="s3-wizard"><div class="step" id="s3-step1">Choose a plan</div>...`
+Problem: The multi-step sequence uses unstructured `<div>`s with no list semantics and no indicator of which step is current, so assistive technology users cannot tell this is an ordered sequence or which step is active.
+Fix: Mark the steps up as an `<ol>` and add `aria-current="step"` to the active step.
+
+Location: Section "Fare adjustments", link paragraph (s3-linkpara)
+Evidence: `<a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>` within "For the full list of upcoming adjustments, ..."
+Problem: The link text says "accessibility improvements list," but the sentence and section are about fare adjustments and the href points to `/fares/history`, so the link text misrepresents its destination and topic.
+Fix: Change the link text to match its destination, e.g. "read the full list of fare adjustments."
+
+Location: Section "Fare adjustments", form controls (s3-form: select#topic, input#email, input#phone, input#promo)
+Evidence: `<select id="topic">...`, `<input id="email" type="email" autocomplete="email">`, `<input id="phone" type="tel" autocomplete="tel">`, `<input id="promo" type="text" aria-invalid="true">`
+Problem: None of the form controls have a `name` attribute, so if this form were submitted (standard or via FormData), none of these values would be included.
+Fix: Add appropriate `name` attributes to the select and all three inputs.
+
+Location: Section "Fare adjustments", phone field (s3-form-phone-label / #phone)
+Evidence: `<label for="phone" ...>Phone number (required)</label>` paired with `<input id="phone" type="tel" autocomplete="tel">`
+Problem: The label visually states the field is required, but the input has no `required` or `aria-required="true"` attribute, so the requirement isn't enforced by the browser or exposed to assistive technology.
+Fix: Add `required` and/or `aria-required="true"` to the phone input.
+
+Location: Section "Fare adjustments", promo code field (#promo / s3-form-promo-error)
+Evidence: `<input id="promo" type="text" aria-invalid="true">` followed by `<span class="error-text" aria-live="polite" id="s3-form-promo-error">Enter a 6 character code...</span>`
+Problem: The input is marked invalid but has no `aria-describedby` referencing the error message span, so screen reader users focusing the field won't hear why it's invalid.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the promo input.

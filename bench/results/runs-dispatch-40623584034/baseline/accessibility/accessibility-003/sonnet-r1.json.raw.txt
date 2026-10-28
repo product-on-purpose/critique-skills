@@ -1,0 +1,69 @@
+Location: Section "Accessibility improvements", element id="s1-p1"
+Evidence: "Riders may request a fare adjustment through the mobile app. Station staff can also help with the same request in person."
+Problem: This paragraph is about fare adjustments, not accessibility; it has no connection to the "Accessibility improvements" heading, and the section's only genuinely accessibility-related content is buried in an image's alt text, invisible to sighted readers.
+Fix: Replace this paragraph with actual accessibility-improvement content (e.g., describe the platform/parking repainting work shown in the image) or move it to a section about fares.
+
+Location: Section "Accessibility improvements", element id="s1-p2"
+Evidence: "Passengers can check real time arrivals by calling rider services. Updates post to the schedule page within one business day."
+Problem: This real-time-arrivals text is unrelated to "Accessibility improvements" and is also duplicated verbatim (with "Local residents" swapped for "Passengers") in the status card at id="s3-statuscard".
+Fix: Remove the duplicate and write distinct, section-appropriate copy, or consolidate real-time-arrival info into one place and link to it.
+
+Location: Section "Weekend service", element id="s2-p1"
+Evidence: "Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person."
+Problem: Identical boilerplate to id="s1-p1" (fare-adjustment text) is repeated here under an unrelated "Weekend service" heading.
+Fix: Replace with content actually describing weekend service changes; delete the duplicated fare-adjustment sentence.
+
+Location: Section "Weekend service", element id="s2-table1"
+Evidence: "Zone / Status" rows showing "North – On time" and "South – On time"
+Problem: The table shows generic current on-time status, not anything specific to weekend service, so it doesn't support the section heading.
+Fix: Replace with weekend-specific schedule/status data, or rename the heading to match a generic "Current status" table.
+
+Location: Section "Schedule changes", element id="s3-p1"
+Evidence: "Local residents should review the updated schedule through the mobile app. Station staff can also help with the same request in person."
+Problem: The second sentence refers to "the same request," but the first sentence describes reviewing a schedule, not making a request — a leftover mismatched template sentence.
+Fix: Rewrite the second sentence to match the actual action ("Station staff can also help you review the schedule in person").
+
+Location: Section "Schedule changes", element id="s3-p2"
+Evidence: "Passengers should review the updated schedule through the mobile app. The change takes effect on the following service day."
+Problem: This paragraph duplicates the first sentence of id="s3-p1" almost word-for-word within the same section, making the content redundant.
+Fix: Merge id="s3-p1" and id="s3-p2" into a single non-repetitive paragraph.
+
+Location: Section "Schedule changes", element id="s3-banner"
+Evidence: `<div class="promo-banner" id="s3-banner"><p>Route adjustments take effect on the posted effective date.</p></div>`
+Problem: A purely informational/status message is marked up with a "promo-banner" class, mismatching semantic intent and likely mismatching the banner's visual/ARIA treatment for promotional content.
+Fix: Rename the class to something like "info-banner" or "status-banner" and ensure styling/ARIA role matches informational, not promotional, content.
+
+Location: Section "Schedule changes", element id="s3-statuscard"
+Evidence: "Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day."
+Problem: Duplicates the content of id="s1-p2" verbatim (aside from the subject noun), repeating the same information in two unrelated sections.
+Fix: Keep one authoritative instance of this content and remove the duplicate, or replace this card's text with schedule-change-specific status info.
+
+Location: Section "Schedule changes", element id="s3-customcontrol"
+Evidence: `<div class="icon-delete" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></div>`
+Problem: This appears to be an interactive delete control built from a plain `<div>` and an image with empty alt text, with no role, accessible name, or keyboard focusability — screen reader and keyboard users cannot perceive or operate it.
+Fix: Convert to a `<button>` with a visible or `aria-label` ("Delete") and remove the empty alt (or keep alt="" only if a sibling text label exists).
+
+Location: Section "Schedule changes", element id="s3-wizard"
+Evidence: `id="s3-step3" style="order:3"` containing "Confirm your order" appears first in the DOM, before `id="s3-step1" style="order:1"` ("Choose a plan")
+Problem: The CSS `order` property reverses the visual order (Choose a plan → Enter payment details → Confirm your order) relative to DOM order (Confirm → Enter → Choose), so keyboard and screen-reader navigation will traverse the steps in the wrong sequence.
+Fix: Reorder the elements in the DOM to match the intended visual/logical sequence instead of relying on CSS `order`.
+
+Location: Section "Schedule changes", element id="s3-wizard"
+Evidence: Step labels "Confirm your order", "Enter payment details", "Choose a plan"
+Problem: These labels describe an e-commerce checkout flow, not a transit "Schedule changes" topic — the content appears to be unrelated placeholder/template text left in the page.
+Fix: Replace the wizard step labels with actual schedule-change-related steps, or remove this component if it doesn't belong on this page.
+
+Location: Section "Schedule changes", element id="s3-linkpara"
+Evidence: `<a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>` inside the sentence "For the full list of upcoming adjustments, ..."
+Problem: The link text references an "accessibility improvements list," the surrounding sentence references "upcoming adjustments," and the href points to "/fares/history" — three mismatched topics for a single link, which will mislead users about where it goes.
+Fix: Make the link text, surrounding sentence, and destination URL consistent (e.g., link text "view the schedule change history" pointing to a schedule-history page).
+
+Location: Section "Schedule changes" form, element id="s3-form-phone-label"
+Evidence: `<label for="phone" id="s3-form-phone-label" style="color:#cc0000">Phone number</label>`
+Problem: Required-field status (implied by the red color) is conveyed through color alone, with no text, symbol, or `required`/`aria-required` attribute, so it's invisible to colorblind users and screen reader users.
+Fix: Add a visible "(required)" text or asterisk with an accessible description, and set the `required` attribute on the input, not just a color cue.
+
+Location: Section "Schedule changes" form, element id="s3-form-promo-label" / input id="promo"
+Evidence: `<input id="promo" type="text" aria-invalid="true">` paired with `<span class="error-text" aria-live="polite" id="s3-form-promo-error">Error.</span>`
+Problem: The promo code field is marked invalid by default on page load before any user interaction or submission, and the error text "Error." gives no indication of what's wrong, both of which confuse users and screen readers from the start.
+Fix: Remove `aria-invalid="true"` until validation actually fails after user input, and replace "Error." with a specific message (e.g., "Promo code not recognized").

@@ -1,0 +1,104 @@
+Location: `<head>` style block, `#head-style`
+Evidence: `@media (orientation: portrait) { #main-content { display: none; } }`
+Problem: This unconditionally hides the entire main content area (`#main-content`) whenever the viewport is in portrait orientation, which is the default orientation for virtually all phone users — making the page appear blank to a large share of mobile visitors.
+Fix: Remove this rule, or replace it with a rule that doesn't hide the primary content regardless of orientation.
+
+Location: skip link, `#body-skiplink`
+Evidence: `<a href="#main-content" id="body-skiplink">Skip to main content</a>`
+Problem: Because `#main-content` is set to `display:none` in portrait orientation (see the `#head-style` rule), the skip link becomes a dead end for exactly the users most likely to need it on a phone.
+Fix: Ensure the skip-link target is never hidden, independent of the portrait media query fix above.
+
+Location: nav, `#nav-link1`
+Evidence: `<a href="/accessibility" id="nav-link1" style="outline:none">Accessibility</a>`
+Problem: Removing the focus outline with no replacement focus style makes this link's keyboard focus state invisible, violating WCAG 2.4.7 (Focus Visible) — ironic for a link to the site's accessibility page.
+Fix: Delete `style="outline:none"`, or replace it with a visible custom focus style (e.g. a focus ring via `:focus-visible`).
+
+Location: section `#s1` ("Weekend service"), paragraphs `#s1-p1` and `#s1-p2`
+Evidence: "Commuters can report a service issue by calling rider services. The change takes effect on the following service day." / "Passengers should review the updated schedule through the mobile app. A confirmation message follows once the request is processed."
+Problem: Neither paragraph says anything about weekend service — they describe generic issue-reporting and confirmation flows unrelated to the "Weekend service" heading.
+Fix: Replace with copy that actually describes the weekend service change (e.g., specific route/times affected).
+
+Location: image, `#s1-img1`
+Evidence: `alt="A newly installed tactile paving strip along the platform edge."` inside section `#s1` ("Weekend service")
+Problem: A tactile paving accessibility feature is placed under "Weekend service" instead of under the "Accessibility improvements" section (`#s3`), where it topically belongs.
+Fix: Move this image into `#s3` ("Accessibility improvements").
+
+Location: section `#s2` ("Schedule changes"), `#s2-p1`
+Evidence: "Station staff can also help with the same request in person."
+Problem: "the same request" has no clear antecedent — the preceding sentence describes checking arrivals, not making a "request," so the reference is confusing, and the paragraph doesn't describe any actual schedule change.
+Fix: Reword to name the action explicitly (e.g., "Station staff can also provide real-time arrival information in person") and add content describing the actual schedule changes.
+
+Location: table, `#s2-table1`
+Evidence: `<table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>...`
+Problem: The table has no `<caption>` (or accessible name), so screen reader users navigating by table have no description of what the table represents.
+Fix: Add `<caption>Zone status</caption>` (or similar) as the first child of the table.
+
+Location: section `#s3` ("Accessibility improvements")
+Evidence: Heading "Accessibility improvements" followed by content about schedules, status cards, a delete icon, a payment wizard, and a form — none describing an accessibility feature.
+Problem: Nothing in this section actually describes an accessibility improvement; the one genuinely accessibility-related item (the tactile paving image) is in a different section entirely.
+Fix: Add content describing actual accessibility improvements in `#s3`, and relocate `#s1-img1` here as noted above.
+
+Location: `#s3-p1`
+Evidence: "Local residents should review the updated schedule through the online portal. A confirmation message follows once the request is processed."
+Problem: This is a near-duplicate of `#s1-p2` ("Passengers should review the updated schedule through the mobile app...") with only the audience and channel swapped, adding no new information and suggesting copy-paste boilerplate.
+Fix: Remove the duplicate or write distinct, section-appropriate content.
+
+Location: `#s3-p2`
+Evidence: "Riders can report a service issue by calling rider services. Station staff can also help with the same request in person."
+Problem: This duplicates the substance of `#s1-p1` and `#s2-p1` almost verbatim, again indicating repeated boilerplate rather than content specific to accessibility improvements.
+Fix: Remove the duplicate or replace with accessibility-specific content.
+
+Location: `#s3-banner`
+Evidence: "Route adjustments take effect on the posted effective date."
+Problem: This sentence is circular and uninformative — it says the date is "the posted effective date" without stating what that date is or where it's posted.
+Fix: State the actual effective date, or link to where riders can find it.
+
+Location: `#s3-statuscard`
+Evidence: `<div class="status-card" id="s3-statuscard">Your changes are saved.</div>`
+Problem: This success/status message appears with no preceding user action (no form was submitted) and has no `role="status"` or `aria-live` attribute, so it's both contextually orphaned and invisible to assistive technology if it updates dynamically.
+Fix: Remove this out-of-context card, or if it reflects real state, add `role="status"` (or `aria-live="polite"`) and only render it after a real save action.
+
+Location: `#s3-customcontrol`
+Evidence: `style="width:16px;height:16px"` on a `role="button"` element
+Problem: A 16×16px interactive target is far below the WCAG 2.5.8 minimum (24×24px) and the commonly recommended 44×44px touch target, making it hard to activate on touch devices.
+Fix: Increase the clickable area to at least 24×24px (ideally 44×44px), e.g. via padding, while keeping the icon itself small.
+
+Location: `#s3-customcontrol`
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" ...>`
+Problem: A generic `<div>` with `role="button"` is used instead of a native `<button>`, requiring manual reimplementation of keyboard activation (Enter/Space) and other built-in button semantics that this markup gives no evidence of providing.
+Fix: Replace with a native `<button>` element styled to match, eliminating the need for manual ARIA role/tabindex.
+
+Location: `#s3-wizard`
+Evidence: `<div class="wizard-steps" id="s3-wizard">` containing "Choose a plan", "Enter payment details", "Confirm your order"
+Problem: A purchase/payment wizard is thematically unrelated to a transit service-announcements page and appears with no indication of which step is current (no `aria-current` or similar marker).
+Fix: Remove this unrelated component, or if intentional, mark the active step with `aria-current="step"` and explain its purpose in context.
+
+Location: `#s3-linkpara`, `#s3-link1`
+Evidence: "For the full list of upcoming adjustments, <a href="/fares/history">check the current station closures</a>."
+Problem: The link text ("check the current station closures") doesn't match the surrounding sentence's topic ("full list of upcoming adjustments"), and the href (`/fares/history`) matches neither — the link's destination is unpredictable from its text.
+Fix: Make the link text, surrounding sentence, and href all describe the same destination/content.
+
+Location: form, `#email` input
+Evidence: `<input id="email" type="email">` vs. `<input id="phone" type="tel" autocomplete="tel">`
+Problem: The phone field has `autocomplete="tel"` but the email field has no corresponding `autocomplete="email"`, an inconsistent and incomplete use of autofill hints.
+Fix: Add `autocomplete="email"` to the email input.
+
+Location: form, `#s3-form-phone-label` / `#phone`
+Evidence: Label text "Phone number (required)" on `<input id="phone" type="tel" autocomplete="tel">`
+Problem: The label visually states the field is required, but the input has no `required` or `aria-required="true"` attribute, so assistive technology and form validation won't treat it as required.
+Fix: Add `required` (and/or `aria-required="true"`) to the `#phone` input.
+
+Location: form, `#promo`
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: `aria-invalid="true"` is set statically in the markup, meaning the field is announced as invalid by default before the user has entered anything.
+Fix: Remove the static `aria-invalid="true"` and set it dynamically only after validation fails.
+
+Location: form, `#s3-form-promo-error`
+Evidence: `<input id="promo" ...><span class="error-text" aria-live="polite" id="s3-form-promo-error">Enter a 6 character code...</span>`
+Problem: The error text is not programmatically associated with the `#promo` input (no `aria-describedby`), so screen reader users won't know this message pertains to that field.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the `#promo` input.
+
+Location: form, `#promo`
+Evidence: Error text reads "Enter a 6 character code using letters and numbers only," but the input is `<input id="promo" type="text" aria-invalid="true">`
+Problem: The stated constraint (6 characters, alphanumeric only) isn't reflected in any input attribute (no `maxlength="6"`, no `pattern`), so the described rule isn't actually enforced or discoverable from the markup.
+Fix: Add `maxlength="6"` and a `pattern="[A-Za-z0-9]{6}"` attribute to match the stated rule.

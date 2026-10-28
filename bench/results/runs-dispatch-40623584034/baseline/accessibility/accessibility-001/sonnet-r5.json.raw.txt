@@ -1,0 +1,124 @@
+Location: `<html lang="translanguage" id="html">`
+Evidence: `lang="translanguage"`
+Problem: "translanguage" is not a valid BCP 47 language code, so the declared document language is meaningless to browsers and assistive technology (affects voice selection, translation prompts, etc.).
+Fix: Set `lang` to the actual content language, e.g. `lang="en"`.
+
+Location: `<title id="head-title"></title>`
+Evidence: `<title id="head-title"></title>`
+Problem: The page title is empty, so browser tabs, bookmarks, history, and screen readers have no name for the page.
+Fix: Add a descriptive title, e.g. "Rider Service Updates".
+
+Location: `<nav id="nav">`
+Evidence: `<a href="/plan" id="nav-link1">Plan a trip</a>\n<a href="/accessibility" id="nav-link2">Accessibility</a>`
+Problem: There is no "skip to main content" link before the nav, forcing keyboard and screen-reader users to tab through navigation on every page load before reaching the content.
+Fix: Add a skip link (e.g. `<a href="#main-content">Skip to main content</a>`) as the first focusable element.
+
+Location: `<div id="main-content">`
+Evidence: `<div id="main-content">`
+Problem: The primary content region is a generic `div` rather than a `<main>` landmark, so assistive technology users can't jump directly to it.
+Fix: Change the wrapper to `<main id="main-content">`.
+
+Location: `s1-p1` and `s1-p2`
+Evidence: both paragraphs end with "Station staff can also help with the same request in person."
+Problem: The identical trailing sentence is reused for two unrelated actions (fare adjustments vs. checking real-time arrivals), which reads as copy-pasted boilerplate rather than accurate per-topic guidance.
+Fix: Write a distinct, accurate closing sentence for each paragraph (or remove it if station staff can't actually help with real-time arrival checks).
+
+Location: `<img src="/img/platform-update.jpg" id="s1-img1">`
+Evidence: `<img src="/img/platform-update.jpg" id="s1-img1">`
+Problem: The image has no `alt` attribute at all, so screen readers will announce the filename or nothing meaningful.
+Fix: Add a descriptive `alt` attribute (or `alt=""` if purely decorative).
+
+Location: `<h4 id="s2-h">Accessibility improvements</h4>`
+Evidence: `<h2 id="s1-h">` ... followed later by `<h4 id="s2-h">`
+Problem: The heading level jumps from h2 to h4, skipping h3, which breaks the document outline for screen-reader users navigating by heading level.
+Fix: Change `s2-h` to an `<h2>` (or add an intervening `<h3>` section) to keep heading levels sequential.
+
+Location: `<h4 id="s2-h">Accessibility improvements</h4>`
+Evidence: heading "Accessibility improvements" followed by content about reporting service issues and an on-time status table
+Problem: The section heading promises accessibility-related content, but the body text and table are about issue reporting and zone status, unrelated to accessibility.
+Fix: Rename the heading to match the actual content (e.g. "Service status") or replace the content with genuine accessibility information.
+
+Location: `s2-p1`
+Evidence: "Updates post to the schedule page within one business day." (also appears verbatim in `s3-p2`)
+Problem: The same sentence is attached both to "report a service issue" and to "review the updated schedule," two different actions, making it unclear which process the one-business-day update timeline actually applies to.
+Fix: Tailor each paragraph's closing sentence to the specific action it follows.
+
+Location: `<table id="s2-table1">`
+Evidence: `<table id="s2-table1">` with no `<caption>`
+Problem: The table has no caption or accessible name, so screen-reader users get no context for what "Zone/Status" refers to when landing on the table.
+Fix: Add a `<caption>` such as "Current zone status".
+
+Location: `s3-p1`
+Evidence: "Passengers can report a service issue at any station kiosk." vs. `s2-p1`'s "Passengers can report a service issue by calling rider services."
+Problem: The same action (reporting a service issue) is described in two separate sections via two different channels with no cross-reference, implying they may be different procedures rather than two options for the same one.
+Fix: Combine into a single statement listing both channels, or explicitly note "You can also report issues by calling rider services" for consistency.
+
+Location: `<div class="promo-banner" id="s3-banner">`
+Evidence: "Route adjustments take effect on the posted effective date."
+Problem: "the posted effective date" is vague and self-referential — it doesn't say where that date is posted or link to it, giving the reader no way to find the actual date.
+Fix: State the actual date or link directly to where it's posted.
+
+Location: `<div class="status-card" role="status" id="s3-statuscard">`
+Evidence: "Local residents can check real time arrivals through the online portal. A confirmation message follows once the request is processed."
+Problem: Checking real-time arrivals is a read-only lookup, not a submitted request, so "a confirmation message follows once the request is processed" (copied from `s3-p1`'s issue-reporting flow) doesn't logically apply here; this also duplicates `s1-p2`'s "check real time arrivals" topic via yet another channel.
+Fix: Replace with wording accurate to a lookup action (no confirmation message), and reconcile with `s1-p2` so the two mentions of checking arrivals are consistent.
+
+Location: `<button type="button" class="btn-secondary" id="s3-button1">Refresh status</button>`
+Evidence: `<button type="button" class="btn-secondary" id="s3-button1">Refresh status</button>`
+Problem: The button has no associated behavior or indication of what it refreshes (no linked status region via `aria-controls`, no visible effect described).
+Fix: Associate the button with the status element it updates (e.g. `aria-controls="s3-statuscard"`) and define/implement its action.
+
+Location: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Evidence: `aria-label="Delete item"` with no visible text, placed amid station-update content
+Problem: A "Delete item" control is contextually unrelated to anything else on this rider-updates page, and as a custom `role="button"` it has no evident keyboard-activation handling (Enter/Space) in the document.
+Fix: Remove the control if unused, or if intentional, clarify what item it deletes and ensure Enter/Space activation is implemented.
+
+Location: `<div class="wizard-steps" id="s3-wizard">`
+Evidence: three `<div class="step">` entries ("Choose a plan", "Enter payment details", "Confirm your order") with no current-step indicator
+Problem: The steps use plain `div`s instead of list semantics and have no `aria-current` or similar marker, so screen readers can't convey progress or that these are a sequence; the content (a payment/order wizard) is also unrelated to "Station updates."
+Fix: Mark up as an ordered list with `aria-current="step"` on the active step, and verify this wizard belongs in this section at all.
+
+Location: `<p id="s3-linkpara">`
+Evidence: `<a href="/fares/history" id="s3-link1">click here</a>`
+Problem: "click here" is non-descriptive link text; users navigating by a screen reader's links list get no indication of the link's destination or purpose.
+Fix: Change the link text to something descriptive, e.g. "view the full list of upcoming adjustments".
+
+Location: `<form id="s3-form">`
+Evidence: `<form id="s3-form">` (no `action` or `method` attribute)
+Problem: The form has no `action` or `method`, so submitting it has undefined/default behavior (typically a GET to the current URL, discarding intended data).
+Fix: Add explicit `action` and `method` attributes.
+
+Location: `<select id="topic">`
+Evidence: options "Northbound"/"Southbound" vs. the table's zones "North"/"South"
+Problem: The route selector uses different naming ("Northbound"/"Southbound") than the status table's zones ("North"/"South"), making it unclear whether they refer to the same areas.
+Fix: Use consistent naming between the table and the form options.
+
+Location: `<form id="s3-form">` inputs/select
+Evidence: `<select id="topic">`, `<input id="email" ...>`, `<input id="phone" ...>`, `<input id="promo" ...>` — none have a `name` attribute
+Problem: None of the form controls have a `name` attribute, so on submission their values won't be included in the submitted form data (only `id` is set, which servers don't read).
+Fix: Add appropriate `name` attributes to each form control.
+
+Location: `<label for="phone" id="s3-form-phone-label">Phone number (required)</label>`
+Evidence: label text "(required)" with `<input id="phone" type="tel" autocomplete="tel">` having no `required` or `aria-required` attribute
+Problem: The label visually/textually indicates the field is required, but nothing in the markup enforces or exposes that to assistive technology or form validation.
+Fix: Add `required` (and optionally `aria-required="true"`) to the phone input.
+
+Location: `<input id="promo" type="text" aria-invalid="true">`
+Evidence: `aria-invalid="true"` present on initial page load, before any user interaction
+Problem: Marking the field invalid by default tells screen-reader users there's an error before they've even entered anything, which is confusing and incorrect.
+Fix: Only set `aria-invalid="true"` dynamically after a failed validation attempt.
+
+Location: `<input id="promo" ...>` / `<span class="error-text" ... id="s3-form-promo-error">`
+Evidence: `<input id="promo" type="text" aria-invalid="true">` followed by `<span class="error-text" aria-live="polite" id="s3-form-promo-error">`
+Problem: The error message is not programmatically associated with the promo input (no `aria-describedby`), so screen-reader users won't hear it when focusing the field.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the promo input.
+
+Location: `<input id="promo" type="text" aria-invalid="true">`
+Evidence: error text states "Enter a 6 character code using letters and numbers only," but the input has no `maxlength` or `pattern`
+Problem: The stated validation rule isn't enforced anywhere in the markup, so the field will accept any input regardless of the described format.
+Fix: Add `maxlength="6"` and a `pattern` (e.g. `pattern="[A-Za-z0-9]{6}"`) matching the stated rule.
+
+Location: `<button type="submit" class="btn-primary" id="s3-form-submit" aria-label="Send form now">Submit</button>`
+Evidence: visible text "Submit" vs. `aria-label="Send form now"`
+Problem: The accessible name ("Send form now") doesn't contain the visible label text ("Submit"), violating WCAG 2.5.3 Label in Name and breaking voice-control users who speak the visible label.
+Fix: Remove the `aria-label` or change it to include the visible text, e.g. `aria-label="Submit form"`.

@@ -1,0 +1,59 @@
+Location: Section "Station updates" (<p id="s1-p1">) and <p id="s1-p2">, repeated again in <p id="s2-p1">
+Evidence: "Station staff can also help with the same request in person." appears verbatim in s1-p1, s1-p2, and s2-p1
+Problem: The same boilerplate sentence is copy-pasted across three unrelated paragraphs regardless of topic, producing redundant, templated-sounding content that adds no information.
+Fix: Write a distinct, specific sentence for each paragraph's actual topic, or remove the repeated sentence where it doesn't add new information.
+
+Location: <img id="s1-img1" src="/img/platform-update.jpg"> in the "Station updates" section
+Evidence: alt="Crews repainting the accessible parking spaces near the station entrance." while the surrounding paragraphs only discuss checking schedules and reporting issues
+Problem: The image's alt text describes content (parking lot repainting) that is never mentioned anywhere in the section text, so the image appears orphaned and unrelated to its section.
+Fix: Either add body text that relates to the image's actual subject, or replace the image with one that matches the "Station updates" content, and update the alt text accordingly.
+
+Location: <table id="s2-table1"> in "Schedule changes" section
+Evidence: `<table id="s2-table1"><tr><th scope="col">Zone</th><th scope="col">Status</th></tr>...`
+Problem: The table has no `<caption>`, no `<thead>`/`<tbody>` structure, and under a heading titled "Schedule changes" it only shows static "On time" statuses with no actual schedule-change information.
+Fix: Add a `<caption>` describing the table's purpose, wrap the header row in `<thead>` and data rows in `<tbody>`, and populate the table with actual schedule-change data (or rename the heading/section to match the content shown).
+
+Location: <p id="s3-p1"> in "Fare adjustments" section
+Evidence: "Riders can report a service issue by calling rider services." under the heading "Fare adjustments"
+Problem: This sentence duplicates the service-issue-reporting content already given in s1-p2 and has nothing to do with fares, so the "Fare adjustments" section contains no actual fare information.
+Fix: Replace this paragraph (and s3-p2, which is about real-time arrivals, not fares) with content specific to fare changes, e.g., new prices or fare categories, and move the service-issue text to the Station updates section if it belongs there.
+
+Location: <div class="promo-banner" id="s3-banner">
+Evidence: "Route adjustments take effect on the posted effective date."
+Problem: The banner references "the posted effective date" without stating or linking to what that date is, making the notice uninformative.
+Fix: Either state the actual effective date or link directly to the page/anchor where it is posted.
+
+Location: <div class="status-card" role="status" id="s3-statuscard">
+Evidence: `<div class="status-card" role="status" id="s3-statuscard"><p>Riders can check real time arrivals at any station kiosk...`
+Problem: role="status" marks an ARIA live region meant for dynamically-updating content announced automatically to assistive technology, but this div contains static, unchanging text, which is a misuse of the live-region role.
+Fix: Remove role="status" unless this card's content is actually updated dynamically via JavaScript; if it is static, use a plain `<div>` or `<section>`.
+
+Location: <div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></div>`
+Problem: This is a custom div-based button (reinventing button semantics with role/tabindex, missing keyboard activation handling) for deleting "an item" that doesn't correspond to anything on this transit-updates page — there is no list of deletable items in context.
+Fix: Remove this control if it's leftover/unused, or if needed, implement it as a native `<button>` and connect it to an actual deletable item with clear context.
+
+Location: <div class="wizard-steps" id="s3-wizard"> in "Fare adjustments" section
+Evidence: Steps listed: "Choose a plan", "Enter payment details", "Confirm your order"
+Problem: This multi-step checkout wizard (choosing a plan, entering payment, confirming an order) is unrelated to fare adjustment notices, is not marked up as a list or ordered sequence, and gives no indication of which step is current (no aria-current).
+Fix: Remove this wizard if it doesn't belong on this page, or if it's a real flow, mark it up as an `<ol>` with `aria-current="step"` on the active step and move it to the appropriate purchase flow page.
+
+Location: <p id="s3-linkpara">
+Evidence: `<a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>` preceded by "For the full list of upcoming adjustments,"
+Problem: The link text says "accessibility improvements list" but the surrounding sentence is about "upcoming adjustments" (fare adjustments) and the href points to "/fares/history" — the link text does not describe its actual destination or purpose, which is misleading, especially for screen-reader users who navigate by link text.
+Fix: Change the link text to accurately describe the destination, e.g., "view fare adjustment history."
+
+Location: <label for="phone" id="s3-form-phone-label"> and <input id="phone" type="tel" ...> in <form id="s3-form">
+Evidence: Label text "Phone number (required)" but the input is `<input id="phone" type="tel" autocomplete="tel">` with no `required` or `aria-required` attribute
+Problem: The label visually/textually indicates the field is required, but this isn't reflected in the markup, so assistive technology and form validation won't actually treat it as required.
+Fix: Add `required` (or `aria-required="true"`) to the phone input to match the label's stated requirement.
+
+Location: <input id="promo" type="text" aria-invalid="true"> and <span class="error-text" aria-live="polite" id="s3-form-promo-error"> in <form id="s3-form">
+Evidence: `aria-invalid="true"` is hardcoded on page load, and the error span has no `aria-describedby` linking it to the input
+Problem: Marking the field invalid before any user input is entered is incorrect and will cause screen readers to announce an error prematurely; additionally, the error text is not programmatically associated with the input via aria-describedby, so screen reader users may not hear why the field is invalid.
+Fix: Set `aria-invalid="false"` (or omit it) until actual validation fails, and add `aria-describedby="s3-form-promo-error"` to the input.
+
+Location: <input id="email" ...>, <input id="phone" ...>, <input id="promo" ...>, and <select id="topic"> in <form id="s3-form">
+Evidence: None of the form controls have a `name` attribute
+Problem: Without `name` attributes, these fields won't be submitted with identifiable keys when the form is posted, breaking form submission.
+Fix: Add appropriate `name` attributes (e.g., name="email", name="phone", name="promo", name="topic") to each form control.

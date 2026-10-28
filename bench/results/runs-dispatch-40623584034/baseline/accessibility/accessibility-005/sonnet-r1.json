@@ -1,0 +1,237 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`@media (orientation: portrait) { #main-content { display: none; } }`",
+      "fix": "Remove this rule, or replace it with a rule that does not hide `#main-content` based on orientation.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<style>` block in `<head>`",
+      "severity": 3,
+      "violation": "This rule hides the entire main content whenever the viewport is in portrait orientation, which is the default orientation for the vast majority of mobile phone users - making the page appear completely blank to most mobile visitors."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"/accessibility\" id=\"nav-link1\" style=\"outline:none\">Accessibility</a>`",
+      "fix": "Remove `style=\"outline:none\"` and let the default or a custom visible focus style apply.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Header nav, `id=\"nav-link1\"` (\"Accessibility\")",
+      "severity": 3,
+      "violation": "Removing the focus outline eliminates the visible keyboard-focus indicator, which is especially harmful on the link to the accessibility page itself and violates WCAG 2.4.7 (Focus Visible)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Commuters can report a service issue by calling rider services. The change takes effect on the following service day.\"",
+      "fix": "Replace with content that actually describes weekend service changes, and de-duplicate the reused sentence pattern.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section s1 (\"Weekend service\"), `id=\"s1-p1\"`",
+      "severity": 3,
+      "violation": "This text is about reporting issues and an unspecified \"change,\" not about weekend service, so it does not match the section heading; it is also near-duplicate boilerplate of `s3-p2`."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Passengers should review the updated schedule through the mobile app. A confirmation message follows once the request is processed.\"",
+      "fix": "Write distinct, section-relevant copy for each paragraph instead of reusing a templated sentence structure.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section s1 (\"Weekend service\"), `id=\"s1-p2\"`",
+      "severity": 3,
+      "violation": "This paragraph is nearly identical to `s3-p1` (\"Local residents should review the updated schedule through the online portal...\") with only the subject/medium swapped, indicating templated filler rather than section-specific content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`alt=\"A newly installed tactile paving strip along the platform edge.\"`",
+      "fix": "Move the image to the Accessibility improvements section, or replace it with an image relevant to weekend service.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section s1 (\"Weekend service\"), `id=\"s1-img1\"`",
+      "severity": 3,
+      "violation": "This image describes an accessibility/platform feature, not weekend service; it appears to belong in the \"Accessibility improvements\" section (s3) instead."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Station staff can also help with the same request in person.\"",
+      "fix": "Remove the duplicated sentence or rewrite it to be specific to checking real-time arrivals.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section s2 (\"Schedule changes\"), `id=\"s2-p1\"`",
+      "severity": 3,
+      "violation": "This sentence is reused verbatim in `s3-p2`, another sign of templated boilerplate rather than content tailored to \"Schedule changes.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "``` <tr><td>North</td><td>On time</td></tr> <tr><td>South</td><td>On time</td></tr> ```",
+      "fix": "Add a `<caption>` describing the table, and either rename the heading or populate the table with actual schedule-change data.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Section s2 (\"Schedule changes\"), `id=\"s2-table1\"`",
+      "severity": 3,
+      "violation": "The table has no `<caption>` identifying it for screen-reader users, and under a \"Schedule changes\" heading it shows no changes at all (both zones \"On time\"), which is confusing or contradicts the heading."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Local residents should review the updated schedule through the online portal. A confirmation message follows once the request is processed.\"",
+      "fix": "Replace with content specific to accessibility improvements; remove the duplicated template sentence.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Section s3 (\"Accessibility improvements\"), `id=\"s3-p1\"`",
+      "severity": 3,
+      "violation": "Content is about reviewing a schedule online, unrelated to accessibility improvements, and duplicates `s1-p2` with only superficial wording changes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Riders can report a service issue by calling rider services. Station staff can also help with the same request in person.\"",
+      "fix": "Write unique, heading-relevant content and eliminate the repeated boilerplate sentence.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Section s3 (\"Accessibility improvements\"), `id=\"s3-p2\"`",
+      "severity": 3,
+      "violation": "Nearly identical opening sentence to `s1-p1` (\"Commuters can report a service issue by calling rider services...\") and unrelated to the \"Accessibility improvements\" heading."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Route adjustments take effect on the posted effective date.\"",
+      "fix": "Replace with a concrete statement, e.g. naming the actual effective date or linking to the specific adjustments.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Section s3, `id=\"s3-banner\"` (promo banner)",
+      "severity": 3,
+      "violation": "This statement is circular/tautological (\"adjustments take effect on the effective date\") and conveys no actual information such as a date or which routes are affected."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`Your changes are saved.`",
+      "fix": "Only render this status after a relevant user action (e.g., form submission), or remove it if it has no corresponding trigger.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Section s3, `id=\"s3-statuscard\"`",
+      "severity": 3,
+      "violation": "This status message is shown with no preceding user action (no form submission or edit occurs before it) in this section, making it an orphaned/confusing message on page load."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button type=\"button\" class=\"btn-secondary\" id=\"s3-button1\">Refresh status</button>`",
+      "fix": "Associate the button with a specific status element and mark that element `aria-live=\"polite\"` so updates are announced.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "Section s3, `id=\"s3-button1\"` (\"Refresh status\")",
+      "severity": 3,
+      "violation": "It's unclear what status this button refreshes (there is no associated status region with `aria-live`), so assistive-technology users won't be informed of any update."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\" style=\"width:16px;height:16px\">`",
+      "fix": "Increase the hit area to at least 24×24px (44×44px recommended), and place it next to the specific item it deletes, or remove it if no such item exists.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "Section s3, `id=\"s3-customcontrol\"`",
+      "severity": 3,
+      "violation": "This is a 16×16px custom clickable control, well under the recommended minimum touch-target size (WCAG 2.5.8 requires at least 24×24px), and it has no visible associated \"item\" or list for it to delete, leaving its purpose unclear."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Choose a plan\" / \"Enter payment details\" / \"Confirm your order\"",
+      "fix": "Remove this wizard from the page if it doesn't belong, or if it is relevant, mark the current step with `aria-current=\"step\"` and relate its content to the transit service context.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "Section s3, `id=\"s3-wizard\"`",
+      "severity": 3,
+      "violation": "This multi-step purchase/checkout wizard is unrelated to \"Accessibility improvements\" or transit service announcements, and it provides no indication of which step is current (no `aria-current` or visual state)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"/fares/history\" id=\"s3-link1\">check the current station closures</a>` within \"For the full list of upcoming adjustments...\"",
+      "fix": "Make the link text, surrounding sentence, and href all describe the same destination/content.",
+      "id": "F-015",
+      "lane": "judged",
+      "location": "Section s3, `id=\"s3-linkpara\"`",
+      "severity": 3,
+      "violation": "The link text says \"station closures,\" the surrounding sentence says \"upcoming adjustments,\" and the href points to `/fares/history` - three different, mismatched destinations/descriptions for the same link."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"email\" id=\"s3-form-email-label\">Email address</label>` / `<input id=\"email\" type=\"email\">`",
+      "fix": "State whether the field is required/optional and add `autocomplete=\"email\"` for consistency with the phone field.",
+      "id": "F-016",
+      "lane": "judged",
+      "location": "Section s3 form, `id=\"email\"` field",
+      "severity": 3,
+      "violation": "Unlike the phone field, there is no indication of whether email is required or optional, and it lacks `autocomplete=\"email\"` even though the phone field uses `autocomplete=\"tel\"`, making the form inconsistent."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"phone\" id=\"s3-form-phone-label\">Phone number (required)</label>` with `<input id=\"phone\" type=\"tel\" autocomplete=\"tel\">`",
+      "fix": "Add `required` (or `aria-required=\"true\"`) to the input in addition to the visible label text.",
+      "id": "F-017",
+      "lane": "judged",
+      "location": "Section s3 form, `id=\"phone\"` field",
+      "severity": 3,
+      "violation": "\"Required\" is conveyed only as visible label text, not via the `required` or `aria-required=\"true\"` attribute, so assistive technology won't programmatically know the field is required."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">` paired with error text \"Enter a 6 character code using letters and numbers only.\"",
+      "fix": "Set `aria-invalid` dynamically only after validation fails on user input/submission, defaulting to `false` or omitted on initial load.",
+      "id": "F-018",
+      "lane": "judged",
+      "location": "Section s3 form, `id=\"promo\"` field",
+      "severity": 3,
+      "violation": "`aria-invalid=\"true\"` is hardcoded in the static markup, so the field is announced as invalid to screen-reader users immediately on page load, before any user input or validation has occurred."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"topic\"><option>Northbound</option><option>Southbound</option></select>`",
+      "fix": "Add a disabled, selected placeholder option (e.g., \"Select a route\") so no route is chosen by default.",
+      "id": "F-019",
+      "lane": "judged",
+      "location": "Section s3 form, `id=\"topic\"` select",
+      "severity": 3,
+      "violation": "There is no blank/placeholder default option, so \"Northbound\" is silently selected and submitted even if the user never interacts with this field."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-005.html",
+    "artifact_sha256": "0f8493f220745495c0706928266e57a6f8d8bacbcd1737ff17dc3965ce55df7b",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T04:56:51Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 19,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

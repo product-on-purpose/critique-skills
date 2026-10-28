@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.3.4",
+      "evidence": "@media (orientation: portrait) { #main-content { display: none; } }",
+      "fix": "Remove the display:none rule from the portrait media query (or restrict it to a genuinely orientation-essential widget, stated as such in the content) so #main-content remains visible and reachable in both orientations.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#head-style, <style> element, media rule targeting #main-content, line 7",
+      "severity": 4,
+      "violation": "The page's own CSS hides the entire #main-content landmark, which holds all of the page's substantive content (every section, the service-update text, the table, and the whole contact form), whenever the viewport is in portrait orientation, with no equivalent rule restoring it in landscape and no stated reason in the page's content that a single orientation is essential to what it shows or does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.5",
+      "evidence": "<nav id=\"nav\"><a href=\"/accessibility\" id=\"nav-link1\" ...>Accessibility</a><a href=\"/fares\" id=\"nav-link2\">Fares and passes</a></nav>",
+      "fix": "Add a second, independent way to reach this page, such as a breadcrumb trail or a site-search form, rather than relying solely on the primary navigation menu.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#nav, <nav> element, links 'Accessibility' and 'Fares and passes', line 12",
+      "severity": 3,
+      "violation": "This page is not one step of a linear process, yet its only mechanism for a reader to locate it within the site's set of pages is this primary navigation menu: there is no site search, no sitemap link, and no breadcrumb trail anywhere in the document, so fewer than two independent location mechanisms are present."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.3.5",
+      "evidence": "<input id=\"email\" type=\"email\">",
+      "fix": "Set the field's autocomplete attribute to email, or the matching standard token for this input purpose.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "#email, <input> field, input purpose email, line 64",
+      "severity": 2,
+      "violation": "This field's type, name, or id identifies the email input purpose, but it carries no autocomplete token, so the purpose is not programmatically determinable."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.4.6",
+      "evidence": "<h2 id=\"s3-h\">Accessibility improvements</h2>",
+      "fix": "Retitle the heading to describe what the section actually contains (for example, separate headings for the status controls and the contact form), or move genuine accessibility-improvement content into this section.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#s3-h, <h2> element, text 'Accessibility improvements', line 35",
+      "severity": 2,
+      "violation": "This heading promises content about accessibility improvements, but the section it introduces is the same generic rider-service text repeated from section 1 (#s3-p1, #s3-p2) plus an unrelated promo banner, status card, buttons, a custom delete control, a wizard-step list, and a contact form, none of which describes any accessibility improvement. A reader scanning headings to find accessibility-related content would be misled into opening this section and would not find what the heading promised."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.4.7",
+      "evidence": "<a href=\"/accessibility\" id=\"nav-link1\" style=\"outline:none\">Accessibility</a>",
+      "fix": "Remove the outline:none declaration, or replace it with a visible focus style (for example a box-shadow or a non-none outline) that still applies when the link is focused.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#nav-link1, <a> element, visible label 'Accessibility', line 13",
+      "severity": 2,
+      "violation": "This link's inline style removes its focus outline (outline:none) with no replacement border, background, box-shadow, or outline declared to take its place, so a keyboard user tabbing through the nav gets no visible indication this control is focused."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-2.5.8",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\" style=\"width:16px;height:16px\">",
+      "fix": "Increase the control's declared width and height to at least 24 CSS pixels, or add enough margin that its 24px target area does not overlap a neighbouring control.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#s3-customcontrol, <div role=\"button\"> control, accessible name 'Delete item', line 45",
+      "severity": 2,
+      "violation": "This pointer-operable custom control is sized 16 by 16 CSS pixels by its own inline style, below the 24 by 24 CSS pixel minimum, and none of the standard's five exceptions is evidenced in the markup: no spacing information showing it clear of a neighbour, no equivalent full-size control elsewhere on the page for the same delete function, no inline-text placement, no stated essential-size reason, and no indication the size comes from the user agent rather than this declared style."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-4.1.3",
+      "evidence": "<div class=\"status-card\" id=\"s3-statuscard\"> Your changes are saved. </div>",
+      "fix": "Add role=\"status\" (or aria-live=\"polite\") to this div so a screen reader announces the confirmation when it appears.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "#s3-statuscard, <div> element, text 'Your changes are saved.', line 41",
+      "severity": 2,
+      "violation": "This element's text reads as a save-confirmation status update, the kind of content that appears without a keyboard-focus change, but the div carries no status or alert role and no aria-live attribute, so assistive technology has no mechanism to announce it unasked."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-005.html",
+    "artifact_sha256": "0f8493f220745495c0706928266e57a6f8d8bacbcd1737ff17dc3965ce55df7b",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T05:10:44Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 1,
+      "4": 1
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

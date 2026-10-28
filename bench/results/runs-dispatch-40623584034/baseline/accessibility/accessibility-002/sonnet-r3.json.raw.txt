@@ -1,0 +1,84 @@
+Location: `<head>`, viewport meta tag
+Evidence: `content="width=device-width, initial-scale=1, user-scalable=no"`
+Problem: `user-scalable=no` disables pinch-to-zoom, which violates WCAG 1.4.4 (Resize Text) and harms low-vision users.
+Fix: Remove `user-scalable=no` (and any `maximum-scale` restriction) so users can zoom.
+
+Location: Section "Accessibility improvements" (#s1), paragraph #s1-p1
+Evidence: `style="color:#999999"` on "Passengers should review the updated schedule at any station kiosk."
+Problem: Light gray (#999999) text on a white background yields roughly a 2.85:1 contrast ratio, failing the WCAG AA minimum of 4.5:1 for normal text.
+Fix: Remove the inline color override or use a darker color (e.g., #595959 or the default body text color) that meets 4.5:1 contrast.
+
+Location: #s1-p1 and #s1-p2
+Evidence: "Passengers should review the updated schedule at any station kiosk." and "Local residents may request a fare adjustment through the mobile app." both appear under the heading "Accessibility improvements," and both end with the identical sentence "Updates post to the schedule page within one business day."
+Problem: Neither paragraph discusses accessibility, and the repeated closing sentence suggests reused boilerplate filler rather than content relevant to the section heading.
+Fix: Replace both paragraphs with content that actually describes accessibility improvements, and remove the duplicated sentence.
+
+Location: #s2-p1
+Evidence: "Local residents can check real time arrivals through the mobile app. A confirmation message follows once the request is processed."
+Problem: Checking real-time arrivals isn't a "request" that produces a confirmation message, so the second sentence doesn't logically follow the first — indicating mismatched template text.
+Fix: Rewrite the second sentence to describe what actually happens after checking arrivals, or delete it.
+
+Location: #s2-table1
+Evidence: `<table id="s2-table1">` with no `<caption>` element
+Problem: The table has no accessible name describing its purpose, making it harder for screen reader users to understand what the table represents when navigating by table.
+Fix: Add a `<caption>` such as "Zone status" as the first child of the table.
+
+Location: #s2-table1 data rows
+Evidence: `<tr><td>North</td><td>On time</td></tr>`
+Problem: "North" and "South" act as row headers but are marked up as plain `<td>` cells instead of `<th scope="row">`, reducing navigability for screen reader users.
+Fix: Change the first cell of each data row to `<th scope="row">`.
+
+Location: Section "Weekend service" (#s3), paragraph #s3-p1
+Evidence: "Passengers may request a fare adjustment through the mobile app. The change takes effect on the following service day."
+Problem: This content is about fare adjustments, not weekend service, and is unrelated to the section heading.
+Fix: Replace with content describing actual weekend service changes, or move this paragraph to the fares section.
+
+Location: #s3-p2
+Evidence: "Local residents can report a service issue by calling rider services. Station staff can also help with the same request in person."
+Problem: This content, about reporting service issues, is also unrelated to the "Weekend service" heading.
+Fix: Replace with weekend-service-specific content or relocate to a more relevant section.
+
+Location: #s3-banner
+Evidence: `style="width:960px"`
+Problem: A fixed pixel width will overflow small/mobile viewports and, combined with `user-scalable=no` in the viewport meta tag, traps users unable to zoom out to see the clipped content.
+Fix: Replace with a responsive rule such as `max-width:960px; width:100%`.
+
+Location: #s3-statuscard
+Evidence: `style="height:60px;overflow:hidden"` on an element with `role="status"` containing two sentences of text
+Problem: The fixed height with clipped overflow can visually truncate the status message for sighted users, even though screen readers (via the live region) receive the full text — an inconsistent experience.
+Fix: Remove the fixed height/overflow clipping, or use `min-height` so the box grows to fit its content.
+
+Location: #s3-button1
+Evidence: `style="border:1px solid #9d9d9d"`
+Problem: The border color #9d9d9d against a white background has roughly a 2.5:1 contrast ratio, below the WCAG 1.4.11 minimum of 3:1 for UI component boundaries.
+Fix: Darken the border color to one meeting at least 3:1 contrast, e.g., #767676.
+
+Location: #s3-customcontrol
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Problem: A non-interactive `<div>` simulates a button via ARIA/tabindex instead of using a native `<button>`, losing built-in keyboard activation (Enter/Space) semantics.
+Fix: Replace with `<button type="button" aria-label="Delete item">` containing the icon.
+
+Location: #s3-wizard
+Evidence: Three `<div class="step">` elements ("Choose a plan", "Enter payment details", "Confirm your order") with no list or state markup
+Problem: The multi-step wizard has no semantic structure (list) or indication of which step is current, so assistive technology users can't tell how many steps exist or where they are.
+Fix: Mark the steps up as an ordered list and add `aria-current="step"` to the active step, or include visually hidden "Step X of 3" text.
+
+Location: #s3-linkpara
+Evidence: "For the full list of upcoming adjustments, `<a href="/fares/history">read the accessibility improvements list</a>`."
+Problem: The link text "read the accessibility improvements list" doesn't match the surrounding sentence about "upcoming adjustments" or its `/fares/history` destination, which is misleading, especially out of context (e.g., for screen reader users browsing a links list).
+Fix: Change the link text to something accurate, such as "view the full list of upcoming adjustments."
+
+Location: #s3-form, Route field
+Evidence: `<label for="topic-alt" id="s3-form-topic-label">Route</label>` paired with `<select id="topic">`
+Problem: The label's `for` attribute ("topic-alt") doesn't match the select's `id` ("topic"), so clicking the label won't focus the control and screen readers won't announce the association.
+Fix: Change `for="topic-alt"` to `for="topic"`.
+
+Location: #s3-form, Phone number field
+Evidence: `<label for="phone" id="s3-form-phone-label">Phone number (required)</label>` next to `<input id="phone" type="tel" autocomplete="tel">`
+Problem: The label text states the field is required, but the input has no `required` or `aria-required="true"` attribute, so the requirement isn't programmatically enforced or announced.
+Fix: Add `required` (or `aria-required="true"`) to the phone input.
+
+Location: #s3-form, Promo code field
+Evidence: `<input id="promo" type="text" aria-invalid="true">` with `<span class="error-text" aria-live="polite" id="s3-form-promo-error">`
+Problem: `aria-invalid="true"` is hardcoded in the static markup, so the field is announced as invalid before the user has entered anything, and the error text isn't linked via `aria-describedby`, so screen reader users aren't told why it's invalid.
+Fix: Default to `aria-invalid="false"` (or omit it) and toggle it on validation, and add `aria-describedby="s3-form-promo-error"` to the promo input.
