@@ -1,0 +1,29 @@
+Location: Section "Accessibility improvements", first paragraph (s1-p1)
+Evidence: `style="color:#999999"`
+Problem: Gray text (#999999) on a white background fails WCAG contrast requirements, making it difficult to read and especially inappropriate on a transit accessibility page.
+Fix: Change the color to a darker shade such as #333333 or #666666 to achieve sufficient contrast.
+
+Location: Section "Weekend service", form label for Route field (s3-form-topic-label)
+Evidence: `<label for="topic-alt">` paired with `<select id="topic">`
+Problem: The label's for attribute references "topic-alt" but the select input has id="topic", breaking the label-input association.
+Fix: Change the label's for attribute from "topic-alt" to "topic" to match the select element's id.
+
+Location: Section "Weekend service", status card (s3-statuscard)
+Evidence: `style="height:60px;overflow:hidden"`
+Problem: Fixed height with overflow:hidden will truncate any content taller than 60 pixels, potentially hiding important status information.
+Fix: Remove both the height and overflow styles, or change overflow to "auto" to allow scrolling if the content exceeds the height.
+
+Location: Section "Weekend service", delete control (s3-customcontrol)
+Evidence: `<div class="icon-delete" role="button" tabindex="0">`
+Problem: A div with role="button" does not natively handle Enter or Space key presses required for keyboard accessibility.
+Fix: Replace with a native `<button>` element, or add JavaScript event listeners to handle keyboard interactions.
+
+Location: Section "Weekend service", promo code input and error message (s3-form-promo-error)
+Evidence: `<input id="promo" type="text" aria-invalid="true">` followed by `<span class="error-text" aria-live="polite" id="s3-form-promo-error">`
+Problem: The invalid input is not connected to its error message; screen reader users won't know which message describes this field's error.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the input element.
+
+Location: Section "Weekend service", link to adjustments list (s3-link1)
+Evidence: `<a href="/fares/history">read the accessibility improvements list</a>`
+Problem: The link text "accessibility improvements list" does not match the destination "/fares/history", creating confusion about where the link leads.
+Fix: Change the link text to "read the fare history" or update the href to point to the actual accessibility improvements page.

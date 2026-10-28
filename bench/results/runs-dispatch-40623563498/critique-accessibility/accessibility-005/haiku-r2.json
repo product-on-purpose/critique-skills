@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.3.4",
+      "evidence": "@media (orientation: portrait) { #main-content { display: none; } }",
+      "fix": "Either keep #main-content visible in all orientations, or add a note to the page explaining why a single orientation is essential to what the page shows or does, such as the page displaying a piano keyboard or a check-deposit form.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#main-content, <main> landmark, visible heading 'Rider service updates', line 17",
+      "severity": 3,
+      "violation": "This page's main content is hidden in portrait orientation with no stated essential reason, making it unavailable to readers whose devices are locked to portrait."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.3.5",
+      "evidence": "<input id=\"email\" type=\"email\">",
+      "fix": "Set the field's autocomplete attribute to email, or the matching standard token for this input purpose.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "#email, <input> field, input purpose email, line 64",
+      "severity": 2,
+      "violation": "This field's type, name, or id identifies the email input purpose, but it carries no autocomplete token, so the purpose is not programmatically determinable."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.4.7",
+      "evidence": "<a href=\"/accessibility\" id=\"nav-link1\" style=\"outline:none\">Accessibility</a>",
+      "fix": "Remove the outline:none style, or replace it with an alternative focus style such as a border, background color change, or box-shadow that makes focus visible when this link receives keyboard focus.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#nav-link1, <a> link, visible text 'Accessibility', line 13",
+      "severity": 2,
+      "violation": "This link's outline:none style removes its focus indicator with no replacement style, so a keyboard user cannot see when this link has focus."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-2.5.8",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\" style=\"width:16px;height:16px\">",
+      "fix": "Increase the button's width and height to at least 24 CSS pixels, or add sufficient spacing around it so that a 24 CSS pixel circle around its center touches no other target, or provide an equivalent full-size delete control elsewhere on the page.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#s3-customcontrol, <div> custom button, accessible label 'Delete item', line 45",
+      "severity": 2,
+      "violation": "This custom delete button renders at 16 by 16 CSS pixels, below the 24 by 24 CSS pixel minimum target size, so a pointer user may have difficulty tapping it accurately."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-4.1.3",
+      "evidence": "<div class=\"status-card\" id=\"s3-statuscard\">Your changes are saved.</div>",
+      "fix": "Add role=\"status\" or aria-live=\"polite\" to the #s3-statuscard element so assistive technology announces the status message when it appears.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#s3-statuscard, <div> status card, visible text 'Your changes are saved.', line 41",
+      "severity": 2,
+      "violation": "This status message appears without a live-region mechanism (no role=\"status\", role=\"alert\", or aria-live attribute), so assistive technology does not announce it to the user."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-005.html",
+    "artifact_sha256": "0f8493f220745495c0706928266e57a6f8d8bacbcd1737ff17dc3965ce55df7b",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T03:41:13Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

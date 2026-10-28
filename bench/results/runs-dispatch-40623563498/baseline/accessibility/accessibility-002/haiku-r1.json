@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"color:#999999\"`",
+      "fix": "Use a darker color or remove the gray styling.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "First paragraph in \"Accessibility improvements\" section",
+      "severity": 3,
+      "violation": "Gray text on white background may fail WCAG contrast requirements."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Section titled \"Accessibility improvements\" contains paragraphs about schedules and fare adjustments.",
+      "fix": "Retitle the section to \"Schedule and fare information\" or move the content to the appropriate section.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"Accessibility improvements\" section heading and content",
+      "severity": 3,
+      "violation": "The heading doesn't match the content - accessibility improvements typically refer to ADA features or access accommodations, not schedule or fare information."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">`",
+      "fix": "Replace with a native button: `<button class=\"icon-delete\" aria-label=\"Delete item\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></button>`",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Delete icon element",
+      "severity": 3,
+      "violation": "Using a div with role=\"button\" instead of a native button element reduces keyboard support and screen reader handling."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"width:960px\"`",
+      "fix": "Use a responsive unit such as `max-width: 960px` instead of `width: 960px`.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Promo banner div",
+      "severity": 3,
+      "violation": "Fixed pixel width does not adapt to viewport, conflicting with the responsive viewport meta tag."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"height:60px;overflow:hidden\"`",
+      "fix": "Remove the height restriction or use `overflow: auto` to allow scrolling if needed.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Status card div",
+      "severity": 3,
+      "violation": "Fixed height with overflow:hidden will truncate content, especially for users with larger text or zoom settings."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"topic-alt\" id=\"s3-form-topic-label\">Route</label>` with `<select id=\"topic\">`",
+      "fix": "Change `for=\"topic-alt\"` to `for=\"topic\"`.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Form label and select pairing",
+      "severity": 3,
+      "violation": "The label's for attribute references \"topic-alt\" but the select has id=\"topic\", so the label will not associate with the input."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">`",
+      "fix": "Remove aria-invalid or make it dynamic based on actual validation state.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Promo code input field",
+      "severity": 3,
+      "violation": "aria-invalid is permanently set to true, which should only be set when validation actually fails."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">` followed by `<span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">`",
+      "fix": "Add `aria-describedby=\"s3-form-promo-error\"` to the input element.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Promo code input and error message",
+      "severity": 3,
+      "violation": "The input does not have aria-describedby linking to the error message, so screen readers cannot associate them."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"/fares/history\" id=\"s3-link1\">read the accessibility improvements list</a>` in the \"Weekend service\" section",
+      "fix": "Either change the link text to match its destination and context (e.g., \"view the fare history\"), or update the href and placement to match the link text.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Link in \"Weekend service\" section",
+      "severity": 3,
+      "violation": "The link text references \"accessibility improvements\" but is located in the \"Weekend service\" section and points to \"/fares/history\", creating a semantic mismatch."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-002.html",
+    "artifact_sha256": "77a0e7586bb29a0807dde74bad599c5697360ab159315d8c672e432e2dedf0fd",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:05:31Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

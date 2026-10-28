@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person.\"",
+      "fix": "Replace with content specific to weekend service updates.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section 2 (Weekend service), paragraph 1",
+      "severity": 3,
+      "violation": "This paragraph is identical to section 1 (Accessibility improvements), paragraph 1, which appears to be unintentional duplication."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form id=\"s3-form\">` has no method or action attributes",
+      "fix": "Add method=\"POST\" and action=\"/submit-endpoint\" (or appropriate endpoint).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section 3 (Schedule changes), form (s3-form)",
+      "severity": 3,
+      "violation": "The form cannot submit anywhere without these attributes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label>` followed by `<input id=\"phone\" type=\"tel\" autocomplete=\"tel\">`",
+      "fix": "Add `required` attribute to the input and use a non-color indicator (like an asterisk or text label) to mark required fields.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section 3, phone number field",
+      "severity": 3,
+      "violation": "The field is styled red to indicate it's required, but uses color alone to convey this, which fails WCAG color-contrast and non-color-reliant requirements. The input also lacks a required attribute or aria-required."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">` with error span but no connection between them",
+      "fix": "Add `aria-describedby=\"s3-form-promo-error\"` to the input and `aria-required=\"true\"` if it's required.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section 3, promo code field",
+      "severity": 3,
+      "violation": "The input has aria-invalid=\"true\" but is not connected to the error message via aria-describedby, and the input has no aria-required attribute."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">Error.</span>`",
+      "fix": "Replace with a descriptive error message (e.g., \"Invalid promo code format\").",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section 3, promo code error message",
+      "severity": 3,
+      "violation": "The error message \"Error.\" provides no useful information about what went wrong."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"wizard-steps\">` contains steps with `style=\"order:3\"`, `style=\"order:2\"`, `style=\"order:1\"` in descending order in HTML",
+      "fix": "Reorder the step divs in HTML so they appear as: step1 (Choose a plan), step2 (Enter payment details), step3 (Confirm your order), and remove the inline style attributes.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section 3, wizard steps",
+      "severity": 3,
+      "violation": "Wizard steps are in reverse order in the HTML and rely on CSS order to display visually correct, breaking source order for screen readers and making navigation confusing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"icon-delete\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>`",
+      "fix": "Replace the div with `<button type=\"button\" aria-label=\"Delete\">` or add role=\"button\" and keyboard/click handlers if a div must be used.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Section 3, delete icon",
+      "severity": 3,
+      "violation": "A div styled as a delete icon is not a semantic button and has an empty alt attribute. If it's interactive, it lacks proper semantics and keyboard access."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"/fares/history\" id=\"s3-link1\">read the accessibility improvements list</a>`",
+      "fix": "Either correct the URL to match the link text, or change the link text to accurately describe where \"/fares/history\" leads.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Section 3, link to accessibility improvements",
+      "severity": 3,
+      "violation": "The link text says \"accessibility improvements list\" but the URL \"/fares/history\" suggests it goes to fare history, not accessibility information."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "7518497ec47bc70bca9021d0ed190bdfb2f04532e6ef68cc37b662d769e87516",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:19:27Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

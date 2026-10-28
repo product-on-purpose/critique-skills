@@ -1,0 +1,54 @@
+Location: `<html lang="translanguage">`
+Evidence: `lang="translanguage"`
+Problem: "translanguage" is not a valid BCP 47 language code.
+Fix: Change to a valid language code, such as `lang="en"` or `lang="en-US"`.
+
+Location: `<title>` element in head
+Evidence: `<title id="head-title"></title>`
+Problem: The page title is empty, which fails to provide a meaningful page identifier for users and search engines.
+Fix: Add descriptive text, such as `<title>Rider Service Updates</title>`.
+
+Location: `<h4>` element in section s2
+Evidence: `<h4 id="s2-h">Accessibility improvements</h4>`
+Problem: The heading hierarchy is broken; h4 appears without an intermediate h2 or h3 between it and the h1 at the top.
+Fix: Change `<h4>` to `<h2>` to maintain proper heading hierarchy.
+
+Location: `<img>` element in section s1
+Evidence: `<img src="/img/platform-update.jpg" id="s1-img1">`
+Problem: The image is missing an alt attribute, which is required for accessibility and provides a text description for screen readers.
+Fix: Add an alt attribute with descriptive text, such as `alt="Platform update illustration"`.
+
+Location: `<div>` with id="s3-statuscard" in section s3
+Evidence: `<div class="status-card" role="status" id="s3-statuscard">`
+Problem: role="status" is used for live regions that receive dynamic updates, but this div contains only static explanatory text.
+Fix: Remove `role="status"` unless the content is dynamically updated.
+
+Location: `<select>` element in the form
+Evidence: `<select id="topic"><option>Northbound</option><option>Southbound</option></select>`
+Problem: The select element is missing a name attribute, so its value will not be submitted with the form.
+Fix: Add `name="topic"` attribute.
+
+Location: Email `<input>` element in the form
+Evidence: `<input id="email" type="email" autocomplete="email">`
+Problem: The input element is missing a name attribute, so its value will not be submitted with the form.
+Fix: Add `name="email"` attribute.
+
+Location: Phone `<input>` element in the form
+Evidence: `<input id="phone" type="tel" autocomplete="tel">` with label text "Phone number (required)"
+Problem: The label indicates this field is required, but the input element lacks the required attribute.
+Fix: Add the `required` attribute.
+
+Location: Phone `<input>` element in the form
+Evidence: `<input id="phone" type="tel" autocomplete="tel">`
+Problem: The input element is missing a name attribute, so its value will not be submitted with the form.
+Fix: Add `name="phone"` attribute.
+
+Location: Promo code `<input>` element in the form
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: aria-invalid="true" indicates an error state, but this is set by default before the user has entered anything or validation has run, which is semantically incorrect.
+Fix: Remove `aria-invalid="true"` and add it dynamically via JavaScript only when validation actually fails.
+
+Location: Promo code `<input>` element in the form
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: The input element is missing a name attribute, so its value will not be submitted with the form.
+Fix: Add `name="promo"` attribute.

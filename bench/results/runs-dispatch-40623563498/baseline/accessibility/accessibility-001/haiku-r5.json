@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`lang=\"translanguage\"`",
+      "fix": "Replace with a valid language code, such as `<html lang=\"en\">`",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Line 2, `<html lang=\"translanguage\">`",
+      "severity": 3,
+      "violation": "\"translanguage\" is not a valid language code. Valid codes are like \"en\", \"es\", \"fr\", etc."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Title tag is empty",
+      "fix": "Add descriptive content to the title, such as `<title>Rider service updates</title>`",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Line 5, `<title id=\"head-title\"></title>`",
+      "severity": 3,
+      "violation": "The page has no title, which provides no meaningful information to users, screen readers, or search engines"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Image element has no alt attribute",
+      "fix": "Add an alt attribute with descriptive text, such as `<img src=\"/img/platform-update.jpg\" id=\"s1-img1\" alt=\"Platform update diagram\">`",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section 1, `<img src=\"/img/platform-update.jpg\" id=\"s1-img1\">`",
+      "severity": 3,
+      "violation": "Images must have alt text to be accessible to screen reader users"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Document heading structure is h1 → h2 → h4 → h2",
+      "fix": "Change `<h4>` to `<h2>` to maintain sequential heading levels",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section 2, `<h4 id=\"s2-h\">Accessibility improvements</h4>`",
+      "severity": 3,
+      "violation": "Heading hierarchy skips from h2 to h4, violating proper document structure"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"phone\" id=\"s3-form-phone-label\">Phone number (required)</label>` with `<input id=\"phone\" type=\"tel\" autocomplete=\"tel\">` missing required attribute",
+      "fix": "Add `required` attribute to the input: `<input id=\"phone\" type=\"tel\" autocomplete=\"tel\" required>`",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section 3 form, phone number input",
+      "severity": 3,
+      "violation": "The label indicates the field is required, but the input has no required attribute to enforce the constraint"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">`",
+      "fix": "Remove `aria-invalid=\"true\"` from the initial input, or add it only via JavaScript when validation actually fails",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section 3 form, promo code input",
+      "severity": 3,
+      "violation": "The aria-invalid attribute is set to true by default before any user input, which misleads screen readers into reporting the field as invalid"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Interactive control implemented as a div with role=\"button\" instead of a button element",
+      "fix": "Replace the div with `<button class=\"icon-delete\" aria-label=\"Delete item\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></button>`",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Section 3, `<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">`",
+      "severity": 3,
+      "violation": "A native `<button>` element is the correct semantic choice for interactive buttons, not a div with an aria role"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-001.html",
+    "artifact_sha256": "9077f0b4d4061075fc6497a8cd5b91b94b2af4f536abadbd41a62d9f86cd85d2",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:02:59Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

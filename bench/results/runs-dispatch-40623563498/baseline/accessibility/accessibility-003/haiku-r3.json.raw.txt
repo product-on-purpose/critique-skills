@@ -1,0 +1,39 @@
+Location: Section 2 (Weekend service), paragraph 1
+Evidence: "Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person."
+Problem: This paragraph is identical to section 1 (Accessibility improvements), paragraph 1, which appears to be unintentional duplication.
+Fix: Replace with content specific to weekend service updates.
+
+Location: Section 3 (Schedule changes), form (s3-form)
+Evidence: `<form id="s3-form">` has no method or action attributes
+Problem: The form cannot submit anywhere without these attributes.
+Fix: Add method="POST" and action="/submit-endpoint" (or appropriate endpoint).
+
+Location: Section 3, phone number field
+Evidence: `<label for="phone" id="s3-form-phone-label" style="color:#cc0000">Phone number</label>` followed by `<input id="phone" type="tel" autocomplete="tel">`
+Problem: The field is styled red to indicate it's required, but uses color alone to convey this, which fails WCAG color-contrast and non-color-reliant requirements. The input also lacks a required attribute or aria-required.
+Fix: Add `required` attribute to the input and use a non-color indicator (like an asterisk or text label) to mark required fields.
+
+Location: Section 3, promo code field
+Evidence: `<input id="promo" type="text" aria-invalid="true">` with error span but no connection between them
+Problem: The input has aria-invalid="true" but is not connected to the error message via aria-describedby, and the input has no aria-required attribute.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the input and `aria-required="true"` if it's required.
+
+Location: Section 3, promo code error message
+Evidence: `<span class="error-text" aria-live="polite" id="s3-form-promo-error">Error.</span>`
+Problem: The error message "Error." provides no useful information about what went wrong.
+Fix: Replace with a descriptive error message (e.g., "Invalid promo code format").
+
+Location: Section 3, wizard steps
+Evidence: `<div class="wizard-steps">` contains steps with `style="order:3"`, `style="order:2"`, `style="order:1"` in descending order in HTML
+Problem: Wizard steps are in reverse order in the HTML and rely on CSS order to display visually correct, breaking source order for screen readers and making navigation confusing.
+Fix: Reorder the step divs in HTML so they appear as: step1 (Choose a plan), step2 (Enter payment details), step3 (Confirm your order), and remove the inline style attributes.
+
+Location: Section 3, delete icon
+Evidence: `<div class="icon-delete" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></div>`
+Problem: A div styled as a delete icon is not a semantic button and has an empty alt attribute. If it's interactive, it lacks proper semantics and keyboard access.
+Fix: Replace the div with `<button type="button" aria-label="Delete">` or add role="button" and keyboard/click handlers if a div must be used.
+
+Location: Section 3, link to accessibility improvements
+Evidence: `<a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>`
+Problem: The link text says "accessibility improvements list" but the URL "/fares/history" suggests it goes to fare history, not accessibility information.
+Fix: Either correct the URL to match the link text, or change the link text to accurately describe where "/fares/history" leads.

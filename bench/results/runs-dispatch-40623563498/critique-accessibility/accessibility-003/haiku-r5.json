@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "WCAG-1.3.2",
+      "evidence": "Steps in DOM order: <div id=\"s3-step3\" style=\"order:3\">Confirm your order</div>, <div id=\"s3-step2\" style=\"order:2\">Enter payment details</div>, <div id=\"s3-step1\" style=\"order:1\">Choose a plan</div>. Screen reader linearization: Confirm, Enter, Choose. Visual order via CSS: Choose (order:1), Enter (order:2), Confirm (order:3).",
+      "fix": "Reorder the step divs in the HTML source to match logical sequence, or use CSS that preserves DOM-reading semantics.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#s3-wizard, <div class=\"wizard-steps\"> container with order-reversed steps",
+      "severity": 3,
+      "violation": "DOM order of wizard steps (Confirm → Enter → Choose) is reversed from visual/logical order (Choose → Enter → Confirm), breaking the meaningful sequence of a checkout flow for screen readers."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-3.3.1",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"> paired with <span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">Error.</span>. The error text 'Error.' does not identify the field or the problem.",
+      "fix": "Replace the generic 'Error.' text with a specific message such as 'Promo code format invalid' or 'This promo code is no longer valid.'",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#s3-form-promo-error, <span> error message beside #promo input",
+      "severity": 3,
+      "violation": "Error message text reads only 'Error.' without naming the field or describing what is wrong with the promo code input marked aria-invalid=\"true\"."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WCAG-4.1.2",
+      "evidence": "<div class=\"icon-delete\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>. The div carries no role, aria-label, aria-labelledby, or visible text. The img carries no alternative text.",
+      "fix": "Add role=\"button\" and aria-label=\"Delete\" to the div, or add aria-label directly to the image element.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#s3-customcontrol, <div class=\"icon-delete\"> delete control",
+      "severity": 3,
+      "violation": "Custom delete control has no role attribute and no accessible name (no aria-label, aria-labelledby, or text content). The nested trash icon image has empty alt text, providing no name."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "7518497ec47bc70bca9021d0ed190bdfb2f04532e6ef68cc37b662d769e87516",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T03:23:52Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<html lang=\"translanguage\" id=\"html\">`",
+      "fix": "Change `lang=\"translanguage\"` to a valid code like `lang=\"en\"` or the appropriate language for the document.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Line 1, html element",
+      "severity": 3,
+      "violation": "\"translanguage\" is not a valid BCP 47 language code."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<title id=\"head-title\"></title>`",
+      "fix": "Add descriptive text between the tags, such as `<title>Rider Service Updates</title>`.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Line 7, title element",
+      "severity": 3,
+      "violation": "The title element is empty and provides no descriptive content for the page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<img src=\"/img/platform-update.jpg\" id=\"s1-img1\">`",
+      "fix": "Add an alt attribute describing the image content, for example: `<img src=\"/img/platform-update.jpg\" id=\"s1-img1\" alt=\"Platform update screenshot\">`.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section s1, image element",
+      "severity": 3,
+      "violation": "The image is missing a required alt attribute for accessibility."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<h4 id=\"s2-h\">Accessibility improvements</h4>` appearing after `<h2 id=\"s1-h\">Fare adjustments</h2>`",
+      "fix": "Change `<h4>` to `<h3>`.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section s2, heading element",
+      "severity": 3,
+      "violation": "Heading hierarchy skips from h2 directly to h4, violating proper semantic structure which should use sequential levels."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">` with error message `<span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">`",
+      "fix": "Add `aria-describedby=\"s3-form-promo-error\"` to the input element to link it to the error message.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section s3, promo code input element",
+      "severity": 3,
+      "violation": "The input has `aria-invalid=\"true\"` but is not connected to the error message element that describes the validation error."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-001.html",
+    "artifact_sha256": "9077f0b4d4061075fc6497a8cd5b91b94b2af4f536abadbd41a62d9f86cd85d2",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:01:18Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

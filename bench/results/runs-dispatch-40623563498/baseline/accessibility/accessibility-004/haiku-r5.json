@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">`",
+      "fix": "Use `<button type=\"button\" class=\"icon-delete\" aria-label=\"Delete item\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></button>` instead.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section 3, Fare adjustments, delete control",
+      "severity": 3,
+      "violation": "A div with role=\"button\" should be replaced with a native button element for proper semantics and built-in keyboard support."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"/fares/history\" id=\"s3-link1\">read the accessibility improvements list</a>`",
+      "fix": "Change the link text to \"read the fare history\" or change the href to a URL that actually contains accessibility information.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section 3, Fare adjustments, paragraph with link",
+      "severity": 3,
+      "violation": "The link text \"accessibility improvements list\" does not match the destination URL \"/fares/history\" which refers to fare history."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"topic\" id=\"s3-form-topic-label\">Route</label>` with options `<option>Northbound</option><option>Southbound</option>`",
+      "fix": "Change the label to \"Direction\" or provide actual route names/numbers as the option values.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section 3, form field, Route selector",
+      "severity": 3,
+      "violation": "The label \"Route\" conflicts with option values that represent directions, not route names."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">`",
+      "fix": "Remove aria-invalid=\"true\" and only set aria-invalid=\"true\" when validation actually fails.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section 3, form field, Promo code input",
+      "severity": 3,
+      "violation": "aria-invalid is set to true before any validation has occurred, which misleads screen reader users into thinking there is a current error."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">Enter a 6 character code using letters and numbers only.</span>`",
+      "fix": "Hide this span by default and only display it when validation fails, or reclassify it as helper text with appropriate styling.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section 3, form, error message below promo field",
+      "severity": 3,
+      "violation": "The error message is displayed by default on page load, making it unclear whether this is a current error or instructional text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"wizard-steps\" id=\"s3-wizard\">` containing \"Choose a plan\", \"Enter payment details\", and \"Confirm your order\" steps",
+      "fix": "Move the wizard to its own section with explanatory text, or provide heading and instructions explaining what plan selection process it represents.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section 3, Fare adjustments, wizard steps element",
+      "severity": 3,
+      "violation": "A multi-step checkout wizard appears unexplained in the middle of a fare adjustments information section with no context for its purpose."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "4febe21b95880d7b0b385588ebdc9c800b2c010b439206d51d6b790cb76d11c3",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:36:57Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

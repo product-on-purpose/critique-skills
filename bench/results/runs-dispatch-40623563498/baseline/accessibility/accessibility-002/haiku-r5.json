@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "style=\"color:#999999\"",
+      "fix": "Change the color to a darker value, such as #555555 or #000000.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section \"Accessibility improvements\", first paragraph (id=\"s1-p1\")",
+      "severity": 3,
+      "violation": "Gray text (#999999) has insufficient contrast (~1.7:1) against white background, violating WCAG AA standards (minimum 4.5:1 for normal text)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Local residents can check real time arrivals through the mobile app. A confirmation message follows once the request is processed.\"",
+      "fix": "Remove the second sentence or replace it with text that actually describes a request-based action.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section \"Schedule changes\", paragraph (id=\"s2-p1\")",
+      "severity": 3,
+      "violation": "The text is contradictory - viewing real-time arrivals is a view-only action and does not require processing a request."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "style=\"height:60px;overflow:hidden\"",
+      "fix": "Remove the height and overflow properties to allow the content to display fully.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section \"Weekend service\", status card container (id=\"s3-statuscard\")",
+      "severity": 3,
+      "violation": "The fixed height of 60px combined with overflow:hidden will truncate the paragraph content inside."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\">",
+      "fix": "Replace with a <button> element: <button class=\"icon-delete\" aria-label=\"Delete item\"><img src=\"/img/trash-icon.svg\" alt=\"\"></button>",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section \"Weekend service\", delete button control (id=\"s3-customcontrol\")",
+      "severity": 3,
+      "violation": "A div with role=\"button\" is not semantic and lacks built-in keyboard support (Enter/Space key handling)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a href=\"/fares/history\">read the accessibility improvements list</a>",
+      "fix": "Either change the text to \"read the fare history\" or change the href to point to an actual accessibility improvements page.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section \"Weekend service\", link in paragraph (id=\"s3-link1\")",
+      "severity": 3,
+      "violation": "Link text \"read the accessibility improvements list\" does not match the destination \"/fares/history\"."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<label for=\"topic-alt\"> paired with <select id=\"topic\">",
+      "fix": "Change the label's for attribute from \"topic-alt\" to \"topic\".",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section \"Weekend service\", form label (id=\"s3-form-topic-label\")",
+      "severity": 3,
+      "violation": "The label's for attribute (\"topic-alt\") does not match the select element's id (\"topic\"), so they will not associate."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\">",
+      "fix": "Remove aria-invalid or set it to \"false\", changing it to \"true\" only after validation determines an actual error exists.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Section \"Weekend service\", form promo input (id=\"s3-form-promo\")",
+      "severity": 3,
+      "violation": "The input has aria-invalid=\"true\" set before any validation or form submission, falsely claiming the field is in an error state."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-002.html",
+    "artifact_sha256": "77a0e7586bb29a0807dde74bad599c5697360ab159315d8c672e432e2dedf0fd",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:12:46Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"topic-alt\" id=\"s3-form-topic-label\">Route</label>` paired with `<select id=\"topic\">`",
+      "fix": "Change `<label for=\"topic-alt\"...>` to `<label for=\"topic\"...>`",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Form label for Route input (s3-form-topic-label)",
+      "severity": 3,
+      "violation": "The label's `for` attribute references \"topic-alt\" but the select element has `id=\"topic\"`, so the label is not associated with the input."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">`",
+      "fix": "Replace with a `<button>` element, or add JavaScript to handle keydown events for Enter and Space keys.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Custom delete button control (s3-customcontrol)",
+      "severity": 3,
+      "violation": "This div is styled as a button with role=\"button\" and tabindex=\"0\", but lacks keyboard event handlers for Enter and Space keys, breaking expected button behavior for keyboard users."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a href=\"/fares/history\" id=\"s3-link1\">read the accessibility improvements list</a>` within section about schedule adjustments",
+      "fix": "Change link text to \"read the schedule adjustments list\" or \"view upcoming changes\" to match the context.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Link in Weekend service section (s3-link1)",
+      "severity": 3,
+      "violation": "The link text says \"accessibility improvements list\" but the surrounding context discusses \"upcoming adjustments\" to schedules and services, creating a mismatch."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">`",
+      "fix": "Set `aria-invalid=\"false\"` initially and update dynamically with JavaScript when validation occurs.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Promo code input field (promo)",
+      "severity": 3,
+      "violation": "The `aria-invalid=\"true\"` attribute is hardcoded, indicating a perpetual error state that should only exist after failed validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"status-card\" role=\"status\" id=\"s3-statuscard\" style=\"height:60px;overflow:hidden\">`",
+      "fix": "Increase the height value, remove the overflow:hidden property, or change to overflow:auto to allow scrolling content.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Status card div (s3-statuscard)",
+      "severity": 3,
+      "violation": "The fixed height of 60px combined with overflow:hidden will cut off the paragraph content inside, making it inaccessible to users."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-002.html",
+    "artifact_sha256": "77a0e7586bb29a0807dde74bad599c5697360ab159315d8c672e432e2dedf0fd",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:07:41Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

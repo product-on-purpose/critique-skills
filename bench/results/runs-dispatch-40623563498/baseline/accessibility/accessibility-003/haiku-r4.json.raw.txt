@@ -1,0 +1,29 @@
+Location: s2-p1 (Weekend service section)
+Evidence: "Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person."
+Problem: This paragraph is identical to s1-p1 in the "Accessibility improvements" section, creating confusing duplication between unrelated sections.
+Fix: Replace with content specific to weekend service updates.
+
+Location: s3-form-phone-label
+Evidence: `<label for="phone" id="s3-form-phone-label" style="color:#cc0000">Phone number</label>`
+Problem: The label is red but the input has no aria-required, aria-invalid, or asterisk to indicate why it's styled differently, violating WCAG color-only requirements.
+Fix: Either add aria-required="true" to the input and a non-color indicator like an asterisk, or remove the red styling.
+
+Location: s3-customcontrol (above the wizard-steps)
+Evidence: `<img src="/img/trash-icon.svg" alt="">`
+Problem: The image has an empty alt attribute, making it inaccessible to screen readers even though it appears to be a functional delete button.
+Fix: Add meaningful alt text like alt="Delete" or, if decorative, add role="presentation".
+
+Location: s3-wizard
+Evidence: Elements appear as `<div class="step" style="order:3">`, `<div class="step" style="order:2">`, `<div class="step" style="order:1">`
+Problem: The HTML source order (3, 2, 1) doesn't match the logical/visual order (1, 2, 3), breaking navigation for screen readers and users without CSS.
+Fix: Reorder the HTML elements so step 1 appears first in the source, followed by step 2, then step 3.
+
+Location: s3-linkpara
+Evidence: Section titled "Schedule changes" contains `<a href="/fares/history">read the accessibility improvements list</a>`
+Problem: The link text says "accessibility improvements" but it's in a "Schedule changes" section and points to "/fares/history", creating a contextual mismatch.
+Fix: Update the link text to match its destination and context, such as "read the fare history" or change the URL to point to schedule changes.
+
+Location: s3-form (promo input)
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: The input has aria-invalid="true" on page load before any user interaction, creating a false error state that confuses users and screen readers.
+Fix: Set aria-invalid="false" initially or omit it, then set to "true" only after validation fails on user input.

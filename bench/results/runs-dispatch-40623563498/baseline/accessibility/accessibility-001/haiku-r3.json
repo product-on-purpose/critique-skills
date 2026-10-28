@@ -1,0 +1,149 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`lang=\"translanguage\"`",
+      "fix": "Change to a valid language code, such as `lang=\"en\"` or `lang=\"en-US\"`.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<html lang=\"translanguage\">`",
+      "severity": 3,
+      "violation": "\"translanguage\" is not a valid BCP 47 language code."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<title id=\"head-title\"></title>`",
+      "fix": "Add descriptive text, such as `<title>Rider Service Updates</title>`.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<title>` element in head",
+      "severity": 3,
+      "violation": "The page title is empty, which fails to provide a meaningful page identifier for users and search engines."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<h4 id=\"s2-h\">Accessibility improvements</h4>`",
+      "fix": "Change `<h4>` to `<h2>` to maintain proper heading hierarchy.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`<h4>` element in section s2",
+      "severity": 3,
+      "violation": "The heading hierarchy is broken; h4 appears without an intermediate h2 or h3 between it and the h1 at the top."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<img src=\"/img/platform-update.jpg\" id=\"s1-img1\">`",
+      "fix": "Add an alt attribute with descriptive text, such as `alt=\"Platform update illustration\"`.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`<img>` element in section s1",
+      "severity": 3,
+      "violation": "The image is missing an alt attribute, which is required for accessibility and provides a text description for screen readers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<div class=\"status-card\" role=\"status\" id=\"s3-statuscard\">`",
+      "fix": "Remove `role=\"status\"` unless the content is dynamically updated.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`<div>` with id=\"s3-statuscard\" in section s3",
+      "severity": 3,
+      "violation": "role=\"status\" is used for live regions that receive dynamic updates, but this div contains only static explanatory text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"topic\"><option>Northbound</option><option>Southbound</option></select>`",
+      "fix": "Add `name=\"topic\"` attribute.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`<select>` element in the form",
+      "severity": 3,
+      "violation": "The select element is missing a name attribute, so its value will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"email\" type=\"email\" autocomplete=\"email\">`",
+      "fix": "Add `name=\"email\"` attribute.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Email `<input>` element in the form",
+      "severity": 3,
+      "violation": "The input element is missing a name attribute, so its value will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"phone\" type=\"tel\" autocomplete=\"tel\">` with label text \"Phone number (required)\"",
+      "fix": "Add the `required` attribute.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Phone `<input>` element in the form",
+      "severity": 3,
+      "violation": "The label indicates this field is required, but the input element lacks the required attribute."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"phone\" type=\"tel\" autocomplete=\"tel\">`",
+      "fix": "Add `name=\"phone\"` attribute.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Phone `<input>` element in the form",
+      "severity": 3,
+      "violation": "The input element is missing a name attribute, so its value will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">`",
+      "fix": "Remove `aria-invalid=\"true\"` and add it dynamically via JavaScript only when validation actually fails.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Promo code `<input>` element in the form",
+      "severity": 3,
+      "violation": "aria-invalid=\"true\" indicates an error state, but this is set by default before the user has entered anything or validation has run, which is semantically incorrect."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">`",
+      "fix": "Add `name=\"promo\"` attribute.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Promo code `<input>` element in the form",
+      "severity": 3,
+      "violation": "The input element is missing a name attribute, so its value will not be submitted with the form."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-001.html",
+    "artifact_sha256": "9077f0b4d4061075fc6497a8cd5b91b94b2af4f536abadbd41a62d9f86cd85d2",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T02:59:21Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 11,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

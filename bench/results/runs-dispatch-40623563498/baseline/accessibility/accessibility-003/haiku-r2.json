@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person.\"",
+      "fix": "Replace with content specific to weekend service.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section 2 (Weekend service), paragraph p1",
+      "severity": 3,
+      "violation": "This paragraph is nearly identical to section 1, paragraph p1 (except \"Passengers\" vs \"Riders\"), indicating duplicated content in different sections."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Station staff can also help with the same request in person.\"",
+      "fix": "Rephrase to clarify staff assistance, such as \"Station staff can answer questions about the schedule in person.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section 3, paragraph p1, second sentence",
+      "severity": 3,
+      "violation": "The sentence implies staff help patrons \"request\" to review a schedule, which is awkward; reviewing a schedule is not typically requested."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day.\"",
+      "fix": "Replace with content relevant to schedule changes.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section 3, status-card",
+      "severity": 3,
+      "violation": "This content appears to be duplicated from section 1, paragraph p2, and does not clearly fit in the schedule changes section."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Steps appear in HTML order as \"Confirm your order\" (order:3), \"Enter payment details\" (order:2), \"Choose a plan\" (order:1)",
+      "fix": "Reorder HTML elements so they appear in logical sequence without relying on CSS order property.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section 3, wizard-steps div",
+      "severity": 3,
+      "violation": "HTML source order is reversed from the logical/visual order (specified by CSS order property); screen readers will announce steps in wrong sequence."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<img src=\"/img/trash-icon.svg\" alt=\"\">`",
+      "fix": "Add descriptive alt text such as `alt=\"Delete\"`.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section 3, icon-delete div",
+      "severity": 3,
+      "violation": "Icon image has empty alt text, making it inaccessible to screen reader users."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Link text reads \"read the accessibility improvements list\" but href is \"/fares/history\"",
+      "fix": "Change link text to match destination, e.g., \"read the fare history\" or change href to match context.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section 3, link in paragraph",
+      "severity": 3,
+      "violation": "Link text does not match the destination URL; heading to fare history is not related to accessibility improvements."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label>` with no required or aria-required attribute on the input",
+      "fix": "Add `required` attribute to the phone input and/or `aria-required=\"true\"` to the label.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Section 3, form phone label",
+      "severity": 3,
+      "violation": "Red color alone is insufficient to indicate a required field; lacks proper accessibility attributes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">`",
+      "fix": "Remove `aria-invalid=\"true\"` or only set it dynamically after validation actually fails.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Section 3, form promo input",
+      "severity": 3,
+      "violation": "aria-invalid is set to true on an empty input, indicating a validation error when none has occurred."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">Error.</span>`",
+      "fix": "Replace \"Error.\" with a specific message such as \"Invalid promo code\" or \"This code has expired\".",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Section 3, form promo error message",
+      "severity": 3,
+      "violation": "Error message is too generic and does not explain what is wrong with the promo code."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "7518497ec47bc70bca9021d0ed190bdfb2f04532e6ef68cc37b662d769e87516",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:17:37Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

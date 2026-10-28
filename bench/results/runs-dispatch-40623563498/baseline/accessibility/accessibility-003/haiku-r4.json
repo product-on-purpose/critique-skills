@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person.\"",
+      "fix": "Replace with content specific to weekend service updates.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "s2-p1 (Weekend service section)",
+      "severity": 3,
+      "violation": "This paragraph is identical to s1-p1 in the \"Accessibility improvements\" section, creating confusing duplication between unrelated sections."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label>`",
+      "fix": "Either add aria-required=\"true\" to the input and a non-color indicator like an asterisk, or remove the red styling.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "s3-form-phone-label",
+      "severity": 3,
+      "violation": "The label is red but the input has no aria-required, aria-invalid, or asterisk to indicate why it's styled differently, violating WCAG color-only requirements."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<img src=\"/img/trash-icon.svg\" alt=\"\">`",
+      "fix": "Add meaningful alt text like alt=\"Delete\" or, if decorative, add role=\"presentation\".",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "s3-customcontrol (above the wizard-steps)",
+      "severity": 3,
+      "violation": "The image has an empty alt attribute, making it inaccessible to screen readers even though it appears to be a functional delete button."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Elements appear as `<div class=\"step\" style=\"order:3\">`, `<div class=\"step\" style=\"order:2\">`, `<div class=\"step\" style=\"order:1\">`",
+      "fix": "Reorder the HTML elements so step 1 appears first in the source, followed by step 2, then step 3.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "s3-wizard",
+      "severity": 3,
+      "violation": "The HTML source order (3, 2, 1) doesn't match the logical/visual order (1, 2, 3), breaking navigation for screen readers and users without CSS."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Section titled \"Schedule changes\" contains `<a href=\"/fares/history\">read the accessibility improvements list</a>`",
+      "fix": "Update the link text to match its destination and context, such as \"read the fare history\" or change the URL to point to schedule changes.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "s3-linkpara",
+      "severity": 3,
+      "violation": "The link text says \"accessibility improvements\" but it's in a \"Schedule changes\" section and points to \"/fares/history\", creating a contextual mismatch."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"promo\" type=\"text\" aria-invalid=\"true\">`",
+      "fix": "Set aria-invalid=\"false\" initially or omit it, then set to \"true\" only after validation fails on user input.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "s3-form (promo input)",
+      "severity": 3,
+      "violation": "The input has aria-invalid=\"true\" on page load before any user interaction, creating a false error state that confuses users and screen readers."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "7518497ec47bc70bca9021d0ed190bdfb2f04532e6ef68cc37b662d769e87516",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:22:13Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

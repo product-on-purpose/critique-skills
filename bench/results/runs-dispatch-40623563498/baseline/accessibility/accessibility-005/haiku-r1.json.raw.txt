@@ -1,0 +1,34 @@
+Location: head > style
+Evidence: @media (orientation: portrait) { #main-content { display: none; } }
+Problem: The CSS rule hides all main content when the viewport is in portrait orientation, breaking the page on mobile devices where portrait is the standard orientation.
+Fix: Remove this media query rule or replace it with a responsive layout that adapts content for portrait screens rather than hiding it entirely.
+
+Location: header > nav > first link
+Evidence: <a href="/accessibility" id="nav-link1" style="outline:none">Accessibility</a>
+Problem: The inline style removes the focus outline, making the link invisible to keyboard users navigating with the Tab key.
+Fix: Remove the style="outline:none" attribute; let the browser's default or CSS-defined focus styles remain visible.
+
+Location: s3-customcontrol
+Evidence: <div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol" ...>
+Problem: A div is being used as a button instead of the semantic button element, which makes it harder for assistive technology to recognize and interact with.
+Fix: Replace the div with a button element: <button class="icon-delete" id="s3-customcontrol" aria-label="Delete item">.
+
+Location: s3-form
+Evidence: <select id="topic"><option>Northbound</option>...</select>, <input id="email" type="email">, <input id="phone" type="tel">, <input id="promo" type="text">
+Problem: All form fields (select and inputs) lack name attributes and will not be submitted with the form.
+Fix: Add name attributes to each field: name="topic", name="email", name="phone", name="promo".
+
+Location: s3-form > promo input
+Evidence: <input id="promo" type="text" aria-invalid="true"> paired with <span class="error-text" aria-live="polite" id="s3-form-promo-error">
+Problem: The input is marked invalid but does not reference its error message; the aria-describedby attribute is missing.
+Fix: Add aria-describedby="s3-form-promo-error" to the promo input element.
+
+Location: s3-form > phone input
+Evidence: <label for="phone">Phone number (required)</label> paired with <input id="phone" type="tel" autocomplete="tel">
+Problem: The label indicates the field is required, but the input element lacks the required attribute.
+Fix: Add the required attribute to the input: <input id="phone" type="tel" autocomplete="tel" required>.
+
+Location: s3-linkpara
+Evidence: <a href="/fares/history" id="s3-link1">check the current station closures</a>
+Problem: The link text says "check the current station closures" but the href points to "/fares/history", which is about fares, not station closures.
+Fix: Change the link text to match its destination, such as "view the fare history", or change the href to point to the actual station closures page.

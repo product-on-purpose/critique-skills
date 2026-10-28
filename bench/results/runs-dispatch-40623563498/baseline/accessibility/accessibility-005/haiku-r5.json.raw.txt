@@ -1,0 +1,34 @@
+Location: CSS in `<head>`, style rule
+Evidence: `@media (orientation: portrait) { #main-content { display: none; } }`
+Problem: This hides the entire main content when the page is viewed in portrait orientation, blocking access to the page's primary content on most mobile devices.
+Fix: Remove this media query or change it to hide only non-critical elements like navigation.
+
+Location: Header navigation, first link
+Evidence: `<a href="/accessibility" id="nav-link1" style="outline:none">Accessibility</a>`
+Problem: The inline style removes the keyboard focus outline, making the link invisible to keyboard users.
+Fix: Remove the `style="outline:none"` attribute.
+
+Location: Section 3, after status card
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Problem: A `<div>` element is being used as a button without visible click or keyboard event handlers; it should be a semantic `<button>` element.
+Fix: Replace with `<button type="button" class="icon-delete" aria-label="Delete item" id="s3-customcontrol">` and move the nested `<img>` inside.
+
+Location: Section 3, link paragraph
+Evidence: `<a href="/fares/history" id="s3-link1">check the current station closures</a>`
+Problem: The link text says "station closures" but the href points to "/fares/history", creating a mismatch between the link text and destination.
+Fix: Either change the link text to match the URL (e.g., "view fare history") or change the href to match the text (e.g., "/stations/closures").
+
+Location: Section 3, form opening tag
+Evidence: `<form id="s3-form">`
+Problem: The form element is missing `action` and `method` attributes required for form submission.
+Fix: Add `action="/submit"` (or the appropriate endpoint) and `method="POST"` attributes.
+
+Location: Section 3, all form inputs (topic select, email input, phone input, promo input)
+Evidence: `<select id="topic">`, `<input id="email" ...>`, `<input id="phone" ...>`, `<input id="promo" ...>`
+Problem: Form inputs have `id` attributes but are missing `name` attributes, so their values won't be submitted with meaningful keys.
+Fix: Add `name` attributes to all inputs: `<select id="topic" name="topic">`, `<input id="email" name="email" ...>`, `<input id="phone" name="phone" ...>`, `<input id="promo" name="promo" ...>`.
+
+Location: Section 3, promo code input and error message
+Evidence: `<input id="promo" type="text" aria-invalid="true">` followed by `<span class="error-text" aria-live="polite" id="s3-form-promo-error">Enter a 6 character code...</span>`
+Problem: The input has `aria-invalid="true"` indicating an error, but the error message is not associated via `aria-describedby`.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the input element.

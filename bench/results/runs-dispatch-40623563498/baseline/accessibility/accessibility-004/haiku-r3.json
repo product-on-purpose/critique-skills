@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Commuters can report a service issue by calling rider services. Station staff can also help with the same request in person.\"",
+      "fix": "Replace the second sentence with \"Station staff can also help you report issues in person at any station.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section 1, paragraph 2 (s1-p2)",
+      "severity": 3,
+      "violation": "The phrase \"the same request\" is ambiguous and confusing - it's unclear whether it refers to the schedule inquiry from the previous paragraph or to reporting service issues in this paragraph."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Passengers can check real time arrivals through the online portal. Station staff can also help with the same request in person.\"",
+      "fix": "Remove this sentence or replace with \"Station staff can provide arrival information at any station kiosk.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section 2, paragraph 1 (s2-p1)",
+      "severity": 3,
+      "violation": "This sentence is unclear and redundant since station kiosks already allow checking arrivals; \"the same request\" is vague."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Link text reads \"read the accessibility improvements list\" but href=\"/fares/history\"",
+      "fix": "Change link text to \"read the fare history\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Section 3, link (s3-link1)",
+      "severity": 3,
+      "violation": "The link text describes accessibility improvements but the destination is fare history - they don't match."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "'<div class=\"icon-delete\" role=\"button\" tabindex=\"0\" aria-label=\"Delete item\" id=\"s3-customcontrol\">'",
+      "fix": "Replace with a real button element: '<button type=\"button\" class=\"icon-delete\" aria-label=\"Delete item\"><img src=\"/img/trash-icon.svg\" alt=\"\"></button>'",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Section 3, custom control (s3-customcontrol)",
+      "severity": 3,
+      "violation": "A div with role=\"button\" is not properly keyboard accessible and won't respond to Enter or Space keys without JavaScript event handling."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "'<input id=\"promo\" type=\"text\" aria-invalid=\"true\">'",
+      "fix": "Remove aria-invalid=\"true\" or change to aria-invalid=\"false\", and set to \"true\" only after validation fails.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Section 3, form promo code field",
+      "severity": 3,
+      "violation": "The aria-invalid attribute is set to \"true\" on page load before the user has entered or submitted anything, incorrectly signaling an error state to screen reader users."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Label says \"Phone number (required)\" but input is '<input id=\"phone\" type=\"tel\" autocomplete=\"tel\">'",
+      "fix": "Add the required attribute: '<input id=\"phone\" type=\"tel\" autocomplete=\"tel\" required>'",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Section 3, form phone number field",
+      "severity": 3,
+      "violation": "The field is marked as required in the label text but lacks the HTML required attribute, so the browser won't enforce validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Three-step wizard with \"Choose a plan\", \"Enter payment details\", and \"Confirm your order\" in the \"Fare adjustments\" section",
+      "fix": "Remove this component or replace with content appropriate to fare adjustments.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Section 3, wizard component (s3-wizard)",
+      "severity": 3,
+      "violation": "This e-commerce checkout flow doesn't fit the context of a transit service fare adjustments page and appears misplaced or unfinished."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-004.html",
+    "artifact_sha256": "4febe21b95880d7b0b385588ebdc9c800b2c010b439206d51d6b790cb76d11c3",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:32:39Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

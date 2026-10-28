@@ -1,0 +1,39 @@
+Location: Section "Weekend service", paragraph 1 (s2-p1)
+Evidence: "Passengers may request a fare adjustment through the mobile app. Station staff can also help with the same request in person."
+Problem: This paragraph is identical to the one in the "Accessibility improvements" section (s1-p1), just with "Passengers" instead of "Riders".
+Fix: Remove this duplicate paragraph or rewrite it with distinct content relevant to weekend service.
+
+Location: Section "Schedule changes", status card (s3-statuscard)
+Evidence: "Local residents can check real time arrivals by calling rider services. Updates post to the schedule page within one business day."
+Problem: This text is identical to s1-p2, just with "Local residents" instead of "Passengers".
+Fix: Remove the duplicate or rewrite with content specific to schedule changes.
+
+Location: Section "Schedule changes", icon-delete div (s3-customcontrol)
+Evidence: `<img src="/img/trash-icon.svg" alt="">`
+Problem: The image has empty alt text and the parent div has no ARIA label, making this functional control inaccessible to screen reader users.
+Fix: Add alt text (e.g., `alt="Delete"`) or add `aria-label="Delete"` to the parent div.
+
+Location: Section "Schedule changes", wizard-steps div (s3-wizard)
+Evidence: HTML source order is step3, step2, step1 but CSS order properties make them display as 1, 2, 3.
+Problem: The visual order (1 → 2 → 3) doesn't match the HTML source order (3 → 2 → 1), which will confuse screen reader users who navigate in source order.
+Fix: Reorder the HTML elements so step1 appears first, then step2, then step3, removing the inline style order properties.
+
+Location: Section "Schedule changes", link paragraph (s3-linkpara)
+Evidence: `<a href="/fares/history">read the accessibility improvements list</a>`
+Problem: The link text says "accessibility improvements list" but the href points to "/fares/history".
+Fix: Change the href to "/accessibility" or similar page that matches the link text, or change the link text to match the destination.
+
+Location: Section "Schedule changes", form, promo field
+Evidence: `<input id="promo" type="text" aria-invalid="true">`
+Problem: The input has aria-invalid="true" set before any validation has occurred, which misleads screen reader users into thinking the field is already invalid.
+Fix: Remove aria-invalid or set it to false; only set it to true after failed validation.
+
+Location: Section "Schedule changes", form, promo field and error message
+Evidence: `<input id="promo" type="text" aria-invalid="true">` and `<span class="error-text" aria-live="polite" id="s3-form-promo-error">Error.</span>`
+Problem: The input with aria-invalid="true" is not connected to the error message span using aria-describedby.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the input element.
+
+Location: Section "Schedule changes", form, promo error message (s3-form-promo-error)
+Evidence: `<span class="error-text" aria-live="polite" id="s3-form-promo-error">Error.</span>`
+Problem: The error message is too vague—"Error." doesn't tell users what's wrong or how to fix the promo code field.
+Fix: Replace with descriptive text such as "Invalid promo code. Please check your code and try again."

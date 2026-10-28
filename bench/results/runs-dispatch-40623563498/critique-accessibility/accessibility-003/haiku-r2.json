@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-1.3.2",
+      "evidence": "Line 47-57: <div class=\"wizard-steps\" id=\"s3-wizard\"> contains <div class=\"step\" id=\"s3-step3\" style=\"order:3\">, <div class=\"step\" id=\"s3-step2\" style=\"order:2\">, <div class=\"step\" id=\"s3-step1\" style=\"order:1\">. DOM sequence is step3, step2, step1; visual sequence via CSS order is step1, step2, step3.",
+      "fix": "Reorder child elements in DOM to match visual sequence, or remove CSS order property and reorder divs directly: step1 (order:1), step2 (order:2), step3 (order:3).",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#s3-wizard, <div> container, line 47",
+      "severity": 3,
+      "violation": "DOM order (step3, step2, step1) contradicts visual/CSS order (step1, step2, step3) via order property. Keyboard and screen reader users navigating DOM encounter steps in incorrect logical sequence."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-4.1.2",
+      "evidence": "Line 44-46: <div class=\"icon-delete\" id=\"s3-customcontrol\"> <img src=\"/img/trash-icon.svg\" alt=\"\"> </div>. No role, aria-label, aria-button, tabindex, or onclick/keyboard handler visible.",
+      "fix": "Add role=\"button\" and aria-label=\"Delete\" (or appropriate label) to the div, and add tabindex=\"0\" if it should receive keyboard focus. Implement keyboard handler for Enter/Space keys.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#s3-customcontrol, <div> with class=\"icon-delete\", line 44",
+      "severity": 3,
+      "violation": "Div appears to be an interactive delete button (styled with class and containing icon image) but has no role=\"button\", aria-label, tabindex, or keyboard event handler. Not exposed to assistive technology as a control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WCAG-1.4.1",
+      "evidence": "Line 64: <label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label>. Color #cc0000 is only visual cue; input at line 65 has no required attribute or aria-required.",
+      "fix": "Add aria-required=\"true\" to input #phone, or add an asterisk (*) or 'required' text after the label text.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#s3-form-phone-label, <label>, line 64",
+      "severity": 2,
+      "violation": "Label text is colored red (#cc0000) with no asterisk, aria-required, or other non-color cue to convey that red indicates purpose or required status. Users unable to perceive color cannot identify the label's significance."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "7518497ec47bc70bca9021d0ed190bdfb2f04532e6ef68cc37b662d769e87516",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "WCAG"
+    ],
+    "skill": "critique-accessibility",
+    "skill_version": "0.2.0",
+    "timestamp": "2026-10-28T03:15:52Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

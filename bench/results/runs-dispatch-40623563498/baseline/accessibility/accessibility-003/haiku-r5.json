@@ -1,0 +1,149 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Riders may request a fare adjustment through the mobile app.\"",
+      "fix": "Replace with content appropriate to accessibility improvements, such as details about accessible parking, elevators, or other accessibility features.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "s1-p1",
+      "severity": 3,
+      "violation": "This content about fare adjustments does not match the \"Accessibility improvements\" section title."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Passengers may request a fare adjustment through the mobile app.\"",
+      "fix": "Replace with content appropriate to weekend service, such as weekend schedule information or service hours.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "s2-p1",
+      "severity": 3,
+      "violation": "This content about fare adjustments does not match the \"Weekend service\" section title."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<a href=\"/fares/history\" id=\"s3-link1\">read the accessibility improvements list</a>",
+      "fix": "Either update the href to point to an accessibility page (e.g., \"/accessibility\") or change the link text to match the destination (e.g., \"read the fare history\").",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "s3-link1",
+      "severity": 3,
+      "violation": "The link text promises \"accessibility improvements list\" but the href points to \"/fares/history\", which is unrelated."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"step\" id=\"s3-step3\" style=\"order:3\">Confirm your order</div><div class=\"step\" id=\"s3-step2\" style=\"order:2\">Enter payment details</div><div class=\"step\" id=\"s3-step1\" style=\"order:1\">Choose a plan</div>",
+      "fix": "Reorder the HTML elements to match the visual order: Choose a plan, Enter payment details, Confirm your order.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "s3-wizard (step order)",
+      "severity": 3,
+      "violation": "The DOM order (Confirm, Enter, Choose) is opposite the visual order (Choose, Enter, Confirm) created by CSS order, breaking screen reader accessibility."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<label for=\"phone\" id=\"s3-form-phone-label\" style=\"color:#cc0000\">Phone number</label>",
+      "fix": "Add a `required` attribute to the input, add a visible required indicator (such as an asterisk), or use `aria-required=\"true\"`.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "s3-form-phone-label",
+      "severity": 3,
+      "violation": "Uses only red color to indicate a required field, which is not accessible to color-blind users."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<select id=\"topic\"><option>Northbound</option><option>Southbound</option></select>",
+      "fix": "Add name=\"topic\" (or another appropriate name) to the select element.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "s3-form (topic select)",
+      "severity": 3,
+      "violation": "The select element is missing a name attribute, so its value will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"email\" type=\"email\" autocomplete=\"email\">",
+      "fix": "Add name=\"email\" to the input element.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "s3-form (email input)",
+      "severity": 3,
+      "violation": "The input is missing a name attribute, so its value will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"phone\" type=\"tel\" autocomplete=\"tel\">",
+      "fix": "Add name=\"phone\" to the input element.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "s3-form (phone input)",
+      "severity": 3,
+      "violation": "The input is missing a name attribute, so its value will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"promo\" type=\"text\" aria-invalid=\"true\"><span class=\"error-text\" aria-live=\"polite\" id=\"s3-form-promo-error\">Error.</span>",
+      "fix": "Remove aria-invalid=\"true\" if this is not a real validation state, or provide a specific error message. Add name=\"promo\" to the input.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "s3-form (promo input)",
+      "severity": 3,
+      "violation": "The input is marked invalid by default with only a generic \"Error.\" message, appearing as placeholder content rather than genuine validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"icon-delete\" id=\"s3-customcontrol\"><img src=\"/img/trash-icon.svg\" alt=\"\"></div>",
+      "fix": "Convert to a proper <button> element, or add role=\"button\", tabindex=\"0\", and keyboard event handlers.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "s3-customcontrol",
+      "severity": 3,
+      "violation": "This div with an icon is styled as a button but has no role=\"button\", no keyboard accessibility, and no visible event handling."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<div class=\"status-card\" role=\"status\" id=\"s3-statuscard\"><p>Local residents can check real time arrivals by calling rider services.</p></div>",
+      "fix": "Remove role=\"status\" unless this element actually updates dynamically as a live region.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "s3-statuscard",
+      "severity": 3,
+      "violation": "The role=\"status\" indicates a live region that updates dynamically, but the content is static informational text."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/accessibility/accessibility-003.html",
+    "artifact_sha256": "7518497ec47bc70bca9021d0ed190bdfb2f04532e6ef68cc37b662d769e87516",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T03:24:50Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 11,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,29 @@
+Location: `<style>` tag in head
+Evidence: `@media (orientation: portrait) { #main-content { display: none; } }`
+Problem: The main content is completely hidden on portrait orientation devices, making the page unusable for mobile users.
+Fix: Remove this media query and implement a responsive layout that works on both orientations.
+
+Location: Skip link element in header
+Evidence: `<a href="#main-content" id="body-skiplink" style="outline:none">Skip to main content</a>`
+Problem: The inline style removes the focus outline, making the skip link invisible to keyboard users.
+Fix: Remove the `style="outline:none"` attribute to restore the focus indicator.
+
+Location: Icon-delete element in accessibility section
+Evidence: `<div class="icon-delete" role="button" tabindex="0" aria-label="Delete item" id="s3-customcontrol">`
+Problem: A div is used instead of a button element; this won't handle keyboard events (Enter/Space) properly without JavaScript.
+Fix: Replace with a proper button element: `<button class="icon-delete" aria-label="Delete item" id="s3-customcontrol"><img src="/img/trash-icon.svg" alt=""></button>`
+
+Location: Phone number label in form
+Evidence: `<label for="phone" id="s3-form-phone-label">Phone number (required)</label>` with `<input id="phone" type="tel" autocomplete="tel">`
+Problem: The label indicates the field is required but the input lacks the `required` attribute.
+Fix: Add `required` attribute to the input: `<input id="phone" type="tel" autocomplete="tel" required>`
+
+Location: Promo code input in form
+Evidence: `<input id="promo" type="text" aria-invalid="true">` with error message `<span class="error-text" aria-live="polite" id="s3-form-promo-error">`
+Problem: The input has `aria-invalid="true"` on page load before any user interaction, and the input doesn't reference the error message via `aria-describedby`.
+Fix: Add `aria-describedby="s3-form-promo-error"` to the input and set `aria-invalid` dynamically only after validation fails.
+
+Location: Link in accessibility section
+Evidence: `<a href="/fares/history" id="s3-link1">check the current station closures</a>`
+Problem: Link text says "check the current station closures" but href points to "/fares/history", which are mismatched concepts.
+Fix: Change link text to match the destination, such as "check the fares history" or change href to a page about station closures.

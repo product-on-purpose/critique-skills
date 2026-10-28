@@ -1,0 +1,19 @@
+Location: `<div class="wizard-steps" id="s3-wizard">` containing three step divs in the Fare adjustments section
+Evidence: Three divs with class "step" containing "Choose a plan", "Enter payment details", "Confirm your order" with no heading, role, or aria-current attributes
+Problem: The wizard section lacks semantic markup and ARIA attributes to convey its multi-step nature to assistive technology
+Fix: Add `role="group" aria-label="Multi-step process"` to the wizard-steps container and add appropriate structure like headings or aria-current to indicate the current step
+
+Location: Link text in the paragraph with id "s3-linkpara" in the Fare adjustments section
+Evidence: `<a href="/fares/history" id="s3-link1">read the accessibility improvements list</a>`
+Problem: The link text says "accessibility improvements list" but the href points to "/fares/history", creating a semantic mismatch between what the user expects to find and the destination
+Fix: Either change the link text to match the destination (e.g., "read the fare adjustment history") or update the href to an accessibility improvements page
+
+Location: Phone input field in the form in the Fare adjustments section
+Evidence: `<label for="phone">Phone number (required)</label>` paired with `<input id="phone" type="tel" autocomplete="tel">` with no required attribute
+Problem: The label text indicates the field is required but the input element lacks the `required` attribute or `aria-required="true"`, causing a mismatch between visual indication and programmatic requirement
+Fix: Add the `required` attribute to the input: `<input id="phone" type="tel" autocomplete="tel" required>`
+
+Location: Promo code input field in the form in the Fare adjustments section
+Evidence: `<input id="promo" type="text" aria-invalid="true">` immediately followed by always-visible error text `<span class="error-text">Enter a 6 character code using letters and numbers only.</span>`
+Problem: The input has `aria-invalid="true"` set unconditionally, marking it as invalid to assistive technology even though the user has not yet interacted with it; this misleads users and screen reader users about the field's actual validation state
+Fix: Remove `aria-invalid="true"` from the input and either hide the error message by default with `hidden` attribute or convert the text to helper text in a `<small>` element without error styling or aria-invalid
