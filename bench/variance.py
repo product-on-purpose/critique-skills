@@ -237,7 +237,7 @@ def _group_scores(
 
 def _reproduction_failures(
     cells: dict[CellKey, dict[str, dict[int, list[Any]]]],
-    committed_by_key: dict[tuple[str, str, str, str], dict[str, Any]],
+    committed_by_key: dict[CellKey, dict[str, Any]],
 ) -> tuple[list[str], int, int]:
     """Every cell-metric whose repetitions do not pool back to the committed figure.
 
@@ -249,7 +249,7 @@ def _reproduction_failures(
     checked = matched = 0
     for key in sorted(cells):
         run_set, skill, skill_version, model, domain = key
-        committed = committed_by_key.get((skill, skill_version, model, domain))
+        committed = committed_by_key.get(key)
         if committed is None:
             continue  # a cell the committed file does not carry
         for name, _scorer, aggregator in _METRICS:
@@ -306,8 +306,13 @@ def build_variance(
         # filter silently keeps whichever lane sorted last and then compares repetition pools
         # against it. A file written before 1.2.0 carries no lane field, so a missing lane reads as
         # "overall" and this stays correct against both shapes.
+        #
+        # Keyed on run_set too (E63): the frozen baseline is re-run inside every dispatch, so
+        # baseline-generic 1.0.0 appears once per run set that ran it, and indexing without run_set
+        # compared each run set's repetitions against whichever baseline entry loaded last. A file
+        # written before 1.2.0 carries no per-entry run_set; its one top-level run_set stands in.
         committed_by_key = {
-            (e["skill"], e["skill_version"], e["model"], e["domain"]): e
+            (e.get("run_set") or committed_results.get("run_set", ""), e["skill"], e["skill_version"], e["model"], e["domain"]): e
             for e in committed_results["entries"]
             if e.get("lane", "overall") == "overall"
         }

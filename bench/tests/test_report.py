@@ -92,7 +92,58 @@ def test_criterion_table_has_no_baseline_or_verdict_columns() -> None:
     assert "Verdict" not in table
     assert "beats baseline" not in table
     header = table.splitlines()[0]
-    assert header == "| Skill | Version | Domain | Model | Recall | Precision |"
+    assert header == "| Skill | Version | Domain | Model | Run set | Recall | Precision |"
+
+
+# E63: two run sets may measure the same (skill, skill_version, model, domain), because the frozen
+# baseline is re-run inside every dispatch. Cells are keyed on run_set too, and a skill entry is
+# compared against the baseline from its own run set.
+
+
+def _located(skill: str, run_set: str, recall: float, precision: float, **over) -> dict:
+    return _entry(
+        skill,
+        run_set=run_set,
+        recall_location=_metric(recall, int(recall * 10), 10),
+        precision_location=_metric(precision, int(precision * 10), 10),
+        **over,
+    )
+
+
+def test_two_run_sets_keep_both_baselines_and_pair_each_skill_with_its_own() -> None:
+    entries = [
+        _located("baseline-generic", "p3-2026-07-31", 0.3, 0.3),
+        _located("baseline-generic", "bench-2026-10-28", 0.9, 0.9),
+        _located("critique-toy", "p3-2026-07-31", 0.5, 0.5, skill_version="0.1.0"),
+        _located("critique-toy", "bench-2026-10-28", 0.5, 0.5, skill_version="0.1.1"),
+    ]
+    rows = [line for line in render_baseline_comparison_location(entries).splitlines() if "critique-toy" in line]
+    old = next(r for r in rows if "| 0.1.0 |" in r)
+    new = next(r for r in rows if "| 0.1.1 |" in r)
+    # The p3 skill is compared with the p3 baseline (0.300) and beats it; the new one with the new
+    # baseline (0.900) and does not. Keyed without run_set, both would read whichever loaded last.
+    assert "| p3-2026-07-31 |" in old and "0.300" in old and "beats baseline" in old
+    assert "| bench-2026-10-28 |" in new and "0.900" in new and "below baseline" in new
+    assert render_entries_table(entries).count("baseline-generic") == 2
+
+
+def test_a_run_set_without_a_baseline_borrows_the_latest_one_measured_on_or_before_its_date() -> None:
+    """cal1 re-measured one skill the day after p3 and ran no baseline; its published verdict was read
+    against p3's. A baseline measured later (bench-2026-10-28) must not replace that."""
+    entries = [
+        _located("baseline-generic", "p3-2026-07-31", 0.3, 0.3),
+        _located("baseline-generic", "bench-2026-10-28", 0.9, 0.9),
+        _located("critique-toy", "cal1-2026-08-01", 0.5, 0.5, skill_version="0.1.1"),
+    ]
+    row = next(line for line in render_baseline_comparison_location(entries).splitlines() if "critique-toy" in line)
+    assert "cal1-2026-08-01 (baseline from p3-2026-07-31)" in row
+    assert "0.300" in row and "0.900" not in row
+
+
+def test_a_duplicate_run_set_identity_is_refused() -> None:
+    entries = [_located("critique-toy", "rs-2026-01-01", 0.5, 0.5), _located("critique-toy", "rs-2026-01-01", 0.6, 0.6)]
+    with pytest.raises(ValueError, match="must be unique"):
+        render_entries_table(entries) and render_baseline_comparison_location(entries)
 
 
 def test_criterion_table_absent_says_so() -> None:

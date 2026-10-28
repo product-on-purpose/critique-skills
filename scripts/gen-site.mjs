@@ -1286,7 +1286,8 @@ function generateReceiptsExplorer(results, activeVersions, routes) {
     (a, b) =>
       a.skill.localeCompare(b.skill) ||
       a.skill_version.localeCompare(b.skill_version) ||
-      tierOf(a).localeCompare(tierOf(b)),
+      tierOf(a).localeCompare(tierOf(b)) ||
+      (a.run_set ?? "").localeCompare(b.run_set ?? ""),
   );
 
   // The floor strip: the worst active cell per metric. Not the best, on purpose.
@@ -1309,6 +1310,9 @@ function generateReceiptsExplorer(results, activeVersions, routes) {
     { label: "Version", key: "version", numeric: false },
     { label: "Tier", key: "tier", numeric: false },
     { label: "Domain", key: "domain", numeric: false },
+    // E63: the frozen baseline is re-run in every dispatch, so two rows can share skill, version,
+    // tier and domain. The run set is what tells them apart.
+    { label: "Run set", key: "runset", numeric: false },
     { label: "Artifacts", key: "artifacts", numeric: true },
     ...METRICS.map((m) => ({ label: m.label, key: m.key, numeric: true })),
     { label: "Unresolvable claims", key: "unresolvable", numeric: true },
@@ -1330,6 +1334,7 @@ function generateReceiptsExplorer(results, activeVersions, routes) {
       `data-version="${escapeHtml(entry.skill_version)}"`,
       `data-tier="${escapeHtml(tierOf(entry))}"`,
       `data-domain="${escapeHtml(entry.domain)}"`,
+      `data-runset="${escapeHtml(entry.run_set ?? runSet)}"`,
       `data-artifacts="${entry.artifacts_scored}"`,
       `data-unresolvable="${entry.unresolvable_claims}"`,
       ...METRICS.map(({ key }) => `data-${key}="${entry[key].value}"`),
@@ -1339,6 +1344,7 @@ function generateReceiptsExplorer(results, activeVersions, routes) {
       `<td>${escapeHtml(entry.skill_version)}</td>`,
       `<td>${escapeHtml(tierOf(entry))}</td>`,
       `<td>${escapeHtml(entry.domain)}</td>`,
+      `<td>${escapeHtml(entry.run_set ?? runSet)}</td>`,
       `<td>${entry.artifacts_scored}</td>`,
       ...METRICS.map(
         ({ key }) =>
@@ -1395,7 +1401,7 @@ function generateReceiptsExplorer(results, activeVersions, routes) {
     "",
     "## Every measured cell",
     "",
-    `All ${entries.length} cells, including the frozen generic-prompt baseline and the superseded \`critique-accessibility\` 0.1.0, which stay here because the comparison below is the most useful thing this benchmark has produced. The filters and the sortable columns need JavaScript; **the table itself does not**, and neither does anything above.`,
+    `All ${entries.length} cells, including the frozen generic-prompt baseline, once per run set that re-ran it, and every superseded skill version, which stay here because comparing a version with the one that replaced it, above all \`critique-accessibility\` 0.1.0 against 0.1.1, is the most useful thing this benchmark has produced. The filters and the sortable columns need JavaScript; **the table itself does not**, and neither does anything above.`,
     "",
     '<div id="receipts">',
     "",
