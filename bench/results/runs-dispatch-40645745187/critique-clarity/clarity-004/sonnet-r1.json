@@ -1,0 +1,84 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "\"How to Apply\" walks through starting a request, autosaving, and reviewing a confirmation summary before submitting. \"Request Steps\" later states: \"Completing the request begins with confirming eligibility, and uploading the receipt.\" \"Program Coordination\" then adds that \"the team logs each request... routes the request to the correct approver based on department... schedules the reimbursement for the next pay cycle,\" and \"Review Responsibility\" adds a further finance review for requests over 200 dollars.",
+      "fix": "Consolidate the full request-to-payment sequence (start request, save draft, review summary, submit, manager review, documentation, routing/approval, finance review over $200, reimbursement) into one ordered section, in the order the reader performs it, and either delete \"Request Steps\" or replace it with the complete list rather than a two-item fragment.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"How to Apply\" (lines 17-23), \"Approval Timeline\" (25-29), \"Request Steps\" (55-57), \"Program Coordination\" (63-65), and \"Review Responsibility\" (67-69)",
+      "severity": 3,
+      "violation": "PLAIN-ORGANIZE requires the document's sections to follow the sequence the reader actually works through. Here the single task of submitting and tracking a stipend request is split across five non-adjacent sections, each adding a different piece of the same sequence with no cross-reference, and \"Request Steps\" names only two of the real steps (confirming eligibility, uploading a receipt), omitting starting the request, the confirmation review, manager approval, and routing described elsewhere. A reader cannot assemble the true end-to-end sequence from any single section, and the section literally titled for that purpose is the most incomplete one."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Line 11: \"The stipend covers one claim per employee per benefit year.\" Lines 17-29 refer to the same yearly submission throughout as \"a stipend request\" and \"the request,\" never as a \"claim.\"",
+      "fix": "Use \"request\" (or \"claim\") consistently for the one submission a reader is allowed per benefit year, including in the Eligibility section's wording.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"Eligibility\", line 11, versus \"How to Apply\"/\"Approval Timeline\", lines 17-29",
+      "severity": 2,
+      "violation": "PLAIN-CONSISTENT-TERMS requires one term per concept. \"Claim\" (used once, in Eligibility) and \"request\"/\"stipend request\" (used throughout the rest of the document) both appear to name the single yearly stipend submission, but the document never signals that the two words are equivalent, leaving a careful reader to infer it rather than confirm it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "Line 7: \"the IT asset group tracks the equipment catalog on the first business day of the month.\" Line 61: \"The finance liaison publishes the equipment catalog at the start of the fiscal year.\" Line 73: \"The benefits team reviews the equipment catalog at the start of the fiscal year.\"",
+      "fix": "State the equipment catalog's ownership and update cadence once, in one section, and have the other two mentions cross-reference it instead of restating a separate, differently-scoped claim.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Program Overview\" (lines 7), \"Special Cases\" (line 61), and \"Questions and Updates\" (line 73)",
+      "severity": 2,
+      "violation": "WILLIAMS-COHERENCE requires a reader to be able to name a consistent, limited set of themes for a concept treated across a document. \"The equipment catalog\" is independently described in three disconnected sections with three different owning teams (IT asset group, finance liaison, benefits team) and two different cadences (monthly vs. start-of-fiscal-year), with no signal tying the three statements together, so a reader cannot state a single coherent account of who maintains the catalog or when."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "\"The IT asset group updates the reimbursement log at the start of the fiscal year... Similarly, the IT asset group tracks the equipment catalog on the first business day of the month.\"",
+      "fix": "Replace \"Similarly\" with a transition that reflects the actual relationship (e.g., \"Separately,\" or \"In addition,\"), or state plainly that the two logs are tracked on different schedules.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"Program Overview\", line 7",
+      "severity": 2,
+      "violation": "WILLIAMS-COHESION requires a transition to correctly signal the relationship between consecutive sentences. \"Similarly\" asserts the second sentence parallels the first, but the two describe different cadences (start of fiscal year vs. first business day of every month) for a different artifact (reimbursement log vs. equipment catalog), so the signaled similarity is false and the reader is misled about how the two update schedules relate."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-STRESS",
+      "evidence": "\"The finance office reviews every stipend request over 200 dollars before it pays out.\"",
+      "fix": "Reorder to end on the threshold, e.g., \"Before paying out, the finance office reviews every stipend request over 200 dollars.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Review Responsibility\", line 69",
+      "severity": 2,
+      "violation": "WILLIAMS-STRESS requires the sentence's newest or most important element to land at the end. The sentence's new, load-bearing fact is the 200-dollar review threshold, but it sits mid-sentence while the sentence instead ends on \"before it pays out,\" a detail the reader already has from the earlier Reimbursement Amounts section."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T08:32:56Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

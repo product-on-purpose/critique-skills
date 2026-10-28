@@ -1,0 +1,128 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the reimbursable item against the request log each month. Payroll releases the covered purchase amount after that monthly review.",
+      "fix": "Pick one term for the thing being recorded, reconciled, and paid, and use it in all three sentences.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Terminology Notes, paragraph 1",
+      "severity": 3,
+      "violation": "Three consecutive sentences describing one continuous record-reconcile-pay process use three different terms, stipend item, reimbursable item, and covered purchase amount, for what appears to be the same underlying thing without ever signalling they are the same, so a reader cannot tell whether the process touches one item or three."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-PARAGRAPH",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout.",
+      "fix": "Rewrite the opening sentence to state the topic the rest of the paragraph covers.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "The paragraph's opening sentence shares almost no vocabulary with the rest of the paragraph, so it does not preview the paragraph's actual topic."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "The employee receives a confirmation email once processing finishes. Then, the employee reviews the confirmation summary before submitting the final request.",
+      "fix": "Reorder the paragraphs so the review-before-submitting step comes before the signing, budget-confirmation, and final-processing step, matching the order the employee actually performs them.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "How to Apply, paragraphs 2-3",
+      "severity": 3,
+      "violation": "Paragraph 2 describes the request already reaching final processing and the employee being notified once processing finishes, and paragraph 3 then states, introduced by Then, that the employee reviews a confirmation summary before submitting the final request, an action that logically precedes submission and processing rather than following it, so a reader finishing the section cannot reconstruct a single order of steps for applying."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout. A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.",
+      "fix": "Remove the three unrelated sentences, or move each to a section its own theme belongs in, so Program Coordination states only what it coordinates.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Program Coordination",
+      "severity": 3,
+      "violation": "After its opening sentence, the section under the heading Program Coordination moves through three unrelated themes, a past travel-expense audit, evolving federal remote-work guidance, and the office coffee budget, none of which connect back to stipend-request coordination, so a reader finishing the section could not state what it was actually about."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Completing the request begins with confirming eligibility, and the uploaded receipt.",
+      "fix": "Move this content into How to Apply, near where the portal steps are already described, or delete it if How to Apply already covers it.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Request Steps (section), relative to How to Apply",
+      "severity": 2,
+      "violation": "This one-sentence section restates the start of the application process but sits after Terminology Notes, Reimbursement Amounts, and Restrictions and Exceptions, far from How to Apply where the reader already worked through the actual steps, so the ordering tracks how the document was assembled rather than the sequence a reader follows to apply."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SUBJECT-VERB-OBJECT",
+      "evidence": "Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.",
+      "fix": "Move the interrupting clause elsewhere, or split it into its own sentence.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 2",
+      "severity": 2,
+      "violation": "3 comma-set-off clause(s) totalling 14 words intervene between the sentence's apparent subject and its verb."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-TRANSITIONS",
+      "evidence": "An incomplete request pauses the timeline until the missing item arrives. The...",
+      "fix": "Open the paragraph with a transition word that states its relationship to the prior paragraph.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 2",
+      "severity": 2,
+      "violation": "The paragraph opens with none of the fixed transition words, so the reader is not told how it relates to the paragraph before it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Completing the request begins with confirming eligibility, and the uploaded receipt.",
+      "fix": "Name the employee as the subject: the employee completes the request by confirming eligibility and uploading the receipt.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Request Steps, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence's subject, Completing the request, is a gerund standing in for the employee who completes it, so the reader has to supply the real actor instead of reading who does the confirming."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "The benefits team publishes the equipment catalog on the first business day of the month. [...] The IT asset group updates the equipment catalog after every open enrollment period.",
+      "fix": "State once, in one place, who maintains the equipment catalog and on what cadence, or explain explicitly how the two update processes relate to each other.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Program Overview and Special Cases",
+      "severity": 2,
+      "violation": "Program Overview states the benefits team publishes the equipment catalog monthly, and Special Cases later states the IT asset group updates the same catalog after every open enrollment period, with no signal reconciling who maintains the catalog or how the two cadences relate, so a reader checking the catalog has to guess which statement governs."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T08:17:03Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 7,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 2
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Eligibility: \"The stipend covers one claim per employee per benefit year.\" How to Apply/Approval Timeline/Request Steps use \"stipend request\" and \"the request\" throughout. Terminology Notes: \"You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review.\" Program Coordination: \"the team schedules the reimbursement for the next pay cycle.\"",
+      "fix": "Pick one term for the single annual transaction (e.g. \"stipend request\") and use it everywhere instead of \"claim\"; pick one term for the purchased equipment (e.g. \"equipment\") and stop substituting \"stipend item\"; if \"reimbursement\" names the same payment as \"the stipend,\" say so once or drop the synonym.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Eligibility, line 11 (\"one claim per employee per benefit year\"); Terminology Notes, line 51 (\"the stipend item\" x3); Program Coordination, line 65 (\"schedules the reimbursement\")",
+      "severity": 3,
+      "violation": "PLAIN-CONSISTENT-TERMS (PLAIN Sec. III.a.3.iv) requires one term per concept. The document uses at least four different terms - claim, request/stipend request, stipend item, reimbursement - for what reads as the same underlying transaction (the single annual use of the stipend and the item/amount tied to it), with no defined-terms section or stated equivalence anywhere. A reader cannot tell whether \"claim\" is the same thing as \"the request,\" or whether \"stipend item\" names the purchased equipment, the request itself, or the dollar amount, matching the severity-3 anchor's \"reader cannot tell whether the terms name the same document or three different steps.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "The document opens with: \"The IT asset group updates the reimbursement log at the start of the fiscal year. A copy of each update goes to the shared benefits folder the same day. ... the IT asset group tracks the equipment catalog on the first business day of the month.\" Eligibility, the first fact an applicant actually needs, does not appear until after this. Separately, \"Request Steps\" (line 57: \"Completing the request begins with confirming eligibility, and uploading the receipt.\") sits six sections after \"How to Apply\" (lines 19-23: start a request in the portal, let it autosave, review the confirmation summary, submit), describing what reads as the same procedure with non-overlapping steps and no cross-reference between the two.",
+      "fix": "Move Eligibility (or a one-line \"who qualifies\" summary) ahead of any internal-process content; move the IT asset group's record-keeping cadence to an appendix or drop it from the employee-facing document entirely. Merge \"Request Steps\" into \"How to Apply\" as one procedure, or state explicitly how the two relate if they are genuinely different steps.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Program Overview, lines 5-7 (document opening); Request Steps, lines 55-57, versus How to Apply, lines 19-23",
+      "severity": 3,
+      "violation": "PLAIN-ORGANIZE (PLAIN Sec. II.a) requires section order to follow the reader's actual task sequence, not an internal workflow. Opening the document with the IT asset group's internal record-keeping cadence, ahead of Eligibility, puts an internal-process detail the reader does not need in the single most-read position in the document - the calibration this skill's own severity-anchors draw between an opening paragraph and a buried recommendation applies directly. Separately, splitting what appears to be one application procedure across two sections six headings apart, with contradictory content (neither mentions the other's steps), forces the reader to reassemble a single task from two disconnected places."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "\"The benefits team coordinates every stipend request from intake to payout. The team logs each request the moment it arrives. The team then routes the request to the correct approver based on department.\" (Program Coordination); \"The finance office reviews every stipend request over 200 dollars before it pays out. The finance office also flags any request that repeats within the same quarter.\" (Review Responsibility)",
+      "fix": "Separate internal-process content into its own clearly labeled appendix or a staff-only procedures document, or cut it; keep the employee-facing policy to the sections an applicant actually needs to act on (eligibility, how to apply, timeline, documentation, amount, restrictions).",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Program Overview (lines 5-7), Program Coordination (lines 63-65), Review Responsibility (lines 67-69), Special Cases (lines 59-61), Questions and Updates (lines 71-73)",
+      "severity": 2,
+      "violation": "PLAIN-AUDIENCE (PLAIN Sec. I) calls for a document to write to its stated reader's actual task. Five of the document's fourteen sections narrate internal benefits/finance/IT administrative workflow - who logs, routes, reconciles, and audits a request - rather than anything the employee reader acts on, interleaved among the employee-facing sections (Eligibility, How to Apply, Documentation, Amounts, Restrictions) with no signal that they describe internal process rather than the reader's own task."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "\"Completing the request begins with confirming eligibility, and uploading the receipt.\"",
+      "fix": "Rewrite with the employee as subject: \"The employee completes the request by confirming eligibility and uploading the receipt.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Request Steps, line 57",
+      "severity": 2,
+      "violation": "WILLIAMS-CHARACTER-ACTION (WILLIAMS ch. 4) requires the grammatical subject to name the real actor performing the action. The subject here is the abstraction \"Completing the request,\" standing in for the employee who actually confirms eligibility and uploads the receipt; the sentence never names that person even though an active-voice version naming them was available."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T08:59:37Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
