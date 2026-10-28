@@ -1,0 +1,132 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "The form contains <button id=\"invite-member-save-btn\" type=\"submit\">Save</button> with no form action/target defined, and immediately below it a separate <a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>. The destination screen (#invite-sent) states: \"An invite was sent to the address entered above.\"",
+      "fix": "Make the single control that actually sends the invite unambiguous: either have Continue perform the submit and remove the redundant Save button, or have Save itself navigate to #invite-sent on success and remove Continue, and state that result explicitly.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Invite a team member screen (#invite-member): the form's \"Save\" button and the separate \"Continue\" link",
+      "severity": 3,
+      "violation": "Two separate controls exist for what the copy implies is one action (sending the invite): a submit button whose outcome is nowhere specified, and a plain navigation link to a confirmation screen that asserts the invite was sent. The artifact never states that activating Continue is what triggers the send, nor what Save does if clicked instead. A user can reach the \"Invite sent\" confirmation without any specified send having occurred, or can click Save and see no result at all."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button> has no href, no form association, and no visible text; no part of the artifact names what happens after it is activated, and no new/duplicated project appears anywhere in the artifact.",
+      "fix": "Define what activating Duplicate project does: the new project it creates, where it appears (e.g. in the projects list), and a visible confirmation that the duplication succeeded.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Project settings screen (#project-settings), \"Duplicate project\" button (project-settings-duplicate-btn)",
+      "severity": 3,
+      "violation": "Duplicating a project changes stored state (it is expected to create a new project) but the artifact specifies absolutely no outcome: no in-progress indication, no success message, no new state, not even a defined target. A user who activates it has no way, now or ever within this spec, to tell whether anything happened."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "\"'Vendor Onboarding' has been moved to archived projects. It no longer appears in the active projects list for anyone on the team.\" The only control on the screen is <a id=\"project-archived-exit-link\" href=\"#workspace-overview\">Back to your projects</a>; no section, link, or control anywhere in the artifact names an unarchive, restore, or view-archived-projects action.",
+      "fix": "Add a stated restore/unarchive path, e.g. a link to an archived-projects view from which a project can be unarchived, and name it on the project-archived confirmation.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Project archived screen (#project-archived)",
+      "severity": 3,
+      "violation": "Archiving is a committed action on a project that is reasonably reversible in this kind of product (unlike a permanent delete), but the artifact names no reversal path anywhere: no unarchive control, no archived-projects list to act from. As specified, an accidental archive has no way back."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-IDENTIFY",
+      "evidence": "\"Import failed. Error code IMP-500. Contact support if this continues.\"",
+      "fix": "Replace the raw code with plain language naming what failed (e.g. which file or step) and why, reserving the code as supplementary detail rather than the explanation itself.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Import status screen (#import-status), message text (import-status-message)",
+      "severity": 3,
+      "violation": "The message surfaces a raw internal error code (IMP-500) and names no action, field, or specific cause; it does not say what about the import failed (which file, which record, which validation), so the user cannot tell what went wrong or whether anything they did caused it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "The only control on the screen is <a id=\"import-status-exit-link\" href=\"#workspace-overview\">Back to your projects</a>; the message says \"Contact support if this continues\" with no contact control, address, or link, and no retry control anywhere on the screen.",
+      "fix": "Add a retry control on the import status screen, and make \"contact support\" an actual reachable control (a link or address), both available where the error appears.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Import status screen (#import-status)",
+      "severity": 3,
+      "violation": "The error names two possible next steps in prose (retry implicitly, by \"if this continues\"; contact support explicitly) but provides a route for neither: there is no retry action and no reachable way to contact support from the error state itself."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button> and <button id=\"notification-settings-save-btn\" type=\"submit\">Save</button>; neither form carries an action attribute, and neither section defines any success message, saved indicator, or transition after Save is activated.",
+      "fix": "Specify a visible save confirmation at each Save button (an inline success message, a saved-state indicator, or a defined next state), so the artifact commits to telling the user the save happened.",
+      "id": "F-006",
+      "instances": [
+        {
+          "location": "Project settings screen (#project-settings), \"Save\" button (project-settings-save-btn)"
+        },
+        {
+          "location": "Notifications screen (#notification-settings), \"Save\" button (notification-settings-save-btn)"
+        }
+      ],
+      "lane": "judged",
+      "location": "Project settings screen (#project-settings) \"Save\" button, and Notifications screen (#notification-settings) \"Save\" button",
+      "severity": 2,
+      "violation": "Both Save actions change stored state but the artifact specifies no visible indication of what happened: no confirmation message, no changed control state, no next screen. The only feedback a user has is that the typed value remains in the field, which does not distinguish a successful save from the click having done nothing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-EXIT",
+      "evidence": "<a id=\"project-settings-back-link\" href=\"#workspace-overview\">Back to your projects</a> sits beside an editable, unsaved \"Project name\" field; <a id=\"notification-settings-back-link\" href=\"#project-settings\">Back to project settings</a> sits beside an unsaved \"Digest frequency\" select. Neither link's label, nor any other text on either screen, says what becomes of an edited-but-unsaved field.",
+      "fix": "Either warn before navigating away from an unsaved edit, or have the back link state (or the screen state) make clear that unsaved changes are discarded on leaving.",
+      "id": "F-007",
+      "instances": [
+        {
+          "location": "Project settings screen (#project-settings), \"Back to your projects\" link (project-settings-back-link)"
+        },
+        {
+          "location": "Notifications screen (#notification-settings), \"Back to project settings\" link (notification-settings-back-link)"
+        }
+      ],
+      "lane": "judged",
+      "location": "Project settings screen (#project-settings) \"Back to your projects\" link, and Notifications screen (#notification-settings) \"Back to project settings\" link",
+      "severity": 2,
+      "violation": "Both exits are reachable and predictably labeled as navigation, but neither the artifact nor the label discloses that taking them discards an in-progress, unsaved edit to the field on the same screen. A user who edits the name or digest setting and then uses the back link loses that edit with no warning."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "\"An invite was sent to the address entered above.\" The #invite-sent section displays no email address itself; the address was entered on the preceding #invite-member screen.",
+      "fix": "Repeat the entered email address on the invite-sent confirmation itself, rather than referring back to it.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Invite sent screen (#invite-sent)",
+      "severity": 2,
+      "violation": "The confirmation refers to the address \"entered above\" without repeating it, but \"above\" is not meaningful on what the artifact treats as a separate state from the one where the address was entered, so the user cannot verify which address the invite went to without navigating back to check."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T15:22:48Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

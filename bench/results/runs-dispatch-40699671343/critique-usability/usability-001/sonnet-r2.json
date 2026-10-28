@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-DEADEND",
+      "evidence": "the \"invite-sent\" section defines 0 controls whose target names another defined state (1 incoming link from elsewhere in the artifact).",
+      "fix": "Add a control inside the \"invite-sent\" section whose target is another state the artifact defines, for example a back, cancel, or continue control.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "the \"invite-sent\" section",
+      "severity": 3,
+      "violation": "This state offers no control whose target names another state the artifact defines, so a user who reaches it has no path to leave it within the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H4-INTERNAL",
+      "evidence": "`<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` sits inside the section's `<form>`, while `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>` sits outside that form as an independent link to the \"invite-sent\" state; nothing in the artifact states a dependency between the two.",
+      "fix": "Collapse the invite task into one commit control (for example, bind the email field to a single \"Send invite\" submit) or state explicitly what Save does if it is meant to be a separate step from Continue.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"invite-member\" section",
+      "severity": 3,
+      "violation": "\"Save\" and \"Continue\" both read as committing the invite task, with no stated relationship between them, so a user can follow Continue straight to the \"invite sent\" confirmation without the form ever having been submitted via Save, and the artifact gives no cue that this distinction exists."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "Each form ends in a bare `<button type=\"submit\">Save</button>` with no action target, no sibling status text, and no defined next state; e.g. `<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>` inside the project-settings form, and the same pattern in invite-member and notification-settings.",
+      "fix": "Specify what each Save action shows once it completes, such as an inline confirmation message or a defined next state the submit leads to.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"project-settings\", \"invite-member\", and \"notification-settings\" sections, each section's Save button (project-settings-save-btn, invite-member-save-btn, notification-settings-save-btn)",
+      "severity": 2,
+      "violation": "Three separate Save actions commit a form value but the artifact specifies no in-progress or result feedback for any of them: no success message, no changed control state, and no stated next screen."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "\"Archiving \\\"Design System Refresh\\\" will remove it from the active projects list for everyone on the team. You can restore it at any time from the archived projects list.\" No section, heading, or link anywhere in the artifact is titled \"archived projects\" or leads to such a state.",
+      "fix": "Add an archived-projects state reachable from workspace-overview (or elsewhere) and link to it, or rewrite the copy so it does not promise a destination the artifact never provides.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"archive-confirm\" section, the archive-confirm-copy paragraph",
+      "severity": 2,
+      "violation": "The confirmation names a reversal path (\"the archived projects list\") but the artifact defines no state or control that leads there, so the stated undo path cannot actually be followed anywhere in the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-LABELED",
+      "evidence": "<button> with no text content and no accessible-name attribute",
+      "fix": "Add visible text to this control, or an aria-label attribute naming what it does.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "This control has neither visible text nor an accessible-name attribute, so nothing on screen names what the control does."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H8",
+      "evidence": "`<div id=\"workspace-overview-promo-referral\">Invite 3 teammates this month to unlock the advanced reporting add-on.</div>` appears between the project list (workspace-overview-recent) and both of the section's primary links, \"Open project settings\" and \"View last import result\".",
+      "fix": "Move the promotional banner below both primary links, or remove it from this screen.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the \"workspace-overview\" section, the workspace-overview-promo-referral div",
+      "severity": 2,
+      "violation": "A promotional upsell element is placed ahead of this screen's primary navigation controls in reading order, so a user has to read past promotional content to reach the actions the workspace overview exists to provide."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "\"The last import finished with 2 rows skipped: each referenced a project that does not exist in this workspace. Rows 15 and 99 were skipped; every other row was imported.\" is followed only by a single \"Back to your projects\" link.",
+      "fix": "Add a control reachable from the import-status state that lets the user address the skipped rows directly, such as a link to re-upload or re-map rows 15 and 99.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "the \"import-status\" section, the import-status-message paragraph",
+      "severity": 2,
+      "violation": "The message names what went wrong but the import-status state offers no control to act on it: no retry, and no link to fix or re-map the two skipped rows, only a link back to the overview."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:01:28Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

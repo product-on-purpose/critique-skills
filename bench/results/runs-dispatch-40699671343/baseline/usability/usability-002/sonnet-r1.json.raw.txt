@@ -1,0 +1,39 @@
+Location: section#workspace-overview, <p> text
+Evidence: "This workspace holds 5 projects, synced last week." followed by a <ul> containing only 4 <li> items (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)
+Problem: The stated project count (5) does not match the number of projects actually listed (4).
+Fix: Either add the missing fifth project to the list or correct the count in the paragraph text.
+
+Location: section#project-settings, input#project-settings-name-input vs section#workspace-overview list
+Evidence: Project settings shows value="Customer Migration", but the "Your projects" list in workspace-overview contains no "Customer Migration" entry
+Problem: The project being configured, invited-to, and archived throughout the mockup never appears in the main project listing, so there's no coherent path from the overview to this project.
+Fix: Add "Customer Migration" to the workspace-overview project list, or make the list dynamic/linked to the project whose settings are shown.
+
+Location: section#project-settings, button#project-settings-duplicate-btn
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text or icon content — only an aria-label — so sighted users have no indication the control exists or what it does.
+Fix: Add visible button text (e.g., "Duplicate") or an icon with accompanying visible label.
+
+Location: section#project-settings, a#project-settings-archive-link
+Evidence: `<a id="project-settings-archive-link" href="#project-archived">Archive project</a>`
+Problem: This link jumps straight to the "Project archived" confirmation screen, bypassing the "Archive this project?" confirmation step entirely, so the destructive action has no confirmation gate.
+Fix: Point this link to `#archive-confirm` instead of `#project-archived`.
+
+Location: section#archive-confirm
+Evidence: No `href="#archive-confirm"` appears anywhere else in the document
+Problem: The archive confirmation screen is unreachable — nothing in the document links to it, making it dead content.
+Fix: Update the archive link in project-settings to target this section (see previous finding), making it reachable.
+
+Location: section#invite-member, form controls
+Evidence: `<button id="invite-member-save-btn" type="submit">Save</button>` and `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>` both present with no indication of how they differ
+Problem: Two separate controls (Save and Continue) appear to both attempt to complete the invite flow, with no clear distinction of what each does, creating ambiguous UX.
+Fix: Remove the redundant control — keep a single "Send invite" action that submits the form and navigates to the confirmation screen.
+
+Location: section#invite-sent, <p> text
+Evidence: "An invite was sent to the address entered above."
+Problem: "Above" refers to the email input field on the previous screen (invite-member), which is not present on this screen, so the reference is broken/confusing.
+Fix: Reword to reference the actual email address, e.g. "An invite was sent to the address you entered," or display the submitted email address on this screen.
+
+Location: section#notification-settings, button#notification-settings-save-btn
+Evidence: `<button id="notification-settings-save-btn" type="submit">Submit</button>` versus "Save" used on project-settings-save-btn and invite-member-save-btn
+Problem: Inconsistent labeling of equivalent save actions across the document ("Submit" here vs "Save" elsewhere) creates unnecessary inconsistency in the UI vocabulary.
+Fix: Rename this button's label to "Save" to match the other form submit buttons.

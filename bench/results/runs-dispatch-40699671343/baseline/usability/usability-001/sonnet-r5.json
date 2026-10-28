@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 3 projects, synced last week.\" followed by a list with only two items: \"Data Warehouse Cutover\" and \"Mobile App Revamp\"",
+      "fix": "Either show all 3 projects, or add a label/link such as \"Showing 2 of 3 - view all projects\" so the discrepancy is explained.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "section#workspace-overview, opening paragraph and list",
+      "severity": 3,
+      "violation": "The stated project count (3) doesn't match the number of items shown in the list (2), and nothing in the UI indicates the list is partial or links to the missing third project."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Invite 3 teammates this month to unlock the advanced reporting add-on.\"",
+      "fix": "Add a link/button from the promo directly to the invite flow (e.g. href=\"#invite-member\").",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "section#workspace-overview, div#workspace-overview-promo-referral",
+      "severity": 3,
+      "violation": "This promo text has no link or button, so there is no way to act on it directly from where it's presented; the user must already know to navigate elsewhere to invite teammates."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Open project settings\" (href=\"#project-settings\")",
+      "fix": "Either name the target project in the link text (\"Open settings for Design System Refresh\") or make each listed project name itself a link to its own settings.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "section#workspace-overview, a#workspace-overview-projects-link",
+      "severity": 3,
+      "violation": "The link text doesn't specify which project's settings it opens, and it navigates to settings for \"Design System Refresh,\" a project that isn't even shown in the preceding list of projects."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\"></button>`",
+      "fix": "Add label text to the button, e.g. \"Duplicate project\".",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "section#project-settings, button#project-settings-duplicate-btn",
+      "severity": 3,
+      "violation": "The button has no visible text or accessible label, so its purpose is unknown to users and assistive technology."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The form's submit button is \"Save,\" but a separate link, `a#invite-member-continue-link` (\"Continue\", href=\"#invite-sent\"), also exists independently of the form.",
+      "fix": "Remove the standalone \"Continue\" link and have the form's Save button itself navigate to #invite-sent on submit, or disable Continue until the form has been saved.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "section#invite-member",
+      "severity": 3,
+      "violation": "Because \"Continue\" is a plain link rather than tied to form submission, a user can navigate straight to the \"Invite sent\" confirmation without ever entering an email or clicking \"Save.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An invite was sent to the address entered above. It expires in 5 days if not accepted.\" with no further markup after that paragraph.",
+      "fix": "Add a link back to project settings or the workspace overview, consistent with the other confirmation screens.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "section#invite-sent",
+      "severity": 3,
+      "violation": "This page is a dead end with no navigation link back to project settings or the workspace, unlike the other confirmation pages (e.g. project-archived, import-status) which both include a \"Back to your projects\" link."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\"",
+      "fix": "Add an archived-projects-list section/page and link to it, or remove the claim if that feature isn't part of this mockup.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "section#archive-confirm, p#archive-confirm-copy",
+      "severity": 3,
+      "violation": "No \"archived projects list\" page or link exists anywhere in the document, so this promised destination is unreachable."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"'Design System Refresh' has been moved to archived projects. It no longer appears in the active projects list for anyone on the team.\" followed by only `a#project-archived-exit-link` (\"Back to your projects\").",
+      "fix": "Add a link to the archived projects list from this confirmation page as well.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "section#project-archived",
+      "severity": 3,
+      "violation": "Same missing destination as the archive-confirm copy - there is no link to view the archived projects where the restore action mentioned earlier would happen."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Rows 15 and 99 were skipped; every other row was imported.\"",
+      "fix": "State the total row count explicitly, e.g. \"2 of 47 rows were skipped; the remaining 45 rows were imported.\"",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "section#import-status, p#import-status-message",
+      "severity": 3,
+      "violation": "The total number of rows in the import is never stated, so \"every other row\" is unverifiable and ambiguous to the reader."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T14:21:25Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

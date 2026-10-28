@@ -1,0 +1,93 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button> is the only thing committing the edited project name; no confirmation message, success state, or changed control state is specified anywhere after it, and the same pattern (a bare submit button with nothing after it) repeats for invite-member-save-btn and notification-settings-save-btn.",
+      "fix": "Add an in-place confirmation for each Save action, e.g. a 'Saved' message next to the button or a defined post-submit state, so the user knows the name, email, or digest preference was actually stored.",
+      "id": "F-001",
+      "instances": [
+        {
+          "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button> has no stated result.",
+          "location": "invite-member section, invite-member-save-btn"
+        },
+        {
+          "evidence": "<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button> has no stated result.",
+          "location": "notification-settings section, notification-settings-save-btn"
+        }
+      ],
+      "lane": "judged",
+      "location": "project-settings section, save-btn (and the same pattern in invite-member and notification-settings)",
+      "severity": 2,
+      "violation": "NNG-H1 requires that a state-changing action's artifact also names what the user sees once it finishes; none of these three Save buttons has any specified result."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-EXIT",
+      "evidence": "The project name input carries value=\"Q3 Roadmap\" and sits beside both project-settings-save-btn and <a id=\"project-settings-back-link\" href=\"#workspace-overview\">Back to your projects</a>; nothing in the artifact says whether following the back link after editing the name preserves or discards that edit. The same pattern repeats in notification-settings: <a id=\"notification-settings-back-link\" href=\"#project-settings\">Back to project settings</a> sits beside an unsaved digest-frequency select with no stated fate for the selection.",
+      "fix": "State the fate of unsaved changes at these exits, e.g. a confirm-discard prompt when leaving with edits pending, or make the back link itself save before navigating.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "project-settings section, project-settings-back-link, and notification-settings section, notification-settings-back-link",
+      "severity": 2,
+      "violation": "NNG-H3-EXIT requires the artifact to say what becomes of work already entered when a flow's exit is taken; here it is silent, so the exit silently discards an edit the user may not have saved."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "\"Archiving \\\"Q3 Roadmap\\\" will remove it from the active projects list for everyone on the team. You can restore it at any time from the archived projects list.\" No section, link, or control anywhere in the artifact defines an 'archived projects list' state; project-archived's only exit is back to workspace-overview.",
+      "fix": "Add an actual archived-projects-list state (reachable from workspace-overview or project-archived) with a restore control, matching the promise made in the archive confirmation copy.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "archive-confirm section, archive-confirm-copy",
+      "severity": 2,
+      "violation": "NNG-H3-UNDO requires a reasonably reversible action to offer a stated way back; the copy states one, but the artifact defines no reachable route to it, so the promised reversal does not exist in the design as specified."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H4-INTERNAL",
+      "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button> sits in the same form as the email input, and a separate <a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a> sits just below it, outside the form; nothing in the artifact says what each one does or how they relate.",
+      "fix": "Collapse this into one labeled commit control (e.g. a single 'Send invite' submit that goes to invite-sent), or, if two steps are genuinely needed, state in place what each one does.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "invite-member section, invite-member-save-btn and invite-member-continue-link",
+      "severity": 2,
+      "violation": "NNG-H4-INTERNAL requires that where two controls might carry one meaning, the artifact give a cue whether they coincide or differ; here there is none, so a user cannot tell whether 'Save' sends the invite, whether 'Continue' requires 'Save' first, or whether the two are redundant."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "\"An invite was sent to the address entered above.\" The invite-sent state never restates the email address itself; it is only ever shown once, on the invite-member screen the user has now left.",
+      "fix": "Restate the actual entered address on invite-sent, e.g. \"An invite was sent to {email}.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "invite-sent section",
+      "severity": 2,
+      "violation": "NNG-H6-RECALL requires the information a user needs at a step to be present at that step rather than held over from an earlier one; confirming which address received the invite needs the address itself, which this confirmation does not show."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T15:45:10Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced last week.\" followed by a `<ul>` with only 3 `<li>` entries (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp)",
+      "fix": "Either add the missing fourth project to the list or change the copy to clarify the list is a subset (e.g., \"Here are your 3 most recent of 4 projects\").",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`#workspace-overview`, paragraph text vs. the list beneath it",
+      "severity": 3,
+      "violation": "The stated project count (4) doesn't match the number of projects actually listed (3), with no indication that the list is partial."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"workspace-overview-import-link\" href=\"#import-status\">View last import result</a>`",
+      "fix": "Add a sentence on the overview page noting an import was run (and when), or move/remove the link if it's not relevant to this mockup flow.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`#workspace-overview`, `workspace-overview-import-link`",
+      "severity": 3,
+      "violation": "This link references \"the last import\" but nothing on the overview page mentions that an import ever occurred, so the link appears out of context."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible button text (e.g., \"Duplicate\") or an icon with accessible markup, and wire it to a duplicate-confirmation flow or section.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`#project-settings`, `project-settings-duplicate-btn`",
+      "severity": 3,
+      "violation": "The button has no visible text content (only an aria-label), so sighted users see an empty, unlabeled control, and it has no associated action or destination section."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\"",
+      "fix": "Add an archived-projects-list section/link reachable from the workspace overview or the project-archived confirmation page, or remove the restoration claim.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`#archive-confirm`, `archive-confirm-copy`",
+      "severity": 3,
+      "violation": "No \"archived projects list\" exists anywhere in the document, and `#project-archived` provides no link to view or restore archived projects, so the promised capability is unreachable."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` followed by `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>`",
+      "fix": "Either remove the redundant Save button and submit directly via Continue, or make Continue depend on a successful Save with visible confirmation first.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`#invite-member` form and its `invite-member-continue-link`",
+      "severity": 3,
+      "violation": "The Save button has no form action and gives no confirmation, yet \"Continue\" navigates straight to `#invite-sent`, which states \"An invite was sent to the address entered above\" regardless of whether Save was ever actually triggered."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"notification-settings-digest-input\"><option>Daily</option><option>Weekly</option><option>Monthly</option></select>`",
+      "fix": "Mark the user's current frequency with `selected` on the appropriate `<option>`.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`#notification-settings`, `notification-settings-digest-input`",
+      "severity": 3,
+      "violation": "No option has a `selected` attribute, so the control can't reflect the user's current digest setting when the page loads."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form><label for=\"project-settings-name-input\">Project name</label><input ... value=\"Q3 Roadmap\"><button id=\"project-settings-save-btn\" type=\"submit\">Save</button></form>`",
+      "fix": "Add a save-confirmation message or link to a follow-up section (similar to how Archive and Invite flows have confirmation pages).",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`#project-settings` form, `project-settings-save-btn`",
+      "severity": 3,
+      "violation": "The form has no `action` and there is no confirmation state or linked section after saving, so clicking Save produces no visible feedback or outcome."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T15:59:31Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

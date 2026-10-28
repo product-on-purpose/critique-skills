@@ -1,0 +1,118 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H5-CONFIRM",
+      "evidence": "project-settings-archive-link has href=\"#project-archived\", going straight to the terminal \"project-archived\" state. The \"archive-confirm\" section (\"Archive this project?\", with Cancel and Archive controls) exists in the artifact but nothing links to it: the only other reference to \"project-archived\" is archive-confirm's own \"Archive\" link, so archive-confirm has no incoming edge and is unreachable by any control in the spec.",
+      "fix": "Point project-settings-archive-link at #archive-confirm instead of #project-archived, so every path to archiving passes through the confirmation screen that already exists, and define the \"archived projects list\" the restore copy promises, or point the restore sentence at a control the artifact actually has.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-archive-link\" link (\"Archive project\")",
+      "severity": 3,
+      "violation": "Archiving removes the project from the active list for the whole team, and the artifact itself treats it as costly enough to warrant a named confirmation screen (archive-confirm), but the actual control a user clicks from project settings bypasses that screen entirely and commits on one click. The restore assurance that exists (\"You can restore it at any time from the archived projects list\") lives only inside the bypassed screen and points to an \"archived projects list\" that is not defined anywhere else in the artifact, so on the path the spec actually wires up, the user gets neither a confirmation nor a stated way back before the action commits."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "project-settings-save-btn is a type=submit button inside a form with no action attribute and no success message, redirect, or status indicator defined anywhere after it; the same gap repeats on invite-member-save-btn, notification-settings-save-btn (labeled \"Submit\"), and on project-settings-duplicate-btn, a type=button control with no form, no href, and no stated outcome at all.",
+      "fix": "For each control, name what the user sees immediately after: a saved-confirmation message or visibly updated field for the three Save/Submit buttons, and a new entry in the project list (or an explicit \"Project duplicated\" message) for Duplicate project.",
+      "id": "F-002",
+      "instances": [
+        {
+          "evidence": "type=submit, no stated outcome",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "type=submit labeled Submit, no stated outcome",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        },
+        {
+          "evidence": "type=button, aria-label only, no form, no href, no stated outcome",
+          "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button"
+        }
+      ],
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "Four state-changing controls commit an action (saving a project name, saving an invite email, saving a notification setting, duplicating a project) with no artifact-specified feedback: no confirmation message, no changed display, no next state. A user who clicks any of these cannot tell whether anything happened."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H4-CONTROL-NAMING",
+      "evidence": "control labeled \"Save\"",
+      "fix": "Pick one label for this commit action, for example \"Save\", and use it everywhere the action appears.",
+      "id": "F-003",
+      "instances": [
+        {
+          "evidence": "control labeled \"Save\"",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "control labeled \"Submit\"",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "This artifact uses 2 different labels for what reads as the same commit action: \"Save\", \"Submit\". A user cannot tell from the label alone whether these controls perform the same action or different ones."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H4-INTERNAL",
+      "evidence": "The invite-member form has a type=submit button labeled \"Save\" and, outside the form, a separate link labeled \"Continue\" that goes straight to \"#invite-sent\" (\"Invite sent\"). Nothing in the artifact says what Save does, or how it relates to Continue.",
+      "fix": "Collapse Save and Continue into one explicit action (for example a single \"Send invite\" submit control that leads to Invite sent), or, if they are genuinely different, label each by what it does and state the relationship between them.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button and the \"invite-member-continue-link\" link",
+      "severity": 2,
+      "violation": "Two controls on the same screen plausibly both mean \"commit this invite\", and the artifact gives no cue whether they are the same action, sequential steps, or unrelated, and Continue reaches the \"Invite sent\" state regardless of whether Save was ever clicked or the email field was ever filled."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "\"An invite was sent to the address entered above.\" is the only reference to the email address; invite-sent is a separate state from invite-member and does not display the address itself.",
+      "fix": "Display the actual email address on the invite-sent screen, for example \"An invite was sent to name@example.com\", instead of referring back to an earlier screen.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"invite-sent\" section, the paragraph text",
+      "severity": 2,
+      "violation": "The confirmation step needs the user to recall or look up an address it refers to as \"above\" rather than showing it, and the invite-member input is not stated to retain its value if the user navigates back to check."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "\"The last import finished with 3 rows skipped: each referenced a project that does not exist in this workspace. Rows 63, 71, and 82 were skipped; every other row was imported.\" is followed only by \"Back to your projects\" with no action for the 3 skipped rows.",
+      "fix": "Add a control from the import-status screen that lets the user act on the skipped rows directly, such as a link to re-run the import for rows 63, 71, and 82, or to create the missing projects.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "the \"import-status\" section, the \"import-status-message\" paragraph",
+      "severity": 2,
+      "violation": "The message correctly identifies which rows failed and why, but names no next step for fixing them: no retry, no link to re-upload just those rows, no path to create the missing projects before re-importing."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:32:50Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

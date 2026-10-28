@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced this morning.\" followed by a list of only three `<li>` items (Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot)",
+      "fix": "Either add the missing fourth project to the list or change the copy to \"3 projects\" / add a heading like \"Recent projects\" that clarifies the list is a subset.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`#workspace-overview`, `<p>` and `<ul>` inside `#workspace-overview-recent`",
+      "severity": 3,
+      "violation": "The stated project count (4) doesn't match the number of projects actually listed (3), and there's no label indicating the list is partial (e.g. \"recent\" vs \"all\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Workspace overview lists \"Beta Launch Plan\", \"Holiday Campaign Assets\", \"Partner Integration Pilot\" as the known projects, but Project settings shows \"Vendor Onboarding\"",
+      "fix": "Use a project name that appears in the workspace overview list (or add \"Vendor Onboarding\" to that list) so the flow is traceable.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`#project-settings`, `<input id=\"project-settings-name-input\" ... value=\"Vendor Onboarding\">`",
+      "severity": 3,
+      "violation": "The project name shown in Project settings doesn't correspond to any project named in the workspace overview, so it's unclear which project the user navigated into."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form><label ...><input ...><button id=\"project-settings-save-btn\" type=\"submit\">Save</button></form>` with no `action` or `method` attribute",
+      "fix": "Either make Save a plain anchor/button consistent with the rest of the navigation (e.g. link back to `#workspace-overview` or show a confirmation state), or explicitly set `action`/`method` and document the intended behavior.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`#project-settings > form`",
+      "severity": 3,
+      "violation": "Submitting this form performs a default GET to the current URL with the field values as query parameters, causing a full page reload - unlike every other transition in the mockup, which uses lightweight `#id` anchor links. This also means Save gives no visible confirmation or next step."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`aria-label=\"Duplicate project\"` with empty element content and no icon",
+      "fix": "Add visible text or an icon (with accompanying visible or sr-only label) so the button's purpose is clear to all users, not just screen reader users.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`#project-settings`, `<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "severity": 3,
+      "violation": "Sighted users will see a blank, unlabeled button with no visible text or icon, even though it's described as \"Duplicate project\" to assistive tech only."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"invite-member-email-input\" type=\"email\">` inside a `<form>` with `<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>`, plus a separate `<a id=\"invite-member-continue-link\" ...>Continue</a>`",
+      "fix": "Remove the redundant submit button or merge its action into the \"Continue\" link so there is one clear call-to-action, and label it according to what it does (e.g. \"Send invite\").",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`#invite-member > form`",
+      "severity": 3,
+      "violation": "Same unhandled form-submit issue as Project settings (GET reload), and there are two competing ways to proceed - a \"Save\" submit button that reloads the page, and a \"Continue\" link that actually advances the flow - with no indication of how they relate or why \"Save\" is labeled generically rather than e.g. \"Send invite.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An invite was sent to the address entered above.\" while the referenced `invite-member-email-input` has no `value` set",
+      "fix": "Give the email input a sample placeholder or prefilled value (as the project name field does) so the confirmation text has something concrete to point back to.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`#invite-sent`, `<p>`",
+      "severity": 3,
+      "violation": "In this static mockup the email field is always empty, so \"the address entered above\" refers to nothing - the confirmation message can't actually demonstrate what was sent."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Import failed. Error code IMP-500. Contact support if this continues.\" reached via the overview's \"View last import result\" link, next to the overview's \"synced this morning\" claim",
+      "fix": "Align the two messages - either show a successful import result consistent with \"synced this morning,\" or change the overview copy to reflect that the last sync/import failed.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "`#import-status`, `<p id=\"import-status-message\">`",
+      "severity": 3,
+      "violation": "The workspace overview implies a successful recent sync (\"synced this morning\") while the linked import result reports a failure, so the two pieces of status copy contradict each other."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form><label ...><select ...>...</select><button id=\"notification-settings-save-btn\" type=\"submit\">Save</button></form>` with no `action`/`method`, followed only by a \"Back to project settings\" link",
+      "fix": "Apply the same fix as the other forms (remove default submit behavior or wire it to a real transition), and add a success indication before returning to project settings.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "`#notification-settings > form`",
+      "severity": 3,
+      "violation": "Same unhandled GET-submit issue as the other two forms, and there is no confirmation feedback after saving - the user clicks Save and the only available action is \"Back,\" with nothing indicating whether the save succeeded."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T15:32:42Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

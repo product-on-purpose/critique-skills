@@ -1,0 +1,115 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "The screen defines its own form Save button (<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>, form has no action attribute) separately from the Continue link (<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>), with no text relating the two.",
+      "fix": "Remove the redundant form Save control, or merge it with Continue into one labeled commit action, and state explicitly that pressing it is what sends the invite.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Invite a team member screen",
+      "severity": 3,
+      "violation": "NNG-H1 requires the artifact to specify what the user sees while an action runs and what the outcome was. Here it does not even specify which control performs the invite-sending action: a user cannot tell whether Save or Continue is what the Invite sent screen's claim that an invite \"was sent\" refers to."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "\"An invite was sent to the address entered above. It expires in 5 days if not accepted.\" The only control on this screen and on Invite a team member is a Cancel or Back link; no revoke or cancel-invite control appears anywhere in the artifact.",
+      "fix": "Add a named \"Cancel invite\" or \"Revoke invite\" control, reachable from project settings or a pending-invites list, that reverses a sent invite before it is accepted.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Invite sent screen",
+      "severity": 3,
+      "violation": "NNG-H3-UNDO requires a stated reversal path for a reasonably reversible committed action. Sending an invite grants pending workspace access immediately; the artifact names no way to revoke it, only a passive 5-day expiry the user does not control."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button> carries no href, no onclick, and no surrounding text describing what happens when it is pressed.",
+      "fix": "State where the duplicate action leads, for example opening the new copy's own project settings screen, or show an inline message naming the new project created.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Project settings screen, Duplicate project button",
+      "severity": 2,
+      "violation": "NNG-H1 requires naming what the user sees while a state-changing action runs and once it finishes. Duplicating a project would create a new state the artifact never defines, with no feedback of any kind specified."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button> inside a <form> with no action attribute; nothing elsewhere in the artifact names a result for pressing it.",
+      "fix": "Specify what Save shows on success, for example an inline confirmation such as \"Project name saved\" next to the field.",
+      "id": "F-004",
+      "instances": [
+        {
+          "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button> inside a <form> with no action attribute and no stated result.",
+          "location": "Invite a team member screen, Save button"
+        },
+        {
+          "evidence": "<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button> inside a <form> with no action attribute and no stated result.",
+          "location": "Notifications screen, Save button"
+        }
+      ],
+      "lane": "judged",
+      "location": "Project settings screen, Save button",
+      "severity": 2,
+      "violation": "NNG-H1 requires that a state-changing action specify a visible indication of what the system is doing and what the outcome was. Save commits a project-name change with no confirmation message or changed state named anywhere."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H5-CONFIRM",
+      "evidence": "<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a> leads directly to the Invite sent screen; no step between the email form and Invite sent names the recipient address or the consequence before committing.",
+      "fix": "Insert a confirmation naming the address and consequence before commit, for example \"Send invite to the address entered? They will get workspace access once they accept.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Invite a team member screen, Continue link",
+      "severity": 2,
+      "violation": "NNG-H5-CONFIRM lists sending to a recipient among its own costly actions needing a gated confirmation that names the object and consequence. Continue fires the send with no such confirmation."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "\"An invite was sent to the address entered above.\" The email address itself is not repeated on this screen, and its only exit link (<a id=\"invite-sent-exit-link\" href=\"#project-settings\">Back to project settings</a>) returns to project settings, not to the invite-member form, so the address entered is not retrievable anywhere in the artifact once this screen is reached.",
+      "fix": "Display the actual submitted address in the confirmation text, for example \"An invite was sent to jane@example.com,\" instead of referring back to it.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Invite sent screen",
+      "severity": 2,
+      "violation": "NNG-H6-RECALL requires that information the user needs at a step be present at that step rather than held over from an earlier screen. Confirming which address received the invite needs the value entered one screen earlier, which this step neither repeats nor makes retrievable."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "\"The last import finished with 4 rows skipped: each referenced a project that does not exist in this workspace. Rows 35, 71, 78, and 83 were skipped; every other row was imported.\" The only control on the screen is <a id=\"import-status-exit-link\" href=\"#workspace-overview\">Back to your projects</a>.",
+      "fix": "Add a control reachable from this screen, for example \"Fix and retry import,\" that lets the user correct the invalid project references and re-run the import for the skipped rows.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Import status screen",
+      "severity": 2,
+      "violation": "NNG-H9-RECOVER requires that error text point to a next step reachable from where the message appears. This message names the problem and the affected rows but offers no control to fix and re-import the skipped rows, only an exit back to the overview."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T15:58:35Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

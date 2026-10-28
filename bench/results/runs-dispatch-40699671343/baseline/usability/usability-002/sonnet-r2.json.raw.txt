@@ -1,0 +1,34 @@
+Location: `<section id="workspace-overview">`, intro paragraph and list
+Evidence: "This workspace holds 5 projects, synced last week." followed by a `<ul>` with only 4 `<li>` entries (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)
+Problem: The stated project count (5) doesn't match the number of projects actually listed (4), and nothing in the visible text indicates the list is a partial/"recent" subset.
+Fix: Either add the missing fifth project to the list, correct the count to "4 projects," or add a visible label (e.g., "Recently viewed") clarifying the list is not exhaustive.
+
+Location: `<input id="project-settings-name-input">`, `<input id="invite-member-email-input">`, `<select id="notification-settings-digest-input">`
+Evidence: `<input id="project-settings-name-input" type="text" value="Customer Migration">` (and similarly for the email input and the digest select) — none carry a `name` attribute
+Problem: None of the form controls have a `name` attribute, so if these forms were submitted, their values would not be included in the submitted data.
+Fix: Add appropriate `name` attributes to every form input/select (e.g., `name="project_name"`, `name="email"`, `name="digest_frequency"`).
+
+Location: `<section id="project-settings">`, duplicate button
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text and no icon, so it renders with no visible content — sighted users have no way to know it exists or what it does, even though it has an accessible name for screen readers.
+Fix: Add visible text (e.g., "Duplicate") or an icon with appropriate alt/visually-hidden text so the control is perceivable to all users.
+
+Location: `<a id="project-settings-archive-link" href="#project-archived">Archive project</a>`
+Evidence: The link jumps directly to `#project-archived`, while a separate `<section id="archive-confirm">` ("Archive this project?") exists but is never linked to from anywhere in the document
+Problem: Archiving a project is a destructive, team-wide action, but the actual flow skips the confirmation step entirely, making the `archive-confirm` section dead/unreachable content.
+Fix: Change `project-settings-archive-link`'s href to `#archive-confirm` so the confirmation screen is shown before the project is archived.
+
+Location: `<section id="invite-member">`
+Evidence: `<button id="invite-member-save-btn" type="submit">Save</button>` and, separately, `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>`
+Problem: There are two competing ways to leave the form (a Save submit button and a Continue link that navigates to the "Invite sent" screen), with no indication that Continue depends on Save having been triggered, so a user could reach "Invite sent" without the invite actually being saved/sent.
+Fix: Remove the redundant control — either make "Continue" the form's submit button, or have the Save button itself navigate to `#invite-sent` on success.
+
+Location: `<p id="archive-confirm-copy">` and `<section id="project-archived">`
+Evidence: "You can restore it at any time from the archived projects list." / "It no longer appears in the active projects list for anyone on the team."
+Problem: Both passages reference an "archived projects list" view where restoration happens, but no such page, section, or link exists anywhere in the document.
+Fix: Either add an "archived projects list" section with a restore action and link to it, or remove the references to a feature that isn't present in this mockup.
+
+Location: `<button id="notification-settings-save-btn" type="submit">Submit</button>`
+Evidence: Other equivalent form-save actions use "Save" (`project-settings-save-btn`, `invite-member-save-btn`), while this one uses "Submit"
+Problem: Inconsistent labeling for the same type of action (saving a settings form) creates unnecessary terminology drift across the workspace.
+Fix: Rename the button to "Save" to match the labeling convention used elsewhere.

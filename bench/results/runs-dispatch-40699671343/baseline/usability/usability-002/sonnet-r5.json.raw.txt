@@ -1,0 +1,59 @@
+Location: section#workspace-overview, <p> element
+Evidence: "This workspace holds 5 projects, synced last week." followed by a <ul> with 4 <li> items (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)
+Problem: The stated project count (5) does not match the number of projects actually listed (4).
+Fix: Either add the fifth project to the list or correct the paragraph to say 4 projects.
+
+Location: section#workspace-overview, <ul> inside #workspace-overview-recent, compared to section#project-settings
+Evidence: List shows "Support Backlog Triage", "Beta Launch Plan", "Partner Integration Pilot", "Mobile App Revamp"; the settings/archive flow operates on a project named "Customer Migration"
+Problem: The project being edited and archived throughout the mockup ("Customer Migration") never appears in the workspace's own project list, so it's unclear which project "Open project settings" is supposed to open.
+Fix: Add "Customer Migration" to the project list, or rename the project used in the settings/invite/archive flow to match one of the listed projects.
+
+Location: section#workspace-overview, <p> element
+Evidence: "synced last week"
+Problem: Relative, unanchored time reference, inconsistent with the specific/concrete figures used elsewhere in the doc (e.g., "5 days", "Rows 63, 71, and 82").
+Fix: Replace with a concrete date or timestamp.
+
+Location: section#project-settings, #project-settings-duplicate-btn
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text content or icon, only an aria-label, so sighted users see an empty, unlabeled control.
+Fix: Add visible text or an icon with alt text (e.g., "Duplicate") inside the button, not just an aria-label.
+
+Location: section#project-settings, #project-settings-duplicate-btn
+Evidence: Button has no href and is not followed by any resulting state (no "project duplicated" section or link)
+Problem: The "Duplicate project" action has no defined outcome anywhere in the document, making it a dead-end control.
+Fix: Link or route the duplicate action to a new section (e.g., a "Project duplicated" confirmation) or remove the control from the mockup.
+
+Location: section#project-settings, #project-settings-notif-link
+Evidence: Link text "Go to notification settings" points to section#notification-settings, whose heading is "Notifications"
+Problem: The link text doesn't match the destination section's actual heading, creating a naming inconsistency.
+Fix: Change the link text to "Go to notifications" or change the heading to "Notification settings".
+
+Location: section#project-settings, #project-settings-archive-link, compared to section#archive-confirm
+Evidence: `<a id="project-settings-archive-link" href="#project-archived">Archive project</a>` while a separate `section#archive-confirm` ("Archive this project?") with Cancel/Archive actions exists but is never linked to from anywhere in the document
+Problem: The confirmation dialog is orphaned (unreachable) because the actual "Archive project" link skips it entirely and archives immediately.
+Fix: Point #project-settings-archive-link to "#archive-confirm" instead of "#project-archived" so the confirmation step is actually used.
+
+Location: section#archive-confirm (#archive-confirm-copy) and section#project-archived
+Evidence: "You can restore it at any time from the archived projects list." / "It no longer appears in the active projects list for anyone on the team."
+Problem: Both sections reference an "archived projects list" page, but no such section or link exists anywhere in the document.
+Fix: Add an "archived projects" section with a way to restore projects, or remove the references to it.
+
+Location: section#invite-member
+Evidence: Form contains `<button id="invite-member-save-btn" type="submit">Save</button>` as well as a separate `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>`
+Problem: Two different controls appear to finish the invite flow (Save vs. Continue) with no explanation of how they differ, which is confusing.
+Fix: Consolidate into a single action, e.g., make the Save button itself proceed to "#invite-sent", and remove the redundant Continue link.
+
+Location: section#notification-settings, #notification-settings-save-btn
+Evidence: `<button id="notification-settings-save-btn" type="submit">Submit</button>` versus "Save" used on #project-settings-save-btn and #invite-member-save-btn
+Problem: Inconsistent labeling for the same kind of action (saving a form) across sections.
+Fix: Use the same label ("Save") for all form submission buttons in the document.
+
+Location: All <form> elements (#project-settings, #invite-member, #notification-settings)
+Evidence: `<form>` tags have no `action` attribute, yet contain `type="submit"` buttons
+Problem: Submitting any of these forms would reload the current page via a blank GET request rather than navigating via the hash-link pattern used everywhere else in the mockup, breaking the prototype's navigation flow.
+Fix: Either remove the `type="submit"` buttons in favor of hash-link anchors consistent with the rest of the mockup, or add `action="#..."` targets that lead to a defined result section.
+
+Location: section#project-settings and section#notification-settings
+Evidence: Saving the project name or notification settings has no corresponding result section, unlike the invite flow ("Invite sent") and archive flow ("Project archived")
+Problem: Inconsistent treatment of "save" actions — some flows show a confirmation/result state and others don't.
+Fix: Add a confirmation state (or at least a visible feedback mechanism) after saving the project name and notification settings, for consistency with the other flows.

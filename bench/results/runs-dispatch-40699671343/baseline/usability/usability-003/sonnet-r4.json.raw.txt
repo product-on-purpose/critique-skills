@@ -1,0 +1,49 @@
+Location: `<head>` section
+Evidence: `<meta charset="utf-8">` is the only meta tag present; no `<meta name="viewport">` follows it
+Problem: There is no viewport meta tag, so this page (clearly meant to represent an app screen) will render at desktop zoom/scale on mobile browsers.
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to the `<head>`.
+
+Location: `#workspace-overview`, intro paragraph
+Evidence: "This workspace holds 4 projects, synced this morning." followed by a `<ul>` with exactly 3 `<li>` items (Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot)
+Problem: The stated project count (4) doesn't match the number of projects actually listed (3), with no label explaining the list is a partial/"recent" subset.
+Fix: Either change the count to 3, add a 4th list item, or add visible text (e.g. "Recent projects" heading) clarifying the list is a subset of the 4.
+
+Location: `#workspace-overview`, `<ul>` list and `workspace-overview-projects-link`
+Evidence: `<li>Beta Launch Plan</li>` etc. are plain text, while `<a id="workspace-overview-projects-link" href="#project-settings">Open project settings</a>` is a separate, unparameterized link
+Problem: None of the listed projects are clickable, so there is no way to open settings for a specific project; the single "Open project settings" link is disconnected from the list and (per the prefilled form) always opens "Vendor Onboarding," a project that isn't even in the visible list.
+Fix: Make each `<li>` a link to its own project settings, or rename/explain the standalone link so it's clear which project it opens.
+
+Location: `#project-settings`, `project-settings-duplicate-btn`
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text content or icon — only an `aria-label` — so sighted users have no indication of what the control is or does.
+Fix: Add visible label text or an icon with the `aria-label` reserved for supplementary context, e.g. `<button ...>Duplicate</button>`.
+
+Location: `#project-settings`, `project-settings-duplicate-btn`
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>` has no `href` and is not wired to any other section
+Problem: Unlike every other action in the mockup, this button leads nowhere — clicking "Duplicate project" has no visible consequence in the prototype.
+Fix: Link or route it to a confirmation/result state (e.g. a new "project duplicated" section), consistent with how Archive and Invite flows work.
+
+Location: `#project-settings`, `project-settings-save-btn`
+Evidence: `<button id="project-settings-save-btn" type="submit">Save</button>` inside a `<form>` with no `action` attribute and no following confirmation link
+Problem: Saving the project name has no visible outcome — no confirmation state and no navigation — unlike the Invite and Archive flows, which both end in a result page.
+Fix: Give the form an explicit next state, e.g. link/route Save to a "settings saved" confirmation or back to the overview with a saved indicator.
+
+Location: `#invite-member`, `invite-member-email-input`
+Evidence: `<input id="invite-member-email-input" type="email">` has no `required` attribute
+Problem: A user can reach "Invite sent" without entering an email address, yet that page states "An invite was sent to the address entered above," which would be false/blank.
+Fix: Add `required` to the email input (and/or disable the Continue action until a valid email is present).
+
+Location: `#invite-member`, `invite-member-continue-link`
+Evidence: `<button id="invite-member-save-btn" type="submit">Save</button>` and, separately, `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>`
+Problem: The "Continue" link to the "Invite sent" confirmation is independent of the form's Save/submit action, so a user can reach "Invite sent" without ever saving (or submitting) the invite form.
+Fix: Remove the redundant Save button or make "Continue" the form's actual submit action so the invite-sent state is gated on a real submission.
+
+Location: `#notification-settings`, `notification-settings-save-btn`
+Evidence: `<button id="notification-settings-save-btn" type="submit">Save</button>` inside a form with no `action`; the only other control is `notification-settings-back-link`, an unrelated manual "Back" link
+Problem: Saving notification settings produces no feedback or confirmation at all, not even the minimal pattern used elsewhere in the document (e.g. invite confirmation).
+Fix: Add a confirmation state or at least auto-navigate back to project settings with a "saved" acknowledgment after Save.
+
+Location: `#project-archived` exit link back to `#workspace-overview`
+Evidence: `project-archived-exit-link` returns to `#workspace-overview`, whose text still reads "This workspace holds 4 projects, synced this morning."
+Problem: After completing the archive flow, the overview screen's project count is not updated to reflect the archived project, leaving stale/contradictory information.
+Fix: Update the overview copy (or note that the count is dynamic) so the project count reflects the post-archive state.

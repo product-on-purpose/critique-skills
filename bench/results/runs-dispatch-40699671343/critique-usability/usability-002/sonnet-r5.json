@@ -1,0 +1,114 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H5-CONFIRM",
+      "evidence": "<a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a>",
+      "fix": "Point \"project-settings-archive-link\"'s href at \"#archive-confirm\" instead of \"#project-archived\", so every path to archiving passes through the confirmation screen before the action commits.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-archive-link\" control",
+      "severity": 3,
+      "violation": "This control's own path goes straight to \"project-archived\" and never passes through the \"archive-confirm\" state the artifact defines, which is the only place the consequence (\"remove it from the active projects list for everyone on the team\") is named. NNG-H5-CONFIRM's own rule is that a confirmation state the control's path bypasses does not count, because a user taking this control never sees it, so this costly, team-wide action commits on one click with no confirmation reached."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "the form's Save button sits beside a separate \"Continue\" link (\"invite-member-continue-link\") to the \"invite-sent\" state, and the artifact never says what Save itself does",
+      "fix": "Either remove the Save button and let Continue be the only commit control, or specify in place what Save persists and how that differs from Continue, with a visible status change after each.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button",
+      "severity": 2,
+      "violation": "Two controls on the same form plausibly commit the invite (a submit button labeled Save and a link labeled Continue), and the artifact gives no visible indication of what Save's own effect is, so a user cannot tell from the screen whether clicking Save already sent the invite, saved a draft, or did nothing."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>",
+      "fix": "Define what happens when Duplicate is clicked, for example a named new project appearing in the \"Your projects\" list, or a confirmation message naming the duplicate.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-duplicate-btn\" button",
+      "severity": 2,
+      "violation": "This button has no href, no form action, and no described result anywhere in the artifact: no new state, no confirmation, no change to the project list. Unlike the Save controls, which at least leave the field's own new value visible, this action's outcome is never shown anywhere in the artifact."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>",
+      "fix": "Specify what the user sees immediately after Save is clicked, for example an inline \"Saved\" confirmation beside the field or a transient status message.",
+      "id": "F-004",
+      "instances": [
+        {
+          "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>",
+          "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button"
+        },
+        {
+          "evidence": "<button id=\"notification-settings-save-btn\" type=\"submit\">Submit</button>",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "judged",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "The form has no action attribute and the artifact specifies no success message, status change, or any other indication of what happens once Save is clicked, so NNG-H1's required visible indication of the outcome is absent for this state-changing action."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "\"You can restore it at any time from the archived projects list.\"",
+      "fix": "Add the archived projects list as a reachable state (for example, linked from \"workspace-overview\") with a restore control on each archived project, or remove the claim if no such list exists yet.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "the \"archive-confirm\" section, the \"archive-confirm-copy\" paragraph",
+      "severity": 2,
+      "violation": "This is the only reversal path NNG-H3-UNDO asks for, but the \"archived projects list\" it names is not a state the artifact defines anywhere, and no control anywhere in the artifact links to it, so the named reversal path cannot actually be followed within the artifact as specified."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H4-CONTROL-NAMING",
+      "evidence": "control labeled \"Save\"",
+      "fix": "Pick one label for this commit action, for example \"Save\", and use it everywhere the action appears.",
+      "id": "F-006",
+      "instances": [
+        {
+          "evidence": "control labeled \"Save\"",
+          "location": "the \"invite-member\" section, the \"invite-member-save-btn\" button"
+        },
+        {
+          "evidence": "control labeled \"Submit\"",
+          "location": "the \"notification-settings\" section, the \"notification-settings-save-btn\" button"
+        }
+      ],
+      "lane": "scripted",
+      "location": "the \"project-settings\" section, the \"project-settings-save-btn\" button",
+      "severity": 2,
+      "violation": "This artifact uses 2 different labels for what reads as the same commit action: \"Save\", \"Submit\". A user cannot tell from the label alone whether these controls perform the same action or different ones."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T14:52:29Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 7,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 2
+  }
+}
