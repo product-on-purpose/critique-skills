@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert.\"",
+      "fix": "Add a line stating whether endpoint_url is required, and if optional, what the default/behavior is when unset.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "## endpoint_url",
+      "severity": 3,
+      "violation": "Unlike retry_policy, this entry states no default value and never says whether the field is required; a reference doc should specify this for every field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The signing_secret field accepts a string used to verify the payload signature on receipt.\"",
+      "fix": "Document the signature scheme (algorithm, header name, encoding) and any constraints on the secret string.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "## signing_secret",
+      "severity": 3,
+      "violation": "The doc never explains the signing algorithm (e.g., HMAC-SHA256), which header carries the signature, or any constraints on the secret (length, allowed characters), making it impossible to actually implement verification from this reference."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential.\"",
+      "fix": "Add a definition for each retry_policy value (e.g., number of attempts, delay schedule) or link to the section that defines it.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "## retry_policy",
+      "severity": 3,
+      "violation": "The three enum values are named but never defined - there's no description of retry counts, intervals, backoff multipliers, or max duration for linear vs exponential, so readers can't predict delivery behavior."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Only three fields (endpoint_url, signing_secret, retry_policy) are documented under \"Webhook delivery reference\"",
+      "fix": "Either add sections for timeout, payload schema, and headers, or scope the title/intro to clarify this document only covers configuration fields, not full delivery behavior.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Whole document",
+      "severity": 3,
+      "violation": "A delivery reference omits other fields typically needed to understand delivery behavior, such as timeout duration, payload/event schema, and which HTTP headers are sent - leaving the reference incomplete for its stated scope."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-004.md",
+    "artifact_sha256": "7f41536ab3c3f7bc93a3dde86b8e81cee5dab0339f2b1d472e9222a20b42d7ae",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T09:55:58Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

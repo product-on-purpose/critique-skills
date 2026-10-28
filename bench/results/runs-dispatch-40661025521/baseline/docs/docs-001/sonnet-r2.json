@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"A threshold is the numeric boundary that triggers an alert once a metric crosses it.\"",
+      "fix": "Remove the definition from this step, or move it to a separate concepts/reference section outside the procedure.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"Open alert settings\" section - \"A threshold is the numeric boundary that triggers an alert once a metric crosses it.\"",
+      "severity": 3,
+      "violation": "This is a conceptual/definitional sentence inserted into a how-to step; it interrupts the procedural flow of \"open the panel, select the rule\" with unrelated reference material."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Enter the updated threshold value in the field provided and confirm the unit matches the metric in use.\"",
+      "fix": "Specify where the unit is displayed (e.g., next to the input field) and what corrective action to take on a mismatch (e.g., select the correct unit from a dropdown).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"Set the new threshold\" section - \"confirm the unit matches the metric in use\"",
+      "severity": 3,
+      "violation": "The instruction doesn't say where to find the unit or what to do if it doesn't match, leaving the step unactionable."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This is because the console applies the new threshold to every future evaluation of this rule.\"",
+      "fix": "State explicitly what behavior this explains (e.g., \"Changes take effect only for evaluations after you save; already-triggered alerts aren't reevaluated\") or remove the sentence if it isn't needed.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Set the new threshold\" section - \"This is because the console applies the new threshold to every future evaluation of this rule.\"",
+      "severity": 3,
+      "violation": "\"This is because\" implies it explains a preceding statement, but no prior claim (about retroactivity or timing) is made for it to justify, so the sentence reads as a non-sequitur."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Save the rule and open the rule list to confirm the new threshold appears there.\"",
+      "fix": "Either retitle the section to \"Save and confirm\" or add a real verification step, such as checking alert history or triggering a test evaluation.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"Save and verify\" section",
+      "severity": 3,
+      "violation": "The heading promises \"verify\" but the step only confirms the displayed value in a list, not that the alert actually functions correctly at the new threshold."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-001.md",
+    "artifact_sha256": "b41787144ac8cc1ae14bcce23fa2b574f6ee68f1aaa9cc432628f9f148ddd713",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T09:08:30Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

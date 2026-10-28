@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "DIATAXIS-CROSSLINK",
+      "evidence": "- Metric catalog reference - Notification channel reference - Webhook delivery reference - Escalation policy reference - Time window reference - Retry backoff reference - Alert rule schema - Rate limit reference - Delivery status codes",
+      "fix": "Turn the Related pages entries into real markdown links to the pages they name, and add a link to a how-to or explanation page covering how to apply and why these defaults and validation rules were chosen for timeout, retries, and logging.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "## Related pages listing",
+      "severity": 2,
+      "violation": "None of these nine items is a markdown link, so despite naming an apparent retries counterpart (Retry backoff reference), the page carries no functioning outbound link at all, let alone to a how-to or explanation page a reader would need next to apply the timeout default guidance or understand why the validator enforces its 1000 millisecond floor."
+    },
+    {
+      "confidence": "high",
+      "criterion": "DIATAXIS-NAV-LENGTH",
+      "evidence": "9 flat items, no sub-headings or nested items breaking them into groups.",
+      "fix": "Split this listing into named subgroups, either nested sub-lists or sub-headings, each holding a smaller set of related items.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "the Related pages listing",
+      "severity": 2,
+      "violation": "This listing holds 9 items, more than 7 a reader can scan in one glance, with no subgrouping to break it up."
+    },
+    {
+      "confidence": "high",
+      "criterion": "DIATAXIS-REFERENCE-NEUTRAL",
+      "evidence": "Leaving this field at its default is the right choice for most teams, and raising it is worth doing only when a specific integration needs the extra room.",
+      "fix": "Replace the recommendation with a neutral statement of fact, for example state only the default value and that the field can be raised, and move the usage guidance into a how-to or explanation page linked from here.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "## timeout section, second paragraph",
+      "severity": 2,
+      "violation": "This sentence recommends a particular way to use the timeout field, a subjective judgment of what is right for most teams, rather than describing the field, so one entry in an otherwise neutral, field by field reference page carries a recommendation instead of description."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "DIATAXIS"
+    ],
+    "skill": "critique-docs",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T09:42:11Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

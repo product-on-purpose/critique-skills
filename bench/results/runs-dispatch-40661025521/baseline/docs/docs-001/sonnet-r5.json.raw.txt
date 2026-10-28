@@ -1,0 +1,29 @@
+Location: ## Open alert settings, second paragraph
+Evidence: "A threshold is the numeric boundary that triggers an alert once a metric crosses it."
+Problem: This conceptual definition is dropped into the middle of a how-to procedure, breaking the action sequence (open panel → select rule → ???) with reference material that doesn't belong in this mode.
+Fix: Remove this sentence or move it to a "Before you begin" / concepts section, keeping this step limited to the action of opening the panel and selecting a rule.
+
+Location: ## Set the new threshold, first paragraph
+Evidence: "confirm the unit matches the metric in use"
+Problem: The instruction doesn't explain how to check the unit or what to do if it doesn't match, so the step isn't actually actionable.
+Fix: Specify where the unit is shown and what to do on mismatch, e.g., "check the unit shown beside the field against the metric's unit; if they differ, choose the correct unit from the dropdown."
+
+Location: ## Set the new threshold, second paragraph
+Evidence: "This is because the console applies the new threshold to every future evaluation of this rule."
+Problem: "This is because" implies it's justifying a prior statement, but nothing before it makes a claim this explains — it reads as a disconnected, dangling sentence that doesn't logically follow from "confirm the unit matches."
+Fix: Either delete the sentence or rewrite it as a standalone fact placed where it's relevant (e.g., near Save) clarifying that the threshold applies only to evaluations after saving, not retroactively.
+
+Location: ## Save and verify
+Evidence: "confirm the new threshold appears there"
+Problem: Verifying that a value merely "appears" doesn't confirm it's the correct value, so a failed edit or wrong entry could go unnoticed.
+Fix: Reword to "confirm the rule list shows the exact value and unit you just entered."
+
+Location: whole document (before ## Open alert settings)
+Evidence: no mention of required access or permissions anywhere in the document
+Problem: The guide assumes the reader can already open the alerts panel and edit rules without stating any prerequisite, leaving readers without access stuck with no explanation.
+Fix: Add a short prerequisites line (e.g., required role/permission) before the first step.
+
+Location: whole document
+Evidence: no statement of when the new threshold takes effect beyond the vague "every future evaluation" line
+Problem: The reader isn't told whether the change is immediate or applies at the next scheduled evaluation, which matters for an alerting configuration guide.
+Fix: Add an explicit statement in "Save and verify" about when the new threshold becomes active.

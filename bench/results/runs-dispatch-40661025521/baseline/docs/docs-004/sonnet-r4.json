@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert.\"",
+      "fix": "Add required/optional status, a max length, and the behavior on unreachable endpoints, redirects, or non-2xx responses.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "## endpoint_url",
+      "severity": 3,
+      "violation": "The entry never states whether the field is required, whether there's a length limit, or what happens if the endpoint is unreachable, redirects, or returns a non-2xx status."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The signing_secret field accepts a string used to verify the payload signature on receipt.\"",
+      "fix": "Document the exact algorithm, the request header name, and the signature encoding used.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "## signing_secret",
+      "severity": 3,
+      "violation": "The signing algorithm (e.g. HMAC-SHA256), the header carrying the computed signature, and its encoding (hex/base64) are not specified, so a reader cannot actually implement signature verification from this reference."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"accepts a string\"",
+      "fix": "Specify length/format constraints and whether the field is required.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "## signing_secret",
+      "severity": 3,
+      "violation": "No minimum/maximum length or character constraints are given, nor whether the field is required or optional, unlike retry_policy which does state a default."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential.\"",
+      "fix": "Add the concrete retry schedule (attempt count and timing) for each of none, linear, and exponential.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "## retry_policy",
+      "severity": 3,
+      "violation": "None of the three policies are defined in terms of actual retry count, interval/backoff multiplier, or max retry duration, so delivery behavior can't be predicted from this reference."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Only three fields are documented (endpoint_url, signing_secret, retry_policy)",
+      "fix": "Add sections for the payload schema/example, the list of triggering events, and the delivery timeout.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Whole document",
+      "severity": 3,
+      "violation": "A reference titled \"Webhook delivery reference\" omits the payload schema, the events that trigger delivery, and the delivery timeout - information necessary to integrate with the webhook, not just configure it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-004.md",
+    "artifact_sha256": "7f41536ab3c3f7bc93a3dde86b8e81cee5dab0339f2b1d472e9222a20b42d7ae",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T09:54:05Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
