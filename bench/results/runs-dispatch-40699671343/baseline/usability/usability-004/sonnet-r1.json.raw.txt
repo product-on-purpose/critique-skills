@@ -1,0 +1,34 @@
+Location: workspace-overview section, intro paragraph and project list
+Evidence: "This workspace holds 4 projects, synced last week." followed by a `<ul>` containing only three `<li>` entries (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp)
+Problem: The stated project count (4) does not match the number of projects actually listed (3).
+Fix: Either add the missing fourth project to the list or correct the count in the paragraph to "3 projects".
+
+Location: project-settings section, name form
+Evidence: `<form>` wrapping `<input id="project-settings-name-input">` and `<button id="project-settings-save-btn" type="submit">Save</button>` with no `action` attribute and no corresponding confirmation state
+Problem: Clicking Save has no defined destination or feedback — unlike every other flow in the document (invite, archive, notifications all have a visible next/confirmation step), this one is a dead end.
+Fix: Give the Save button a target state (e.g., navigate to a "settings saved" confirmation or back to workspace-overview with a success message) consistent with the other flows.
+
+Location: project-settings section, duplicate button
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text label (only an aria-label) and no href/action, so sighted users see an unlabeled blank control that does nothing when activated.
+Fix: Add visible button text (e.g., "Duplicate") and wire it to an actual destination or action, mirroring how other controls in the mockup link somewhere.
+
+Location: invite-member section
+Evidence: `<button id="invite-member-save-btn" type="submit">Save</button>` and separately `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>`
+Problem: It's unclear whether "Save" sends the invite or "Continue" does — Save has no destination, while Continue jumps straight to the "Invite sent" screen regardless of whether Save was ever pressed or the email field was filled in.
+Fix: Collapse this into one action (e.g., make the submit button itself navigate to #invite-sent) or clearly differentiate the two steps so the flow only reaches "Invite sent" after a successful save.
+
+Location: invite-sent section
+Evidence: "An invite was sent to the address entered above."
+Problem: "Above" refers to the email input on the previous screen, which is not visually above this content in the document/flow — this screen is reached by navigating away from that form.
+Fix: Reword to something that doesn't depend on screen position, e.g., "An invite was sent to the email address you entered."
+
+Location: archive-confirm section
+Evidence: "You can restore it at any time from the archived projects list."
+Problem: No "archived projects list" page or link exists anywhere in the document, so this references a destination the mockup never provides.
+Fix: Either add an archived-projects-list section/link reachable from workspace-overview, or remove this claim from the copy.
+
+Location: notification-settings section
+Evidence: `<button id="notification-settings-save-btn" type="submit">Save</button>` with no `action` on the enclosing `<form>` and no confirmation state
+Problem: Like the project-settings Save button, this control has no defined outcome when clicked, leaving the user with no feedback that their digest preference was saved.
+Fix: Add a save confirmation (inline message or navigation) consistent with the rest of the settings flows.

@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 5 projects, synced last week.\" followed by a <ul> containing only 4 <li> items (Support Backlog Triage, Beta Launch Plan, Partner Integration Pilot, Mobile App Revamp)",
+      "fix": "Either add the missing fifth project to the list or correct the count in the paragraph text.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "section#workspace-overview, <p> text",
+      "severity": 3,
+      "violation": "The stated project count (5) does not match the number of projects actually listed (4)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Project settings shows value=\"Customer Migration\", but the \"Your projects\" list in workspace-overview contains no \"Customer Migration\" entry",
+      "fix": "Add \"Customer Migration\" to the workspace-overview project list, or make the list dynamic/linked to the project whose settings are shown.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "section#project-settings, input#project-settings-name-input vs section#workspace-overview list",
+      "severity": 3,
+      "violation": "The project being configured, invited-to, and archived throughout the mockup never appears in the main project listing, so there's no coherent path from the overview to this project."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible button text (e.g., \"Duplicate\") or an icon with accompanying visible label.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "section#project-settings, button#project-settings-duplicate-btn",
+      "severity": 3,
+      "violation": "The button has no visible text or icon content - only an aria-label - so sighted users have no indication the control exists or what it does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<a id=\"project-settings-archive-link\" href=\"#project-archived\">Archive project</a>`",
+      "fix": "Point this link to `#archive-confirm` instead of `#project-archived`.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "section#project-settings, a#project-settings-archive-link",
+      "severity": 3,
+      "violation": "This link jumps straight to the \"Project archived\" confirmation screen, bypassing the \"Archive this project?\" confirmation step entirely, so the destructive action has no confirmation gate."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "No `href=\"#archive-confirm\"` appears anywhere else in the document",
+      "fix": "Update the archive link in project-settings to target this section (see previous finding), making it reachable.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "section#archive-confirm",
+      "severity": 3,
+      "violation": "The archive confirmation screen is unreachable - nothing in the document links to it, making it dead content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` and `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>` both present with no indication of how they differ",
+      "fix": "Remove the redundant control - keep a single \"Send invite\" action that submits the form and navigates to the confirmation screen.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "section#invite-member, form controls",
+      "severity": 3,
+      "violation": "Two separate controls (Save and Continue) appear to both attempt to complete the invite flow, with no clear distinction of what each does, creating ambiguous UX."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An invite was sent to the address entered above.\"",
+      "fix": "Reword to reference the actual email address, e.g. \"An invite was sent to the address you entered,\" or display the submitted email address on this screen.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "section#invite-sent, <p> text",
+      "severity": 3,
+      "violation": "\"Above\" refers to the email input field on the previous screen (invite-member), which is not present on this screen, so the reference is broken/confusing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"notification-settings-save-btn\" type=\"submit\">Submit</button>` versus \"Save\" used on project-settings-save-btn and invite-member-save-btn",
+      "fix": "Rename this button's label to \"Save\" to match the other form submit buttons.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "section#notification-settings, button#notification-settings-save-btn",
+      "severity": 3,
+      "violation": "Inconsistent labeling of equivalent save actions across the document (\"Submit\" here vs \"Save\" elsewhere) creates unnecessary inconsistency in the UI vocabulary."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-002.html",
+    "artifact_sha256": "2fce17d6fd41a6114edd843e45c8025be3cd45b75306d739e7fa283c922ebbf6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T14:27:43Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

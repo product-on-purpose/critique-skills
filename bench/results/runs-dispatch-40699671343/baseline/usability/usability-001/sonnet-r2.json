@@ -1,0 +1,160 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 3 projects, synced last week.\" followed by a list with only two `<li>` entries (\"Data Warehouse Cutover\", \"Mobile App Revamp\")",
+      "fix": "Either add the missing third project to the list or change the copy to clarify this is a partial/recent list (e.g., \"Recent projects\" with a \"View all 3\" link).",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<section id=\"workspace-overview\">`, paragraph text",
+      "severity": 3,
+      "violation": "The stated project count (3) doesn't match the number of projects actually listed (2), with no indication that the list is partial."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<li>Data Warehouse Cutover</li>` and `<li>Mobile App Revamp</li>`",
+      "fix": "Wrap each project name in an anchor/button that links to that project's own settings or detail view.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`<div id=\"workspace-overview-recent\">` list items",
+      "severity": 3,
+      "violation": "The project names are plain text with no link or button, so there is no way to navigate into either specific project from the overview."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Invite 3 teammates this month to unlock the advanced reporting add-on.\"",
+      "fix": "Add a call-to-action link (e.g., to the invite flow) and/or a progress indicator (\"1 of 3 invited\").",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`<div id=\"workspace-overview-promo-referral\">`",
+      "severity": 3,
+      "violation": "The promo text has no accompanying link, button, or progress indicator, giving the user no way to act on it or see how many invites they've already sent."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The overview link is simply labeled \"Open project settings\" (not tied to any project), yet the destination form is pre-filled with `value=\"Design System Refresh\"`, a project that isn't one of the two listed in the overview.",
+      "fix": "Either scope the link per-project (e.g., one settings link per list item) or make clear in the overview which project \"Open project settings\" refers to.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`<a id=\"workspace-overview-projects-link\">` and `<section id=\"project-settings\">`",
+      "severity": 3,
+      "violation": "There is no project-selection step, so it's unclear which project's settings are being opened, and the hardcoded project name is inconsistent with the projects shown on the overview page."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\"></button>`",
+      "fix": "Add label text such as \"Duplicate project\" inside the button (or an `aria-label` if it must stay icon-only).",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, duplicate button",
+      "severity": 3,
+      "violation": "The button has no visible text or accessible label, so users can't tell what it does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>` with no subsequent confirmation step",
+      "fix": "Add a confirmation state or message after saving, consistent with the other flows.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`<section id=\"project-settings\">`, save button",
+      "severity": 3,
+      "violation": "Unlike the invite and archive flows (which lead to \"Invite sent\" / \"Project archived\" confirmation screens), saving project settings gives no feedback that the save succeeded."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"project-settings-name-input\" type=\"text\" value=\"Design System Refresh\">` has no `name` attribute",
+      "fix": "Add appropriate `name` attributes to all form inputs and selects.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Form inputs throughout (`project-settings-name-input`, `invite-member-email-input`, `notification-settings-digest-input`)",
+      "severity": 3,
+      "violation": "Without `name` attributes, these form fields would not be submitted as data when the form posts."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "A `<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` inside the form, plus a separate `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>` outside it",
+      "fix": "Combine into a single action (e.g., the Save button itself navigates to \"Invite sent\" on submit), removing the redundant Continue link.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "`<section id=\"invite-member\">`",
+      "severity": 3,
+      "violation": "It's unclear whether \"Save\" or \"Continue\" is what actually sends the invite - having both suggests two competing triggers for the same action, which is confusing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An invite was sent to the address entered above.\"",
+      "fix": "Display the actual email address that was invited on the confirmation screen instead of referring back to a field that's no longer visible.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "`<section id=\"invite-sent\">`",
+      "severity": 3,
+      "violation": "This is a separate section from the invite form, so the \"address entered above\" is not actually visible or carried over anywhere on this page - the reference is unverifiable to the user."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\" / \"It no longer appears in the active projects list for anyone on the team.\"",
+      "fix": "Add an archived-projects section (with a restore action) and link to it from these messages, or remove the claim if out of scope.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "`<section id=\"archive-confirm\">` and `<section id=\"project-archived\">`",
+      "severity": 3,
+      "violation": "Both sections reference an \"archived projects list\" page, but no such section or link exists anywhere in the document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"notification-settings-digest-input\"><option>Daily</option><option>Weekly</option></select>` with no `selected` attribute on either option",
+      "fix": "Mark the option matching the current saved setting with `selected`.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "`<section id=\"notification-settings\">`, select element",
+      "severity": 3,
+      "violation": "The settings form doesn't reflect the user's actual current digest preference, defaulting ambiguously to the first option."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button>` with no resulting confirmation",
+      "fix": "Add a save-confirmation message or redirect to a confirmation state.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "`<section id=\"notification-settings\">`, save button",
+      "severity": 3,
+      "violation": "As with project settings, saving here gives no feedback that the change was applied, inconsistent with the invite/archive flows' confirmation screens."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T14:02:40Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 12,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

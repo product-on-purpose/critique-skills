@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced last week.\" followed by a list with only three `<li>` entries (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp)",
+      "fix": "Either add the fourth project to the list, change the count to \"3 projects,\" or add a visible label/link clarifying this is a partial \"recent projects\" list with a way to see the rest.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<p>` inside `#workspace-overview`",
+      "severity": 3,
+      "violation": "The stated project count (4) doesn't match the number of projects actually listed (3), and there's no indication the list is partial (e.g., \"recent\" vs \"all\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible button text (\"Duplicate project\") and link/route it to a resulting state (e.g., a new \"Project duplicated\" confirmation section), consistent with how Archive and Invite actions resolve.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "`#project-settings`, `project-settings-duplicate-btn`",
+      "severity": 3,
+      "violation": "The button has no visible text content - it relies entirely on `aria-label`, so sighted users see an empty, unlabeled control. It also has no click handler or href, so activating it does nothing, unlike every other action in the mockup which navigates to a result section."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form><label for=\"project-settings-name-input\">...</label><input ...><button id=\"project-settings-save-btn\" type=\"submit\">Save</button></form>`",
+      "fix": "Add a confirmation state (e.g., inline success message or a \"Changes saved\" section) so the Save action has a visible outcome, matching the pattern used elsewhere in the mockup.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`#project-settings`, form containing `project-settings-save-btn`",
+      "severity": 3,
+      "violation": "The form has no `action` attribute and the Save button has no link to any resulting/confirmation section, so saving the project name produces no visible feedback - unlike the Archive and Invite flows, which both navigate to a confirmation screen."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Section contains both `<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` and `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>`",
+      "fix": "Remove the redundant Save button, or clarify the two controls' distinct purposes (e.g., \"Save draft\" vs. \"Send invite\") and wire Save to a real outcome.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`#invite-member`",
+      "severity": 3,
+      "violation": "Two different controls appear to complete the same action (sending the invite) with no indication of how they relate - the Save button leads nowhere (no form action), while Continue is the one that actually advances to the \"Invite sent\" screen, which is confusing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button>` with no enclosing form `action` and no link to a confirmation state",
+      "fix": "Add a confirmation state or at least route Save to an explicit \"preferences saved\" indication.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`#notification-settings`, form containing `notification-settings-save-btn`",
+      "severity": 3,
+      "violation": "Same dead-end issue as the project settings Save button - changing digest frequency and clicking Save produces no visible confirmation or state change anywhere in the mockup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Link text \"Go to notification settings\" points to `#notification-settings`, whose heading is `<h2>Notifications</h2>`",
+      "fix": "Align the wording, e.g., rename the heading to \"Notification settings\" or change the link text to \"Go to notifications.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "`#project-settings`, `project-settings-notif-link`",
+      "severity": 3,
+      "violation": "The link's label (\"notification settings\") doesn't match the destination section's heading (\"Notifications\"), a minor terminology inconsistency that could make users unsure they reached the right place."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T16:06:08Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 6,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

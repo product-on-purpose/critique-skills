@@ -1,0 +1,44 @@
+Location: section#workspace-overview, opening paragraph and list
+Evidence: "This workspace holds 3 projects, synced last week." followed by a list with only two items: "Data Warehouse Cutover" and "Mobile App Revamp"
+Problem: The stated project count (3) doesn't match the number of items shown in the list (2), and nothing in the UI indicates the list is partial or links to the missing third project.
+Fix: Either show all 3 projects, or add a label/link such as "Showing 2 of 3 — view all projects" so the discrepancy is explained.
+
+Location: section#workspace-overview, div#workspace-overview-promo-referral
+Evidence: "Invite 3 teammates this month to unlock the advanced reporting add-on."
+Problem: This promo text has no link or button, so there is no way to act on it directly from where it's presented; the user must already know to navigate elsewhere to invite teammates.
+Fix: Add a link/button from the promo directly to the invite flow (e.g. href="#invite-member").
+
+Location: section#workspace-overview, a#workspace-overview-projects-link
+Evidence: "Open project settings" (href="#project-settings")
+Problem: The link text doesn't specify which project's settings it opens, and it navigates to settings for "Design System Refresh," a project that isn't even shown in the preceding list of projects.
+Fix: Either name the target project in the link text ("Open settings for Design System Refresh") or make each listed project name itself a link to its own settings.
+
+Location: section#project-settings, button#project-settings-duplicate-btn
+Evidence: `<button id="project-settings-duplicate-btn" type="button"></button>`
+Problem: The button has no visible text or accessible label, so its purpose is unknown to users and assistive technology.
+Fix: Add label text to the button, e.g. "Duplicate project".
+
+Location: section#invite-member
+Evidence: The form's submit button is "Save," but a separate link, `a#invite-member-continue-link` ("Continue", href="#invite-sent"), also exists independently of the form.
+Problem: Because "Continue" is a plain link rather than tied to form submission, a user can navigate straight to the "Invite sent" confirmation without ever entering an email or clicking "Save."
+Fix: Remove the standalone "Continue" link and have the form's Save button itself navigate to #invite-sent on submit, or disable Continue until the form has been saved.
+
+Location: section#invite-sent
+Evidence: "An invite was sent to the address entered above. It expires in 5 days if not accepted." with no further markup after that paragraph.
+Problem: This page is a dead end with no navigation link back to project settings or the workspace, unlike the other confirmation pages (e.g. project-archived, import-status) which both include a "Back to your projects" link.
+Fix: Add a link back to project settings or the workspace overview, consistent with the other confirmation screens.
+
+Location: section#archive-confirm, p#archive-confirm-copy
+Evidence: "You can restore it at any time from the archived projects list."
+Problem: No "archived projects list" page or link exists anywhere in the document, so this promised destination is unreachable.
+Fix: Add an archived-projects-list section/page and link to it, or remove the claim if that feature isn't part of this mockup.
+
+Location: section#project-archived
+Evidence: "'Design System Refresh' has been moved to archived projects. It no longer appears in the active projects list for anyone on the team." followed by only `a#project-archived-exit-link` ("Back to your projects").
+Problem: Same missing destination as the archive-confirm copy — there is no link to view the archived projects where the restore action mentioned earlier would happen.
+Fix: Add a link to the archived projects list from this confirmation page as well.
+
+Location: section#import-status, p#import-status-message
+Evidence: "Rows 15 and 99 were skipped; every other row was imported."
+Problem: The total number of rows in the import is never stated, so "every other row" is unverifiable and ambiguous to the reader.
+Fix: State the total row count explicitly, e.g. "2 of 47 rows were skipped; the remaining 45 rows were imported."

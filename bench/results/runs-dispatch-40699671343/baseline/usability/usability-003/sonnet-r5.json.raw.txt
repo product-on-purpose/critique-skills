@@ -1,0 +1,39 @@
+Location: `#workspace-overview`, `<p>` and `<ul>` inside `#workspace-overview-recent`
+Evidence: "This workspace holds 4 projects, synced this morning." followed by a list of only three `<li>` items (Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot)
+Problem: The stated project count (4) doesn't match the number of projects actually listed (3), and there's no label indicating the list is partial (e.g. "recent" vs "all").
+Fix: Either add the missing fourth project to the list or change the copy to "3 projects" / add a heading like "Recent projects" that clarifies the list is a subset.
+
+Location: `#project-settings`, `<input id="project-settings-name-input" ... value="Vendor Onboarding">`
+Evidence: Workspace overview lists "Beta Launch Plan", "Holiday Campaign Assets", "Partner Integration Pilot" as the known projects, but Project settings shows "Vendor Onboarding"
+Problem: The project name shown in Project settings doesn't correspond to any project named in the workspace overview, so it's unclear which project the user navigated into.
+Fix: Use a project name that appears in the workspace overview list (or add "Vendor Onboarding" to that list) so the flow is traceable.
+
+Location: `#project-settings > form`
+Evidence: `<form><label ...><input ...><button id="project-settings-save-btn" type="submit">Save</button></form>` with no `action` or `method` attribute
+Problem: Submitting this form performs a default GET to the current URL with the field values as query parameters, causing a full page reload — unlike every other transition in the mockup, which uses lightweight `#id` anchor links. This also means Save gives no visible confirmation or next step.
+Fix: Either make Save a plain anchor/button consistent with the rest of the navigation (e.g. link back to `#workspace-overview` or show a confirmation state), or explicitly set `action`/`method` and document the intended behavior.
+
+Location: `#project-settings`, `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Evidence: `aria-label="Duplicate project"` with empty element content and no icon
+Problem: Sighted users will see a blank, unlabeled button with no visible text or icon, even though it's described as "Duplicate project" to assistive tech only.
+Fix: Add visible text or an icon (with accompanying visible or sr-only label) so the button's purpose is clear to all users, not just screen reader users.
+
+Location: `#invite-member > form`
+Evidence: `<input id="invite-member-email-input" type="email">` inside a `<form>` with `<button id="invite-member-save-btn" type="submit">Save</button>`, plus a separate `<a id="invite-member-continue-link" ...>Continue</a>`
+Problem: Same unhandled form-submit issue as Project settings (GET reload), and there are two competing ways to proceed — a "Save" submit button that reloads the page, and a "Continue" link that actually advances the flow — with no indication of how they relate or why "Save" is labeled generically rather than e.g. "Send invite."
+Fix: Remove the redundant submit button or merge its action into the "Continue" link so there is one clear call-to-action, and label it according to what it does (e.g. "Send invite").
+
+Location: `#invite-sent`, `<p>`
+Evidence: "An invite was sent to the address entered above." while the referenced `invite-member-email-input` has no `value` set
+Problem: In this static mockup the email field is always empty, so "the address entered above" refers to nothing — the confirmation message can't actually demonstrate what was sent.
+Fix: Give the email input a sample placeholder or prefilled value (as the project name field does) so the confirmation text has something concrete to point back to.
+
+Location: `#import-status`, `<p id="import-status-message">`
+Evidence: "Import failed. Error code IMP-500. Contact support if this continues." reached via the overview's "View last import result" link, next to the overview's "synced this morning" claim
+Problem: The workspace overview implies a successful recent sync ("synced this morning") while the linked import result reports a failure, so the two pieces of status copy contradict each other.
+Fix: Align the two messages — either show a successful import result consistent with "synced this morning," or change the overview copy to reflect that the last sync/import failed.
+
+Location: `#notification-settings > form`
+Evidence: `<form><label ...><select ...>...</select><button id="notification-settings-save-btn" type="submit">Save</button></form>` with no `action`/`method`, followed only by a "Back to project settings" link
+Problem: Same unhandled GET-submit issue as the other two forms, and there is no confirmation feedback after saving — the user clicks Save and the only available action is "Back," with nothing indicating whether the save succeeded.
+Fix: Apply the same fix as the other forms (remove default submit behavior or wire it to a real transition), and add a success indication before returning to project settings.

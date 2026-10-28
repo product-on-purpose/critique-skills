@@ -1,0 +1,75 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<form><label for=\"project-settings-name-input\">Project name</label><input id=\"project-settings-name-input\" type=\"text\" value=\"Q3 Roadmap\"><button id=\"project-settings-save-btn\" type=\"submit\">Save</button></form>, with no action target and no success, failure, or changed state defined anywhere in the artifact after this control fires",
+      "fix": "Define what this screen shows immediately after Save fires: an inline success message, a visibly updated field state, or an explicit next state, so the user can tell the save took effect.",
+      "id": "F-001",
+      "instances": [
+        {
+          "evidence": "<select id=\"notification-settings-digest-input\">...</select><button id=\"notification-settings-save-btn\" type=\"submit\">Save</button>, with no confirmation or next state defined after submit",
+          "location": "Notification settings section, Save button (id notification-settings-save-btn)"
+        },
+        {
+          "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>, whose effect is named nowhere else in the artifact: no new project appears in the workspace overview list, no message, no next state",
+          "location": "Project settings section, Duplicate project button (id project-settings-duplicate-btn)"
+        },
+        {
+          "evidence": "the invite-member form's Save button (type submit) sits beside a separate link, id invite-member-continue-link, labeled Continue, that alone leads to #invite-sent; nothing in the artifact says whether Save already sends the invite or whether Continue is the action that does",
+          "location": "Invite a team member section, Save button (id invite-member-save-btn)"
+        }
+      ],
+      "lane": "judged",
+      "location": "Project settings section, Save button (id project-settings-save-btn)",
+      "severity": 3,
+      "violation": "NNG-H1 requires that a state-changing action the artifact names also names what the user sees while it runs and once it finishes. Save changes stored state (the project name) but the artifact specifies no indication, on this screen or any other, that the save succeeded, failed, or is in progress."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "\"An invite was sent to the address entered above. It expires in 5 days if not accepted.\", with no cancel-invite, revoke, or pending-invites control named anywhere in the artifact",
+      "fix": "Add a way to revoke or cancel a pending invite, for example from a pending-invites list reachable from project settings or from this confirmation screen itself, before it is accepted or expires.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Invite sent section (id invite-sent)",
+      "severity": 2,
+      "violation": "NNG-H3-UNDO requires a stated reversal path for an action that is reasonably reversible in the product described. Revoking a pending invitation before it is accepted is ordinary for this kind of feature, and the artifact names no way to do it; the only control on this screen is a one-way exit back to project settings."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "\"An invite was sent to the address entered above.\" is the entire confirmation text; the actual email address typed into invite-member-email-input on the previous screen is never shown on this screen",
+      "fix": "Display the actual submitted email address in the invite sent confirmation text, for example \"An invite was sent to jane@example.com\", instead of referring to it only as \"the address entered above\".",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Invite sent section, confirmation paragraph (id invite-status-message is absent; paragraph follows the invite-sent h2)",
+      "severity": 2,
+      "violation": "NNG-H6-RECALL requires the information a user needs at a step to be present at that step rather than held over from an earlier screen. This confirmation step needs the submitted address to let the user verify the invite went where intended, and instead refers back to a screen it does not show inline, forcing recall rather than recognition."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T15:51:35Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

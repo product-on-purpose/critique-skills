@@ -1,0 +1,126 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "\"'Vendor Onboarding' has been moved to archived projects. It no longer appears in the active projects list for anyone on the team.\" with only a single exit link, \"Back to your projects\" (#project-archived-exit-link), and no mention anywhere in the artifact of an archived-projects view or a restore/unarchive control.",
+      "fix": "Add a stated restore path: an archived-projects list reachable from the workspace overview, with an unarchive control, and link to it from the project-archived confirmation.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Project archived screen (#project-archived)",
+      "severity": 3,
+      "violation": "NNG-H3-UNDO requires a stated way back for an action that is reasonably reversible in the product being described; archiving a project is ordinarily reversible, but no restore or unarchive path appears anywhere in the eight states this artifact defines."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H4-INTERNAL",
+      "evidence": "The Save button (#invite-member-save-btn) submits the email form with no stated effect, while a separate Continue link (#invite-member-continue-link) is what actually leads to \"Invite sent\" (#invite-sent), whose copy reads \"An invite was sent to the address entered above.\" On the project-settings and notification-settings screens, by contrast, the same \"Save\" label is the screen's one and only commit action.",
+      "fix": "Either make Save and Continue consistent with the other screens' single-commit pattern (drop one control), or relabel so the two controls' distinct roles are self-evident, e.g. rename Save to something that does not imply completion, such as \"Check address\".",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Invite a team member screen (#invite-member), the Save button versus Continue link",
+      "severity": 3,
+      "violation": "NNG-H4-INTERNAL requires that one label carry one meaning everywhere it appears; \"Save\" is the terminal, complete action on two screens but a non-terminal step preceding a separate commit (Continue) on this one, with no cue distinguishing the two meanings."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-IDENTIFY",
+      "evidence": "\"Import failed. Error code IMP-500. Contact support if this continues.\"",
+      "fix": "Replace or supplement the code with a plain-language cause, e.g. naming which file or step failed and why (format, size, permissions, connectivity).",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Import status screen (#import-status), the status message (#import-status-message)",
+      "severity": 3,
+      "violation": "NNG-H9-IDENTIFY requires error text specific enough that the user can tell which action or entry caused the failure; this message reports only that the import failed and surfaces a raw internal code, naming no file, field, or cause the user can act on."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "The only control on this screen is \"Back to your projects\" (#import-status-exit-link); the message's suggested step, \"Contact support,\" has no link, address, or control anywhere on the screen or elsewhere in the artifact.",
+      "fix": "Add a retry control for the import and a working support contact (link, email, or in-app channel) directly on this screen.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Import status screen (#import-status)",
+      "severity": 3,
+      "violation": "NNG-H9-RECOVER requires that error text's suggested next step be reachable from where the message appears; this message suggests contacting support but gives no way to do so, and offers no retry control for the import itself, leaving the user's only path a return to the overview with the import still unresolved."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>: no href, no form, and no target state or message anywhere in the artifact names what happens after it is activated.",
+      "fix": "Define what Duplicate project does: either a result message on the same screen or a defined destination state (e.g. the new duplicate appearing in the project list), so the user can tell the action took effect.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Project settings screen, the Duplicate project button (#project-settings-duplicate-btn)",
+      "severity": 2,
+      "violation": "NNG-H1 requires a visible indication of what the system is doing and what the outcome was for a state-changing action; this trigger is specified with no in-progress or result feedback at all, not even a destination state."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button> with no form action and no success or failure message defined anywhere in the project-settings section.",
+      "fix": "Specify a visible save confirmation (a message or a changed control state) that appears after Save is activated, on this screen and at each repeated instance.",
+      "id": "F-006",
+      "instances": [
+        {
+          "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button> with no form action and no stated result.",
+          "location": "Invite a team member screen, the Save button (#invite-member-save-btn)"
+        },
+        {
+          "evidence": "<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button> with no form action and no stated result.",
+          "location": "Notifications screen, the Save button (#notification-settings-save-btn)"
+        }
+      ],
+      "lane": "judged",
+      "location": "Project settings screen, the Save button (#project-settings-save-btn)",
+      "severity": 2,
+      "violation": "NNG-H1 requires that a state-changing action name what the user sees while it runs and once it finishes; the artifact names the Save trigger but specifies no in-progress or result feedback for it, on the same pattern repeated at two further instances."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-EXIT",
+      "evidence": "<a id=\"invite-member-cancel-link\" href=\"#project-settings\">Cancel</a> follows an email input the user has already filled in; nothing in the invite-member section or elsewhere states what becomes of that entered address.",
+      "fix": "State in place, next to Cancel, that the entered email address is discarded (or preserved) when Cancel is used.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Invite a team member screen, the Cancel link (#invite-member-cancel-link)",
+      "severity": 2,
+      "violation": "NNG-H3-EXIT requires that an exit from a flow holding entered data states what happens to that data; the exit here is visible and clearly labeled, but its effect on the already-entered email address is unstated."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H6-RECALL",
+      "evidence": "\"An invite was sent to the address entered above.\" is the entire content of this screen; the email address itself, entered on the previous invite-member screen, is not redisplayed here.",
+      "fix": "Redisplay the email address on the invite-sent confirmation itself, e.g. \"An invite was sent to jane@example.com.\"",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Invite sent screen (#invite-sent)",
+      "severity": 2,
+      "violation": "NNG-H6-RECALL requires that information the user needs at a step be present at that step rather than held over from an earlier screen; this confirmation refers to \"the address entered above\" on a screen where nothing is in fact above it, leaving the user to recall or re-verify an address they cannot currently see."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T15:07:10Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

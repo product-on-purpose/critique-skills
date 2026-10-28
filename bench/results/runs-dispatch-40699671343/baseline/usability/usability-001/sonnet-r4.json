@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 3 projects, synced last week.\" followed by a list containing only \"Data Warehouse Cutover\" and \"Mobile App Revamp\"",
+      "fix": "Either add the third project to the list or correct the count text to \"2 projects.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "section#workspace-overview, <p> summary text and the #workspace-overview-recent list",
+      "severity": 3,
+      "violation": "The stated project count (3) does not match the number of projects actually listed (2)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Invite 3 teammates this month to unlock the advanced reporting add-on.\"",
+      "fix": "Either make the promo text a link to the invite flow, or add a counter/progress indicator for multi-invite tracking, or change the copy to not imply a specific multi-invite goal the UI can't track.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "section#workspace-overview, #workspace-overview-promo-referral",
+      "severity": 3,
+      "violation": "The promo asks the user to invite 3 teammates, but the only invite flow in the document (#invite-member) handles one email address at a time with no indication of progress toward a goal of 3, and the promo text itself is not a link into that flow."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Open project settings\" links to #project-settings, which contains an input with value \"Design System Refresh\"",
+      "fix": "Either list \"Design System Refresh\" among the workspace's projects, or make each project list item its own link to its respective settings page instead of one ambiguous link.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "section#workspace-overview, #workspace-overview-projects-link",
+      "severity": 3,
+      "violation": "The workspace overview's project list (\"Data Warehouse Cutover\", \"Mobile App Revamp\") never includes \"Design System Refresh,\" yet the single \"Open project settings\" link jumps straight to settings for that unlisted project, with no indication of which project is being opened."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\"></button>`",
+      "fix": "Add label text such as \"Duplicate project\" inside the button.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "section#project-settings, #project-settings-duplicate-btn",
+      "severity": 3,
+      "violation": "The button has no visible text or accessible label, so users (and screen readers) cannot tell what it does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>` inside a `<form>` with no `action` attribute and no confirmation target",
+      "fix": "Give the form an action/handler or add a post-save confirmation state (e.g., a \"Settings saved\" section or message) consistent with the rest of the flow.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "section#project-settings, form containing #project-settings-save-btn",
+      "severity": 3,
+      "violation": "Unlike every other action in this mockup (which navigates via an anchor to a confirmation or next section), clicking Save has no defined destination or feedback, leaving the user with no indication the name change was saved."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Form with `#invite-member-save-btn` (type=\"submit\", no action) and a separate `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>`",
+      "fix": "Make \"Continue\" trigger/require form submission (or remove the separate Save button) so the invite-sent confirmation can only be reached after a valid email has been submitted.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "section#invite-member",
+      "severity": 3,
+      "violation": "\"Continue\" navigates directly to the \"invite sent\" confirmation independent of the Save button or any email validation, so a user can reach \"An invite was sent to the address entered above\" without ever entering or submitting an email address."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Section contains only `<h2>Invite sent</h2>` and a `<p>`, with no `<a>` elements",
+      "fix": "Add a link back to project settings or the workspace overview, e.g. \"Back to project settings.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "section#invite-sent",
+      "severity": 3,
+      "violation": "This is the only non-terminal-looking page in the document with no way to navigate onward (e.g., back to project settings or the workspace), unlike #project-archived and #import-status which both provide an exit link."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\"",
+      "fix": "Add an archived-projects section/link, or remove the claim about restoring from an archived list until that page exists.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "section#archive-confirm, #archive-confirm-copy (and similarly section#project-archived)",
+      "severity": 3,
+      "violation": "No \"archived projects list\" page or link exists anywhere in the document - #project-archived only links back to #workspace-overview (the active projects list), so the restore path described is unreachable."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T14:15:18Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

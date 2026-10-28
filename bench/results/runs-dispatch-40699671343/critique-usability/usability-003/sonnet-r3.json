@@ -1,0 +1,108 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "The only control on #project-archived is <a id=\"project-archived-exit-link\" href=\"#workspace-overview\">Back to your projects</a>. No control or link anywhere in the artifact targets a restore, unarchive, or archived-projects state.",
+      "fix": "Add an unarchive or restore control, for example a Restore project link on #project-archived itself, or an Archived projects list reachable from #workspace-overview that returns a project to the active list.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Project archived screen (#project-archived)",
+      "severity": 3,
+      "violation": "Archive is one of the actions NNG-H3-UNDO names as needing a stated reversal path, and the artifact's own confirmation wording commits to archiving as a list-visibility change rather than data loss, saying it will remove the project from the active list, yet no restore path is defined anywhere, so an accidental archive has no way back in the design as specified."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-H9-IDENTIFY",
+      "evidence": "<p id=\"import-status-message\">Import failed. Error code IMP-500. Contact support if this continues.</p>",
+      "fix": "Replace the generic message with one that names what failed, for example stating which file or project the import concerned and what about it was rejected, and move the raw code after the plain-language explanation rather than leading with it.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Import status screen (#import-status)",
+      "severity": 3,
+      "violation": "NNG-H9-IDENTIFY requires error text to say in plain language what went wrong and where, specifically enough that the user can tell which of their own actions or entries caused it; this message only reports that the import failed and surfaces a raw error code, naming no file, step, or cause the user could address."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H1",
+      "evidence": "<button id=\"project-settings-save-btn\" type=\"submit\">Save</button> is the form's only commit control; #project-settings defines no loading state, success message, or any other post-save indication anywhere in the artifact.",
+      "fix": "Add a save confirmation to the #project-settings, #invite-member, and #notification-settings forms and a result indication for the duplicate action, for example a transient Saved message next to each commit control, or a defined success state the control transitions to.",
+      "id": "F-003",
+      "instances": [
+        {
+          "evidence": "<button id=\"invite-member-save-btn\" type=\"submit\">Save</button> has no defined post-submit state anywhere in #invite-member.",
+          "location": "Invite a team member screen (#invite-member), Save button"
+        },
+        {
+          "evidence": "<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button> has no defined post-submit state anywhere in #notification-settings.",
+          "location": "Notifications screen (#notification-settings), Save button"
+        },
+        {
+          "evidence": "<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button> has no feedback, confirmation, or resulting state defined anywhere in the artifact.",
+          "location": "Project settings screen (#project-settings), Duplicate project button"
+        }
+      ],
+      "lane": "judged",
+      "location": "Project settings screen (#project-settings), Save button",
+      "severity": 2,
+      "violation": "The artifact names a state-changing action, saving the edited project name, but specifies no visible indication of what the system is doing while it runs or what the outcome was once it finishes, breaching NNG-H1's requirement that every state-changing action the artifact describes get a defined in-progress or result indication."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H3-UNDO",
+      "evidence": "The only control on #invite-sent is <a id=\"invite-sent-exit-link\" href=\"#project-settings\">Back to project settings</a>. No control anywhere in the artifact targets revoking or canceling a pending invite.",
+      "fix": "Add a Cancel invite or Revoke control, reachable from #invite-sent or from a pending-invites list on #project-settings, that withdraws the invite before it is accepted.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Invite sent screen (#invite-sent)",
+      "severity": 2,
+      "violation": "Send is one of the actions NNG-H3-UNDO names as needing a stated reversal path, and the artifact names no revoke-invite control from #invite-sent or from #project-settings, so a mistakenly sent invite has no stated way back other than its own five-day expiry."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H4-INTERNAL",
+      "evidence": "The form contains <button id=\"invite-member-save-btn\" type=\"submit\">Save</button>, and the screen separately offers <a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>, the only control that leads to #invite-sent.",
+      "fix": "Remove the redundant control, or if the two are genuinely different steps, label them to say so, for example Save draft and Send invite, and define where the form's Save action leads.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Invite a team member screen (#invite-member)",
+      "severity": 2,
+      "violation": "NNG-H4-INTERNAL requires one interaction pattern to carry one meaning, with a cue where two terms coincide or differ; #invite-member presents a form-submit Save control and a separate Continue link with no stated relationship, so a user cannot tell whether Save stores the invite before Continue sends it, whether the two are redundant, or whether Save silently does nothing since no path is defined from it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-H9-RECOVER",
+      "evidence": "<p id=\"import-status-message\">Import failed. Error code IMP-500. Contact support if this continues.</p> The only control on #import-status is <a id=\"import-status-exit-link\" href=\"#workspace-overview\">Back to your projects</a>.",
+      "fix": "Add a retry-import control on #import-status, and either a direct support link or contact address, so the suggested next step is something the user can actually act on from this screen.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Import status screen (#import-status)",
+      "severity": 2,
+      "violation": "NNG-H9-RECOVER requires an error's suggested next step to be reachable from where the message appears; the suggested step, contact support, has no link, address, or control anywhere on #import-status or elsewhere in the artifact, and no retry-import control is offered either."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-003.html",
+    "artifact_sha256": "1059f20a086f45858944a5a7c7ff90352e2597fe939718b96a02737951845aee",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-usability",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T15:15:31Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

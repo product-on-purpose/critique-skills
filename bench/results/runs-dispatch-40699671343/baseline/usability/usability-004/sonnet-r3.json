@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 4 projects, synced last week.\" followed by a `<ul>` with only 3 `<li>` items (Holiday Campaign Assets, Support Backlog Triage, Mobile App Revamp)",
+      "fix": "Either add the missing fourth project to the list or relabel the list so it's clear it isn't the full set (e.g. \"Recently viewed projects\").",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "workspace-overview section, intro paragraph and the list in `#workspace-overview-recent`",
+      "severity": 3,
+      "violation": "The stated project count (4) doesn't match the number of projects actually listed (3), and nothing marks the list as partial (e.g. \"recent\" or \"3 of 4\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form>` has no `action` or `method` attribute, and `<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>` submits it",
+      "fix": "Give the form a mock action or intercept submission to show a save confirmation, consistent with how other actions (e.g. Archive) land on a result section.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "project-settings section, `<form>` wrapping the name input and Save button",
+      "severity": 3,
+      "violation": "Submitting this form with no defined action reloads the document, discarding the hash-based navigation state the rest of the mockup relies on, and gives no visible confirmation that anything was saved."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\" aria-label=\"Duplicate project\"></button>`",
+      "fix": "Add visible button text (e.g. \"Duplicate\") and/or link it to a result section such as a new \"project duplicated\" confirmation page.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "project-settings section, `<button id=\"project-settings-duplicate-btn\">`",
+      "severity": 3,
+      "violation": "This control has no visible text and no destination or handler - unlike every other interactive element in the document, it leads nowhere observable in the mockup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"invite-member-save-btn\" type=\"submit\">Save</button>` and, separately, `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>`",
+      "fix": "Remove the redundant control (likely the Save button) so there is a single, unambiguous action that results in \"Invite sent\".",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "invite-member section, form plus `#invite-member-continue-link`",
+      "severity": 3,
+      "violation": "Two different controls appear to finalize the invite - an unlinked Save submit button and a separate Continue link to \"Invite sent\" - so it's unclear which one actually sends the invite."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An invite was sent to the address entered above.\"",
+      "fix": "Reword without positional reference, e.g. \"An invite was sent to the email address you entered,\" or echo back the actual address.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "invite-sent section, paragraph",
+      "severity": 3,
+      "violation": "\"above\" refers to the email field on the previous page (invite-member), which isn't present on this page, so the reference makes no sense once the user has navigated here."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\"",
+      "fix": "Add an archived-projects section (linked from workspace-overview) or remove the restore claim.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "archive-confirm section, `<p id=\"archive-confirm-copy\">`",
+      "severity": 3,
+      "violation": "No \"archived projects list\" page, section, or link exists anywhere in the document, so this points to a destination that isn't part of the mockup."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Daily</option><option>Weekly</option><option>Monthly</option>` with no `selected` attribute on any option",
+      "fix": "Mark the current setting with `selected` (e.g. on \"Weekly\") so the form reflects existing state.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "notification-settings section, `<select id=\"notification-settings-digest-input\">`",
+      "severity": 3,
+      "violation": "Unlike the project name field, which is pre-filled with its current value (\"Q3 Roadmap\"), this select gives no indication of the currently configured digest frequency, breaking the pattern of showing existing settings."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form>` has no `action`/`method`, and `<button id=\"notification-settings-save-btn\" type=\"submit\">Save</button>` submits it",
+      "fix": "Add a mock action or intercept submission to show a confirmation instead of a full reload.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "notification-settings section, `<form>` wrapping the digest select and Save button",
+      "severity": 3,
+      "violation": "As with the project-settings form, submitting reloads the page instead of confirming the save, losing the hash-navigation state."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-004.html",
+    "artifact_sha256": "1f9a3a218edd2e0b388c6cf21a4d8405b6481a00abff29e574797380a9734380",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T15:53:01Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

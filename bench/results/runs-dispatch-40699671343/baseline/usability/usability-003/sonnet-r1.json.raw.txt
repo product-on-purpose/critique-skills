@@ -1,0 +1,39 @@
+Location: `<section id="workspace-overview">`, the `<p>` text
+Evidence: "This workspace holds 4 projects, synced this morning." followed by a list with only three `<li>` items (Beta Launch Plan, Holiday Campaign Assets, Partner Integration Pilot)
+Problem: The stated project count (4) doesn't match the number of items actually listed (3), with no label explaining the list is partial (e.g. "recent").
+Fix: Either change the count to match the list, add a 4th item, or add a visible heading/label (e.g. "Recent") clarifying the list isn't the full set.
+
+Location: `<section id="workspace-overview">`, `workspace-overview-projects-link`
+Evidence: `<a id="workspace-overview-projects-link" href="#project-settings">Open project settings</a>` leads to a settings form pre-filled with `value="Vendor Onboarding"`, a project name that appears nowhere in the "Your projects" list
+Problem: The generic settings link isn't associated with any of the listed projects, so clicking it opens settings for a project the user never saw referenced on the overview page.
+Fix: Either list "Vendor Onboarding" among the projects on the overview page, or give each listed project its own settings link so the destination matches what the user clicked.
+
+Location: `<section id="project-settings">`, form inputs
+Evidence: `<input id="project-settings-name-input" type="text" value="Vendor Onboarding">` has no `name` attribute (same for `invite-member-email-input` and `notification-settings-digest-input`)
+Problem: Without a `name` attribute, these form controls would not be submitted as form data if the form were actually posted.
+Fix: Add a `name` attribute to each form input/select that is meant to be submitted.
+
+Location: `<section id="project-settings">`, `project-settings-duplicate-btn`
+Evidence: `<button id="project-settings-duplicate-btn" type="button" aria-label="Duplicate project"></button>`
+Problem: The button has no visible text content (relies solely on `aria-label`) and has no handler, href, or linked destination, so it appears to do nothing when activated.
+Fix: Add visible button text (e.g. "Duplicate") and either link it to a new section showing the result of duplication or remove the control if duplication isn't part of this mockup's scope.
+
+Location: `<section id="project-settings">`, `project-settings-save-btn`
+Evidence: `<button id="project-settings-save-btn" type="submit">Save</button>` inside a `<form>` with no `action` attribute and no link to a follow-up state
+Problem: Unlike every other interactive element in the document, which navigates via `href="#section"`, this submit button has no defined destination or confirmation state, so it's unclear what happens after saving.
+Fix: Give the form an action/destination (e.g. navigate to a "Settings saved" confirmation section) consistent with how other flows (archive, invite) show a result state.
+
+Location: `<section id="archive-confirm">`, `archive-confirm-archive-link`
+Evidence: `<a id="archive-confirm-archive-link" href="#project-archived">Archive</a>`
+Problem: A destructive, state-changing action ("Archive") is implemented as a hyperlink rather than a button, which is a semantic misuse of `<a>` (links imply navigation, not mutation) and is inconsistent with "Save"/"Duplicate" elsewhere being `<button>` elements.
+Fix: Use a `<button type="submit">` (or button with a click handler) for the Archive action instead of an anchor link.
+
+Location: `<section id="invite-member">`
+Evidence: The form has `<button id="invite-member-save-btn" type="submit">Save</button>` and separately `<a id="invite-member-continue-link" href="#invite-sent">Continue</a>`
+Problem: There are two different, unexplained ways to proceed (submitting the form vs. clicking "Continue"), and it's unclear which one actually triggers sending the invite described on the next screen.
+Fix: Remove the redundant control and keep a single clear call-to-action, e.g. rename the Save button to "Send invite" and have it lead to `#invite-sent`, dropping the separate Continue link.
+
+Location: `<section id="import-status">`, `import-status-message`
+Evidence: Link text "View last import result" (in `workspace-overview`) leads to a page that unconditionally reads "Import failed. Error code IMP-500."
+Problem: The link's neutral phrasing ("result") implies the outcome could vary, but the destination only models a failure state, with no success variant.
+Fix: Either rename the link to reflect that it shows an error (e.g. "View import error") or add a success-state version of the import-status content.

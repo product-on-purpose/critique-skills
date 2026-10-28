@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This workspace holds 3 projects, synced last week.\" followed by a list containing only \"Data Warehouse Cutover\" and \"Mobile App Revamp\"",
+      "fix": "Either add the third project to the list (or a visible indicator like \"showing 2 of 3\" with a way to see the rest) or correct the count in the paragraph to match the list.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "section#workspace-overview, <p> and <div id=\"workspace-overview-recent\">",
+      "severity": 3,
+      "violation": "The text claims 3 projects but only 2 are listed, and nowhere in the document is the third project named or reachable."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Invite 3 teammates this month to unlock the advanced reporting add-on.\"",
+      "fix": "Either remove this promo copy or link it to an actual reporting section/page and show invite progress toward the goal.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "section#workspace-overview, <div id=\"workspace-overview-promo-referral\">",
+      "severity": 3,
+      "violation": "This references an \"advanced reporting add-on\" feature that does not exist anywhere else in the document, and the invite flow only supports inviting one person at a time with no progress indicator toward the \"3 teammates\" goal."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<form>` has no `action` attribute, and `<button id=\"project-settings-save-btn\" type=\"submit\">Save</button>` has no associated navigation",
+      "fix": "Give each form an action/handler consistent with the rest of the prototype's hash-based navigation (e.g., route Save to a confirmation state or back to the relevant hub).",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "section#project-settings, <form> containing #project-settings-save-btn",
+      "severity": 3,
+      "violation": "Unlike every other flow transition in the mockup (which uses `<a href=\"#...\">` links), this Save button (and the equivalent Save buttons in #invite-member-save-btn and #notification-settings-save-btn) has no defined destination, so submitting the form goes nowhere."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"project-settings-duplicate-btn\" type=\"button\"></button>`",
+      "fix": "Add label text (e.g., \"Duplicate project\") inside the button or via `aria-label`.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "section#project-settings, <button id=\"project-settings-duplicate-btn\">",
+      "severity": 3,
+      "violation": "The button has no visible text or accessible label, so users (and screen readers) cannot tell what it does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "form with `#invite-member-save-btn` (type=\"submit\") alongside a separate `<a id=\"invite-member-continue-link\" href=\"#invite-sent\">Continue</a>`",
+      "fix": "Collapse this into one action - either make Save itself route to #invite-sent, or remove the redundant Continue link.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "section#invite-member",
+      "severity": 3,
+      "violation": "There are two different controls that appear to complete the same invite action (Save vs. Continue), but only Continue actually navigates anywhere; this is confusing and inconsistent with other single-action forms like project-settings."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<h2>Invite sent</h2><p>An invite was sent to the address entered above...</p>` with no following link",
+      "fix": "Add a link back to #project-settings or #workspace-overview, matching the pattern used after other confirmation screens.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "section#invite-sent",
+      "severity": 3,
+      "violation": "This page is a dead end with no way to navigate back to project settings or the workspace overview, unlike #project-archived and #import-status which both provide an exit link."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You can restore it at any time from the archived projects list.\"",
+      "fix": "Either add an archived-projects-list section/link reachable from the workspace overview, or remove this sentence.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "section#archive-confirm, <p id=\"archive-confirm-copy\">",
+      "severity": 3,
+      "violation": "No \"archived projects list\" page or link exists anywhere in the document, so this references a feature users cannot reach."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/usability/usability-001.html",
+    "artifact_sha256": "c05697abd728a7e12a024d9a66262daeab848086127c7feea4823812a595a2e6",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T14:08:50Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
