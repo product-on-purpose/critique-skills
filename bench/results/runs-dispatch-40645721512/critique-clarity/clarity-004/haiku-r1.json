@@ -1,0 +1,62 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Request Steps section states 'Completing the request begins with confirming eligibility, and uploading the receipt.' This section appears after Terminology Notes, but should logically follow How to Apply (line 17). A reader following the natural task sequence (Eligibility -> How to Apply -> Request Steps) would skip from How to Apply directly to Approval Timeline, missing this core procedural step.",
+      "fix": "Move the Request Steps section to immediately follow How to Apply (after line 24).",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section 'Request Steps' (lines 56-57), appearing after 'Terminology Notes'",
+      "severity": 3,
+      "violation": "Actionable section for completing a request appears after non-essential sections, breaking the reader's natural task sequence"
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Line 1: 'Home-Office Equipment Stipend Policy' (equipment). Line 33: 'proof of purchase for every stipend item' (stipend item). Line 47: 'one device per category per employee' (device). These three terms (equipment, stipend item, device) all refer to the physical items eligible for reimbursement, but no glossary or cross-reference signals they are synonymous.",
+      "fix": "Either use 'equipment' consistently throughout (replacing 'stipend item' and 'device'), or add a glossary section at the end that explicitly states 'equipment, device, and stipend item refer to the same thing' or similar.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Throughout the document: title, Eligibility section, Required Documentation, Restrictions section, Terminology Notes",
+      "severity": 2,
+      "violation": "Multiple different terms used for the same concept without stated equivalence"
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "First paragraph of Terminology Notes: 'You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review.' Subject shifts from 'You' to 'Finance' to 'Payroll' across three consecutive sentences with no transition connecting the topics.",
+      "fix": "Restructure the paragraph to group sentences by actor: first all sentences with 'You' as subject, then transition to Finance's role, then Payroll's role. Or rewrite as a workflow description: 'After you record the stipend item on the request form, Finance reconciles it against the request log each month, and Payroll releases the amount after that monthly review.'",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Terminology Notes section, lines 51-53",
+      "severity": 2,
+      "violation": "Grammatical subjects change in consecutive sentences without maintaining a consistent topic thread, forcing readers to re-orient at each sentence boundary"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T07:38:13Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

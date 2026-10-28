@@ -1,0 +1,128 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "evidence": "Lines 11-12: 'If the position counts as full-time, the stipend can apply. If the employee has completed 90 days of continuous service, the stipend can apply. If the request arrives before the benefit year ends, the stipend can apply. Only once every condition above is met does the home-office equipment stipend become available to the employee.' The main idea appears only in the final sentence.",
+      "fix": "Lead with the main rule: 'Employees become eligible for the home-office equipment stipend when three conditions are met: the position counts as full-time, the employee has completed 90 days of continuous service, and the request arrives before the benefit year ends.'",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Eligibility section, lines 11-12",
+      "severity": 3,
+      "violation": "The section opens with three conditional clauses before stating the governing rule. Reader must process all conditions before learning what the benefit actually is."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Lines 56-57 contain only 'Completing the request begins with confirming eligibility, and uploading the receipt.' This should appear much earlier, and sections from lines 63-73 (Program Coordination, Review Responsibility, Questions and Updates) are internal administrative content, not employee workflow.",
+      "fix": "Reorganize so that procedural steps appear immediately after 'How to Apply.' Move internal administrative sections (Program Coordination, Review Responsibility) to an appendix or separate document for staff. Restore the document to employee-task sequence: Overview, Eligibility, How to Apply [with full steps], Approval Timeline, Required Documentation, Reimbursement Amounts, Restrictions.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Document structure: duplicate section and late placement of procedural steps",
+      "severity": 3,
+      "violation": "The document's structure does not follow the reader's workflow. Request steps appear as a single sentence far into the document (line 56-57), after six unrelated sections. Internal administrative sections (Program Coordination, Review Responsibility) occupy the final positions when employee-facing content would remain more useful. The duplicate Overview section further breaks document organization."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "evidence": "36-word sentence, 4 subordinate-clause markers: Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 3",
+      "severity": 3,
+      "violation": "The sentence runs to 36 words with 4 subordinate-clause markers, longer than the reader can hold in mind on a single pass."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "Lines 3-7: 'The people operations office publishes the reimbursement log each quarter...' and lines 59-61: 'The benefits team publishes the reimbursement log after every open enrollment period...' are functionally identical statements of the same concept.",
+      "fix": "Delete one of the duplicate Overview sections entirely. Consolidate any unique content from each into a single coherent Program Overview.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Program Overview (lines 3-7) and Overview (lines 59-61)",
+      "severity": 3,
+      "violation": "Identical 'Overview' section appears twice in the document with overlapping content, preventing a reader from identifying a single coherent theme running through the document."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ACTIVE",
+      "evidence": "The request is reviewed within two business days.",
+      "fix": "Rewrite the sentence in active voice, naming the actor that performs the action.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence uses a be-verb plus past-participle passive construction in a context where the actor is recoverable and worth naming directly."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Line 33: 'The manager approves items pursuant to internal discretion...' appears in the Required Documentation section with no signal this is manager-level process, not employee instruction. Lines 63-73 shift entirely to internal coordination and review processes with no heading distinguishing them as back-office content.",
+      "fix": "Separate audience content into distinct labeled sections. Create a 'For Employees' section covering Eligibility through Reimbursement Amounts. Create a separate 'For Managers and Administrators' section containing approval and coordination details. Or, within each section, clearly label which paragraphs are employee-facing vs. management-only.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Required Documentation section (line 33) and Program Coordination section (lines 63-65)",
+      "severity": 2,
+      "violation": "The document mixes employee audience with internal management/administrative audience without clear separation. Readers cannot tell which instructions apply to them without carefully re-reading."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONCISE",
+      "evidence": "Also, the deposit happens in order to offset costs the employee already paid at this point in time.",
+      "fix": "Replace the wordy phrase with its plain equivalent (for example, because for due to the fact that).",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Reimbursement Amounts, paragraph 2",
+      "severity": 2,
+      "violation": "The sentence uses a wordy construction from the fixed wordy-phrase list that a shorter equivalent would carry with no loss of meaning."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-DOUBLE-NEGATIVE",
+      "evidence": "However, reimbursement is not available without a completed receipt.",
+      "fix": "Restate the sentence with at most one negation, or recast it as a positive statement.",
+      "id": "F-008",
+      "lane": "scripted",
+      "location": "Eligibility, paragraph 2",
+      "severity": 2,
+      "violation": "2 negation markers from the fixed negation list co-occur in one clause, so the reader has to work out the statement's logical sign before understanding it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-HEADINGS",
+      "evidence": "heading: Overview",
+      "fix": "Replace the heading with text specific enough to be found by scanning.",
+      "id": "F-009",
+      "lane": "scripted",
+      "location": "the Overview heading",
+      "severity": 2,
+      "violation": "The heading text matches the fixed list of non-specific heading labels, so a reader scanning headings cannot tell whether the section applies to them."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-001.md",
+    "artifact_sha256": "32ee3fed58b3e9b931565041a2e195dade8e2d19c9e9172fe28b38bdb5f6ef2c",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T06:55:22Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 8,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 3
+  }
+}

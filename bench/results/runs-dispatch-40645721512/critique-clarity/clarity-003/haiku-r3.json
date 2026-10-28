@@ -1,0 +1,106 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-PARAGRAPH",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout.",
+      "fix": "Rewrite the opening sentence to state the topic the rest of the paragraph covers.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "The paragraph's opening sentence shares almost no vocabulary with the rest of the paragraph, so it does not preview the paragraph's actual topic."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout. A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.",
+      "fix": "Delete the unrelated sentences, or move them to a separate section. If you must include them, create a new section titled 'General Updates' or similar and explain their relevance.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Program Coordination section",
+      "severity": 3,
+      "violation": "The section opens with a governing topic (benefits team coordinating stipend requests) but immediately shifts to three completely unrelated topics (travel expense audit, remote work guidance, coffee budget reset) with no connection back to the main topic."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the reimbursable item against the request log each month. Payroll releases the covered purchase amount after that monthly review. Also, you submit the request in the portal. Countersign the employee request within two business days. You track its status there until the payment clears.",
+      "fix": "Separate the employee instructions from the internal process descriptions, or clearly label which sentences apply to which audience.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Terminology Notes",
+      "severity": 2,
+      "violation": "The section addresses multiple audiences without clear separation. It mixes employee instructions ('You record...', 'you submit...', 'You track...') with process descriptions for other roles ('Finance reconciles...', 'Payroll releases...') and a manager instruction ('Countersign the employee request...'), making it unclear which sentences are meant for the reader."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "In Eligibility: 'the stipend covers one claim per employee per benefit year'. In How to Apply: 'Employees start a stipend request in the benefits portal'.",
+      "fix": "Choose one term consistently throughout the document, or explicitly state that 'claim' and 'request' are equivalent.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Eligibility and How to Apply sections",
+      "severity": 2,
+      "violation": "The term 'claim' in the Eligibility section and 'request' throughout the rest of the document refer to the same concept (what an employee submits to receive the stipend) but are used inconsistently with no signal that they are equivalent."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "evidence": "However, employees on an approved leave of absence remain eligible once they return to active status.",
+      "fix": "Reorder to state the main rule first: 'Employees on an approved leave of absence remain eligible once they return to active status' or structure as 'Employees remain eligible on their return from an approved leave of absence.'",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Eligibility section",
+      "severity": 2,
+      "violation": "The sentence opens with an exception condition before stating the governing rule, requiring re-reading to recover what the rule actually is."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SUBJECT-VERB-OBJECT",
+      "evidence": "Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.",
+      "fix": "Move the interrupting clause elsewhere, or split it into its own sentence.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 2",
+      "severity": 2,
+      "violation": "3 comma-set-off clause(s) totalling 14 words intervene between the sentence's apparent subject and its verb."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-TRANSITIONS",
+      "evidence": "An incomplete request pauses the timeline until the missing item arrives. The...",
+      "fix": "Open the paragraph with a transition word that states its relationship to the prior paragraph.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 2",
+      "severity": 2,
+      "violation": "The paragraph opens with none of the fixed transition words, so the reader is not told how it relates to the paragraph before it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T07:28:57Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 9,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 4
+  }
+}
