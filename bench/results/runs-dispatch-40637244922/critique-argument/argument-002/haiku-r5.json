@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-CLAIM-MARKER",
+      "evidence": "0 conclusion-marker phrases found across 401 words.",
+      "fix": "Add an explicit conclusion-signalling phrase at the point the artifact states its central claim, for example \"therefore\" or \"we recommend\".",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "severity": 3,
+      "violation": "No phrase from the conclusion-marker lexicon (therefore, thus, hence, it follows that, we recommend, this paper argues, I argue that, the conclusion is, in conclusion, we should, the case for) appears anywhere in the artifact, so a reader scanning rather than reading straight through has no signpost to where the conclusion is asserted."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-HEDGE-DENSITY",
+      "evidence": "10 of 14 sentences (0.71) carry at least one hedging term.",
+      "fix": "Remove the hedge from sentences whose claim the evidence actually supports, reserving qualification for the claims that genuinely need it.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "severity": 3,
+      "violation": "More than 0.35 of the artifact's sentences carry a term from the hedging lexicon (may, might, could, possibly, perhaps, arguably, somewhat, relatively, it seems, appears to, tends to, to a degree), spread across the whole document rather than concentrated where the evidence actually underdetermines the claim."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-BACKING",
+      "evidence": "Line 27 states only \"this relationship is documented in the Tri-County Library Data Cooperative's 2023 fines-elimination research brief, which reviewed return-rate data from fourteen library systems.\" No finding from the brief is stated.",
+      "fix": "Quote or describe a specific finding from the Tri-County research - for example, \"the brief reported an average return-rate improvement of X percent across the fourteen systems\" or \"the brief found that elimination led to increased circulation in Y percent of systems.\" Make explicit what relationship the research documents.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "line 27, \"Addressing the Revenue Concern\" section",
+      "severity": 2,
+      "violation": "The warrant (line 25) asserts that removing fines \"predictably increases both on-time return rates and overall program participation.\" Its backing (line 27) names the source - Tri-County Library Data Cooperative's 2023 brief - but does not state what the brief found or how it supports the warrant. The verb \"documented\" is passive; a reader cannot reconstruct the relationship from the artifact alone."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-GROUNDS",
+      "evidence": "Line 25 states \"the pilot's return-rate and avoidance-survey results, taken together, support...\" but does not give return-rate numbers. Line 13 gives avoidance-survey numbers (20% before, 3% after) but nowhere are return-rate figures stated.",
+      "fix": "Add the actual return-rate improvement from the pilot - for example, \"the pilot branches increased on-time returns by X percent\" or \"return rates improved from Y percent to Z percent.\" Place this figure where the return-rate ground is first cited (line 25 or in the \"What the Pilot Showed\" section).",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "lines 13 and 25 - the pilot results and warrant section",
+      "severity": 2,
+      "violation": "The artifact cites pilot return-rate improvement on line 25 (\"return-rate...results\") but does not state the actual return-rate figures. The survey result (20% to 3% reduction in reported library avoidance) is quantified, but the return-rate ground is mentioned only as existing, not with numbers. A reader cannot assess the magnitude of this ground without the figures."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-QUALIFIER",
+      "evidence": "Claim: lines 11 (\"plainly\"), 17 (\"stronger choice\"), 21 (\"without qualification\"). Grounds: line 13 (\"Arguably\"), lines 25 - 27 (\"In a somewhat qualified way\" appears twice).",
+      "fix": "Either (1) remove or reduce the hedging from the grounds and claim if the evidence is strong enough to support an unqualified recommendation, or (2) qualify the claim to match the evidence - for example, \"The available evidence suggests a systemwide end to overdue fines is a promising choice, likely to increase return rates and library use based on pilot results and external research.\". Ensure that the certainty language applied to the claim reflects the certainty warranted by the grounds.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "lines 11, 17, 21 (claim) and lines 13, 25, 27 (grounds)",
+      "severity": 2,
+      "violation": "The claim is asserted with high certainty (\"plainly the better path,\" \"stronger choice,\" \"without qualification,\" line 21) but the grounds are consistently hedged. Line 13 uses \"Arguably\" for the survey result. Lines 25 and 27 repeat \"In a somewhat qualified way\" twice. This mismatch suggests the claim's stated strength (unqualified, definitive) does not match the strength of the evidence (hedged, somewhat qualified). The claim should either be qualified down or the hedging on the grounds should be removed if the evidence actually supports the unqualified claim."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-WARRANT",
+      "evidence": "Lines 25 - 26 assert that the relationship between fines and return rates is \"the reason\" pilot results apply systemwide, but do not state the principle explicitly (e.g., \"removing fines causes higher returns in any library system\" or \"the benefit of eliminating fines is not branch-specific\").",
+      "fix": "State the warrant plainly and directly. For example: \"Removing financial penalties for late returns increases library use and return rates regardless of branch or system size, because the barrier to use is psychological, not context-specific. Therefore, the pilot's positive results should apply to all consortium branches.\" Or: \"The pilot branches are representative of the consortium in terms of patron demographics, collection size, and operational capacity, so results from the pilot are predictive for systemwide implementation.\". Make the principle of transfer explicit.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "lines 25 - 26, \"Why the Pilot Result Applies Systemwide\" section",
+      "severity": 2,
+      "violation": "The warrant states the general principle that should license the move from pilot results to systemwide recommendation: \"removing the financial penalty for late returns predictably increases both on-time return rates and overall program participation, which is the reason the pilot's...results...support ending fines for the whole consortium rather than only the pilot branches.\" However, the warrant does not make fully explicit what this principle is or how it applies to other branches. It asserts that the principle is documented in the Tri-County research (line 27) but does not state the principle itself in clear language a reader can evaluate. The warrant is stated but opaque."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-CLAIM",
+      "evidence": "Four distinct claim statements appear on lines 11, 17, 19, and 21, each with different scope (system-wide vs. forward-looking, permanent removal vs. abstract benefit).",
+      "fix": "State a single, clearly bounded claim once, at the point where the artifact's logic has been fully developed (ideally in or near the \"Recommendation\" section). The claim should be specific enough that a reader can evaluate whether the grounds support it. For example: \"The consortium should eliminate overdue fines systemwide, effective at the start of the next fiscal year, because pilot data and external research show this change increases return rates and library use while incurring negligible revenue loss.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "lines 11, 17, 19, 21 - the document title and recommendation section",
+      "severity": 1,
+      "violation": "The claim is stated four separate times in different formulations: (line 11) \"Ending overdue fines is plainly the better path,\" (line 17) \"the stronger choice is a systemwide end to overdue fines,\" (line 19) \"the recommended change is about making things better for patrons going forward,\" and (line 21) \"This recommendation removes every overdue-related charge permanently, for every item the consortium owns, without qualification.\" These are restatements rather than a single stated claim, and their scope and force differ. Iteration suggests the artifact has not settled on a single, clearly bounded central claim."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/argument/argument-002.md",
+    "artifact_sha256": "0322bc2ebeb48318c56473186a8cb1f1e78d8667b99cfaf75ee7bb84f82fcfa2",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "TOULMIN"
+    ],
+    "skill": "critique-argument",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T05:50:08Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 2,
+      "2": 4,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

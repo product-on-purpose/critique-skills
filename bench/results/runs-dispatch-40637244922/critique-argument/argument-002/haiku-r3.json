@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-CLAIM-MARKER",
+      "evidence": "0 conclusion-marker phrases found across 401 words.",
+      "fix": "Add an explicit conclusion-signalling phrase at the point the artifact states its central claim, for example \"therefore\" or \"we recommend\".",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "severity": 3,
+      "violation": "No phrase from the conclusion-marker lexicon (therefore, thus, hence, it follows that, we recommend, this paper argues, I argue that, the conclusion is, in conclusion, we should, the case for) appears anywhere in the artifact, so a reader scanning rather than reading straight through has no signpost to where the conclusion is asserted."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-HEDGE-DENSITY",
+      "evidence": "10 of 14 sentences (0.71) carry at least one hedging term.",
+      "fix": "Remove the hedge from sentences whose claim the evidence actually supports, reserving qualification for the claims that genuinely need it.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "the whole document, under its \"Ending Overdue Fines Systemwide: A Recommendation\" heading",
+      "severity": 3,
+      "violation": "More than 0.35 of the artifact's sentences carry a term from the hedging lexicon (may, might, could, possibly, perhaps, arguably, somewhat, relatively, it seems, appears to, tends to, to a degree), spread across the whole document rather than concentrated where the evidence actually underdetermines the claim."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-GROUNDS",
+      "evidence": "The Recommendation section states 'Given the return-rate and avoidance-survey results above' but the What the Pilot Showed section specifies only the avoidance-survey result (20% to 3%), never stating what the return-rate results were.",
+      "fix": "In the What the Pilot Showed section, specify the actual return-rate improvement from the pilot, providing the numeric data a reader could verify.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Recommendation section first sentence references grounds that are not fully specified in the What the Pilot Showed section",
+      "severity": 2,
+      "violation": "The central claim is attached to evidence a reader could check, but the return-rate results referenced in the claim are never actually stated. Only the avoidance survey numbers are provided. A reader cannot verify the return-rate data because the artifact does not supply it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-QUALIFIER",
+      "evidence": "The claim is stated as 'the stronger choice' with no modal qualifier, while supporting sentences use 'In a somewhat qualified way,' 'arguably,' 'it seems,' 'it might be that,' and 'to a degree' throughout the document.",
+      "fix": "Either strengthen the evidential grounds by removing hedges where the evidence actually supports unqualified claims, or add a corresponding qualifier to the central claim such as 'appears to be a stronger choice' to match the heavily-qualified grounds.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Recommendation section (claim stated without qualification) versus Why the Pilot Result Applies Systemwide and Addressing the Revenue Concern sections (claim's grounds heavily hedged)",
+      "severity": 2,
+      "violation": "The strength with which the central claim is asserted does not match the strength of the grounds. The claim uses 'the stronger choice' with no qualification, but the grounds supporting it are consistently qualified as 'somewhat qualified way,' 'arguably,' and similar hedges. A reader expecting the claim's confidence to reflect its grounds' confidence will encounter a mismatch."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-REBUTTAL",
+      "evidence": "The artifact raises and answers the revenue/budget objection. However, the artifact's own grounds - mention of survey methods without detail, unspecified return-rate improvements, and limited pilot scope - leave open other objections: whether the survey methodology was adequate, whether the improvement is durable beyond the twelve-month pilot window, and whether the result truly generalizes to all ten branches.",
+      "fix": "Raise and address a second foreseeable objection that the artifact's own grounds expose, such as whether the survey methodology was sound, whether the improvement persists long-term, or what alternative approaches might better serve the goal of improving access.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Addressing the Revenue Concern section; absent sections addressing methodology or sustainability of results",
+      "severity": 2,
+      "violation": "The argument names and answers one circumstance that would set its claim aside (revenue impact on four pilot branches) but does not raise or address other foreseeable objections exposed by its own scope and evidence. A skeptical reader's second question - whether the methodology was valid and whether the improvement persists - goes unaddressed."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/argument/argument-002.md",
+    "artifact_sha256": "0322bc2ebeb48318c56473186a8cb1f1e78d8667b99cfaf75ee7bb84f82fcfa2",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "TOULMIN"
+    ],
+    "skill": "critique-argument",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T05:43:04Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

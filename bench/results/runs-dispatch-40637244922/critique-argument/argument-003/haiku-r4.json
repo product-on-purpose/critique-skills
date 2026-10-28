@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-GROUNDS",
+      "evidence": "Line 21: 'This recommendation applies to items returned within 60 days of their due date; items still unreturned past that window remain subject to the existing replacement-cost billing process, matching the return-rate pattern the pilot data actually established.' Lines 11: '94 percent, compared with 87 percent'.",
+      "fix": "Either provide data from the pilot showing what fraction of items were returned by day 60, or remove the claim that this parameter is grounded in the pilot results. If the 60-day window comes from another source or is a policy choice, state that explicitly rather than attributing it to the pilot data.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Line 21",
+      "severity": 3,
+      "violation": "The 60-day cutoff is asserted to match the return-rate pattern from the pilot, but the pilot data (lines 11) report only aggregate return rates (94% vs 87%), with no breakdown by time window. The artifact provides no evidence for why the 60-day boundary specifically matches the pilot pattern."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-GROUNDS",
+      "evidence": "Line 11: 'During a 16-month pilot at 5 branches'. Line 33: 'the four pilot branches absorbed the loss'.",
+      "fix": "Clarify whether the financial data (fine revenue as 2% of budget, no measurable change in spending) comes from the same 5 branches as the return-rate pilot, or from a subset of 4 branches. If they are different sets, specify which branches reported which data.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Line 33, comparing with line 11",
+      "severity": 2,
+      "violation": "Branch count is inconsistent: the return-rate pilot is stated as 5 branches, but the financial impact data references four pilot branches, creating ambiguity about which branches provided the financial grounds."
+    },
+    {
+      "confidence": "high",
+      "criterion": "TOULMIN-QUALIFIER",
+      "evidence": "Line 21: 'This recommendation applies to items returned within 60 days of their due date'.",
+      "fix": "Either qualify the claim (e.g., 'we recommend a provisional 60-day window' or 'a 60-day window would apply') if the parameter is not firmly grounded, or add grounds explaining why 60 days is the right choice based on the pilot data or other evidence.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Line 21",
+      "severity": 2,
+      "violation": "The 60-day boundary is stated as a definite, unqualified policy specification, but the grounds do not establish this specific parameter. The claim carries more certainty than the evidence supporting it warrants."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "TOULMIN-REBUTTAL",
+      "evidence": "Lines 31-33: 'A skeptic on the board points to overdue fines as a source of materials-replacement funding... the shortfall the objection anticipates has not materialized where the policy has already been tried.' The pilot involved 5 branches over 16 months; the recommendation is systemwide across 10 branches with no stated end date.",
+      "fix": "Identify other conditions the pilot data leaves open (representativeness of the 5 pilot branches to the other 5, sustainability beyond 16 months, implementation costs) and address at least the most material ones before recommending systemwide change. If these objections do not apply, explain why the pilot's scope is sufficient.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Lines 31-33, relative to the entire artifact",
+      "severity": 2,
+      "violation": "The artifact raises and addresses the revenue-shortfall objection but does not raise or address other foreseeable objections the pilot's limited scope leaves open: whether the 5-branch success generalizes to all 10 branches, whether 16 months is sufficient to establish sustainable behavior change, and what implementation or transition costs the policy entails."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/argument/argument-003.md",
+    "artifact_sha256": "3735fd3a135fcd3f730e35c6af56fb064083676684399e5b0486c140ff7894de",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "TOULMIN"
+    ],
+    "skill": "critique-argument",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T06:01:05Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
