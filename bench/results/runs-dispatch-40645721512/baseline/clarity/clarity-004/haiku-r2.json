@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You must keep your equipment in good working condition and we may ask for a brief photo check once a year.\"",
+      "fix": "Change to \"Employees must keep their equipment in good working condition and the company may ask for a brief photo check once a year.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Restrictions and Exceptions section, first paragraph",
+      "severity": 3,
+      "violation": "Inconsistent pronoun usage - the document uses third-person voice (employees, the manager, the team) throughout, but this sentence switches to second person \"you\" and first-person plural \"we.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal. You track its status there until the payment clears.\"",
+      "fix": "Replace \"you\" with third-person constructions: \"The employee records the stipend item... The employee submits the request in the portal. The employee tracks its status...\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Terminology Notes section",
+      "severity": 3,
+      "violation": "Multiple sentences use second-person \"you,\" breaking consistency with the third-person voice used throughout the rest of the document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"However, an incomplete request pauses the timeline until the missing item arrives.\"",
+      "fix": "Change to \"However, an incomplete request pauses the timeline until the missing information is provided.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Approval Timeline section, second paragraph",
+      "severity": 3,
+      "violation": "The phrase \"until the missing item arrives\" is confusing and inaccurate - an incomplete request means missing information or documentation, not a physical item that needs to arrive."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Program Overview states \"the IT asset group tracks the equipment catalog on the first business day of the month,\" while Special Cases states \"The finance liaison publishes the equipment catalog at the start of the fiscal year.\"",
+      "fix": "Clarify the actual schedule and responsible party, then ensure all sections align.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Program Overview and Special Cases sections",
+      "severity": 3,
+      "violation": "Contradictory information about when the equipment catalog is updated (monthly vs. annually) and which party is responsible (IT asset group vs. finance liaison)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Completing the request begins with confirming eligibility, and uploading the receipt.\"",
+      "fix": "Either expand this section to list all actual steps or remove it as redundant.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Request Steps section",
+      "severity": 3,
+      "violation": "This section lists only two incomplete steps and is vague compared to the more detailed \"How to Apply\" section, creating redundancy and potential confusion about the actual required steps."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T07:42:15Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
