@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential.\"",
+      "fix": "Add descriptions for each value, such as: \"none means do not retry; linear increases the delay between retries by a fixed amount; exponential increases the delay exponentially.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "## retry_policy section",
+      "severity": 3,
+      "violation": "The valid values are listed but not explained. A reader cannot determine what distinguishes linear from exponential retry behavior, or what none means."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The signing_secret field accepts a string used to verify the payload signature on receipt.\"",
+      "fix": "Specify the algorithm, such as: \"The signing_secret field accepts a string used to verify the payload signature via HMAC-SHA256 on receipt.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "## signing_secret section",
+      "severity": 3,
+      "violation": "The verification algorithm is not specified. It does not say whether HMAC-SHA256, HMAC-SHA512, or another standard is used."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "No field indicates required vs optional status",
+      "fix": "Add a required/optional indicator for each field, either inline (e.g., \"The endpoint_url field (required) accepts...\") or in a separate column/note.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Document-wide",
+      "severity": 3,
+      "violation": "The document does not state which fields are required and which are optional for webhook configuration."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"accepts one of none, linear, or exponential, and the default value is exponential\"",
+      "fix": "Add timing details, such as: \"Linear retries every 5 seconds up to 10 attempts. Exponential retries with a 1 second base delay, doubling each attempt, up to 10 attempts or 5 minutes.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "## retry_policy section",
+      "severity": 3,
+      "violation": "No timing information is provided. The document does not explain retry limits, backoff intervals, or how long the retry period lasts."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-004.md",
+    "artifact_sha256": "7f41536ab3c3f7bc93a3dde86b8e81cee5dab0339f2b1d472e9222a20b42d7ae",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T09:26:16Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

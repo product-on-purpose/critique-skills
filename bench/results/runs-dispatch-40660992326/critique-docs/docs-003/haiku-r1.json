@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "DIATAXIS-CROSSLINK",
+      "evidence": "The Related pages section (lines 21-31) lists 9 reference-mode links: Metric catalog reference, Notification channel reference, Webhook delivery reference, Escalation policy reference, Time window reference, Retry backoff reference, Alert rule schema, Rate limit reference, Delivery status codes. No how-to, tutorial, or explanation pages are linked.",
+      "fix": "Add links to complementary-mode pages: a how-to guide for configuring alert rules with these fields, a tutorial for creating alert rules, or explanations of why these specific fields exist and how they interact.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Related pages section and page as a whole",
+      "severity": 2,
+      "violation": "The page links only to other reference pages and does not link to complementary-mode pages (how-to guides, tutorials, or explanations) that would help readers apply these fields in context."
+    },
+    {
+      "confidence": "high",
+      "criterion": "DIATAXIS-NAV-LENGTH",
+      "evidence": "9 flat items, no sub-headings or nested items breaking them into groups.",
+      "fix": "Split this listing into named subgroups, either nested sub-lists or sub-headings, each holding a smaller set of related items.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "the Related pages listing",
+      "severity": 2,
+      "violation": "This listing holds 9 items, more than 7 a reader can scan in one glance, with no subgrouping to break it up."
+    },
+    {
+      "confidence": "high",
+      "criterion": "DIATAXIS-REFERENCE-NEUTRAL",
+      "evidence": "Line 11: 'Leaving this field at its default is the right choice for most teams, and raising it is worth doing only when a specific integration needs the extra room.'",
+      "fix": "Rewrite to remove recommendations and keep only neutral description: e.g., 'Many teams leave this field at its default. Some teams raise it when a specific integration needs the extra room.'",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "timeout field description (lines 9-11)",
+      "severity": 2,
+      "violation": "The timeout field description contains prescriptive language ('the right choice for most teams', 'worth doing') rather than neutral description."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "DIATAXIS"
+    ],
+    "skill": "critique-docs",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T09:17:28Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

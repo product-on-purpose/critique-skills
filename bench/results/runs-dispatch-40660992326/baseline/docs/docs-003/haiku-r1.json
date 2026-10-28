@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Leaving this field at its default is the right choice for most teams\"",
+      "fix": "Add an explicit statement of the default timeout value (e.g., \"and defaults to X milliseconds\").",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "timeout section, second paragraph",
+      "severity": 3,
+      "violation": "The default value for timeout is referenced but never specified, unlike retries (\"defaults to 3\") and logging (\"default value is info\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"the validator rejects any value below 1000\"",
+      "fix": "Rephrase as \"minimum accepted value is 1000 milliseconds\" or \"accepts values from 1000 milliseconds and above\".",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "timeout section, first paragraph",
+      "severity": 3,
+      "violation": "The minimum constraint is stated in negative form, less clear than the range specification used for retries (\"from 0 to 10\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000.\"",
+      "fix": "Add either an explicit maximum value or state that there is no upper limit.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "timeout section",
+      "severity": 3,
+      "violation": "No maximum value is specified, leaving the upper bound of the timeout field undocumented."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"- Metric catalog reference - Notification channel reference\"",
+      "fix": "Format these items as markdown links or otherwise indicate they are navigable references (e.g., `[Metric catalog reference](path)`).",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Related pages section",
+      "severity": 3,
+      "violation": "These reference items are formatted as plain text rather than as hyperlinks or with link formatting."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T09:18:03Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

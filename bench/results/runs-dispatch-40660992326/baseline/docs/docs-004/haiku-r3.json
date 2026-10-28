@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The retry_policy field accepts one of none, linear, or exponential\"",
+      "fix": "Add descriptions for each retry policy type - for example, clarify whether \"linear\" means fixed-interval retries, \"exponential\" means exponentially-increasing intervals, and \"none\" means no retries at all.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "## retry_policy",
+      "severity": 3,
+      "violation": "The document lists the valid values but does not explain what each option does or how they differ from each other."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The signing_secret field accepts a string used to verify the payload signature on receipt.\"",
+      "fix": "Clarify whether the field is required, specify minimum and maximum length constraints, and explain the signature verification algorithm or process.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "## signing_secret",
+      "severity": 3,
+      "violation": "The documentation does not specify whether this field is required or optional, and provides no format or length requirements."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert.\"",
+      "fix": "Add specific format constraints and clarify what types of URLs are valid (e.g., whether paths, ports, and query parameters are supported).",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "## endpoint_url",
+      "severity": 3,
+      "violation": "No constraints on the URL format are provided, such as maximum length, whether query parameters are allowed, or whether custom ports are supported."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-004.md",
+    "artifact_sha256": "7f41536ab3c3f7bc93a3dde86b8e81cee5dab0339f2b1d472e9222a20b42d7ae",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T09:27:16Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
