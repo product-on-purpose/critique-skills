@@ -1,0 +1,24 @@
+Location: ## timeout section
+Evidence: "Leaving this field at its default is the right choice for most teams" / "The timeout field takes a duration in milliseconds, and the validator rejects any value below 1000."
+Problem: The section references "its default" twice but never states what the default timeout value actually is, unlike the retries and logging fields which both specify their defaults explicitly.
+Fix: Add the default timeout value, e.g. "The timeout field takes a duration in milliseconds, defaults to X, and the validator rejects any value below 1000."
+
+Location: ## timeout section
+Evidence: "the validator rejects any value below 1000"
+Problem: Only a lower bound is given; no upper bound is specified, which is inconsistent with the retries field that documents a full range (0 to 10). It's unclear whether timeout is unbounded or simply undocumented.
+Fix: State the maximum accepted timeout value, or explicitly note that there is no upper bound.
+
+Location: ## retries section
+Evidence: "The retries field takes an integer from 0 to 10, and it defaults to 3."
+Problem: The field's purpose and behavior are not explained (e.g., what triggers a retry, whether retries apply to delivery failures, evaluation failures, or something else), despite a separate "Retry backoff reference" page existing, leaving readers unable to tell what this field actually controls.
+Fix: Add a sentence describing what event causes a retry and link to the Retry backoff reference for timing details.
+
+Location: ## logging section
+Evidence: "The logging field accepts one of debug, info, warn, or error, and the default value is info."
+Problem: The field lists valid values and a default but never explains what the logging level actually affects (e.g., per-rule execution logs, delivery logs, or something else), so the reader cannot judge when changing it is useful.
+Fix: Add a brief description of what output or system the logging level controls.
+
+Location: ## Related pages
+Evidence: "Metric catalog reference" and "Delivery status codes" listed alongside "Alert rule schema"
+Problem: Several linked pages (e.g., Metric catalog reference, Delivery status codes) have no stated connection to the three documented fields (timeout, retries, logging), making it unclear why they're included versus other alert-rule-adjacent topics.
+Fix: Either add a one-line rationale for each related link or trim the list to pages that are directly relevant to these fields.

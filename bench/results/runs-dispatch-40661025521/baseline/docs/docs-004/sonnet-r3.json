@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential.\"",
+      "fix": "Either confirm this is intentional and add a brief note on why exponential is the safe default (and what none/linear are for), or correct the default if it's actually a documentation error.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "## retry_policy",
+      "severity": 3,
+      "violation": "Documenting the most aggressive retry behavior as the default is a surprising operational choice that isn't explained or justified, and no guidance is given on when to choose the other options."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert.\"",
+      "fix": "Add details on validation rules and failure behavior for endpoint_url, or link to the retry_policy section explaining what happens when delivery fails.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "## endpoint_url",
+      "severity": 3,
+      "violation": "No constraints are given on URL requirements (e.g., whether redirects are followed, whether non-standard ports are allowed, max length, or what happens if the endpoint is unreachable)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The signing_secret field accepts a string used to verify the payload signature on receipt.\"",
+      "fix": "Specify the signing algorithm (e.g., HMAC-SHA256), which HTTP header carries the signature, and provide an example of computing/verifying it.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "## signing_secret",
+      "severity": 3,
+      "violation": "The signature verification mechanism itself (algorithm, header name, encoding) is not documented, making this field's description incomplete for actually implementing verification."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Entire document consists of three short field descriptions with no other content.",
+      "fix": "Add sections covering payload schema/example, delivery guarantees, timeout values, and the concrete retry intervals for linear and exponential policies.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Document overall",
+      "severity": 3,
+      "violation": "There's no description of the payload format, delivery semantics (e.g., at-least-once vs exactly-once), timeout behavior, or retry schedule/backoff intervals for the retry_policy values, which are essential for a \"delivery reference.\""
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-004.md",
+    "artifact_sha256": "7f41536ab3c3f7bc93a3dde86b8e81cee5dab0339f2b1d472e9222a20b42d7ae",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T09:51:49Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

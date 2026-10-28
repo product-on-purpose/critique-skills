@@ -1,0 +1,34 @@
+Location: `## Open the test console` section
+Evidence: "select the sample alert rule provided for new accounts"
+Problem: The instruction assumes every reader is on a "new account" with a sample rule present; it gives no fallback for existing accounts or accounts where the sample rule was deleted/renamed, so the tutorial can dead-end at step one.
+Fix: Add a note on what to do if no sample alert rule is visible (e.g., a link to create one, or a note that this tutorial requires a new/trial account).
+
+Location: `#### Check the sidebar updated` heading
+Evidence: heading level jumps from `##` (Open the test console) to `####` with no intervening `###`
+Problem: The heading hierarchy skips a level and breaks the pattern used by the other steps, which are all top-level `##` sections; this makes the substep inconsistent with the document's structure and will render oddly in any auto-generated table of contents.
+Fix: Either promote "Check the sidebar updated" to `##` to match the other steps, or demote it to a `###` substep and apply the same substep pattern consistently elsewhere if it's meant to be a sub-step.
+
+Location: "Check the sidebar updated" section
+Evidence: "Look at the sidebar and confirm the rule count now includes the sample rule."
+Problem: This validation step isn't connected to the stated goal of sending a test alert, and it gives no guidance on what to do if the count doesn't update, making it feel like disconnected filler rather than a necessary part of the task.
+Fix: Either explain why this check matters (e.g., "this confirms the rule was successfully added before you trigger it") or remove the step if it isn't load-bearing for the rest of the tutorial.
+
+Location: `## Trigger the sample alert` section
+Evidence: "Click Trigger sample alert and wait for the status indicator to change to Sent."
+Problem: The document doesn't say where the "Trigger sample alert" button is located relative to the previous screen (test console vs. sidebar), so continuity between steps is ambiguous.
+Fix: Specify where to find the button, e.g., "In the test console, click Trigger sample alert."
+
+Location: Line after the Trigger step instruction
+Evidence: "The status indicator takes a few seconds to update while the delivery pipeline processes the event in the background."
+Problem: This explanation is placed after the user has already been told to "wait for the status indicator to change to Sent," so the rationale arrives too late to be useful and reads as a redundant afterthought.
+Fix: Move this sentence before the instruction, e.g., "Delivery happens in the background, so the status indicator may take a few seconds to update. Click Trigger sample alert and wait for it to change to Sent."
+
+Location: `## Check the delivery log` section
+Evidence: "Open the delivery log and check that the test alert shows a Sent status with a timestamp."
+Problem: No navigation path is given for where to find the delivery log (e.g., which menu or tab), unlike the implied specificity of the first step's "developer menu" reference.
+Fix: Add explicit navigation, e.g., "Open the delivery log from the developer menu."
+
+Location: End of document
+Evidence: Document ends immediately after "...shows a Sent status with a timestamp."
+Problem: The tutorial has no closing confirmation of overall success or pointer to a next step, leaving the reader without a clear signal that the task is complete.
+Fix: Add a brief closing line confirming success criteria (e.g., "You've successfully sent and verified a test alert") and optionally link to a related next tutorial.

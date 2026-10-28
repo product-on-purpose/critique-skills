@@ -1,0 +1,19 @@
+Location: ## endpoint_url section
+Evidence: "The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert."
+Problem: Doesn't state whether the field is required, whether there is a default, or what happens if a non-HTTPS (e.g., HTTP) URL is supplied.
+Fix: Add a line specifying required/optional status and the validation error or rejection behavior for non-HTTPS URLs.
+
+Location: ## signing_secret section
+Evidence: "The signing_secret field accepts a string used to verify the payload signature on receipt."
+Problem: Doesn't specify the signing algorithm (e.g., HMAC-SHA256), which header carries the resulting signature, or any constraints on the secret's length/format.
+Fix: Document the algorithm used, the header name the signature is sent in, and any length/character constraints on the secret.
+
+Location: ## retry_policy section
+Evidence: "The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential."
+Problem: The three enum values are named but not defined — there's no explanation of retry intervals, backoff multipliers, or the maximum number of attempts for each policy.
+Fix: Add a description of the retry behavior for each value (e.g., interval schedule and max attempt count).
+
+Location: Document overall
+Evidence: Only three fields (endpoint_url, signing_secret, retry_policy) are documented under a title of "Webhook delivery reference"
+Problem: A delivery reference omits core delivery semantics such as request timeout, what constitutes a failed delivery (status codes that trigger retry), and payload/header format, despite the title implying full delivery behavior is covered.
+Fix: Either narrow the title to reflect that this covers only configuration fields, or add sections covering timeout, failure conditions, and payload/header structure.

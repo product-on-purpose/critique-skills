@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Leaving this field at its default is the right choice for most teams\"",
+      "fix": "Add the default timeout value (e.g., \"defaults to Xms\") to the timeout section.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "## timeout section",
+      "severity": 3,
+      "violation": "The section advises keeping the \"default\" but never states what that default value actually is, unlike the retries and logging sections which both specify their defaults."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"the validator rejects any value below 1000\"",
+      "fix": "State the maximum allowed timeout value, or explicitly note that there is no upper bound.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "## timeout section",
+      "severity": 3,
+      "violation": "Only a minimum bound is given; no maximum value is specified, leaving the valid range open-ended and inconsistent with the retries field, which specifies a full range (0 to 10)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"- Metric catalog reference\\n- Notification channel reference\\n...\"",
+      "fix": "Convert each list item into a markdown link pointing to the corresponding page.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "## Related pages section",
+      "severity": 3,
+      "violation": "These related pages are listed as plain text rather than as hyperlinks, so a reader cannot navigate to them from this document."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "timeout includes the guidance sentence \"raising it is worth doing only when a specific integration needs the extra room,\" while retries and logging have only a one-sentence factual description each.",
+      "fix": "Either add usage guidance for retries and logging as well, or remove the extra guidance from timeout to keep field entries uniform.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Overall document structure (## timeout vs ## retries and ## logging)",
+      "severity": 3,
+      "violation": "The depth of explanation is inconsistent across fields with no stated reason, making the reference feel incomplete for retries and logging."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T09:38:59Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

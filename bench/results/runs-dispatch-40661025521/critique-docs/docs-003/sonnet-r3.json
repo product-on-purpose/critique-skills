@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "DIATAXIS-CROSSLINK",
+      "evidence": "The nine items (\"Metric catalog reference\", \"Notification channel reference\", \"Webhook delivery reference\", \"Escalation policy reference\", \"Time window reference\", \"Retry backoff reference\", \"Alert rule schema\", \"Rate limit reference\", \"Delivery status codes\") are plain bullet text with no markdown link syntax anywhere on the page, and every title reads as a reference-mode sibling rather than a how-to or explanation page.",
+      "fix": "Render the Related pages entries as actual hyperlinks, and add at least one link to a how-to page for configuring an alert rule's timeout/retries/logging and, if one exists, an explanation page covering why these defaults were chosen.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "the Related pages list under the final heading",
+      "severity": 2,
+      "violation": "The page documents how to set the timeout, retries, and logging fields but carries no outbound link to a how-to page for configuring an alert rule or an explanation of why these defaults were chosen; the one list that could carry such a link instead lists nine same-mode titles as unlinked text, so even if a complementary-mode page exists elsewhere, a reader has no path from this page to it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "DIATAXIS-NAV-LENGTH",
+      "evidence": "9 flat items, no sub-headings or nested items breaking them into groups.",
+      "fix": "Split this listing into named subgroups, either nested sub-lists or sub-headings, each holding a smaller set of related items.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "the Related pages listing",
+      "severity": 2,
+      "violation": "This listing holds 9 items, more than 7 a reader can scan in one glance, with no subgrouping to break it up."
+    },
+    {
+      "confidence": "high",
+      "criterion": "DIATAXIS-REFERENCE-NEUTRAL",
+      "evidence": "\"Leaving this field at its default is the right choice for most teams, and raising it is worth doing only when a specific integration needs the extra room.\"",
+      "fix": "Remove the recommendation or move it to a how-to or explanation page; state only the field's accepted values, default, and validation rule, matching the retries and logging sections.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "the timeout section, second paragraph",
+      "severity": 2,
+      "violation": "This sentence is a subjective recommendation about how to use the timeout field rather than a neutral, even-handed description of it, breaking the field-by-field description the retries and logging sections otherwise hold to."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-003.md",
+    "artifact_sha256": "a331150eb6d723c8f7afd494e7581b28386032e9dc5e26df16244c449eef54e1",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "DIATAXIS"
+    ],
+    "skill": "critique-docs",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T09:38:37Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

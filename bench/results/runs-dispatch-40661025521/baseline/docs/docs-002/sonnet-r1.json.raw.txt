@@ -1,0 +1,44 @@
+Location: Heading "#### Check the sidebar updated"
+Evidence: "## Open the test console" is followed by "#### Check the sidebar updated"
+Problem: The heading level jumps from H2 to H4, skipping H3, breaking the document's heading hierarchy.
+Fix: Change "#### Check the sidebar updated" to "### Check the sidebar updated" or merge it into the "Open the test console" section as regular text.
+
+Location: "Check the sidebar updated" section
+Evidence: "Look at the sidebar and confirm the rule count now includes the sample rule."
+Problem: The previous step only selects a pre-existing sample alert rule; selecting an existing rule should not change the rule count, so this verification doesn't logically follow from the action described.
+Fix: Either clarify that the sample rule is newly added to the account's rule list when first selected, or change this check to something that actually results from selecting the rule (e.g., confirm the rule is highlighted/selected in the sidebar).
+
+Location: Between "Check the sidebar updated" and "## Trigger the sample alert"
+Evidence: section ends with "...now includes the sample rule." followed immediately by "Click Trigger sample alert..."
+Problem: The reader's attention was just directed to the sidebar, but there's no instruction to return to the test console before clicking "Trigger sample alert," leaving a gap in navigation.
+Fix: Add a transition sentence such as "Return to the test console" before the trigger instruction.
+
+Location: Overall document structure (compare "Open the test console" vs. "Trigger the sample alert" and "Check the delivery log" sections)
+Evidence: The first step splits the action ("Open the test console") and its verification ("Check the sidebar updated") into two separate headings, while later steps combine action and verification under one heading.
+Problem: Inconsistent section granularity makes the tutorial's structure unpredictable for the reader.
+Fix: Either give every step its own verification subheading, or fold "Check the sidebar updated" into the "Open the test console" section like the other steps.
+
+Location: Heading "Check the sidebar updated"
+Evidence: "Check the sidebar updated"
+Problem: The phrase is grammatically incomplete/awkward — missing "that" or a verb form change.
+Fix: Reword to "Check that the sidebar updated" or "Check the sidebar update."
+
+Location: "Trigger the sample alert" and "Check the delivery log" sections
+Evidence: "Click Trigger sample alert and wait for the status indicator to change to Sent." vs. "Open the delivery log and check that the test alert shows a Sent status"
+Problem: UI element names are capitalized inconsistently — "Trigger sample alert" (button) and "Sent" (status) are capitalized, but "delivery log" and "test console" are not, even though they also appear to be named UI elements.
+Fix: Apply a consistent capitalization convention for all UI element names throughout the document.
+
+Location: "Open the test console" section
+Evidence: "select the sample alert rule provided for new accounts"
+Problem: This assumes every reader has a "new account" with this sample rule available; there's no guidance for readers whose account doesn't have it (e.g., existing accounts or accounts where the sample rule was deleted).
+Fix: Add a note on what to do if the sample rule isn't present, or clarify the account prerequisite at the top of the document.
+
+Location: Document start (before "## Open the test console")
+Evidence: No introductory text exists before the first heading.
+Problem: The tutorial has no introduction stating its goal, prerequisites, or expected outcome, leaving readers without context before starting.
+Fix: Add a short introductory paragraph summarizing what the tutorial accomplishes and any prerequisites (e.g., account type, permissions).
+
+Location: End of document, "Check the delivery log" section
+Evidence: Document ends at "check that the test alert shows a Sent status with a timestamp." with no closing statement.
+Problem: The tutorial ends abruptly without confirming overall success or suggesting next steps, leaving the reader uncertain if they're done.
+Fix: Add a brief closing line confirming the tutorial is complete and optionally pointing to a next step or related document.

@@ -1,0 +1,24 @@
+Location: ## timeout section
+Evidence: "the validator rejects any value below 1000"
+Problem: Only a minimum is given; no maximum value is specified for the timeout field, unlike the retries field which gives a full range (0–10).
+Fix: State the maximum allowed timeout value, or explicitly note that there is no upper bound.
+
+Location: ## timeout section, second paragraph
+Evidence: "Leaving this field at its default is the right choice for most teams"
+Problem: The actual default value for timeout is never stated, so the advice to "leave it at default" is unusable—readers don't know what that default is.
+Fix: Add the concrete default value (e.g., "the default is 5000ms") alongside the advisory sentence.
+
+Location: ## retries and ## logging sections
+Evidence: "The retries field takes an integer from 0 to 10, and it defaults to 3." / "The logging field accepts one of debug, info, warn, or error, and the default value is info."
+Problem: Unlike the timeout section, these two entries give no usage guidance on when or why to change the value, making the level of detail inconsistent across an otherwise parallel set of field entries.
+Fix: Either add brief usage guidance for retries and logging similar to timeout's, or trim timeout's guidance so all three entries match in depth.
+
+Location: ## Related pages
+Evidence: "- Metric catalog reference" (and the eight following bullet items)
+Problem: All related-page entries are plain text with no hyperlinks or paths, so readers cannot actually navigate to them despite this being a reference document.
+Fix: Convert each bullet into a markdown link to its actual path, e.g. "[Metric catalog reference](./metric-catalog.md)".
+
+Location: # Alert rule fields reference (document scope)
+Evidence: Only "timeout", "retries", and "logging" are documented, while "Alert rule schema" is listed separately under Related pages.
+Problem: The document doesn't state whether this is the complete set of alert rule fields or a partial subset, which is ambiguous for a page titled as a "fields reference."
+Fix: Add a scope note, e.g., "This page documents commonly configured fields; see Alert rule schema for the full field list."

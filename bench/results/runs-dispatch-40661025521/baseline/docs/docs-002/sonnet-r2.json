@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "The document has no introductory sentence before \"## Open the test console\" begins.",
+      "fix": "Add a one- or two-sentence introduction after the title stating the goal of the tutorial and any prerequisites.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Frontmatter / overall document",
+      "severity": 3,
+      "violation": "The tutorial jumps straight into step one with no overview of what a \"test alert\" is or why the reader is doing this, and no prerequisites (e.g., needing alerting enabled, developer menu access)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"select the sample alert rule provided for new accounts\"",
+      "fix": "Add a note clarifying what to do if no sample alert rule is present, or state this tutorial only applies to new accounts.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"## Open the test console\" section",
+      "severity": 3,
+      "violation": "This assumes every reader has a \"new account\" with a sample rule available; readers on older or already-configured accounts may have no such rule to select, and the tutorial gives no fallback."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"#### Check the sidebar updated\" appears directly under a `##` (h2) section, skipping the `###` (h3) level.",
+      "fix": "Change \"#### Check the sidebar updated\" to `##` or `###` consistent with the rest of the document's heading levels.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"#### Check the sidebar updated\" heading",
+      "severity": 3,
+      "violation": "The heading hierarchy jumps from h2 to h4, which is inconsistent with the other sections (\"## Trigger the sample alert\", \"## Check the delivery log\") and breaks document structure/navigation (e.g., table of contents, accessibility)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Check the sidebar updated\"",
+      "fix": "Reword to \"Check that the sidebar updated\" or \"Confirm the sidebar updated.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"#### Check the sidebar updated\" heading text",
+      "severity": 3,
+      "violation": "The heading is grammatically incomplete - it's missing a verb like \"has\" (\"Check the sidebar has updated\") or should be reworded, making it read awkwardly."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"confirm the rule count now includes the sample rule\"",
+      "fix": "Either explain what action causes the rule count to update, or remove this step if no such change actually occurs.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Check the sidebar updated\" section",
+      "severity": 3,
+      "violation": "Merely opening the test console and selecting an existing sample rule shouldn't change a rule count anywhere - this step describes an effect with no corresponding cause established earlier in the tutorial, making the instruction confusing or factually wrong."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Click Trigger sample alert and wait for the status indicator to change to Sent.\"",
+      "fix": "Specify the location of the button and status indicator (e.g., \"In the test console, click Trigger sample alert... The status indicator next to the rule name will change to Sent\").",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "\"## Trigger the sample alert\" section",
+      "severity": 3,
+      "violation": "Unlike the first step, which specifies where to find the test console (\"from the developer menu\"), this step doesn't say where the \"Trigger sample alert\" button or the \"status indicator\" are located, leaving the reader to guess."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Open the delivery log and check that the test alert shows a Sent status with a timestamp.\"",
+      "fix": "Add navigation details, e.g., \"Open the delivery log from the developer menu.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "\"## Check the delivery log\" section",
+      "severity": 3,
+      "violation": "No navigation instructions are given for finding the delivery log, inconsistent with the level of detail provided in the first step for the test console."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-002.md",
+    "artifact_sha256": "25c4dd0ebb76ed338a3330329de0387044967be4fa65c3db44b1e3042d579c91",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T09:22:18Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"#### Check the sidebar updated\"",
+      "fix": "Change this heading to `##` or `###` to match the surrounding structure, or remove the heading and fold the sentence into the preceding step.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Heading \"#### Check the sidebar updated\" (subsection under \"## Open the test console\")",
+      "severity": 3,
+      "violation": "The heading jumps from h2 to h4, skipping h3, which breaks the document's heading hierarchy and is inconsistent with the other sibling sections that are all h2."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Check the sidebar updated\"",
+      "fix": "Reword to \"Confirm the sidebar updated\" or \"Check that the sidebar updated.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Heading \"#### Check the sidebar updated\"",
+      "severity": 3,
+      "violation": "The heading text is grammatically incomplete - it reads like a fragment rather than an instruction (compare to \"Confirm X\" or \"Check that X\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"select the sample alert rule provided for new accounts\"",
+      "fix": "Either state explicitly that this tutorial requires a new account, or explain how to get/create the sample rule otherwise.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Open the test console\" section",
+      "severity": 3,
+      "violation": "This phrasing assumes the reader is on a \"new account\" that has the sample rule; it gives no guidance for a reader on an existing account who may not see this rule."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Open the delivery log and check that the test alert shows a Sent status with a timestamp.\"",
+      "fix": "Add the navigation path, e.g., \"Open the delivery log from the developer menu.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"Check the delivery log\" section",
+      "severity": 3,
+      "violation": "Unlike the first step, which specifies \"from the developer menu,\" this step gives no location for where to open the delivery log from, leaving a navigation gap."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Click Trigger sample alert and wait for the status indicator to change to Sent.\"",
+      "fix": "Add a brief troubleshooting note describing what a non-Sent outcome looks like and what to check.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Trigger the sample alert\" section",
+      "severity": 3,
+      "violation": "The tutorial provides no guidance for what to do if the status indicator does not change to Sent (e.g., an error or failed state), leaving the reader stuck with no recourse."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"wait for the status indicator to change to Sent\" and \"check that the test alert shows a Sent status with a timestamp\"",
+      "fix": "Either drop the duplicate verification or clarify the distinct purpose of checking the delivery log versus the status indicator.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "\"Trigger the sample alert\" and \"Check the delivery log\" sections together",
+      "severity": 3,
+      "violation": "The same \"Sent\" status is verified twice in a row without explaining why both checks matter (e.g., transient UI state vs. persisted log record), making the final step feel redundant."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Document ends with \"...shows a Sent status with a timestamp.\"",
+      "fix": "Add a short closing line confirming the tutorial is complete and, if applicable, linking to the next tutorial or topic.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "End of document, after \"Check the delivery log\" section",
+      "severity": 3,
+      "violation": "The tutorial ends abruptly with no closing confirmation or pointer to what to do next, which is atypical for a tutorial-mode document."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/docs/docs-002.md",
+    "artifact_sha256": "25c4dd0ebb76ed338a3330329de0387044967be4fa65c3db44b1e3042d579c91",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T09:28:24Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

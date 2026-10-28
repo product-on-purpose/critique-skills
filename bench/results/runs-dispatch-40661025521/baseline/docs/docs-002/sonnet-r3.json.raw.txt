@@ -1,0 +1,34 @@
+Location: Title / frontmatter
+Evidence: "# Send your first test alert" with `mode: tutorial`
+Problem: The document never states a prerequisite — it assumes the reader already has access to the developer menu and a configured account, with no mention of what's needed before starting (e.g., permissions, account setup).
+Fix: Add a brief "Before you begin" note listing required access/permissions.
+
+Location: "Open the test console" section
+Evidence: "Open the test console from the developer menu and select the sample alert rule provided for new accounts."
+Problem: This assumes every account has a "sample alert rule" already provisioned; if the account doesn't have one (e.g., it was deleted or the account isn't "new"), the instructions break with no fallback guidance.
+Fix: Add a note on what to do if no sample alert rule is present (e.g., how to create one).
+
+Location: "#### Check the sidebar updated" heading
+Evidence: The heading level jumps from `##` to `####`
+Problem: Heading levels skip from H2 to H4, breaking document structure/hierarchy (no H3 used), which can cause inconsistent rendering or navigation/TOC issues.
+Fix: Change the heading to `###` (or otherwise make heading levels sequential).
+
+Location: "Check the sidebar updated" section
+Evidence: "Look at the sidebar and confirm the rule count now includes the sample rule."
+Problem: This step's purpose is unclear — it's not stated why confirming the sidebar count matters or what to do if it doesn't match, making it feel like a disconnected checkpoint rather than part of the task flow.
+Fix: Explain briefly why this check matters or what action to take if the count is wrong, or remove the step if it's not essential to sending the test alert.
+
+Location: "Trigger the sample alert" section
+Evidence: "Click Trigger sample alert and wait for the status indicator to change to Sent."
+Problem: No guidance is given for what to do if the status indicator does not change to "Sent" (e.g., shows an error or stays pending indefinitely), leaving the reader stuck with no troubleshooting path.
+Fix: Add a brief troubleshooting note for failure/timeout cases.
+
+Location: "Trigger the sample alert" section, second paragraph
+Evidence: "The status indicator takes a few seconds to update while the delivery pipeline processes the event in the background."
+Problem: This explanatory sentence is placed after the instruction telling the reader to "wait," making it read as an afterthought rather than setting expectations beforehand; it also doesn't specify how many seconds to actually expect.
+Fix: Move this sentence before the instruction to wait, and give a concrete expected time range (e.g., "within 10–15 seconds").
+
+Location: "Check the delivery log" section (final section)
+Evidence: "Open the delivery log and check that the test alert shows a Sent status with a timestamp."
+Problem: The tutorial ends abruptly without confirming success or next steps (e.g., no closing statement like "You've successfully sent your first test alert" or pointers to related tasks).
+Fix: Add a brief closing line confirming task completion and/or linking to a next tutorial.

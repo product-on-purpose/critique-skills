@@ -1,0 +1,29 @@
+Location: ## endpoint_url
+Evidence: "The endpoint_url field accepts an HTTPS URL that receives the webhook payload for each triggered alert."
+Problem: The field's required/optional status and default value (if any) are never stated, leaving readers unable to tell whether omitting it is valid.
+Fix: Add a line specifying whether endpoint_url is required and, if optional, what the default behavior is when it's unset.
+
+Location: ## endpoint_url
+Evidence: "accepts an HTTPS URL"
+Problem: It's not stated whether a non-HTTPS (e.g. plain HTTP) URL is rejected with an error, silently coerced, or merely discouraged, which is ambiguous for an integration relying on this reference.
+Fix: State explicitly what happens when a non-HTTPS URL is supplied (e.g. "requests with an http:// URL are rejected with a validation error").
+
+Location: ## signing_secret
+Evidence: "a string used to verify the payload signature on receipt"
+Problem: The signing mechanism itself is undocumented — there's no mention of the signing algorithm (e.g. HMAC-SHA256), which header carries the resulting signature, or how the secret combines with the payload, making it impossible to actually implement verification from this reference.
+Fix: Document the signing algorithm, the exact header name the signature is sent in, and the construction of the signed string (e.g. HMAC-SHA256 of the raw body using signing_secret as key, sent in X-Signature header).
+
+Location: ## signing_secret
+Evidence: "The signing_secret field accepts a string"
+Problem: No required/optional status or default is given, and no constraints (minimum length, allowed characters) are specified, unlike guidance typically expected for a secret field.
+Fix: State whether signing_secret is required, what the default is if omitted (e.g. unsigned payloads), and any length/format constraints.
+
+Location: ## retry_policy
+Evidence: "accepts one of none, linear, or exponential, and the default value is exponential"
+Problem: The three enum values are named but never individually defined — there is no description of the actual retry schedule, interval, or maximum attempt count for any of them, so a reader cannot predict delivery behavior.
+Fix: Add a definition for each value (e.g. "none: single delivery attempt, no retries"; "linear: retries every N seconds up to M attempts"; "exponential: backoff starting at N seconds, doubling up to M attempts").
+
+Location: ## retry_policy
+Evidence: "The retry_policy field accepts one of none, linear, or exponential, and the default value is exponential."
+Problem: There is no mention of what happens once all retries are exhausted (e.g. whether the webhook is disabled, an alert is raised, or the event is dropped), which is a core part of "delivery" behavior implied by the document's title.
+Fix: Add a sentence describing the terminal behavior after retries are exhausted.

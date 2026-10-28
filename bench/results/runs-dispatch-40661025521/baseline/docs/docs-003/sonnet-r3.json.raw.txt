@@ -1,0 +1,19 @@
+Location: ## timeout section
+Evidence: "Leaving this field at its default is the right choice for most teams"
+Problem: The section advises keeping the "default" but never states what that default value actually is, unlike the retries and logging sections which both specify their defaults.
+Fix: Add the default timeout value (e.g., "defaults to Xms") to the timeout section.
+
+Location: ## timeout section
+Evidence: "the validator rejects any value below 1000"
+Problem: Only a minimum bound is given; no maximum value is specified, leaving the valid range open-ended and inconsistent with the retries field, which specifies a full range (0 to 10).
+Fix: State the maximum allowed timeout value, or explicitly note that there is no upper bound.
+
+Location: ## Related pages section
+Evidence: "- Metric catalog reference\n- Notification channel reference\n..."
+Problem: These related pages are listed as plain text rather than as hyperlinks, so a reader cannot navigate to them from this document.
+Fix: Convert each list item into a markdown link pointing to the corresponding page.
+
+Location: Overall document structure (## timeout vs ## retries and ## logging)
+Evidence: timeout includes the guidance sentence "raising it is worth doing only when a specific integration needs the extra room," while retries and logging have only a one-sentence factual description each.
+Problem: The depth of explanation is inconsistent across fields with no stated reason, making the reference feel incomplete for retries and logging.
+Fix: Either add usage guidance for retries and logging as well, or remove the extra guidance from timeout to keep field entries uniform.
