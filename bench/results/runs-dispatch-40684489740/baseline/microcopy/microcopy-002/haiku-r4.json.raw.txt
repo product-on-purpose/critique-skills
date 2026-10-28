@@ -1,0 +1,19 @@
+Location: Checkout form, shipping address, second message
+Evidence: "Please correct the highlighted field. Error code: 502."
+Problem: A 502 error is a server-side Bad Gateway error, not a user input validation error. Asking the user to correct a field when the error code indicates a server problem is misleading and contradictory.
+Fix: Use an appropriate error code or message that matches the actual cause (either a server error message if the problem is on the server, or remove the 502 code and provide validation feedback if it's actually a user input problem).
+
+Location: Password reset, new password, first message
+Evidence: "Choose a password of at least 8 characters, long enough that a guessing attack cannot work through every combination."
+Problem: This security claim is inaccurate. An 8-character password is vulnerable to modern password cracking techniques and does not provide sufficient protection against guessing attacks.
+Fix: Specify a stronger minimum length (12+ characters is more appropriate for modern security standards) or adjust the claim to be accurate, such as "at least 8 characters, a basic minimum."
+
+Location: Password reset, new password, first message
+Evidence: "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page"
+Problem: The validation message is not visible when the user is editing the field it validates, requiring them to scroll up to read it. This breaks the user's workflow.
+Fix: Place the message directly below or adjacent to the password field so it is visible while the user is entering the password.
+
+Location: Account settings, username
+Evidence: Message states "cannot be recovered" but metadata lists "Input on resubmission: preserved"
+Problem: The message claims the changes "cannot be recovered," but the metadata indicates the input is preserved on resubmission. These are contradictory—either the data is lost and unrecoverable, or it is preserved.
+Fix: Correct either the message (to acknowledge that input is preserved and resend is possible) or the metadata (if input is actually lost), so the two are consistent.

@@ -1,0 +1,29 @@
+Location: Checkout form, shipping address, Message 1
+Evidence: "Shorten the entry and save again." with "Fires: after-field-complete"
+Problem: The instruction to "save again" is confusing when the error fires automatically after field completion, implying no manual save action was taken. The user didn't initiate a save action to redo.
+Fix: Change "save again" to "try again" or remove the save reference entirely, since the validation is automatic.
+
+Location: Checkout form, shipping address, Message 2
+Evidence: "Please correct the highlighted field. Error code: 502."
+Problem: HTTP error code 502 (Bad Gateway) is a server error, not a validation error. This message appears to be showing the wrong error code or is being displayed in the wrong context for field validation.
+Fix: Either replace 502 with an appropriate validation error code, or confirm this message should only appear for actual server errors, not field validation.
+
+Location: Password reset, new password, Message 1
+Evidence: "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page" with "Fires: after-field-complete"
+Problem: The message fires after the user completes the password field, but its placement at the top of the form means users won't see it immediately—they'll need to scroll up after typing, creating a disconnect between action and feedback.
+Fix: Move the message to appear directly below or inline with the password field itself, not at the top of the form.
+
+Location: Password reset, new password, Message 1
+Evidence: "long enough that a guessing attack cannot work through every combination"
+Problem: This explanation is technically misleading. An 8-character password can still be guessed through combinations relatively quickly with modern computing. The security benefit of length is real but not because it prevents attackers from trying combinations.
+Fix: Replace with an accurate explanation, such as "long enough to resist common password attacks" or reference industry standards like NIST guidelines.
+
+Location: Password reset, new password, Message 2
+Evidence: "Container: toast" with "in a dialog centered on the password reset step, over the new password field it blocks"
+Problem: The container type and description are contradictory. A toast is a brief, non-blocking notification; a centered dialog that blocks interaction is a modal. These are different UI patterns.
+Fix: Clarify whether this is a toast or a modal dialog, and update the container field to match the actual implementation.
+
+Location: Account settings, username
+Evidence: "The last changes were not saved and cannot be recovered." with "Input on resubmission: preserved"
+Problem: The message claims changes "cannot be recovered," but the metadata indicates user input is preserved on resubmission. These statements contradict each other—if input is preserved, it can be recovered and resubmitted.
+Fix: Either change the message to acknowledge that input is preserved and can be resubmitted, or confirm the input is actually not preserved and update the metadata.

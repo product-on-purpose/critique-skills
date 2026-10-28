@@ -1,0 +1,72 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Please correct the highlighted field. Error code: 502.\"",
+      "fix": "Use an appropriate error code or message that matches the actual cause (either a server error message if the problem is on the server, or remove the 502 code and provide validation feedback if it's actually a user input problem).",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Checkout form, shipping address, second message",
+      "severity": 3,
+      "violation": "A 502 error is a server-side Bad Gateway error, not a user input validation error. Asking the user to correct a field when the error code indicates a server problem is misleading and contradictory."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Choose a password of at least 8 characters, long enough that a guessing attack cannot work through every combination.\"",
+      "fix": "Specify a stronger minimum length (12+ characters is more appropriate for modern security standards) or adjust the claim to be accurate, such as \"at least 8 characters, a basic minimum.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Password reset, new password, first message",
+      "severity": 3,
+      "violation": "This security claim is inaccurate. An 8-character password is vulnerable to modern password cracking techniques and does not provide sufficient protection against guessing attacks."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page\"",
+      "fix": "Place the message directly below or adjacent to the password field so it is visible while the user is entering the password.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Password reset, new password, first message",
+      "severity": 3,
+      "violation": "The validation message is not visible when the user is editing the field it validates, requiring them to scroll up to read it. This breaks the user's workflow."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message states \"cannot be recovered\" but metadata lists \"Input on resubmission: preserved\"",
+      "fix": "Correct either the message (to acknowledge that input is preserved and resend is possible) or the metadata (if input is actually lost), so the two are consistent.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Account settings, username",
+      "severity": 3,
+      "violation": "The message claims the changes \"cannot be recovered,\" but the metadata indicates the input is preserved on resubmission. These are contradictory - either the data is lost and unrecoverable, or it is preserved."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:24:40Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

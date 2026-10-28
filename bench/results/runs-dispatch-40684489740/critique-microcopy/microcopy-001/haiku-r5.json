@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-NEUTRAL-TONE",
+      "evidence": "You keep entering the wrong value. Re-enter it to continue.",
+      "fix": "Rewrite the sentence to state the problem neutrally, without blaming the reader.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "Profile settings, phone number, message 1",
+      "severity": 3,
+      "violation": "The message frames the problem as something the reader personally did wrong or should have known better than to do, using a second-person accusatory construction."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-SPECIFIC",
+      "evidence": "Something went wrong. Contact support if this continues.",
+      "fix": "Name the specific cause of the payment failure: why the transaction was declined or why processing failed.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Checkout form, payment method, message 1",
+      "severity": 3,
+      "violation": "The message states only that something went wrong with no specific cause named, when the payment processing failure (declined card, processing unavailable, or similar) was available to the system."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-CONSTRUCTIVE",
+      "evidence": "The connection dropped before this finished.",
+      "fix": "Add a concrete next step: name the action the reader should take to resolve this.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "Signup form, email field, message 1",
+      "severity": 2,
+      "violation": "The message states that a problem exists with no imperative instruction or named next step anywhere in the text."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-NOT-COLOR-ONLY",
+      "evidence": "Signal: one step bolder and larger than the field label, none",
+      "fix": "Add a non-color cue: an icon, a text label, a shape change, or bold or underline styling.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "Signup form, email field, message 2, Signal field",
+      "severity": 2,
+      "violation": "The Signal field's non-color-cue token is none, so color or highlight is the message's only stated cue."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-PRESERVE-INPUT",
+      "evidence": "Input on resubmission: cleared",
+      "fix": "Preserve the reader's entered input across the failed submission.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "Profile settings, phone number, message 2, Input on resubmission field",
+      "severity": 2,
+      "violation": "A failed submission clears what the reader already entered instead of preserving it so they can correct the specific problem in place."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-SPECIFIC",
+      "evidence": "You keep entering the wrong value. Re-enter it to continue.",
+      "fix": "Name the specific validation rule that was violated: format requirement, length, pattern, or conflicting value.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Profile settings, phone number, message 1",
+      "severity": 2,
+      "violation": "The message states that the reader entered a wrong value with no specific rule or requirement named, when the validation rule that was violated was available to the system."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-TIMING",
+      "evidence": "Fires: mid-keystroke",
+      "fix": "Delay the message until the field loses focus or the form is submitted, not while the reader is still typing or before they have entered anything.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Checkout form, payment method, message 2, Fires field",
+      "severity": 2,
+      "violation": "The message can appear before the reader has had a fair chance to finish entering the relevant input."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-001.md",
+    "artifact_sha256": "0580399008ca4517da0a1b1f620180b68a4cfb24e596be279a5f782cde325fc7",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T12:13:10Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

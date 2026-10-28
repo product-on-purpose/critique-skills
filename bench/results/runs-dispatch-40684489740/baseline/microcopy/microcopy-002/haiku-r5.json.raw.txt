@@ -1,0 +1,24 @@
+Location: Password reset, new password, first message, "Fires" field
+Evidence: "Fires: after-field-complete"
+Problem: A message that requires scrolling to read cannot fire reliably when the user completes the field, since the completed field will remain visible but the message position scrolls away.
+Fix: Either reposition the message to stay in viewport when fired, or change the trigger to "on-focus" so the user sees the message before attempting the field.
+
+Location: Password reset, new password, second message, "Container" field
+Evidence: "Container: toast" paired with location description "in a dialog centered on the password reset step, over the new password field it blocks"
+Problem: A toast is a non-blocking notification, typically at screen edge; the description indicates a centered blocking dialog, which is not a toast.
+Fix: Either change Container to "dialog" or "modal" if it blocks content, or change the placement to a true toast position at screen edge.
+
+Location: Checkout form, shipping address, first message, "Signal" field
+Evidence: "Signal: bold text set larger than the field label, icon"
+Problem: This signal description lacks directional placement (above/below) unlike similar messages in file upload and the second checkout message, making it ambiguous where the message appears relative to the field.
+Fix: Add directional placement: "bold text set above/below the postal code field at a larger size than the field label, icon"
+
+Location: File upload, receipts, both messages, overall section
+Evidence: Both messages are placed "directly below the upload control" and "after-field-complete" or "on-submit" triggers, but have different "Suggested fix" approaches
+Problem: The two errors are triggered at different times and offer different fix strategies (one requires manual action, one offers an automated action), but their similar placement and signal styling suggest they should follow the same pattern.
+Fix: Clarify the trigger timing and fix availability so users can predict which error leads to which outcome.
+
+Location: Throughout document, "Suggested fix" field
+Evidence: Values include "described", "selectable", "none"; some entries expand these with commas and additional description
+Problem: The document uses "described" and "selectable" without defining what these values mean or how they differ in user experience.
+Fix: Add a legend at the top of the document defining each possible "Suggested fix" value.

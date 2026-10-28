@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-SEVERITY-CONTAINER",
+      "evidence": "Container: toast, Fires: on-focus. Message reports a blocking condition (reset link expired) that cannot be worked around on the current screen.",
+      "fix": "Show this message in a modal dialog that does not auto-clear, so the reader cannot miss the explanation for the blocking failure. The dialog should also include the offered action (send a new link button) prominently.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Password reset, new password, message 2",
+      "severity": 3,
+      "violation": "Password reset link expiration is a fully blocking failure that prevents the reader from proceeding with password reset. A self-clearing toast is inappropriate for a blocking failure; the reader may miss the one message explaining why reset cannot proceed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-GRACE",
+      "evidence": "The last changes were not saved and cannot be recovered. Contact support for assistance.",
+      "fix": "Acknowledge the gravity of the situation and the reader's frustration. Add a sincere tone: 'Unfortunately, your changes couldn't be saved and we weren't able to recover them. Please contact our support team - they can review what happened and help get your work back if possible.'",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Account settings, username, message 1",
+      "severity": 2,
+      "violation": "Unrecoverable failure (lost changes cannot be recovered) is presented as a bare technical notice with minimal acknowledgment of what this means for the reader and what they have lost."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-PLAIN-LANGUAGE",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "fix": "Replace the code or jargon term with a plain-language sentence a non-technical reader can act on.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "Checkout form, shipping address, message 2",
+      "severity": 2,
+      "violation": "The message text carries an internal error code, a code-style token, or an engineering-jargon term standing in for a plain-language explanation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-PREVENT",
+      "evidence": "Predictable mistake: yes, Fires: on-submit. File format validation can be performed when the user selects the file, not deferred until form submission.",
+      "fix": "Validate file format client-side as soon as the user selects a file. Show a real-time warning if an unsupported format is selected, letting the reader correct it immediately rather than after filling out the rest of the form.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "File upload, receipts, message 2",
+      "severity": 2,
+      "violation": "File-format error (PDF/PNG only) is a predictable and foreseeable mistake the system could catch during file selection, but the validation fires only on-submit instead of warning during entry."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-PROXIMITY",
+      "evidence": "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page.",
+      "fix": "Place the message directly below the password field so the reader encounters the requirement just before or as they enter the field, not earlier in the form.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Password reset, new password, message 1",
+      "severity": 2,
+      "violation": "Password requirement message appears at the top of a long form, but the password field is below, requiring the reader to scroll to see both the message and the field together."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-SEVERITY-CONTAINER",
+      "evidence": "Container: inline. Message reports a completed, unrecoverable loss (changes not saved and cannot be recovered).",
+      "fix": "Show this message in a modal dialog so the reader cannot miss it and understands the severity. The visual weight and blocking nature of a modal matches the gravity of the situation (lost work).",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Account settings, username, message 1",
+      "severity": 2,
+      "violation": "Total, unrecoverable failure (changes lost) is shown as an inline message. A critical failure that blocks recovery should use a modal container to ensure the reader sees and understands the severity."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T12:21:43Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}
