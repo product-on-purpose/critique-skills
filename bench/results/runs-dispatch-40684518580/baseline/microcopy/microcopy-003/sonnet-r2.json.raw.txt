@@ -1,0 +1,54 @@
+Location: "Search results, no matches" section, first entry (timed-out message)
+Evidence: Heading reads "Search results, no matches" but the message is "This request timed out before it could finish."
+Problem: The entry is filed under a "no matches" heading even though the message describes a timeout failure, not a zero-result search — a different error class with different recovery needs.
+Fix: Move the timeout message to its own "search request failed/timed out" category, or rename the section to cover both outcomes.
+
+Location: "Search results, no matches" section, first entry, Fires field
+Evidence: Fires: on-submit
+Problem: A timeout is an asynchronous failure that occurs some time after submission (or after an abort), not synchronously at the moment of submit, so labeling it "on-submit" misrepresents when the message actually appears.
+Fix: Change the trigger to something like "on-timeout" or "on-request-abort" to reflect the delayed nature of the failure.
+
+Location: "Search results, no matches" section, first entry, Suggested fix field
+Evidence: Suggested fix: none
+Problem: A timeout is inherently retryable, yet no retry action is offered, leaving the user with no path forward from the error state.
+Fix: Add a "try again" / retry action to the message, consistent with the actionable fix given to the other entry in this section.
+
+Location: "Search results, no matches" section, first entry, Input on resubmission field
+Evidence: Input on resubmission: not-applicable
+Problem: Marking this "not-applicable" ignores that resubmitting the same search query is the natural recovery path after a timeout.
+Fix: Specify that the original query is retained so the user can resubmit it without retyping.
+
+Location: "Search results, no matches" section, first entry, Signal field
+Evidence: Signal: bold heading text where the first result would sit, text-label
+Problem: The signal gives no error-specific visual cue (no icon or distinct styling) and instead matches the styling of a normal content heading, risking the user mistaking it for an actual result.
+Fix: Add a distinguishing error icon or styling so the message is not visually identical to ordinary heading/result text.
+
+Location: "Search results, no matches" section, second entry (date range message), Predictable mistake field
+Evidence: Predictable mistake: no
+Problem: The presence of a purpose-built, pre-written recovery message with two specific remedies shows the team anticipated this exact scenario, contradicting the "no" value.
+Fix: Set Predictable mistake to "yes" for this entry.
+
+Location: "Search results, no matches" section, second entry, Input on resubmission field
+Evidence: Input on resubmission: not-applicable
+Problem: The message text itself instructs the user to resubmit ("Change the date range, or clear the filters"), so resubmission behavior is directly relevant and shouldn't be marked not-applicable.
+Fix: Document whether the previous date range/filter values are retained or reset when the user resubmits.
+
+Location: "Search results, no matches" section, second entry, Suggested fix field
+Evidence: Signal notes "no visual cue that this one demands action"; Suggested fix: "selectable, offers a clear filters button beside the message"
+Problem: The fix adds a button but does not address the styling problem already identified in the Signal field — the message still looks like a passive informational banner.
+Fix: Also restyle the message so it's visually distinct from non-actionable banners (e.g., different color/icon), not just add a button.
+
+Location: "Notification center, sync status" section, Placement vs Signal fields
+Evidence: Placement: "directly under the sync status row"; Signal: "bold text at the top of the notification list"
+Problem: These two fields contradict each other — one says the message sits below the sync status row, the other says it appears at the top of the list, leaving its actual position ambiguous.
+Fix: Reconcile the two fields into one consistent description of where the message appears relative to the list and the sync status row.
+
+Location: "Notification center, sync status" section, Fires field
+Evidence: Fires: on-focus
+Problem: A time-sensitive state change (sync being paused) is only surfaced when the user happens to focus that specific list item, so a user who never focuses it may never learn syncing has stopped.
+Fix: Fire the notification proactively when the pause state changes (e.g., on-state-change), in addition to or instead of on-focus.
+
+Location: "Notification center, sync status" section, Signal field
+Evidence: Signal: bold text at the top of the notification list, icon
+Problem: The field describes two distinct cue types (bold text and an icon) but is tagged with only a single type ("icon"), unlike the other entries where the description matches a single tag.
+Fix: Either split this into two tagged cues or clarify which single tag actually applies.

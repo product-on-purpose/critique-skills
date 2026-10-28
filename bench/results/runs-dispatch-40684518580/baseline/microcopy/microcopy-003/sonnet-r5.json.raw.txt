@@ -1,0 +1,49 @@
+Location: "Search results, no matches" section, first entry (Message field)
+Evidence: "Message: This request timed out before it could finish." listed under the heading "Search results, no matches"
+Problem: A request timeout is a failed-request/error condition, not a "no matches" (empty result set) condition, so this entry is filed under a heading that doesn't describe it.
+Fix: Rename the section to cover both conditions (e.g., "Search results, no matches or error") or move the timeout entry into its own section.
+
+Location: "Search results, no matches" section, first entry, Signal and Predictable mistake fields
+Evidence: "Signal: bold heading text where the first result would sit, text-label" paired with "Predictable mistake: no"
+Problem: Placing the error text as bold heading copy in the exact spot where a real result title would appear is a classic setup for users to mistake it for actual content, yet this is marked as not a predictable mistake.
+Fix: Reclassify "Predictable mistake" as yes, or change the Signal so the message can't visually pass for a real result heading (e.g., non-heading typography plus an icon).
+
+Location: "Search results, no matches" section, first entry, Suggested fix field
+Evidence: "Suggested fix: none"
+Problem: A timeout is a transient, retryable failure, but no retry action is suggested, while the sibling empty-state entry below it does get an actionable fix ("clear filters").
+Fix: Add a suggested fix that offers a retry/try-again action for the timed-out request.
+
+Location: "Search results, no matches" section, comparing the Placement fields of the two entries
+Evidence: "in place of the results list" (first entry) versus "directly under the filter bar it concerns" (second entry)
+Problem: Two states that both leave the results panel empty are placed in different locations within the same panel, making the empty-state experience inconsistent depending on the failure type.
+Fix: Standardize on one placement for all empty/error states shown in the results panel.
+
+Location: "Search results, no matches" section, second entry, Signal and Suggested fix fields
+Evidence: "Signal: styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action" vs. "Suggested fix: selectable, offers a clear filters button beside the message"
+Problem: The Signal field identifies that the message looks like a passive informational banner with no cue it demands action, but the proposed fix only adds a button and leaves the styling that caused the confusion unchanged.
+Fix: Update the suggested fix to also change the visual treatment (e.g., warning styling) so the message is distinguishable from passive banners, not just add an action.
+
+Location: "Search results, no matches" section, second entry, Predictable mistake field
+Evidence: "Predictable mistake: no" for the message "No orders fall inside the selected date range."
+Problem: Selecting a date range that unintentionally excludes all results is a textbook predictable user mistake, so marking this "no" is inconsistent with the scenario described.
+Fix: Reclassify as "yes," or document the criteria used for this field so the classification is justified.
+
+Location: "Search results, no matches" section, second entry, Input on resubmission field
+Evidence: "Input on resubmission: not-applicable" alongside the message text "Change the date range, or clear the filters to see every order."
+Problem: The message explicitly directs the user to change filters and try again, yet the field claims resubmission input is not applicable, which contradicts the recommended action.
+Fix: Specify what happens to the previously entered filter values on resubmission instead of marking the field not-applicable.
+
+Location: "Notification center, sync status" section, Signal field
+Evidence: "Signal: bold text at the top of the notification list, icon"
+Problem: The icon is mentioned but never described (type, meaning, or color), unlike the other entries' Signal fields, which fully specify the visual treatment.
+Fix: Specify which icon is used and what it signals (e.g., a paused-sync warning icon).
+
+Location: "Notification center, sync status" section, Fires field
+Evidence: "Fires: on-focus"
+Problem: Tying the sync-paused message to the notification list gaining focus means a user who doesn't open the list won't be told that syncing has stopped, even though that information may be time-sensitive.
+Fix: Surface the message as soon as sync pauses (e.g., inserted into the list on state change) rather than deferring entirely to focus, or add a persistent indicator visible before the list is focused.
+
+Location: "Notification center, sync status" section, Message vs. Suggested fix fields
+Evidence: Message: "Select resume to sync now." / Suggested fix: "offers a resume now action inside the notification"
+Problem: The action is named "resume" in the message copy but "resume now" in the suggested fix, an inconsistent label for what should be the same control.
+Fix: Use one consistent label for the action in both the message copy and the suggested fix description.

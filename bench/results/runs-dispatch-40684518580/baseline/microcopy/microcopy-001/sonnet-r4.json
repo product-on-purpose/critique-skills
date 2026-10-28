@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\"",
+      "fix": "Mark \"Predictable mistake\" as \"no\" for the connection-dropped message, consistent with how the other non-user-caused failure in the document is classified.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Signup form, email field - first message entry (\"The connection dropped before this finished.\"), Predictable mistake field",
+      "severity": 3,
+      "violation": "A dropped connection is a system/network failure, not a user mistake, yet it is marked \"yes\" while the comparable system-caused error in Checkout (\"Something went wrong\") is marked \"no\" - the classification is applied inconsistently."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: selectable, offers the one available next step as a direct action\"",
+      "fix": "Either name the concrete suggested fix text/action (e.g., a \"Retry\" button) or set the field to \"none\" to match the pattern used elsewhere.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Signup form, email field - first message entry, Suggested fix field",
+      "severity": 3,
+      "violation": "Every other entry's Suggested fix field is either \"none\" or empty, but this one contains vague descriptive attributes without ever stating what the actual suggested fix is (e.g., a retry action's label), breaking the document's format and leaving the fix content unspecified."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: in a banner directly above the payment method selector...\" paired with \"Container: inline\"",
+      "fix": "Set Container to \"banner\" (or the correct discrete type), or revise Placement so it no longer describes a banner if the container is genuinely inline.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Checkout form, payment method - first entry (\"Something went wrong...\"), Placement vs. Container fields",
+      "severity": 3,
+      "violation": "The placement explicitly names the container as a banner, but the Container field says \"inline,\" which is self-contradictory since a banner is a distinct container type."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"staying on screen until another method is chosen\"",
+      "fix": "Move the persistence detail out of Placement (into its own field or note) so Placement describes only where the message appears.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Checkout form, payment method - first entry, Placement field",
+      "severity": 3,
+      "violation": "This clause describes dismissal/persistence behavior rather than location, conflating two attributes that every other entry in the document keeps separate."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: mid-keystroke\"",
+      "fix": "Change Fires to \"on-blur\" (or on-completed-entry) so the full date is available before the passed/not-passed check runs.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Checkout form, payment method - second entry (\"The expiry date on this card has passed...\"), Fires field",
+      "severity": 3,
+      "violation": "Whether an expiry date has passed cannot be determined until the full date is entered, so firing this check mid-keystroke will produce false-positive errors while the user is still typing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You keep entering the wrong value. Re-enter it to continue.\"",
+      "fix": "Rewrite to name the specific validation failure (e.g., digit count, format) and describe a valid value, matching the specificity used in the signup email message.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Profile settings, phone number - first entry (\"You keep entering the wrong value. Re-enter it to continue.\")",
+      "severity": 3,
+      "violation": "The message never states what is wrong with the value or what a valid one looks like, and \"re-enter it\" gives the user no new information to avoid repeating the same failed input - unlike the signup email-format message, which spells out exactly what's required."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: cleared\"",
+      "fix": "Change to \"preserved\" so the user keeps the number they entered, consistent with the rest of the document and with the fact that the input itself wasn't invalid.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Profile settings, phone number - second entry (\"This phone number is already on another account...\"), Input on resubmission field",
+      "severity": 3,
+      "violation": "Unlike every other entry in the document (all \"preserved\"), this one clears a value that was actually valid - it's merely registered elsewhere - forcing the user to retype a correct number they may still need (e.g., to quote to support)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"one step bolder and larger than the field label\" vs. \"bold text set larger than the surrounding form labels\" vs. \"bold text set larger than the field label\"",
+      "fix": "Standardize on a single phrasing convention for the Signal field's weight/size descriptor throughout the document, reserving wording differences for cases of genuinely different treatment.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Signal field, compared across Signup entry 1/2, Checkout entry 1, and Checkout entry 2",
+      "severity": 3,
+      "violation": "The same visual-weight attribute is described with inconsistent terminology across entries, making it unclear whether these represent the same treatment or genuinely different ones."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-001.md",
+    "artifact_sha256": "0580399008ca4517da0a1b1f620180b68a4cfb24e596be279a5f782cde325fc7",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:25:12Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

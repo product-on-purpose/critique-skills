@@ -1,0 +1,171 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" paired with \"Suggested fix: none\"",
+      "fix": "Add a suggested fix such as a live character counter or a maxlength constraint that prevents typing past 30 characters.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - first entry (30-character field message)",
+      "severity": 3,
+      "violation": "A foreseeable character-overflow mistake is identified but given no preventive fix, so the field only rejects input after the fact instead of stopping it at entry time."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Please correct the highlighted field. Error code: 502.\"",
+      "fix": "Rewrite the message to describe the actual server issue (e.g., \"We couldn't reach the server. Please try again shortly.\") and move the raw code to a details/support link.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - second entry, Message line",
+      "severity": 3,
+      "violation": "A 502 is a server/gateway failure, not something the user can fix by correcting field content, so telling them to \"correct the highlighted field\" misattributes a backend outage to user error."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: directly below the shipping address block\" vs. \"Signal: bold text set above the address block\"",
+      "fix": "Reconcile the two lines to state a single, consistent position.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - second entry, Placement vs. Signal lines",
+      "severity": 3,
+      "violation": "The entry contradicts itself about where the message sits relative to the address block - \"below\" in Placement and \"above\" in Signal."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" for a message whose stated cause is \"Error code: 502\"",
+      "fix": "Change this entry's \"Predictable mistake\" value to \"no.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - second entry, Predictable mistake line",
+      "severity": 3,
+      "violation": "A gateway/server error is not a foreseeable user mistake the way a character-limit overflow is, so marking it \"yes\" miscategorizes a system failure as user behavior."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"described, names the one available alternative\" next to Message \"Reduce the file size and upload it again.\"",
+      "fix": "Either name the alternative in the message (e.g., \"Compress the file or upload a lower-resolution scan\") or correct the annotation to reflect that none is named.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "File upload, receipts - first entry (10 MB limit), Suggested fix line",
+      "severity": 3,
+      "violation": "The annotation claims the message names a specific alternative, but the message text never names one - it only instructs the reader to reduce the size."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-submit\" paired with \"Predictable mistake: yes\"",
+      "fix": "Change the trigger to fire at file-selection time instead of \"on-submit.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "File upload, receipts - second entry (format error), Fires line",
+      "severity": 3,
+      "violation": "The file's format is already known at selection time, so deferring the error until submit delays feedback on a mistake that could be caught immediately."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"long enough that a guessing attack cannot work through every combination\"",
+      "fix": "Remove or soften the unsupported claim, e.g., \"Choose a password of at least 8 characters to make it harder to guess.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Password reset, new password - first entry, Message line",
+      "severity": 3,
+      "violation": "An 8-character minimum does not reliably prevent brute-force attacks (it depends on character set, rate limiting, and hashing), so the message states a security guarantee that isn't actually true."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page\"",
+      "fix": "Move the message to appear directly adjacent to the password field, consistent with the other inline entries.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Password reset, new password - first entry, Placement line",
+      "severity": 3,
+      "violation": "Despite being an inline error, the message is placed away from the field it describes, forcing a scroll to see feedback about a field already visible on screen."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" / \"Suggested fix: none\"",
+      "fix": "Add a suggested fix, such as a live length-requirement indicator shown as the user types.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Password reset, new password - first entry, Predictable mistake / Suggested fix lines",
+      "severity": 3,
+      "violation": "As with the checkout character-limit entry, a known, preventable violation is flagged as predictable but given no preventive fix."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Container: toast\" vs. \"Placement: in a dialog centered on the password reset step, over the new password field it blocks\" and \"Signal: bold heading text at the top of the dialog\"",
+      "fix": "Change the Container value to \"dialog\" to match the described behavior.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Password reset, new password - second entry (expired link), Container line",
+      "severity": 3,
+      "violation": "The container is labeled \"toast,\" but every other detail describes a modal dialog that blocks the field, not a transient, non-blocking toast."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-focus\"",
+      "fix": "Change the trigger to fire on page load rather than \"on-focus.\"",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Password reset, new password - second entry (expired link), Fires line",
+      "severity": 3,
+      "violation": "The link's expiration is already known before any user interaction, so waiting for field focus to surface a blocking dialog needlessly delays information that could be shown on load."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The last changes were not saved and cannot be recovered.\" vs. \"Input on resubmission: preserved\"",
+      "fix": "Correct whichever field is wrong - either drop the \"cannot be recovered\" claim or change \"Input on resubmission\" to \"not preserved.\"",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "Account settings, username - Message vs. Input on resubmission lines",
+      "severity": 3,
+      "violation": "The message asserts the data \"cannot be recovered,\" yet the entry also states the input is \"preserved\" on resubmission - a direct contradiction."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" for a message describing unsaved, unrecoverable data loss",
+      "fix": "Change the \"Predictable mistake\" value to \"no\" for this entry.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "Account settings, username - Predictable mistake line",
+      "severity": 3,
+      "violation": "An irrecoverable save failure is a system fault, not a foreseeable user input mistake like the character-limit or format entries elsewhere, so labeling it \"predictable mistake: yes\" is inconsistent with that label's use elsewhere in the document."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:35:48Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 13,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-SEVERITY-CONTAINER",
+      "evidence": "Container: toast; Placement: in a dialog centered on the password reset step, over the new password field it blocks",
+      "fix": "Present this message in a persistent modal or inline block that stays until the reader acts, not a self-clearing toast.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Password reset, new password, message 2",
+      "severity": 3,
+      "violation": "The expired-link failure fully blocks the reader from setting a new password at all, yet it is presented in a self-clearing toast, so a reader who looks away misses the one message explaining why the step cannot proceed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-EXPLAIN",
+      "evidence": "This field takes a maximum of 30 characters. Shorten the entry and save again.",
+      "fix": "Add a brief reason for the limit, e.g. \"This field takes a maximum of 30 characters so it fits on a shipping label. Shorten the entry and save again.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Checkout form, shipping address, message 1",
+      "severity": 2,
+      "violation": "The message states a product-set limit (a 30-character maximum) with no reason attached, leaving the reader to simply comply without understanding why the limit exists."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-GRACE",
+      "evidence": "The last changes were not saved and cannot be recovered. Contact support for assistance.",
+      "fix": "Add a brief acknowledgment before the technical facts, e.g. \"We're sorry, your last changes weren't saved and can't be recovered. Contact support for help restoring them.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Account settings, username, message 1",
+      "severity": 2,
+      "violation": "This is the only message block on this screen, its Suggested fix is none, and it reports a completed, unrecoverable loss, yet the wording is a bare technical notice with no acknowledgment of what that loss means for the reader."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-PLAIN-LANGUAGE",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "fix": "Replace the code or jargon term with a plain-language sentence a non-technical reader can act on.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "Checkout form, shipping address, message 2",
+      "severity": 2,
+      "violation": "The message text carries an internal error code, a code-style token, or an engineering-jargon term standing in for a plain-language explanation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-PREVENT",
+      "evidence": "Receipts upload as PDF or PNG only, the two formats the expense system can read.",
+      "fix": "Validate the file's format immediately after selection and show this message at that point instead of waiting for submit.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "File upload, receipts, message 2",
+      "severity": 2,
+      "violation": "This message fires on-submit for a predictable mistake, but the file's format is already known the moment it is selected, so the product could have warned the reader before they submitted rather than waiting until then."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-PROXIMITY",
+      "evidence": "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page",
+      "fix": "Move the message to directly beside or below the password field instead of the top of the form.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Password reset, new password, message 1",
+      "severity": 2,
+      "violation": "The message sits at the top of a long form rather than beside the password field it concerns, requiring the reader to scroll up to find it even though the field itself stays visible."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T12:39:31Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 7,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 2
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Check the message again and enter all six.\"",
+      "fix": "Name the actual channel, e.g. \"Check the text message we sent and enter all six digits.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - first message entry (\"5 digits\" message)",
+      "severity": 3,
+      "violation": "\"The message\" doesn't specify which delivery channel the code was sent through (SMS, email, app), leaving the instruction ambiguous about where to look."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" ... \"Suggested fix: none\"",
+      "fix": "Propose a preventive fix such as an input mask/live digit counter that blocks entry past 6 digits, or justify why none is needed.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - first message entry, \"Predictable mistake\" / \"Suggested fix\" fields",
+      "severity": 3,
+      "violation": "Flagging a mistake as predictable implies it recurs often enough to warrant prevention, yet no mitigation (e.g., restricting the field to 6 digits) is proposed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This verification code expired 10 minutes after it was sent, which stops an intercepted code from being reused later.\"",
+      "fix": "Cut the rationale clause and lead with the action: \"This code has expired. Request a new one and enter it here.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - second message entry (expired code)",
+      "severity": 3,
+      "violation": "The message justifies the security policy to the user instead of focusing on the needed action, adding irrelevant, oddly technical content to an inline error."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"selectable, offers a resend code button in place of the message\"",
+      "fix": "Rewrite as a plain sentence, e.g. \"Replace the message with a 'Resend code' button.\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - second message entry, \"Suggested fix\" field",
+      "severity": 3,
+      "violation": "The fix description is a garbled fragment inconsistent with the terse one-word format used in every other entry, making its meaning and scope unclear."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: preserved\"",
+      "fix": "Clear the field (or mark it visibly stale) when the expiry error fires, rather than preserving it as-is.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - second message entry, \"Input on resubmission\" field",
+      "severity": 3,
+      "violation": "Preserving the expired code's digits gives no visual indication the value must change, inviting the user to resubmit the same invalid code unchanged."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This promo code ended on 30 June.\"",
+      "fix": "Include the year, e.g. \"This promo code ended on 30 June 2026.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Billing, promo code - first message entry (expired promo)",
+      "severity": 3,
+      "violation": "The date omits the year, making the expiration ambiguous for a user revisiting the flow near a year boundary."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: no\"",
+      "fix": "Apply a consistent definition of \"predictable mistake\" across both promo-code messages, or state the reasoning that distinguishes them.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Billing, promo code - first message entry, \"Predictable mistake\" field",
+      "severity": 3,
+      "violation": "Entering a stale/expired promo code (often shared long after it lapses) is at least as foreseeable as the plan-mismatch case below, which is marked \"yes\" - the criterion is applied inconsistently between the two promo-code entries."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" ... \"Suggested fix: none\"",
+      "fix": "Suggest a preventive fix, such as disabling or graying out the promo field when the selected plan is ineligible for the entered code.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Billing, promo code - second message entry (plan mismatch), \"Predictable mistake\" / \"Suggested fix\" fields",
+      "severity": 3,
+      "violation": "As with the digit-count message, a mistake flagged as predictable has no proposed prevention, even though the conflict (code requires annual, plan is monthly) is knowable before submission."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Change the plan to annual, or remove the code.\"",
+      "fix": "Add a secondary cue (highlight or link) on the plan selector so the user can locate the field the message refers to.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Billing, promo code - second message entry, message text",
+      "severity": 3,
+      "violation": "The instructed fix lives in the plan selector, a different field from the one displaying the message, but only the promo code field carries the error signal - nothing flags the plan selector itself."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Signal: bold text set larger than the field label, icon\" (identical in all four entries)",
+      "fix": "Vary signal weight/icon type by severity, reserving the heaviest treatment for blocking errors and a lighter one for optional or informational notices.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Across all four entries, \"Signal\" field",
+      "severity": 3,
+      "violation": "The same high-intensity visual treatment is used for messages of very different severity (an optional \"continue without one\" notice vs. a blocking expired-code error), flattening the hierarchy and making urgency hard to triage at a glance."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-004.md",
+    "artifact_sha256": "c8f58456a4deb36595b0ac00fe364b68e80445e939d7293d2db8d8f1a42ac91b",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T13:27:16Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,39 @@
+Location: Signup form, email field — first message entry ("The connection dropped before this finished."), Predictable mistake field
+Evidence: "Predictable mistake: yes"
+Problem: A dropped connection is a system/network failure, not a user mistake, yet it is marked "yes" while the comparable system-caused error in Checkout ("Something went wrong") is marked "no" — the classification is applied inconsistently.
+Fix: Mark "Predictable mistake" as "no" for the connection-dropped message, consistent with how the other non-user-caused failure in the document is classified.
+
+Location: Signup form, email field — first message entry, Suggested fix field
+Evidence: "Suggested fix: selectable, offers the one available next step as a direct action"
+Problem: Every other entry's Suggested fix field is either "none" or empty, but this one contains vague descriptive attributes without ever stating what the actual suggested fix is (e.g., a retry action's label), breaking the document's format and leaving the fix content unspecified.
+Fix: Either name the concrete suggested fix text/action (e.g., a "Retry" button) or set the field to "none" to match the pattern used elsewhere.
+
+Location: Checkout form, payment method — first entry ("Something went wrong..."), Placement vs. Container fields
+Evidence: "Placement: in a banner directly above the payment method selector..." paired with "Container: inline"
+Problem: The placement explicitly names the container as a banner, but the Container field says "inline," which is self-contradictory since a banner is a distinct container type.
+Fix: Set Container to "banner" (or the correct discrete type), or revise Placement so it no longer describes a banner if the container is genuinely inline.
+
+Location: Checkout form, payment method — first entry, Placement field
+Evidence: "staying on screen until another method is chosen"
+Problem: This clause describes dismissal/persistence behavior rather than location, conflating two attributes that every other entry in the document keeps separate.
+Fix: Move the persistence detail out of Placement (into its own field or note) so Placement describes only where the message appears.
+
+Location: Checkout form, payment method — second entry ("The expiry date on this card has passed..."), Fires field
+Evidence: "Fires: mid-keystroke"
+Problem: Whether an expiry date has passed cannot be determined until the full date is entered, so firing this check mid-keystroke will produce false-positive errors while the user is still typing.
+Fix: Change Fires to "on-blur" (or on-completed-entry) so the full date is available before the passed/not-passed check runs.
+
+Location: Profile settings, phone number — first entry ("You keep entering the wrong value. Re-enter it to continue.")
+Evidence: "You keep entering the wrong value. Re-enter it to continue."
+Problem: The message never states what is wrong with the value or what a valid one looks like, and "re-enter it" gives the user no new information to avoid repeating the same failed input — unlike the signup email-format message, which spells out exactly what's required.
+Fix: Rewrite to name the specific validation failure (e.g., digit count, format) and describe a valid value, matching the specificity used in the signup email message.
+
+Location: Profile settings, phone number — second entry ("This phone number is already on another account..."), Input on resubmission field
+Evidence: "Input on resubmission: cleared"
+Problem: Unlike every other entry in the document (all "preserved"), this one clears a value that was actually valid — it's merely registered elsewhere — forcing the user to retype a correct number they may still need (e.g., to quote to support).
+Fix: Change to "preserved" so the user keeps the number they entered, consistent with the rest of the document and with the fact that the input itself wasn't invalid.
+
+Location: Signal field, compared across Signup entry 1/2, Checkout entry 1, and Checkout entry 2
+Evidence: "one step bolder and larger than the field label" vs. "bold text set larger than the surrounding form labels" vs. "bold text set larger than the field label"
+Problem: The same visual-weight attribute is described with inconsistent terminology across entries, making it unclear whether these represent the same treatment or genuinely different ones.
+Fix: Standardize on a single phrasing convention for the Signal field's weight/size descriptor throughout the document, reserving wording differences for cases of genuinely different treatment.

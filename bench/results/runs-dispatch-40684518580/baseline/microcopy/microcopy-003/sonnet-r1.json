@@ -1,0 +1,149 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Message: This request timed out before it could finish.\" listed under heading \"Search results, no matches\"",
+      "fix": "Split this into its own heading (e.g. \"Search results, request failed\") or rename the section to cover both empty-result and failure states.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Section heading \"Search results, no matches\" (covers the timeout entry)",
+      "severity": 3,
+      "violation": "A timeout is a failed/incomplete search, not a \"no matches\" (zero-result) case, so this entry is miscategorized under a heading that implies the search completed successfully but found nothing."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: none\"",
+      "fix": "Add a \"Try again\" / retry action to the suggested fix, matching the actionable pattern used in the other entries.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Search results, no matches - timeout entry, Suggested fix field",
+      "severity": 3,
+      "violation": "A timeout is a transient, recoverable error, but no retry action is offered, leaving the user with no way forward other than restarting the search from scratch."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"bold heading text where the first result would sit, text-label\"",
+      "fix": "Give the error a visually distinct treatment (e.g. icon plus alert styling) that doesn't mimic a result row's heading.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Search results, no matches - timeout entry, Signal field",
+      "severity": 3,
+      "violation": "Styling the error as a bold heading in the exact slot where the first result's title would appear risks the user mistaking it for an actual result rather than a system message."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: not-applicable\"",
+      "fix": "State explicitly whether search terms and filters are retained when the user resubmits after a timeout.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Search results, no matches - timeout entry, Input on resubmission field",
+      "severity": 3,
+      "violation": "Since the obvious recovery from a timeout is resubmitting the same search, whether the original query/filters survive that retry is directly relevant, so \"not-applicable\" leaves an open question about data loss."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"No orders fall inside the selected date range. Change the date range, or clear the filters to see every order.\"",
+      "fix": "Reword to clarify, e.g. \"Try a different date range, or clear all filters (including the date range) to see every order.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Search results, no matches - no-orders entry, Message field",
+      "severity": 3,
+      "violation": "The message treats \"date range\" and \"filters\" as separate things, but it's unclear whether \"clear the filters\" also resets the date range, so the user can't tell what each suggested action does."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message offers \"Change the date range, or clear the filters\"; Suggested fix: \"offers a clear filters button beside the message\"",
+      "fix": "Either add a date-range control next to the clear-filters button, or remove that option from the message copy.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Search results, no matches - no-orders entry, Suggested fix field",
+      "severity": 3,
+      "violation": "Only one of the two remedies promised in the message text has a corresponding UI affordance; there's no control for changing the date range."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Signal: \"styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action\"; Suggested fix: \"selectable, offers a clear filters button beside the message\"",
+      "fix": "Update the visual treatment (color, icon, weight) in addition to adding the button, so the message visually signals it needs action.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Search results, no matches - no-orders entry, Signal vs. Suggested fix fields",
+      "severity": 3,
+      "violation": "The diagnosed issue is a lack of visual distinction from passive banners, but the fix only adds a button without changing the styling, so the message will still read as non-actionable."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: no\" paired with a dedicated \"clear filters\" affordance",
+      "fix": "Mark this as a predictable mistake, or document why bespoke UI was added despite classifying it as unpredictable.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Search results, no matches - no-orders entry, Predictable mistake field",
+      "severity": 3,
+      "violation": "Filtering to zero results is a common, foreseeable occurrence, so marking it \"no\" while providing bespoke corrective UI for exactly this case is internally inconsistent."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Sync is paused while this device is on a metered connection, so syncing does not spend a data allowance. Select resume to sync now.\"",
+      "fix": "Add an explicit warning to the resume action, e.g. \"Resuming will use mobile data,\" so the user isn't caught off guard.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Notification center, sync status entry, Message field",
+      "severity": 3,
+      "violation": "The message explains that pausing protects the data allowance, then immediately invites the user to override that protection with no warning that resuming will consume metered data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: no\" on an entry whose own call to action is \"Select resume to sync now\"",
+      "fix": "Mark this as a predictable mistake and add a confirmation step before resuming sync on a metered connection.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Notification center, sync status entry, Predictable mistake field",
+      "severity": 3,
+      "violation": "Because the UI itself prompts the risky action, a user inadvertently spending metered data by tapping resume is a foreseeable outcome, so \"no\" understates the risk."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-focus\"",
+      "fix": "Also trigger re-evaluation on the underlying status-change event (e.g. connection-type change), not only on focus.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Notification center, sync status entry, Fires field",
+      "severity": 3,
+      "violation": "Binding the message to the notification center gaining focus means it won't re-evaluate if the underlying condition changes afterward (e.g. connection becomes unmetered, sync completes elsewhere), leaving a stale status displayed."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T13:04:53Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 11,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

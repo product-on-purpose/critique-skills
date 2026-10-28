@@ -1,0 +1,204 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This field takes a maximum of 30 characters. Shorten the entry and save again.\"",
+      "fix": "Name the field explicitly in the message text, e.g. \"Postal code takes a maximum of 30 characters.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - first entry, Message line",
+      "severity": 3,
+      "violation": "The message says \"This field\" instead of naming the field (e.g., \"Postal code\"), so it has no meaning on its own and relies entirely on visual proximity - a problem for screen-reader users or anyone who loses that positional context."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" paired with \"Suggested fix: none\"",
+      "fix": "Suggest a proactive fix, such as a live character counter or truncation as the user types, instead of \"none.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - first entry, Predictable mistake / Suggested fix rows",
+      "severity": 3,
+      "violation": "A 30-character maximum is fully foreseeable and preventable (e.g., via a live character counter or input truncation), yet no proactive fix is suggested despite the mistake being flagged as predictable."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: directly below the shipping address block\" / \"Signal: bold text set above the address block at a larger size than its labels, icon\"",
+      "fix": "Make Placement and Signal agree on a single position for the message.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - second entry, Placement vs. Signal rows",
+      "severity": 3,
+      "violation": "Placement and Signal directly contradict each other about where the message appears relative to the address block (below vs. above)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Please correct the highlighted field. Error code: 502.\"",
+      "fix": "Replace with a specific, user-actionable description of the problem, and move the technical error code (if needed for support) out of the primary message or into fine print.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - second entry, Message line",
+      "severity": 3,
+      "violation": "The message is vague (doesn't say what's wrong) and exposes a raw HTTP-style error code to the end user; 502 is a gateway/server error, not something a shopper can act on by \"correcting a field.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" alongside \"Error code: 502\"",
+      "fix": "Reclassify this as a system/server error rather than a predictable mistake, and handle it with retry logic rather than field-correction guidance.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - second entry, Predictable mistake row",
+      "severity": 3,
+      "violation": "A 502-style error indicates a server/infrastructure failure, not a predictable user input mistake, so classifying it as a \"predictable mistake\" is inconsistent with the message content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-blur\" with a message reading \"Error code: 502\"",
+      "fix": "Change the trigger to on-submit (or whenever the failing request actually occurs) rather than on-blur.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - second entry, Fires row",
+      "severity": 3,
+      "violation": "A gateway/server error would surface from a submission request, not from a field losing focus, so the firing trigger doesn't match the nature of the error."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"described, names the one available alternative but requires the reader to enter it by hand\" vs. \"selectable, offers a convert and retry action in place of the message\"",
+      "fix": "Offer an equivalent automated action for the size error (e.g., a \"compress and retry\" option) instead of requiring manual resizing.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "File upload, receipts - first entry vs. second entry, Suggested fix rows",
+      "severity": 3,
+      "violation": "Both errors are marked \"Predictable mistake: yes,\" but only the format error gets an automated one-click remedy; the size-limit error leaves the user to manually figure out how to shrink the file."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: after-field-complete\" (size limit) vs. \"Fires: on-submit\" (file format)",
+      "fix": "Validate file format immediately upon selection (after-field-complete), matching the size-limit check's timing.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "File upload, receipts - first entry vs. second entry, Fires rows",
+      "severity": 3,
+      "violation": "Two validations on the same upload control fire at different times, so a wrong-format file isn't flagged until final submission while an oversized file is flagged immediately - an inconsistent and needlessly late check for format."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Choose a password of at least 8 characters, long enough that a guessing attack cannot work through every combination.\"",
+      "fix": "Remove or correct the justification; state the requirement plainly without an inaccurate security guarantee.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Password reset, new password - first entry, Message line",
+      "severity": 3,
+      "violation": "This is a misleading security claim - an 8-character minimum alone does not make exhaustive guessing infeasible, especially without complexity requirements or rate limiting."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page\"",
+      "fix": "Move the message to appear directly adjacent to the password field instead of at the top of the form.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Password reset, new password - first entry, Placement row",
+      "severity": 3,
+      "violation": "The error is displaced far from the field it describes, forcing unnecessary scrolling even though the field itself is on screen - a proximity violation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Container: toast\" vs. \"Placement: in a dialog centered on the password reset step, over the new password field it blocks\" / \"Signal: bold heading text at the top of the dialog, icon\"",
+      "fix": "Relabel the container as \"dialog\" (or \"modal\") to match the described behavior.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Password reset, new password - second entry, Container vs. Placement/Signal rows",
+      "severity": 3,
+      "violation": "\"Toast\" denotes a transient, non-blocking notification, but the description is of a centered, blocking modal dialog - the container type contradicts its own placement and signal description."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-focus\" for message \"This reset link expired an hour after it was sent\"",
+      "fix": "Fire this message immediately on page load/mount rather than on-focus.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "Password reset, new password - second entry, Fires row",
+      "severity": 3,
+      "violation": "Link expiration is known as soon as the page loads, but waiting for the user to focus the field delays telling them, allowing interaction with a dead page in the meantime."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" with message \"The last changes were not saved and cannot be recovered. Contact support for assistance.\"",
+      "fix": "Reclassify this as a system error rather than a predictable mistake.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "Account settings, username - entry, Predictable mistake row",
+      "severity": 3,
+      "violation": "An unrecoverable save failure requiring support intervention is a system failure, not a predictable user mistake, so the classification doesn't match the described event."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Signal: bold text set larger than the field label, icon\" for an unrecoverable, irreversible data-loss message, vs. a full blocking dialog used for the recoverable expired-link case",
+      "fix": "Escalate the signal for unrecoverable data loss (e.g., a blocking dialog) so visual weight matches severity.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "Account settings, username - entry, Signal row compared to Password reset second entry",
+      "severity": 3,
+      "violation": "The visual severity signal is inverted relative to actual severity - an irreversible loss gets a minor inline treatment while a recoverable issue gets a blocking modal."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: preserved\" next to message \"cannot be recovered\"",
+      "fix": "Clarify what is preserved (e.g., the currently-typed value only, not the lost prior save) or remove the field if nothing meaningful is preserved.",
+      "id": "F-015",
+      "lane": "judged",
+      "location": "Account settings, username - entry, Input on resubmission row",
+      "severity": 3,
+      "violation": "It's unclear what \"preserved\" refers to when the message states the prior changes cannot be recovered - the field is contradictory or at least unexplained given the stated data loss."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-blur\" for message \"The last changes were not saved and cannot be recovered.\"",
+      "fix": "Surface this message immediately when the save failure occurs, not on a subsequent on-blur event.",
+      "id": "F-016",
+      "lane": "judged",
+      "location": "Account settings, username - entry, Fires row",
+      "severity": 3,
+      "violation": "An unrecoverable save failure is reported only when the user later blurs the field again, deferring notice of a past, already-occurred data loss instead of surfacing it at the moment it happened."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:41:26Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 16,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

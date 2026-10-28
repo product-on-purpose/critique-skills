@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-GRACE",
+      "evidence": "The last changes were not saved and cannot be recovered. Contact support for assistance.",
+      "fix": "Add a brief, sincere acknowledgment of the loss before the instruction, e.g. an apology naming what was lost, so the message does not read as purely procedural at the one moment the stakes are highest.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Account settings, username, message 1",
+      "severity": 3,
+      "violation": "The failure is total and unrecoverable in the moment (Suggested fix is none, no other message under this heading offers a way forward, and the text itself reports a completed, irreversible loss), yet the wording is a bare technical notice with no acknowledgment of what that loss costs the reader."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-SEVERITY-CONTAINER",
+      "evidence": "Container: toast (Placement: in a dialog centered on the password reset step, over the new password field it blocks)",
+      "fix": "Present this message in a modal that the reader must act on or dismiss, matching the blocking container already implied by its own placement description, rather than a self-clearing toast.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Password reset, new password, message 2",
+      "severity": 3,
+      "violation": "An expired reset link fully blocks the password-reset flow (the reader cannot proceed with no live link), yet it is presented in a toast, a container that clears itself and gives a reader who looks away no second chance to see the one message explaining why they cannot continue."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-SPECIFIC",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "fix": "Name the actual field and the actual problem (or, if the cause is a server error rather than a field problem, say so and offer a retry instead of asking the reader to correct a field that was never at fault).",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Checkout form, shipping address, message 2",
+      "severity": 3,
+      "violation": "The message names neither which field is wrong nor what rule it broke, only a generic instruction to correct \"the highlighted field\" plus a bare server error code, when a 502 is itself evidence the real cause is a server failure rather than anything the reader's correction can fix."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-EXPLAIN",
+      "evidence": "This field takes a maximum of 30 characters. Shorten the entry and save again.",
+      "fix": "Add a short clause naming why the 30-character cap exists, e.g. the field this feeds into or the system it must fit, so the restriction reads as a reason rather than an arbitrary number.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Checkout form, shipping address, message 1",
+      "severity": 2,
+      "violation": "The message states a recurring field-length restriction the reader can hit again without saying why the limit exists, and a reason (what the field is used for, or a downstream system limit) would help the reader accept and remember the constraint."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-PLAIN-LANGUAGE",
+      "evidence": "Please correct the highlighted field. Error code: 502.",
+      "fix": "Replace the code or jargon term with a plain-language sentence a non-technical reader can act on.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "Checkout form, shipping address, message 2",
+      "severity": 2,
+      "violation": "The message text carries an internal error code, a code-style token, or an engineering-jargon term standing in for a plain-language explanation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "NNG-EM-PREVENT",
+      "evidence": "Receipts upload as PDF or PNG only, the two formats the expense system can read. Change this file to one of those formats and upload it again, or select a different receipt. (Fires: on-submit, Predictable mistake: yes)",
+      "fix": "Check the file's format immediately after selection (the same after-field-complete point the size check in this section already uses) and warn then, rather than waiting for on-submit.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "File upload, receipts, message 2",
+      "severity": 2,
+      "violation": "The file's format is knowable the moment it is selected, not only at submission; reporting the mismatch only on-submit, with nothing earlier in the flow warning the reader, misses a foreseeable mistake the product could have caught at selection time."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-PROXIMITY",
+      "evidence": "Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page",
+      "fix": "Move the message to directly below the new-password field itself, the same placement pattern used for every other inline message in this artifact.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Password reset, new password, message 1",
+      "severity": 2,
+      "violation": "The message sits at the top of a long form rather than beside or below the password field it concerns, requiring the reader to scroll up to find it even though the field stays in view."
+    },
+    {
+      "confidence": "high",
+      "criterion": "NNG-EM-SELECTABLE-FIX",
+      "evidence": "Suggested fix: described, names the one available alternative but requires the reader to enter it by hand",
+      "fix": "Offer a selectable action in place of the prose description, e.g. a built-in compress-and-retry option, the same pattern already used for the file-format message in this section.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "File upload, receipts, message 1",
+      "severity": 2,
+      "violation": "The fix names a single, unambiguous alternative (reduce the file to under the 10 MB limit) but only describes it in prose, leaving the reader to find and apply a size reduction by hand instead of offering it as something they can pick."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "NNG"
+    ],
+    "skill": "critique-microcopy",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T12:45:38Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Message: This request timed out before it could finish.\" listed under the heading \"Search results, no matches\"",
+      "fix": "Rename the section to cover both conditions (e.g., \"Search results, no matches or error\") or move the timeout entry into its own section.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" section, first entry (Message field)",
+      "severity": 3,
+      "violation": "A request timeout is a failed-request/error condition, not a \"no matches\" (empty result set) condition, so this entry is filed under a heading that doesn't describe it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Signal: bold heading text where the first result would sit, text-label\" paired with \"Predictable mistake: no\"",
+      "fix": "Reclassify \"Predictable mistake\" as yes, or change the Signal so the message can't visually pass for a real result heading (e.g., non-heading typography plus an icon).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" section, first entry, Signal and Predictable mistake fields",
+      "severity": 3,
+      "violation": "Placing the error text as bold heading copy in the exact spot where a real result title would appear is a classic setup for users to mistake it for actual content, yet this is marked as not a predictable mistake."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: none\"",
+      "fix": "Add a suggested fix that offers a retry/try-again action for the timed-out request.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" section, first entry, Suggested fix field",
+      "severity": 3,
+      "violation": "A timeout is a transient, retryable failure, but no retry action is suggested, while the sibling empty-state entry below it does get an actionable fix (\"clear filters\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"in place of the results list\" (first entry) versus \"directly under the filter bar it concerns\" (second entry)",
+      "fix": "Standardize on one placement for all empty/error states shown in the results panel.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" section, comparing the Placement fields of the two entries",
+      "severity": 3,
+      "violation": "Two states that both leave the results panel empty are placed in different locations within the same panel, making the empty-state experience inconsistent depending on the failure type."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Signal: styled identically to informational banners elsewhere on the page, with no visual cue that this one demands action\" vs. \"Suggested fix: selectable, offers a clear filters button beside the message\"",
+      "fix": "Update the suggested fix to also change the visual treatment (e.g., warning styling) so the message is distinguishable from passive banners, not just add an action.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" section, second entry, Signal and Suggested fix fields",
+      "severity": 3,
+      "violation": "The Signal field identifies that the message looks like a passive informational banner with no cue it demands action, but the proposed fix only adds a button and leaves the styling that caused the confusion unchanged."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: no\" for the message \"No orders fall inside the selected date range.\"",
+      "fix": "Reclassify as \"yes,\" or document the criteria used for this field so the classification is justified.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" section, second entry, Predictable mistake field",
+      "severity": 3,
+      "violation": "Selecting a date range that unintentionally excludes all results is a textbook predictable user mistake, so marking this \"no\" is inconsistent with the scenario described."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: not-applicable\" alongside the message text \"Change the date range, or clear the filters to see every order.\"",
+      "fix": "Specify what happens to the previously entered filter values on resubmission instead of marking the field not-applicable.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "\"Search results, no matches\" section, second entry, Input on resubmission field",
+      "severity": 3,
+      "violation": "The message explicitly directs the user to change filters and try again, yet the field claims resubmission input is not applicable, which contradicts the recommended action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Signal: bold text at the top of the notification list, icon\"",
+      "fix": "Specify which icon is used and what it signals (e.g., a paused-sync warning icon).",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "\"Notification center, sync status\" section, Signal field",
+      "severity": 3,
+      "violation": "The icon is mentioned but never described (type, meaning, or color), unlike the other entries' Signal fields, which fully specify the visual treatment."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-focus\"",
+      "fix": "Surface the message as soon as sync pauses (e.g., inserted into the list on state change) rather than deferring entirely to focus, or add a persistent indicator visible before the list is focused.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "\"Notification center, sync status\" section, Fires field",
+      "severity": 3,
+      "violation": "Tying the sync-paused message to the notification list gaining focus means a user who doesn't open the list won't be told that syncing has stopped, even though that information may be time-sensitive."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message: \"Select resume to sync now.\" / Suggested fix: \"offers a resume now action inside the notification\"",
+      "fix": "Use one consistent label for the action in both the message copy and the suggested fix description.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "\"Notification center, sync status\" section, Message vs. Suggested fix fields",
+      "severity": 3,
+      "violation": "The action is named \"resume\" in the message copy but \"resume now\" in the suggested fix, an inconsistent label for what should be the same control."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-003.md",
+    "artifact_sha256": "e9b64055b86fe1ab966f96bb9fe0f79445ede21bc0c18a28c6c9326aaa325f59",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T13:23:20Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

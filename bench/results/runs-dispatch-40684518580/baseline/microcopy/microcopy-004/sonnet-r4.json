@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Check the message again and enter all six.\"",
+      "fix": "Name the source explicitly (e.g., \"Check the text message we sent and enter all 6 digits\") or drop the assumption and simply say \"Enter all 6 digits of the code.\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - first message, Message field",
+      "severity": 3,
+      "violation": "\"the message\" has no clear antecedent on screen - it assumes the code arrived via a rereadable text/email message, which may not hold if the code comes from an authenticator app, and nothing tells the user which \"message\" is meant."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Signal: bold text set larger than the field label, icon\"",
+      "fix": "Scale signal strength to severity - keep low-stakes format errors no larger than the label, and reserve stronger treatment for security/account-risk messages.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - first message, Signal field",
+      "severity": 3,
+      "violation": "Making the error larger and bolder than the field label it describes inverts the expected label/error visual hierarchy, and this identical heavy treatment is reused for all four messages regardless of severity, giving a minor digit-count slip the same visual weight as a security-relevant expired-code warning."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" ... \"Suggested fix: none\"",
+      "fix": "Propose a preventive fix such as input length limiting/masking on the code field, or state why none is warranted.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - first message, Predictable mistake / Suggested fix fields",
+      "severity": 3,
+      "violation": "Marking a mistake \"predictable\" is normally the cue for a preventive fix (e.g., limiting the field to 6 numeric characters), yet none is proposed here, while the \"no\" (expired code) case below does get a concrete suggested fix."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: preserved\"",
+      "fix": "Clear the field (or mark its contents invalid) once a new code is requested, instead of preserving the expired value.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - second message, Input on resubmission field",
+      "severity": 3,
+      "violation": "The code is expired and cannot be reused, so preserving the stale value in the field alongside a \"Resend code\" action leaves an invalid value sitting in the input, inviting the user to resubmit the same dead code."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"selectable, offers a resend code button in place of the message\"",
+      "fix": "Rewrite as a complete recommendation, e.g., \"Replace the message with a 'Resend code' button.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Two-factor setup, verification code - second message, Suggested fix field",
+      "severity": 3,
+      "violation": "The text is a sentence fragment - \"selectable\" has no subject or clear referent - so the recommendation isn't actionable as written."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This promo code ended on 30 June.\"",
+      "fix": "Include the year, e.g., \"This promo code ended on 30 June 2026.\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Billing, promo code - first message, Message field",
+      "severity": 3,
+      "violation": "No year is given, so the expiration date is ambiguous - the user can't tell whether the code lapsed this year or a previous year."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: on-blur\"",
+      "fix": "Apply one consistent timing rule for expiry checks across both screens, and only re-check on-blur when the code value has actually changed.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Billing, promo code - first message, Fires field",
+      "severity": 3,
+      "violation": "This expiration check fires on-blur, while the verification code's expiration check above fires on-submit, even though both are the same kind of time-based validity lookup; no reason is given for the different timing, and on-blur also means the error can re-fire every time the user tabs through other billing fields and back without changing the code."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: no\"",
+      "fix": "Re-apply the \"predictable mistake\" criterion consistently across both messages, or document what distinguishes them.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Billing, promo code - first message, Predictable mistake field",
+      "severity": 3,
+      "violation": "Entering a stale promo code (from an old email or expired ad) is a common, foreseeable mistake, yet it's marked \"no\" while the plan/code mismatch in the next message is marked \"yes\" - the expired-code case seems at least as predictable, making the classification inconsistent."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: none\"",
+      "fix": "Propose an analogous fix (e.g., a \"browse current codes\" link or a one-click remove-code action) or explain why this case doesn't need one.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Billing, promo code - first message, Suggested fix field",
+      "severity": 3,
+      "violation": "This message is structurally identical to the expired verification-code message (same kind of expiry failure), which received a concrete suggested fix (a resend button), but no analogous fix is proposed here, with no explanation for the different treatment."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-004.md",
+    "artifact_sha256": "c8f58456a4deb36595b0ac00fe364b68e80445e939d7293d2db8d8f1a42ac91b",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T13:41:14Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

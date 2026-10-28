@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: directly below the shipping address block\" / \"Signal: bold text set above the address block at a larger size than its labels, icon\"",
+      "fix": "Make Placement and Signal agree on a single position (confirm the actual implementation and correct whichever field is wrong).",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - second entry (Error code 502 message), Placement vs. Signal lines",
+      "severity": 3,
+      "violation": "The two fields contradict each other on where the message renders - one says below the address block, the other says above it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Please correct the highlighted field. Error code: 502.\" / \"Predictable mistake: yes\"",
+      "fix": "Show a distinct system-error message (e.g., \"Something went wrong on our end - try again\") instead of implying the user mistyped something, and mark \"Predictable mistake\" as no.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Checkout form, shipping address - second entry (Error code 502 message), Message vs. Predictable mistake lines",
+      "severity": 3,
+      "violation": "A 502 status code signals a server/gateway failure, not a user input error, so framing it as a field the user should \"correct\" and labeling it a predictable user mistake conflates a backend outage with client-side validation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Message: \"Reduce the file size and upload it again.\" / Suggested fix: \"described, names the one available alternative but requires the reader to enter it by hand\"",
+      "fix": "Either revise the message to name the actual alternative (e.g., a compression step) or correct the Suggested fix field to reflect that no alternative is actually named.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "File upload, receipts - first entry (10 MB limit), Message vs. Suggested fix lines",
+      "severity": 3,
+      "violation": "The Suggested fix classification claims the message names an available alternative, but the message only gives a generic instruction without naming any specific method or alternative."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Full message text is listed, while Suggested fix reads \"selectable, offers a convert and retry action in place of the message\"",
+      "fix": "Decide whether the convert-and-retry control replaces or supplements the text message, and update the entry so the two fields describe one coherent design.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "File upload, receipts - second entry (PDF/PNG only), Message vs. Suggested fix lines",
+      "severity": 3,
+      "violation": "\"In place of the message\" implies the button replaces the text, yet the entry still presents the full message as what fires, leaving it unclear whether the user sees text or a button."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: at the top of a long form, requiring the reader to scroll up to see it, though the field itself stays visible on the page\" / \"Suggested fix: none\"",
+      "fix": "Move the message inline next to the password field, matching the field-adjacent placement used elsewhere in this document, and update Suggested fix accordingly instead of \"none.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Password reset, new password - first entry (8 character minimum), Placement vs. Suggested fix lines",
+      "severity": 3,
+      "violation": "Placing the error far from the visible field it concerns is a clear usability defect, yet the Suggested fix field offers no remedy for it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Container: toast\" / \"Placement: in a dialog centered on the password reset step... Signal: bold heading text at the top of the dialog\"",
+      "fix": "Correct \"Container: toast\" to \"Container: dialog\" so it matches the blocking, centered description given elsewhere in the row.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Password reset, new password - second entry (expired link), Container vs. Placement/Signal lines",
+      "severity": 3,
+      "violation": "Container labels this a toast while Placement and Signal both describe a centered modal dialog - toasts and dialogs are distinct, mutually exclusive container types."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"over the new password field it blocks\" / \"Fires: on-focus\"",
+      "fix": "Change the trigger to one that doesn't require focusing a blocked field, such as on-page-load or on-step-entry.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Password reset, new password - second entry (expired link), Placement vs. Fires lines",
+      "severity": 3,
+      "violation": "If the dialog blocks the password field, the user cannot focus that field to trigger the message, making an on-focus trigger impossible given the stated placement."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The last changes were not saved and cannot be recovered. Contact support for assistance.\" / \"Predictable mistake: yes\"",
+      "fix": "Change \"Predictable mistake\" to \"no,\" consistent with how the expired-link entry (also a system-caused event) is marked.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Account settings, username - Message vs. Predictable mistake lines",
+      "severity": 3,
+      "violation": "An unrecoverable save failure is a system/data-persistence fault, not a predictable user input mistake (unlike the character-limit or format errors elsewhere), so \"yes\" mischaracterizes the failure type."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: preserved\" alongside \"cannot be recovered. Contact support for assistance.\" and \"Suggested fix: none\"",
+      "fix": "Either revise the message to acknowledge the preserved input can be resaved, or add a \"save again\" action as the Suggested fix instead of \"none.\"",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Account settings, username - Input on resubmission vs. Message/Suggested fix lines",
+      "severity": 3,
+      "violation": "If the user's input is preserved on screen, the obvious fix is to simply resave it, which contradicts telling the user the change is unrecoverable and must go through support - and no such retry fix is offered."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-002.md",
+    "artifact_sha256": "7cb1b1d826480c691801e8371cfc3581fb30860d7865c406f1b3cae8e8d69b26",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:55:02Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

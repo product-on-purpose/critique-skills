@@ -1,0 +1,149 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Predictable mistake: yes\" (for the message \"The connection dropped before this finished.\")",
+      "fix": "Change this entry's \"Predictable mistake\" to \"no\" for consistency with how other system-level failures in the document are classified.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Signup form, email field, first message block, \"Predictable mistake\" field",
+      "severity": 3,
+      "violation": "A dropped connection is a network/system failure, not something the user did, yet it's classified as a predictable user mistake; contrast with the checkout \"Something went wrong\" message, a comparable system-level error, which is correctly marked \"Predictable mistake: no.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: directly below the email input field\" / \"Fires: on-blur\" for \"The connection dropped before this finished.\"",
+      "fix": "Treat this as a form-level or submission-level error (e.g., a banner tied to the submit action) rather than an inline message anchored to the email field.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Signup form, email field, first message block, \"Placement\" and \"Fires\" fields",
+      "severity": 3,
+      "violation": "Scoping a connectivity failure to the email field specifically (and triggering it on blur) implies the problem is with what the user typed, when the failure is actually about the network/submission attempt and unrelated to the field's content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: selectable, offers the one available next step as a direct action\" paired with message text \"The connection dropped before this finished.\"",
+      "fix": "Either name the action in the message (e.g., \"Try again\") or describe in the Suggested fix field what the offered action actually is.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Signup form, email field, first message block, \"Suggested fix\" field",
+      "severity": 3,
+      "violation": "The suggested fix claims to offer a concrete next action, but the message itself never states what that action is (e.g., retry), so the fix and the message text don't match."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Signal: one step bolder and larger than the field label, none\"",
+      "fix": "Either add an icon to match the other field-level validation errors, or state why this message is exempt from the icon convention.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Signup form, email field, second message block, \"Signal\" field",
+      "severity": 3,
+      "violation": "Every other on-blur validation error in the document pairs bold/larger text with an icon; this entry drops the icon with no stated rationale, creating an unexplained inconsistency in how similarly-triggered errors are signaled."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Placement: in a banner directly above the payment method selector...\" / \"Container: inline\"",
+      "fix": "Change Container to a value that reflects a banner-style container (e.g., \"banner\") or revise the placement text to describe an inline element instead of a banner.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Checkout form, payment method, first message block, \"Placement\" vs \"Container\" fields",
+      "severity": 3,
+      "violation": "The placement text describes a banner, but the Container field labels it \"inline,\" which is the same value used for every field-level message directly below an input - this contradicts the description of a distinct banner element."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Something went wrong. Contact support if this continues.\"",
+      "fix": "Add at least a category of failure (e.g., \"We couldn't process this payment method\") and a concrete first step before escalating to support.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Checkout form, payment method, first message block, \"Message\" field",
+      "severity": 3,
+      "violation": "The message gives no information about what failed or what the user can do beyond \"contact support,\" unlike the specific, actionable guidance in other entries (e.g., the email format message)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"...staying on screen until another method is chosen\" paired with message \"Contact support if this continues.\"",
+      "fix": "Either let the banner clear on a retry with the same method, or change the message to explicitly instruct the user to choose a different method.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Checkout form, payment method, first message block, \"Placement\" field",
+      "severity": 3,
+      "violation": "The persistence condition forces the user to switch payment methods to dismiss the error, but the message's \"if this continues\" phrasing implies the issue may be transient and worth retrying with the same method - the two don't agree on what resolves the error."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Fires: mid-keystroke\" for \"The expiry date on this card has passed.\"",
+      "fix": "Change the trigger to on-blur or to fire only once the expiry field contains a complete, parseable date.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Checkout form, payment method, second message block, \"Fires\" field",
+      "severity": 3,
+      "violation": "Validating a full date as \"passed\" while the user is still typing it will produce false-positive errors on incomplete input (e.g., flagging the date before the year digits are entered)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You keep entering the wrong value. Re-enter it to continue.\"",
+      "fix": "State the specific validation rule that failed and rephrase neutrally, e.g., \"Enter a phone number with your country code, for example +1 555 123 4567.\"",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Profile settings, phone number, first message block, \"Message\" field",
+      "severity": 3,
+      "violation": "The message never states what is wrong with the value (format, length, country code, etc.), unlike comparable entries, and its phrasing reads as blaming the user rather than being constructive."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Input on resubmission: cleared\" for \"This phone number is already on another account...\"",
+      "fix": "Change \"Input on resubmission\" to \"preserved\" so the user doesn't have to retype a number that was valid, just not available.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Profile settings, phone number, second message block, \"Input on resubmission\" field",
+      "severity": 3,
+      "violation": "Every other message in the document preserves input on resubmission; here the value is cleared even though the number itself wasn't malformed (it's just registered elsewhere), forcing unnecessary re-entry of correct data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Suggested fix: none\" for a message offering two concrete next steps (\"Remove it there first, or contact support to move it across.\")",
+      "fix": "Apply the same treatment used for the signup connection-drop message (a selectable direct action, e.g., a \"Contact support\" link) or explain why this case doesn't warrant one.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "Profile settings, phone number, second message block, \"Suggested fix\" field",
+      "severity": 3,
+      "violation": "This message states actionable next steps much like the signup form's first entry, which was given a selectable direct-action suggested fix - the two similar cases are treated inconsistently."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/microcopy/microcopy-001.md",
+    "artifact_sha256": "0580399008ca4517da0a1b1f620180b68a4cfb24e596be279a5f782cde325fc7",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T12:29:29Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 11,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
