@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<p>Thanks for signing up.</p>`",
+      "fix": "Remove this paragraph from the form; display it via JavaScript after form submission or on a success page.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Inside `<div id=\"row-phone\">`, after the phone input",
+      "severity": 3,
+      "violation": "This confirmation message appears in the middle of the form before submission, which will confuse users. It should only display after the form is successfully submitted."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Full name field (`name=\"full_name\"`) and separate first/last name fields (`name=\"given_name\"`, `name=\"family_name\"`)",
+      "fix": "Remove either the full name field or the first/last name fields, depending on your data model requirements.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Form contains both `<div id=\"row-name\">` and `<div id=\"row-legalname\">`",
+      "severity": 3,
+      "violation": "The form collects the same information twice - once as a single full name and again as separate first and last names - which is redundant and creates data inconsistency."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\" required=\"\"` with no validation constraints",
+      "fix": "Add `minlength=\"8\" maxlength=\"8\" pattern=\"\\d{8}\"` to the input.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "`<div id=\"row-member\">` membership number input",
+      "severity": 3,
+      "violation": "The placeholder promises 8-digit validation but the input lacks minlength, maxlength, or pattern attributes to enforce it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`name=\"contact_time\" type=\"text\" required=\"\"`",
+      "fix": "Change `type=\"text\"` to `type=\"time\"`.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "`<div id=\"row-contacttime\">` preferred contact time input",
+      "severity": 3,
+      "violation": "Contact time should use a time input type, not text, to ensure consistent formatting and provide a time picker."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Standard</option>`, `<option>Express</option>`, `<option>Overnight</option>`",
+      "fix": "Add value attributes: `<option value=\"standard\">Standard</option>`, `<option value=\"express\">Express</option>`, `<option value=\"overnight\">Overnight</option>`.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "`<select id=\"shipspeed-select\">` inside row-shipspeed",
+      "severity": 3,
+      "violation": "The option elements lack value attributes, so the form will submit the display text instead of clean values."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-003.html",
+    "artifact_sha256": "df62d7b38659529bf26df03102d3e7969a1c47b7c66e72bc8d3cf208f082bc1f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T10:35:47Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

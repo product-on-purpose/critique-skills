@@ -1,0 +1,54 @@
+Location: email-input
+Evidence: `autocomplete="e-mail"`
+Problem: The autocomplete value is non-standard; the correct value is "email".
+Fix: Change `autocomplete="e-mail"` to `autocomplete="email"`
+
+Location: confirm-password-input
+Evidence: `<input id="confirm-password-input" ... required="">` (missing minlength attribute)
+Problem: The password field specifies minlength="8", but the confirm password field does not, creating an inconsistent validation constraint.
+Fix: Add `minlength="8"` to the confirm-password-input
+
+Location: membership_number input (member-input)
+Evidence: `placeholder="Must be 8 digits"` with no pattern, minlength, or maxlength
+Problem: The placeholder promises 8-digit validation, but the input lacks any attributes to enforce this constraint.
+Fix: Add `minlength="8" maxlength="8" pattern="[0-9]{8}"` to enforce the stated requirement
+
+Location: account_number input (acctnum-input)
+Evidence: `type="text" inputmode="numeric"` with no pattern or validation
+Problem: inputmode="numeric" is only a hint and does not prevent non-numeric input; type="text" allows any characters.
+Fix: Either change to `type="number"` or add `pattern="[0-9]+"` to enforce numeric-only input
+
+Location: shipspeed-select options
+Evidence: `<option>Standard</option>` through `<option>International</option>` (no value attributes)
+Problem: Options lack value attributes, causing the form to submit the visible text as the value instead of explicit values.
+Fix: Add value attributes: `<option value="standard">Standard</option>` (and similarly for all other options)
+
+Location: Full name and legal name fields (name-input and legalname-input)
+Evidence: First field labeled "Full name", later field labeled "Your name" (legalname-input)
+Problem: The form asks for the user's name twice in different ways, creating redundancy and confusion about whether these should be different values.
+Fix: Remove the legalname-input field, or clarify the distinct purpose of each field if both are genuinely required
+
+Location: org-input
+Evidence: `style="font-size:16px"`
+Problem: Unnecessary inline style that is inconsistent with other form fields and should be defined in a stylesheet.
+Fix: Remove the inline style attribute
+
+Location: contacttime-label
+Evidence: `style="display:block"`
+Problem: Unnecessary inline style; labels are already block-level by default and this clutters the HTML.
+Fix: Remove the inline style attribute
+
+Location: contacttime-input
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: The field is labeled "Preferred contact time" but uses type="text" instead of the semantically correct type="time".
+Fix: Change `type="text"` to `type="time"`
+
+Location: viewdetails-btn
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>` (no onclick or function)
+Problem: This button has type="button" and no visible onclick handler, making it non-functional and its purpose unclear within the form.
+Fix: Either remove the button if unused, add an onclick handler to define its action, or provide context explaining its purpose
+
+Location: hear-select options
+Evidence: `<option>Search engine</option>` through `<option>Other</option>` (no value attributes)
+Problem: Same as shipspeed-select; options lack value attributes, causing form submission of visible text instead of explicit values.
+Fix: Add value attributes: `<option value="search_engine">Search engine</option>` (and similarly for all other options)

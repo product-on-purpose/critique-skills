@@ -1,0 +1,127 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"website-input\" name=\"website\" type=\"url\" required=\"\">`",
+      "fix": "Either remove the required attribute or implement conditional validation that only requires it for business account types.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "div id=\"row-website\"",
+      "severity": 3,
+      "violation": "Company website is marked as required, but this field may not be applicable to all customer types (e.g., individual consumers rather than businesses)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no maxlength, minlength, or pattern validation",
+      "fix": "Add maxlength=\"8\" and pattern=\"[0-9]{8}\" attributes to enforce the constraint.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "div id=\"row-member\"",
+      "severity": 3,
+      "violation": "The field specifies \"8 digits\" in the placeholder but has no validation to enforce this constraint."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required=\"\">`",
+      "fix": "Add a placeholder explaining the expected format and validation attributes (minlength, maxlength, and/or pattern) appropriate to the account number format.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "div id=\"row-acctnum\"",
+      "severity": 3,
+      "violation": "Account number field has no format specification, placeholder, or validation despite being marked as required and numeric."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Standard</option>` and four other options without value attributes",
+      "fix": "Add value attributes to each option: `<option value=\"standard\">Standard</option>`, `<option value=\"express\">Express</option>`, etc.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "div id=\"row-shipspeed\"",
+      "severity": 3,
+      "violation": "Select options lack value attributes and will submit display text (including \"Next-day\" with a hyphen) as form values instead of normalized identifiers."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Two separate fields labeled \"Full name\" (name-input) and \"Your name\" (legalname-input)",
+      "fix": "Remove one of the duplicate name fields, or if both are necessary, rename one to clarify its distinct purpose (e.g., \"Legal name for contracts\").",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "div id=\"row-legalname\" and div id=\"row-name\"",
+      "severity": 3,
+      "violation": "The form contains two fields asking for a person's name, which appears redundant and creates user confusion about what to enter in each field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Change to `type=\"time\"` or replace with a select element containing predefined options like Morning, Afternoon, or Evening.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "div id=\"row-contacttime\"",
+      "severity": 3,
+      "violation": "Text input is inappropriate for collecting a time preference; the expected format is ambiguous to users."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"font-size:16px\"`",
+      "fix": "Remove the inline style and apply the font-size via a CSS class in a stylesheet.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "div id=\"row-org\"",
+      "severity": 3,
+      "violation": "Inline style attribute should be defined in a CSS stylesheet instead."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"display:block\"`",
+      "fix": "Remove the inline style and apply display:block via a CSS class in a stylesheet.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "div id=\"row-contacttime\" label element",
+      "severity": 3,
+      "violation": "Inline style attribute should be defined in a CSS stylesheet instead."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"padding:12px 20px;font-size:16px\"`",
+      "fix": "Remove the inline styles and apply padding and font-size via a CSS class in a stylesheet.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "button id=\"viewdetails-btn\"",
+      "severity": 3,
+      "violation": "Inline style attributes should be defined in a CSS stylesheet instead."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T10:42:26Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 9,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

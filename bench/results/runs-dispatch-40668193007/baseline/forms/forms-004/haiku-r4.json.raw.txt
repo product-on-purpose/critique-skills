@@ -1,0 +1,39 @@
+Location: Form element, line 8
+Evidence: `<form id="form">`
+Problem: The form is missing `method` and `action` attributes, so it cannot submit properly or securely (missing method defaults to GET, which is insecure for password fields).
+Fix: Add `method="POST" action="/api/register"` (or appropriate endpoint) to the form tag.
+
+Location: Shipping speed select, line 49
+Evidence: `<select id="shipspeed-select" required="">`
+Problem: The select element is missing a `name` attribute, so the selected shipping speed will not be submitted with the form.
+Fix: Add `name="shipping_speed"` to the select element.
+
+Location: Shipping speed options, lines 51-55
+Evidence: `<option>Standard</option>` through `<option>International</option>`
+Problem: The option elements lack `value` attributes, so the form will submit the display text instead of consistent internal values.
+Fix: Add `value` attributes to each option: `<option value="standard">Standard</option>`, `<option value="express">Express</option>`, etc.
+
+Location: Full name and legal name fields, lines 10 and 56
+Evidence: `<label id="name-label" for="name-input">Full name</label>` and `<label id="legalname-label" for="legalname-input">Your name</label>`
+Problem: The form asks for "Full name" and then separately for "Your name" (legal name), requesting the same information twice and confusing users about which to fill.
+Fix: Remove one of the duplicate fields, or if both are genuinely needed, clarify their distinct purposes with labels like "Full name (for login)" and "Legal name (for billing)".
+
+Location: Membership number field, line 37
+Evidence: `placeholder="Must be 8 digits"` with no `maxlength` or `pattern` attribute
+Problem: The label and placeholder promise an 8-digit constraint, but the input has no validation to enforce it, allowing invalid entries.
+Fix: Add `maxlength="8" pattern="[0-9]{8}"` to enforce the 8-digit requirement.
+
+Location: Preferred contact time field, line 63
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: The field is labeled "Preferred contact time" but uses type="text", which provides no validation, appropriate mobile keyboard, or time-picker UI.
+Fix: Change to `type="time"` for a time picker, or use a `<select>` element if only predefined time slots are acceptable.
+
+Location: Preferred contact time label, line 63
+Evidence: `<label id="contacttime-label" for="contacttime-input" style="display:block">`
+Problem: This label has an inline `style="display:block"` while all other labels lack this, creating inconsistent styling and mixing presentation logic with markup.
+Fix: Remove the inline style and define label styling in a CSS file instead.
+
+Location: View details button, line 67
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>`
+Problem: The button has no `onclick` handler or associated JavaScript function, making it nonfunctional and its purpose unclear.
+Fix: Either remove the button if not needed, or add an `onclick` handler and corresponding JavaScript to reveal the intended details.

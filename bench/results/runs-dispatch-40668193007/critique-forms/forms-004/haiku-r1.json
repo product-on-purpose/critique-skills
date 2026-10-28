@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "The form's heading is 'Set up your account' and submit button is 'Create account'. The duplicate name fields ask for the same information with different labels. The other fields are profile and preference data unnecessary for account creation. An account sign-up should ask only what is needed to create the account.",
+      "fix": "Remove the duplicate #legalname-input field. Remove or defer unnecessary fields: membership number, account number, organization name, and preferred contact time preference. These could be gathered during profile setup after the account is created.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#legalname-input, \"Your name\" field, line 62",
+      "severity": 3,
+      "violation": "The form asks for the person's name twice: as \"Full name\" (#name-input, line 11) and again as \"Your name\" (#legalname-input, line 62). Additionally, the form requires fields that do not serve account creation: \"Membership number\" (line 41), \"Account number\" (line 45), \"Organization name\" (line 67), and \"Preferred contact time\" (line 71) could all be gathered after account creation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "Line 73: <button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button> declares explicit padding and font size. Line 74: <button id=\"submit-btn\" type=\"submit\">Create account</button> has no inline styles. The explicit padding creates a button that is visually larger than the default-styled primary submit button, making the secondary action compete for prominence.",
+      "fix": "Ensure the primary \"Create account\" submit button is visibly more prominent than the secondary \"View details\" button. Either remove or reduce the explicit styling on #viewdetails-btn, or add more prominent styling to #submit-btn (e.g., background color, larger padding, bolder text).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#viewdetails-btn, \"View details\" button, line 73",
+      "severity": 2,
+      "violation": "The secondary action button (#viewdetails-btn) has explicit inline styling (padding:12px 20px;font-size:16px) that makes it larger and potentially as prominent as the primary \"Create account\" submit button (#submit-btn, line 74), which has no explicit styling and relies on default browser rendering."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-LABEL-POSITION",
+      "evidence": "Line 70: <label id=\"contacttime-label\" for=\"contacttime-input\" style=\"display:block\">Preferred contact time</label> shows explicit block positioning. Lines 11, 15, 19, 23, 27, 32, 36, 40, 44, 48, 52, 62, 66 show labels without style attributes, defaulting to inline. This creates inconsistent label alignment.",
+      "fix": "Apply consistent label positioning throughout the form. Either add display:block to all labels or remove it from #contacttime-label to maintain uniform label alignment.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#contacttime-label and others, form labels",
+      "severity": 2,
+      "violation": "The form mixes label positioning. Label #contacttime-label has declared display:block (positioned above its field), while 13 other labels lack explicit positioning and default to inline rendering (positioned beside their fields)."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T10:38:57Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

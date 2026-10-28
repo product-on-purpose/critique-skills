@@ -1,0 +1,61 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "The form's task is account creation. Preferred contact time is an optional user preference that does not need to be collected during initial account setup.",
+      "fix": "Remove this field from account creation and ask for it later when setting up contact preferences or communication settings",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#contacttime-input",
+      "severity": 2,
+      "violation": "Preferred contact time is not necessary to create an account; this preference could be asked later or set as a default in account settings"
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "Both fields have autocomplete=\"name\" and request the person's name without clarification that one is for legal purposes and the other is for display purposes",
+      "fix": "Remove one of the duplicate name fields, or clarify their distinct purposes (legal vs. display) if both are genuinely needed",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#name-input and #legalname-input",
+      "severity": 2,
+      "violation": "Form asks for the same information twice: full name at #name-input and your name at #legalname-input, both required fields with identical autocomplete token"
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "The form's task is account creation (heading: Set up your account, button: Create account). Shipping speed preference is not part of establishing an account.",
+      "fix": "Remove this field from account creation flow and ask for shipping preference later when the person places their first order",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#shipspeed-select",
+      "severity": 2,
+      "violation": "Preferred shipping speed is not necessary to create an account; this preference could be asked later during order placement or set as a default in account preferences"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T10:41:35Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

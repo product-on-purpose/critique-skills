@@ -1,0 +1,34 @@
+Location: Company website input
+Evidence: <input id="website-input" name="website" required="" type="text">
+Problem: The input uses type="text" instead of type="url", missing browser-level validation for website URLs.
+Fix: Change type="text" to type="url"
+
+Location: Membership number input
+Evidence: placeholder="Must be 8 digits" with no pattern or maxlength attribute
+Problem: The placeholder indicates the field requires exactly 8 digits, but there is no validation to enforce this requirement.
+Fix: Add pattern="[0-9]{8}" to enforce exactly 8 digits
+
+Location: Secondary phone input
+Evidence: pattern="[0-9]+"
+Problem: The pattern [0-9]+ allows unlimited consecutive digits, which does not match typical phone number length constraints.
+Fix: Change pattern to limit length, such as pattern="[0-9]{7,15}" to match standard phone number ranges
+
+Location: Postal code input
+Evidence: <input id="postal-input" name="postal_code" type="text" autocomplete="postal-code" required="" size="3">
+Problem: The size="3" attribute only controls visual display width, not actual validation; it does not enforce postal code length requirements.
+Fix: Add a maxlength attribute appropriate to your postal code format, such as maxlength="10"
+
+Location: Full name and legal name fields
+Evidence: id="name-input" labeled "Full name" and id="legalname-input" labeled "Your name"
+Problem: The form contains two separate name input fields asking for essentially the same information, creating confusion about whether they should differ.
+Fix: Remove the "Your name" field and keep only "Full name", or clearly distinguish their purposes with different labels
+
+Location: Preferred contact time input
+Evidence: <input id="contacttime-input" name="contact_time" type="text" required="">
+Problem: Using type="text" for a time field is ambiguous; users cannot determine the expected format (24-hour time, AM/PM, time range, etc.).
+Fix: Use type="time" for a single time value, or add placeholder and pattern attributes to clarify format, such as placeholder="9:00 AM - 5:00 PM"
+
+Location: Date of birth year select
+Evidence: Final year option is <option>2009</option>
+Problem: The year dropdown only spans 1950–2009, but the current year is 2026; people born after 2009 cannot complete the form.
+Fix: Extend the year options to include 2010–2026 and beyond if needed for your age requirements

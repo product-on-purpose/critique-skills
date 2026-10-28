@@ -1,0 +1,44 @@
+Location: Inside `<div id="row-phone">`, after the phone input
+Evidence: `<p>Thanks for signing up.</p>` appears mid-form
+Problem: A confirmation message is placed in the middle of the form instead of appearing after successful submission, creating a confusing user experience.
+Fix: Remove this element from the form; handle the confirmation message with JavaScript after form submission or place it outside the form on a success page.
+
+Location: `<div id="name-input">` and `<div id="row-legalname">`
+Evidence: "Full name" input and separate "First name" / "Last name" inputs both present
+Problem: The form collects both a full name and individual given/family names, creating redundant fields that could cause data consistency issues.
+Fix: Remove either the full name field or the separate first/last name fields, depending on whether the backend needs structured name data.
+
+Location: `<div id="row-shipspeed">`, the `<select>` element
+Evidence: `<select id="shipspeed-select" required="">`
+Problem: The select element lacks a name attribute, so its value will not be included when the form is submitted.
+Fix: Add `name="shipping_speed"` (or an appropriate name) to the select element.
+
+Location: `<div id="row-shipspeed">`, the option elements
+Evidence: `<option>Standard</option>` (repeated for all three options)
+Problem: Option elements lack value attributes, so the form will submit the display text instead of structured data values.
+Fix: Add value attributes: `<option value="standard">Standard</option>`, `<option value="express">Express</option>`, `<option value="overnight">Overnight</option>`.
+
+Location: `<div id="row-member">`, the membership input
+Evidence: `placeholder="Must be 8 digits" required=""` with `type="text"`
+Problem: The field's placeholder requires 8 digits, but there is no pattern or length validation to enforce this constraint.
+Fix: Add `pattern="[0-9]{8}"` and `minlength="8" maxlength="8"` to enforce the 8-digit requirement.
+
+Location: `<div id="row-contacttime">`, the contact time input
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: "Preferred contact time" is a generic text input, which is unclear and does not match the semantic meaning of the field.
+Fix: Change to `type="time"`, or replace with a select menu if specific contact times are available.
+
+Location: `<div id="row-contacttime">`, the label element
+Evidence: `<label id="contacttime-label" for="contacttime-input" style="display:block">`
+Problem: The inline style `display:block` is unnecessary and should be handled by external CSS.
+Fix: Remove `style="display:block"` and apply block display styling to labels in a stylesheet.
+
+Location: Form buttons section, the reset button
+Evidence: `<button id="reset-btn" type="reset">Clear form</button>`
+Problem: A reset button on a signup form poses a high risk of accidental data loss, degrading the user experience.
+Fix: Remove the reset button entirely, or change it to `type="button"` with a JavaScript confirmation dialog if clearing the form is truly necessary.
+
+Location: Form buttons section, the "View details" button
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:1px 2px;font-size:11px">`
+Problem: This button has no onclick handler or clear purpose, and its inconsistent inline styling suggests it may be incomplete or vestigial.
+Fix: Either implement the button's functionality with an event handler and documentation, or remove it if it is not needed.

@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"website-input\" name=\"website\" required=\"\" type=\"text\">",
+      "fix": "Change type=\"text\" to type=\"url\"",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Company website input",
+      "severity": 3,
+      "violation": "The input uses type=\"text\" instead of type=\"url\", missing browser-level validation for website URLs."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "placeholder=\"Must be 8 digits\" with no pattern or maxlength attribute",
+      "fix": "Add pattern=\"[0-9]{8}\" to enforce exactly 8 digits",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Membership number input",
+      "severity": 3,
+      "violation": "The placeholder indicates the field requires exactly 8 digits, but there is no validation to enforce this requirement."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "pattern=\"[0-9]+\"",
+      "fix": "Change pattern to limit length, such as pattern=\"[0-9]{7,15}\" to match standard phone number ranges",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Secondary phone input",
+      "severity": 3,
+      "violation": "The pattern [0-9]+ allows unlimited consecutive digits, which does not match typical phone number length constraints."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"postal-input\" name=\"postal_code\" type=\"text\" autocomplete=\"postal-code\" required=\"\" size=\"3\">",
+      "fix": "Add a maxlength attribute appropriate to your postal code format, such as maxlength=\"10\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Postal code input",
+      "severity": 3,
+      "violation": "The size=\"3\" attribute only controls visual display width, not actual validation; it does not enforce postal code length requirements."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "id=\"name-input\" labeled \"Full name\" and id=\"legalname-input\" labeled \"Your name\"",
+      "fix": "Remove the \"Your name\" field and keep only \"Full name\", or clearly distinguish their purposes with different labels",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Full name and legal name fields",
+      "severity": 3,
+      "violation": "The form contains two separate name input fields asking for essentially the same information, creating confusion about whether they should differ."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">",
+      "fix": "Use type=\"time\" for a single time value, or add placeholder and pattern attributes to clarify format, such as placeholder=\"9:00 AM - 5:00 PM\"",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Preferred contact time input",
+      "severity": 3,
+      "violation": "Using type=\"text\" for a time field is ambiguous; users cannot determine the expected format (24-hour time, AM/PM, time range, etc.)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Final year option is <option>2009</option>",
+      "fix": "Extend the year options to include 2010 - 2026 and beyond if needed for your age requirements",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Date of birth year select",
+      "severity": 3,
+      "violation": "The year dropdown only spans 1950 - 2009, but the current year is 2026; people born after 2009 cannot complete the form."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-002.html",
+    "artifact_sha256": "e39d0a6e9175987711e114d2ce5edd568205f5aecafb2d271246e6036a16457f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T10:13:59Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

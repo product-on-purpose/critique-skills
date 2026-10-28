@@ -1,0 +1,24 @@
+Location: Inside `<div id="row-phone">`, after the phone input field
+Evidence: `<p>Thanks for signing up.</p>`
+Problem: A success message appears inside the form before the form is submitted, which is semantically incorrect and appears prematurely.
+Fix: Remove this paragraph element from the form; it should only display after successful form submission via JavaScript or a success page.
+
+Location: `<div id="row-shipspeed">`
+Evidence: `<select id="shipspeed-select" required="">` has no `name` attribute
+Problem: The select field lacks a `name` attribute, so its value will not be included in the submitted form data.
+Fix: Add `name="shipping_speed"` to the select element.
+
+Location: `<div id="row-legalname">`
+Evidence: Contains "First name" and "Last name" fields, following the earlier "Full name" field in `<div id="row-name">`
+Problem: The form asks for a full name at the top and then separately requests first and last names later, creating redundant and conflicting name fields.
+Fix: Remove either the "Full name" field or the separate "First name"/"Last name" fields to avoid duplication.
+
+Location: `<div id="row-contacttime">`
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: The field is type="text" but should accept a time value, making it unclear what format users should enter.
+Fix: Change the input type to `type="time"` to provide proper time input handling.
+
+Location: `<div id="row-member">`
+Evidence: `<input id="member-input" name="membership_number" type="text" inputmode="numeric" placeholder="Must be 8 digits" required="">`
+Problem: The placeholder text states "Must be 8 digits" as a requirement, but there is no validation (minlength, maxlength, or pattern) to enforce this constraint.
+Fix: Add `minlength="8" maxlength="8"` or add a `pattern="[0-9]{8}"` attribute to enforce the stated requirement.

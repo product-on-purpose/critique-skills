@@ -1,0 +1,44 @@
+Location: Line 14, email input `autocomplete` attribute
+Evidence: `autocomplete="e-mail"`
+Problem: The autocomplete value should be "email", not "e-mail". The invalid value will be ignored by browsers.
+Fix: Change `autocomplete="e-mail"` to `autocomplete="email"`
+
+Location: Line 20, confirm password input
+Evidence: `<input id="confirm-password-input" name="password_again" type="password" autocomplete="new-password" required="">`
+Problem: The confirm password field lacks the `minlength="8"` constraint that the password field has, allowing a mismatch in validation requirements.
+Fix: Add `minlength="8"` to the confirm password input
+
+Location: Line 59, shipping speed select element
+Evidence: `<select id="shipspeed-select" required="">`
+Problem: The select element has no `name` attribute, so the selected value will not be submitted with the form.
+Fix: Add `name="preferred_shipping_speed"` to the select element
+
+Location: Lines 60–64, shipping speed select options
+Evidence: `<option>Standard</option>` and similar without value attributes
+Problem: Options lack explicit `value` attributes, which is poor practice and can cause confusion between display text and submitted values.
+Fix: Add `value` attributes to each option (e.g., `<option value="standard">Standard</option>`)
+
+Location: Line 54, contact time input
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: The field is labeled "Preferred contact time" but uses `type="text"` instead of `type="time"`, providing poor user experience and no browser validation.
+Fix: Change `type="text"` to `type="time"`
+
+Location: Line 66, how you heard about us select element
+Evidence: `<select id="hear-select" required="">`
+Problem: The select element has no `name` attribute, so the selected value will not be submitted with the form.
+Fix: Add `name="heard_about_us"` to the select element
+
+Location: Lines 67–71, how you heard about us select options
+Evidence: `<option>Search engine</option>` and similar without value attributes
+Problem: Options lack explicit `value` attributes, making it unclear what values will be submitted.
+Fix: Add `value` attributes to each option (e.g., `<option value="search_engine">Search engine</option>`)
+
+Location: Lines 11 and 52, name input fields
+Evidence: "Full name" (`name="full_name"`) and "Your name" (`name="legal_name"`) both required
+Problem: Two different name fields with unclear distinction create confusion about why both are needed and what information each should contain.
+Fix: Clarify the purpose of each field with distinct labels (e.g., "Full name" and "Legal name (as it appears on official documents)"), or remove one if only one is actually required
+
+Location: Line 46, membership number input
+Evidence: `<input id="member-input" name="membership_number" type="text" inputmode="numeric" placeholder="Must be 8 digits" required="">`
+Problem: The placeholder promises an 8-digit requirement, but no `minlength`, `maxlength`, or `pattern` attribute enforces this constraint.
+Fix: Add `minlength="8" maxlength="8" pattern="[0-9]{8}"` to enforce the 8-digit requirement

@@ -1,0 +1,29 @@
+Location: Email address input field
+Evidence: `autocomplete="e-mail"`
+Problem: The autocomplete attribute value should be "email" per HTML specification, not "e-mail".
+Fix: Change `autocomplete="e-mail"` to `autocomplete="email"`
+
+Location: Confirm password input field
+Evidence: `<input id="confirm-password-input" name="password_again" type="password" autocomplete="new-password" required="">`
+Problem: The confirm password field lacks the minlength="8" constraint that the primary password field has, allowing mismatched length passwords to be submitted.
+Fix: Add `minlength="8"` to the confirm password input field
+
+Location: Membership number input field
+Evidence: Label states "(8 digits)", placeholder states "Must be 8 digits", but input is `<input id="member-input" name="membership_number" type="text" inputmode="numeric" placeholder="Must be 8 digits" required="">`
+Problem: The input lacks minlength and maxlength attributes despite the labels explicitly specifying exactly 8 digits are required.
+Fix: Add `minlength="8" maxlength="8"` to the membership number input field
+
+Location: Preferred contact time input field
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: A contact time field should use an appropriate input type for time selection (type="time") rather than type="text", which accepts any arbitrary text.
+Fix: Change `type="text"` to `type="time"` or replace with a select dropdown containing time options
+
+Location: Name fields (Full name and Your name)
+Evidence: First field: `<input id="name-input" name="full_name" ... autocomplete="name" required="">` and later `<input id="legalname-input" name="legal_name" ... autocomplete="name" required="">`
+Problem: The form asks users to enter their name twice—once as "Full name" and again as "Your name"—with no clear distinction between the two fields.
+Fix: Remove the duplicate field or clearly differentiate them (e.g., change one to "Legal name" if that distinction is intentional)
+
+Location: View details button
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>` placed mid-form with no surrounding context
+Problem: This button appears in the middle of the form with no clear purpose, label context, or visible associated functionality to indicate what details would be shown or how the button functions.
+Fix: Either remove the button, add explanatory text describing what details it reveals, or implement and document the associated JavaScript functionality

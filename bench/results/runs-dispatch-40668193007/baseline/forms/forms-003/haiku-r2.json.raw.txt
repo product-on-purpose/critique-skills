@@ -1,0 +1,39 @@
+Location: `<head>` section, between `<meta charset="utf-8">` and `<title>`
+Evidence: Missing `<meta name="viewport">` tag
+Problem: The page lacks a viewport meta tag needed for proper responsive design on mobile devices.
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` after the charset meta tag.
+
+Location: Form fields, row-name (lines 11-14) and row-legalname (lines 44-49)
+Evidence: Both "Full name" field with `name="full_name"` and separate "First name"/"Last name" fields with `name="given_name"` and `name="family_name"`
+Problem: The form asks for both a full name and separate first/last name fields, creating redundant and conflicting data.
+Fix: Remove either the "Full name" field or the separate first/last name fields, not both.
+
+Location: row-phone section, line 29
+Evidence: `<p>Thanks for signing up.</p>` appears inside the phone input row, before the form is submitted
+Problem: This success message displays while the user is still filling out the form, which is confusing and misleading.
+Fix: Remove this paragraph or move it to a success page shown after form submission.
+
+Location: row-member section, line 37
+Evidence: `placeholder="Must be 8 digits"` with no validation attributes
+Problem: The membership number field promises "Must be 8 digits" but has no `pattern`, `minlength`, or `maxlength` attributes to enforce this requirement.
+Fix: Add `pattern="[0-9]{8}"` and `minlength="8"` `maxlength="8"` to the input.
+
+Location: row-shipspeed section, line 50
+Evidence: `<select id="shipspeed-select" required="">` with no `name` attribute
+Problem: The select element lacks a `name` attribute, so its value will not be submitted with the form data.
+Fix: Add `name="shipping_speed"` (or appropriate field name) to the select element.
+
+Location: row-org section, line 56
+Evidence: `<input id="org-input" name="organization" type="text" style="font-size:16px" required="">`
+Problem: Only this form field has inline `font-size` styling, making it inconsistent with other fields.
+Fix: Remove the inline `style="font-size:16px"` or apply consistent styling to all form inputs via CSS.
+
+Location: row-contacttime section, line 59
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: A field labeled "Preferred contact time" uses `type="text"` instead of a proper time/datetime input type.
+Fix: Change `type="text"` to `type="time"` or `type="datetime-local"` depending on whether you need just the time or date and time.
+
+Location: viewdetails-btn, line 61
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:1px 2px;font-size:11px">View details</button>`
+Problem: The button has extremely small padding (1px 2px) and font size (11px), making it difficult to read and click.
+Fix: Either remove the button if not needed, or apply reasonable styling like `style="padding:8px 12px;font-size:14px"`.

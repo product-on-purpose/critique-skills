@@ -1,0 +1,138 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"website-input\" name=\"website\" required=\"\" type=\"text\">`",
+      "fix": "Change `type=\"text\"` to `type=\"url\"`",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Line 45, website input field",
+      "severity": 3,
+      "violation": "Input type should be \"url\" to properly validate website URLs."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required=\"\">`",
+      "fix": "Add `pattern=\"[0-9]{8}\"`",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Line 50, membership number input field",
+      "severity": 3,
+      "violation": "Label requires \"8 digits\" but there is no pattern validation to enforce this constraint."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required=\"\">`",
+      "fix": "Change `type=\"text\"` to `type=\"number\"`",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Line 55, account number input field",
+      "severity": 3,
+      "violation": "Field uses type=\"text\" with inputmode=\"numeric\" which is inconsistent; numeric inputs should use type=\"number\"."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"postal-input\" name=\"postal_code\" type=\"text\" autocomplete=\"postal-code\" required=\"\" size=\"3\">`",
+      "fix": "Remove the `size=\"3\"` attribute or increase it to at least 10",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Line 59, postal code input field",
+      "severity": 3,
+      "violation": "The size=\"3\" attribute makes the field too narrow for most postal codes (US ZIP codes are 5+ digits, Canadian codes are 7 characters)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">`",
+      "fix": "Add `name=\"shipspeed\"` attribute",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Line 62, shipping speed select element",
+      "severity": 3,
+      "violation": "The select element is missing a name attribute, so its value will not be submitted with the form."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Full name\" label and input, followed later by \"Your name\" label and input with different field names",
+      "fix": "Remove one of the duplicate name fields or clarify their distinct purposes with different labels",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Lines 13-17 and 74-76, name fields",
+      "severity": 3,
+      "violation": "The form asks for the user's name twice in different fields (full_name vs legal_name) creating confusion about which is needed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"org-input\" name=\"organization\" type=\"text\" required=\"\" style=\"font-size:13px\">`",
+      "fix": "Remove the inline style and apply styling via a CSS class",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Line 78, organization input field",
+      "severity": 3,
+      "violation": "Uses inline style attribute instead of a CSS class."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"contacttime-label\" for=\"contacttime-input\" style=\"display:inline-block;float:left;width:140px\">`",
+      "fix": "Remove inline styles and use CSS class with modern layout (flexbox or grid)",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Line 82, contact time label",
+      "severity": 3,
+      "violation": "Uses outdated float-based layout and multiple inline style attributes."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Change `type=\"text\"` to `type=\"time\"`",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Line 83, contact time input field",
+      "severity": 3,
+      "violation": "\"Preferred contact time\" should use type=\"time\" or a selection mechanism, not free text input."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>`",
+      "fix": "Either move the button outside the form, add an onclick handler with defined functionality, or remove it if not needed",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Line 85, view details button",
+      "severity": 3,
+      "violation": "Button appears in the middle of the form with no clear purpose, handler, or context for what it displays."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-002.html",
+    "artifact_sha256": "e39d0a6e9175987711e114d2ce5edd568205f5aecafb2d271246e6036a16457f",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T10:11:13Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 10,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
