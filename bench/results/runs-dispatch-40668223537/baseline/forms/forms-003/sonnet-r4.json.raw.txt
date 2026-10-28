@@ -1,0 +1,64 @@
+Location: `<head>` block
+Evidence: `<meta charset="utf-8">\n<title>Join Meridian Outfitters</title>`
+Problem: There is no `<meta name="viewport">` tag, so the form will render at desktop zoom/scale on mobile browsers, undermining usability on small screens.
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to the `<head>`.
+
+Location: row-password, password-input
+Evidence: `minlength="6"`
+Problem: A 6-character minimum is weak by current password-security guidance (NIST SP 800-63B recommends at least 8).
+Fix: Raise `minlength` to at least 8 and avoid an upper limit that blocks passphrases.
+
+Location: row-phone
+Evidence: `<p>Thanks for signing up.</p>`
+Problem: A "thanks for signing up" message is shown mid-form, before the user has submitted anything, which is confusing and appears to be stray/leftover content.
+Fix: Remove the paragraph from row-phone, or move an actual thank-you message to a post-submit confirmation page.
+
+Location: row-phone2, phone2-input
+Evidence: `<input id="phone2-input" name="phone_secondary" type="tel" autocomplete="tel">` (compare to phone-input's `autocomplete="tel"`)
+Problem: Both the primary and secondary phone fields use the same `autocomplete="tel"` token, so browser autofill cannot distinguish them and may fill the same number into both.
+Fix: Differentiate the fields (e.g., omit autocomplete on the secondary field or use a distinguishing section/contextual token) so autofill doesn't duplicate values.
+
+Location: row-website, website-input
+Evidence: `<input id="website-input" name="website" type="url" required="">`
+Problem: Company website is marked `required`, which will block signup for individual users who have no company website, and the field has no `autocomplete` attribute.
+Fix: Make the field optional unless every signup is a business account, and add `autocomplete="url"`.
+
+Location: row-member, member-input
+Evidence: `placeholder="Must be 8 digits"` with `type="text" inputmode="numeric"` and no `pattern` or `maxlength`
+Problem: The format requirement is only communicated via placeholder text (which disappears on input and isn't a substitute for persistent guidance) and isn't enforced by any validation attribute.
+Fix: Add `pattern="[0-9]{8}"` and `maxlength="8"`, and move the instruction into visible helper text rather than relying solely on the placeholder.
+
+Location: row-acctnum, acctnum-input
+Evidence: `<input id="acctnum-input" name="account_number" type="text" required="">`
+Problem: "Account number" has no accompanying explanation of what account it refers to (distinct from the membership number field), and collecting it with no autocomplete/format hint on a new-signup form is confusing and a potential sensitive-data concern.
+Fix: Clarify the field's purpose with helper text or relabel it, or remove it if it duplicates `membership_number`.
+
+Location: row-postal, relative to row-street
+Evidence: `street-input` (row-street) uses `autocomplete="address-line1"`, while `postal-input` (row-postal) appears several unrelated fields later, with no city/state/country fields anywhere
+Problem: The address is split across non-adjacent rows and is incomplete (no city, region, or country field), which will produce unusable addresses and confuses autofill grouping.
+Fix: Group all address fields (street, city, state/region, postal code, country) together and add the missing fields.
+
+Location: row-legalname (given-input/family-input)
+Evidence: `<label id="given-label" for="given-input">First name</label> ... <label id="family-label" for="family-input">Last name</label>` versus `row-name`'s `<input id="name-input" name="full_name" ... autocomplete="name">`
+Problem: The form collects the user's name twice in incompatible shapes (a single full name field and separate first/last fields), creating conflicting data and mixing `autocomplete="name"` with `given-name`/`family-name` tokens the spec doesn't expect combined on one form.
+Fix: Remove one of the two name-collection patterns so the form captures the name only once.
+
+Location: row-org, org-input
+Evidence: `style="font-size:16px"`
+Problem: This inline font-size is an isolated workaround for iOS Safari's input-zoom behavior, but it's applied inconsistently (no other input has it) and is ineffective anyway without a viewport meta tag.
+Fix: Remove the inline style and instead set a global minimum font-size (≥16px) for all form inputs via CSS, alongside adding the viewport meta tag.
+
+Location: row-contacttime, contacttime-input
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">` with label `style="display:block"`
+Problem: "Preferred contact time" uses a free-text input with no format constraint, which will produce inconsistent, unparseable data, and the label has a one-off inline style not used elsewhere.
+Fix: Use a `<select>` of time ranges or `type="time"` input, and move the `display:block` styling into a shared stylesheet rule applied consistently to all labels.
+
+Location: viewdetails-btn
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:1px 2px;font-size:11px">View details</button>`
+Problem: There is no `<script>` anywhere in the document, so this button has no handler and does nothing when clicked; its tiny padding/font-size also make it a poor touch target.
+Fix: Either wire up the button's behavior with a script (or link to a details page) or remove it; if kept, increase its padding/font-size to meet touch-target guidelines.
+
+Location: reset-btn
+Evidence: `<button id="reset-btn" type="reset">Clear form</button>` placed immediately after `submit-btn`
+Problem: Placing a reset button next to the submit button risks users accidentally wiping a long form's data with a misclick, a well-known UX anti-pattern.
+Fix: Remove the reset button, or visually de-emphasize and separate it from the submit button with a confirmation step.

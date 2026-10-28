@@ -1,0 +1,237 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<meta charset=\"utf-8\">` followed directly by `<title>Create your Meridian Outfitters account</title>` with no other meta tags",
+      "fix": "Add `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">` to the `<head>`.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "`<head>` section",
+      "severity": 3,
+      "violation": "There is no `<meta name=\"viewport\">` tag, so the form will not scale correctly on mobile browsers (inputs may render at desktop width or trigger unwanted zooming)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`autocomplete=\"e-mail\"`",
+      "fix": "Change `autocomplete=\"e-mail\"` to `autocomplete=\"email\"`.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "row-email, email-input",
+      "severity": 3,
+      "violation": "\"e-mail\" is not a valid HTML autocomplete token; the valid value is \"email\". Browsers will ignore the invalid value and fail to offer autofill for this field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"confirm-password-input\" name=\"password_again\" type=\"password\" autocomplete=\"new-password\" required=\"\">`",
+      "fix": "Add `minlength=\"8\"` to confirm-password-input, and add script-based (or `pattern`-based) validation that compares it to password-input's value before submit.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-confirm-password, confirm-password-input",
+      "severity": 3,
+      "violation": "Unlike password-input, which has `minlength=\"8\"`, this field has no minlength, so a mismatched/too-short confirmation value isn't caught until server-side validation, and there's no client-side check that the two password fields match."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"housenumber-input\" name=\"house_number\" type=\"text\" required=\"\">` placed in a row before row-street",
+      "fix": "Add an appropriate autocomplete token (e.g. `autocomplete=\"address-line2\"`) and reorder this row after row-street.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-housenumber, housenumber-input",
+      "severity": 3,
+      "violation": "The house number field has no `autocomplete` attribute and is sequenced before the street field, breaking browser address-autofill heuristics, which expect house number/line2 to follow the main street line."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "rows present are `house_number`, `street_address`, and `postal_code` only, with no corresponding \"City\" field anywhere in the form",
+      "fix": "Add a \"City\" input (e.g. `name=\"city\" autocomplete=\"address-level2\"`) between the street and postal code rows.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "address section (row-housenumber, row-street, row-postal)",
+      "severity": 3,
+      "violation": "There is no field to collect the city/town, which is required to produce a deliverable shipping address."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"phone-input\" ...><p>We will text you about delivery updates.</p>`",
+      "fix": "Give the `<p>` an id and reference it from phone-input via `aria-describedby`.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "row-phone",
+      "severity": 3,
+      "violation": "The explanatory paragraph is not programmatically associated with the phone input, so screen reader users won't hear the explanation when focusing the field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label ...>Company website</label><input id=\"website-input\" name=\"website\" type=\"url\" required=\"\">`",
+      "fix": "Remove this field, or make it optional and relevant only to a business-account signup path.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "row-website, website-input",
+      "severity": 3,
+      "violation": "A required company website field is out of place on a consumer account-signup form (this is a retail outfitter customer account, not a B2B registration), and blocks signup for any ordinary shopper who has no website."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no `pattern` or `maxlength` attribute",
+      "fix": "Add `pattern=\"\\d{8}\"` and `maxlength=\"8\"` to member-input, and move the instruction into visible helper text rather than relying solely on the placeholder.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "row-member, member-input",
+      "severity": 3,
+      "violation": "The 8-digit requirement is only communicated via placeholder text (which disappears on input and isn't a reliable validation mechanism) and is never actually enforced."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"acctnum-label\" for=\"acctnum-input\">Account number</label>` immediately after the membership-number row",
+      "fix": "Either remove this field or add helper text clarifying what distinct \"account number\" refers to (e.g. an existing loyalty account vs. the new membership number).",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "row-acctnum, acctnum-input",
+      "severity": 3,
+      "violation": "It's unclear how \"account number\" differs from \"membership number\" collected two fields earlier; for a new signup, the purpose of this field is unexplained and likely duplicative."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "row-postal (`postal_code`, `autocomplete=\"postal-code\"`) is separated from row-street (`autocomplete=\"address-line1\"`) by five unrelated fields",
+      "fix": "Move the postal-code field immediately after the street/house-number fields, keeping all address fields contiguous.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "rows between row-street and row-postal (row-phone, row-phone2, row-website, row-member, row-acctnum)",
+      "severity": 3,
+      "violation": "Splitting the address fields apart with unrelated fields breaks browser address-autofill grouping, which relies on address fields being contiguous."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"shipspeed-select\" required=\"\">`",
+      "fix": "Add `name=\"shipping_speed\"` to the select element.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "row-shipspeed, shipspeed-select",
+      "severity": 3,
+      "violation": "The `<select>` has no `name` attribute, so its selected value will not be included in the form submission at all."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Express</option><option>Overnight</option><option>Next-day</option>`",
+      "fix": "Consolidate into a single option (e.g. keep \"Overnight\" or \"Next-day\", not both).",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "row-shipspeed, shipspeed-select options",
+      "severity": 3,
+      "violation": "\"Overnight\" and \"Next-day\" are redundant/overlapping shipping-speed options that will confuse users about which to pick."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"legalname-label\" for=\"legalname-input\">Your name</label><input ... name=\"legal_name\" ... autocomplete=\"name\" ...>`",
+      "fix": "Remove this duplicate field, or rename/repurpose it clearly (e.g. \"Legal name (if different from above)\") and give it a distinct autocomplete value.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "row-legalname, legalname-input",
+      "severity": 3,
+      "violation": "This duplicates the \"Full name\" field collected earlier in row-name, which also uses `autocomplete=\"name\"`; collecting the same data twice under different labels is redundant and will confuse autofill (two same-page fields claiming the same autocomplete token)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"org-label\" for=\"org-input\">Organization name</label><input ... required=\"\">`",
+      "fix": "Remove the field or make it optional, scoped to business-account signups only.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "row-org, org-input",
+      "severity": 3,
+      "violation": "A required \"Organization name\" field is inappropriate for an individual consumer account-creation form and will block signup for shoppers without an organization."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"font-size:16px\"` is applied only to org-input, while no other text input in the form has this style",
+      "fix": "Apply a consistent font-size (≥16px) across all text inputs via a shared stylesheet rule instead of a one-off inline style.",
+      "id": "F-015",
+      "lane": "judged",
+      "location": "row-org, org-input",
+      "severity": 3,
+      "violation": "Inconsistent inline font-size styling means other inputs may render below 16px, which triggers automatic zoom on focus in mobile Safari - an issue this one field was apparently patched for but others weren't."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Replace with a `<select>` of defined time ranges or a `type=\"time\"` input.",
+      "id": "F-016",
+      "lane": "judged",
+      "location": "row-contacttime, contacttime-input",
+      "severity": 3,
+      "violation": "\"Preferred contact time\" is collected as unstructured free text with no format guidance, leading to inconsistent, hard-to-parse values (e.g. \"mornings\" vs \"9am\" vs \"after 5\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>`",
+      "fix": "Remove the button, or implement its intended behavior and clarify its label/purpose in context.",
+      "id": "F-017",
+      "lane": "judged",
+      "location": "viewdetails-btn, between row-contacttime and row-hear",
+      "severity": 3,
+      "violation": "This button has no associated script anywhere in the document and no clear purpose, sitting in the middle of the signup form with no explanation of what \"details\" it would show."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"hear-select\" required=\"\">`",
+      "fix": "Add `name=\"referral_source\"` to the select element.",
+      "id": "F-018",
+      "lane": "judged",
+      "location": "row-hear, hear-select",
+      "severity": 3,
+      "violation": "Like shipspeed-select, this `<select>` has no `name` attribute, so its value will be silently dropped from the submitted form data."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "all rows are flat `<div>`s with no `<fieldset>`/`<legend>`, and only row-phone2's label manually appends \"(optional)\" while every other field is `required=\"\"` with no visible indicator",
+      "fix": "Wrap related field groups in `<fieldset>`/`<legend>` elements and adopt one consistent, visible method (e.g. asterisk + legend note) for marking required vs. optional fields.",
+      "id": "F-019",
+      "lane": "judged",
+      "location": "overall `<form>` structure",
+      "severity": 3,
+      "violation": "There's no grouping of related fields (account, address, preferences) for assistive technology, and required/optional status is signaled inconsistently (only one field says \"(optional)\" in its label text; no asterisks or legend elsewhere)."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-001.html",
+    "artifact_sha256": "531c999912c0ab6c8224cbeb2347e7644d493a84e3a9461a434deaf5f2f09cdd",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T10:05:54Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 19,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

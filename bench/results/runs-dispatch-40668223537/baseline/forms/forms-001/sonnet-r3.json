@@ -1,0 +1,204 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`autocomplete=\"e-mail\"`",
+      "fix": "Change `autocomplete=\"e-mail\"` to `autocomplete=\"email\"`.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "row-email, `<input id=\"email-input\" ...>`",
+      "severity": 3,
+      "violation": "\"e-mail\" is not a valid HTML autocomplete token (the correct value is \"email\"), so browsers will not reliably autofill this field."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"confirm-password-input\" name=\"password_again\" type=\"password\" autocomplete=\"new-password\" required=\"\">`",
+      "fix": "Add `minlength=\"8\"` to the confirm-password input to match the password field.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "row-confirm-password, `<input id=\"confirm-password-input\" ...>`",
+      "severity": 3,
+      "violation": "Unlike the password field, this input has no `minlength=\"8\"`, so a user could type a confirmation shorter than the minimum password length with no immediate feedback that something is off."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"housenumber-input\" name=\"house_number\" type=\"text\" required=\"\">`",
+      "fix": "Make the field optional, or fold it into the street-address field instead of requiring it separately.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "row-housenumber, `<input id=\"housenumber-input\" ...>`",
+      "severity": 3,
+      "violation": "Requiring a separate, mandatory \"house number\" field blocks users whose address has no numbered house (rural addresses, PO boxes, many non-US formats)."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Both `phone-input` and `phone2-input` use `autocomplete=\"tel\"`",
+      "fix": "Differentiate the tokens, e.g. use `autocomplete=\"tel\"` for the primary and a non-autofilled or `tel-extension`/custom token for the secondary field.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "row-phone2, `<input id=\"phone2-input\" ...>`",
+      "severity": 3,
+      "violation": "Using the identical autocomplete token for both the primary and secondary phone fields can cause browsers to autofill the same number into both, defeating the purpose of a \"secondary\" phone."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label ...>Company website</label>` ... `<input id=\"website-input\" name=\"website\" type=\"url\" required=\"\">`",
+      "fix": "Remove the field, or make it optional and clearly scoped to business accounts only.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "row-website, `<input id=\"website-input\" ...>`",
+      "severity": 3,
+      "violation": "A required \"company website\" field is out of place on a consumer retail account signup (Meridian Outfitters) and will block individual customers who have no company website."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`placeholder=\"Must be 8 digits\"` with no `pattern` or `maxlength` attribute",
+      "fix": "Add `pattern=\"\\d{8}\"` and `maxlength=\"8\"` to enforce the stated format.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "row-member, `<input id=\"member-input\" ...>`",
+      "severity": 3,
+      "violation": "The \"8 digits\" requirement is only communicated via placeholder text (which disappears on input) and is not actually enforced, so users can submit the wrong length or non-numeric characters."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"acctnum-label\" for=\"acctnum-input\">Account number</label>` with no helper text",
+      "fix": "Add helper text clarifying the field's purpose (e.g., an existing loyalty/catalog account number), or remove it if not needed at signup.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "row-acctnum, `<input id=\"acctnum-input\" ...>`",
+      "severity": 3,
+      "violation": "It's unclear what \"account number\" means for someone who is creating a new account for the first time, and unlike the phone field there's no explanatory text."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"postal-input\" name=\"postal_code\" type=\"text\" autocomplete=\"postal-code\" required=\"\">` - no corresponding country field anywhere in the form",
+      "fix": "Add a required country field (e.g., a `select` with `autocomplete=\"country\"`) before or alongside the postal code field.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "row-postal, `<input id=\"postal-input\" ...>`",
+      "severity": 3,
+      "violation": "Postal code format and validity depend on country, but the form never collects a country, which is especially inconsistent given \"International\" is offered as a shipping option."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<option>Overnight</option>\\n <option>Next-day</option>` and `<option>International</option>`",
+      "fix": "Remove the duplicate \"Next-day\"/\"Overnight\" option and move \"International\" out of this speed selector into a destination/country-driven field.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "row-shipspeed, `<select id=\"shipspeed-select\">`",
+      "severity": 3,
+      "violation": "\"Overnight\" and \"Next-day\" are redundant options that will confuse users, and \"International\" conflates a shipping destination with a shipping speed."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"legalname-label\" for=\"legalname-input\">Your name</label> ... autocomplete=\"name\"` versus the earlier `row-name` field `<label id=\"name-label\" for=\"name-input\">Full name</label> ... autocomplete=\"name\"`",
+      "fix": "Remove the duplicate \"Your name\" field, or rename/repurpose it to clarify how it differs from \"Full name\" (e.g., legal name for billing vs. display name).",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "row-legalname, `<input id=\"legalname-input\" ...>`",
+      "severity": 3,
+      "violation": "The form asks for the user's name twice (full_name and legal_name), both marked `autocomplete=\"name\"`, which is redundant and may cause browser autofill to populate them inconsistently."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<label id=\"org-label\" for=\"org-input\">Organization name</label>` ... `required=\"\"`",
+      "fix": "Make the field optional and only show/require it for business account signups.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "row-org, `<input id=\"org-input\" ...>`",
+      "severity": 3,
+      "violation": "A required organization name field is inappropriate for an individual consumer creating a retail account and forces non-business users to invent a value."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">`",
+      "fix": "Replace with a `<select>` of discrete time ranges or a `type=\"time\"` input, and remove the hard requirement.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "row-contacttime, `<input id=\"contacttime-input\" ...>`",
+      "severity": 3,
+      "violation": "A free-text required field for \"preferred contact time\" gives no format guidance, so submissions will be inconsistent (\"morning\", \"9am\", \"anytime\") and hard to use programmatically."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button>` - document contains no `<script>` element",
+      "fix": "Either remove the button or add the script/handler that implements its \"View details\" behavior.",
+      "id": "F-013",
+      "lane": "judged",
+      "location": "viewdetails-btn, `<button id=\"viewdetails-btn\" type=\"button\" ...>`",
+      "severity": 3,
+      "violation": "The button has `type=\"button\"` (so it won't submit the form) but there is no JavaScript anywhere in the document to give it behavior, making it a dead control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`<select id=\"hear-select\" required=\"\">` for \"How did you hear about us?\"",
+      "fix": "Remove the `required` attribute from this select.",
+      "id": "F-014",
+      "lane": "judged",
+      "location": "row-hear, `<select id=\"hear-select\">`",
+      "severity": 3,
+      "violation": "Marketing-attribution questions are not essential to account creation and requiring an answer adds friction/blocks submission for users who don't fit the listed options."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "`style=\"font-size:16px\"`, `style=\"display:block\"`, `style=\"padding:12px 20px;font-size:16px\"`",
+      "fix": "Move these styles into a stylesheet with classes applied consistently across equivalent elements.",
+      "id": "F-015",
+      "lane": "judged",
+      "location": "Throughout the form (e.g. org-input, contacttime-label, viewdetails-btn)",
+      "severity": 3,
+      "violation": "Styling is applied ad hoc via inline `style` attributes on only a few scattered elements rather than consistently through CSS, making the presentation inconsistent and hard to maintain."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "No `<fieldset>`/`<legend>` elements anywhere in the document",
+      "fix": "Wrap related field groups (name/contact, address, account/shipping preferences) in `<fieldset>` elements with descriptive `<legend>` labels.",
+      "id": "F-016",
+      "lane": "judged",
+      "location": "Overall form structure (`<form id=\"form\">`)",
+      "severity": 3,
+      "violation": "Related fields (e.g. house number, street, postal code) are not grouped semantically, which hurts accessibility and makes the long flat list of fields harder to scan."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-001.html",
+    "artifact_sha256": "531c999912c0ab6c8224cbeb2347e7644d493a84e3a9461a434deaf5f2f09cdd",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-10-28T10:29:39Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 16,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

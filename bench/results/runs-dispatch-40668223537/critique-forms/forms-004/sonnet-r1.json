@@ -1,0 +1,94 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"acctnum-label\" for=\"acctnum-input\">Account number</label><input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required> and <label id=\"member-label\" for=\"member-input\">Membership number (8 digits)</label><input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required> both appear, both required, with no hint text distinguishing a new signup from an existing-customer migration.",
+      "fix": "Remove these two required fields from account creation, or if they apply only to people migrating an existing loyalty or account relationship, mark them optional and add a sentence explaining that they are only for existing members.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#acctnum-input, <input> field, label 'Account number', with #member-input, label 'Membership number (8 digits)', as a second instance",
+      "severity": 3,
+      "violation": "FORMS-FIELD-NECESSITY is breached because the task this form names is creating a new account, which by definition the person does not yet have, so the task cannot use an 'account number' or 'membership number' answer from someone who has neither yet; requiring both blocks completion for exactly the new-customer audience the form addresses, unless this is in fact an existing-customer account-linking form, which nothing in the markup states."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button> immediately followed by <button id=\"submit-btn\" type=\"submit\">Create account</button>, which carries no style attribute at all.",
+      "fix": "Remove the explicit padding/font-size styling from #viewdetails-btn, or apply stronger, clearly dominant styling (fill colour, larger size) to #submit-btn, so the primary action is unmistakably more prominent than the secondary one.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> \"View details\", compared with #submit-btn",
+      "severity": 2,
+      "violation": "FORMS-ACTION-HIERARCHY requires the secondary action to be visibly lesser than the primary. Here the secondary action (\"View details\") declares explicit padding and a 16px font size, while the primary submit button (\"Create account\") declares no size or weight at all, so the declared CSS gives the secondary action equal or greater visual prominence than the primary."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"contacttime-label\" for=\"contacttime-input\" style=\"display:block\">Preferred contact time</label><input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required> is required at account creation, while the only stated reason for contact ('We will text you about delivery updates') does not depend on a preferred time.",
+      "fix": "Remove the required contact-time field from account creation, or make it optional and ask it only at the point a contact is actually being scheduled.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#contacttime-input, <input> field, label 'Preferred contact time'",
+      "severity": 2,
+      "violation": "FORMS-FIELD-NECESSITY is breached because a preferred contact time serves a later step, being contacted, and could be asked then rather than being required before the account exists."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"legalname-label\" for=\"legalname-input\">Your name</label><input id=\"legalname-input\" name=\"legal_name\" type=\"text\" autocomplete=\"name\" ... required> appears later in the same form that already collected <input id=\"name-input\" name=\"full_name\" ...> under the label 'Full name'.",
+      "fix": "Remove #legalname-input, or, if a legal name genuinely differs from a display name for this task, relabel both fields to state the difference (e.g. 'Preferred name' and 'Legal name for billing') so the person understands why two name fields exist.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label 'Your name'",
+      "severity": 2,
+      "violation": "FORMS-FIELD-NECESSITY is breached by asking again for something the form already asked: the task of creating an account has already captured the person's name once, under 'Full name', and asks for it again under 'Your name' with no stated distinction between the two."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<select id=\"shipspeed-select\" required><option>Standard</option><option>Express</option><option>Overnight</option><option>Next-day</option><option>International</option></select> is required on a form headed 'Set up your account', whose submit button reads 'Create account'.",
+      "fix": "Remove the required shipping-speed field from account creation and ask it during checkout, or mark it optional with a sensible default here.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#shipspeed-select, <select> field, label 'Preferred shipping speed'",
+      "severity": 2,
+      "violation": "FORMS-FIELD-NECESSITY is breached because the task named by the form's heading and submit label is creating an account, not placing or shipping an order; a shipping-speed preference serves a later step (checkout) and could be asked then instead of being required now."
+    },
+    {
+      "confidence": "low",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"website-label\" for=\"website-input\">Company website</label><input id=\"website-input\" name=\"website\" type=\"url\" required> appears on a form whose heading is 'Set up your account' for 'Meridian Outfitters', with no other text establishing that only business accounts are being created.",
+      "fix": "Remove the required company-website field from account creation, or, if this form is specifically for business accounts, say so in the heading or intro text and justify each business-only field there.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "#website-input, <input> field, label 'Company website'",
+      "severity": 2,
+      "violation": "FORMS-FIELD-NECESSITY is breached because nothing in the form establishes that creating this account requires a company website; absent that context the task cannot use the answer, and the field asks for information the task does not need now."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-004.html",
+    "artifact_sha256": "5869da68b9ffbb6268c3ab1228f8b6422e66e63cb511ea17bc85ea1a8e5270d5",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T11:54:34Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 1,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

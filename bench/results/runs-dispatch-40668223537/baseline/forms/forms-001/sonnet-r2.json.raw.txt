@@ -1,0 +1,64 @@
+Location: `row-email` div, `email-input`
+Evidence: `autocomplete="e-mail"`
+Problem: `"e-mail"` is not a valid HTML autocomplete token (the spec defines `"email"`), so browsers/password managers will likely fail to autofill this field.
+Fix: Change the value to `autocomplete="email"`.
+
+Location: `row-confirm-password` div / whole document
+Evidence: `<input id="confirm-password-input" name="password_again" type="password" autocomplete="new-password" required="">` with no `<script>` anywhere in the document
+Problem: There is no client-side logic (and presumably none described for the server round-trip) to check that this field matches the password field before submission; a mismatched confirmation will submit successfully.
+Fix: Add JavaScript validation (e.g. on submit or on input) that compares `password-input` and `confirm-password-input` and blocks submission with a visible error if they differ.
+
+Location: between `row-street` and `row-phone`
+Evidence: `row-housenumber`, `row-street`, and `row-postal` exist, but no city/town field
+Problem: The shipping address is incomplete — house number, street, and postal code are collected but there is no city field, which most carriers require.
+Fix: Add a city/town input (e.g. `name="city"` with `autocomplete="address-level2"`) between the street and postal code fields.
+
+Location: `row-website`
+Evidence: `<input id="website-input" name="website" type="url" required="">`
+Problem: A personal clothing-retailer account has no apparent need for a mandatory company website; requiring it will block signups from ordinary individual customers.
+Fix: Remove the field or make it optional (drop `required`), and only show/require it for business accounts if that's a real use case.
+
+Location: `row-member`
+Evidence: `<input id="member-input" name="membership_number" type="text" inputmode="numeric" placeholder="Must be 8 digits" required="">`
+Problem: This is an account-creation form, so a new customer wouldn't yet have a membership number, making a required field for one a chicken-and-egg blocker; additionally "8 digits" is only stated as a placeholder with no `pattern`/`maxlength` to actually enforce it.
+Fix: Make the field optional (for existing members linking an account) and add `pattern="\d{8}"` and `maxlength="8"` to enforce the stated format.
+
+Location: `row-acctnum`
+Evidence: `<input id="acctnum-input" name="account_number" type="text" inputmode="numeric" required="">`
+Problem: This duplicates the purpose of the "Membership number" field immediately above it with no explanation of how the two differ, and is required, compounding the same chicken-and-egg signup problem.
+Fix: Remove this field if it's redundant with membership number, or add label text clarifying what distinct number is being requested and why it's required at signup.
+
+Location: `row-shipspeed`
+Evidence: `<option>Overnight</option>` and `<option>Next-day</option>` alongside `<option>International</option>`
+Problem: "Overnight" and "Next-day" are effectively the same shipping tier, creating ambiguous duplicate choices, and "International" describes a destination rather than a speed, mixing unrelated categories in one control.
+Fix: Collapse "Overnight"/"Next-day" into a single option, and move international shipping into a separate destination/region field rather than the speed selector.
+
+Location: `row-legalname`
+Evidence: `<label id="legalname-label" for="legalname-input">Your name</label>` with `autocomplete="name"`, compared to `row-name`'s `<label id="name-label" for="name-input">Full name</label>` also with `autocomplete="name"`
+Problem: This field duplicates the "Full name" field collected earlier in the form under a different label, with no explanation of why a legal name is needed separately.
+Fix: Remove the duplicate field, or if a distinct legal name is genuinely required, relabel it clearly (e.g. "Legal name (if different from above)") and explain the purpose.
+
+Location: `row-org`
+Evidence: `<input id="org-input" name="organization" type="text" style="font-size:16px" required="">`
+Problem: Organization name is required even though this is a consumer apparel signup form, and it carries an inline `font-size:16px` style (likely an iOS zoom-prevention hack) that no other text input in the form has, producing inconsistent mobile input behavior across fields.
+Fix: Make the field optional and move the font-size fix into a shared stylesheet rule applied to all text inputs, not just this one.
+
+Location: `row-contacttime`
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: "Preferred contact time" is a free-text input with no format guidance, placeholder, or structured control, so submitted values will be inconsistent and hard to process.
+Fix: Replace with a `<select>` of time ranges (e.g. "Morning", "Afternoon", "Evening") or a `<input type="time">`/structured picker.
+
+Location: `viewdetails-btn`, between `row-contacttime` and `row-hear`
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>`
+Problem: This button has `type="button"` (so it won't submit) but no associated script or handler is present anywhere in the document, making it a dead control with no defined behavior, placed confusingly in the middle of the signup form.
+Fix: Either wire up a click handler for its intended action or remove the button entirely.
+
+Location: `row-hear`
+Evidence: `<select id="hear-select" required="">`
+Problem: Making the marketing-attribution question "How did you hear about us?" mandatory will block account creation for users who don't want to answer or for whom no option fits.
+Fix: Remove `required` from this field, or add a neutral "Prefer not to say" option.
+
+Location: `<head>`
+Evidence: `<meta charset="utf-8"><title>Create your Meridian Outfitters account</title>` with no viewport meta tag
+Problem: There is no `<meta name="viewport">` tag, so mobile browsers will not scale the form correctly and the ad-hoc `font-size:16px` zoom workaround on `org-input` won't reliably solve mobile usability issues.
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to the `<head>`.

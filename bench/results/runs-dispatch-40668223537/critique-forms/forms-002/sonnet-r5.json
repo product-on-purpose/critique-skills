@@ -1,0 +1,160 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "FORMS-DATE-SELECTS",
+      "evidence": "<select id=\"dob-day-select\" autocomplete=\"bday-day\" required=\"\"> <select id=\"dob-month-select\" autocomplete=\"bday-month\" required=\"\"> <select id=\"dob-year-select\" autocomplete=\"bday-year\" required=\"\">",
+      "fix": "Use three short text fields for day, month and year, with the numeric input mode.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "#dob-day-select, <select> field, label 'Day', line 77",
+      "severity": 3,
+      "violation": "A date the person knows by heart is picked from three drop-downs, the year from 60 options."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"acctnum-label\" for=\"acctnum-input\">Account number</label> <input id=\"acctnum-input\" name=\"account_number\" type=\"text\" inputmode=\"numeric\" required> on a form headed \"Create your account\" whose submit button reads \"Create account\".",
+      "fix": "Remove the account-number field from account creation, or, if it links a pre-existing membership, mark it clearly optional and explain why it is being asked for before the account exists.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#acctnum-input, <input> field, label 'Account number', line 45",
+      "severity": 3,
+      "violation": "The task this form performs is creating an account that does not exist yet, so it cannot use an answer that presupposes one already exists; the field asks for information the task has no way to act on."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"legalname-label\" for=\"legalname-input\">Your name</label> <input id=\"legalname-input\" name=\"legal_name\" type=\"text\" autocomplete=\"name\" required> appears after #name-input, <label id=\"name-label\">Full name</label>, which the same form already required.",
+      "fix": "Remove the duplicate name field, or state in both labels why two different names are needed (for example a legal name distinct from a display name) if that is genuinely the case.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#legalname-input, <input> field, label 'Your name', line 62",
+      "severity": 3,
+      "violation": "The task is creating an account, and this field asks again for the person's name, which the form already collected under Full name; the account-creation task cannot use two different name answers."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<label id=\"member-label\" for=\"member-input\">Membership number (8 digits)</label> <input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required> required alongside #acctnum-input on the same account-creation form.",
+      "fix": "Remove the membership-number requirement from account creation, or move it to a later, clearly optional step for people who are linking an existing membership.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "#member-input, <input> field, label 'Membership number (8 digits)', line 41",
+      "severity": 3,
+      "violation": "Like the account-number field beside it, this field requires an identifier from a membership that cannot exist before the account being created exists, so the account-creation task has no use for the answer it demands."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<fieldset id=\"row-dob\"><legend>Date of birth</legend> ... three required selects (day, month, year) ... on a form whose heading is \"Create your account\" and whose only other fields are name, email, password, address and shipping-related data.",
+      "fix": "Remove the date-of-birth requirement from account creation, or ask for it only when a later step genuinely needs it (for example age-restricted products), with a stated reason.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "#row-dob, <fieldset> legend 'Date of birth', line 74",
+      "severity": 3,
+      "violation": "Nothing in the form's task, stated as creating an account to buy outdoor gear, uses a date of birth; the form requires it before the account the task creates exists, and never says why."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-WIDTH",
+      "evidence": "<input id=\"postal-input\" name=\"postal_code\" type=\"text\" autocomplete=\"postal-code\" required=\"\" size=\"3\"> (size=3)",
+      "fix": "Size the field to show at least 5 characters.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "#postal-input, <input> field, label 'Postal code', line 49",
+      "severity": 3,
+      "violation": "This postal code field shows 3 characters, too few to show a typical value whole while it is typed and checked."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FORMAT-TOLERANCE",
+      "evidence": "pattern=[0-9]+",
+      "fix": "Loosen the pattern to accept every valid way of writing the value, and normalise it after submission.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "#phone2-input, <input> field, label 'Secondary phone (optional)', line 33",
+      "severity": 3,
+      "violation": "The pattern on this phone field rejects valid values such as +44 20 7946 0958; 020 7946 0958."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "<button id=\"viewdetails-btn\" type=\"button\" style=\"padding:12px 20px;font-size:16px\">View details</button> sits between the #row-contacttime field and the #row-dob fieldset, and carries explicit padding and font-size while the real primary submit, #submit-btn, carries none.",
+      "fix": "Move the \"View details\" control outside the field column, for example beside or above the form as a whole, and keep only the primary action in line with the fields where they end.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> \"View details\", line 73",
+      "severity": 2,
+      "violation": "An action unrelated to finishing the form interrupts the single column of fields, sitting above the date-of-birth fieldset rather than beside the primary action where the fields end, so a person reaching it may believe entry is finished before the remaining required fields."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "#org-input (Organization name), #website-input (Company website), #shipspeed-select (Preferred shipping speed) and #contacttime-input (Preferred contact time) are all required on the same account-creation form, none explained by the heading \"Create your account\" or the submit label \"Create account\".",
+      "fix": "Make these fields optional at sign-up, or move them to the step that actually uses each answer (checkout for shipping speed, a profile page for organization and contact-time preferences).",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "#org-input, <input> field, label 'Organization name', line 67",
+      "severity": 2,
+      "violation": "These four required fields ask for business, logistics and scheduling details that the stated task of creating an account does not need now, and each could wait until a step that actually uses it, such as placing an order or completing a business profile."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-INPUT-FONT-SIZE",
+      "evidence": "font-size: 13px declared by its inline style",
+      "fix": "Set the field's font size to at least 16 pixels.",
+      "id": "F-010",
+      "lane": "scripted",
+      "location": "#org-input, <input> field, label 'Organization name', line 67",
+      "severity": 2,
+      "violation": "The text in this field is 13 pixels, below the 16 pixels at which a phone stops zooming the page on focus."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-INPUT-TYPE",
+      "evidence": "<input id=\"website-input\" name=\"website\" required=\"\" type=\"text\">",
+      "fix": "Set type=url on the field.",
+      "id": "F-011",
+      "lane": "scripted",
+      "location": "#website-input, <input> field, label 'Company website', line 37",
+      "severity": 2,
+      "violation": "This web address field is type text, so a phone does not show the keyboard built for it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-LABEL-POSITION",
+      "evidence": "<label id=\"contacttime-label\" for=\"contacttime-input\" style=\"display:inline-block;float:left;width:140px\">Preferred contact time</label> is the only label in the form whose declared CSS sets a side-by-side position; every other label in the form carries no positioning CSS at all.",
+      "fix": "Remove the float and fixed width from this label, or, if a beside position is wanted, apply the same position consistently to every label in the form.",
+      "id": "F-012",
+      "lane": "judged",
+      "location": "#contacttime-label, <label> 'Preferred contact time', line 70",
+      "severity": 2,
+      "violation": "The form's one declared label position breaks from the rest of the form's implicit stacked convention, so the label alignment is inconsistent across the form rather than uniform throughout."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-002.html",
+    "artifact_sha256": "e39d0a6e9175987711e114d2ce5edd568205f5aecafb2d271246e6036a16457f",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T11:12:58Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

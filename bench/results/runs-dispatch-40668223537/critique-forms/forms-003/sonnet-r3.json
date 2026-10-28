@@ -1,0 +1,229 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" required> and <input id=\"member-input\" name=\"membership_number\" type=\"text\" placeholder=\"Must be 8 digits\" required>, on a form headed 'Set up your account' / 'Join Meridian Outfitters'",
+      "fix": "Remove the account-number and membership-number fields from sign-up, or make them optional and explain they are only for people who already hold one.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "#acctnum-input, <input> field, label 'Account number', line 45",
+      "severity": 3,
+      "violation": "The task is creating a new account, but this field and #member-input require an account number and a membership number as if one already existed; a person joining for the first time has no value to put in either required field."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"name-input\" name=\"full_name\" ... required> (line 12) then later <input id=\"given-input\" name=\"given_name\" ... required> <input id=\"family-input\" name=\"family_name\" ... required> (lines 61 and 63)",
+      "fix": "Collect the name once: remove the separate first-name and last-name fields, or remove the full-name field and keep only first and last name.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "#given-input, <input> field, label 'First name', line 61",
+      "severity": 3,
+      "violation": "The form already asked for the person's full name in #name-input; #given-input and #family-input ask for the same name again, split into parts, so the task re-asks something it already has."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"org-input\" name=\"organization\" type=\"text\" required> and <input id=\"website-input\" name=\"website\" type=\"url\" required>, with nothing on the page indicating a business-only sign-up",
+      "fix": "Make organization name and company website optional, or remove them unless the form is for business accounts only.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "#org-input, <input> field, label 'Organization name', line 67",
+      "severity": 3,
+      "violation": "The task this heading and submit button name is an individual joining the outfitters, but an organization name and a company website are required of every person, though an individual customer has neither to give."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-PHONE-REASON",
+      "evidence": "<input id=\"phone-input\" name=\"phone\" type=\"tel\" autocomplete=\"tel\" required=\"\">",
+      "fix": "Say beside the field what the number is used for, or make it optional.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "#phone-input, <input> field, label 'Phone number', line 28",
+      "severity": 3,
+      "violation": "A phone number is required with no word beside the field on why it is needed, though the form already asks for an email address."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-PLACEHOLDER-INSTRUCTION",
+      "evidence": "placeholder=Must be 8 digits",
+      "fix": "Move the rule into hint text beside the field, linked with aria-describedby.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "#member-input, <input> field, label 'Membership number', line 41",
+      "severity": 3,
+      "violation": "A format rule appears only in the placeholder, which disappears as soon as typing starts."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-REQUIRED-OPTIONAL",
+      "evidence": "<input id=\"phone2-input\" name=\"phone_secondary\" type=\"tel\" autocomplete=\"tel\">",
+      "fix": "Mark the optional fields with the word optional in their labels, or mark the required ones and explain the mark.",
+      "id": "F-006",
+      "instances": [
+        {
+          "evidence": "<input id=\"name-input\" name=\"full_name\" type=\"text\" autocomplete=\"name\" autocorrect=\"off\" spellcheck=\"false\" required=\"\">",
+          "location": "#name-input, <input> field, label 'Full name', line 12"
+        },
+        {
+          "evidence": "<input id=\"email-input\" name=\"email\" type=\"email\" autocomplete=\"email\" required=\"\">",
+          "location": "#email-input, <input> field, label 'Email address', line 16"
+        },
+        {
+          "evidence": "<input id=\"password-input\" name=\"password\" type=\"password\" autocomplete=\"new-password\" required=\"\" minlength=\"6\">",
+          "location": "#password-input, <input> field, label 'Create a password', line 20"
+        },
+        {
+          "evidence": "<input id=\"street-input\" name=\"street_address\" type=\"text\" autocomplete=\"address-line1\" autocorrect=\"off\" spellcheck=\"false\" required=\"\">",
+          "location": "#street-input, <input> field, label 'Street address', line 24"
+        },
+        {
+          "evidence": "<input id=\"phone-input\" name=\"phone\" type=\"tel\" autocomplete=\"tel\" required=\"\">",
+          "location": "#phone-input, <input> field, label 'Phone number', line 28"
+        },
+        {
+          "evidence": "<input id=\"website-input\" name=\"website\" type=\"url\" required=\"\">",
+          "location": "#website-input, <input> field, label 'Company website', line 37"
+        },
+        {
+          "evidence": "<input id=\"member-input\" name=\"membership_number\" type=\"text\" inputmode=\"numeric\" placeholder=\"Must be 8 digits\" required=\"\">",
+          "location": "#member-input, <input> field, label 'Membership number', line 41"
+        },
+        {
+          "evidence": "<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" required=\"\">",
+          "location": "#acctnum-input, <input> field, label 'Account number', line 45"
+        },
+        {
+          "evidence": "<input id=\"postal-input\" name=\"postal_code\" type=\"text\" autocomplete=\"postal-code\" required=\"\">",
+          "location": "#postal-input, <input> field, label 'Postal code', line 49"
+        },
+        {
+          "evidence": "<select id=\"shipspeed-select\" required=\"\">",
+          "location": "#shipspeed-select, <select> field, label 'Preferred shipping speed', line 53"
+        },
+        {
+          "evidence": "<input id=\"given-input\" name=\"given_name\" type=\"text\" autocomplete=\"given-name\" autocorrect=\"off\" spellcheck=\"false\" required=\"\">",
+          "location": "#given-input, <input> field, label 'First name', line 61"
+        },
+        {
+          "evidence": "<input id=\"family-input\" name=\"family_name\" type=\"text\" autocomplete=\"family-name\" autocorrect=\"off\" spellcheck=\"false\" required=\"\">",
+          "location": "#family-input, <input> field, label 'Last name', line 63"
+        },
+        {
+          "evidence": "<input id=\"org-input\" name=\"organization\" type=\"text\" style=\"font-size:16px\" required=\"\">",
+          "location": "#org-input, <input> field, label 'Organization name', line 67"
+        },
+        {
+          "evidence": "<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required=\"\">",
+          "location": "#contacttime-input, <input> field, label 'Preferred contact time', line 71"
+        }
+      ],
+      "lane": "scripted",
+      "location": "#phone2-input, <input> field, label 'Secondary phone', line 33",
+      "severity": 3,
+      "violation": "The form mixes 14 required and 1 optional fields and marks none of them, so the person cannot tell which may be left empty."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-RESET-BUTTON",
+      "evidence": "<button id=\"reset-btn\" type=\"reset\">",
+      "fix": "Remove the reset control.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "#reset-btn, <button> button, text 'Clear form', line 75",
+      "severity": 3,
+      "violation": "A control that clears everything entered sits directly beside the submit button."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-TOUCH-TARGET",
+      "evidence": "style=\"padding:1px 2px;font-size:11px\"",
+      "fix": "Increase the button's padding and font size so it renders at least 44 by 44 CSS pixels.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "#viewdetails-btn, <button> button, text 'View details', line 73",
+      "severity": 3,
+      "violation": "The declared padding and font size render this button well under the roughly 44 CSS pixel target mobile-usability guidance recommends, likely close to the height of its own text, so a fingertip is likely to miss it or catch a neighbouring control."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-ACTION-HIERARCHY",
+      "evidence": "<button id=\"submit-btn\" type=\"submit\">Create account</button> <button id=\"reset-btn\" type=\"reset\">Clear form</button>, neither carrying any style attribute",
+      "fix": "Style the reset button as visually subordinate to Create account, such as a plain text link or an outline style, or remove it.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "#reset-btn, <button> button, text 'Clear form', line 75",
+      "severity": 2,
+      "violation": "The secondary action (Clear form) carries no style making it visibly lesser than the primary action (Create account); both render in the browser's identical default button style, so a person must read the labels to tell which one saves their work."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<input id=\"contacttime-input\" name=\"contact_time\" type=\"text\" required>",
+      "fix": "Make this field optional, or remove it from sign-up and ask it only when a call is actually needed.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "#contacttime-input, <input> field, label 'Preferred contact time', line 71",
+      "severity": 2,
+      "violation": "A preferred contact time is only useful once the company actually needs to call, which is a later step than creating an account, so requiring it now asks for an answer that could be asked then."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "FORMS-FIELD-NECESSITY",
+      "evidence": "<select id=\"shipspeed-select\" required><option>Standard</option><option>Express</option><option>Overnight</option></select>",
+      "fix": "Remove this field from sign-up and ask it during checkout instead.",
+      "id": "F-011",
+      "lane": "judged",
+      "location": "#shipspeed-select, <select> field, label 'Preferred shipping speed', line 53",
+      "severity": 2,
+      "violation": "Shipping speed is ordinarily chosen per order, not stored as account data, so this required choice asks now for an answer the task of creating an account does not yet need and that could be asked when an order is placed."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-NUMERIC-INPUTMODE",
+      "evidence": "<input id=\"acctnum-input\" name=\"account_number\" type=\"text\" required=\"\">",
+      "fix": "Add inputmode=numeric.",
+      "id": "F-012",
+      "lane": "scripted",
+      "location": "#acctnum-input, <input> field, label 'Account number', line 45",
+      "severity": 2,
+      "violation": "This account number is a text field without the numeric input mode, so a phone shows the full keyboard for digits."
+    },
+    {
+      "confidence": "high",
+      "criterion": "FORMS-OPTION-CONTROL",
+      "evidence": "<select id=\"shipspeed-select\" required=\"\">",
+      "fix": "Offer the options as visible radio buttons.",
+      "id": "F-013",
+      "lane": "scripted",
+      "location": "#shipspeed-select, <select> field, label 'Preferred shipping speed', line 53",
+      "severity": 2,
+      "violation": "A single choice among 3 options sits in a drop-down, so the person must open it to see them."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/forms/forms-003.html",
+    "artifact_sha256": "df62d7b38659529bf26df03102d3e7969a1c47b7c66e72bc8d3cf208f082bc1f",
+    "contract_version": "1.0.0",
+    "model": "claude-sonnet-5",
+    "rubrics": [
+      "FORMS"
+    ],
+    "skill": "critique-forms",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-10-28T11:34:28Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 7,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 2
+  }
+}

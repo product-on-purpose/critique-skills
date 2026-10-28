@@ -1,0 +1,84 @@
+Location: <head><title> vs <h1> in <body>
+Evidence: `<title>Create your Meridian Outfitters account</title>` but `<h1>Create your account</h1>`
+Problem: The page title includes the brand name but the visible heading drops it, so the two don't match and the user loses the brand confirmation on the page itself.
+Fix: Change the `<h1>` to "Create your Meridian Outfitters account" (or otherwise make title and heading consistent).
+
+Location: row-password
+Evidence: `<input id="password-input" ... minlength="8" required="">` with no visible helper text
+Problem: The 8-character minimum is enforced only via the `minlength` attribute; nothing in the visible UI tells the user the requirement before they get a validation error.
+Fix: Add visible helper text under the password field, e.g. "Must be at least 8 characters."
+
+Location: row-confirm-password
+Evidence: `<input id="confirm-password-input" name="password_again" type="password" autocomplete="new-password" required="">`
+Problem: Unlike the password field, this input has no `minlength="8"`, so the two related fields have inconsistent validation constraints.
+Fix: Add `minlength="8"` to the confirm-password input to match the password field.
+
+Location: row-email
+Evidence: `autocomplete="e-mail"`
+Problem: "e-mail" is not a valid HTML autocomplete token (the correct value is "email"), so browsers won't recognize it and autofill for this field will silently fail.
+Fix: Change `autocomplete="e-mail"` to `autocomplete="email"`.
+
+Location: row-phone and row-phone2
+Evidence: both use `autocomplete="tel"` (`id="phone-input" ... autocomplete="tel"` and `id="phone2-input" ... autocomplete="tel"`)
+Problem: Using the identical autocomplete token for two different phone fields can cause the browser to autofill the same stored number into both the primary and secondary phone fields.
+Fix: Differentiate them, e.g. keep `tel` for the primary and use `autocomplete="tel-national"`/a distinct section token or just remove autocomplete from the secondary field.
+
+Location: row-website
+Evidence: `<label ...>Company website</label> <input id="website-input" name="website" type="url" required="">`
+Problem: Requiring a company website on a consumer outfitters account-signup form is unnecessary friction — most individual shoppers don't have one, and nothing else on the form explains why it's needed.
+Fix: Make the website field optional, or remove it unless this form is specifically for business accounts.
+
+Location: row-member
+Evidence: `<input id="member-input" ... placeholder="Must be 8 digits" required="">` with no `maxlength` or `pattern`
+Problem: The "8 digits" requirement is communicated only through placeholder text, which disappears once the user starts typing, and there is no `pattern`/`maxlength` to actually enforce 8 digits.
+Fix: Add `pattern="\d{8}"` and `maxlength="8"`, and move the "Must be 8 digits" instruction into visible helper text instead of (or in addition to) the placeholder.
+
+Location: row-acctnum
+Evidence: `<label id="acctnum-label" for="acctnum-input">Account number</label>`
+Problem: "Account number" is ambiguous in context — it's unclear whether this refers to a Meridian Outfitters account, a bank account, or something else, and no helper text clarifies it.
+Fix: Rename the label or add helper text clarifying what "account number" refers to (or remove the field if it duplicates "Membership number").
+
+Location: row-street through row-postal
+Evidence: Street address (`row-street`) is followed by `row-phone`, `row-phone2`, `row-website`, `row-member`, `row-acctnum` before `row-postal` (postal code) appears
+Problem: The postal code is separated from the other address fields (house number, street) by five unrelated fields, breaking the logical grouping of the address section and making the form harder to scan and fill in correctly.
+Fix: Move `row-postal` directly after `row-street` so all address fields are contiguous.
+
+Location: Address section (row-housenumber, row-street, row-postal)
+Evidence: Fields present are House number, Street address, Postal code — no city/town field
+Problem: A complete mailing address requires a city/town, but no such field exists anywhere in the form.
+Fix: Add a required "City" field adjacent to the street/postal fields.
+
+Location: row-shipspeed
+Evidence: `<option>Overnight</option><option>Next-day</option>` and `<option>International</option>`
+Problem: "Overnight" and "Next-day" are effectively the same shipping speed and will confuse users choosing between them, and "International" is a destination category, not a shipping speed, so it doesn't belong in the same list.
+Fix: Merge "Overnight" and "Next-day" into one option, and move "International" to a separate destination/region control if it's needed at all.
+
+Location: row-shipspeed and row-hear
+Evidence: `<select id="shipspeed-select" required="">` and `<select id="hear-select" required="">`, both with no blank/placeholder first option
+Problem: Because the first `<option>` is selected by default and there's no empty placeholder option, a user who never touches the dropdown will silently submit "Standard" / "Search engine" as if they had chosen it.
+Fix: Add a disabled, selected-by-default placeholder option (e.g. "Select one") to both selects.
+
+Location: row-legalname (compare row-name)
+Evidence: `row-name`: `<label>Full name</label><input ... name="full_name" autocomplete="name">` vs `row-legalname`: `<label>Your name</label><input ... name="legal_name" autocomplete="name">`
+Problem: The form asks for the user's name twice under different labels ("Full name" and "Your name"), both marked required with the same `autocomplete="name"`, which is redundant and will confuse browser autofill into filling both with the same value.
+Fix: Remove one of the duplicate name fields, or clearly differentiate their purpose (e.g. "Legal name for shipping documents" vs. display name) if both are genuinely needed.
+
+Location: row-org
+Evidence: `<input id="org-input" name="organization" ... style="font-size:16px" required="">`
+Problem: This is the only input in the form with an inline style; singling it out suggests a leftover debugging/mobile-zoom fix rather than an intentional, consistent design choice.
+Fix: Remove the inline style and apply any needed font-size rule consistently via CSS to all inputs, or delete it if unnecessary.
+
+Location: row-contacttime
+Evidence: `<label id="contacttime-label" for="contacttime-input" style="display:block">Preferred contact time</label><input id="contacttime-input" name="contact_time" type="text" required="">`
+Problem: "Preferred contact time" is a free-text field with no format guidance (e.g. "Weekdays 9–5"), so submitted values will be inconsistent and hard to process; the label also carries a one-off inline style not used elsewhere.
+Fix: Replace the text input with a `<select>` of time ranges (or paired start/end time inputs), and move the `display:block` styling into shared CSS instead of an inline style on one label.
+
+Location: viewdetails-btn
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>` placed between row-contacttime and row-hear
+Problem: This button has no associated handler, description, or context in the document — it's unclear what "details" it refers to, and it's the only element with this inline button styling, making it look like orphaned/leftover markup inside the signup form.
+Fix: Remove the button if unused, or give it a clear purpose/label and wire up its behavior if it's meant to do something.
+
+Location: Overall form field set
+Evidence: Mix of fields like "Full name"/"Your name", "Membership number", "Account number", "Company website", "Organization name" all marked required in the same form
+Problem: The form conflates a personal consumer signup (name, email, password, shipping address) with business/membership account fields (organization, company website, membership number, account number) without any visual or structural separation, making it unclear what kind of account is being created.
+Fix: Split the form into clearly labeled sections (e.g. "Personal details," "Shipping address," "Business/membership details") using `<fieldset>`/`<legend>`, and reconsider which fields are actually required for a standard consumer account.

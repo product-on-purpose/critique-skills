@@ -1,0 +1,59 @@
+Location: `<head>` section
+Evidence: `<meta charset="utf-8">` followed directly by `<title>` with no viewport meta tag
+Problem: There is no `<meta name="viewport">` tag, so on mobile devices (which this form clearly targets, given `inputmode="numeric"` and `type="tel"` fields) the page will render at desktop width and force users to pinch-zoom.
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to the `<head>`.
+
+Location: `row-street` / `row-postal`
+Evidence: `street-input` (autocomplete="address-line1") appears early in the form, while `postal-input` appears much later after phone, website, membership, and account-number fields
+Problem: Address-related fields are split apart and interleaved with unrelated fields (phone, website, membership number), and there is no city/state/country field at all even though shipping speed offers an "International" option.
+Fix: Group all address fields (street, address line 2, city, state/region, postal code, country) together, ideally inside a `<fieldset>` with a `<legend>Shipping address</legend>`.
+
+Location: `row-phone`
+Evidence: `<input id="phone-input" name="phone" type="tel" autocomplete="tel" required="">` with helper text "We will text you about delivery updates."
+Problem: Phone number is marked `required` for account creation even though its only stated purpose (delivery texts) is optional/situational, forcing users to disclose a phone number just to sign up.
+Fix: Make the phone field optional (remove `required`) or clearly justify why it's mandatory for account creation.
+
+Location: `row-website`
+Evidence: `<label id="website-label" for="website-input">Company website</label>` ... `required=""`
+Problem: A personal retail account signup ("Create your Meridian Outfitters account") requires a "Company website" URL, which is irrelevant for individual consumers and will block signup for anyone without one.
+Fix: Remove this field, or make it optional and only show it for business-account signups.
+
+Location: `row-member`
+Evidence: `placeholder="Must be 8 digits"` on `<input id="member-input" name="membership_number" type="text" inputmode="numeric" required="">`
+Problem: The 8-digit requirement is only communicated via placeholder text (which disappears on input and isn't read reliably by all assistive tech) and is not actually enforced — there's no `pattern` or `maxlength` attribute.
+Fix: Add `pattern="\d{8}"` and `maxlength="8"`, and move the "Must be 8 digits" instruction into visible helper text instead of relying solely on the placeholder.
+
+Location: `row-acctnum`
+Evidence: `<label id="acctnum-label" for="acctnum-input">Account number</label>` immediately follows the membership number field
+Problem: "Account number" and "Membership number" are collected as two separate required fields with no explanation of how they differ, which is confusing and likely redundant during initial account creation.
+Fix: Either merge these into a single field or add explanatory text distinguishing what each number is and where to find it.
+
+Location: `row-shipspeed`
+Evidence: `<option>Overnight</option>` and `<option>Next-day</option>` in the same `<select>`
+Problem: "Overnight" and "Next-day" shipping are effectively the same thing, creating ambiguous, overlapping choices for the user.
+Fix: Remove one of the duplicate options (e.g., keep only "Overnight") or rename them to be clearly distinct (e.g., "Next-day" vs. "2-day").
+
+Location: `row-legalname`
+Evidence: `<label id="legalname-label" for="legalname-input">Your name</label>` with `autocomplete="name"`, duplicating `row-name`'s `<label id="name-label" for="name-input">Full name</label>` (also `autocomplete="name"`)
+Problem: The form asks for the user's name twice under different, vaguely-worded labels ("Full name" vs. "Your name"), both using the same `autocomplete="name"` token, which will confuse users and cause browsers to autofill both identically.
+Fix: Remove the duplicate field, or if a distinct "legal name" is genuinely needed, rename the labels to clarify the difference (e.g., "Preferred name" vs. "Legal name for shipping/ID") and use a different autocomplete value or none.
+
+Location: `row-org`
+Evidence: `<input id="org-input" name="organization" type="text" style="font-size:16px" required="">`
+Problem: "Organization name" is required for what appears to be a personal consumer account, excluding or confusing individual users who have no organization to enter.
+Fix: Make this field optional, or remove it unless this signup flow is specifically for business accounts.
+
+Location: `row-contacttime`
+Evidence: `<input id="contacttime-input" name="contact_time" type="text" required="">` with no placeholder or format hint
+Problem: "Preferred contact time" is a free-text required field with no guidance on expected format (e.g., time range, time zone), which will produce inconsistent, hard-to-parse data.
+Fix: Replace with a structured control (e.g., a `<select>` of time windows) or add a placeholder/helper text specifying the expected format, and reconsider whether it should be required.
+
+Location: `viewdetails-btn`
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>`
+Problem: This button has `type="button"` with no visible associated behavior, handler, or linked content in the markup, making it a non-functional dead element as shipped.
+Fix: Either implement its intended behavior (e.g., open a modal/expand a details section) or remove the button if it serves no purpose.
+
+Location: `row-password`
+Evidence: `<input id="password-input" name="password" type="password" autocomplete="new-password" minlength="8" required="">` with no accompanying helper text
+Problem: The 8-character minimum is enforced only via `minlength` with no visible instruction, so users only discover the requirement after a failed submission.
+Fix: Add visible helper text near the password field, e.g., "Must be at least 8 characters."

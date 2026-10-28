@@ -1,0 +1,64 @@
+Location: `<head>`
+Evidence: no `<meta name="viewport">` tag present
+Problem: Without a viewport meta tag the form will not render responsively on mobile devices, appearing zoomed out or requiring horizontal scrolling.
+Fix: Add `<meta name="viewport" content="width=device-width, initial-scale=1">` to the `<head>`.
+
+Location: row-website div
+Evidence: `<input id="website-input" name="website" required="" type="text">`
+Problem: "Company website" is marked required, which blocks any individual signing up for a personal retail account (the page is titled "Join Meridian Outfitters", not a business registration) from completing signup, and the field uses `type="text"` instead of `type="url"`.
+Fix: Remove the `required` attribute and change `type` to `"url"`.
+
+Location: row-member div
+Evidence: `placeholder="Must be 8 digits"` with no `pattern` or `maxlength` on `#member-input`
+Problem: The 8-digit requirement is only communicated via placeholder text, which disappears once typing starts, and is never actually enforced, so any length or non-digit characters can be submitted.
+Fix: Add `pattern="[0-9]{8}"` and `maxlength="8"` to `#member-input`, and show the format hint as persistent helper text, not just a placeholder.
+
+Location: row-acctnum div
+Evidence: `<label id="acctnum-label" for="acctnum-input">Account number</label>` ... `required=""`
+Problem: This is a new-account signup form, so requiring an "Account number" that a brand-new user cannot yet possess makes the field impossible for the intended user to complete.
+Fix: Remove the field, or if it refers to an existing loyalty/account number, clarify the label and make it optional.
+
+Location: row-postal div
+Evidence: `<input id="postal-input" ... autocomplete="postal-code" required="" size="3">`
+Problem: `size="3"` renders a box only wide enough for 3 characters, far too narrow for most real postal codes (e.g., ZIP+4 or UK postcodes), misleading users about expected input length.
+Fix: Remove the `size` attribute or increase it substantially, and control width via CSS instead.
+
+Location: row-shipspeed select options
+Evidence: `<option>Overnight</option>` and `<option>Next-day</option>` both listed
+Problem: "Overnight" and "Next-day" shipping describe the same service, presented as two separate, ambiguous choices with no distinguishing detail.
+Fix: Remove the duplicate option or relabel each with clear delivery-time detail so they are distinguishable.
+
+Location: row-legalname div
+Evidence: `<label id="legalname-label" for="legalname-input">Your name</label>` with `name="legal_name" autocomplete="name"`, duplicating row-name's `<label id="name-label">Full name</label>` which also uses `autocomplete="name"`
+Problem: This field duplicates the "Full name" field collected earlier, and both inputs share the same `autocomplete="name"` token, so the browser can't distinguish which to autofill and the user is asked twice for the same information under inconsistent labels.
+Fix: Remove the redundant field, or if a distinct legal name is truly needed, relabel it (e.g., "Legal name, if different") and give it a different/no autocomplete token.
+
+Location: row-org div
+Evidence: `<input id="org-input" name="organization" type="text" required="" style="font-size:13px">`
+Problem: An inline style shrinks only this field's font to 13px while every other input uses the default size, creating a visually inconsistent, harder-to-read field.
+Fix: Remove the inline style and let the field inherit the form's standard typography.
+
+Location: row-contacttime div
+Evidence: `<label id="contacttime-label" ... style="display:inline-block;float:left;width:140px">Preferred contact time</label>` paired with a plain `type="text"` input with no placeholder
+Problem: The label has inline float styling inconsistent with every other label in the form, and the required free-text input gives no guidance on expected format (time of day? day of week?).
+Fix: Remove the inline styling (or move it to CSS) and add a placeholder or constrained control so the expected input format is clear.
+
+Location: viewdetails-btn, between row-contacttime and the row-dob fieldset
+Evidence: `<button id="viewdetails-btn" type="button" style="padding:12px 20px;font-size:16px">View details</button>`
+Problem: This button is dropped into the middle of the signup form with no associated action, context, or explanation of what "details" refers to, disrupting the form's linear flow.
+Fix: Remove the button or relocate it outside the form with a clear label and purpose.
+
+Location: row-dob fieldset, dob-year-select options
+Evidence: options run only from `<option>1950</option>` to `<option>2009</option>`
+Problem: On a form filled out in 2026, this fixed range excludes anyone born before 1950 (older than ~76) and anyone born after 2009 (younger than 17), making the form impossible to complete for users outside that stale window.
+Fix: Generate the year options dynamically relative to the current date (e.g., current year minus 100 through current year minus 13) instead of hardcoding a fixed list.
+
+Location: row-dob fieldset, all three selects
+Evidence: `dob-day-select`, `dob-month-select`, and `dob-year-select` are each `required=""` but their first `<option>` (day "1", "January", "1950") is selected by default
+Problem: Because each select already has a valid value pre-selected, a user can submit without ever touching these controls, silently submitting a fabricated birth date of January 1, 1950, which defeats the purpose of `required`.
+Fix: Add a disabled, selected placeholder option (e.g., "Day"/"Month"/"Year") to each select so no valid value is chosen by default.
+
+Location: row-phone2 div
+Evidence: `<input id="phone2-input" name="phone_secondary" type="tel" autocomplete="tel" pattern="[0-9]+">`
+Problem: The pattern restricts input to digits only, rejecting common phone formatting (spaces, hyphens, parentheses, leading "+"), while the required primary phone field (`#phone-input`) has no such restriction — an inconsistent and overly strict rule.
+Fix: Remove the digit-only pattern, or loosen it to permit standard phone-number punctuation to match the primary phone field.
