@@ -4,7 +4,8 @@ Commands, frozen in `bench/generator/README.md`, "Commands":
 
     validate     Domain.validate() for every registered domain, no output written
     build        generate the full corpus and its manifests
-    verify       regenerate to a temporary tree and compare every sha256
+    verify       regenerate to a temporary tree, compare every sha256, and
+                 check AC-3's corpus-composition thresholds
     diff         show the clean composition against the seeded one, for review
     leak-check   run the leak rules over an existing corpus
 
@@ -24,7 +25,7 @@ from bench.generator.build import build as build_corpus
 from bench.generator.leak import leak_check_corpus
 from bench.generator.pipeline import GenerationError, generate
 from bench.generator.registry import load_domains
-from bench.generator.verify import verify_corpus
+from bench.generator.verify import verify_composition, verify_corpus
 
 
 def _select_domains(domains: tuple[Domain, ...], name: str | None) -> tuple[Domain, ...] | None:
@@ -76,7 +77,11 @@ def _cmd_build(args: argparse.Namespace) -> int:
 def _cmd_verify(args: argparse.Namespace) -> int:
     result = verify_corpus(Path(args.corpus))
     print(result.report())
-    return 0 if result.ok else 1
+    # AC-3 (corpus composition thresholds) rides this same command rather than
+    # a separate CI job; see bench/generator/verify.py's module docstring.
+    composition = verify_composition(Path(args.corpus))
+    print(composition.report())
+    return 0 if (result.ok and composition.ok) else 1
 
 
 def _cmd_leak_check(args: argparse.Namespace) -> int:

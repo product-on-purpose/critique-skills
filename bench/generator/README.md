@@ -647,7 +647,7 @@ and every command is run from the repository root.
 | `python -m bench.generator validate` | `Domain.validate()` for every registered domain, no output written |
 | `python -m bench.generator build --out bench/corpus` | generate the full corpus and its manifests |
 | `python -m bench.generator build --domain toy` | regenerate one domain |
-| `python -m bench.generator verify --corpus bench/corpus` | regenerate to a temporary tree and compare every sha256 |
+| `python -m bench.generator verify --corpus bench/corpus` | regenerate to a temporary tree, compare every sha256, and check AC-3's corpus-composition thresholds |
 | `python -m bench.generator diff toy-001` | show the clean composition against the seeded one, for review |
 | `python -m bench.generator leak-check --corpus bench/corpus` | run the leak rules over an existing corpus |
 

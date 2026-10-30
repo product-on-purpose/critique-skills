@@ -19,14 +19,22 @@ audience: agent
 ## Task Summary
 
 - Status: committed
-- AC: [x] AC-1 [x] AC-2 [ ] AC-3 [x] AC-4 [x] AC-5 [x] AC-6 [x] AC-7 [x] AC-8
+- AC: [x] AC-1 [x] AC-2 [x] AC-3 [x] AC-4 [x] AC-5 [x] AC-6 [x] AC-7 [x] AC-8
 - AC evidence:
   - AC-1: docs/internal/execution/P1-report.md (S03-AC1, PASS)
   - AC-2: docs/internal/execution/P1-report.md (S03-AC2, PASS)
-  - AC-3: docs/internal/execution/P1-report.md (S03-AC3, DEFERRED). P2-report.md's CORPUS row
-    confirms the underlying counts clear the stated targets on all six launch domains but
-    explicitly declines to re-verdict AC-3 itself as out of that audit's scope; no later report
-    closes it. Not evidenced as fulfilled; left unchecked.
+  - AC-3: docs/internal/execution/P1-report.md (S03-AC3, DEFERRED); P2-report.md's CORPUS row
+    confirms the underlying counts clear the stated targets on all six launch domains. That row
+    already notes that the flat >=20-total, >=3-per-domain, >=1-clean-per-domain bar holds for
+    every domain, not only the three S-05-core ones, though re-verdicting AC-3 itself was out of
+    that audit's scope. Closed 2026-10-29 by E32 (close S-03 AC-3 with a corpus-composition CI
+    check, see docs/internal/backlog/enhancements.md). `verify_composition` in
+    `bench/generator/verify.py` now enforces the same thresholds against every domain backing an
+    active skill, per S-05's per-skill floor (spec.md line 71: >=3 artifacts, >=1 clean, per skill
+    domain). It excludes only `toy`, a harness fixture, never a shipped skill. It is wired into
+    `python -m bench.generator verify --corpus bench/corpus`, the existing corpus CI job. The live
+    corpus (7 skill domains, 28 artifacts: 5/3/4/4/4/4/4, one clean each) passes. Covered by
+    `bench/generator/tests/test_verify.py`.
   - AC-4: docs/internal/execution/P1-report.md (S03-AC4, PASS)
   - AC-5: docs/internal/execution/P1-report.md (S03-AC5, PASS)
   - AC-6: docs/internal/execution/P1-report.md (S03-AC6, PASS)

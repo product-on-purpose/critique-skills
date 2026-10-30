@@ -276,6 +276,101 @@ def test_location_falls_back_to_line_1_without_any_h1():
 
 
 # ---------------------------------------------------------------------------
+# TOULMIN-HEDGE-DENSITY false-positive check (ADR 0017, ../../../../docs/
+# internal/decisions/0017-argument-lane-split-scripted-assists-as-criteria.md)
+# ---------------------------------------------------------------------------
+
+# ADR 0017 (critique-argument lane split: scripted assists as criteria)
+# names the sharpest open risk on the scripted lane. Quoting it: "an
+# academic argument or a risk assessment hedges heavily on purpose, and a
+# threshold set too low would fire on the artifacts most careful about
+# their own qualifiers." Two fixtures below check that risk at two
+# different hedging levels. Both are complete, well-formed Toulmin
+# arguments: a signposted claim, specific grounds, a warrant connecting
+# the evidence to the recommendation, a qualifier matched to genuine
+# uncertainty, and a rebuttal. Neither carries a planted defect; both are
+# clean in the sense checks.py cannot see.
+
+# An extreme case: a risk assessment that hedges on nearly every sentence,
+# because almost every claim in it genuinely rests on unproven projections.
+HEAVILY_HEDGED_RISK_ASSESSMENT_TEXT = """# Risk assessment: migrating the billing database before Q1 close
+
+The migration could reduce reconciliation errors, but the evidence for that benefit is not yet
+conclusive. Early load tests suggest the new schema may handle peak traffic without additional
+capacity, though the sample window was short. The vendor's own benchmarks appear to support a
+faster nightly close, but they were run against a dataset that only somewhat resembles our
+production shape. A rollback plan exists, and it could restore the prior schema within an hour,
+though that estimate has not been tested under real failure conditions. Therefore, because so much
+of the expected benefit still rests on projections rather than production data, the team should
+treat the migration as a pilot rather than a committed cutover, and the go-live decision should
+wait until at least one more close cycle's worth of data arguably settles the capacity question.
+Given the backup plan and the limited blast radius of a pilot, the risk of proceeding now seems
+acceptable, though the committee should revisit the decision the moment any of these assumptions
+prove wrong.
+"""
+
+# A near-threshold case: most sentences state a settled fact. Only the
+# genuinely uncertain claims carry a hedge, and that alone is enough to
+# cross ADR 0017's "too low" line.
+NEAR_THRESHOLD_HEDGED_ARGUMENT_TEXT = """# Recommendation: delay the vendor migration by one quarter
+
+Our load tests show the new vendor's API handles current peak traffic with margin to spare. The
+cutover plan has been rehearsed twice in staging without incident. Billing reconciliation under
+the new vendor might take longer to settle during the first month, since the fee-category mapping
+has not been exercised at full volume. The support contract commits to a four-hour response time,
+matching our current vendor's terms. Historical attrition data suggests some customers could
+notice the new checkout flow's extra verification step, though the pilot region's sample was
+small. The rollback window is the same forty-eight hours it has always been. One engineer on the
+pilot team felt the new dashboard's error messages were somewhat harder to parse than the old
+vendor's. Therefore, we recommend starting the migration now and holding the fee-category
+reconciliation under watch for the first two billing cycles.
+"""
+
+
+def test_hedge_density_false_positive_on_a_well_formed_heavily_hedged_risk_assessment():
+    """Records one run of checks.py's TOULMIN-HEDGE-DENSITY against ADR
+    0017's named risk (E37, docs/internal/backlog/enhancements.md). The
+    argument carries a conclusion marker ("Therefore"), so TOULMIN-CLAIM-
+    MARKER does not fire. That isolates the result to TOULMIN-HEDGE-DENSITY
+    alone.
+
+    Measured: 5 of 6 sentences (0.83) carry a hedging-lexicon term. That is
+    well past both the 0.35 fire ratio and the 0.50 severity-3 ratio. This
+    is a confirmed false positive on an extreme but realistic case:
+    TOULMIN-HEDGE-DENSITY is a sentence-ratio count with no notion of
+    whether the hedging is appropriate. It cannot tell genuine epistemic
+    caution from a sloppy argument. That is a property of the check as
+    designed (ADR 0017 calls it a "surface trace", not a verdict on the
+    argument). Whether to recalibrate the threshold is a version decision
+    for a later effort, not this one; see E37's backlog entry."""
+    findings = checks.check(_artifact(HEAVILY_HEDGED_RISK_ASSESSMENT_TEXT))
+    assert _criteria(findings) == ["TOULMIN-HEDGE-DENSITY"]
+    finding = findings[0]
+    assert finding.severity == 3
+    assert "5 of 6 sentences (0.83)" in finding.evidence
+
+
+def test_hedge_density_false_positive_on_a_near_threshold_hedged_argument():
+    """A second, milder run of the same ADR 0017 check. Six of this
+    argument's eight sentences state a settled fact with no hedge at all.
+    Only the three genuinely uncertain claims (reconciliation timing,
+    customer reaction, one engineer's own impression) carry a hedge term,
+    which ADR 0017 calls hedging "on purpose", not carelessness.
+
+    Measured: 3 of 8 sentences (0.38) carry a hedging-lexicon term, just
+    above the 0.35 fire ratio, so this fires at severity 2 rather than 3.
+    This is the case ADR 0017's own wording names most directly: "a
+    threshold set too low would fire on the artifacts most careful about
+    their own qualifiers." A well-formed argument that hedges only its
+    three actually-uncertain claims still crosses the line."""
+    findings = checks.check(_artifact(NEAR_THRESHOLD_HEDGED_ARGUMENT_TEXT))
+    assert _criteria(findings) == ["TOULMIN-HEDGE-DENSITY"]
+    finding = findings[0]
+    assert finding.severity == 2
+    assert "3 of 8 sentences (0.38)" in finding.evidence
+
+
+# ---------------------------------------------------------------------------
 # Both criteria together
 # ---------------------------------------------------------------------------
 

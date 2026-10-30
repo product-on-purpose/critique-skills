@@ -92,8 +92,22 @@ exists to prevent.
 Two numbers in the table above are v0.1 defaults, not measured values: the hedged-sentence ratio
 bands (0.35 and 0.50) and the claim-marker word-count boundary (300 words). Both are set so the
 scripted lane is deterministic and reproducible, which is the property the library claims for it;
-neither is calibrated against the corpus yet. P3 measurement is where they get their first evidence,
-and moving a threshold there is a revision to this file, not a contract change.
+neither is calibrated against the corpus. Moving a threshold is a revision to this file, not a
+contract change.
+
+[ADR 0017 (argument lane split)](../../../docs/internal/decisions/0017-argument-lane-split-scripted-assists-as-criteria.md)
+named a false positive on legitimately cautious prose as the sharpest risk here. It asked for that
+risk to be checked first. Two hand-built fixtures checked it on 2026-10-29, both well-formed
+Toulmin arguments with no planted defect. The first hedges heavily throughout, because almost every
+claim in it genuinely rests on an unproven projection: 5 of 6 sentences carry a hedging-lexicon term
+(ratio 0.83), and TOULMIN-HEDGE-DENSITY fires at severity 3. The second hedges only its three
+genuinely uncertain claims and states the rest as settled fact: 3 of 8 sentences carry a
+hedging-lexicon term (ratio 0.38), just above the 0.35 fire line, and TOULMIN-HEDGE-DENSITY fires
+at severity 2. Both are confirmed false positives, and the second is the closer match to ADR
+0017's own wording: "a threshold set too low would fire on the artifacts most careful about their
+own qualifiers." Both fixtures and results are held in
+`skills/critique-argument/scripts/tests/test_checks_argument.py`. A full corpus-level P3
+measurement of this criterion's false-positive rate across many artifacts is still open.
 
 ## See also
 

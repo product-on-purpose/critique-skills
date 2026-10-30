@@ -98,6 +98,13 @@ core domain) with margin, and S-05's per-skill floor of at least 3 artifacts inc
 clean. Clean artifacts are not padding: they are the only place a false positive can be observed
 without a human adjudicating whether an unplanted finding is genuine.
 
+`bench/generator/verify.py`'s `verify_composition` now enforces this margin, rather than relying on
+a point-in-time recount. It is run by `python -m bench.generator verify --corpus bench/corpus`. It
+applies AC-3's per-domain floor to every domain in this table except `toy`. S-05's spec (line 71)
+holds every skill's contributed domain, core or stretch, to the identical floor, not only the three
+launch-core ones. A domain that shrinks below 3 artifacts, or loses its one clean artifact, now
+fails CI's corpus job.
+
 `critique-microcopy`'s artifact type depended on S-05 OQ-2, which the microcopy pipeline has now
 decided in [ADR 0018](../docs/internal/decisions/0018-microcopy-artifact-format-annotated-context.md):
 annotated context, so the type is `markdown-prose` with one message block per paragraph and the

@@ -899,6 +899,17 @@ and the repository did not have.
 - **Blocks:** Nothing; latent regression risk
 - **Depends on:** Nothing
 - **Rank at intake:** 32 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-10-29**, ruled on the maintainer's delegation. The checkbox is flipped. The corpus
+  now holds 7 skill domains (accessibility, argument, clarity, docs, forms, microcopy, usability),
+  28 artifacts, 5/3/4/4/4/4/4, one clean artifact each. Every AC-3 threshold clears with margin.
+  `verify_composition` in `bench/generator/verify.py` now checks this. It is wired into
+  `python -m bench.generator verify --corpus bench/corpus`, the existing corpus CI job, so no new
+  job was added. It enforces, on every run: >=20 artifacts total, >=3 per domain, >=1 clean per
+  domain. The check applies this to every domain backing an active skill, not only to the original
+  three S-05-labeled "core" domains. S-05's spec line 71 gives every skill's domain the identical
+  per-skill floor, and P2-report.md's own note already says the flat bar holds for all six launch
+  domains, not only the three core ones. `toy` is excluded, since it is a harness fixture and never
+  a shipped skill. Six new tests in `bench/generator/tests/test_verify.py` cover it.
 
 ## E33 - Correct ROADMAP's Gold-tier bullet (3 of 4 done) and decide the tier declaration
 
@@ -982,6 +993,23 @@ and the repository did not have.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
 - **Rank at intake:** 37 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-10-29**, ruled on the maintainer's delegation. Ran the check ADR 0017 named,
+  against two hand-built, well-formed arguments (a signposted claim, specific grounds, a warrant, a
+  qualifier, a rebuttal), neither carrying a planted defect. The first hedges heavily throughout,
+  since almost every claim in it genuinely rests on an unproven projection; `checks.py` fires
+  TOULMIN-HEDGE-DENSITY at severity 3 (5 of 6 sentences, ratio 0.83). The second hedges only its
+  three genuinely uncertain claims and states the rest as settled fact; `checks.py` still fires
+  TOULMIN-HEDGE-DENSITY, at severity 2 (3 of 8 sentences, ratio 0.38), just above the 0.35 fire
+  line. Both are real false positives, confirming the risk ADR 0017's Consequences section named
+  rather than merely restating it; the second matches that section's own wording most closely
+  ("a threshold set too low would fire on the artifacts most careful about their own qualifiers").
+  Per this item's own instruction, `checks.py` is unchanged; a recalibration decision belongs to a
+  later effort, not this one. Both fixtures and results are held in
+  `skills/critique-argument/scripts/tests/test_checks_argument.py`. `references/TOULMIN.md`'s
+  Thresholds section is updated to past tense with these numbers. That edit changes no threshold
+  value, no lexicon, and no wording the skill reports to a reader; it only updates the
+  calibration-status narrative. A full corpus-level P3 measurement of this criterion's
+  false-positive rate across many artifacts is still open and not claimed here.
 
 ## E38 - Measure critique-accessibility's location fix on id-poor markup
 
