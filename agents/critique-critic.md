@@ -103,6 +103,18 @@ bounded-output rule are the ones this run follows; they are not restated here
    python3 <skill_dir>/scripts/merge.py --artifact <artifact-path> --findings <findings.json>
    ```
 
+   **Write every prose field as text.** `location`, `evidence`, `violation` and `fix` are strings,
+   and `location` is words a reader can navigate by, never an object, a span or a line number:
+
+   ```
+   {"findings": [{"criterion": "TOULMIN-WARRANT", "severity": 3, "confidence": "medium",
+     "location": "Section 2, paragraph 3, the sentence beginning 'Therefore'",
+     "evidence": "...", "violation": "...", "fix": "..."}]}
+   ```
+
+   Not `"location": {"span": [28, 28]}`. The assembler rejects an object in any prose field, and
+   you would have to rewrite the file.
+
    **Call it at `<skill_dir>/scripts/merge.py`, beside `scripts/checks.py`, and nowhere else.**
    `skills/_shared/merge.py` is the module behind it and is not the entry point to invoke: v0.1.5
    established by four live runs that a path referenced from `skills/_shared/` is unreachable from
