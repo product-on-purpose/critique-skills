@@ -1871,4 +1871,9 @@ and the repository did not have.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
 - **Rank at intake:** unranked (added 2026-10-29, filed on the maintainer's delegation). **Status:**
-  backlog, needs the maintainer's ruling.
+  CLOSED 2026-10-29. The maintainer ruled option A: the 0.35 fire line stays, and `checks.py`,
+  `TOULMIN.md` and `SKILL.md` are unchanged, so no version moves and no run is needed. The
+  false-positive class is recorded under "Known limitations" in
+  `skills/critique-argument/README.md`. It went there rather than into `SKILL.md`, because
+  `SKILL.md` is the prompt the bench measured at 0.1.1, and a prose change to it without a version
+  move would let the published numbers describe a prompt that no longer ships.
