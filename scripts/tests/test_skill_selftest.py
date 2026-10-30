@@ -485,6 +485,155 @@ def test_quoted_operationalization_cell_fails(tmp_path):
     assert "paraphrase-operationalization-quoted" in rule_names(errors)
 
 
+# --------------------------------------------------------------------------
+# E31: criterion-table completeness (docs/internal/backlog/enhancements.md)
+# --------------------------------------------------------------------------
+
+
+def test_declared_criterion_with_no_table_row_fails_distinctly(tmp_path):
+    skill_dir = write_valid_skill(tmp_path)
+    missing_row = "\n".join(line for line in REFERENCES_MD.splitlines() if "TOY-COHESION" not in line)
+    assert missing_row != REFERENCES_MD
+    (skill_dir / "references" / "toy-source.md").write_text(missing_row, encoding="utf-8")
+
+    fm, _frontmatter_issues = selftest.check_frontmatter(skill_dir)
+    errors = selftest.check_criterion_table_completeness(skill_dir, fm)
+
+    assert "criterion-table-row-missing" in rule_names(errors)
+
+
+def test_duplicated_criterion_table_row_fails_distinctly(tmp_path):
+    skill_dir = write_valid_skill(tmp_path)
+    duplicated_row = (
+        "| TOY-ACTIVE | Sentences default to active voice unless the actor is unknown or "
+        "irrelevant to the point. | Flag a sentence written in passive voice when the actor "
+        "is both known and relevant. | One paragraph lapses into passive voice for a few "
+        "sentences, then recovers. | An entire procedure is written in passive voice "
+        "throughout, so the reader must guess who acts at every step. | scripted | Detectable "
+        "by a fixed be-plus-participle pattern; no judgment call is needed to find it. |\n"
+    )
+    poisoned = REFERENCES_MD + duplicated_row
+    (skill_dir / "references" / "toy-source.md").write_text(poisoned, encoding="utf-8")
+
+    fm, _frontmatter_issues = selftest.check_frontmatter(skill_dir)
+    errors = selftest.check_criterion_table_completeness(skill_dir, fm)
+
+    assert "criterion-table-row-duplicate" in rule_names(errors)
+
+
+def test_undeclared_table_row_fails_distinctly(tmp_path):
+    skill_dir = write_valid_skill(tmp_path)
+    extra_row = (
+        "| TOY-GHOST | Not a real criterion; never declared in checks.scripted or "
+        "checks.judged. | N/A | N/A | N/A | scripted | Fixture row for the undeclared-table-"
+        "row test. |\n"
+    )
+    poisoned = REFERENCES_MD + extra_row
+    (skill_dir / "references" / "toy-source.md").write_text(poisoned, encoding="utf-8")
+
+    fm, _frontmatter_issues = selftest.check_frontmatter(skill_dir)
+    errors = selftest.check_criterion_table_completeness(skill_dir, fm)
+
+    assert "criterion-table-row-undeclared" in rule_names(errors)
+
+
+def test_criterion_table_completeness_still_runs_with_a_bare_empty_lane(tmp_path):
+    """A bare `judged:` key (no `[]`) parses to None, which
+    check_lane_manifest_consistency already treats as a legitimate empty lane. This check
+    has to treat it the same way rather than mistaking it for the lane-shape defect
+    `frontmatter-checks-lane-invalid` catches, or a skill written with a bare empty lane
+    would get no completeness check at all, silently.
+    """
+    skill_dir = write_valid_skill(tmp_path)
+    broken = SKILL_MD.replace("  judged:\n    - TOY-COHESION\n", "  judged:\n")
+    assert broken != SKILL_MD
+    (skill_dir / "SKILL.md").write_text(broken, encoding="utf-8")
+    extra_row = (
+        "| TOY-GHOST | Not a real criterion; never declared in checks.scripted or "
+        "checks.judged. | N/A | N/A | N/A | scripted | Fixture row for the undeclared-table-"
+        "row test. |\n"
+    )
+    poisoned = REFERENCES_MD.replace(
+        "| TOY-COHESION | Consecutive paragraphs read as one continuous argument rather "
+        "than a list of unrelated facts. | Judge whether a paragraph transition requires "
+        "the reader to infer an unstated connective. | A single transition feels abrupt but "
+        "the surrounding argument still holds together. | A whole section reads as "
+        "disconnected facts with no throughline connecting them. | judged | Requires reading "
+        "the surrounding argument as a whole; not reducible to a pattern. |\n",
+        "",
+    ) + extra_row
+    assert poisoned != REFERENCES_MD
+    (skill_dir / "references" / "toy-source.md").write_text(poisoned, encoding="utf-8")
+
+    fm, _frontmatter_issues = selftest.check_frontmatter(skill_dir)
+    assert fm["checks"]["judged"] is None
+    errors = selftest.check_criterion_table_completeness(skill_dir, fm)
+
+    assert "criterion-table-row-undeclared" in rule_names(errors)
+
+
+# --------------------------------------------------------------------------
+# E71: bibliography exemption (docs/internal/backlog/enhancements.md)
+# --------------------------------------------------------------------------
+
+
+def test_sources_bibliography_with_bullets_is_exempt_and_passes(tmp_path):
+    skill_dir = write_valid_skill(tmp_path)
+    (skill_dir / "references" / "sources.md").write_text(
+        "# Sources\n\n- Fixture Author (2026). *A Fixture Title*. Fixture Press.\n",
+        encoding="utf-8",
+    )
+
+    errors, _warnings = selftest.run_selftest(skill_dir)
+
+    assert errors == [], [str(e) for e in errors]
+
+
+def test_sources_bibliography_without_bullets_fails(tmp_path):
+    skill_dir = write_valid_skill(tmp_path)
+    (skill_dir / "references" / "sources.md").write_text(
+        "# Sources\n\nA bibliography with no bulleted entries at all.\n",
+        encoding="utf-8",
+    )
+
+    errors = selftest.check_sources_bibliography(skill_dir)
+
+    assert "references-bibliography-empty" in rule_names(errors)
+
+
+def test_sources_bibliography_is_not_swept_into_the_criterion_table_check(tmp_path):
+    """E71's point: references/sources.md keeps a bibliography with no criterion table at
+    all, and that must not trip references-criterion-table-missing the way any other
+    references/*.md file without an Operationalization column would.
+    """
+    skill_dir = write_valid_skill(tmp_path)
+    (skill_dir / "references" / "sources.md").write_text(
+        "# Sources\n\n- Fixture Author (2026). *A Fixture Title*. Fixture Press.\n",
+        encoding="utf-8",
+    )
+
+    errors = selftest.check_paraphrase_heuristic(skill_dir)
+
+    assert "references-criterion-table-missing" not in rule_names(errors)
+
+
+def test_sources_bibliography_still_gets_the_quote_length_check(tmp_path):
+    """The bibliography exemption is from the criterion-table requirement only; the
+    paraphrase heuristic's quote-length check still applies "anywhere in references/*.md"
+    (docs/internal/skill-template.md), same as it does for severity-anchors.md.
+    """
+    skill_dir = write_valid_skill(tmp_path)
+    long_quote = " ".join(f"word{i}" for i in range(30))
+    (skill_dir / "references" / "sources.md").write_text(
+        f'# Sources\n\n- Fixture Author (2026). "{long_quote}"\n',
+        encoding="utf-8",
+    )
+
+    errors = selftest.check_paraphrase_heuristic(skill_dir)
+
+    assert "paraphrase-quote-too-long" in rule_names(errors)
+
+
 def test_skill_md_over_500_lines_fails(tmp_path):
     skill_dir = write_valid_skill(tmp_path)
     padding = "\n".join(f"Padding line {i}." for i in range(510))

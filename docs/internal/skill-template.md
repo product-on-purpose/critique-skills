@@ -509,6 +509,12 @@ Column contracts:
   Every ID declared anywhere in `checks.scripted` or `checks.judged` must have exactly one row here
   (across this skill's `references/*.md` files); no ID appears in two skills' tables except an
   upstream WCAG ID, which appears only in `critique-accessibility` (S-05 AC-3).
+  `scripts/skill-selftest.py` cross-checks this directly: E31 (criterion-table completeness,
+  `docs/internal/backlog/enhancements.md`). `criterion-table-row-missing` fires when a declared ID
+  has no row. `criterion-table-row-duplicate` fires when it has more than one.
+  `criterion-table-row-undeclared` fires when a row names an ID neither lane declares. The
+  cross-skill half of this rule stays in `scripts/gen-site.mjs`, which this check does not
+  duplicate.
 - **Operationalization** - the skill's own original-wording test for this criterion, citing the
   source by `rubric_sources.id`. **This column must contain zero quotation marks, of any kind.** It
   is paraphrase by definition ([ADR 0006](decisions/0006-copyright-paraphrase-policy.md)); a
@@ -551,6 +557,18 @@ Free prose, not a table: this skill's own domain-anchor examples, extending
 whatever additional calibration this skill's criterion table doesn't already carry. The paraphrase
 heuristic's quote-length check still applies to this file; its operationalization-column check does
 not, since this file is not a criterion table.
+
+### `references/sources.md`
+
+E71 (bibliography exemption, `docs/internal/backlog/enhancements.md`) lets a skill name one
+bibliography file. [ADR 0035](decisions/0035-synthesized-rubric-namespace.md) (synthesized-rubric
+namespace)'s fourth condition requires this: a skill whose rubric is synthesized from several
+publishers commits the research record as a bibliography. A bibliography has no criterion rows to
+check. `references/sources.md` is exempt from the criterion-table requirement, the same way
+`severity-anchors.md` is exempt. The check stays minimal, not absent: `scripts/skill-selftest.py`
+requires at least one `-` or `*` bulleted line, or it fails `references-bibliography-empty`. The
+exemption cannot hide an empty placeholder. The paraphrase heuristic's quote-length check still
+applies to this file too, exactly as it does to `severity-anchors.md`.
 
 ## Wiring `scripts/checks.py`
 
@@ -841,7 +859,9 @@ message).
 | Example counts | >=3 golden, >=1 anti-example. | `examples-too-few-golden`, `examples-too-few-anti` |
 | Trigger evals | Well-formed cases, >=20 total. | `trigger-case-malformed`, `trigger-evals-too-few` (AC-2: "under-20 trigger evals") |
 | Trigger eval negatives | >=3 negatives, >=3 of those cross-domain. | `trigger-evals-too-few-negatives`, `trigger-evals-too-few-cross-domain-negatives` |
-| Paraphrase heuristic | No quoted span over 25 words anywhere in `references/*.md`; zero quotation marks in any criterion table's Operationalization column. | `paraphrase-quote-too-long`, `paraphrase-operationalization-quoted`, `references-criterion-table-missing` |
+| Paraphrase heuristic | No quoted span over 25 words anywhere in `references/*.md`; zero quotation marks in any criterion table's Operationalization column. `severity-anchors.md` and `sources.md` are exempt from the table requirement, not from the quote-length check. | `paraphrase-quote-too-long`, `paraphrase-operationalization-quoted`, `references-criterion-table-missing` |
+| Criterion-table completeness (E31) | Every ID in `checks.scripted`/`checks.judged` has exactly one row across this skill's `references/*.md` criterion tables: not zero, not more than one, and no table row names an ID neither lane declares. | `criterion-table-row-missing`, `criterion-table-row-duplicate`, `criterion-table-row-undeclared` |
+| Bibliography exemption (E71) | `references/sources.md`, when present, has at least one bulleted source entry. | `references-bibliography-empty` |
 | SKILL.md length | Under 500 lines. | `skill-md-too-long` |
 | Test module names | Every `scripts/tests/test_*.py` basename ends with the skill's domain, so two skills cannot collide at pytest collection. | `checks-py-test-module-name` |
 | `scripts/tests/` | Exists, has at least one test module, and passes under `python -m pytest`. | `checks-py-tests-missing`, `checks-py-pytest-failed` |
