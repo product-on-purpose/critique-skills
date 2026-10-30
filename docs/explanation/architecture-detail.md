@@ -106,7 +106,7 @@ flowchart LR
   gen["bench/generator<br/>deterministic, seeded"]:::det --> corpus["28 artifacts<br/>+ ground-truth manifests"]:::data
   corpus --> staging["staging copy<br/>manifests stripped"]:::data
   staging --> runs["measurement grid<br/>k=5, two pinned tiers,<br/>skill + baseline"]:::run
-  runs --> env["502 run envelopes<br/>immutable"]:::data
+  runs --> env["1,477 run envelopes<br/>immutable"]:::data
   corpus -.ground truth.-> score["bench/metrics<br/>recall, precision,<br/>k=5 consistency"]:::det
   env --> score
   score --> results["results.json<br/>-> generated tables"]:::out
@@ -117,10 +117,11 @@ flowchart LR
   classDef out fill:#eef2ff,stroke:#818cf8,color:#312e81
 ```
 
-In text: a deterministic seeded generator produces 23 corpus artifacts with ground-truth manifests
+In text: a deterministic seeded generator produces 28 scored corpus artifacts with ground-truth manifests
 recording every planted defect. A staging copy with the manifests stripped is what runners see. The
 measurement grid runs each artifact five times per model tier, in both a skill condition and a
-frozen generic-prompt baseline condition, producing 502 immutable run envelopes. Scoring joins those
+frozen generic-prompt baseline condition. 1,477 immutable run envelopes are committed across every run
+set so far. Scoring joins those
 envelopes against the ground truth the runners never saw, and the results file generates the
 published tables.
 
