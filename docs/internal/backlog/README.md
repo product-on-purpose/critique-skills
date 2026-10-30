@@ -3,7 +3,7 @@
 Local-first, version-controlled backlogs (Standard sec 7.1). Two files, plus this index:
 
 - **[enhancements.md](enhancements.md)** - features, fixes and refinements to components that already
-  exist. 75 items, `E1` through `E75`.
+  exist. 76 items, `E1` through `E76`.
 - **[new-components.md](new-components.md)** - proposals to ADD a skill, command, subagent, hook or
   chain. 5 items, `N1` through `N5`, each with a recorded why-gate verdict.
 
@@ -100,7 +100,7 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**11 items depend on nothing and can start today.** Derived from each item's own
+**12 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
@@ -114,6 +114,7 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E51 | Give the precision and corpus-provenance limitations a retirement path or an explicit 'accepted' | S | unscheduled |
 | E59 | Verify what the marketplace consumes the homepage field for | S | unscheduled |
 | E69 | Revisit ADR 0011's npm option now that the toolkit ships on npm | S | unscheduled |
+| E76 | Correct the skill READMEs' version lines and guard them against drift | S | v0.3.0 |
 | E49 | Write one real tutorial for the empty Diataxis Tutorials quadrant | M | v0.3.0 |
 | E54 | Ship one documented cross-library composition workflow | M | v0.3.0 |
 

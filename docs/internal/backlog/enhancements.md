@@ -1889,3 +1889,27 @@ and the repository did not have.
   `skills/critique-argument/README.md`. It went there rather than into `SKILL.md`, because
   `SKILL.md` is the prompt the bench measured at 0.1.1, and a prose change to it without a version
   move would let the published numbers describe a prompt that no longer ships.
+
+## E76 - Correct the skill READMEs' version lines and guard them against drift
+
+- **Target:** `skills/critique-*/README.md` (the "Version x.y.z." sentence in each),
+  `skills/_shared/tests/test_read_skill_version.py`
+- **Change:** All seven skill READMEs state a stale version. `critique-accessibility`'s says 0.1.1
+  where the skill is 0.2.0, and the other six say 0.1.0 where each is 0.1.1. The skill version is
+  already written in three places that `test_read_skill_version.py` holds equal: the `SKILL.md`
+  frontmatter, the `library.json` entry and `scripts/checks.py`'s `skill_version=` argument. The
+  README is a fourth place that nothing checks, so the re-measure of 2026-10-28 moved every version
+  and left every README behind. Done: each README states its skill's current version, and the same
+  test fails when a README's version sentence disagrees with `SKILL.md`. Dropping the version
+  sentence from the READMEs instead is an equally valid fix, because it removes the copy rather than
+  guarding it.
+- **Why:** A reader who opens a skill's folder on GitHub sees the README first, and it names a
+  version that does not ship.
+- **Evidence:** `grep -n "Version 0\." skills/*/README.md`, read 2026-10-29.
+- **Derives from:** found while recording E75 (hedge-density recalibration) in
+  `skills/critique-argument/README.md`, 2026-10-29.
+- **Size:** S. **Release:** v0.3.0. **Category:** docs. **Confidence:** high; all seven lines and
+  all seven versions were read.
+- **Blocks:** Nothing
+- **Depends on:** Nothing
+- **Rank at intake:** unranked (added 2026-10-29). **Status:** backlog.
