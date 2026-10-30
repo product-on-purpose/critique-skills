@@ -3,7 +3,7 @@
 // what-it-does: (1) an unconditional test that gen-plugin-manifest.mjs fails loudly when
 //               agent-skills-toolkit cannot be resolved, run from an isolated fixture copy; (2) a
 //               smoke test, skipped when no toolkit is resolvable in this environment, that the
-//               real script's --check prints all five of its documented check sections and that
+//               real script's --check prints all six of its documented check sections and that
 //               its exit code agrees with whether any of them reported failure; (3) unit tests for
 //               the ci.yml aggregate-gate assertion, which need no toolkit because the parsing
 //               lives in scripts/lib/ci-gate.mjs
@@ -53,7 +53,7 @@ test("gen --check fails with a clear message when the toolkit cannot be resolved
 });
 
 test(
-  "smoke: the real script's --check prints all five documented checks with a consistent exit code",
+  "smoke: the real script's --check prints all six documented checks with a consistent exit code",
   { skip: toolkitAvailable ? false : "agent-skills-toolkit is not resolvable in this environment" },
   () => {
     const { status, stdout } = runNode(resolve(REPO_ROOT, "scripts", "gen-plugin-manifest.mjs"), ["--check"], {
@@ -65,6 +65,7 @@ test(
     assert.match(stdout, /gen:index --check:/);
     assert.match(stdout, /gen --check: AGENTS\.md/);
     assert.match(stdout, /gen --check: "ci-ok"/);
+    assert.match(stdout, /gen --check: release\.yml re-runs/);
 
     const anyFailureWord = /(out of date|does not exist|is missing|failed)/.test(stdout);
     assert.equal(status === 1, anyFailureWord, `exit code and message content disagree:\n${stdout}`);

@@ -100,16 +100,14 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**19 items depend on nothing and can start today.** Derived from each item's own
+**16 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
 |---|---|---|---|
-| E29 | Make release.yml's re-run suite match what it claims to run | S | v0.1.x |
 | E31 | Add criterion-table completeness to skill-selftest.py | S | v0.1.x |
 | E32 | Close S-03 AC-3: flip the checkbox and add a corpus-composition CI check | S | v0.1.x |
 | E33 | Correct ROADMAP's Gold-tier bullet (3 of 4 done) and decide the tier declaration | S | v0.1.x |
-| E34 | Close the SKIP_DIRS carry-forward note - fixed upstream and already adopted | S | v0.1.x |
 | E36 | Confirm or deprecate the reserved selector field per ADR 0012's own RC question | S | v0.1.x |
 | E37 | Run the TOULMIN-HEDGE-DENSITY false-positive check ADR 0017 named, and fix TOULMIN.md's future tense | S | v0.1.x |
 | E38 | Measure critique-accessibility's location fix on id-poor markup | S | v0.3.0 |
@@ -120,7 +118,6 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E51 | Give the precision and corpus-provenance limitations a retirement path or an explicit 'accepted' | S | unscheduled |
 | E59 | Verify what the marketplace consumes the homepage field for | S | unscheduled |
 | E69 | Revisit ADR 0011's npm option now that the toolkit ships on npm | S | unscheduled |
-| E70 | Teach the skill template how a synthesized rubric lays out its references and anchors | S | unscheduled |
 | E71 | Let a skill keep a bibliography in references/ without a criterion table | S | unscheduled |
 | E49 | Write one real tutorial for the empty Diataxis Tutorials quadrant | M | v0.3.0 |
 | E54 | Ship one documented cross-library composition workflow | M | v0.3.0 |

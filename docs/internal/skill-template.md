@@ -48,6 +48,7 @@ skills/critique-<domain>/
   SKILL.md
   README.md                          folder README: title, one-paragraph purpose, version, inventory
   references/<source-id>.md          one per rubric source: criterion table with IDs, anchors, operationalizations
+                                     (a synthesized rubric keeps one file named for its namespace; see below)
   references/severity-anchors.md     domain anchor examples, extends docs/reference/severity-scale.md
   scripts/checks.py                  scripted lane; CLI: artifact path in, contract run envelope out
   scripts/merge.py                   pass 4 assembler entry point; a verbatim copy, see below
@@ -518,7 +519,11 @@ Column contracts:
 - **Severity 2 anchor / Severity 3 anchor** - one domain-specific worked example each, calibrated
   against [docs/reference/severity-scale.md](../reference/severity-scale.md)'s weighing order. These
   two levels are anchored per-criterion (not just per-domain) because they are where reviewers most
-  often disagree.
+  often disagree. A criterion that can never reach severity 3 writes `Not assigned.` in the
+  Severity 3 cell, followed by one sentence saying why: the defect never blocks completion, or a
+  ruling caps its severity at 2. Never leave the cell empty, and never invent a severity-3 case to
+  fill it. `critique-forms` has three such rows (FORMS-ACTION-LABEL, FORMS-CONFIRM-PASSWORD and
+  FORMS-SINGLE-COLUMN).
 - **Lane** - `scripted` or `judged`, matching this criterion's entry in `SKILL.md`'s `checks`.
 - **Lane rationale** - one sentence on why this criterion sits in that lane. "Detectable by a fixed
   pattern, no judgment call" for scripted; "requires reading X as a whole" for judged.
@@ -528,6 +533,16 @@ text" aside used to orient a reader, but never inside the Operationalization col
 criterion text itself. `scripts/skill-selftest.py` flags any quoted span longer than 25 words anywhere
 in a `references/*.md` file (`paraphrase-quote-too-long`); this is a documented approximation, not a
 copyright detector, and staying well under the threshold is the actual goal, not clearing it exactly.
+
+### A synthesized rubric keeps one file per namespace
+
+"One per rubric source" assumes each criterion comes from one publisher, as a WCAG or Diataxis
+criterion does. A rubric synthesized under
+[ADR 0035 (synthesized rubric namespace)](decisions/0035-synthesized-rubric-namespace.md) breaks that
+assumption: each row cites several publishers, so splitting by source would scatter one criterion
+across several files. Such a skill keeps a single criterion table named for its namespace, as
+`critique-forms` keeps `references/FORMS.md`. Each row names its own sources instead, in a closing
+"Sources:" sentence in the Operationalization column, so no attribution is lost.
 
 ### `references/severity-anchors.md`
 

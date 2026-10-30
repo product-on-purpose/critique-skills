@@ -838,7 +838,14 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.1.x. **Category:** ci. **Confidence:** verified.
 - **Blocks:** Nothing directly; leaves the release gate weaker than the PR gate
 - **Depends on:** Nothing
-- **Rank at intake:** 29 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Rank at intake:** 29 of 64. **Status:** CLOSED 2026-10-29, ruled on the maintainer's delegation.
+- **Ruling: add the steps, not narrow the comments, except for build-site.** `release.yml` now runs
+  `smoke` (both assertions, the first before any `pip install`) and the site-tree audit, so it re-runs
+  every `ci.yml` command except `build-site`'s. A release publishes no site, and `deploy-pages.yml`
+  already builds and guards it from `main` with that job's recipe. The header comment and `AGENTS.md`
+  say so. The drift job now fails if the gap reopens: `scripts/lib/release-parity.mjs` requires
+  `release.yml` to run every `# doc-check` command outside the jobs it excludes by name with a reason,
+  and `scripts/tests/release-parity.test.mjs` holds it.
 
 ## E30 - Fix two gaps in skill-template.md before the next skill is built from it
 
@@ -914,7 +921,9 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.1.x. **Category:** hygiene. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
-- **Rank at intake:** 34 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Rank at intake:** 34 of 64. **Status:** CLOSED 2026-10-29. No issue was filed. The toolkit's
+  PR #189 (commit `9439699`) added both directories, the pinned `TOOLKIT_REF` descends from it, and
+  `docs/internal/execution/RC-HANDOVER.md`'s carry-forward bullet now says so.
 
 ## E35 - Run plugin-dev:plugin-validator and plugin-dev:skill-reviewer, or record why not
 
@@ -1658,7 +1667,10 @@ and the repository did not have.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
 - **Rank at intake:** unranked (added 2026-10-02, filed on the maintainer's delegation). **Status:**
-  backlog.
+  CLOSED 2026-10-29, ruled on the maintainer's delegation. `docs/internal/skill-template.md` now names
+  the one-file-per-namespace layout for a rubric synthesized under ADR 0035, and sanctions
+  `Not assigned.` plus a one-sentence reason in the Severity 3 cell of a criterion that never reaches
+  severity 3. Both rules describe what `critique-forms` already does, so no skill changes.
 
 ## E71 - Let a skill keep a bibliography in references/ without a criterion table
 

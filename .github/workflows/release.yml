@@ -1,8 +1,14 @@
 name: Release
 
-# Trigger: a pushed tag "v*". Re-runs the full deterministic suite (the same seven commands ci.yml
-# runs; see AGENTS.md "Checks") as a release-time safety net, enforces the tag-equals-manifest
-# version guard, extracts this version's RELEASE-NOTES.md section, and publishes a GitHub Release.
+# Trigger: a pushed tag "v*". Re-runs ci.yml's deterministic suite as a release-time safety net
+# (see AGENTS.md "Checks"), enforces the tag-equals-manifest version guard, extracts this version's
+# RELEASE-NOTES.md section, and publishes a GitHub Release.
+#
+# Eight of ci.yml's nine jobs are re-run here, every command each of them runs. The ninth,
+# build-site, is left out on purpose: a release publishes no site. The docs site is built, guarded
+# and deployed from main by deploy-pages.yml, which runs build-site's own recipe, so a tag adds
+# nothing to that check. smoke is here because a release is exactly what /plugin install delivers,
+# and smoke is the only job that sees a fresh install (E29, release.yml's re-run parity).
 #
 # Follows the family pattern in agent-skills-toolkit/.github/workflows/release.yml: checkout, gate,
 # guard, extract, publish. The guard reads scripts/lib/version-manifest.mjs's single enumeration of
@@ -51,11 +57,21 @@ jobs:
         run: npm ci
         working-directory: .agent-skills-toolkit
 
+      # smoke's first half must run before any pip install, because it asserts the state a new user
+      # is in: no dependencies. The uninstall mirrors ci.yml's smoke job, for the same reason.
+      - name: Remove jsonschema if the runner image ships it
+        run: pip uninstall -y jsonschema || true
+
+      - name: Every skill fails actionably with no dependencies installed
+        run: python scripts/smoke.py --expect no-deps
+
       - name: Install Python dependencies
         run: pip install -r requirements-dev.txt
 
-      # The deterministic suite, re-run at release time: the same seven commands as ci.yml, in the
-      # same order they appear there, so "re-run the deterministic suite" means exactly that.
+      - name: Every skill produces a usable envelope once dependencies are installed
+        run: python scripts/smoke.py --expect ready
+
+      # The rest of the deterministic suite, re-run at release time in the order ci.yml lists it.
       - name: Conformance gate
         env:
           AGENT_SKILLS_TOOLKIT: ${{ github.workspace }}/.agent-skills-toolkit
@@ -80,6 +96,10 @@ jobs:
 
       - name: Audit npm dependencies
         run: node scripts/audit.mjs
+
+      # The site tree is a separate dependency graph, which ci.yml's audit job also checks.
+      - name: Audit the site's npm dependencies
+        run: node scripts/audit.mjs --prefix site
 
       - name: Guard - tag must equal every version-bearing manifest
         run: node scripts/check-release-versions.mjs "${GITHUB_REF_NAME}"

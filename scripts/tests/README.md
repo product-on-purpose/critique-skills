@@ -41,8 +41,12 @@ Python half.
   agrees with its own `checkIndexDrift()` verdict.
 - `gen-plugin-manifest.test.mjs` - the native-manifest generator wrapper's `--check` (the "drift" CI
   job's entry point): the same toolkit-not-found and toolkit-available smoke coverage as
-  `gen-index.test.mjs`, checking all four of its documented check sections print and that its exit
+  `gen-index.test.mjs`, checking all six of its documented check sections print and that its exit
   code is consistent with them.
+- `release-parity.test.mjs` - `lib/release-parity.mjs`, the drift check's sixth section: the
+  committed `release.yml` re-runs every `ci.yml` command outside the jobs it excludes by name, a
+  release that drops one fails naming the command and its job, and an excluded job's command alone
+  missing passes. Added by E29 (release.yml's re-run parity).
 - `gen-index.filter.test.mjs` - unit tests for `lib/gen-index-filter.mjs`'s `dropPhantomRows()`
   (the INDEX.md phantom-link filter); not part of this task's scope, documented here for inventory
   completeness only.
