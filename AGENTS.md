@@ -218,6 +218,13 @@ python -m bench.variance --corpus bench/corpus \
   --runs bench/results/runs-dispatch-40684518580 --run-set bench-2026-10-28 \
   --runs bench/results/runs-dispatch-40699634145 --run-set bench-2026-10-28 \
   --runs bench/results/runs-dispatch-40699671343 --run-set bench-2026-10-28 \
+  --runs bench/results/runs-dispatch-31988100372 --run-set bench-2026-08-17 \
+  --runs bench/results/runs-dispatch-34917562578 --run-set bench-2026-09-15 \
+  --runs bench/results/runs-dispatch-34917728793 --run-set bench-2026-09-15 \
+  --runs bench/results/runs-dispatch-38673834829 --run-set bench-2026-10-15 \
+  --runs bench/results/runs-dispatch-38673837025 --run-set bench-2026-10-15 \
+  --runs bench/results/runs-dispatch-38678419907 --run-set bench-2026-10-15 \
+  --runs bench/results/runs-dispatch-38683363024 --run-set bench-2026-10-15 \
   --committed bench/results/results.json --out bench/results/variance.json
 ```
 

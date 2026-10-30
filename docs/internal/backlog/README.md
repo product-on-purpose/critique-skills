@@ -100,7 +100,7 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**22 items depend on nothing and can start today.** Derived from each item's own
+**19 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
@@ -122,9 +122,6 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E69 | Revisit ADR 0011's npm option now that the toolkit ships on npm | S | unscheduled |
 | E70 | Teach the skill template how a synthesized rubric lays out its references and anchors | S | unscheduled |
 | E71 | Let a skill keep a bibliography in references/ without a criterion table | S | unscheduled |
-| E63 | Bring the dispatch run sets into results.json, or amend the rule they break | M | v0.3.0 |
-| E73 | Make the merge step run the scripted lane itself, instead of trusting the model's copy | M | v0.3.0 |
-| E67 | Expand critique-accessibility with the WCAG 2.2 AA criteria checkable from static markup | M to L | v0.3.0 |
 | E49 | Write one real tutorial for the empty Diataxis Tutorials quadrant | M | v0.3.0 |
 | E54 | Ship one documented cross-library composition workflow | M | v0.3.0 |
 
@@ -154,10 +151,11 @@ v0.1.x finished are both discharged.
   coverage) gates any tier declaration above Convergent. E52 was ruled on 2026-10-25
   ([ADR 0040 (the revision loop pauses with a revision brief)](../decisions/0040-revision-loop-pauses-with-a-revision-brief.md)),
   so N4 is unblocked.
-- **The v0.3.0 re-measure.** E73 (merge runs the scripted lane itself) and E67 (accessibility
-  expansion) are built, and one shared paid dispatch measures both: 560 envelopes across all seven
-  skills. It gates both items' version moves and E67's exit-gate condition, and it needs the
-  maintainer's own go.
+- **The v0.3.0 re-measure: done 2026-10-28.** One shared paid dispatch measured E73 (merge runs the
+  scripted lane itself) and E67 (accessibility expansion) across all seven skills, under run set
+  `bench-2026-10-28`. Every skill's version moved with it, and both items closed that day. E63
+  (dispatch run sets into results.json) closed on 2026-10-29, when the seven older dispatch run sets
+  joined `results.json`.
 - **v1.0.0.** E48 (disposition telemetry) is the true critical path, because it needs calendar time
   for real dispositions to accumulate before a pruning pass can run, in parallel with E56's external
   adoption. No amount of session throughput buys either.

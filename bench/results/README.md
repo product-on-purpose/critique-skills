@@ -274,8 +274,10 @@ that reverses under a stricter match.
 
 **Confirmed and published, not merely re-run.** An interim figure recorded here on 2026-09-15, from run
 `34917728793`, was an off-ledger check against the shipped harness, reading 0.169 precision against a
-re-run baseline of 0.194 and 0.800 recall against 0.857 - a loss on both sides even then, feeding no
-published number. `bench-2026-10-28` is the published, committed version of that same comparison:
+re-run baseline of 0.194 and 0.800 recall against 0.857 - a loss on both sides even then. It was
+off-ledger until 2026-10-29, when E63 (dispatch run sets into results.json) pooled it as run set
+`bench-2026-09-15`, a superseded `critique-usability` 0.1.0 row. `bench-2026-10-28` is the published,
+committed version of that same comparison at the shipped version:
 `critique-usability` 0.1.1 on sonnet reads 0.159 precision against a re-run baseline of 0.179, and 0.800
 recall against 0.857, matching the interim recall reading closely and reading a touch worse on precision.
 ADR 0026's stricter-match cut has not been re-applied to these newer envelopes, as far as this file's
@@ -318,7 +320,9 @@ either way.
 
 **On sonnet, the picture is less comfortable.** ADR 0038 set the sonnet floor, 0.450, as the minimum
 current-harness consistency among the three core skills, sourced from `critique-clarity` 0.1.0's reading
-in a dispatch outside `results.json`. At the shipped `bench-2026-10-28` versions, `critique-clarity`
+in a dispatch that was outside `results.json` until 2026-10-29, when E63 (dispatch run sets into
+results.json) pooled it as run set `bench-2026-09-15`. At the shipped `bench-2026-10-28` versions,
+`critique-clarity`
 0.1.1 reads **0.404** on sonnet - below that published 0.450 floor. ADR 0038's decision outcome states
 its method as a standing rule, not a one-time reading: "Re-measuring a core skill re-derives its tier's
 floor." Applying that rule mechanically, the sonnet floor would move to 0.404, still set by
@@ -786,14 +790,21 @@ not control, and it is committed here with its envelopes rather than summarised.
 by k=5. The `critique-clarity` arm holds 19: `critique-clarity/clarity-001/haiku-r1.json` never
 landed. That single absence is the "19 of 20 skill cells" coverage figure named in `CHANGELOG.md`
 and it is why [ADR 0031](../../docs/internal/decisions/0031-fidelity-gate-acceptance-band.md)
-rebuilt the acceptance band over the coverage actually obtained rather than over 20.
+rebuilt the acceptance band over the coverage actually obtained rather than over 20. See
+[E21 (missing clarity-001 haiku cell)](../../docs/internal/backlog/enhancements.md) for the gap
+itself.
 
-**These envelopes feed no published number, by design.** `results.json` carries one `run_set`,
-`p3-2026-07-31-plus-cal1-2026-08-01`, and this dispatch is not in it. ADR 0031 treats the run as a
-check against the measurement of record, not a replacement for it, and the changelog entry states
-the same conclusion in the same words: the committed figures "stand as the measurement of record"
-and this run "does not license republishing" them as reproduced. The envelopes are committed so a
-reader can audit the check, not so the check can be averaged into the thing it checked.
+**These envelopes fed no published number until 2026-10-29, by design.** `results.json`
+used to carry one `run_set`, `p3-2026-07-31-plus-cal1-2026-08-01`, and this dispatch was not in it.
+ADR 0031 treats the run as a check against the measurement of record, not a replacement for it, and
+the changelog entry states the same conclusion in the same words: the committed figures "stand as
+the measurement of record" and this run "does not license republishing" them as reproduced. The
+envelopes were committed so a reader could audit the check, not so the check could be averaged into
+the thing it checked. [E63 (dispatch run sets into results.json)](../../docs/internal/backlog/enhancements.md)
+changed that on 2026-10-29. This run is now a row in `results.json`, under run set
+`bench-2026-08-17`, a superseded `critique-clarity` 0.1.0 reading. It appears in the generated
+per-lane tables under that run set; the scoreboard reads only active-version cells, so no scoreboard
+row moved.
 
 **What it closes, and what it does not.** It closes the mechanism question for one cell of the grid:
 `critique-clarity` on haiku now has a run set whose harness, infrastructure, and log are all
@@ -828,14 +839,20 @@ diff before committing, and only the envelope directories were taken from each r
 workflow also rewrites `results.json` to hold its own run set alone, which would have deleted the
 committed entries.
 
-**They feed no published number either, and one of them is a fidelity-gate failure.** The clarity
-run is the sonnet fidelity gate. It failed by the gate's own rule on `precision_location`, and most
-of the move traces to the judged lane no longer emitting `instances`. The full reading, with the
-counterfactual and the baseline's own movement, is in
+**They fed no published number either, until E63 pooled them on 2026-10-29, and one of them is a
+fidelity-gate failure.** The clarity run is the sonnet fidelity gate. It failed by the gate's own
+rule on `precision_location`, and most of the move traces to the judged lane no longer emitting
+`instances`. The full reading, with the counterfactual and the baseline's own movement, is in
 [ADR 0031](../../docs/internal/decisions/0031-fidelity-gate-acceptance-band.md), section "The gate ran
 on sonnet, 2026-09-15". The usability run landed inside its band on both gated figures and
 re-measured the one cell [section 2](#2-cells-where-a-skill-is-worse-than-the-generic-prompt) leaves
 open; what it found is recorded there.
+[E63 (dispatch run sets into results.json)](../../docs/internal/backlog/enhancements.md) pooled both
+runs as run set `bench-2026-09-15`: `critique-clarity` 0.1.0's row and `critique-usability` 0.1.0's
+row are now in `results.json` and in the generated per-lane tables under that run set. Read the
+clarity row as the fidelity-gate failure it is, not as an ordinary measurement: it is also the
+source of [ADR 0038 (consistency threshold v2)](../../docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md)'s
+0.450 sonnet consistency floor.
 
 **A fourth run directory followed on 2026-10-03, and it measures a skill no earlier run set saw.**
 Workflow run `37091134037`, dispatched through `bench.yml` on commit `c442ba8`, measured
@@ -856,9 +873,12 @@ published there.** They waited for the ship verdict, because the documentation s
 renders every entry in `results.json` and does not read a skill's status. Adding them earlier would
 have shown a skill registered `experimental` on the site. [ADR 0037](../../docs/internal/decisions/0037-critique-forms-ship-verdict.md) ruled SHIP, and the
 same change moved the skill to `active` under [ADR 0036](../../docs/internal/decisions/0036-experimental-status-until-ship-verdict.md). The three earlier dispatch
-directories stay outside `results.json` for the reason "Known issues" gives. These entries could
-join because no earlier entry is in the `forms` domain, so none of them shares a cell with another
-run set.
+directories stayed outside `results.json` for the reason "Known issues" gives, until
+[E63 (dispatch run sets into results.json)](../../docs/internal/backlog/enhancements.md) pooled
+them on 2026-10-29. These entries could join on 2026-10-06 because no earlier entry is in the
+`forms` domain, so none of them shared a cell with another run set. The three from 2026-08-17 and
+2026-09-15 could not join until every reader keyed cells on `run_set` as well, which E63's reader
+half did on 2026-10-28; E63's dispatch half pooled them the next day.
 
 **One fidelity finding travels with it.** In 10 of the 40 `critique-forms` envelopes, the scripted
 lane differs from what `checks.py` emits for the same artifact. Sonnet dropped script findings in 6
@@ -884,14 +904,19 @@ ran after it, and their files are 1.3.0. Rebuilding all four with today's `build
 every other field of every entry. The two older files are left as the harness wrote them, because a
 run directory is immutable evidence.
 
-**They feed no published number.** Each one shares its cell with a p3 or cal1 entry, which is the
-collision "Known issues" describes, so all four stay outside `results.json` under
-[E63 (dispatch run sets outside results.json)](../../docs/internal/backlog/enhancements.md). Their
-figures are read against the published bands in
+**They fed no published number until 2026-10-29.** Each one shares its cell with a p3 or cal1
+entry, which is the collision "Known issues" describes, so all four stayed outside `results.json`
+until [E63 (dispatch run sets into results.json)](../../docs/internal/backlog/enhancements.md)
+pooled them as run set `bench-2026-10-15` on 2026-10-29. Readers were already keyed on `run_set` by
+then, from E63's reader half the day before, so the collision drops no row. Their figures are read
+against the published bands in
 [ADR 0031](../../docs/internal/decisions/0031-fidelity-gate-acceptance-band.md), in the section dated
 2026-10-14. Microcopy lands inside on both gated figures, argument and accessibility each miss one,
 and docs misses a band of zero width. The four directories are also the evidence base for
-[E26 (consistency threshold v2)](../../docs/internal/backlog/enhancements.md).
+[E26 (consistency threshold v2)](../../docs/internal/backlog/enhancements.md). The accessibility
+directory's row is also a source figure in
+[ADR 0038 (consistency threshold v2)](../../docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md)'s
+sonnet margin table, and it too is now in `results.json`.
 
 **Which Claude Code CLI each dispatch ran under is inferred, not recorded.** Until 2026-10-15,
 `bench.yml` installed `@anthropic-ai/claude-code` with no version, and npm's install step does not
@@ -1080,12 +1105,32 @@ for id in 40623563498 40623584034 40735091318 40637267814 40735130172 4064574518
       --out /tmp/results-$id.json --run-set bench-2026-10-28
 done
 
-# 5. The committed results.json is the four run sets' entry arrays concatenated and sorted by
+# 4c. E63 (dispatch run sets into results.json) pooled three more run sets on 2026-10-29, each
+#    scored the same way as step 4b, one call per directory: bench-2026-08-17
+#    (runs-dispatch-31988100372), bench-2026-09-15 (runs-dispatch-34917562578 and
+#    runs-dispatch-34917728793), and bench-2026-10-15 (runs-dispatch-38673834829,
+#    runs-dispatch-38673837025, runs-dispatch-38678419907, runs-dispatch-38683363024).
+python -m bench.metrics score --corpus bench/corpus --runs bench/results/runs-dispatch-31988100372 \
+    --out /tmp/results-31988100372.json --run-set bench-2026-08-17
+for id in 34917562578 34917728793; do
+  python -m bench.metrics score --corpus bench/corpus --runs bench/results/runs-dispatch-$id \
+      --out /tmp/results-$id.json --run-set bench-2026-09-15
+done
+for id in 38673834829 38673837025 38678419907 38683363024; do
+  python -m bench.metrics score --corpus bench/corpus --runs bench/results/runs-dispatch-$id \
+      --out /tmp/results-$id.json --run-set bench-2026-10-15
+done
+
+# 5. The committed results.json is the seven run sets' entry arrays concatenated, not merge-sorted
+#    across run sets. The first 174 entries, p3 through bench-2026-10-28, are sorted by
 #    (skill, skill_version, model, domain, run_set), which is the order build_results itself
 #    emits within one run set, with run_set
-#    "p3-2026-07-31-plus-cal1-2026-08-01-plus-bench-2026-10-03-plus-bench-2026-10-28". Since
-#    bench-2026-10-28 the file holds baseline-generic 1.0.0 twice per (model, domain), once per run
-#    set that ran it, so every reader keys a cell on run_set as well (E63), and a skill entry is
+#    "pooled-2026-07-31-to-2026-10-28" (previously the un-abbreviated "-plus-" chain of the four,
+#    then seven, labels, which no longer fits the schema's 128-character limit with seven). The 42
+#    entries E63 added on 2026-10-29 follow, in the order each directory was scored, not merged
+#    into that sort.
+#    Since bench-2026-10-28 the file holds baseline-generic 1.0.0 twice per (model, domain), once per
+#    run set that ran it, so every reader keys a cell on run_set as well (E63), and a skill entry is
 #    compared against the baseline from its own run set, or, for a run set that ran none (cal1),
 #    the latest baseline measured on or before its date. The first three run sets are held
 #    in one file because the repository's rule is that no number appears anywhere that is not in a
@@ -1181,24 +1226,30 @@ Reported, not fixed. Each affects how far a reader should trust the surrounding 
   told apart in this format at all. A per-entry `run_set` belongs in the v0.2 schema alongside the
   lane dimension that [ADR 0022](../../docs/internal/decisions/0022-consistency-floor-overall-lane-min-core.md)
   already flagged.
-- **Seven committed run directories feed no entry in `results.json`, against a rule that says every
-  committed run set does.** `bench/README.md` states that `results.json` "carries every computed
-  number for every committed run set". `runs-dispatch-31988100372/` (haiku, 2026-08-17),
-  `runs-dispatch-34917562578/` and `runs-dispatch-34917728793/` (sonnet, 2026-09-15), and four sonnet
-  directories from 2026-10-14 (`runs-dispatch-38673834829/`, `runs-dispatch-38673837025/`,
-  `runs-dispatch-38678419907/` and `runs-dispatch-38683363024/`) are committed and
-  schema-checked on every CI run, and none of them is in it; their figures are quoted in prose in
+- **RESOLVED 2026-10-29: seven committed run directories fed no entry in `results.json`, against a
+  rule that says every committed run set does.** `bench/README.md` states that `results.json`
+  "carries every computed number for every committed run set". `runs-dispatch-31988100372/` (haiku,
+  2026-08-17), `runs-dispatch-34917562578/` and `runs-dispatch-34917728793/` (sonnet, 2026-09-15), and
+  four sonnet directories from 2026-10-14 (`runs-dispatch-38673834829/`, `runs-dispatch-38673837025/`,
+  `runs-dispatch-38678419907/` and `runs-dispatch-38683363024/`) were committed and schema-checked on
+  every CI run, and none of them was in it; their figures were quoted in prose in
   [ADR 0031](../../docs/internal/decisions/0031-fidelity-gate-acceptance-band.md), this file and the
-  changelog instead. They stay out deliberately for now. Each shares `(skill, skill_version, model,
-  domain)` with a p3 entry, and the readers of this file key cells on that identity, so adding them
-  would put two entries on one key for the first time: the collision shape of the dropped-row entry
-  below. Closing it needs every reader to key on `run_set` as well, and a ruling on which run set a
-  published table shows. Tracked as
-  [E63 (dispatch run sets outside results.json)](../../docs/internal/backlog/enhancements.md).
-  An eighth directory, `runs-dispatch-37091134037/` (both tiers, 2026-10-03), is in it, and it is the
-  only dispatch run set that is. No earlier entry is in the `forms` domain, so its 12 entries collide
-  with nothing. They joined on 2026-10-06 with the `critique-forms` ship verdict, as "Provenance"
-  explains.
+  changelog instead. They stayed out deliberately, for this reason: each shared
+  `(skill, skill_version, model, domain)` with a p3 entry, and the readers of this file keyed cells on
+  that identity alone, so adding them would have put two entries on one key for the first time, the
+  collision shape of the dropped-row entry below. Closing it needed every reader to key on `run_set`
+  as well, and a ruling on which run set a published table shows. Tracked as
+  [E63 (dispatch run sets into results.json)](../../docs/internal/backlog/enhancements.md).
+  An eighth directory, `runs-dispatch-37091134037/` (both tiers, 2026-10-03), was already in it, the
+  first dispatch run set to join, on 2026-10-06; no earlier entry was in the `forms` domain, so its 12
+  entries collided with nothing, as "Provenance" explains. **Resolution.** E63's reader half, on
+  2026-10-28, keyed every reader of `results.json` on `run_set` as well as the four-field identity.
+  Its dispatch half, on 2026-10-29, pooled the seven directories as three run sets,
+  `bench-2026-08-17`, `bench-2026-09-15` and `bench-2026-10-15` (the maintainer's ruling: every
+  published table still shows every run set, as before). `results.json` grew from 174 entries to 216
+  and `variance.json` from 232 bands to 288; the first 174 entries and all 232 original bands are
+  unchanged. Every pooled row is a superseded skill version, so no shipped-version figure, scoreboard
+  row, or verdict in this file moved.
 - **`bench/report.py` used to drop a row silently.** Its baseline-comparison tables keyed each
   `(domain, model)` cell by skill name alone, so two entries for the same skill at different versions
   collided and whichever was inserted first vanished from the comparison without any error. It was
