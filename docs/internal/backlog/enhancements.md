@@ -1006,10 +1006,11 @@ and the repository did not have.
   Per this item's own instruction, `checks.py` is unchanged; a recalibration decision belongs to a
   later effort, not this one. Both fixtures and results are held in
   `skills/critique-argument/scripts/tests/test_checks_argument.py`. `references/TOULMIN.md`'s
-  Thresholds section is updated to past tense with these numbers. That edit changes no threshold
-  value, no lexicon, and no wording the skill reports to a reader; it only updates the
-  calibration-status narrative. A full corpus-level P3 measurement of this criterion's
-  false-positive rate across many artifacts is still open and not claimed here.
+  Thresholds section now says, in the past tense, that the bands are uncalibrated and what the
+  fixture check read. It is kept to two neutral sentences because the critic reads that file at
+  run time, and no threshold, lexicon or reported wording changes. Whether to recalibrate is filed
+  as E75 (hedge-density recalibration), because moving a threshold changes what a shipped skill
+  reports. A corpus-level measurement of this criterion's false-positive rate is still open.
 
 ## E38 - Measure critique-accessibility's location fix on id-poor markup
 
@@ -1840,3 +1841,34 @@ and the repository did not have.
 - **Depends on:** Nothing
 - **Rank at intake:** unranked (added 2026-10-29, filed on the maintainer's delegation). **Status:**
   backlog.
+
+## E75 - Decide whether TOULMIN-HEDGE-DENSITY's 0.35 fire line should move
+
+- **Target:** `skills/critique-argument/scripts/checks.py` (the hedged-sentence ratio bands),
+  `skills/critique-argument/references/TOULMIN.md` (the Thresholds section),
+  `skills/critique-argument/SKILL.md` (its version)
+- **Change:** E37 (hedge-density false-positive check) ran the check ADR 0017 named on 2026-10-29.
+  Two arguments written to hedge only their uncertain claims both fire. One hedges 3 of 8 sentences
+  (0.38) and fires at severity 2. The other hedges 5 of 6 (0.83) and fires at severity 3, though
+  nearly every claim in it rests on an unproven projection. The criterion counts hedged sentences
+  and cannot tell appropriate caution from evasion. Done: a maintainer ruling among the options
+  below, and, for any option that changes behavior, the change, a version move and a measured run.
+- **Options:** (A) keep 0.35 and record the false-positive class in the skill's limitations, since
+  ADR 0017 calls the criterion a surface trace rather than a verdict; (B) raise the fire line, for
+  example to 0.50, which clears the near-threshold fixture but not the heavy one; (C) cap the
+  criterion at severity 2, so it can inform a reader but never gate a document. Recommendation, not
+  a decision: A or C. B moves the line without answering the design question, and any threshold can
+  be crossed by a document that is uncertain about most of what it says.
+- **Why:** It is the only fully scripted criterion in `critique-argument`, and its false-positive
+  risk was named in ADR 0017 before the skill shipped. It is now measured.
+- **Evidence:** the two fixtures and their held results in
+  `skills/critique-argument/scripts/tests/test_checks_argument.py`; ADR 0017's Consequences
+  section; E37's status line in this file.
+- **Derives from:** E37 (hedge-density false-positive check), closed 2026-10-29.
+- **Size:** S to decide; M if behavior changes, because that needs a version move and a paid run.
+  **Release:** v0.3.0. **Category:** decision. **Confidence:** the two fixture results are
+  verified by test; how often the criterion fires falsely across real documents is not measured.
+- **Blocks:** Nothing
+- **Depends on:** Nothing
+- **Rank at intake:** unranked (added 2026-10-29, filed on the maintainer's delegation). **Status:**
+  backlog, needs the maintainer's ruling.

@@ -312,7 +312,7 @@ prove wrong.
 # A near-threshold case: most sentences state a settled fact. Only the
 # genuinely uncertain claims carry a hedge, and that alone is enough to
 # cross ADR 0017's "too low" line.
-NEAR_THRESHOLD_HEDGED_ARGUMENT_TEXT = """# Recommendation: delay the vendor migration by one quarter
+NEAR_THRESHOLD_HEDGED_ARGUMENT_TEXT = """# Recommendation: start the vendor migration now, with reconciliation under watch
 
 Our load tests show the new vendor's API handles current peak traffic with margin to spare. The
 cutover plan has been rehearsed twice in staging without incident. Billing reconciliation under
@@ -351,7 +351,7 @@ def test_hedge_density_false_positive_on_a_well_formed_heavily_hedged_risk_asses
 
 
 def test_hedge_density_false_positive_on_a_near_threshold_hedged_argument():
-    """A second, milder run of the same ADR 0017 check. Six of this
+    """A second, milder run of the same ADR 0017 check. Five of this
     argument's eight sentences state a settled fact with no hedge at all.
     Only the three genuinely uncertain claims (reconciliation timing,
     customer reaction, one engineer's own impression) carry a hedge term,
