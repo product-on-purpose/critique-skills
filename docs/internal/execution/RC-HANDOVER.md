@@ -118,6 +118,9 @@ so the list stays complete.
 - **File the upstream `SKIP_DIRS` issue against `agent-skills-toolkit`.** Adding `__pycache__` and
   `.pytest_cache` to `scripts/lib/fs-utils.mjs`'s `SKIP_DIRS` clears three of the four remaining
   above-tier gate issues here, and in every other Python-bearing family plugin.
+  **Closed 2026-10-29 without an issue (E34, the SKIP_DIRS note).** The toolkit's PR #189 (commit
+  `9439699`) already added both directories to `SKIP_DIRS`. The `TOOLKIT_REF` that `ci.yml` and
+  `release.yml` pin descends from that commit, so the fix has been in use since that pin was adopted.
 - **Reconcile `README.md`'s 0.976 accessibility recall figure with `RELEASE-NOTES.md`'s 0.988**, or
   label the README figure as criterion-level so a single before-and-after story does not switch
   metrics mid-paragraph.

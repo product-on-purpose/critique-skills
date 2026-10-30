@@ -9,7 +9,8 @@
 //               other generated doc this repo does not have yet (the README result and catalog
 //               tables), checks that AGENTS.md documents every command
 //               .github/workflows/ci.yml runs, marked "# doc-check" (S-07 CI-pipeline spec, AC-5),
-//               and checks that ci.yml's aggregate gate job still depends on every job in the file.
+//               checks that ci.yml's aggregate gate job still depends on every job in the file,
+//               and checks that release.yml re-runs every ci.yml command it does not exclude by name.
 // why:          library.json is the single source of truth; regenerating deterministically from it
 //               keeps the manifest and INDEX.md diff-free instead of hand-edited in parallel and
 //               drifting. --check is the "drift" job's one command (S-07): CI must never
@@ -29,6 +30,7 @@ import { fileURLToPath } from "node:url";
 import { resolveToolkit, toolkitCandidates, TOOLKIT_REPO_URL } from "./lib/resolve-toolkit.mjs";
 import { checkIndexDrift, writeIndex } from "./gen-index.mjs";
 import { checkCiGate } from "./lib/ci-gate.mjs";
+import { checkReleaseParity } from "./lib/release-parity.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "..");
@@ -171,6 +173,24 @@ function checkCiGateCoverage() {
   return { ok: result.ok, messages: result.messages.map((m) => `gen --check: ${m}`) };
 }
 
+/**
+ * release.yml must re-run every "# doc-check" command ci.yml runs, outside the jobs
+ * scripts/lib/release-parity.mjs excludes by name with a reason. It once re-ran 7 of 9 while
+ * claiming all of them, and the two it skipped included smoke (E29, release.yml's re-run parity).
+ */
+function checkReleaseParityCoverage() {
+  const ciPath = resolve(ROOT, ".github", "workflows", "ci.yml");
+  const releasePath = resolve(ROOT, ".github", "workflows", "release.yml");
+  if (!existsSync(ciPath) || !existsSync(releasePath)) {
+    return {
+      ok: true,
+      messages: ["gen --check: ci.yml or release.yml not found yet; skipping the release parity check."],
+    };
+  }
+  const result = checkReleaseParity(readFileSync(ciPath, "utf8"), readFileSync(releasePath, "utf8"));
+  return { ok: result.ok, messages: result.messages.map((m) => `gen --check: ${m}`) };
+}
+
 const args = process.argv.slice(2);
 
 if (args.includes("--check")) {
@@ -180,6 +200,7 @@ if (args.includes("--check")) {
     checkGeneratedDocsPlaceholder(),
     checkAgentsDocCoverage(),
     checkCiGateCoverage(),
+    checkReleaseParityCoverage(),
   ];
   let ok = true;
   for (const r of results) {

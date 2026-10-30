@@ -250,7 +250,10 @@ an uncertainty estimate (0.450 on sonnet and 0.309 on haiku, per
 
 ### Release (`.github/workflows/release.yml`)
 
-Triggered by pushing a tag matching `v*`. Re-runs every command in the CI table above, then guards
+Triggered by pushing a tag matching `v*`. Re-runs every command in the CI table above except
+`build-site`'s. A release publishes no site, and `deploy-pages.yml` already builds and guards the site
+from `main` with that job's recipe. `smoke` runs first, before any `pip install`, because its first
+assertion is the state a new user is in. The workflow then guards
 that the tag equals every version-bearing manifest, listed once in
 `scripts/lib/version-manifest.mjs` so the guard and any future version-bump tool cannot drift apart.
 That list covers three JSON files and two prose pages that pin the plugin version inline
