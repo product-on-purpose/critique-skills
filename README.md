@@ -190,7 +190,7 @@ Receipts come before the claim, because that is the order that earns trust.
 | `critique-microcopy` 0.1.1 | 0.840 | 0.947 | 0.829 | 0.910 | beats on haiku, no pass on sonnet |
 | `critique-usability` 0.1.1 | 0.767 | 0.800 | 0.267 | 0.159 | beats on haiku, below baseline on sonnet |
 
-_Location-level, shipped versions only, run set `p3-2026-07-31-plus-cal1-2026-08-01-plus-bench-2026-10-03-plus-bench-2026-10-28`. Every figure is computed from `bench/results/results.json`._
+_Location-level, shipped versions only, run set `pooled-2026-07-31-to-2026-10-28`. Every figure is computed from `bench/results/results.json`._
 <!-- bench-scoreboard:end -->
 
 Recall is the flattering half. Among shipped skills the lowest run-to-run consistency is `critique-argument` on Haiku at **0.343**, and precision falls to **0.159**, on `critique-usability` at Sonnet. Counting every version this library has measured, consistency falls to **0.309**, on `critique-clarity` 0.1.0 at Haiku, with its judged lane alone at **0.150**, and precision falls to **0.155**, on the retired `critique-accessibility` 0.1.0, which is the version [the failure below](#the-most-instructive-number-is-a-failure) is about. Both cuts are named because they are different questions: what you can install today, and what this library has ever measured.

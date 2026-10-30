@@ -732,8 +732,9 @@ function activeVersionMap() {
 
 test("loadResults reads the committed benchmark file and its provenance", () => {
   const results = loadResults();
-  assert.equal(results.entries.length, 58);
-  assert.equal(results.runSet, "p3-2026-07-31-plus-cal1-2026-08-01-plus-bench-2026-10-03-plus-bench-2026-10-28");
+  // 72 since E63 pooled the seven older dispatch directories (14 overall-lane entries) on 2026-10-29.
+  assert.equal(results.entries.length, 72);
+  assert.equal(results.runSet, "pooled-2026-07-31-to-2026-10-28");
   assert.ok(results.generatedAt, "generated_at");
   assert.ok(results.resultsVersion, "results_version");
 });
@@ -797,7 +798,7 @@ test("the baseline scores exactly zero at criterion level, which is structural",
   // match at the criterion level whatever it says. The page explains this in place; if a future
   // baseline ever scores non-zero here, that explanation is wrong and must be rewritten.
   const baseline = loadResults().entries.filter(isBaseline);
-  assert.equal(baseline.length, 28);
+  assert.equal(baseline.length, 35);
   for (const entry of baseline) {
     assert.equal(entry.precision.value, 0, `${entry.domain}/${entry.model} precision`);
     assert.equal(entry.recall.value, 0, `${entry.domain}/${entry.model} recall`);

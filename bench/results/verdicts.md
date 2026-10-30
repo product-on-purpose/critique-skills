@@ -59,8 +59,12 @@ diagnostic, with no threshold.
 
 Every verdict recorded below applied the single 0.309 floor, because that was the rule in force
 when each skill shipped. Every shipped skill also clears both of ADR 0038's per-tier floors. ADR
-0038 carries the per-skill margin table, and it reads each sonnet margin from the current harness,
-so the sonnet floor's source figures are not in `results.json`.
+0038 carries the per-skill margin table, and it reads each sonnet margin from the current harness.
+ADR 0038 named its three sonnet source figures - 0.450 for `critique-clarity`, 0.573 for
+`critique-usability`, 0.745 for `critique-accessibility` - as absent from `results.json`. E63
+(dispatch run sets into results.json) pooled all three on 2026-10-29, under run sets
+`bench-2026-09-15` and `bench-2026-10-15`. Each pooled row is a superseded version, so no verdict
+here moves.
 
 ## Summary
 
@@ -98,17 +102,20 @@ exactly as consistent as clarity passes either floor with no margin at all.
 is the one a different set of five runs could plausibly move, since its own margin is already
 inside the range a single defect instance can shift.
 
-**Dated caveats.** Two harness re-measurements exist outside `results.json` and feed no published
-number. On haiku, run `31988100372` (2026-08-17) landed inside its fidelity-gate band on
-`recall_location` and outside it on `precision_location`, by less than the band's own width, which
+**Dated caveats.** Two harness re-measurements existed outside `results.json` until 2026-10-29, when
+E63 (dispatch run sets into results.json) pooled both. On haiku, run `31988100372` (2026-08-17, now
+run set `bench-2026-08-17`) landed inside its fidelity-gate band on `recall_location` and outside it
+on `precision_location`, by less than the band's own width, which
 [ADR 0031 (the fidelity gate's acceptance band)](../../docs/internal/decisions/0031-fidelity-gate-acceptance-band.md)
-reads as triggering investigation rather than failure. On sonnet, run `34917562578` (2026-09-15)
-missed its band on `precision_location` by more than the band's width, which ADR 0031 records as "a
-failure by the gate's own rule". ADR 0031 traces most of that move to the judged lane no longer
-emitting an `instances` field, and it states plainly: "None of it is the skill finding fewer
-defects." Both location recall and criterion-level recall in the re-run are above the committed
-figures. Neither re-run changes this verdict or feeds a
-published number.
+reads as triggering investigation rather than failure. On sonnet, run `34917562578` (2026-09-15, now
+run set `bench-2026-09-15`) missed its band on `precision_location` by more than the band's width,
+which ADR 0031 records as "a failure by the gate's own rule". ADR 0031 traces most of that move to
+the judged lane no longer emitting an `instances` field, and it states plainly: "None of it is the
+skill finding fewer defects." Both location recall and criterion-level recall in the re-run are
+above the committed figures. Both runs are now rows in `results.json`, each a superseded
+`critique-clarity` 0.1.0 reading. Neither changes this verdict. Read the `bench-2026-09-15` row as
+the fidelity-gate failure ADR 0031 records, not as an ordinary measurement; it is also the sonnet
+consistency floor's source.
 
 **History:** [ADR 0026](../../docs/internal/decisions/0026-location-level-re-examination-of-baseline-gates.md)
 for the location-level ruling; [`bench/results/README.md`, "Core skills: S-05 AC-6"](README.md)
@@ -154,8 +161,10 @@ harness: `recall_location` landed inside its fidelity-gate band, and `precision_
 outside it, below the band, by 0.017 against a band 0.062 wide.
 [ADR 0031](../../docs/internal/decisions/0031-fidelity-gate-acceptance-band.md) reads a single miss
 smaller than the band's width as triggering investigation, not failure. It traces the miss to the
-critic writing more judged findings, not to the skill finding fewer defects. The re-run changes no
-verdict and feeds no published number.
+critic writing more judged findings, not to the skill finding fewer defects. This run existed
+outside `results.json` until 2026-10-29, when E63 (dispatch run sets into results.json) pooled it as
+run set `bench-2026-10-15`. The re-run changes no verdict, and the pooled row is a superseded
+`critique-accessibility` 0.1.1 reading, not the shipped 0.2.0 figure.
 
 **History:** [ADR 0026](../../docs/internal/decisions/0026-location-level-re-examination-of-baseline-gates.md)
 for the 0.1.0 failure, [ADR 0027](../../docs/internal/decisions/0027-accessibility-location-emission-calibration.md)
@@ -195,7 +204,9 @@ both gated figures land inside: `recall_location` 0.800 against a band of [0.771
 that same re-run, the skill still trails the re-run baseline on both location metrics: recall 0.800
 against the baseline's 0.857, precision 0.169 against 0.194. Both gaps are smaller than the spread
 either arm shows across its own five repetitions, so the re-run confirms that the sonnet cell does
-not qualify. Neither fact changes this verdict or feeds a published number.
+not qualify. This run existed outside `results.json` until 2026-10-29, when E63 (dispatch run sets
+into results.json) pooled it as run set `bench-2026-09-15`. Neither fact changes this verdict, and
+the pooled row is a superseded `critique-usability` 0.1.0 reading.
 [ROADMAP.md](../../ROADMAP.md)'s "Known limitations" section states the consequence plainly: the
 skill "ships qualified through Haiku, not unconditionally."
 
