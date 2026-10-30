@@ -28,7 +28,7 @@ Every skill operationalizes a published external standard, cites a permanent cri
 | **Build on it or contribute** | [How a critique runs](#-how-a-critique-runs) and [where this stops](#-where-this-stops) | [The methodology](https://product-on-purpose.github.io/critique-skills/explanation/methodology/), the [Critique Contract](docs/reference/critique-contract.md), and [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 
 > [!NOTE]
-> **v0.2.0.** The finding contract, the severity scale, and the criterion IDs are stable commitments. The measured numbers are honest but young: one benchmark cycle on two pinned model tiers, with consistency floors set per tier at **0.450** on Sonnet and **0.309** on Haiku, well below the 0.7 proposed before any data existed ([ADR 0038](docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md)).
+> **v0.2.0.** The finding contract, the severity scale, and the criterion IDs are stable commitments. The measured numbers are honest but young: one benchmark cycle on two pinned model tiers, with consistency floors set per tier at **0.404** on Sonnet and **0.357** on Haiku, well below the 0.7 proposed before any data existed ([ADR 0038](docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md), amended 2026-10-30).
 
 ---
 

@@ -71,7 +71,7 @@ came from.
 - Measurement basis: [`measurement-manifest.json`](measurement-manifest.json) and
   [ADR 0023 (v0.1.0 measurement basis)](../../docs/internal/decisions/0023-v0.1.0-measurement-basis-two-pinned-tiers-k5.md)
 - Consistency floor: [ADR 0022 (consistency floor: 0.309, overall lane)](../../docs/internal/decisions/0022-consistency-floor-overall-lane-min-core.md),
-  amended by [ADR 0038 (consistency threshold v2: 0.450 sonnet, 0.309 haiku)](../../docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md)
+  amended by [ADR 0038 (consistency threshold v2: per-tier floors, 0.404 sonnet and 0.357 haiku since 2026-10-30)](../../docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md)
 - Full generated tables, every skill and baseline row: [`../README.md`](../README.md)
 
 ---
@@ -311,12 +311,13 @@ historical 0.1.0 reading of 0.309 in `p3-2026-07-31`, but still above that figur
 a stretch skill and does not itself set any gate; it is only compared against one.
 [ADR 0022 (consistency floor: 0.309, overall lane)](../../docs/internal/decisions/0022-consistency-floor-overall-lane-min-core.md)'s
 and [ADR 0038 (consistency threshold v2: per-tier floors)](../../docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md)'s
-haiku floor, **0.309**, is defined as the minimum over the three **core** skills
-(`critique-accessibility`, `critique-clarity`, `critique-usability`) only, and is carried unchanged from
-`critique-clarity` 0.1.0's `p3-2026-07-31` reading until all three core skills have current-harness
-haiku data. At the shipped versions, the core-skill haiku minimum is `critique-usability` 0.1.1 at
-0.357, not `critique-clarity`'s 0.359 - both above the published 0.309 floor, so nothing fails on haiku
-either way.
+haiku floor is defined as the minimum over the three **core** skills
+(`critique-accessibility`, `critique-clarity`, `critique-usability`) only. It was carried at 0.309 from
+`critique-clarity` 0.1.0's `p3-2026-07-31` reading until all three core skills had current-harness
+haiku data, which `bench-2026-10-28` supplied. ADR 0038's amendment of 2026-10-30 re-derived it as
+**0.357**, `critique-usability` 0.1.1, just under `critique-clarity`'s 0.359. That puts
+`critique-argument`'s 0.343 below the haiku floor by 0.014. Its ship verdict stands, because a floor
+gates a new skill at its ship verdict and a re-measure never reopens a shipped one.
 
 **On sonnet, the picture is less comfortable.** ADR 0038 set the sonnet floor, 0.450, as the minimum
 current-harness consistency among the three core skills, sourced from `critique-clarity` 0.1.0's reading
@@ -327,9 +328,11 @@ results.json) pooled it as run set `bench-2026-09-15`. At the shipped `bench-202
 its method as a standing rule, not a one-time reading: "Re-measuring a core skill re-derives its tier's
 floor." Applying that rule mechanically, the sonnet floor would move to 0.404, still set by
 `critique-clarity`, against `critique-accessibility` 0.2.0's 0.735 and `critique-usability` 0.1.1's
-0.474. No ADR records that redetermination as of this writing. Whether ADR 0038's rule is meant to apply
-automatically on a routine re-measure, or needs a ruling of its own first, is not settled by this file
-and is a question for the maintainer.
+0.474. The maintainer ruled on 2026-10-30 to apply the rule after one check, and ADR 0038's amendment
+of that date records the result: the sonnet floor is now **0.404**. The check was why clarity's
+scripted lane reads 0.881 rather than 1.000 after E73. The cause is the output bound, not a defect:
+an envelope keeps at most five findings below severity 3, clarity's scripted findings are mostly
+severity 2, and they compete for those places with judged findings that vary between runs.
 
 Restricted to the judged lane, which is the honest reading of the part that needs a model, the ranking
 changes:
@@ -850,9 +853,9 @@ open; what it found is recorded there.
 [E63 (dispatch run sets into results.json)](../../docs/internal/backlog/enhancements.md) pooled both
 runs as run set `bench-2026-09-15`: `critique-clarity` 0.1.0's row and `critique-usability` 0.1.0's
 row are now in `results.json` and in the generated per-lane tables under that run set. Read the
-clarity row as the fidelity-gate failure it is, not as an ordinary measurement: it is also the
+clarity row as the fidelity-gate failure it is, not as an ordinary measurement: it was also the
 source of [ADR 0038 (consistency threshold v2)](../../docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md)'s
-0.450 sonnet consistency floor.
+original 0.450 sonnet consistency floor, which that ADR's amendment of 2026-10-30 re-derived as 0.404.
 
 **A fourth run directory followed on 2026-10-03, and it measures a skill no earlier run set saw.**
 Workflow run `37091134037`, dispatched through `bench.yml` on commit `c442ba8`, measured
