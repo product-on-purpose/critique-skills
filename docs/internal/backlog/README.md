@@ -100,7 +100,7 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**13 items depend on nothing and can start today.** Derived from each item's own
+**12 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
@@ -115,7 +115,6 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E59 | Verify what the marketplace consumes the homepage field for | S | unscheduled |
 | E69 | Revisit ADR 0011's npm option now that the toolkit ships on npm | S | unscheduled |
 | E74 | Stop the site's Mermaid labels from clipping in the architecture overview | S | v0.3.0 |
-| E75 | Decide whether TOULMIN-HEDGE-DENSITY's 0.35 fire line should move | S | v0.3.0 |
 | E49 | Write one real tutorial for the empty Diataxis Tutorials quadrant | M | v0.3.0 |
 | E54 | Ship one documented cross-library composition workflow | M | v0.3.0 |
 
