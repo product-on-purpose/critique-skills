@@ -3,7 +3,7 @@
 Local-first, version-controlled backlogs (Standard sec 7.1). Two files, plus this index:
 
 - **[enhancements.md](enhancements.md)** - features, fixes and refinements to components that already
-  exist. 73 items, `E1` through `E73`.
+  exist. 74 items, `E1` through `E74`.
 - **[new-components.md](new-components.md)** - proposals to ADD a skill, command, subagent, hook or
   chain. 5 items, `N1` through `N5`, each with a recorded why-gate verdict.
 
@@ -112,13 +112,13 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E37 | Run the TOULMIN-HEDGE-DENSITY false-positive check ADR 0017 named, and fix TOULMIN.md's future tense | S | v0.1.x |
 | E38 | Measure critique-accessibility's location fix on id-poor markup | S | v0.3.0 |
 | E39 | Record the CLAUDE_CODE_OAUTH_TOKEN retention decision and a rotation procedure | S | v0.1.x |
-| E40 | Look at a Mermaid diagram in light and dark on the live site | S | v0.1.x |
 | E42 | Reconcile 'frozen with a JSON Schema' against 'freezes at v1.0' | S | unscheduled |
 | E43 | Create a v1.0 readiness tracker for the four declaration criteria | S | v1.0.0 |
 | E51 | Give the precision and corpus-provenance limitations a retirement path or an explicit 'accepted' | S | unscheduled |
 | E59 | Verify what the marketplace consumes the homepage field for | S | unscheduled |
 | E69 | Revisit ADR 0011's npm option now that the toolkit ships on npm | S | unscheduled |
 | E71 | Let a skill keep a bibliography in references/ without a criterion table | S | unscheduled |
+| E74 | Stop the site's Mermaid labels from clipping in the architecture overview | S | v0.3.0 |
 | E49 | Write one real tutorial for the empty Diataxis Tutorials quadrant | M | v0.3.0 |
 | E54 | Ship one documented cross-library composition workflow | M | v0.3.0 |
 

@@ -37,7 +37,7 @@ flowchart TD
     schema["contract/critique-contract.schema.json<br/>finding + envelope + disposition log"]:::contract
   end
   subgraph evidence["Evidence"]
-    bench["bench/<br/>seeded-defect corpus, metrics,<br/>502 run envelopes"]:::ev
+    bench["bench/<br/>seeded-defect corpus, metrics,<br/>1,477 run envelopes"]:::ev
   end
 
   rubric --> skill

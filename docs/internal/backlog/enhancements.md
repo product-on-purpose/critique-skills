@@ -1013,7 +1013,13 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.1.x. **Category:** site. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
-- **Rank at intake:** 40 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Rank at intake:** 40 of 64. **Status:** CLOSED 2026-10-29. Both diagrams were viewed on the live
+  site in both themes, through Playwright with `prefers-color-scheme` emulated, and screenshotted.
+  Both are legible in light and dark: in dark, clusters render gray and nodes keep their light
+  `classDef` fills with dark text. The check found one defect, filed as E74 (Mermaid label
+  clipping): in `architecture.md`'s diagram, 11 of 20 labels are clipped in both themes.
+  `architecture-detail.md`'s diagram clips 0 of 14. Both pages' "502 run envelopes" were stale and
+  now read 1,477, and `architecture-detail.md`'s prose count of 23 corpus artifacts now reads 28.
 
 ## E41 - Remove bench/README.md's stale '.gitattributes does not exist yet' prerequisite
 
@@ -1766,3 +1772,32 @@ and the repository did not have.
   and [E73's spec](../release-plans/_unassigned/E73_merge-runs-scripted-lane/spec.md). **Still open:**
   the version moves (D4) and the paid re-measure (D5, AC-9), both ruled to happen together with
   E67's accessibility expansion and both needing the maintainer's own separate go.
+
+## E74 - Stop the site's Mermaid labels from clipping in the architecture overview
+
+- **Target:** `site/astro.config.mjs` (the `mermaid()` integration), `site/src/styles/custom.css`,
+  `docs/explanation/architecture.md` (its `%%{init}%%` directive)
+- **Change:** On the live architecture overview page, 11 of the diagram's 20 labels are cut off at
+  the right edge of their box, in light and dark alike. "Frozen contract" gets a 96-pixel box for
+  115 pixels of text. The labels render in `monospace`, inherited from the `<pre class="mermaid">`
+  that hosts the diagram. Neither the integration's `themeVariables.fontFamily` nor the page's own
+  `init` directive reaches them: the page-level `#mermaid-*` rule carries no `font-family`, and the
+  SVG's inner style falls back to Mermaid's default `"trebuchet ms"`. The boxes were sized for a
+  narrower font than the one that draws them. Done: every label on both explanation pages fits its
+  box in both themes, checked against a local build before deploy.
+- **Why:** The overview is the first diagram a reader meets, and half its labels are unreadable.
+  E40 (Mermaid in both themes) found it on 2026-10-29. CHANGELOG's 2026-08-22 caveat had said this
+  check was never performed.
+- **Evidence:** live page `explanation/architecture/`, measured 2026-10-29 through Playwright by
+  comparing each `foreignObject`'s width with its text's rendered width; screenshots in both themes.
+  `architecture-detail` measured 0 of 14 clipped with the same probe. The `.mermaid` rules in
+  `site/src/styles/custom.css` set no font. Related: the CHANGELOG entry "A brand setting that does
+  nothing, across four family sites", which found the integration's `lineColor` ignored the same way.
+- **Derives from:** E40 (Mermaid in both themes), closed 2026-10-29.
+- **Size:** S. **Release:** v0.3.0. **Category:** site. **Confidence:** the clipping and the
+  inherited font are verified on the live site; why the configured font never applies is inferred
+  and not reproduced in a local build.
+- **Blocks:** Nothing
+- **Depends on:** Nothing
+- **Rank at intake:** unranked (added 2026-10-29, filed on the maintainer's delegation). **Status:**
+  backlog.
