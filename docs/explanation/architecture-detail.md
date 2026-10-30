@@ -133,7 +133,7 @@ Four design choices carry most of the weight:
   on the same artifacts and the same pinned model. Without it, a good-looking recall number says
   nothing about whether the rubric contributed anything.
 - **k=5 per cell.** Run-to-run agreement is a published metric, not an assumption. The floor
-  is set per tier, at 0.450 on Sonnet and 0.309 on Haiku, well below the 0.7 that was proposed
+  is set per tier, at 0.404 on Sonnet and 0.357 on Haiku, well below the 0.7 that was proposed
   before any data existed.
 - **Envelopes are immutable evidence.** `bench/results/runs*/` is never edited or regenerated. The
   numbers are recomputed from the envelopes, not maintained alongside them.

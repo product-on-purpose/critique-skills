@@ -50,16 +50,19 @@ better on one).
 **The consistency floor is set per tier, on the overall lane.** [ADR 0038 (consistency threshold
 v2)](../../docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md) replaced the
 single floor [ADR 0022 (consistency floor: 0.309, overall lane)](../../docs/internal/decisions/0022-consistency-floor-overall-lane-min-core.md)
-set. The floor is now **0.450 on the sonnet tier**, the lowest current-harness overall-lane
-consistency among the three core skills. On the **haiku tier it stays 0.309**, ADR 0022's figure
-from run set `p3-2026-07-31`, until all three core skills have current-harness haiku data. The
-scripted lane's expected consistency is 1.000, reported and not gated; a reading below 1.000 is a
-known transport defect, not a calibration target. The judged lane publishes per cell as a
-diagnostic, with no threshold.
+set. Each floor is the lowest current-harness overall-lane consistency among the three core skills.
+ADR 0038's amendment of 2026-10-30 re-derived both from run set `bench-2026-10-28`: **0.404 on the
+sonnet tier** (`critique-clarity` 0.1.1) and **0.357 on the haiku tier** (`critique-usability`
+0.1.1). The scripted lane is reported and not gated. Its checks are deterministic, but the envelope
+keeps at most five findings below severity 3, so a reading below 1.000 can come from that output
+bound rather than from any defect. The judged lane publishes per cell as a diagnostic, with no
+threshold.
 
 Every verdict recorded below applied the single 0.309 floor, because that was the rule in force
-when each skill shipped. Every shipped skill also clears both of ADR 0038's per-tier floors. ADR
-0038 carries the per-skill margin table, and it reads each sonnet margin from the current harness.
+when each skill shipped. At the shipped versions, every skill clears both re-derived floors except
+`critique-argument` on haiku, at 0.343 against 0.357. Its verdict stands, because a floor gates a new
+skill at its ship verdict and a re-measure never reopens a shipped one. ADR 0038's amendment carries
+the per-skill margin table at the shipped versions.
 ADR 0038 named its three sonnet source figures - 0.450 for `critique-clarity`, 0.573 for
 `critique-usability`, 0.745 for `critique-accessibility` - as absent from `results.json`. E63
 (dispatch run sets into results.json) pooled all three on 2026-10-29, under run sets
@@ -92,11 +95,11 @@ precision) and on sonnet (0.890 against 0.880 recall, 0.434 against 0.335 precis
 
 **Weakest point.** The sonnet recall margin is +0.010, one defect instance out of a hundred. The
 haiku cell, with a +0.240 recall margin and a +0.090 precision margin, is what carries the verdict;
-the sonnet pass is real but thin. `critique-clarity` also sets both consistency floors: 0.309 on
-haiku, from [ADR 0022](../../docs/internal/decisions/0022-consistency-floor-overall-lane-min-core.md),
-and 0.450 on sonnet, from its current-harness re-measurement, per
-[ADR 0038](../../docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md). A skill
-exactly as consistent as clarity passes either floor with no margin at all.
+the sonnet pass is real but thin. `critique-clarity` also sets the sonnet consistency floor, 0.404
+at the shipped 0.1.1, per
+[ADR 0038](../../docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md) as amended
+on 2026-10-30. On haiku it sits 0.002 above the 0.357 floor `critique-usability` sets. A skill
+exactly as consistent as clarity on sonnet passes that floor with no margin at all.
 
 **What would flip it.** A haiku dominance margin this wide is far from reversing. The sonnet cell
 is the one a different set of five runs could plausibly move, since its own margin is already
