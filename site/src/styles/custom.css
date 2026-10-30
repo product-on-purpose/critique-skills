@@ -25,6 +25,13 @@
 .mermaid {
   max-width: 100%;
 }
+/* Mermaid sizes each label box while the diagram is still in a hidden element under <body>,
+   so it measures in the body font. The finished SVG then lands inside this <pre>, whose
+   monospace font the HTML labels inherit, and a wider font in a box sized for a narrower one
+   clips (E74). Inheriting the content font makes the two fonts the same one. */
+pre.mermaid {
+  font-family: inherit;
+}
 .mermaid svg {
   max-width: 100%;
   height: auto;

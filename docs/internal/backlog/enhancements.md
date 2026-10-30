@@ -1840,7 +1840,19 @@ and the repository did not have.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
 - **Rank at intake:** unranked (added 2026-10-29, filed on the maintainer's delegation). **Status:**
-  backlog.
+  CLOSED 2026-10-29, on the maintainer's delegation to judgment. The cause: Mermaid sizes each label
+  box while the diagram sits in a hidden element under `<body>`, so it measures in the body font,
+  then the finished SVG is inserted into `<pre class="mermaid">`, where the HTML labels inherit
+  Starlight's monospace. The SVG's own style block sets `font-size` on its root but no
+  `font-family`, and its `.label` rule sets only a color, so nothing in the diagram overrides the
+  inherited font. Why the configured `fontFamily` never reaches that style block was not
+  determined, and it no longer matters for the labels. The fix is one rule in
+  `site/src/styles/custom.css`, `pre.mermaid { font-family: inherit; }`, which makes the display
+  font the measuring font. A local build reproduced the live reading first (11 of 13 non-empty
+  labels clipped, "Frozen contract" in a 96-pixel box for 115 pixels of text). After the fix, the
+  same probe read 0 clipped on both explanation pages in both themes, and 0 on the three other
+  pages that carry a diagram (`how-we-measure`, `revision-loop`, `critique-contract`). The
+  earlier counts of 20 and 14 labels included empty edge labels, which the probe now skips.
 
 ## E75 - Decide whether TOULMIN-HEDGE-DENSITY's 0.35 fire line should move
 
