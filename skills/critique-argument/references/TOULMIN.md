@@ -92,8 +92,10 @@ exists to prevent.
 Two numbers in the table above are v0.1 defaults, not measured values: the hedged-sentence ratio
 bands (0.35 and 0.50) and the claim-marker word-count boundary (300 words). Both are set so the
 scripted lane is deterministic and reproducible, which is the property the library claims for it;
-neither is calibrated against the corpus yet. P3 measurement is where they get their first evidence,
-and moving a threshold there is a revision to this file, not a contract change.
+neither is calibrated against the corpus. A fixture check on 2026-10-29 ran the hedged-sentence
+bands against two arguments written to hedge only their uncertain claims: one read 3 of 8 sentences
+(0.38, severity 2) and the other 5 of 6 (0.83, severity 3). Moving a threshold is a revision to
+this file, not a contract change.
 
 ## See also
 

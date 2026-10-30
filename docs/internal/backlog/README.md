@@ -3,7 +3,7 @@
 Local-first, version-controlled backlogs (Standard sec 7.1). Two files, plus this index:
 
 - **[enhancements.md](enhancements.md)** - features, fixes and refinements to components that already
-  exist. 74 items, `E1` through `E74`.
+  exist. 75 items, `E1` through `E75`.
 - **[new-components.md](new-components.md)** - proposals to ADD a skill, command, subagent, hook or
   chain. 5 items, `N1` through `N5`, each with a recorded why-gate verdict.
 
@@ -100,15 +100,13 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**14 items depend on nothing and can start today.** Derived from each item's own
+**13 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
 |---|---|---|---|
-| E32 | Close S-03 AC-3: flip the checkbox and add a corpus-composition CI check | S | v0.1.x |
 | E33 | Correct ROADMAP's Gold-tier bullet (3 of 4 done) and decide the tier declaration | S | v0.1.x |
 | E36 | Confirm or deprecate the reserved selector field per ADR 0012's own RC question | S | v0.1.x |
-| E37 | Run the TOULMIN-HEDGE-DENSITY false-positive check ADR 0017 named, and fix TOULMIN.md's future tense | S | v0.1.x |
 | E38 | Measure critique-accessibility's location fix on id-poor markup | S | v0.3.0 |
 | E39 | Record the CLAUDE_CODE_OAUTH_TOKEN retention decision and a rotation procedure | S | v0.1.x |
 | E42 | Reconcile 'frozen with a JSON Schema' against 'freezes at v1.0' | S | unscheduled |
@@ -117,6 +115,7 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E59 | Verify what the marketplace consumes the homepage field for | S | unscheduled |
 | E69 | Revisit ADR 0011's npm option now that the toolkit ships on npm | S | unscheduled |
 | E74 | Stop the site's Mermaid labels from clipping in the architecture overview | S | v0.3.0 |
+| E75 | Decide whether TOULMIN-HEDGE-DENSITY's 0.35 fire line should move | S | v0.3.0 |
 | E49 | Write one real tutorial for the empty Diataxis Tutorials quadrant | M | v0.3.0 |
 | E54 | Ship one documented cross-library composition workflow | M | v0.3.0 |
 
