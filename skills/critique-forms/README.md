@@ -8,7 +8,7 @@ Reviews HTML forms for how easy they are to complete, especially on a phone: inp
 keyboards, autofill tokens, field widths, required and optional marking, password rules, button
 labels, and layout. Its 24 criteria form one synthesized rubric, `FORMS`, drawn from convergent
 research by Baymard, GOV.UK, web.dev, NN/g and others, with each criterion citing its own sources
-by evidence grade. Version 0.1.0.
+by evidence grade. Version 0.1.1.
 
 ## Inventory
 

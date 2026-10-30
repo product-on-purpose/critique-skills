@@ -6,7 +6,7 @@ title: critique-argument
 
 Reviews argumentative prose - essays, proposals, position papers, recommendation memos, strategy
 docs, and op-eds - against the Toulmin model of argument: whether the claim, grounds, warrant,
-backing, qualifier, and rebuttal are present, explicit, and actually hold together. Version 0.1.0.
+backing, qualifier, and rebuttal are present, explicit, and actually hold together. Version 0.1.1.
 
 ## Inventory
 

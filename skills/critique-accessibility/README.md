@@ -8,7 +8,7 @@ Reviews HTML pages and fragments (markdown where mappable) against 27 of the 55 
 and AA success criteria: contrast, alt text, heading structure, link text, input purpose, target
 size, orientation, focus visibility, status messages, and keyboard and screen-reader access. A
 report with no findings is not an AA conformance claim; `references/WCAG.md`,
-"Scope", lists the 28 criteria this skill does not check and why. Version 0.1.1; see the
+"Scope", lists the 28 criteria this skill does not check and why. Version 0.2.0; see the
 root README's "most instructive number is a failure" section for why this skill shipped, lost to
 the unrubricked baseline, and was recalibrated in place rather than silently replaced.
 

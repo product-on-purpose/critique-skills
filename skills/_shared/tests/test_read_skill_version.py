@@ -76,3 +76,15 @@ def test_every_registered_skill_version_matches_library_json_and_checks_py() -> 
         assert version == entry["version"], entry["name"]
         stamped = re.findall(r'skill_version="([^"]+)"', (skill_dir / "scripts" / "checks.py").read_text(encoding="utf-8"))
         assert stamped == [version], f"{entry['name']}: checks.py stamps {stamped}, SKILL.md says {version}"
+
+
+def test_every_registered_skill_readme_states_its_skill_version() -> None:
+    """The skill README's "Version x.y.z" sentence is a fourth copy, and the first a reader on
+    GitHub sees. Nothing compared it until E76, so the 2026-10-28 re-measure moved every version and
+    left all seven READMEs behind. Exactly one sentence per README, so a stale second copy fails too."""
+    library = json.loads((REPO_ROOT / "library.json").read_text(encoding="utf-8"))
+    for entry in library["components"]["skills"]:
+        skill_dir = REPO_ROOT / entry["path"]
+        version = read_skill_version((skill_dir / "SKILL.md").read_text(encoding="utf-8"))
+        stated = re.findall(r"\bVersion (\d+\.\d+\.\d+)", (skill_dir / "README.md").read_text(encoding="utf-8"))
+        assert stated == [version], f"{entry['name']}: README.md states {stated}, SKILL.md says {version}"

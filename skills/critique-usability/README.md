@@ -6,7 +6,7 @@ title: critique-usability
 
 Reviews HTML or markdown UI specs, wireframe write-ups, and page mockups against Nielsen's 10
 usability heuristics: system status, user control and exits, consistency, error prevention and
-recovery, recognition over recall, and minimalist design. Version 0.1.0. The claim is narrower
+recovery, recognition over recall, and minimalist design. Version 0.1.1. The claim is narrower
 than it may look: static specs and mockups, not live running applications.
 
 ## Inventory
