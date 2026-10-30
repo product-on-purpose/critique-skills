@@ -43,6 +43,8 @@ Option 3.
 
 Confirmation at RC, per S-02 OQ-1, means one question: did any launch skill find `selector` insufficient or unnecessary? If unnecessary across all six, the field is deprecated in contract 1.1 rather than deleted.
 
+**Answered 2026-10-30: unnecessary.** No shipped skill writes `selector`, now seven rather than six. No committed envelope, golden example or bench run contains it. `critique-accessibility`, the skill this ADR expected to use it, names CSS selectors inside its prose `location` instead. The maintainer ruled the field deprecated, not deleted, in contract 1.1.0, recorded in [ADR 0042 (contract 1.1.0)](0042-contract-1-1-0-iteration-revision-brief-selector.md). Closes the question [E36 (confirm or deprecate the reserved selector)](../backlog/enhancements.md) carried.
+
 ## Consequences
 
 **Positive:** the contract cannot be wrong about a grammar it does not assert. The constitution's example validates unchanged. Skills that have a cheap structured pointer can record it from day one, so the v0.2 vocabulary design starts from collected evidence rather than from a whiteboard. `location` remains directly human-readable, which matters because the disposition step, where the library says its value lives, is a person reading findings.
