@@ -880,7 +880,13 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.1.x. **Category:** skills. **Confidence:** verified.
 - **Blocks:** Nothing today; protects the registry at the next skill or pruning pass
 - **Depends on:** Nothing
-- **Rank at intake:** 31 of 64. **Status:** backlog (recorded 2026-09-11).
+- **CLOSED 2026-10-29**, ruled on the maintainer's delegation. `check_criterion_table_completeness`
+  in `scripts/skill-selftest.py` cross-references `checks.scripted`/`checks.judged` against every
+  `references/*.md` criterion-table row, under three new rules:
+  `criterion-table-row-missing`, `criterion-table-row-duplicate`, and
+  `criterion-table-row-undeclared`. All 7 registered skills pass unchanged (125 declared IDs, zero
+  drift found).
+- **Rank at intake:** 31 of 64. **Status:** CLOSED 2026-10-29.
 
 ## E32 - Close S-03 AC-3: flip the checkbox and add a corpus-composition CI check
 
@@ -1696,8 +1702,13 @@ and the repository did not have.
 - **Size:** S. **Release:** unscheduled. **Category:** tooling. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
+- **CLOSED 2026-10-29**, ruled on the maintainer's delegation. `references/sources.md` is now a
+  named bibliography exemption. The only check it gets is `references-bibliography-empty`: at
+  least one `-` or `*` bulleted line. `critique-forms` keeps its existing N2 (critique-forms)
+  `sources.md` under `docs/internal/release-plans/`, unmoved, so this ships the mechanism without
+  touching a shipped skill's committed bibliography.
 - **Rank at intake:** unranked (added 2026-10-02, filed on the maintainer's delegation). **Status:**
-  backlog.
+  CLOSED 2026-10-29.
 
 ## E72 - Fix the site's rubric attribution for a synthesized namespace before critique-forms goes active
 

@@ -47,6 +47,7 @@ import re
 import subprocess
 import sys
 import uuid
+from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
@@ -86,6 +87,16 @@ SEMVER_RE = re.compile(
 )
 OPERATIONALIZATION_VALUES = frozenset({"paraphrased", "open-standard", "byor"})
 QUOTE_CHARS = ('"', "“", "”")
+
+# references/*.md files that are not criterion tables, so the Operationalization-column
+# requirement (check_paraphrase_heuristic's references-criterion-table-missing rule, and
+# check_criterion_table_completeness below) does not apply to them. severity-anchors.md is
+# free-form domain-anchor prose (docs/internal/skill-template.md, "references/severity-
+# anchors.md"). sources.md is E71's one named bibliography exemption: a skill whose rubric
+# is synthesized from several publishers (ADR 0035) commits its research record as a
+# bibliography, which has no criterion rows to check at all.
+BIBLIOGRAPHY_FILENAME = "sources.md"
+NON_CRITERION_TABLE_FILES = frozenset({"severity-anchors.md", BIBLIOGRAPHY_FILENAME})
 
 
 @dataclass(frozen=True)
@@ -795,7 +806,7 @@ def check_paraphrase_heuristic(skill_dir: Path) -> list[Issue]:
                         )
                     )
 
-        if path.name == "severity-anchors.md":
+        if path.name in NON_CRITERION_TABLE_FILES:
             continue
 
         tables = _find_markdown_tables(text)
@@ -963,6 +974,135 @@ def _pytest_failure_detail(result: subprocess.CompletedProcess) -> str:
 
 
 # --------------------------------------------------------------------------
+# Check 8: criterion-table completeness (E31, docs/internal/backlog/
+# enhancements.md)
+# --------------------------------------------------------------------------
+
+
+def check_criterion_table_completeness(skill_dir: Path, frontmatter: dict[str, Any]) -> list[Issue]:
+    """Cross-references checks.scripted/checks.judged against the criterion-table rows in
+    this skill's references/*.md files.
+
+    docs/internal/skill-template.md's own stated rule: "Every ID declared anywhere in
+    checks.scripted or checks.judged must have exactly one row here". Before E31 that rule
+    held only by author diligence (96 IDs, zero duplicates, hand-verified at intake); nothing
+    machine-checked it, so the next criterion edit could silently add or drop a row with no
+    CI signal. gen-site.mjs's own duplicate-ID guard catches a criterion declared by two
+    skills, not a skill's own table drifting from its own frontmatter, which is this check's
+    job instead.
+
+    Three distinct failure modes, so a pipeline agent is told exactly which half of "exactly
+    one" broke, and whether the drift started in the frontmatter or the table:
+    - a declared ID with no table row at all,
+    - a declared ID with more than one table row, and
+    - a table row naming an ID that checks.scripted/checks.judged never declared.
+    """
+    checks = frontmatter.get("checks")
+    if not isinstance(checks, dict) or "scripted" not in checks or "judged" not in checks:
+        return []  # already reported by _check_checks_lanes; say it once
+
+    # A lane is legitimately empty written either as `judged: []` or as a bare `judged:`
+    # (which parses to None, same as check_lane_manifest_consistency treats it); only a
+    # lane holding something else is the frontmatter-checks-lane-invalid defect, already
+    # reported by _check_checks_lanes, which this check skips rather than duplicating.
+    scripted = checks.get("scripted")
+    judged = checks.get("judged")
+    if (scripted is not None and not isinstance(scripted, list)) or (
+        judged is not None and not isinstance(judged, list)
+    ):
+        return []
+
+    declared = set(scripted or []) | set(judged or [])
+
+    references_dir = skill_dir / "references"
+    if not references_dir.is_dir():
+        return []  # already reported by check_paraphrase_heuristic as references-dir-missing
+
+    row_locations: dict[str, list[str]] = {}
+    for path in sorted(references_dir.glob("*.md")):
+        if path.name in NON_CRITERION_TABLE_FILES:
+            continue
+        text = path.read_text(encoding="utf-8")
+        for table in _find_markdown_tables(text):
+            header = [h.lower() for h in table["header"]]
+            if "operationalization" not in header or "id" not in header:
+                continue
+            id_index = header.index("id")
+            for row in table["rows"]:
+                if len(row) <= id_index:
+                    continue
+                row_locations.setdefault(row[id_index], []).append(str(path))
+
+    issues: list[Issue] = []
+    for criterion in sorted(declared):
+        locations = row_locations.get(criterion, [])
+        if not locations:
+            issues.append(
+                Issue(
+                    "criterion-table-row-missing",
+                    criterion,
+                    f"'{criterion}' is declared in checks.scripted or checks.judged but has no "
+                    "row in any references/*.md criterion table",
+                )
+            )
+        elif len(locations) > 1:
+            counts = Counter(locations)
+            detail = ", ".join(f"{path} (x{n})" if n > 1 else path for path, n in counts.items())
+            issues.append(
+                Issue(
+                    "criterion-table-row-duplicate",
+                    criterion,
+                    f"'{criterion}' has {len(locations)} rows, not exactly one: {detail}",
+                )
+            )
+
+    for criterion in sorted(set(row_locations) - declared):
+        issues.append(
+            Issue(
+                "criterion-table-row-undeclared",
+                criterion,
+                f"'{criterion}' has a references/*.md table row but checks.scripted and "
+                "checks.judged declare neither",
+            )
+        )
+
+    return issues
+
+
+# --------------------------------------------------------------------------
+# Check 9: bibliography exemption (E71, docs/internal/backlog/
+# enhancements.md)
+# --------------------------------------------------------------------------
+
+_BULLET_LINE_RE = re.compile(r"^\s*[-*]\s+\S")
+
+
+def check_sources_bibliography(skill_dir: Path) -> list[Issue]:
+    """references/sources.md is exempt from check_paraphrase_heuristic's and
+    check_criterion_table_completeness's criterion-table requirement (E71), but the
+    exemption is for a real bibliography, not a blank placeholder a pipeline agent forgot to
+    fill in: ADR 0035's fourth condition requires a synthesized rubric's research record to
+    be committed, and a bibliography with no entries commits nothing. The minimal check a
+    triage recommended: at least one `-`- or `*`-bulleted line.
+    """
+    path = skill_dir / "references" / BIBLIOGRAPHY_FILENAME
+    if not path.is_file():
+        return []
+    text = path.read_text(encoding="utf-8")
+    if not any(_BULLET_LINE_RE.match(line) for line in text.splitlines()):
+        return [
+            Issue(
+                "references-bibliography-empty",
+                str(path),
+                f"{BIBLIOGRAPHY_FILENAME} must contain at least one '-' or '*' bulleted "
+                "source entry (E71: the exemption from a criterion table is not an exemption "
+                "from having a bibliography)",
+            )
+        ]
+    return []
+
+
+# --------------------------------------------------------------------------
 # Advisory (non-blocking) checks
 # --------------------------------------------------------------------------
 
@@ -1057,11 +1197,13 @@ def run_selftest(skill_dir: Path) -> tuple[list[Issue], list[Issue]]:
 
     if frontmatter is not None:
         errors.extend(check_lane_manifest_consistency(skill_dir, frontmatter))
+        errors.extend(check_criterion_table_completeness(skill_dir, frontmatter))
         errors.extend(check_examples(skill_dir, frontmatter))
         errors.extend(check_trigger_evals(skill_dir, frontmatter))
         warnings.extend(check_description_quality_advisory(frontmatter))
 
     errors.extend(check_paraphrase_heuristic(skill_dir))
+    errors.extend(check_sources_bibliography(skill_dir))
     errors.extend(check_skill_md_length(skill_dir))
     errors.extend(check_test_module_names(skill_dir))
     errors.extend(check_pytest(skill_dir))
