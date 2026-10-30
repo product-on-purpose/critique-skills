@@ -7,7 +7,7 @@ title: critique-microcopy
 Reviews error messages, empty states, and other short microcopy strings, including screens
 annotated with placement, container, timing, and behavior context, against NN/g's error-message
 guidelines: plain language, specificity, constructive next steps, neutral tone, and recovery
-grace. Version 0.1.0.
+grace. Version 0.1.1.
 
 ## Inventory
 

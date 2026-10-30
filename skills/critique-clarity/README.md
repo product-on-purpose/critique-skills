@@ -6,7 +6,7 @@ title: critique-clarity
 
 Reviews markdown or plain-text prose for clarity against the Federal Plain Language Guidelines and
 Williams' *Style*: readability, passive voice, sentence length, and nominalization density.
-Version 0.1.0.
+Version 0.1.1.
 
 ## Inventory
 

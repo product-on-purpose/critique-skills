@@ -1175,7 +1175,10 @@ and the repository did not have.
 - **Derives from:** Diataxis coverage assessment: the thinnest quadrant
 - **Size:** M. **Release:** v0.3.0 (was v0.2.0). **Category:** docs. **Confidence:** verified.
 - **Blocks:** Nothing
-- **Depends on:** Nothing
+- **Depends on:** The maintainer's ruling on the interactive specimen format (decision D1 of the
+  specimen work begun 2026-10-23, still open). The tutorial is meant to walk a reader through a
+  provided artifact, and it would copy whichever specimen format that ruling settles. Added
+  2026-10-29: this field said "Nothing" while the dependency was recorded only in local notes.
 - **Rank at intake:** 52 of 64. **Status:** backlog (recorded 2026-09-11).
 - **Ruled 2026-10-15 by the maintainer:** moves to v0.3.0 at the v0.2.0 cut. The v0.2.0 exit gate,
   re-cut on 2026-09-14, never named this item, and the release does not wait on it.
@@ -1912,4 +1915,11 @@ and the repository did not have.
   all seven versions were read.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
-- **Rank at intake:** unranked (added 2026-10-29). **Status:** backlog.
+- **Rank at intake:** unranked (added 2026-10-29). **Status:** CLOSED 2026-10-29. All seven README
+  version sentences now state the shipped version: 0.2.0 for `critique-accessibility` and 0.1.1 for
+  the other six. The fix keeps the sentences and guards them rather than dropping them.
+  `test_read_skill_version.py` gains a test that requires exactly one "Version x.y.z" sentence in
+  each registered skill's README, equal to that skill's `SKILL.md` `metadata.version`. It failed on
+  the seven stale lines before the correction and passes after it. `scripts/lib/version-manifest.mjs`
+  was left alone, because it guards the plugin version against the release tag, not skill versions.
+  No skill version moved, because no `SKILL.md` or references file changed.

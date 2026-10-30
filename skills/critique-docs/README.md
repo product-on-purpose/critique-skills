@@ -6,7 +6,7 @@ title: critique-docs
 
 Reviews technical documentation pages and page trees written in markdown against the Diataxis
 framework: tutorial, how-to, reference, and explanation mode fit, plus heading structure, orphaned
-pages, cross-mode linking, and navigation-list length. Version 0.1.0.
+pages, cross-mode linking, and navigation-list length. Version 0.1.1.
 
 ## Inventory
 
