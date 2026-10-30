@@ -472,6 +472,68 @@ def test_execute_grid_a_failed_cell_does_not_stop_the_rest(tmp_path: Path) -> No
     assert "envelope" in by_condition["skill"].detail
     assert by_condition["baseline"].ok is True
     assert not (out_dir / "critique-toy" / "toy-001" / "haiku-r1.json").exists()
+    # The last response is kept, so a non-final or refused response can be read back later.
+    refused = run_bench.refused_text_path(out_dir / "critique-toy" / "toy-001" / "haiku-r1.json")
+    assert "I could not read that file, sorry." in refused.read_text(encoding="utf-8")
+
+
+def test_execute_grid_keeps_the_response_of_a_refused_scripted_only_cell(tmp_path: Path) -> None:
+    """Four cells in bench-2026-10-28 were refused as scripted-only and kept nothing, so "the
+    critic judged and missed" could not be told from "the critic never judged". The refused cell
+    must still write no envelope, but its response text, narration included, must survive."""
+    _write_fake_skill(tmp_path, "critique-toy", scripted=["TOY-ALPHA"], judged=["TOY-BETA"])
+    corpus_dir = tmp_path / "bench" / "corpus"
+    _write_corpus_artifact(corpus_dir, "toy", "toy-001", "Body one.\n")
+    manifest_path = corpus_dir / "toy" / "toy-001.manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["defects"] = [{"criterion": "TOY-BETA"}]
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    out_dir = tmp_path / "runs"
+    tiers = [Tier(alias="haiku", model_id="claude-haiku-4-5-20251001")]
+    cells = [c for c in plan_grid(["critique-toy"], tiers, k=1, corpus_dir=corpus_dir, out_dir=out_dir) if c.condition == "skill"]
+    scripted_only = _toy_envelope_from_skill()
+    scripted_only["findings"] = [f for f in scripted_only["findings"] if f["lane"] == "scripted"]
+    response = "The judged sweep found nothing to report.\n" + json.dumps(scripted_only)
+    client = FakeClient([FakeResponse(response)])
+
+    results = execute_grid(cells, client=client, repo_root=tmp_path, now_fn=_now)
+
+    assert [r.ok for r in results] == [False]
+    assert "no judged-lane finding" in results[0].detail
+    skill_path = out_dir / "critique-toy" / "toy-001" / "haiku-r1.json"
+    assert not skill_path.exists()
+    text = run_bench.refused_text_path(skill_path).read_text(encoding="utf-8")
+    assert text.startswith("critique-toy: the envelope carries no judged-lane finding")
+    assert "The judged sweep found nothing to report." in text
+    assert '"TOY-ALPHA"' in text
+
+
+def test_a_refused_cells_text_names_no_local_path(tmp_path: Path) -> None:
+    """The text is committed to a public repository, and the run narrates from a staging
+    directory that, on a workstation, sits under the user's home directory."""
+    staging = tmp_path / "home" / "someone" / "tmp" / "stage-1"
+    home = tmp_path / "home" / "someone"
+    text = f"Reading {staging / 'toy-001.md'} and {staging.as_posix()}/x, then {home / 'notes'}."
+
+    scrubbed = run_bench._scrub_paths(text, {staging: "<staging>", home: "<home>"})
+
+    assert str(tmp_path) not in scrubbed and tmp_path.as_posix() not in scrubbed
+    assert "<staging>" in scrubbed and "<home>" in scrubbed
+
+
+def test_a_refused_cells_text_is_invisible_to_every_envelope_reader(tmp_path: Path) -> None:
+    """The scorer and the envelope validator both discover by *.json, so the refused text must
+    never end in .json, or a refused run would be scored as though it were complete."""
+    from bench.metrics.__main__ import _discover_envelopes
+    from contract.validate_envelopes import find_envelope_files
+
+    refused = run_bench.refused_text_path(tmp_path / "critique-toy" / "toy-001" / "haiku-r1.json")
+    refused.parent.mkdir(parents=True)
+    refused.write_text(json.dumps(_toy_envelope_from_skill()), encoding="utf-8")
+
+    assert not refused.name.endswith(".json")
+    assert find_envelope_files(tmp_path) == []
+    assert _discover_envelopes(tmp_path) == []
 
 
 def test_execute_grid_rejects_an_artifact_whose_bytes_do_not_match_the_manifest_sha256(tmp_path: Path) -> None:

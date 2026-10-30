@@ -377,7 +377,14 @@ class JudgedLaneError(RuntimeError):
     """Raised when a skill run cannot be turned into an envelope at all: the response was not
     JSON, or was JSON of the wrong shape. The cell is recorded as failed rather than written,
     because a harness must never invent or partially assemble measurement evidence.
+
+    `raw_text` carries what the CLI printed, when there was a response at all, so execute_grid can
+    keep it beside the cell it failed. It is evidence of the failure, never a measurement.
     """
+
+    def __init__(self, message: str, *, raw_text: str | None = None) -> None:
+        super().__init__(message)
+        self.raw_text = raw_text
 
 
 def _strip_code_fence(text: str) -> str:
@@ -644,6 +651,33 @@ def call_skill_lane(
     directory, so the corpus path never reaches the skill and the sibling seeded-defect manifest
     is not discoverable. See staged_artifact().
     """
+    envelope, _ = _call_skill_lane_with_text(
+        client,
+        model_id=model_id,
+        skill=skill,
+        staged_path=staged_path,
+        repo_root=repo_root,
+        severity_3_threshold=severity_3_threshold,
+    )
+    return envelope
+
+
+def _call_skill_lane_with_text(
+    client: Any,
+    *,
+    model_id: str,
+    skill: str,
+    staged_path: Path,
+    repo_root: Path,
+    severity_3_threshold: int = 0,
+) -> tuple[dict[str, Any], str]:
+    """call_skill_lane, also returning the response text the envelope came from.
+
+    execute_skill_cell needs the text for one case: an envelope it refuses after the fact. Four
+    such cells in `bench-2026-10-28` kept nothing, so whether the critic judged and missed or never
+    judged at all could not be read back. The narration before the envelope is the only record of
+    which steps the run took.
+    """
     instruction = _SKILL_RUN_INSTRUCTION.format(skill=skill, artifact=staged_path.name)
     if severity_3_threshold:
         # Only when it is not the default. agents/critique-critic.md documents this input as "a
@@ -662,7 +696,7 @@ def call_skill_lane(
         last_text = _strip_code_fence(_response_text(response))
         envelope = _extract_envelope(last_text)
         if envelope is not None:
-            return _sanitize_envelope_prose(envelope)
+            return _sanitize_envelope_prose(envelope), last_text
         # No envelope is usually a NON-FINAL response rather than a refusal. Measured 2026-08-09, a
         # cell returned "The critique-critic agent is running in the background to evaluate
         # clarity-001.md. I'll output the final run envelope when it completes." In a one-shot
@@ -674,7 +708,8 @@ def call_skill_lane(
 
     raise JudgedLaneError(
         f"{skill}: no run envelope after {SKILL_RUN_ATTEMPTS} attempts. The last response was "
-        f"probably non-final (the run had not finished when the process exited): {last_text[:300]}"
+        f"probably non-final (the run had not finished when the process exited): {last_text[:300]}",
+        raw_text=last_text,
     )
 
 
@@ -879,15 +914,22 @@ def execute_skill_cell(
     # E27: the CLI loads a fresh copy of the plugin, never the live tree, and the copy is compared
     # before and after the run. See staged_plugin().
     with staged_plugin(repo_root) as plugin, staged_artifact(cell.artifact, repo_root=repo_root) as staged:
+        local_paths = {staged.parent: "<staging>", plugin: "<plugin>", Path.home(): "<home>"}
         before = tree_snapshot(plugin)
-        envelope = call_skill_lane(
-            client,
-            model_id=cell.tier.model_id,
-            skill=cell.skill,
-            staged_path=staged,
-            repo_root=plugin,
-            severity_3_threshold=severity_3_threshold,
-        )
+        try:
+            envelope, raw_text = _call_skill_lane_with_text(
+                client,
+                model_id=cell.tier.model_id,
+                skill=cell.skill,
+                staged_path=staged,
+                repo_root=plugin,
+                severity_3_threshold=severity_3_threshold,
+            )
+        except JudgedLaneError as exc:
+            if exc.raw_text:
+                exc.raw_text = _scrub_paths(exc.raw_text, local_paths)
+            raise
+        raw_text = _scrub_paths(raw_text, local_paths)
         changes = snapshot_changes(before, tree_snapshot(plugin))
     # Two kinds of change, two consequences. A modified or deleted file means the run did not run
     # the plugin the evidence says it ran, so the cell fails. An added file does not: every SKILL.md
@@ -931,7 +973,8 @@ def execute_skill_cell(
                 f"{cell.artifact.artifact_id} plants {len(expected_judged)} defect(s) under this "
                 f"skill's judged criteria ({', '.join(sorted(expected_judged))}). Lanes present: "
                 f"{sorted(l for l in lanes if l)}. A scripted-only envelope is not a complete run "
-                "and must not be scored as one."
+                "and must not be scored as one.",
+                raw_text=raw_text,
             )
 
     envelope["run"] = {
@@ -977,6 +1020,27 @@ def _write_text(path: Path, text: str) -> None:
         handle.write(text)
 
 
+def _scrub_paths(text: str, replacements: dict[Path, str]) -> str:
+    """Replace each local path in `text` with its placeholder, in both slash styles.
+
+    A refused cell's text is committed beside the envelopes, and the run narrates from inside a
+    temporary staging directory. On a workstation that path names the running user's home
+    directory, which is the same leak execute_skill_cell's docstring keeps out of the `run` block.
+    """
+    # Longest first, so a staging directory inside the home directory is named as staging.
+    for path, placeholder in sorted(replacements.items(), key=lambda kv: -len(str(kv[0]))):
+        for form in {str(path), path.as_posix()}:
+            if form:
+                text = text.replace(form, placeholder)
+    return text
+
+
+def refused_text_path(out_path: Path) -> Path:
+    """Where a failed cell's response text goes: `haiku-r4.json.refused.txt` beside the envelope
+    path it never got, matching the baseline's `haiku-r4.json.raw.txt`."""
+    return out_path.with_name(out_path.name + ".refused.txt")
+
+
 @dataclass
 class CellResult:
     cell: GridCell
@@ -997,6 +1061,8 @@ def execute_grid(
     that fails (a bad scripted-lane exit, an unparseable judged response, a schema-invalid
     assembled envelope) is recorded as a failure and does not stop the rest of the grid: a
     harness that aborts on the first bad cell throws away every good run that ran before it.
+    When the failure carries the model's response text, it is kept at refused_text_path() so the
+    cause can be read back later; no envelope is written for that cell.
     """
     now_fn = now_fn or _utc_now_iso
     frontmatter_cache: dict[str, dict[str, Any]] = {}
@@ -1030,6 +1096,12 @@ def execute_grid(
                 _write_text(cell.out_path.with_name(cell.out_path.name + ".raw.txt"), raw_text)
             results.append(CellResult(cell=cell, ok=True))
         except Exception as exc:  # a harness must keep going and report, never crash the whole grid on one bad cell
+            raw_text = getattr(exc, "raw_text", None)
+            if raw_text:
+                # The suffix ends in .txt, never .json: every reader that discovers envelopes
+                # (bench.metrics, contract/validate_envelopes.py, bench.variance) walks *.json, so
+                # a refused run's text can never be scored or counted as one.
+                _write_text(refused_text_path(cell.out_path), f"{exc}\n\n{raw_text}")
             results.append(CellResult(cell=cell, ok=False, detail=str(exc)))
 
     return results
