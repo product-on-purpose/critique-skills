@@ -927,6 +927,11 @@ and the repository did not have.
   under v0.4.0+, names only chain and hook coverage (G1 and G3), and says the folder READMEs, docs
   frontmatter and source docblocks already pass the strict gate. A strict run that day still reported
   "Tier: Convergent (no blockers detected)". The tier-declaration half is still open.
+- **CLOSED 2026-10-30.** The maintainer ruled the tier-declaration half on the triage's
+  recommendation: `library.json` keeps `tier: convergent`. Gold's G1 (hook documentation) and G3
+  (chain eval coverage) pass only vacuously, because the plugin declares no hooks and no chain
+  contract, and declaring Advanced on vacuous passes would claim more than the plugin shows. Revisit
+  when N4 (the revision-loop chain) ships its chain contract and G3 evaluates real edges.
 
 ## E34 - Close the SKIP_DIRS carry-forward note - fixed upstream and already adopted
 
@@ -979,8 +984,15 @@ and the repository did not have.
 - **Derives from:** ADR 0012 (location grammar: free text plus reserved selector)
 - **Size:** S. **Release:** v0.1.x. **Category:** contract. **Confidence:** verified.
 - **Blocks:** Nothing
-- **Depends on:** Nothing
+- **Depends on:** Nothing for the answer; the deprecation ships with N4's contract 1.1.0 (added
+  2026-10-30)
 - **Rank at intake:** 36 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Ruled 2026-10-30: unnecessary, so deprecated in contract 1.1.0.** No shipped skill writes
+  `selector`, and no committed envelope, golden example or bench run contains it. The dated answer is
+  appended to ADR 0012, and [ADR 0042 (contract 1.1.0)](../decisions/0042-contract-1-1-0-iteration-revision-brief-selector.md)
+  records the deprecation with the other two 1.1.0 changes. **The answer half is done. The
+  deprecation is not built:** it ships in contract 1.1.0, which N4's build produces, so this item
+  now depends on N4.
 
 ## E37 - Run the TOULMIN-HEDGE-DENSITY false-positive check ADR 0017 named, and fix TOULMIN.md's future tense
 
@@ -1036,7 +1048,11 @@ and the repository did not have.
 - **Size:** S. **Release:** v0.1.x. **Category:** docs. **Confidence:** likely.
 - **Blocks:** Nothing operationally
 - **Depends on:** Nothing
-- **Rank at intake:** 39 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Rank at intake:** 39 of 64. **Status:** CLOSED 2026-10-30 (recorded 2026-09-11). The maintainer
+  ruled on the triage's recommendation: the token is retained. ADR 0030 gains an amendment recording
+  the decision, the token's documented one-year lifetime, and a rotation procedure. The
+  documentation describes no way to revoke a `setup-token` credential, and deleting the secret does
+  not revoke it, so the amendment says so rather than inventing a procedure.
 
 ## E40 - Look at a Mermaid diagram in light and dark on the live site
 
@@ -1245,7 +1261,8 @@ and the repository did not have.
   envelopes with no model call, not on a live run. `docs/how-to/gate-in-ci.md` now says the workflow
   covers any shipped skill and adds a multi-envelope loop, and both gate pages pin `v0.2.0`. The
   v0.3.0 exit-gate condition in `ROADMAP.md` is left for the maintainer to mark met, because that
-  reading is theirs to accept.
+  reading is theirs to accept. **Accepted 2026-10-30:** the maintainer accepted the reading, and the
+  ROADMAP condition is marked met.
 - **Rank at intake:** 57 of 64. **Status:** closed 2026-10-23.
 
 ## E54 - Ship one documented cross-library composition workflow
@@ -1257,7 +1274,9 @@ and the repository did not have.
 - **Derives from:** ROADMAP.md v0.3.0 E3 (Cross-library composition)
 - **Size:** M. **Release:** v0.3.0. **Category:** docs. **Confidence:** verified.
 - **Blocks:** Nothing
-- **Depends on:** Nothing
+- **Depends on:** N4 (the revision-loop chain) being built (added 2026-10-30). The maintainer ruled
+  that the recipe produces a revision brief with N4's brief writer, so E54 is built after N4, and the
+  brief joins the contract in [ADR 0042 (contract 1.1.0)](../decisions/0042-contract-1-1-0-iteration-revision-brief-selector.md).
 - **Rank at intake:** 58 of 64. **Status:** backlog (recorded 2026-09-11).
 
 ## E55 - Build chain and hook evaluation coverage (Gold checks G1 and G3)

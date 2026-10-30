@@ -160,7 +160,8 @@ agreeing with itself.
 
 **The token is a real credential and should be treated as one.** It is long-lived, it is tied to a
 personal subscription rather than to the repository, and it grants whatever that subscription
-grants. Rotating it is `claude setup-token` again followed by re-setting the secret.
+grants. Rotating it is `claude setup-token` again followed by re-setting the secret. **Amended
+2026-10-30:** the token is retained, and the full procedure is in "Amendment, 2026-10-30" below.
 
 ## Implemented in two halves; the first is done
 
@@ -617,6 +618,36 @@ is now a decision rather than an assumption, tracked as
 run through `claude --plugin-dir`. Its fidelity condition is recorded here as unmet rather than
 quietly dropped. Ruled on the maintainer's delegation, 2026-09-25, as
 [E64 (ADR 0030 after the sonnet gate)](../backlog/enhancements.md).
+
+### Amendment, 2026-10-30: the token is retained, and how to rotate it
+
+**The decision.** The `CLAUDE_CODE_OAUTH_TOKEN` repository secret stays. It is the only credential
+`bench.yml` uses for a live dispatch, and a dry run needs no secret. The keep-or-remove question was
+raised on 2026-08-08 and settled only in an uncommitted note, so the maintainer ruled it on
+2026-10-30, closing [E39 (OAuth token retention and rotation)](../backlog/enhancements.md).
+
+**What the Claude Code documentation says, read 2026-10-30.**
+
+- A `claude setup-token` credential lasts one year. This token was minted for the 2026-08-07
+  acceptance gate, so unless it has been re-minted since, it expires around 2027-08-07. That date is
+  inferred from the mint date, not read from the token.
+- No revocation procedure for a `setup-token` credential is documented.
+- Deleting the GitHub secret does not revoke the credential it held. The token stays valid wherever
+  else a copy exists.
+
+**Rotation**, before the expiry date or whenever the token may have been exposed:
+
+1. Run `claude setup-token` on the maintainer's machine, signed in to the subscription the bench
+   should bill.
+2. Replace the secret with `gh secret set CLAUDE_CODE_OAUTH_TOKEN`, pasting the new token at the
+   prompt, so it never appears in shell history.
+3. Confirm the new token with the smallest live dispatch the maintainer approves. A dry run does not
+   exercise the secret, so it proves nothing about the token.
+
+**Exposure.** Because revocation is not documented and deleting the secret does not revoke, an
+exposed token cannot be shown to be dead from this repository. Rotate it at once, then ask Anthropic
+support whether the old credential can be revoked. Whether minting a new token invalidates the old one is not
+documented either, so do not assume it does.
 
 ## Open questions
 

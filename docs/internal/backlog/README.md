@@ -100,21 +100,17 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**10 items depend on nothing and can start today.** Derived from each item's own
+**6 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
 |---|---|---|---|
-| E33 | Correct ROADMAP's Gold-tier bullet (3 of 4 done) and decide the tier declaration | S | v0.1.x |
-| E36 | Confirm or deprecate the reserved selector field per ADR 0012's own RC question | S | v0.1.x |
 | E38 | Measure critique-accessibility's location fix on id-poor markup | S | v0.3.0 |
-| E39 | Record the CLAUDE_CODE_OAUTH_TOKEN retention decision and a rotation procedure | S | v0.1.x |
 | E42 | Reconcile 'frozen with a JSON Schema' against 'freezes at v1.0' | S | unscheduled |
 | E43 | Create a v1.0 readiness tracker for the four declaration criteria | S | v1.0.0 |
 | E51 | Give the precision and corpus-provenance limitations a retirement path or an explicit 'accepted' | S | unscheduled |
 | E59 | Verify what the marketplace consumes the homepage field for | S | unscheduled |
 | E69 | Revisit ADR 0011's npm option now that the toolkit ships on npm | S | unscheduled |
-| E54 | Ship one documented cross-library composition workflow | M | v0.3.0 |
 
 With S-07's AC-4 closed, every criterion in that spec passes and
 [ADR 0034](../decisions/0034-v0.1.x-exit-gate-declaration.md)'s two named conditions for calling
