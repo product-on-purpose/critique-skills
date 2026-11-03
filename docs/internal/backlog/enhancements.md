@@ -1137,7 +1137,7 @@ and the repository did not have.
 - **Why:** The only v0.2/v0.3 candidate that changes what a user can do with the library; its true cost (invocation layer, not contract layer) is now known and should not be re-derived.
 - **Evidence:** contract/critique-contract.schema.json:87-93,111-125,418-424; docs/reference/criterion-ids.md:57,64; docs/explanation/methodology.md section 3 (Bring Your Own Rubric, Status: Provisional); scripts/skill-selftest.py:87; skills/_shared/tests/test_findings.py:65-76; skills/_shared/merge.py:130-145; agents/critique-critic.md:28-33; docs/internal/skill-template.md lines 250-257 and :256 ('byor - ... not used by any v0.1 skill'); examples/README.md and examples/recipes/ (no byor recipe); grep of all six skills/critique-*/SKILL.md for 'byor' (zero matches); ROADMAP.md:56
 - **Derives from:** ROADMAP.md v0.2.0 E3 (BYOR mode); live decision 5
-- **Size:** L. **Release:** v0.3.0. **Category:** skills. **Confidence:** verified.
+- **Size:** L. **Release:** v0.4.0+. **Category:** skills. **Confidence:** verified.
 - **Blocks:** Every later skill's BYOR support
 - **Depends on:** E1 and E10; a named flagship skill
 - **Rank at intake:** 45 of 64. **Status:** backlog (recorded 2026-09-11).
@@ -1145,6 +1145,10 @@ and the repository did not have.
   [ADR 0039 (BYOR measured by parity)](../decisions/0039-byor-measured-by-parity.md). This item's
   spec sets the parity pass band and the rewrite rule, and it decides whether to add judged-defect
   recipes to the microcopy corpus. The parity run needs its own approval.
+- **Moved out of v0.3.0, 2026-11-03:** the maintainer scoped this item to a bare-bones proof of
+  concept on an unmerged branch, which cannot meet a gate condition worded as a measured feature,
+  so the condition left the v0.3.0 exit gate and the release became v0.4.0+. The Change and Done
+  text above describes the full build, which is what v0.4.0+ would still have to deliver.
 
 ## E46 - Sync the samples-corpus THREAD_PROFILES placeholders from pm-skills
 
@@ -1181,6 +1185,8 @@ and the repository did not have.
 - **Blocks:** The v1.0 per-skill pruning criterion (E43 row 1)
 - **Depends on:** E1; real usage volume
 - **Rank at intake:** 48 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Spec:** [E48's spec (disposition telemetry)](../release-plans/_unassigned/E48_disposition-telemetry/spec.md),
+  ruled 2026-10-30, not built.
 
 ## E49 - Write one real tutorial for the empty Diataxis Tutorials quadrant
 
@@ -1278,6 +1284,8 @@ and the repository did not have.
   that the recipe produces a revision brief with N4's brief writer, so E54 is built after N4, and the
   brief joins the contract in [ADR 0042 (contract 1.1.0)](../decisions/0042-contract-1-1-0-iteration-revision-brief-selector.md).
 - **Rank at intake:** 58 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Spec:** [E54's spec (cross-library composition)](../release-plans/_unassigned/E54_cross-library-composition/spec.md),
+  ruled 2026-10-30, not built. Its one paid run is deferred until N4 (the revision-loop chain) is built.
 
 ## E55 - Build chain and hook evaluation coverage (Gold checks G1 and G3)
 

@@ -270,6 +270,12 @@ re-derived 0.357. It is a stretch skill, so it does not set the floor, and its s
 for the reason above. The sentence "every shipped skill clears both floors" is no longer true, and
 the documents that said it now say this instead.
 
+**Ruled 2026-11-03: a stretch skill below a floor does not block a release.** The maintainer ruled this
+in a decision walk. A floor gates a new skill at its ship verdict, and the core skills set it, so
+`critique-argument`'s -0.014 on haiku blocks no release. The margin stays disclosed in the table above.
+A core skill cannot fall below its tier's floor under this rule, because re-measuring a core skill
+re-derives the floor.
+
 **Why the scripted lane reads below 1.000 after E73.** Methodology section 7 bounds every envelope:
 it keeps every finding at severity 3 or 4, plus at most five below severity 3, ranked by severity,
 then criterion, then location, across both lanes (`skills/_shared/envelope.py`, `rank_and_bound`).

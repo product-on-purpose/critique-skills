@@ -133,7 +133,7 @@ v0.1.x finished are both discharged.
 - **BYOR.** E10 (the measurement ruling) gates E45 (the build) gates every later skill's BYOR support.
   E10 was ruled on 2026-10-24
   ([ADR 0039 (BYOR measured by parity)](../decisions/0039-byor-measured-by-parity.md)), so E45 is
-  unblocked.
+  unblocked. E45 moved out of v0.3.0 to v0.4.0+ on 2026-11-03.
 - **Gold tier.** E52 (who performs revise) gates N4 (the revision-loop chain) gates E55 (G1 and G3
   coverage) gates any tier declaration above Convergent. E52 was ruled on 2026-10-25
   ([ADR 0040 (the revision loop pauses with a revision brief)](../decisions/0040-revision-loop-pauses-with-a-revision-brief.md)),

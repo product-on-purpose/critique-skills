@@ -39,7 +39,8 @@ BYOR's criteria arrive at run time, from the user. The benchmark corpus is keyed
 each seeded defect in a manifest names the criterion it breaks. A criterion that does not exist until
 run time cannot have a seeded defect in advance. E10 asked whether BYOR is measured some other way,
 or is exempt, and why. The v0.3.0 exit gate requires that ruling to be recorded, and it requires E45
-to be measured under it.
+to be measured under it. (**Amended 2026-11-03:** the maintainer moved E45 to v0.4.0+, so the gate now
+asks only for the ruling. This ADR's measurement rule stands for when E45 is built.)
 
 Three facts bound the answer.
 
