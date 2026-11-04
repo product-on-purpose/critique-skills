@@ -24,9 +24,6 @@ permissions:
   contents: write
 
 env:
-  # agent-skills-toolkit, pinned for reproducibility; bump deliberately to adopt toolkit changes
-  # (docs/internal/decisions/0011-gate-wiring-toolkit-wrapper.md). Kept identical to ci.yml's pin.
-  TOOLKIT_REF: a2a54fa8551fce0af6382a5ef24ccced975edd06
   NODE_VERSION: '22.12.0'
 
 jobs:
@@ -35,13 +32,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Checkout the toolkit validators (pinned)
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: product-on-purpose/agent-skills-toolkit
-          ref: ${{ env.TOOLKIT_REF }}
-          path: .agent-skills-toolkit
 
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -53,9 +43,8 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install toolkit dependencies
+      - name: Install the toolkit at the version package-lock.json pins
         run: npm ci
-        working-directory: .agent-skills-toolkit
 
       # smoke's first half must run before any pip install, because it asserts the state a new user
       # is in: no dependencies. The uninstall mirrors ci.yml's smoke job, for the same reason.
@@ -73,8 +62,6 @@ jobs:
 
       # The rest of the deterministic suite, re-run at release time in the order ci.yml lists it.
       - name: Conformance gate
-        env:
-          AGENT_SKILLS_TOOLKIT: ${{ github.workspace }}/.agent-skills-toolkit
         run: npm run check
 
       - name: Python unit tests
@@ -90,8 +77,6 @@ jobs:
         run: python -m bench.generator verify --corpus bench/corpus
 
       - name: Check generated artifacts and documented commands for drift
-        env:
-          AGENT_SKILLS_TOOLKIT: ${{ github.workspace }}/.agent-skills-toolkit
         run: npm run gen -- --check
 
       - name: Audit npm dependencies

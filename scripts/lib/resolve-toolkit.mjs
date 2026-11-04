@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // what-it-is:   the agent-skills-toolkit resolver
-// what-it-does: finds a local checkout of agent-skills-toolkit (the validators this plugin
-//               does not vendor), by AGENT_SKILLS_TOOLKIT env var, a sibling checkout, an
-//               .agent-skills-toolkit clone, or the same next to a linked worktree's main root
+// what-it-does: finds agent-skills-toolkit (the validators this plugin does not vendor): the
+//               AGENT_SKILLS_TOOLKIT env var if set, otherwise the version package.json pins, in
+//               node_modules here or next to a linked worktree's main root
 // why:          scripts/check.mjs and scripts/gen-plugin-manifest.mjs both need the toolkit's
 //               scripts and must resolve it the same way, so this is the one shared lookup
 //               (Pattern A, the thinking-framework-skills wrapper model)
@@ -11,13 +11,11 @@ import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { execSync } from "node:child_process";
 
-export const TOOLKIT_REPO_URL = "https://github.com/product-on-purpose/agent-skills-toolkit";
-
 /**
- * Candidate toolkit paths, in resolution order: the AGENT_SKILLS_TOOLKIT env var, an
- * .agent-skills-toolkit clone or sibling checkout of this root, and the same two next to the
- * MAIN repo root (worktree-portable: when `root` is a linked worktree, e.g. under
- * .claude/worktrees/, a toolkit checked out next to the main checkout is still found).
+ * Candidate toolkit paths, in resolution order: the AGENT_SKILLS_TOOLKIT env var, which lets a
+ * contributor test against a toolkit checkout, then the pinned package in this root's node_modules,
+ * then in the MAIN repo root's (worktree-portable: when `root` is a linked worktree, e.g. under
+ * .claude/worktrees/, the main checkout's install is still found).
  */
 function candidates(root) {
   let mainRoot = root;
@@ -29,14 +27,12 @@ function candidates(root) {
   }
   return [
     process.env.AGENT_SKILLS_TOOLKIT,
-    resolve(root, ".agent-skills-toolkit"),
-    resolve(root, "..", "agent-skills-toolkit"),
-    resolve(mainRoot, ".agent-skills-toolkit"),
-    resolve(mainRoot, "..", "agent-skills-toolkit"),
+    resolve(root, "node_modules", "agent-skills-toolkit"),
+    resolve(mainRoot, "node_modules", "agent-skills-toolkit"),
   ].filter(Boolean);
 }
 
-/** Resolve a local checkout of agent-skills-toolkit, or return null if none is found. */
+/** Resolve agent-skills-toolkit, or return null if none is found. */
 export function resolveToolkit(root) {
   return candidates(root).find((p) => existsSync(resolve(p, "scripts", "check.mjs"))) ?? null;
 }

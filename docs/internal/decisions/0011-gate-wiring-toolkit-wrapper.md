@@ -3,7 +3,7 @@
 ## TL;DR
 - **Decision:** `scripts/check.mjs` and `scripts/gen-plugin-manifest.mjs` are thin Node wrappers that resolve a local `agent-skills-toolkit` checkout (by `AGENT_SKILLS_TOOLKIT` env var, a sibling checkout, or an `.agent-skills-toolkit` clone) and `spawnSync` its own `scripts/check.mjs` and `scripts/generators/gen-manifest.mjs`, forwarding CLI args unchanged. No toolkit checks are vendored or reimplemented.
 - **Why:** `thinking-framework-skills`, the settled sibling precedent, wires the gate exactly this way (Pattern A). Copying it verbatim means the validators can never drift from the family's shared Standard implementation, and satisfies S-01 (repo-scaffold spec) AC-7's instruction to inspect and copy the family's current answer rather than invent a new mechanism.
-- **Status:** Accepted (2026-07-31).
+- **Status:** Accepted (2026-07-31). **Amended 2026-11-03: the wrappers stay, and the toolkit they wrap now comes from a pinned npm version instead of a checkout (see the amendment at the end).**
 
 - **Status:** Accepted
 - **Date:** 2026-07-31
@@ -53,3 +53,15 @@ Option 3. `scripts/lib/resolve-toolkit.mjs` is the single shared resolver both `
 - `package.json` - `npm run check` and `npm run gen` scripts calling the two wrappers above.
 
 Not yet created: `.github/workflows/ci.yml`, which would pin the toolkit ref and set `AGENT_SKILLS_TOOLKIT` for CI (S-07, CI-pipeline spec scope).
+
+## Amendment, 2026-11-03: the wrapper now finds a pinned npm version
+
+**What changed.** Option 2 was set aside because the toolkit did not ship as a versioned npm package. It now does, so [E69 (revisit the npm option)](../backlog/enhancements.md) reopened the choice. The maintainer ruled in a decision walk to move if the package could do what the checkout did. That ruling is provisional: the maintainer is also considering deprecating the Standard's tier levels, which would change what this gate reports.
+
+**What was measured, with no model call.** Against this repository at `a37d9cc`, the wrapper reads the same result from either source. Pinned checkout `a2a54fa` and npm `agent-skills-toolkit@1.23.0` both grade Convergent with 0 errors and 0 warnings, and all 4 site guards pass. `npm run gen -- --check` passes with the npm package as the toolkit. Both sources are Standard 0.17, read from the `STANDARD.md` the package ships. The one difference is that 1.23.0 adds an informational advisory, `ADV1`, which never affects the tier, the error count or the exit code.
+
+**What moved.** `package.json` pins `agent-skills-toolkit` to an exact version, and `package-lock.json` records it. `scripts/lib/resolve-toolkit.mjs` now looks for the `AGENT_SKILLS_TOOLKIT` env var, then the package in `node_modules`, here or in a linked worktree's main root. It no longer looks for a sibling checkout or an `.agent-skills-toolkit` clone. `ci.yml` and `release.yml` run `npm ci` instead of cloning the toolkit at `TOOLKIT_REF`.
+
+**What did not move.** The wrappers stay, because they add this repository's own guards around the toolkit: the site guards in `check.mjs` and the phantom-row filter in `gen-index.mjs`. They still reach the toolkit's scripts by path. The package ships those files, but its `exports` map names only `check.mjs`, `evaluate` and `tier-report`, so a future toolkit release could move the generator paths without a breaking-change signal. Any such move fails loudly at the next deliberate version bump, not silently, because the wrappers spawn those paths and CI runs them.
+
+**Consequences.** The pin is a tagged release, which `npm audit` and dependency tooling can see, and the root `audit` job now covers it. The toolkit no longer needs a second clone. Adopting a toolkit change takes an explicit edit of the version in `package.json`, as `TOOLKIT_REF` did. The gate now depends on the npm registry being reachable when CI runs `npm ci`, as `site` already did.

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // what-it-is:   the conformance gate entry point
-// what-it-does: resolves a local checkout of agent-skills-toolkit and runs its aggregate check
+// what-it-does: resolves the pinned agent-skills-toolkit and runs its aggregate check
 //               (scripts/check.mjs) against this plugin, forwarding CLI args unchanged, then runs
 //               the docs-site guards when a built site is present
 // why:          this plugin wraps the toolkit rather than vendoring its checks, so the validators
@@ -11,17 +11,17 @@
 // Usage:  node scripts/check.mjs [<plugin-path>] [--strict] [--mode local|published-verdict] [--profile <name>]
 // With no <plugin-path>, defaults to this repo's root.
 //
-// To run locally, clone the toolkit next to this repo (or set AGENT_SKILLS_TOOLKIT):
-//   git clone https://github.com/product-on-purpose/agent-skills-toolkit.git ../agent-skills-toolkit
+// To run locally, install the version package.json pins, then run the gate:
+//   npm ci
 //   node scripts/check.mjs
 //
-// CI clones it to ./.agent-skills-toolkit and sets AGENT_SKILLS_TOOLKIT (see
-// .github/workflows/ci.yml), so the same command runs unchanged.
+// CI runs the same two commands (.github/workflows/ci.yml). Set AGENT_SKILLS_TOOLKIT to a toolkit
+// checkout to grade against an unreleased toolkit instead.
 import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { resolveToolkit, toolkitCandidates, TOOLKIT_REPO_URL } from "./lib/resolve-toolkit.mjs";
+import { resolveToolkit, toolkitCandidates } from "./lib/resolve-toolkit.mjs";
 import { checkSite } from "./check-site.mjs";
 import { checkReadmeLinks } from "./check-readme-links.mjs";
 import { checkReadmeFigures } from "./check-readme-figures.mjs";
@@ -33,8 +33,7 @@ const toolkit = resolveToolkit(ROOT);
 if (!toolkit) {
   console.error(
     "Conformance gate: agent-skills-toolkit (the validators) not found.\n" +
-      "Clone it next to this repo, or set AGENT_SKILLS_TOOLKIT:\n" +
-      `  git clone ${TOOLKIT_REPO_URL}.git ../agent-skills-toolkit\n` +
+      "Run `npm ci` to install the pinned version, or set AGENT_SKILLS_TOOLKIT to a checkout of it.\n" +
       "Looked in:\n  " +
       toolkitCandidates(ROOT).join("\n  "),
   );

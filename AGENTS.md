@@ -57,11 +57,11 @@ node scripts/check.mjs [<plugin-path>] [--strict] [--mode local|published-verdic
 
 Equivalent: `npm run check`.
 
-Requires a local checkout of `agent-skills-toolkit` next to this repo, or `AGENT_SKILLS_TOOLKIT`
-set to one:
+Requires `agent-skills-toolkit`, which `package.json` pins to an exact version. Install it once
+(set `AGENT_SKILLS_TOOLKIT` to a toolkit checkout only to grade against an unreleased toolkit):
 
 ```
-git clone https://github.com/product-on-purpose/agent-skills-toolkit.git ../agent-skills-toolkit
+npm ci
 ```
 
 Regenerate the native manifest from `library.json` after any manifest change:
@@ -81,7 +81,7 @@ checked. Every command below is exactly what the workflow runs and reproduces th
 locally. A tenth job, `ci-ok`, runs no command and
 is described under the table. Node matrix: `22.12.0` and `24`. Python:
 `3.12`. See `docs/internal/release-plans/plan_v0.1.0/S-07_ci-pipeline/spec.md` for the acceptance
-criteria and `docs/internal/decisions/0011-gate-wiring-toolkit-wrapper.md` for the toolkit-checkout
+criteria and `docs/internal/decisions/0011-gate-wiring-toolkit-wrapper.md` for the pinned toolkit
 prerequisite `npm run check` and `npm run gen -- --check` share.
 
 | Job | Command |

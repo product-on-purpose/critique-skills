@@ -32,11 +32,8 @@ on:
 permissions:
   contents: read
 
-env:
-  # agent-skills-toolkit, pinned for reproducibility; bump deliberately to adopt toolkit changes
-  # (docs/internal/decisions/0011-gate-wiring-toolkit-wrapper.md). a2a54fa is Standard 0.17, adopted
-  # 2026-09-30 by E62 (Standard version pin); untagged, re-pin to v1.20.0 when the toolkit cuts it.
-  TOOLKIT_REF: a2a54fa8551fce0af6382a5ef24ccced975edd06
+# agent-skills-toolkit is an exact devDependency in package.json, pinned for reproducibility. Bump it
+# deliberately to adopt toolkit changes (docs/internal/decisions/0011-gate-wiring-toolkit-wrapper.md).
 
 jobs:
   conformance:
@@ -49,25 +46,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Checkout the toolkit validators (pinned)
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: product-on-purpose/agent-skills-toolkit
-          ref: ${{ env.TOOLKIT_REF }}
-          path: .agent-skills-toolkit
-
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install toolkit dependencies
+      - name: Install the toolkit at the version package-lock.json pins
         run: npm ci
-        working-directory: .agent-skills-toolkit
 
       - name: Run conformance gate
-        env:
-          AGENT_SKILLS_TOOLKIT: ${{ github.workspace }}/.agent-skills-toolkit
         run: npm run check # doc-check
 
   unit-python:
@@ -195,25 +182,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Checkout the toolkit validators (pinned)
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: product-on-purpose/agent-skills-toolkit
-          ref: ${{ env.TOOLKIT_REF }}
-          path: .agent-skills-toolkit
-
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install toolkit dependencies
+      - name: Install the toolkit at the version package-lock.json pins
         run: npm ci
-        working-directory: .agent-skills-toolkit
 
       - name: Check generated artifacts and documented commands for drift
-        env:
-          AGENT_SKILLS_TOOLKIT: ${{ github.workspace }}/.agent-skills-toolkit
         run: npm run gen -- --check # doc-check
 
   audit:

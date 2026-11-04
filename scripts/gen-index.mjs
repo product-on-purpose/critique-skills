@@ -30,7 +30,7 @@ import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { resolveToolkit, toolkitCandidates, TOOLKIT_REPO_URL } from "./lib/resolve-toolkit.mjs";
+import { resolveToolkit, toolkitCandidates } from "./lib/resolve-toolkit.mjs";
 import { dropPhantomRows } from "./lib/gen-index-filter.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -40,8 +40,7 @@ const toolkit = resolveToolkit(ROOT);
 if (!toolkit) {
   console.error(
     "gen-index: agent-skills-toolkit (the generator) not found.\n" +
-      "Clone it next to this repo, or set AGENT_SKILLS_TOOLKIT:\n" +
-      `  git clone ${TOOLKIT_REPO_URL}.git ../agent-skills-toolkit\n` +
+      "Run `npm ci` to install the pinned version, or set AGENT_SKILLS_TOOLKIT to a checkout of it.\n" +
       "Looked in:\n  " +
       toolkitCandidates(ROOT).join("\n  "),
   );

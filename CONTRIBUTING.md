@@ -77,13 +77,15 @@ Before opening a PR, run the same conformance gate CI runs:
 npm run check
 ```
 
-which is equivalent to `node scripts/check.mjs`. It requires a local checkout of
-`agent-skills-toolkit` next to this repository, or an `AGENT_SKILLS_TOOLKIT` environment variable
-pointing at one:
+which is equivalent to `node scripts/check.mjs`. It requires `agent-skills-toolkit`, which
+`package.json` pins to an exact version. Install it once:
 
 ```
-git clone https://github.com/product-on-purpose/agent-skills-toolkit.git ../agent-skills-toolkit
+npm ci
 ```
+
+To grade against an unreleased toolkit, set an `AGENT_SKILLS_TOOLKIT` environment variable to a
+checkout of it.
 
 See [`AGENTS.md`](AGENTS.md) ("Checks") for the full command table CI runs, one command per job
 (conformance, unit-python, unit-node, schema, corpus, drift, audit): run whichever ones your change

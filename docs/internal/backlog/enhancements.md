@@ -1707,7 +1707,10 @@ and the repository did not have.
 - **Blocks:** Nothing
 - **Depends on:** Nothing. The natural moment is the toolkit's first npm release that carries
   Standard 0.17.
-- **Rank at intake:** unranked (added 2026-09-30). **Status:** backlog.
+- **Rank at intake:** unranked (added 2026-09-30). **Status:** closed 2026-11-03. The gate and
+  generators moved to pinned npm `agent-skills-toolkit@1.23.0`, which ships Standard 0.17. The maintainer's
+  ruling is provisional; see the amendment in
+  [ADR 0011 (gate wiring)](../decisions/0011-gate-wiring-toolkit-wrapper.md).
 
 ## E70 - Teach the skill template how a synthesized rubric lays out its references and anchors
 
