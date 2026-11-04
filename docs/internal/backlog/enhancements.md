@@ -1950,3 +1950,85 @@ and the repository did not have.
   the seven stale lines before the correction and passes after it. `scripts/lib/version-manifest.mjs`
   was left alone, because it guards the plugin version against the release tag, not skill versions.
   No skill version moved, because no `SKILL.md` or references file changed.
+
+## E77 - Keep a skill cell's response text when its assembled envelope fails contract validation
+
+- **Target:** `bench/run_bench.py` (`execute_skill_cell` and `execute_grid`)
+- **Change:** `execute_grid` validates a skill cell's envelope after `execute_skill_cell` returns, and
+  it raises a plain `RuntimeError` when validation fails. That error carries no `raw_text`, so no
+  `.refused.txt` file is written. Done: a cell that fails contract validation keeps its response
+  text beside the path its envelope would have used, as every other refused cell already does.
+- **Why:** The refused-cell text exists so that a failed paid cell can be diagnosed afterwards. This
+  failure path still loses that text, so the cause of a failed cell cannot be read back.
+- **Evidence:** Dispatch 41741268703 lost `clarity-002`, repetition 5, on 2026-11-03 with
+  `summary.by_severity: histogram total 12 does not equal len(findings) (10) plus suppressed_count (5)`.
+  Its results branch holds no `.refused.txt` for that cell. `bench/run_bench.py` raises the error at
+  the "assembled envelope is not contract-valid" line in `execute_grid`.
+- **Derives from:** the critic prose-location measurement of PR 122, closed unmerged on 2026-11-04.
+- **Size:** S. **Release:** v0.3.0. **Category:** bench. **Confidence:** high; the code path and the
+  missing file were both read.
+- **Blocks:** Nothing
+- **Depends on:** Nothing
+- **Rank at intake:** unranked (added 2026-11-04). **Status:** open.
+
+## E78 - Rule on the TOULMIN.md note that landed after critique-argument 0.1.1 was measured
+
+- **Target:** `skills/critique-argument/references/TOULMIN.md`, `skills/critique-argument/SKILL.md`
+- **Change:** `critique-argument` 0.1.1 was measured at commit `9822b52` in run set
+  `bench-2026-10-28`. PR 116 then reworded the Thresholds note in `TOULMIN.md`, and the skill's
+  version did not move. Done: the maintainer rules on one of two outcomes before the next release.
+  Either the next measured version move carries the note, or the note is reverted so that the
+  file matches what was measured.
+- **Why:** This repository moves a skill's version when its `SKILL.md` or references file changes,
+  as E76's closing note assumes. PR 116's own commit message says the critic reads `TOULMIN.md` at
+  run time. A release cut from `main` today would label an unmeasured file as version 0.1.1.
+- **Evidence:** `git diff 9822b52 fbd9956 -- skills/critique-argument/references/TOULMIN.md` shows
+  the note, and `git log` names PR 116 as its source. Whether the note changes any finding is
+  unknown. PR 122's critique-argument comparison cannot separate its effect from that PR's edit.
+- **Derives from:** the critic prose-location measurement of PR 122, closed unmerged on 2026-11-04.
+- **Size:** S. **Release:** v0.3.0. **Category:** skills. **Confidence:** high that the slip exists;
+  low on whether the note affects results.
+- **Blocks:** Nothing
+- **Depends on:** Nothing
+- **Rank at intake:** unranked (added 2026-11-04). **Status:** open.
+
+## E79 - Decide whether SKILL.md's top-level checks and rubric_sources keys should move for portability
+
+- **Target:** every `skills/critique-*/SKILL.md` frontmatter
+- **Change:** `agent-skills-toolkit` 1.23.0 adds advisory ADV1 (portability). It reports that
+  claude.ai and the Skills API reject any top-level `SKILL.md` key outside a six-field list. All
+  seven skills declare `checks` and `rubric_sources` at the top level. Done: the maintainer rules
+  on whether the skills should load on those two surfaces. If so, both keys move under `metadata`,
+  which the advisory says is always allowed, and every reader of those keys moves with them.
+- **Why:** A skill that passes the gate can fail on upload to claude.ai. Claude Code accepts these
+  keys, so nothing fails today, and the advisory is not a gate failure.
+- **Evidence:** `scripts/advisory/adv1-portability.mjs` in the toolkit's npm package, version 1.23.0,
+  read 2026-11-03. `grep -lE "^(checks|rubric_sources):" skills/critique-*/SKILL.md` lists all seven
+  skills. This entry has not tested an upload, and it has not checked whether the Standard requires
+  these keys at the top level.
+- **Derives from:** the comparison for E69 (npm option for the gate), 2026-11-03.
+- **Size:** M. **Release:** unassigned. **Category:** skills. **Confidence:** high that the keys are
+  top-level; medium on the rejection, which rests on the toolkit's vendor citation.
+- **Blocks:** Nothing
+- **Depends on:** Nothing
+- **Rank at intake:** unranked (added 2026-11-04). **Status:** open.
+
+## E80 - Decide whether the output bound should rank scripted findings ahead of judged ones
+
+- **Target:** `skills/_shared/envelope.py` (`_rank_key`, `rank_and_bound`)
+- **Change:** Below severity 3, the envelope keeps five findings. It ranks them by severity, then
+  criterion, then location, so the lane plays no part. A judged finding that differs between
+  repetitions can therefore displace a deterministic scripted finding. Done: the maintainer rules
+  on whether scripted findings outrank judged ones at equal severity.
+- **Why:** ADR 0038's 2026-10-30 amendment attributes the scripted lane's shortfall below 1.000 to
+  this bound, and it leaves this question undecided. A change would alter what shipped skills
+  report, so it needs version moves and a paid re-measure.
+- **Evidence:** `skills/_shared/envelope.py` sets `OUTPUT_BOUND_BELOW_SEVERITY_3 = 5`, and
+  `_rank_key` has no lane term. `critique-clarity`'s scripted lane reads 0.881 on Sonnet in ADR
+  0038, whose amendment states "What this amendment does not decide."
+- **Derives from:** ADR 0038 (per-tier consistency floors), amended 2026-10-30.
+- **Size:** M. **Release:** unassigned. **Category:** contract. **Confidence:** high; the code and
+  the ADR were both read.
+- **Blocks:** Nothing
+- **Depends on:** Nothing
+- **Rank at intake:** unranked (added 2026-11-04). **Status:** open.
