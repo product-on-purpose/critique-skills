@@ -1,0 +1,116 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The employee receives a confirmation email once processing finishes. Then, the employee reviews the confirmation summary before submitting the final request.\"",
+      "fix": "Reorder to show employee review before submission: move paragraph 3 before paragraph 2, so the employee reviews, submits, then receives confirmation email.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "How to Apply, second and third paragraphs",
+      "severity": 3,
+      "violation": "The sequence is contradictory - the employee cannot review and submit before processing finishes if the email arrives after processing is complete."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"An incomplete request pauses the timeline until the missing item arrives.\"",
+      "fix": "Replace with \"until the requester submits the missing documentation\" or \"until the requester provides the missing information.\"",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Approval Timeline, second paragraph",
+      "severity": 3,
+      "violation": "Unclear whether \"missing item\" refers to documentation the requester must provide or something external; the phrasing suggests external delivery."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You must keep your equipment in good working condition and we may ask for a brief photo check once a year.\"",
+      "fix": "Rewrite as \"Employees must keep their equipment in good working condition, and the company may request a brief photo check once a year.\"",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Restrictions and Exceptions, first paragraph",
+      "severity": 3,
+      "violation": "Inconsistent voice - shifts from third person (\"employees\") used throughout to second person (\"you\") and first person plural (\"we\")."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"You record the stipend item on the request form... Countersign the employee request within two business days. You track its status...\"",
+      "fix": "Assign explicit roles: \"Employees record the stipend item... Managers countersign within two business days... Finance reconciles...\"",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Terminology Notes, entire section",
+      "severity": 3,
+      "violation": "Uses \"you\" and \"countersign\" without specifying which role (employee, manager, or staff) performs each action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Completing the request begins with confirming eligibility, and the uploaded receipt.\"",
+      "fix": "Replace with a complete ordered list: \"Completing the request requires confirming eligibility, uploading the receipt, obtaining manager approval, finance confirmation, and final submission.\"",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Request Steps",
+      "severity": 3,
+      "violation": "Sentence is grammatically incomplete and vague; it names only two partial elements without clarifying the full sequence."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Every entry carries a date stamp so the record stays easy to audit.\"",
+      "fix": "Remove the sentence or replace it with content specific to special cases that adds new information.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Special Cases, first paragraph",
+      "severity": 3,
+      "violation": "This sentence repeats verbatim from the Program Overview section, introducing unnecessary redundancy."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.\"",
+      "fix": "Delete these sentences; keep only \"The benefits team coordinates every stipend request from intake to payout.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Program Coordination",
+      "severity": 3,
+      "violation": "These three sentences are unrelated to home-office equipment stipends and belong in different documents."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The most recent version supersedes the one that came before it\" appears in both sections describing different publications.",
+      "fix": "Keep the phrase in one section only (Program Overview) and remove it from Questions and Updates, or replace with unique language specific to each section.",
+      "id": "F-008",
+      "lane": "judged",
+      "location": "Program Overview (first mention) and Questions and Updates (second mention)",
+      "severity": 3,
+      "violation": "The identical phrase is repeated in two separate sections, creating redundancy."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-11-04T00:17:10Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

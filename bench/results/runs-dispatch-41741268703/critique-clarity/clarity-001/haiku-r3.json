@@ -1,0 +1,128 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "The Eligibility section (paragraph 1) describes eligibility conditions for employees but does not distinguish between HR staff who will apply these rules and employees who must meet them. Similarly, the How to Apply section shifts abruptly in paragraph 3 from employee-facing instructions ('Employees start...') to a statement about manager scheduling issues ('Then, the review takes longer because the manager who normally handles it is traveling'), which describes an internal operational problem, not information an employee needs to apply.",
+      "fix": "Separate employee-facing content from administrative/manager-facing content into distinct sections, or clearly label which paragraphs are intended for which audience.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Eligibility section and How to Apply section",
+      "severity": 3,
+      "violation": "The document addresses both employees and managers/HR staff within the same sections without clearly separating which audience each paragraph is for, making it unclear which instructions are for whom."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "The document contains a section titled 'Terminology Notes' in position 8, which explains how terms like 'stipend item' and 'request' are used throughout the document. This section appears after the reader has already encountered these terms multiple times in earlier sections (Eligibility, How to Apply, Approval Timeline, etc.). Additionally, section 10 is titled 'Overview' and largely duplicates content from section 1 (Program Overview), appearing far later in the document where it cannot serve as a preview for readers.",
+      "fix": "Move the Terminology Notes section to the beginning of the document, immediately after the Program Overview, before the reader encounters the defined terms. Delete or consolidate the duplicate Overview section (section 10).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Document structure: Terminology Notes (section 8) and duplicate Overview (section 10)",
+      "severity": 3,
+      "violation": "Sections that a reader needs early to understand terminology appear after the reader has already encountered those terms; a duplicate Overview section appears out of place, disrupting document coherence."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "evidence": "36-word sentence, 4 subordinate-clause markers: Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 3",
+      "severity": 3,
+      "violation": "The sentence runs to 36 words with 4 subordinate-clause markers, longer than the reader can hold in mind on a single pass."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "The paragraph reads: 'Also, the portal saves a draft automatically every few minutes. Employees can return to finish later without losing progress. Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.' The first two sentences establish the topic of the portal's auto-save feature (employee benefit). The third sentence, beginning with 'Then,' abruptly shifts to an operational problem about manager scheduling and communication, abandoning the portal auto-save topic and jumping to an unrelated administrative issue. This forces the reader to re-orient at the sentence boundary.",
+      "fix": "Move the sentence about the manager being unavailable to a separate 'Review Process' or 'Approval Delays' section, or delete it if it is a temporary situation not relevant to the standard policy.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "How to Apply section, paragraph 3",
+      "severity": 3,
+      "violation": "A sentence introduces a wholly new subject (manager scheduling) that the prior sentence never mentioned or implied, breaking the topic thread and forcing the reader to re-orient."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ACTIVE",
+      "evidence": "The request is reviewed within two business days.",
+      "fix": "Rewrite the sentence in active voice, naming the actor that performs the action.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence uses a be-verb plus past-participle passive construction in a context where the actor is recoverable and worth naming directly."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONCISE",
+      "evidence": "Also, the deposit happens in order to offset costs the employee already paid at this point in time.",
+      "fix": "Replace the wordy phrase with its plain equivalent (for example, because for due to the fact that).",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "Reimbursement Amounts, paragraph 2",
+      "severity": 2,
+      "violation": "The sentence uses a wordy construction from the fixed wordy-phrase list that a shorter equivalent would carry with no loss of meaning."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "The document uses 'manager' in the Approval Timeline section ('The manager confirms the equipment category...') but also uses 'approver' in the Program Coordination section ('The team then routes the request to the correct approver based on department'). These appear to refer to the same role but use different terms.",
+      "fix": "Use one consistent term throughout (either 'manager' or 'approver') and define it once if ambiguity is possible.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Throughout the document, particularly Approval Timeline and Required Documentation sections",
+      "severity": 2,
+      "violation": "Two terms that appear to refer to the same concept (the person who approves requests) are used interchangeably without a defined-terms section or explicit equivalence statement, forcing the reader to check whether they mean the same thing."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-DOUBLE-NEGATIVE",
+      "evidence": "However, reimbursement is not available without a completed receipt.",
+      "fix": "Restate the sentence with at most one negation, or recast it as a positive statement.",
+      "id": "F-008",
+      "lane": "scripted",
+      "location": "Eligibility, paragraph 2",
+      "severity": 2,
+      "violation": "2 negation markers from the fixed negation list co-occur in one clause, so the reader has to work out the statement's logical sign before understanding it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-HEADINGS",
+      "evidence": "heading: Overview",
+      "fix": "Replace the heading with text specific enough to be found by scanning.",
+      "id": "F-009",
+      "lane": "scripted",
+      "location": "the Overview heading",
+      "severity": 2,
+      "violation": "The heading text matches the fixed list of non-specific heading labels, so a reader scanning headings cannot tell whether the section applies to them."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-001.md",
+    "artifact_sha256": "32ee3fed58b3e9b931565041a2e195dade8e2d19c9e9172fe28b38bdb5f6ef2c",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-11-03T23:50:31Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 10,
+      "3": 4,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 5
+  }
+}

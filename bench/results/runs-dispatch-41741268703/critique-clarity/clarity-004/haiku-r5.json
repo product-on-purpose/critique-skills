@@ -1,0 +1,51 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Lines 57 (Request Steps: 'Completing the request begins with confirming eligibility, and uploading the receipt.') appears after line 47 (Restrictions and Exceptions ends), then lines 59 - 73 introduce Special Cases, Program Coordination, Review Responsibility, and Questions and Updates. A reader completing the application process reads How to Apply (lines 19 - 23), then encounters four unrelated sections before Request Steps reappears.",
+      "fix": "Consolidate all procedural steps for the employee reader into a single 'How to Apply' section in the following order: (1) Eligibility confirmation, (2) Upload receipt, (3) Review summary and submit, (4) Manager review timeline, (5) Finance review (if over $200), (6) Reimbursement schedule. Move administrative background (Program Coordination, Review Responsibility) to a separate 'How We Process Your Request' section after the employee-facing procedure, or omit if not necessary for the employee reader.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Lines 19 - 73",
+      "severity": 2,
+      "violation": "The document mixes employee-facing procedural steps (How to Apply, Approval Timeline, Required Documentation) with internal administrative information (Program Coordination, Review Responsibility) without clear separation. The Request Steps section (line 57) appears much later after Restrictions and Exceptions, disconnected from the main How to Apply flow."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Line 21: 'the portal saves a draft automatically' (real actor: system/benefits team). Line 23: 'The summary shows the equipment cost' (real actor: benefits portal/system). Line 29: 'an incomplete request pauses the timeline' (real actor: system/workflow or team). Line 39: 'The stipend pays up to 500 dollars' (real actor: finance office/company). Line 47: 'the policy applies to one device per category' (real actor: company/benefits team enforces).",
+      "fix": "Revise to name real actors: Line 21: 'The portal automatically saves your draft every few minutes' or 'Your draft saves automatically every few minutes.' Line 23: 'You can review the summary showing the equipment cost and requested delivery date.' Line 29: 'If your request is incomplete, we pause the timeline until the missing item arrives.' Line 39: 'We deposit up to 500 dollars per benefit year within one pay cycle.' Line 47: 'We apply this policy to one device per category per employee.'",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Lines 21, 23, 29, 39, 47",
+      "severity": 2,
+      "violation": "Grammatical subjects use abstractions (portal, summary, request, stipend, policy) instead of naming the real actors (company, finance office, system, benefits team) who perform the actions."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-11-04T00:43:30Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

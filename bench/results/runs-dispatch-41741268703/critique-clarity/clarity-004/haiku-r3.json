@@ -1,0 +1,95 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Line 45: 'You must keep your equipment in good working condition and we may ask for a brief photo check once a year.' Lines 5-8 describe internal IT asset group processes. Terminology Notes section (lines 49-53) uses 'you' for employee instructions.",
+      "fix": "Reorganize document into two separate sections: one for employees (application steps, eligibility, requirements) and one for internal documentation (process overview, program coordination). Use consistent pronouns - address employees directly with 'you' throughout employee-facing sections. Move Program Overview to an appendix or separate internal documentation.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Line 45, also lines 5-8",
+      "severity": 3,
+      "violation": "Mixes second-person employee address with first-person organizational perspective; audience shifts between employees and internal processes without clear separation"
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Program Overview appears first but describes internal IT asset group processes irrelevant to applicants. 'Required Documentation' section (lines 31-35) appears after 'How to Apply' (lines 17-23), forcing employees to start their application before knowing what documents are needed. Typical employee workflow: verify eligibility, gather documents, then apply.",
+      "fix": "Reorder sections to match employee workflow: (1) Program Overview (renamed to employee-focused summary), (2) Eligibility, (3) Required Documentation, (4) How to Apply, (5) Approval Timeline, (6) Reimbursement Amounts, (7) Restrictions and Exceptions. Move internal coordination details (lines 63-73) to a separate internal-only appendix.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section ordering: Program Overview (line 3), How to Apply (line 17), Required Documentation (line 31), Approval Timeline (line 25)",
+      "severity": 3,
+      "violation": "Section order tracks internal process workflow rather than employee's actual task sequence for applying"
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "First sentence (line 51): 'You record the stipend item on the request form.' Last sentence (line 53): 'You track its status there until the payment clears.' Content jumps between defining terminology for 'stipend item' (line 51-52), describing payment processing (line 52), and then explaining portal submission (line 53). A reader finishing this section cannot state a single coherent theme.",
+      "fix": "Split into two sections: (1) Define terms in a 'Glossary' or 'Key Terms' section - list each term and its meaning concisely. (2) Describe the process workflow in a 'Process Timeline' section. Or, if terminology must be explained in context, rewrite the section to cover one coherent aspect, e.g., 'What happens after you submit' (tracking through payment), and move term definitions to a glossary.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Lines 49-53 (Terminology Notes section)",
+      "severity": 3,
+      "violation": "Section title promises 'Terminology Notes' but content mixes unrelated process steps and definitions with no limited, consistent set of themes"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Line 33: 'A photo of the receipt is enough for most requests.' Line 35: 'Additionally, employees must retain receipts for one year after the purchase date.' Two terms used: 'photo of the receipt' and 'receipts' - ambiguous whether originals must be retained or photos suffice.",
+      "fix": "Use one consistent term throughout. Either: (1) state 'A photo of the receipt is sufficient for submission; retain the original receipt for one year,' or (2) clarify 'Submit proof of purchase (a photo or original receipt); you must retain the original receipt for one year.' Define 'proof of purchase' once at first use.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Lines 33 and 35",
+      "severity": 2,
+      "violation": "Uses different terms ('photo of the receipt' vs. 'receipts') for the same documentation requirement without stating equivalence"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "Line 45: 'You must keep your equipment in good working condition and we may ask for a brief photo check once a year.' Line 47: 'Similarly, the policy applies to one device per category per employee.' Two distinct restrictions: (1) equipment maintenance and photo checks, (2) device-per-category limits. Transition word 'Similarly' implies they are parallel, but one concerns condition maintenance while the other concerns quantity.",
+      "fix": "Either combine into one rule if they are truly parallel (unlikely), or separate them: 'Equipment Requirements: [maintenance clause]. Device Limits: One device per category per employee.' Or use a clearer transition: 'Additionally,' or 'Separate from maintenance requirements,' to signal the restriction is distinct.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Lines 43-47 (Restrictions and Exceptions section)",
+      "severity": 2,
+      "violation": "Two unrelated restrictions joined with 'Similarly' despite not being genuinely similar; reader cannot identify how they relate"
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "Sentence subjects: 'You record' (line 51) → 'Finance reconciles' (line 51) → 'Payroll releases' (line 52) → 'you submit' (line 53) → 'You track' (line 53). Each sentence introduces a different actor; no sentence opens with information the prior sentence established.",
+      "fix": "If this section is meant to explain terminology, group related terms together (e.g., all employee actions in one paragraph, all internal team actions in another). If it's meant to describe the process, rewrite with a consistent subject (e.g., 'The request follows this timeline: You record... Then Finance reconciles... Then Payroll releases...') and use transitions to track the flow.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Lines 49-53 (Terminology Notes section)",
+      "severity": 2,
+      "violation": "Subjects jump between unrelated actors ('You', 'Finance', 'Payroll') without connecting them to a running topic thread"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-11-04T00:37:57Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

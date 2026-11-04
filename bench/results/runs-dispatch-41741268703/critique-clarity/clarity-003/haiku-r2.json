@@ -1,0 +1,117 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Section 'How to Apply' includes 'Employees start a stipend request in the benefits portal' (employee instruction), 'The manager signs it' (manager instruction), and 'finance confirms the budget line' (administrative instruction) without signal as to which audience should read which part. Section 'Terminology Notes' uses 'You record the stipend item' and 'You submit the request' but earlier sections addressed employees by third person. Section 'Restrictions and Exceptions' uses second person 'You must keep your equipment' followed by first person 'we may ask for a brief photo check', mixing perspectives.",
+      "fix": "Separate content by intended audience explicitly using headings or subheadings, or clearly signal in each section which audience is being addressed.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Multiple sections including How to Apply, Terminology Notes, and Program Coordination",
+      "severity": 3,
+      "violation": "The document addresses multiple distinct audiences - employees, managers, administrative staff - within the same sections and paragraphs without clear signals as to which instructions belong to which reader, making it unclear which actions each audience is responsible for executing."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "The central concept of what the employee is requesting is variously called 'equipment' (lines 5, 23, 27, 28, 45, 47), 'item' (lines 32, 51, 52), 'device' (line 47), 'purchase' (line 35, 51), and 'covered purchase amount' (line 51). Additionally, the documentation artifact is called 'reimbursement log' (line 7), 'request log' (line 51), 'request form' (line 51), and simply 'request' throughout.",
+      "fix": "Choose one primary term for each concept throughout (e.g., 'equipment,' 'request form') and define them once in a glossary or terminology section if synonym use is necessary.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Throughout the document, particularly in sections Program Overview, Reimbursement Amounts, and Restrictions and Exceptions",
+      "severity": 3,
+      "violation": "Multiple terms refer to the same central concepts without signals that they mean the same thing, forcing the reader to verify whether 'equipment,' 'item,' and 'device' are equivalent or refer to different things, and whether 'reimbursement log,' 'request log,' and 'request form' are the same document or three different documents."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-PARAGRAPH",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout.",
+      "fix": "Rewrite the opening sentence to state the topic the rest of the paragraph covers.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "The paragraph's opening sentence shares almost no vocabulary with the rest of the paragraph, so it does not preview the paragraph's actual topic."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "The section opens with 'The benefits team coordinates every stipend request from intake to payout.' The next three sentences are 'A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.' These three sentences have no connection to each other or to the opening statement about stipend coordination.",
+      "fix": "Remove the three unrelated sentences (travel audit, remote work guidance, coffee budget) from this section and move them to an appropriate location or delete them if they do not belong in a stipend policy document.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Program Coordination section, sentences 2-4",
+      "severity": 3,
+      "violation": "A five-sentence section cannot be read as a coherent unit. The opening states the theme is stipend coordination, but sentences 2-4 pursue three unrelated topics (travel expenses, remote work policy, office budget) with no signal connecting them to each other or to the main topic, so a reader finishing the section cannot state what it was actually about."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "Sentence 1: 'The benefits team coordinates every stipend request from intake to payout.' Sentence 2: 'A separate audit last spring reviewed unrelated travel expenses.' Sentence 3: 'Federal guidance on remote work continues to evolve each year.' Sentence 4: 'The office coffee budget was reset at the start of the quarter.' None of sentences 2-4 open with information that sentence 1 or the surrounding section has given the reader about stipend coordination.",
+      "fix": "Either integrate these three sentences into appropriate prior sections if they are relevant to the stipend policy, or remove them entirely.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Program Coordination section, transition from sentence 1 to sentences 2-4",
+      "severity": 3,
+      "violation": "Sentences 2-4 each open with wholly new information that has no basis in the prior sentence or surrounding context, requiring the reader to abandon the thread about stipend coordination and re-orient to three separate new topics in sequence."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SUBJECT-VERB-OBJECT",
+      "evidence": "Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.",
+      "fix": "Move the interrupting clause elsewhere, or split it into its own sentence.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 2",
+      "severity": 2,
+      "violation": "3 comma-set-off clause(s) totalling 14 words intervene between the sentence's apparent subject and its verb."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-TRANSITIONS",
+      "evidence": "An incomplete request pauses the timeline until the missing item arrives. The...",
+      "fix": "Open the paragraph with a transition word that states its relationship to the prior paragraph.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 2",
+      "severity": 2,
+      "violation": "The paragraph opens with none of the fixed transition words, so the reader is not told how it relates to the paragraph before it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-PARALLELISM",
+      "evidence": "Completing the request begins with confirming eligibility, and the uploaded receipt.",
+      "fix": "Restate every item in the series with the same grammatical form.",
+      "id": "F-008",
+      "lane": "scripted",
+      "location": "Request Steps, paragraph 1",
+      "severity": 2,
+      "violation": "The series' 2 items mix grammatical forms (gerund, other) at their head words instead of sharing one form."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-11-04T00:19:33Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

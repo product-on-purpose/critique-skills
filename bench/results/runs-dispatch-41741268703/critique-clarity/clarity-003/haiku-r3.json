@@ -1,0 +1,106 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-PARAGRAPH",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout.",
+      "fix": "Rewrite the opening sentence to state the topic the rest of the paragraph covers.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "The paragraph's opening sentence shares almost no vocabulary with the rest of the paragraph, so it does not preview the paragraph's actual topic."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout. A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.",
+      "fix": "Remove the unrelated sentences about travel audit, federal guidance, and coffee budget. Replace with sentences that actually describe program coordination for the stipend program.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Program Coordination (lines 65-66)",
+      "severity": 3,
+      "violation": "The section titled Program Coordination opens with the coordinating role, then lists three facts entirely unrelated to the stipend program or coordination - a travel audit, remote-work guidance, and a coffee budget - that have no connection to the topic. A reader cannot state what the section is actually about."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "You record the stipend item on the request form. Finance reconciles the reimbursable item against the request log each month. Payroll releases the covered purchase amount after that monthly review. Also, you submit the request in the portal. Countersign the employee request within two business days. You track its status there until the payment clears.",
+      "fix": "Clarify audience by separating employee instructions from staff instructions, or maintain consistent second-person address.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Terminology Notes, paragraph 1 (lines 49-54)",
+      "severity": 2,
+      "violation": "The paragraph mixes direct address (you, your) with third-person institutional roles (Finance, Payroll) without clarifying which audience each sentence addresses, forcing the reader to infer who is responsible for each action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "the employee personally uses (line 15), The requester gets an automatic reminder (line 29), Employees keep proof of purchase (line 33), the employee request (line 53)",
+      "fix": "Choose one term for the person applying - either employee or requester - and use it consistently throughout.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Multiple sections (Eligibility line 15, Approval Timeline line 29, Required Documentation line 33, Terminology Notes line 53)",
+      "severity": 2,
+      "violation": "The terms employee and requester refer to the same role but are used interchangeably without a stated equivalence, forcing the reader to infer whether they name the same concept or two related but distinct participants."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Request Steps appears at line 57, after Terminology Notes and before Special Cases, rather than immediately following How to Apply.",
+      "fix": "Move Request Steps section to follow How to Apply section immediately, and consolidate background sections (Program Coordination, Review Responsibility, Questions and Updates) at the end.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Document structure (line 57, Request Steps placement)",
+      "severity": 2,
+      "violation": "Section ordering does not follow the reader's actual task sequence. The reader needs to know the specific request steps immediately after learning the general apply process, but Request Steps appears halfway through the document after unrelated sections, forcing the reader to backtrack."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SUBJECT-VERB-OBJECT",
+      "evidence": "Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.",
+      "fix": "Move the interrupting clause elsewhere, or split it into its own sentence.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 2",
+      "severity": 2,
+      "violation": "3 comma-set-off clause(s) totalling 14 words intervene between the sentence's apparent subject and its verb."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-TRANSITIONS",
+      "evidence": "An incomplete request pauses the timeline until the missing item arrives. The...",
+      "fix": "Open the paragraph with a transition word that states its relationship to the prior paragraph.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 2",
+      "severity": 2,
+      "violation": "The paragraph opens with none of the fixed transition words, so the reader is not told how it relates to the paragraph before it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-11-04T00:22:22Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 10,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 5
+  }
+}

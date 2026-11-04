@@ -1,0 +1,106 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-PARAGRAPH",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout.",
+      "fix": "Rewrite the opening sentence to state the topic the rest of the paragraph covers.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "The paragraph's opening sentence shares almost no vocabulary with the rest of the paragraph, so it does not preview the paragraph's actual topic."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout. A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.",
+      "fix": "Remove the sentences about the travel audit, remote work guidance, and coffee budget. Rewrite the paragraph to focus exclusively on how the benefits team coordinates stipend requests, or move those sentences to appropriate policy documents.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "Sentences completely unrelated to the policy topic appear after the opening sentence, disrupting the paragraph's coherence and suggesting unedited or carelessly assembled content."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "You must keep your equipment and we may ask for a brief photo check (line 45); you submit the request in the portal. Countersign the employee request within two business days (lines 53-54); The finance office reviews every stipend request over 200 dollars (line 69).",
+      "fix": "Clearly segment the document by audience. Use a consistent voice for each audience group: either address employees throughout with 'you,' or create separate sections labeled by role. Maintain voice consistency within each section.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Multiple sections: Restrictions and Exceptions (line 45), Terminology Notes (lines 51-53), Review Responsibility (line 69)",
+      "severity": 2,
+      "violation": "The document shifts inconsistently between addressing employees directly, addressing managers, and describing processes in third person, creating confusion about the intended audience for each section."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Lines 5 and 61 both state: 'Every entry carries a date stamp so the record stays easy to audit.' Lines 7 and 73 both state: 'The most recent version supersedes the one that came before it.'",
+      "fix": "Consolidate the repeated statements into a single location, or rewrite them with different phrasing to clarify which catalog or version they refer to in each context.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Program Overview (lines 5 and 7), Special Cases (line 61), Questions and Updates (line 73)",
+      "severity": 2,
+      "violation": "Critical statements are repeated verbatim across different sections, suggesting either that sections were redundantly written or that content was carelessly copied without consolidation."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Terms like 'benefit year' (used in line 11), 'reimbursable item' (used in section 7), and 'covered purchase amount' (used in section 7) are not defined until Terminology Notes in section 9.",
+      "fix": "Move Terminology Notes to appear after the overview and before Eligibility. Alternatively, define key terms inline on first use using parenthetical definitions.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Terminology Notes (section 9) appears after Eligibility, How to Apply, Approval Timeline, Required Documentation, Reimbursement Amounts (sections 2-7)",
+      "severity": 2,
+      "violation": "Key terms are defined after they are used throughout the document, requiring readers to either tolerate undefined terms or backtrack to locate definitions."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SUBJECT-VERB-OBJECT",
+      "evidence": "Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.",
+      "fix": "Move the interrupting clause elsewhere, or split it into its own sentence.",
+      "id": "F-006",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 2",
+      "severity": 2,
+      "violation": "3 comma-set-off clause(s) totalling 14 words intervene between the sentence's apparent subject and its verb."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-TRANSITIONS",
+      "evidence": "An incomplete request pauses the timeline until the missing item arrives. The...",
+      "fix": "Open the paragraph with a transition word that states its relationship to the prior paragraph.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 2",
+      "severity": 2,
+      "violation": "The paragraph opens with none of the fixed transition words, so the reader is not told how it relates to the paragraph before it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-11-04T00:28:06Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

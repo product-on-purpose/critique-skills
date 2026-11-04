@@ -1,0 +1,62 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "The document uses 'equipment', 'item', 'stipend item', and 'device' to refer to the physical things being claimed for, apparently interchangeably. In Restrictions section: 'the policy applies to one device per category per employee' but everywhere else the term is 'equipment' or 'stipend item'. Terminology Notes uses 'stipend item' without clarifying whether it differs from 'equipment' used elsewhere.",
+      "fix": "Define the primary term once in Terminology Notes or at first mention: 'Throughout this policy, equipment, items, and devices refer to the same physical things being claimed under the stipend.' Alternatively, standardize on one term throughout (recommend 'equipment') and replace 'item' and 'device' except where context requires specificity.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Throughout the document; specifically in Restrictions and Exceptions ('one device per category per employee') and Terminology Notes ('stipend item')",
+      "severity": 2,
+      "violation": "Multiple interchangeable terms for the same concept (the physical items/equipment claimed under the stipend) appear without a clear definition stating they are identical, forcing the reader to verify whether these terms name the same thing or describe different concepts."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Program Overview describes internal IT asset group processes before any reader-facing information. Required Documentation appears after the Approval Timeline, requiring the reader to learn how long approval takes before learning what to prepare. Request Steps briefly summarizes the process but appears midway through the document, after detailed sections on amounts and restrictions. Internal process descriptions (Program Coordination, Review Responsibility) are interleaved with reader-facing sections rather than consolidated.",
+      "fix": "Reorganize sections to follow the reader's task sequence: 1) Eligibility, 2) Required Documentation, 3) How to Apply (with Request Steps integrated), 4) Approval Timeline, 5) Reimbursement Amounts, 6) Restrictions and Exceptions. Move Program Overview, Program Coordination, Review Responsibility, and Special Cases to an 'Internal Process' appendix section, clearly labeled as background information not required for applicants.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Section order: Program Overview (comes first), Required Documentation (Section 5), Approval Timeline (Section 4), Request Steps (Section 9), Program Coordination (Section 11), Review Responsibility (Section 12)",
+      "severity": 2,
+      "violation": "The section order tracks organizational/internal processes rather than the reader's actual task sequence. A reader looking for the steps to follow must skip past internal processes and back-end workflows. The logical reader sequence (Am I eligible? → What do I need? → What are the steps? → How long? → How much?) is disrupted."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "How to Apply: 'Employees start a stipend request in the benefits portal. The portal walks through each step in order. Also, the portal saves a draft automatically... Employees can return to finish later...' Subject shifts from Employees to Portal to Portal to Employees, disrupting the topic thread. Approval Timeline: 'The manager reviews the request within two business days. The manager confirms the equipment category matches the approved list. However, an incomplete request pauses the timeline until the missing item arrives. The requester gets an automatic reminder...' Subject shifts from Manager to Manager to Request to Requester, breaking continuity.",
+      "fix": "Maintain consistent subjects within each paragraph. How to Apply could revise to: 'Start your stipend request in the benefits portal. As you work through each step in order, the portal saves a draft automatically every few minutes. You can return to finish later without losing progress. After you review the confirmation summary, you submit your final request.' Similarly, in Approval Timeline, use parallel structure: 'Your manager reviews the request within two business days and confirms the equipment category matches the approved list. If your request is incomplete, the review pauses until the missing item arrives, and you receive an automatic reminder after three days.'",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "How to Apply section, sentences 1-5; Approval Timeline section, sentences 1-4",
+      "severity": 2,
+      "violation": "Consecutive sentences shift their grammatical subject between unrelated entities (Employees, Portal, Employees, etc. and Manager, Request, Requester) without maintaining a consistent topic thread, forcing the reader to re-orient at each sentence boundary."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-11-04T00:34:43Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 3,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

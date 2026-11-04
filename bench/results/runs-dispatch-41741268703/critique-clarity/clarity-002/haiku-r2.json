@@ -1,0 +1,172 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "The document jumps between addressing employees directly (line 11: 'Full-time employees... are eligible'), discussing administrative processes (line 15: 'The reviewer checks one at a time'), and detailing organizational workflows (lines 63-69: benefits team coordination and review responsibility). For example, in the Eligibility section, the focus shifts from employee eligibility criteria to what 'the reviewer' does and what 'the finance office' tracks, without separating content meant for applicants from internal process descriptions.",
+      "fix": "Restructure the document to separate employee-facing content (eligibility, application steps, restrictions) from administrative process documentation, or add clear audience markers within each section (e.g., 'For applicants:' and 'For administrators:') to signal which readers need each part.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Multiple sections including Eligibility, How to Apply, Program Coordination, and Review Responsibility",
+      "severity": 3,
+      "violation": "The document addresses multiple distinct audiences (employees/applicants, managers, benefits team, finance office, people operations office) in overlapping sections without consistent separation of content by audience, making it unclear which instructions are for the applicant versus which describe administrative processes."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "evidence": "The sentence reads: 'Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.' The main rule (policy applies to one device per category per employee) is stated immediately, but is followed by a cascade of conditions and qualifications that bury the actual scope of the rule before the reader reaches the end.",
+      "fix": "Split into two sentences: (1) 'The policy applies to one device per category per employee per benefit year.' (2) 'The team may approve a second device when the role genuinely requires it - for example, if fieldwork regularly takes you away from your primary desk - and the finance office tracks the second device against the same annual amount published in the equipment catalog.'",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Restrictions and Exceptions, paragraph 2, line 47",
+      "severity": 3,
+      "violation": "The sentence states the main idea first but then overloads it with conditions and qualifications so extensive that a reader cannot hold the complete rule in mind without re-reading; the exceptions and conditions consume most of the sentence length and obscure what the rule actually allows."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "An applicant reading 'How to Apply' (lines 17-23) learns they must 'submit the receipt, the manager's approval form, and the original purchase order before the review begins' (line 19), but the full details of what each document means and what constitutes proof of purchase appear four sections later in 'Required Documentation' (lines 31-35). The reader encounters the approval timeline (lines 25-29) before learning what documentation they actually need to gather.",
+      "fix": "Move 'Required Documentation' (lines 31-35) to immediately follow 'How to Apply' (lines 17-23), so applicants learn what is required before encountering the approval timeline. The revised order should be: Eligibility, How to Apply, Required Documentation, Approval Timeline, Reimbursement Amounts, Restrictions and Exceptions.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Document structure, sections 4 and 5: Approval Timeline (line 25) followed by Required Documentation (line 31)",
+      "severity": 3,
+      "violation": "The 'Required Documentation' section appears after 'Approval Timeline,' forcing readers to learn about the approval process before fully understanding what documents they must prepare. The reader's task sequence is: 1) Am I eligible?, 2) What documentation do I need?, 3) How do I apply?, 4) When will approval happen? - but the document presents: 1) Overview, 2) Eligibility, 3) How to Apply, 4) Approval Timeline, 5) Required Documentation."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "evidence": "71-word sentence, 5 subordinate-clause markers: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "severity": 3,
+      "violation": "The sentence runs to 71 words with 5 subordinate-clause markers, longer than the reader can hold in mind on a single pass."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Line 69: 'The determination of stipend eligibility happens before any payment goes out.' Line 69-70: 'The escalation of repeat requests happens automatically within the same quarter.' Both sentences use abstract nouns ('determination,' 'escalation') as grammatical subjects instead of naming the actual people or team responsible for these actions.",
+      "fix": "Rewrite to name the actual actors: 'The benefits team determines stipend eligibility before any payment goes out' and 'Repeat requests are automatically escalated within the same quarter' or 'The system automatically escalates repeat requests within the same quarter,' depending on whether a person or automated process handles escalation.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Review Responsibility section, lines 69-70",
+      "severity": 3,
+      "violation": "Two consecutive sentences in the Review Responsibility section use abstract nouns standing in for unnamed actors ('determination happens,' 'escalation happens'), leaving the reader uncertain who is responsible for making eligibility determinations or escalating repeat requests."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "The section is titled 'Special Cases' but its content is: 'The finance liaison reviews the stipend budget at the start of the fiscal year. Staff can request a printed copy from the benefits team at any time.' This is not a special case; it is the normal budget review process and is identical to the first two sentences of 'Program Overview' (lines 5-7).",
+      "fix": "Either (1) Rename the section to 'Budget Review Process' and move it under Program Coordination, or (2) Replace the content with actual special cases (e.g., equipment for accessibility accommodations, remote-first roles, etc.) that clarify the title, or (3) Delete the section as redundant with Program Overview.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Special Cases section, lines 59-61",
+      "severity": 3,
+      "violation": "A reader who finishes the 'Special Cases' section cannot state what it is about because the title promises special scenarios but the content describes a routine administrative process. The section also duplicates content from the opening without signal that the duplication is intentional."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "The 165-word paragraph in the Eligibility section (starting at line 15: 'In addition, eligibility for the workspace stipend depends on several details the reviewer checks one at a time') chains together 9 separate workspace requirements without transition words or clear logical grouping. Each sentence begins with a new aspect ('The workspace must sit inside...', 'A workspace located in a shared coworking space...', 'A workspace used only occasionally...', 'The reviewer confirms...', 'A workspace shared with a roommate...', 'The stipend covers only...', 'A workspace that changes address...', 'The reviewer logs...', 'A workspace confirmation from...') without signaling how each requirement relates to the others or what underlying principle groups them.",
+      "fix": "Break the paragraph into smaller logical groups with transition words: (1) Physical requirements (location, shared space, occasional use), (2) Reviewer verification (address confirmation, photo updates), (3) Scope (equipment placement, roommate arrangements), (4) Ongoing conditions (temporal limits, address changes). Add transition words ('Additionally,' 'For example,' 'However,') between groups and consider using a bullet-point list for the distinct requirements rather than a narrative paragraph.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Eligibility section, paragraph 3, lines 15-47",
+      "severity": 3,
+      "violation": "Consecutive sentences in the paragraph shift topics between physical location, equipment scope, reviewer responsibilities, and temporal conditions without transition words or structural signals, forcing the reader to reconstruct the logical relationships between requirements on their own."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-SHAPE",
+      "evidence": "71-word sentence: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "fix": "Move subordinate clauses and modifiers after the main clause, not between its subject and verb.",
+      "id": "F-008",
+      "lane": "scripted",
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "severity": 3,
+      "violation": "At 71 words, with 0 comma-set-off clause(s) and 5 subordinate-clause marker(s), the sentence stacks interruptions between its subject and its main verb instead of holding the main clause together."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Lines 51-53 use 'stipend item' to describe both the physical equipment ('You record the stipend item on the request form') and the monetary amount ('Payroll releases the stipend item amount after that monthly review'). Earlier sections use 'equipment' for the physical items and 'stipend' for the benefit, making 'stipend item' ambiguous.",
+      "fix": "Use 'equipment' or 'equipment item' consistently when referring to physical items, and 'stipend amount' when referring to the monetary value. Consider replacing 'stipend item' entirely with clearer, more specific terms.",
+      "id": "F-009",
+      "lane": "judged",
+      "location": "Terminology Notes, lines 51-53",
+      "severity": 2,
+      "violation": "The term 'stipend item' is used to mean both the physical equipment and the monetary reimbursement amount in the same section, forcing readers to infer from context which meaning applies."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-LISTS",
+      "evidence": "Employees must submit the receipt, the manager's approval form, and the original purchase order before the review begins.",
+      "fix": "Reformat the inline items as a numbered or bulleted list.",
+      "id": "F-010",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence embeds three or more comma- or semicolon-separated parallel items inline rather than presenting them as a formatted list."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-MUST",
+      "evidence": "Additionally, employees shall retain receipts for one year after the purchase date.",
+      "fix": "Restate the requirement using must.",
+      "id": "F-011",
+      "lane": "scripted",
+      "location": "Required Documentation, paragraph 2",
+      "severity": 2,
+      "violation": "The sentence states a binding requirement using shall or an indirect requirement phrasing instead of must."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-NOMINALIZATION",
+      "evidence": "The finance office conducts an evaluation of every submitted receipt before it approves the amount.",
+      "fix": "Restate the nominalized noun as the sentence's main verb.",
+      "id": "F-012",
+      "lane": "scripted",
+      "location": "Reimbursement Amounts, paragraph 1",
+      "severity": 2,
+      "violation": "The action is buried inside the noun 'evaluation', carried by a generic support verb, instead of stated as the sentence's own main verb."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-PARAGRAPH",
+      "evidence": "165 words in one paragraph.",
+      "fix": "Split the paragraph so each part covers one topic.",
+      "id": "F-013",
+      "lane": "scripted",
+      "location": "Eligibility, paragraph 3",
+      "severity": 2,
+      "violation": "The paragraph exceeds the 150-word scannability threshold."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-002.md",
+    "artifact_sha256": "7fd910197f585ef10416cde2ed6b94fa48de539377a1082d82e29ccee509e6df",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-11-04T00:03:06Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 8,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "evidence": "Three sentences open with conditions: 'If the position counts as full-time, the stipend can apply. If the employee has completed 90 days of continuous service, the stipend can apply. If the request arrives before the benefit year ends, the stipend can apply.' The main rule appears only in the fourth sentence: 'Only once every condition above is met does the home-office equipment stipend become available to the employee.'",
+      "fix": "Reorder to state the main rule first: 'The home-office equipment stipend is available only when all three conditions are met: the position counts as full-time, the employee has completed 90 days of continuous service, and the request arrives before the benefit year ends.'",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Eligibility section, paragraph 1",
+      "severity": 3,
+      "violation": "The eligibility section accumulates three separate conditional sentences before stating the governing rule, requiring a reader to reach the end of the paragraph before the opening conditions make sense."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "evidence": "36-word sentence, 4 subordinate-clause markers: Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 3",
+      "severity": 3,
+      "violation": "The sentence runs to 36 words with 4 subordinate-clause markers, longer than the reader can hold in mind on a single pass."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ACTIVE",
+      "evidence": "The request is reviewed within two business days.",
+      "fix": "Rewrite the sentence in active voice, naming the actor that performs the action.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence uses a be-verb plus past-participle passive construction in a context where the actor is recoverable and worth naming directly."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Terminology Notes section: 'You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review.' Program Coordination section: 'The benefits team coordinates every stipend request from intake to payout. The team logs each request the moment it arrives. The team then routes the request to the correct approver based on department.'",
+      "fix": "Consolidate all employee-facing instructions into a single workflow section, and move staff-process descriptions into a separate appendix or internal-procedures section clearly labeled as background information.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Terminology Notes and Program Coordination sections",
+      "severity": 2,
+      "violation": "The document mixes instructions addressed to employees (recording stipend items, submitting requests, tracking status) with descriptions of what staff does (Finance reconciles, Payroll releases, benefits team coordinates). These two audiences are interleaved across sections rather than cleanly separated, making it unclear in places which reader a given passage is for."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONCISE",
+      "evidence": "Also, the deposit happens in order to offset costs the employee already paid at this point in time.",
+      "fix": "Replace the wordy phrase with its plain equivalent (for example, because for due to the fact that).",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "Reimbursement Amounts, paragraph 2",
+      "severity": 2,
+      "violation": "The sentence uses a wordy construction from the fixed wordy-phrase list that a shorter equivalent would carry with no loss of meaning."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Equipment referred to as: 'home-office equipment stipend' (title), 'equipment' (Restrictions), 'items' (Required Documentation), and 'stipend item' (Terminology Notes). Person seeking reimbursement called: 'employee' (Eligibility), 'applicant' (not present but 'the applicant' is institutional substitute), and 'requester' (Approval Timeline). Payment referred to as: 'stipend' (Reimbursement Amounts), 'reimbursement' (Program Coordination, Eligibility), and 'amount' (Reimbursement Amounts).",
+      "fix": "Use one consistent term for each key concept throughout: 'equipment' or 'home-office equipment' (not 'items' or 'stipend item'), 'employee' (not 'requester' or 'applicant'), and 'stipend' or 'reimbursement' used consistently rather than alternating.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Throughout the document",
+      "severity": 2,
+      "violation": "Multiple terms for the same underlying concepts appear without a defined-terms section signaling they are equivalent, forcing careful readers to check whether new terminology names the same thing or something distinct."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-DOUBLE-NEGATIVE",
+      "evidence": "However, reimbursement is not available without a completed receipt.",
+      "fix": "Restate the sentence with at most one negation, or recast it as a positive statement.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Eligibility, paragraph 2",
+      "severity": 2,
+      "violation": "2 negation markers from the fixed negation list co-occur in one clause, so the reader has to work out the statement's logical sign before understanding it."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-001.md",
+    "artifact_sha256": "32ee3fed58b3e9b931565041a2e195dade8e2d19c9e9172fe28b38bdb5f6ef2c",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-11-03T23:55:42Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 11,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 6
+  }
+}

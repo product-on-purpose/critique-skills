@@ -1,0 +1,139 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Lines 51 - 53 shift to second person ('You record,' 'You submit,' 'Countersign') addressing multiple roles, while the rest of the document uses third person ('employees,' 'the manager,' 'the finance office').",
+      "fix": "Choose one perspective (either consistently third person with role names, or consistently second person to a specific audience) and apply it throughout.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Terminology Notes, paragraphs 1 - 2",
+      "severity": 3,
+      "violation": "Perspective shifts between second and third person, breaking audience consistency and clarity."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "evidence": "Line 21: 'moves to final processing.' Line 23: 'the employee reviews the confirmation summary before submitting the final request.'",
+      "fix": "Clarify the sequence: does the employee review and submit, or does submission happen automatically after manager/finance approval?",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "How to Apply, paragraphs 2 - 3",
+      "severity": 3,
+      "violation": "Process steps contradict each other, creating ambiguity about whether employee submission precedes or follows approval."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Program Coordination contains: 'A separate audit last spring reviewed unrelated travel expenses. Federal guidance on remote work continues to evolve each year. The office coffee budget was reset at the start of the quarter.'",
+      "fix": "Remove sentences unrelated to equipment stipend coordination (travel audit, federal guidance, coffee budget).",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "Off-topic content undermines the section's purpose and damages document credibility."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-PARAGRAPH",
+      "evidence": "The benefits team coordinates every stipend request from intake to payout.",
+      "fix": "Rewrite the opening sentence to state the topic the rest of the paragraph covers.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "Program Coordination, paragraph 1",
+      "severity": 3,
+      "violation": "The paragraph's opening sentence shares almost no vocabulary with the rest of the paragraph, so it does not preview the paragraph's actual topic."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Subjects shift: 'employees start' (line 19), 'the manager reviews' (line 27), 'an incomplete request pauses' (line 29), 'the requester gets a reminder' (line 29), 'employees keep proof' (line 33), 'finance deposits' (line 39), 'the IT group updates' (line 61), 'the finance office reviews' (line 69).",
+      "fix": "Rewrite to maintain 'employee' as the primary subject throughout, or clearly separate roles into distinct sections.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Throughout, especially How to Apply and Approval Timeline",
+      "severity": 3,
+      "violation": "Frequent subject shifts obscure role responsibilities and process ownership, making it difficult for readers to track who does what."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "'Equipment catalog' (lines 5, 61) and 'vendor list' (line 73) appear to refer to the same resource, and the catalog-update schedule is restated identically in three sections.",
+      "fix": "Use one term consistently and consolidate the repeated update-schedule statement into a single location.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Program Overview, Special Cases, Questions and Updates",
+      "severity": 2,
+      "violation": "Redundant terminology and repeated statements reduce efficiency and signal unclear content organization."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Special Cases (line 61): 'The IT asset group updates the equipment catalog after every open enrollment period. Every entry carries a date stamp so the record stays easy to audit.' This identical information appears in Program Overview (line 5).",
+      "fix": "Remove the Special Cases section or populate it with genuinely exceptional scenarios not covered elsewhere.",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "Special Cases",
+      "severity": 2,
+      "violation": "Unnecessary repetition wastes space and suggests incomplete content organization."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SUBJECT-VERB-OBJECT",
+      "evidence": "Also, the stipend request, once the manager signs it, after finance confirms the budget line, moves to final processing.",
+      "fix": "Move the interrupting clause elsewhere, or split it into its own sentence.",
+      "id": "F-008",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 2",
+      "severity": 2,
+      "violation": "3 comma-set-off clause(s) totalling 14 words intervene between the sentence's apparent subject and its verb."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-TRANSITIONS",
+      "evidence": "An incomplete request pauses the timeline until the missing item arrives. The...",
+      "fix": "Open the paragraph with a transition word that states its relationship to the prior paragraph.",
+      "id": "F-009",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 2",
+      "severity": 2,
+      "violation": "The paragraph opens with none of the fixed transition words, so the reader is not told how it relates to the paragraph before it."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "Terminology Notes mixes definitions ('Finance reconciles,' 'Payroll releases') with procedural steps ('You submit,' 'Countersign within two business days').",
+      "fix": "Either isolate term definitions or move procedural instructions to the How to Apply section.",
+      "id": "F-010",
+      "lane": "judged",
+      "location": "Terminology Notes",
+      "severity": 2,
+      "violation": "Mixing term definitions with procedural instructions blurs the section's purpose and makes it difficult to use as a reference."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-003.md",
+    "artifact_sha256": "43c57ed716a4f3683bdc8f51d2d240a773f9ca1b2f7ca22f06280a1a2241d777",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-11-04T00:15:48Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 6,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 1
+  }
+}

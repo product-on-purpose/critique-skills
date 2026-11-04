@@ -1,0 +1,84 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Lines 5 - 7 describe IT asset group's update and tracking schedules - backend administrative processes, not relevant to employees reading the policy to understand eligibility or application",
+      "fix": "Rewrite opening to address employees directly: lead with policy purpose, covered equipment categories, basic eligibility threshold, and key dates employees need to know",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Program Overview section, lines 5 - 7",
+      "severity": 2,
+      "violation": "Program Overview opens with internal IT operations instead of addressing the employee audience"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "Lines 49 - 53 define operational terms in glossary format appearing after Restrictions and before Request Steps, fragmenting the main content and breaking reader focus on procedures",
+      "fix": "Relocate Terminology Notes section to an appendix after Questions and Updates, or integrate term definitions inline where they first appear",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Terminology Notes section, lines 49 - 53",
+      "severity": 2,
+      "violation": "Terminology Notes section placed mid-document disrupts the document's logical flow; glossary style interrupts policy narrative"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Line 45: 'You must keep your equipment in good working condition and we may ask for a brief photo check once a year' switches subject from employee to employer mid-sentence",
+      "fix": "Separate into two sentences or restructure to maintain consistent subject: 'You must keep your equipment in good working condition. We may request a photo verification once yearly'",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Restrictions and Exceptions section, line 45",
+      "severity": 2,
+      "violation": "Sentence shifts grammatical subject mid-clause from employee (you) to company (we), abandoning the actor established at the sentence's opening"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Lines 51 - 53: 'You record the stipend item' (employee as actor) vs. 'Finance reconciles' and 'Payroll releases' (backend operations as actors) in consecutive sentences defining the same workflow",
+      "fix": "Separate into employee and backend glossaries with clear role labels, or limit Terminology Notes to terms employees encounter directly",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Terminology Notes section, lines 51 - 53",
+      "severity": 2,
+      "violation": "Terminology Notes mixes employee actor with backend actors in adjacent sentences, breaking character consistency within the same section"
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-STRESS",
+      "evidence": "Lines 55 - 57: two sentences, no step-by-step guidance; compares to 3+ sentences for Program Overview and Program Coordination, minimizing a core employee action",
+      "fix": "Expand Request Steps to match procedural sections' scope: detail portal login, eligibility confirmation, receipt upload, draft-saving mechanism, summary review, and submission sequence",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Request Steps section, lines 55 - 57",
+      "severity": 2,
+      "violation": "Request Steps section receives minimal space despite being the procedure employees must execute; importance is buried by underdevelopment"
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-11-04T00:30:19Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 5,
+      "3": 0,
+      "4": 0
+    },
+    "gate": "pass",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

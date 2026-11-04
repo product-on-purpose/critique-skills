@@ -1,0 +1,106 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "evidence": "71-word sentence, 5 subordinate-clause markers: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "id": "F-001",
+      "lane": "scripted",
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "severity": 3,
+      "violation": "The sentence runs to 71 words with 5 subordinate-clause markers, longer than the reader can hold in mind on a single pass."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-SHAPE",
+      "evidence": "71-word sentence: Similarly, the policy applies to one device per category per employee whenever the benefits team confirms that the role genuinely requires a second device because fieldwork regularly takes the employee away from the single fixed desk that the standard equipment list assumes every applicant has for the whole benefit year while the finance office tracks the second device against the same annual amount that the equipment catalog publishes for each category.",
+      "fix": "Move subordinate clauses and modifiers after the main clause, not between its subject and verb.",
+      "id": "F-002",
+      "lane": "scripted",
+      "location": "Restrictions and Exceptions, paragraph 2",
+      "severity": 3,
+      "violation": "At 71 words, with 0 comma-set-off clause(s) and 5 subordinate-clause marker(s), the sentence stacks interruptions between its subject and its main verb instead of holding the main clause together."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "How to Apply mixes employee instructions ('Employees must submit...') with administrative process ('the portal saves a draft...'). Approval Timeline addresses managers ('The manager reviews...'). Multiple sections address different audiences without clear boundaries.",
+      "fix": "Separate sections by audience: create clear 'For Employees' and 'For Managers' sections, or use consistent markers (e.g., 'You (employee) must...' vs 'The manager will...') to indicate which reader each instruction targets.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "How to Apply and Approval Timeline sections",
+      "severity": 2,
+      "violation": "The document addresses employees, managers, and finance staff in the same sections without separating content by audience, forcing readers to extract only the parts relevant to them."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "The program is managed by 'the benefits team' (lines 3, 5, 61), 'the finance liaison' (line 60), 'the people operations office' (line 73), and 'the finance office' (line 39). Equipment is called 'equipment' throughout but 'stipend item' in Terminology Notes.",
+      "fix": "Choose one term for each concept and use it consistently throughout. Either always say 'benefits team' or define which term is primary, and note any role distinctions if they exist. Use 'equipment' consistently instead of switching to 'stipend item.'",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Throughout document: Program Overview (lines 3, 5), Reimbursement Amounts (line 39), Special Cases (line 60), Questions and Updates (line 73), Terminology Notes (line 51)",
+      "severity": 2,
+      "violation": "Multiple terms refer to the same underlying concept (who manages the program, what is being purchased), forcing the reader to check whether each new term names the same thing or represents a different role/concept."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-LISTS",
+      "evidence": "Employees must submit the receipt, the manager's approval form, and the original purchase order before the review begins.",
+      "fix": "Reformat the inline items as a numbered or bulleted list.",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence embeds three or more comma- or semicolon-separated parallel items inline rather than presenting them as a formatted list."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-MAIN-IDEA-FIRST",
+      "evidence": "Paragraph opens: 'In addition, eligibility for the workspace stipend depends on several details the reviewer checks one at a time. The workspace must sit inside the employee's primary residence for the stipend to apply. A workspace located in a shared coworking space does not qualify...' [continues listing conditions]",
+      "fix": "Lead with the main rule: 'The workspace must be a dedicated residential space under the employee's sole control.' Then list the specific conditions that satisfy this principle.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Eligibility, paragraph 3, lines 14-15",
+      "severity": 2,
+      "violation": "The opening sentence says eligibility depends on details, then lists specific conditions, but never states the governing principle upfront. A reader must read through all conditions to infer what makes a workspace eligible."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-MUST",
+      "evidence": "Additionally, employees shall retain receipts for one year after the purchase date.",
+      "fix": "Restate the requirement using must.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Required Documentation, paragraph 2",
+      "severity": 2,
+      "violation": "The sentence states a binding requirement using shall or an indirect requirement phrasing instead of must."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-002.md",
+    "artifact_sha256": "7fd910197f585ef10416cde2ed6b94fa48de539377a1082d82e29ccee509e6df",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-11-03T23:59:09Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 12,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 7
+  }
+}

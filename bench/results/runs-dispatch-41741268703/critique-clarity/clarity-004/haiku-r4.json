@@ -1,0 +1,95 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "Line 33: 'Employees keep proof of purchase for every stipend item.' Line 45: 'You must keep your equipment in good working condition'. Line 47: 'the policy applies to one device per category per employee'. Lines 51-52: 'You record the stipend item on the request form. Finance reconciles the stipend item against the request log.'",
+      "fix": "Choose one term for the purchased good and use it consistently. Recommend 'equipment' as the primary term. Replace 'device' on line 47 with 'equipment', and replace 'stipend item' with 'equipment' on lines 33, 51, 52. Add a glossary at the start if other terms are unavoidable.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Lines 33, 45, 47, 51-52: terminology throughout document",
+      "severity": 3,
+      "violation": "The purchased good is called 'stipend item' (lines 33, 51-52), 'equipment' (line 45), and 'device' (line 47). These terms are used interchangeably without any marker (such as a glossary or first-use definition) signaling they mean the same thing, forcing the reader to infer the relationship."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-COHERENCE",
+      "evidence": "The section begins: 'You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review. Also, you submit the request in the portal. You track its status there until the payment clears.' This covers three distinct topics: what the stipend item is, the internal reconciliation process, and portal status tracking, with no sentence that opens the section or unifies the themes.",
+      "fix": "Either delete this section (it duplicates how-to info in How to Apply) or split it into two focused sections: one 'Glossary' section with term definitions only (placed near the start), and one 'Internal Process' section describing how Finance and Payroll handle items (moved to a backend-only appendix or separate internal documentation).",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Lines 49-54: Terminology Notes section",
+      "severity": 3,
+      "violation": "A reader who reads only the section's first and last sentences cannot state what the section is about. The section mixes three unrelated subtopics (item definition, internal processing, portal tracking) with no signal connecting them. No opening sentence announces a coherent theme."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "The document addresses employees directly in some sections (line 19: 'Employees start a stipend request'; line 45: 'You must keep your equipment') and then describes what managers and internal staff do without clarifying which sections are for the employee to read (lines 27-29: 'The manager reviews the request...'; lines 51-52: 'Finance reconciles...'; line 65: 'The benefits team coordinates...'). Section headings like 'Approval Timeline', 'Program Coordination', and 'Review Responsibility' do not signal whether they are for employees or internal staff.",
+      "fix": "Add audience labels to each section heading: '[For Employees]' or '[Internal Process]'. Alternatively, split into two documents: one employee-facing guide and one internal procedures manual, or clearly separate the two with a visual break and a note saying 'Sections below are for internal use only'.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "Throughout; examples: lines 19-23, 27-29, 39, 45, 51-52, 65, 69",
+      "severity": 2,
+      "violation": "The document simultaneously addresses employees and describes internal workflows without separating them by audience. An employee cannot easily tell which sections describe their own responsibilities versus internal processes they do not need to act on."
+    },
+    {
+      "confidence": "high",
+      "criterion": "WILLIAMS-CHARACTER-ACTION",
+      "evidence": "Line 29: 'However, an incomplete request pauses the timeline until the missing item arrives.' Line 39: 'The stipend pays up to 500 dollars per benefit year.'",
+      "fix": "Line 29: Replace 'an incomplete request pauses the timeline' with 'the company pauses the timeline' or 'If your request is incomplete, the timeline pauses'. Line 39: Replace 'The stipend pays up to 500 dollars' with 'The company reimburses up to 500 dollars' or 'Your maximum reimbursement is 500 dollars'.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "Line 29 and Line 39",
+      "severity": 2,
+      "violation": "Both sentences use an abstract concept as the grammatical subject instead of naming the real actor. On line 29, the request does not pause anything; a person or system does. On line 39, the stipend does not pay; the employer does. This forces the reader to guess who is actually responsible for the action."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-COHESION",
+      "evidence": "'You record the stipend item on the request form. Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review.'",
+      "fix": "Add transitions between sentences: 'You record the stipend item on the request form. Then, Finance reconciles the stipend item against the request log each month. Payroll releases the stipend item amount after that monthly review.' Alternatively, restructure with parallel subjects to keep the thread: 'You record the stipend item, Finance reconciles it monthly, and Payroll releases the amount.'",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "Lines 51-52 (Terminology Notes section, three consecutive sentences)",
+      "severity": 2,
+      "violation": "Three consecutive sentences shift subjects (You to Finance to Payroll) with no transition word or phrase (e.g., 'Then', 'Meanwhile', 'After that', 'Subsequently'). The reader cannot tell how the sentences relate or whether they describe steps in sequence, parallel processes, or unrelated facts."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "WILLIAMS-STRESS",
+      "evidence": "Line 5 ends: '...at the start of the fiscal year.' Line 7 ends: '...on the first business day of the month.' Line 39 ends: '...within one pay cycle.' Line 45 ends: '...once a year.' Line 69 ends: '...within the same quarter.'",
+      "fix": "Restructure sentences to place the main point last. E.g., Line 39: 'The company reimburses up to 500 dollars per benefit year; deposits arrive within one pay cycle.' Line 45: 'You must keep equipment in good condition; we may ask for a photo check once yearly.' Move timing clauses earlier or use subordinate form ('within one pay cycle' becomes a clause, not the main clause ending).",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Lines 5, 7, 39, 45, 69 (multiple instances)",
+      "severity": 2,
+      "violation": "Multiple sentences end with temporal details, minor qualifiers, or process steps rather than the sentence's main point. The newest or most important information is buried in the middle, while secondary details like timing occupy the stressed position (sentence end)."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-004.md",
+    "artifact_sha256": "1b91bbd4d62f348ad0b0760933515d3704a42a18c42826b29e83cf27de9da23a",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-11-04T00:40:46Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 4,
+      "3": 2,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

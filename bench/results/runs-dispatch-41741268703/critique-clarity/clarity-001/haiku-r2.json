@@ -1,0 +1,117 @@
+{
+  "findings": [
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-AUDIENCE",
+      "evidence": "Sections 1-9 and 13 address employees (e.g., 'Employees start a stipend request', 'You must keep your equipment'). Sections 10-12 address internal staff (e.g., 'The benefits team coordinates every stipend request', 'The finance office reviews every stipend request'). These audiences have different information needs and no section heading, transition, or visual break signals the shift.",
+      "fix": "Clearly separate content for the two audiences. Either create two distinct sections with explicit audience labels (e.g., 'For Employees Applying' and 'For Managers and Finance Staff'), or move all internal-process content to a separate appendix or document.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "Sections 1-13, pervasive",
+      "severity": 3,
+      "violation": "The document addresses two distinct audiences - employees seeking reimbursement and internal managers/finance staff - in the same continuous flow without separating their content. An employee reader cannot tell which instructions are theirs to follow and which describe what internal staff will do."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ORGANIZE",
+      "evidence": "The 'Request Steps' section (lines 55-57) contains the first actionable information for readers ('Completing the request begins with confirming eligibility, and uploading the receipt') but appears after Approval Timeline, Required Documentation, and Reimbursement Amounts sections. Internal team process sections (Program Coordination, Review Responsibility) appear at the end where employees do not need them, disrupting the reader's task sequence.",
+      "fix": "Reorganize sections to follow the employee's task sequence: lead with 'Request Steps' and basic 'How to Apply' information, then Eligibility, then Approval Timeline, then what happens after approval. Move or clearly separate internal process sections (Program Coordination, Review Responsibility) into a distinct section labeled 'For Managers and Finance Staff' or similar.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "Sections 3-13, overall document structure",
+      "severity": 3,
+      "violation": "The document's section order does not follow the sequence of questions or steps the reader actually works through. An employee applying for a stipend needs the basic steps first, but that information is buried late. The internal team descriptions follow without a clear boundary between employee-facing and internal content."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-SENTENCE-LENGTH",
+      "evidence": "36-word sentence, 4 subordinate-clause markers: Then, the review takes longer because the manager who normally handles it is traveling; the backup reviewer who covers for absences was not told that the request needs sign-off before the portal releases the confirmation email.",
+      "fix": "Split the sentence at a subordinate-clause boundary.",
+      "id": "F-003",
+      "lane": "scripted",
+      "location": "How to Apply, paragraph 3",
+      "severity": 3,
+      "violation": "The sentence runs to 36 words with 4 subordinate-clause markers, longer than the reader can hold in mind on a single pass."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-ACTIVE",
+      "evidence": "The request is reviewed within two business days.",
+      "fix": "Rewrite the sentence in active voice, naming the actor that performs the action.",
+      "id": "F-004",
+      "lane": "scripted",
+      "location": "Approval Timeline, paragraph 1",
+      "severity": 2,
+      "violation": "The sentence uses a be-verb plus past-participle passive construction in a context where the actor is recoverable and worth naming directly."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONCISE",
+      "evidence": "Also, the deposit happens in order to offset costs the employee already paid at this point in time.",
+      "fix": "Replace the wordy phrase with its plain equivalent (for example, because for due to the fact that).",
+      "id": "F-005",
+      "lane": "scripted",
+      "location": "Reimbursement Amounts, paragraph 2",
+      "severity": 2,
+      "violation": "The sentence uses a wordy construction from the fixed wordy-phrase list that a shorter equivalent would carry with no loss of meaning."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-CONSISTENT-TERMS",
+      "evidence": "The document uses 'stipend request' (line 19), 'request' (line 23), 'stipend item' (line 51), 'reimbursement' (lines 5, 13, 39, 41, 61, 65), and 'stipend' (lines 7, 11, 39, 47, 51) overlappingly. For example: line 51 states 'You record the stipend item on the request form. Finance reconciles the stipend item against the request log.' It is unclear whether 'stipend item' and 'request' are the same thing, related concepts, or distinct.",
+      "fix": "Define terms explicitly in an introductory Terminology section: 'In this policy: A *request* is your submission in the portal. A *stipend item* is each piece of equipment you are requesting reimbursement for. *Reimbursement* is the payment you receive after approval. *Stipend* refers to the benefit program itself.' Then use the terms consistently throughout.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "Throughout document, especially Terminology Notes (lines 49-53) and surrounding sections",
+      "severity": 2,
+      "violation": "Multiple overlapping terms refer to related concepts without explicit definition of their relationships. A reader cannot tell whether 'stipend item' is the same as a 'request', or whether 'reimbursement' and 'stipend' are interchangeable."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-DOUBLE-NEGATIVE",
+      "evidence": "However, reimbursement is not available without a completed receipt.",
+      "fix": "Restate the sentence with at most one negation, or recast it as a positive statement.",
+      "id": "F-007",
+      "lane": "scripted",
+      "location": "Eligibility, paragraph 2",
+      "severity": 2,
+      "violation": "2 negation markers from the fixed negation list co-occur in one clause, so the reader has to work out the statement's logical sign before understanding it."
+    },
+    {
+      "confidence": "high",
+      "criterion": "PLAIN-HEADINGS",
+      "evidence": "heading: Overview",
+      "fix": "Replace the heading with text specific enough to be found by scanning.",
+      "id": "F-008",
+      "lane": "scripted",
+      "location": "the Overview heading",
+      "severity": 2,
+      "violation": "The heading text matches the fixed list of non-specific heading labels, so a reader scanning headings cannot tell whether the section applies to them."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/clarity/clarity-001.md",
+    "artifact_sha256": "32ee3fed58b3e9b931565041a2e195dade8e2d19c9e9172fe28b38bdb5f6ef2c",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "PLAIN",
+      "WILLIAMS"
+    ],
+    "skill": "critique-clarity",
+    "skill_version": "0.1.1",
+    "timestamp": "2026-11-03T23:47:50Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 10,
+      "3": 3,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 5
+  }
+}
