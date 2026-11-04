@@ -1,0 +1,105 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "Section titled \"Circulation Trends\" but contains only descriptions of data-collection processes (\"audits renewal rates,\" \"reviews monthly checkout volume,\" \"roll up into...dashboard\"), no actual trend data or metrics",
+      "fix": "Either populate the section with actual circulation trend data (e.g., circulation volume over time, renewal patterns), or retitle it to accurately reflect that it describes data governance.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"Circulation Trends\" section heading and content",
+      "severity": 3,
+      "violation": "The title promises circulation trends or patterns, but the section presents only data-collection infrastructure without any actual numbers, comparisons, or time-series analysis."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The survey was administered at the same pilot branches immediately before and twelve months into the pilot\" (pilot duration was 16 months)",
+      "fix": "Either explain why the survey was timed at the 12-month mark rather than at pilot conclusion, or extend the survey to the end of the pilot.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"What the Pilot Showed\" section, survey paragraph",
+      "severity": 3,
+      "violation": "The survey endpoint is set at 12 months of a 16-month pilot with no explanation, leaving one-third of the pilot period unexamined and raising questions about whether the observed effect (22% to 5%) persists through the full pilot duration."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"A parallel patron survey found that self-reported avoidance of the library due to fear of fines dropped from 22 percent of respondents before the pilot to 5 percent after it\"",
+      "fix": "Add sample size, confidence interval, and methodology details (e.g., \"among 200 surveyed patrons, margin of error ±7 percent\").",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"What the Pilot Showed\" section, survey paragraph",
+      "severity": 3,
+      "violation": "The survey results are cited with specific percentages but no sample size, margin of error, or confidence interval, making it impossible to assess the statistical validity of the change."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"the on-time-or-eventual return rate for borrowed items held at 94 percent, compared with 87 percent at the branches that kept fines in place over the same period\"",
+      "fix": "Add evidence of comparability - for example, confirm that pilot and comparison branches had similar pre-pilot return rates, patron demographics, or collection sizes.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"What the Pilot Showed\" section, return-rate paragraph",
+      "severity": 3,
+      "violation": "The comparison assumes the two groups of branches are comparable (similar size, demographics, circulation patterns), but provides no evidence to support this assumption."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"items still unreturned past that window remain subject to the existing replacement-cost billing process, matching the return-rate pattern the pilot data actually established\"",
+      "fix": "Explain how the 60-day threshold was derived from the pilot data, or state that it is a separate policy choice not directly from pilot findings.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Recommendation\" section, final paragraph",
+      "severity": 3,
+      "violation": "The claim that the 60-day threshold \"matches the return-rate pattern the pilot data actually established\" is unsupported; the pilot data shows a 94% overall return rate but does not indicate how return timing is distributed across days or the rationale for the 60-day cutoff specifically."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"Consortium finance records show fine revenue covered under 2 percent of the annual materials budget\"",
+      "fix": "Reword to \"fine revenue amounted to less than 2 percent of the annual materials budget\" or similar clear phrasing.",
+      "id": "F-006",
+      "lane": "judged",
+      "location": "\"Addressing the Revenue Concern\" section, first sentence",
+      "severity": 3,
+      "violation": "The phrasing \"covered under\" is non-standard and ambiguous - it is unclear whether it means \"amounted to less than\" or \"was accounted for approximately at.\""
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"the four pilot branches absorbed the loss without a measurable change to their replacement-copy spending\"",
+      "fix": "Specify what would constitute a \"measurable change\" - for example, \"without a change exceeding 5 percent\" or \"without a statistically significant change.\"",
+      "id": "F-007",
+      "lane": "judged",
+      "location": "\"Addressing the Revenue Concern\" section, second sentence",
+      "severity": 3,
+      "violation": "The term \"measurable change\" is undefined - no threshold, confidence interval, or statistical standard is provided, making the claim difficult to verify or falsify."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/argument/argument-003.md",
+    "artifact_sha256": "3735fd3a135fcd3f730e35c6af56fb064083676684399e5b0486c140ff7894de",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-11-04T00:26:32Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 7,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}

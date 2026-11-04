@@ -1,0 +1,83 @@
+{
+  "findings": [
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"The finance office reviews overdue notice counts on the first of every month. Historical figures are archived for five years before being summarized and retired.\" and \"The finance office reviews self-checkout usage at the end of each quarter.\"",
+      "fix": "Either provide actual trend data (e.g., historical changes in overdue notice counts or self-checkout usage) or rename the section to reflect that it describes data infrastructure.",
+      "id": "F-001",
+      "lane": "judged",
+      "location": "\"Circulation Trends\" section",
+      "severity": 3,
+      "violation": "The section is titled \"Circulation Trends\" but describes only data collection processes without presenting any actual trend data or baseline figures."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"During an 18-month pilot\" contrasted with \"The survey was administered at the same pilot branches immediately before and twelve months into the pilot.\"",
+      "fix": "Clarify whether the survey was repeated at the end of the 18-month period, or explain why the 12-month point was chosen as the final measurement.",
+      "id": "F-002",
+      "lane": "judged",
+      "location": "\"What the Pilot Showed\" section, survey timing",
+      "severity": 3,
+      "violation": "The patron avoidance survey was administered at the 12-month mark, leaving the final six months of the 18-month pilot period unmeasured."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"This recommendation applies to items returned within 60 days of their due date\"",
+      "fix": "Explain why 60 days was chosen, or provide data showing that the pilot's return pattern supports this specific timeframe.",
+      "id": "F-003",
+      "lane": "judged",
+      "location": "\"Recommendation\" section, final paragraph",
+      "severity": 3,
+      "violation": "The 60-day cutoff is not justified by or explained in relation to the pilot data, which reports a 93% return rate without specifying the distribution of return times."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"no library that has tried it has ever found otherwise\"",
+      "fix": "Either provide citations or references to support this generalization, or remove it and rely on the pilot data alone.",
+      "id": "F-004",
+      "lane": "judged",
+      "location": "\"Why the Pilot Result Applies Systemwide\" section, final sentence",
+      "severity": 3,
+      "violation": "This claim about other libraries is presented as fact without citation, evidence, or reference to external sources."
+    },
+    {
+      "confidence": "medium",
+      "criterion": "BASELINE-GENERIC",
+      "evidence": "\"A skeptic on the board points to overdue fines as a source of materials-replacement funding, and argues that eliminating them systemwide will leave a shortfall the consortium has not planned for. The branch renovation project remains on schedule for completion next spring.\"",
+      "fix": "Explain how the revenue loss will be offset (alternative funding sources, budget reallocation, etc.), or remove the unrelated renovation sentence.",
+      "id": "F-005",
+      "lane": "judged",
+      "location": "\"Addressing the Revenue Concern\" section",
+      "severity": 3,
+      "violation": "The section opens by acknowledging a revenue shortfall concern but closes with a sentence about the renovation project that does not address this concern."
+    }
+  ],
+  "run": {
+    "artifact": "bench/corpus/argument/argument-001.md",
+    "artifact_sha256": "1a8e240dbe5e45749ac14d0de3554b5b2829840eb5dff3dbb044ad6674f30796",
+    "contract_version": "1.0.0",
+    "model": "claude-haiku-4-5-20251001",
+    "rubrics": [
+      "BASELINE"
+    ],
+    "skill": "baseline-generic",
+    "skill_version": "1.0.0",
+    "timestamp": "2026-11-03T23:48:08Z"
+  },
+  "summary": {
+    "by_severity": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 5,
+      "4": 0
+    },
+    "gate": "fail",
+    "severity_3_threshold": 0,
+    "suppressed_count": 0
+  }
+}
