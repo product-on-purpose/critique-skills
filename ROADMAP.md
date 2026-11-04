@@ -92,7 +92,7 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 | Taxonomy survey regeneration | Unscheduled | Deferred on 2026-09-14. The library still makes no claim about how many critique frameworks exist, and will not until the survey runs. |
 | `critique-deck` | Dropped 2026-10-15 | Deprioritized behind `critique-forms` on 2026-09-14, then dropped: a critique of markdown slide source sees the text, but not the visual presentation that makes a slideshow work. |
 | `critique-dataviz` | Unscheduled | It depends on a chart-spec corpus generator that has not been scoped, and dating a skill before its blocker is sized would be a guess. |
-| BYOR mode | v0.3.0 | Unchanged in substance; it moves with the skill wave. |
+| BYOR mode | v0.4.0+ | Unchanged in substance. It moved to v0.3.0 with the skill wave, then to v0.4.0+ on 2026-11-03. |
 | Disposition telemetry | v0.3.0 | Unchanged in substance. |
 | Samples corpus | v0.4.0+ | Unchanged in substance. |
 
@@ -102,7 +102,6 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 
 ## Next: v0.3.0
 
-- **BYOR mode** (bring your own rubric) on one flagship skill, as the pattern-setter for every skill after it. This is what lets a user hand the library a rubric it did not ship with, using the `rubric_source: byor` finding marker already defined in the methodology.
 - **Disposition telemetry begins.** Acceptance-rate-per-criterion data from real use starts feeding the first criterion pruning pass.
 - **Revision loop as a first-class chain.** The critique, disposition, revise, re-critique loop exists today as a documented recipe (`examples/recipes/revision-loop.md`); this version makes it a real, invokable chain with a defined convergence rule.
 - **Gate hardening.** `--gate` exit codes exercised and documented across every shipped skill as a CI recipe for consumer repositories, not just this one.
@@ -111,7 +110,7 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 
 **Exit gate** (set 2026-10-23). Each condition names the backlog item that delivers it.
 
-- The ruling on how BYOR is measured is recorded ([E10 (rule how BYOR is measured)](docs/internal/backlog/enhancements.md)). One flagship skill accepts a user-supplied rubric and is measured under that ruling ([E45 (build BYOR on one flagship skill)](docs/internal/backlog/enhancements.md)).
+- The ruling on how BYOR is measured is recorded ([E10 (rule how BYOR is measured)](docs/internal/backlog/enhancements.md)). **Met 2026-10-24**, by [ADR 0039 (BYOR measured by parity)](docs/internal/decisions/0039-byor-measured-by-parity.md).
 - Disposition logs from real use are collected, an aggregation script turns them into acceptance rates per criterion, and the first acceptance table is published ([E48 (disposition telemetry)](docs/internal/backlog/enhancements.md)). Real use means runs on real artifacts, including the maintainer's own, not bench runs. The first pruning pass is not part of this gate, because it needs months of dispositions.
 - The ruling on who performs "revise" is recorded ([E52 (who performs revise)](docs/internal/backlog/enhancements.md)). The revision loop is an invokable chain with a stated rule for when it stops ([N4 (the revision-loop chain)](docs/internal/backlog/new-components.md)).
 - `--gate` exit codes are exercised on every shipped skill, and the CI recipe for other repositories is documented ([E53 (`--gate` as a CI recipe)](docs/internal/backlog/enhancements.md)). **Met 2026-10-30:** "exercised" means the gate runs on each skill's committed envelopes for exits 0 and 2, and on a severity-4 variant built in the test for exit 1, with no model call. The maintainer accepted that reading.
@@ -122,6 +121,8 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 The last condition gates two v0.3.0 backlog items that no bullet above names. Three smaller v0.3.0 items stay outside the gate: [E35 (run the plugin validators)](docs/internal/backlog/enhancements.md), [E38 (measure the location fix on id-poor markup)](docs/internal/backlog/enhancements.md) and [E49 (one real tutorial)](docs/internal/backlog/enhancements.md). They are v0.3.0 work, but none of them defines the version.
 
 **Gold-tier groundwork moved to v0.4.0+ on 2026-10-21.** It only becomes meaningful once the revision-loop chain exists to evaluate. As a gate condition, it would keep v0.3.0 open until the chain was built and then evaluated.
+
+**BYOR mode moved to v0.4.0+ on 2026-11-03.** The maintainer ruled that BYOR does not justify a full build and a paid parity run this early. A bare-bones proof of concept on an unmerged branch is the most it gets for now, and that cannot meet a gate condition worded as a measured feature. [E45 (build BYOR on one flagship skill)](docs/internal/backlog/enhancements.md) therefore leaves this gate, and ADR 0039's measurement ruling stands for when it is built.
 
 ---
 
@@ -134,6 +135,7 @@ Priority among these is set by what telemetry from v0.3.0 onward says is actuall
 - **Samples corpus.** Worked, narrative samples distinct from the benchmark: multiple skills applied across a small set of running example threads, each following the same scenario-to-disposition shape, with machine-validated envelopes checked in CI and provenance honestly labeled as illustrative single runs, never conflated with k=5 measurement. Samples never enter `bench/` and never carry ground-truth manifests; that boundary is what keeps a compelling example from being mistaken for a measured claim.
 - **Benchmark harness as a standalone asset.** Publishing the corpus generator and grading harness so third-party skill authors can measure their own skills against the same discipline this library holds itself to.
 - **Remaining domain waves**, drawn from whatever the taxonomy survey admits once it runs: visual design, naming and terminology, and any newcomer the survey surfaces.
+- **BYOR mode** (bring your own rubric), moved from v0.3.0 on 2026-11-03: one flagship skill, `critique-microcopy`, accepts a rubric the library did not ship with, as the pattern-setter for every skill after it. It uses the `rubric_source: byor` finding marker already defined in the methodology, and it is measured by parity under [ADR 0039 (BYOR measured by parity)](docs/internal/decisions/0039-byor-measured-by-parity.md).
 - **Gold-tier groundwork**, moved from v0.3.0 on 2026-10-21: chain and hook evaluation coverage (Gold checks G1 and G3), which starts once the v0.3.0 revision-loop chain exists to evaluate. The folder READMEs, docs frontmatter and source docblocks this bullet once listed already pass the strict gate.
 - **Further domain work**, continued as coverage and telemetry justify it.
 
