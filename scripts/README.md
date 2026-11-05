@@ -14,7 +14,7 @@ shared library.
 - `gen-plugin-manifest.mjs` - regenerates `.claude-plugin/plugin.json` from `library.json`; under
   `--check`, the CI "drift" job's entry point instead.
 - `gen-readme-catalog.mjs` - regenerates `README.md`'s skill-catalog table from `library.json` and
-  each shipped skill's own `SKILL.md` frontmatter; `--check` compares instead of writing. The
+  each shipped skill's own `SKILL.md` frontmatter; `--check` compares instead of writing, and `npm run gen -- --check` runs that comparison. The
   README's scoreboard has its own generator, `python -m bench.report scoreboard`, and the results
   table `python -m bench.report table` (see
   `bench/README.md`, "Results"); this script does not touch it.

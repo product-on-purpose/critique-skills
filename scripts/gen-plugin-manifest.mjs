@@ -6,8 +6,9 @@
 //               hand-authored (Standard sec 5 G4 for the manifest, sec 2.6 G4 for INDEX.md). Under
 //               --check, instead of writing, it diffs the native manifest and INDEX.md against what
 //               library.json (plus component frontmatter, for INDEX.md) would generate, notes any
-//               other generated doc this repo does not have yet (the README result and catalog
-//               tables), checks that AGENTS.md documents every command
+//               other generated doc this repo does not have yet (the README result tables),
+//               diffs README.md's skill-catalog table against library.json, checks that AGENTS.md
+//               documents every command
 //               .github/workflows/ci.yml runs, marked "# doc-check" (S-07 CI-pipeline spec, AC-5),
 //               checks that ci.yml's aggregate gate job still depends on every job in the file,
 //               and checks that release.yml re-runs every ci.yml command it does not exclude by name.
@@ -29,6 +30,7 @@ import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { resolveToolkit, toolkitCandidates, TOOLKIT_REPO_URL } from "./lib/resolve-toolkit.mjs";
 import { checkIndexDrift, writeIndex } from "./gen-index.mjs";
+import { checkCatalogDrift } from "./gen-readme-catalog.mjs";
 import { checkCiGate } from "./lib/ci-gate.mjs";
 import { checkReleaseParity } from "./lib/release-parity.mjs";
 
@@ -92,8 +94,8 @@ function checkIndexMd() {
 }
 
 /**
- * Generated docs this repo does not have yet (the README result and catalog tables need
- * bench/results/ and library.json's skill catalog wiring respectively). Vacuously OK: there is
+ * Generated docs this repo does not have yet (the README result tables need bench/results/).
+ * Vacuously OK: there is
  * nothing to diff against a file that legitimately does not exist yet (S-07 CI-pipeline spec: "the
  * script must succeed vacuously with a clear message, not fail"). Kept here, rather than silently
  * omitted, so a future reader sees this drift job already knows about it and will start checking it
@@ -197,6 +199,7 @@ if (args.includes("--check")) {
   const results = [
     checkManifestDrift(),
     checkIndexMd(),
+    checkCatalogDrift(),
     checkGeneratedDocsPlaceholder(),
     checkAgentsDocCoverage(),
     checkCiGateCoverage(),
