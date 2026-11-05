@@ -128,7 +128,9 @@ export function checkCatalogDrift(targetArg) {
   } catch (e) {
     return { ok: false, messages: [`gen:catalog --check: ${e.message}`] };
   }
-  if (newText !== targetText) {
+  // Compare without line endings: a Windows checkout holds this file as CRLF and the block renders
+  // as LF, which is not drift, because git normalizes both to the same committed bytes.
+  if (newText.replace(/\r\n/g, "\n") !== targetText.replace(/\r\n/g, "\n")) {
     return {
       ok: false,
       messages: [
