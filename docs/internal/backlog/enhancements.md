@@ -2007,7 +2007,7 @@ and the repository did not have.
   skills. This entry has not tested an upload, and it has not checked whether the Standard requires
   these keys at the top level.
 - **Derives from:** the comparison for E69 (npm option for the gate), 2026-11-03.
-- **Size:** M. **Release:** unassigned. **Category:** skills. **Confidence:** high that the keys are
+- **Size:** M. **Release:** unscheduled. **Category:** skills. **Confidence:** high that the keys are
   top-level; medium on the rejection, which rests on the toolkit's vendor citation.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
@@ -2027,7 +2027,7 @@ and the repository did not have.
   `_rank_key` has no lane term. `critique-clarity`'s scripted lane reads 0.881 on Sonnet in ADR
   0038, whose amendment states "What this amendment does not decide."
 - **Derives from:** ADR 0038 (per-tier consistency floors), amended 2026-10-30.
-- **Size:** M. **Release:** unassigned. **Category:** contract. **Confidence:** high; the code and
+- **Size:** M. **Release:** unscheduled. **Category:** contract. **Confidence:** high; the code and
   the ADR were both read.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
