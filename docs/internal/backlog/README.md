@@ -3,7 +3,7 @@
 Local-first, version-controlled backlogs (Standard sec 7.1). Two files, plus this index:
 
 - **[enhancements.md](enhancements.md)** - features, fixes and refinements to components that already
-  exist. 76 items, `E1` through `E76`.
+  exist. 80 items, `E1` through `E80`.
 - **[new-components.md](new-components.md)** - proposals to ADD a skill, command, subagent, hook or
   chain. 5 items, `N1` through `N5`, each with a recorded why-gate verdict.
 
@@ -100,7 +100,7 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**6 items depend on nothing and can start today.** Derived from each item's own
+**10 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
@@ -111,6 +111,10 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E51 | Give the precision and corpus-provenance limitations a retirement path or an explicit 'accepted' | S | unscheduled |
 | E59 | Verify what the marketplace consumes the homepage field for | S | unscheduled |
 | E69 | Revisit ADR 0011's npm option now that the toolkit ships on npm | S | unscheduled |
+| E77 | Keep a skill cell's response text when its assembled envelope fails contract validation | S | v0.3.0 |
+| E78 | Rule on the TOULMIN.md note that landed after critique-argument 0.1.1 was measured | S | v0.3.0 |
+| E79 | Decide whether SKILL.md's top-level checks and rubric_sources keys should move for portability | M | unscheduled |
+| E80 | Decide whether the output bound should rank scripted findings ahead of judged ones | M | unscheduled |
 
 With S-07's AC-4 closed, every criterion in that spec passes and
 [ADR 0034](../decisions/0034-v0.1.x-exit-gate-declaration.md)'s two named conditions for calling
@@ -133,7 +137,7 @@ v0.1.x finished are both discharged.
 - **BYOR.** E10 (the measurement ruling) gates E45 (the build) gates every later skill's BYOR support.
   E10 was ruled on 2026-10-24
   ([ADR 0039 (BYOR measured by parity)](../decisions/0039-byor-measured-by-parity.md)), so E45 is
-  unblocked.
+  unblocked. E45 moved out of v0.3.0 to v0.4.0+ on 2026-11-03.
 - **Gold tier.** E52 (who performs revise) gates N4 (the revision-loop chain) gates E55 (G1 and G3
   coverage) gates any tier declaration above Convergent. E52 was ruled on 2026-10-25
   ([ADR 0040 (the revision loop pauses with a revision brief)](../decisions/0040-revision-loop-pauses-with-a-revision-brief.md)),

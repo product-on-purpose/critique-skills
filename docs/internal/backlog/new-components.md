@@ -225,6 +225,8 @@ as the record of 2026-09-14.
   [ADR 0040 (the revision loop pauses with a revision brief)](../decisions/0040-revision-loop-pauses-with-a-revision-brief.md).
   This item's spec fixes the brief's field names, the disposition log's iteration field, and one G3
   eval per chain edge.
+- **Spec:** [N4's spec (the revision-loop chain)](../release-plans/_unassigned/N4_revision-loop-chain/spec.md),
+  ruled 2026-10-30, not built.
 
 ## N5 - critique-payment-checkout (checkout and payment flow critique, its own research base)
 
