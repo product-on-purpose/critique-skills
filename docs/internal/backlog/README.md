@@ -113,8 +113,8 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E69 | Revisit ADR 0011's npm option now that the toolkit ships on npm | S | unscheduled |
 | E77 | Keep a skill cell's response text when its assembled envelope fails contract validation | S | v0.3.0 |
 | E78 | Rule on the TOULMIN.md note that landed after critique-argument 0.1.1 was measured | S | v0.3.0 |
-| E79 | Decide whether SKILL.md's top-level checks and rubric_sources keys should move for portability | M | unassigned |
-| E80 | Decide whether the output bound should rank scripted findings ahead of judged ones | M | unassigned |
+| E79 | Decide whether SKILL.md's top-level checks and rubric_sources keys should move for portability | M | unscheduled |
+| E80 | Decide whether the output bound should rank scripted findings ahead of judged ones | M | unscheduled |
 
 With S-07's AC-4 closed, every criterion in that spec passes and
 [ADR 0034](../decisions/0034-v0.1.x-exit-gate-declaration.md)'s two named conditions for calling
