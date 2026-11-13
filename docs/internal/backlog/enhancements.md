@@ -1109,7 +1109,10 @@ and the repository did not have.
 - **Size:** S. **Release:** v1.0.0. **Category:** docs. **Confidence:** verified.
 - **Blocks:** Declaring v1.0.0 without re-derivation
 - **Depends on:** Nothing to create; rows depend on E44, E48 and E56
-- **Rank at intake:** 43 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Rank at intake:** 43 of 64. **Status:** done 2026-11-12. The tracker is
+  `docs/internal/v1-readiness.md`, with one row per condition. Rows 1, 2 and 4 read "Not met" and
+  name E48, E44 and E56 as what closes them. Row 3 needs the maintainer to rule which two minor
+  releases count.
 
 ## E44 - Run the taxonomy survey and triage the Gemini audit's slate through it
 
@@ -1713,8 +1716,10 @@ and the repository did not have.
 - **Size:** S to decide. **Release:** unscheduled. **Category:** decision. **Confidence:** verified
   for the premise, inference for the trade-off.
 - **Blocks:** Nothing
-- **Depends on:** Nothing. The natural moment is the toolkit's first npm release that carries
-  Standard 0.17.
+- **Depends on:** The maintainer's decision on whether agent-skills-toolkit deprecates its tier
+  levels, which was deferred on 2026-11-04. The edits are committed only on the local branch
+  `build/e69-gate-on-npm-toolkit` and wait for that decision. (Updated 2026-11-12. The field said
+  "Nothing" until then, which kept this item in the Ready now table while it was held.)
 - **Rank at intake:** unranked (added 2026-09-30). **Status:** backlog.
 
 ## E70 - Teach the skill template how a synthesized rubric lays out its references and anchors
@@ -2036,3 +2041,28 @@ and the repository did not have.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
 - **Rank at intake:** unranked (added 2026-11-04). **Status:** open.
+
+## E81 - Record how many attempts each skill cell took
+
+- **Target:** `bench/run_bench.py` (`_call_skill_lane_with_text`, `execute_grid`) and the run's
+  provenance output
+- **Change:** `_call_skill_lane_with_text` tries a skill cell up to `SKILL_RUN_ATTEMPTS` (3) times
+  when the response holds no envelope, and the attempt number is a loop variable that nothing
+  records. A cell that succeeded on its third attempt looks the same as one that succeeded on its
+  first. Done: each cell's attempt count is written beside its envelope or its `.refused.txt`, in a
+  file that no envelope reader discovers, and the run prints a per-skill total.
+- **Why:** PR 122 (critic prose-location fix) could not be measured, partly because its one
+  remaining benefit, fewer retries, is invisible to this bench. A prompt fix that makes a skill
+  finish more reliably needs this count before any paid run can show it. The count covers only the
+  harness's own retries. Rewrites that happen inside one CLI call, such as the model fixing an
+  envelope that `merge.py` rejected, would need the CLI transcript, which this item does not add.
+- **Evidence:** `bench/run_bench.py` sets `SKILL_RUN_ATTEMPTS = 3`, and `attempt` appears only as the
+  loop variable. The PR 122 measurement concluded that "a future measurement of a prompt fix needs a
+  retry or refusal instrument first".
+- **Derives from:** the critic prose-location measurement of PR 122, closed unmerged on 2026-11-04,
+  whose wrap noted that no backlog item covered the retry count.
+- **Size:** S. **Release:** unscheduled. **Category:** bench. **Confidence:** high; the code path was
+  read.
+- **Blocks:** Measuring any prompt fix whose benefit is fewer retries.
+- **Depends on:** Nothing
+- **Rank at intake:** unranked (added 2026-11-12). **Status:** open.
