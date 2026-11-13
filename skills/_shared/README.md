@@ -26,6 +26,10 @@ skill.
   is reimplemented; `tests/test_gate.py` asserts function identity, not just equivalent behavior.
 - `runner.py` - `run_scripted_lane()`: the whole body of a skill's `checks.py` `main()`, parameterized
   by that skill's own check function.
+- `revision_loop.py` - the revision loop's deterministic steps, for
+  [the revision-loop workflow](../../_workflows/critique-revision-loop.md): `stop-check`, `brief`,
+  `resume`, and `compare`. Bookkeeping over contract documents only. It never calls a model and never
+  writes to the artifact under critique.
 - `merge.py` - the CLI form of `envelope.py`, for the judged lane. `runner.py` gave the scripted lane
   a way to reach `assemble_envelope()`; the critic had none, because it is prose plus `Bash` and that
   was a Python function, so it did pass 4 in its head from instructions. It did not do it reliably:

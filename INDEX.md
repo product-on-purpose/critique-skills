@@ -37,4 +37,5 @@
 - [`CHANGELOG.md`](CHANGELOG.md) - full technical history; [`RELEASE-NOTES.md`](RELEASE-NOTES.md) - curated, user-facing notes.
 - [`docs/`](docs/) - Diataxis docs (reference, how-to, explanation).
 - [`docs/internal/decisions/`](docs/internal/decisions/) - ADRs; [`docs/internal/backlog/`](docs/internal/backlog/) - backlog.
+- [`agents/_chain-permitted.yaml`](agents/_chain-permitted.yaml) - the chain contract.
 - [`scripts/`](scripts/) - the Node validation spine (conformance checks, generators, gate, evaluate).

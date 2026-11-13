@@ -2,9 +2,9 @@
 id: N4
 title: "The revision-loop chain"
 type: spec
-status: committed
+status: built
 created: 2026-10-26
-updated: 2026-11-03
+updated: 2026-11-12
 linked-effort: docs/internal/backlog/new-components.md
 linked-plan: null
 linked-release: v0.3.0
@@ -17,28 +17,35 @@ target-release: v0.3.0
 
 # Spec: the revision-loop chain (N4)
 
-Ruled by the maintainer on 2026-10-30 (the nine decisions below), and not built yet. [ADR 0040 (the revision loop pauses with a revision brief)](../../../decisions/0040-revision-loop-pauses-with-a-revision-brief.md) settled who performs revise, and this spec restates that ruling as requirements. [ADR 0042 (contract 1.1.0)](../../../decisions/0042-contract-1-1-0-iteration-revision-brief-selector.md) decides the contract change this chain builds. The body below is the draft the maintainer ruled on, so a note that was true on 2026-10-26 can be out of date: E73 (merge runs the scripted lane) is built, and its version moves happened on 2026-10-28.
+Ruled by the maintainer on 2026-10-30 (the nine decisions below), and built on 2026-11-12 in PR 130 (contract 1.1.0) and PR 131 (the chain). Two parts of the build differ from the text below, and both are recorded under Task Summary. [ADR 0040 (the revision loop pauses with a revision brief)](../../../decisions/0040-revision-loop-pauses-with-a-revision-brief.md) settled who performs revise, and this spec restates that ruling as requirements. [ADR 0042 (contract 1.1.0)](../../../decisions/0042-contract-1-1-0-iteration-revision-brief-selector.md) decides the contract change this chain builds. The body below is the draft the maintainer ruled on, so a note that was true on 2026-10-26 can be out of date: E73 (merge runs the scripted lane) is built, and its version moves happened on 2026-10-28.
 
 ## Task Summary
 
-**Status:** ruled 2026-10-30, not built
-**Last updated:** 2026-11-03 by Claude, promoted from a local draft after the 2026-10-30 walk
+**Status:** built 2026-11-12, except D6's frontmatter key, which waits on a version ruling
+**Last updated:** 2026-11-12 by Claude, after the build
+
+**Where the build differs from this spec.**
+
+- **The brief is in the contract.** Requirement 3 says the brief stays outside the contract until E54 consumes it. ADR 0042, written after this spec, moved it into contract 1.1.0 as a fourth document type, and PR 130 built that.
+- **No skill's frontmatter gained `metadata.chain` yet.** D6 chose to declare each edge both in the contract and in the skill's frontmatter, and its follow-up said to raise the version question if the key changes what a skill run reads. It does: `critique-critic` reads the skill's `SKILL.md` in full, frontmatter included. So the edges live in `agents/_chain-permitted.yaml` only, which is all the toolkit's S4 and G3 checks read, and the frontmatter key waits on the maintainer's ruling.
+- **A fourth stop decision exists.** When findings at severity 3 or above remain but the person accepted none, the loop stops with `stop-nothing-accepted`, because an empty brief asks for no revision and the contract rejects one. The spec names only the two stops.
+- **`INDEX.md` lists the chain contract but not the workflow.** The toolkit's index generator renders no workflow section, and inserting one locally makes the toolkit's G4 drift check fail, which is a Gold burndown regression. The workflow is listed in `library.json`, `AGENTS.md`, and `README.md`.
 **Linked plan:** not yet planned
 **Open questions:** 0 (all nine were decided 2026-10-30; see Open Questions / Decisions)
 **Revisions:** 0
 
 ### Acceptance Criteria Fulfillment
 
-- [ ] **AC-1** - The chain runs ADR 0040's five steps, in order, and no step writes to the artifact
-- [ ] **AC-2** - The chain stops when no finding at severity 3 or above remains, or after the third iteration, whichever comes first
-- [ ] **AC-3** - A pause writes a revision brief holding one entry per accepted finding, with the finding, its location, its fix, and its criterion
-- [ ] **AC-4** - The brief is a deterministic projection of the envelope and the disposition log, computable with no model call
-- [ ] **AC-5** - The disposition log's iteration field is optional, added at contract version 1.1.0, and every existing 1.0.0 log stays valid
-- [ ] **AC-6** - A resumed run finds its prior state from what the person hands it, by a stated, reproducible rule
-- [ ] **AC-7** - A re-critique's comparison against the previous envelope emits a stated, deterministic output
-- [ ] **AC-8** - Every edge `agents/_chain-permitted.yaml` declares for this chain carries at least one G3 eval whose expected output is a revision brief
-- [ ] **AC-9** - The README states beside N4 that the loop takes two invocations, and the docs state that the commitment covers the library, not a tool a person wires downstream
-- [ ] **AC-10** - No step of the chain itself requires a paid, model-calling measurement run to validate; every G3 eval and regression case runs on committed fixtures with no API call
+- [x] **AC-1** - The chain runs ADR 0040's five steps, in order, and no step writes to the artifact
+- [x] **AC-2** - The chain stops when no finding at severity 3 or above remains, or after the third iteration, whichever comes first
+- [x] **AC-3** - A pause writes a revision brief holding one entry per accepted finding, with the finding, its location, its fix, and its criterion
+- [x] **AC-4** - The brief is a deterministic projection of the envelope and the disposition log, computable with no model call
+- [x] **AC-5** - The disposition log's iteration field is optional, added at contract version 1.1.0, and every existing 1.0.0 log stays valid
+- [x] **AC-6** - A resumed run finds its prior state from what the person hands it, by a stated, reproducible rule
+- [x] **AC-7** - A re-critique's comparison against the previous envelope emits a stated, deterministic output
+- [x] **AC-8** - Every edge `agents/_chain-permitted.yaml` declares for this chain carries at least one G3 eval whose expected output is a revision brief
+- [x] **AC-9** - The README states beside N4 that the loop takes two invocations, and the docs state that the commitment covers the library, not a tool a person wires downstream
+- [x] **AC-10** - No step of the chain itself requires a paid, model-calling measurement run to validate; every G3 eval and regression case runs on committed fixtures with no API call
 
 ## Purpose
 

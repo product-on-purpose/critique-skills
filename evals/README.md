@@ -8,7 +8,7 @@ Evaluation fixtures that span more than one skill. A fixture scoped to a single 
 that skill, in `skills/<skill>/evals/`; this folder is for the ones that are only meaningful when
 several skills are considered together.
 
-There is exactly one such fixture today, and it exists because of a gap an external review found:
+The joint-routing fixture exists because of a gap an external review found:
 every skill's own `evals/triggers.eval.json` is validated in isolation, so nothing in the pipeline
 ever compares one skill's description against another's. Seven sibling skills in one namespace, all
 of them about critique, is precisely where that matters.
@@ -21,7 +21,14 @@ structural: that the fixture is well formed, that every skill it names exists, a
 contested pair of skills carries a boundary clause in both descriptions naming the other. See
 `scripts/tests/test_joint_routing_eval.py`, whose module docstring states that scope explicitly.
 
-Each fixture's own `scoring` block records its mechanism and whether it has been run. A fixture
+**The chain eval sets are the exception, and they do run in CI.** Each
+`critique-<domain>.revision-loop.eval.json` covers one edge of `agents/_chain-permitted.yaml`, a
+skill delegating its critique to `critique-critic`, and its cases test the revision loop's own
+deterministic steps: the stop-check, and the revision brief it writes when the loop continues. No
+case calls a model, so `skills/_shared/tests/test_revision_loop_evals.py` executes every case in the
+`unit-python` job and compares each brief byte for byte with the file under `expected/`.
+
+The joint-routing fixture's own `scoring` block records its mechanism and whether it has been run. A fixture
 whose `status` is `not-yet-run` publishes no results, and a test enforces that.
 
 ## Inventory
@@ -38,3 +45,33 @@ whose `status` is `not-yet-run` publishes no results, and a test enforces that.
   `scripts/run-joint-routing.py`. Records the model, `k`, every trial per case, and whether the
   answers were unanimous, so a shaky win is distinguishable from a solid one. Committed because
   this repository's rule is that no number appears anywhere that is not in a committed result file.
+- `critique-accessibility.revision-loop.eval.json` - the eval set for the `critique-accessibility` to `critique-critic`
+  edge of [the revision-loop workflow](../_workflows/critique-revision-loop.md), over
+  `examples/accessibility/`: the loop continues at iteration 1 and writes a brief, and it stops without one at
+  the three-iteration bound.
+- `critique-argument.revision-loop.eval.json` - the eval set for the `critique-argument` to `critique-critic`
+  edge of [the revision-loop workflow](../_workflows/critique-revision-loop.md), over
+  `examples/argument/`: the loop continues at iteration 1 and writes a brief, and it stops without one at
+  the three-iteration bound.
+- `critique-clarity.revision-loop.eval.json` - the eval set for the `critique-clarity` to `critique-critic`
+  edge of [the revision-loop workflow](../_workflows/critique-revision-loop.md), over
+  `examples/clarity/`: the loop continues at iteration 1 and writes a brief, and it stops without one at
+  the three-iteration bound.
+- `critique-docs.revision-loop.eval.json` - the eval set for the `critique-docs` to `critique-critic`
+  edge of [the revision-loop workflow](../_workflows/critique-revision-loop.md), over
+  `examples/docs/`: the loop continues at iteration 1 and writes a brief, and it stops without one at
+  the three-iteration bound.
+- `critique-forms.revision-loop.eval.json` - the eval set for the `critique-forms` to `critique-critic`
+  edge of [the revision-loop workflow](../_workflows/critique-revision-loop.md), over
+  `examples/forms/`: the loop continues at iteration 1 and writes a brief, and it stops without one at
+  the three-iteration bound.
+- `critique-microcopy.revision-loop.eval.json` - the eval set for the `critique-microcopy` to `critique-critic`
+  edge of [the revision-loop workflow](../_workflows/critique-revision-loop.md), over
+  `examples/microcopy/`: the loop continues at iteration 1 and writes a brief, and it stops without one at
+  the three-iteration bound.
+- `critique-usability.revision-loop.eval.json` - the eval set for the `critique-usability` to `critique-critic`
+  edge of [the revision-loop workflow](../_workflows/critique-revision-loop.md), over
+  `examples/usability/`: the loop continues at iteration 1 and writes a brief, and it stops without one at
+  the three-iteration bound.
+- `expected/` - the revision brief each eval set's first case must produce, byte for byte, one
+  `<domain>.revision-brief.json` per skill.
