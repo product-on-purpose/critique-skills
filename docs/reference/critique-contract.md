@@ -9,9 +9,9 @@ level: intermediate
 
 This page is commentary on [`contract/critique-contract.schema.json`](../../contract/critique-contract.schema.json), the machine-parseable interface every critique-skills component produces or consumes. It links to and quotes the schema; it does not restate it. For the exhaustive required-field tables, the versioning rules, and the validator rules JSON Schema itself cannot express, read [`contract/README.md`](../../contract/README.md); that file is the schema's own specification and stays authoritative over anything said here. The schema itself states that where it and [the methodology, section 5](../explanation/methodology.md#5-the-critique-contract) disagree, the methodology is correct and the schema is a bug.
 
-## Three documents, one file
+## Four documents, one file
 
-The schema defines three document shapes and dispatches on one key: a document carrying `dispositions` validates as a disposition log (`#/$defs/dispositionLog`, anchor `#dispositionLog`); every other object validates as a run envelope (`#/$defs/envelope`, anchor `#envelope`). A bare finding is validated by referencing `#/$defs/finding` directly (anchor `#finding`), since a finding never appears at a document root on its own, only inside an envelope's `findings` array.
+The schema defines four document shapes and dispatches on two keys, in order. A document carrying `dispositions` validates as a disposition log (`#/$defs/dispositionLog`, anchor `#dispositionLog`). Otherwise, a document carrying `items` validates as a revision brief (`#/$defs/revisionBrief`, anchor `#revisionBrief`), which contract 1.1.0 added for the revision loop. Every other object validates as a run envelope (`#/$defs/envelope`, anchor `#envelope`). A bare finding is validated by referencing `#/$defs/finding` directly (anchor `#finding`), since a finding never appears at a document root on its own, only inside an envelope's `findings` array.
 
 ## Where enforcement stops
 

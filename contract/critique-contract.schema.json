@@ -2,8 +2,8 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/product-on-purpose/critique-skills/main/contract/critique-contract.schema.json",
   "title": "Critique contract",
-  "description": "The machine-parseable interface every critique-skills component produces and consumes. Three document types are defined: a finding (#/$defs/finding), a run envelope (#/$defs/envelope), and a disposition log (#/$defs/dispositionLog). This file is contract version 1.0.0 and validates contract 1.x documents only. Where this file and docs/explanation/methodology.md disagree, the methodology is correct and this file is a bug.",
-  "$comment": "Contract version 1.0.0. Root dispatch: a document carrying a 'dispositions' key is validated as a disposition log; every other object is validated as a run envelope. To validate a bare finding, reference #/$defs/finding directly. Rules this schema cannot express are listed in contract/README.md and MUST be implemented by the validator.",
+  "description": "The machine-parseable interface every critique-skills component produces and consumes. Four document types are defined: a finding (#/$defs/finding), a run envelope (#/$defs/envelope), a disposition log (#/$defs/dispositionLog), and a revision brief (#/$defs/revisionBrief). This file is contract version 1.1.0 and validates contract 1.x documents only. Where this file and docs/explanation/methodology.md disagree, the methodology is correct and this file is a bug.",
+  "$comment": "Contract version 1.1.0. Root dispatch: a document carrying a 'dispositions' key is validated as a disposition log; otherwise a document carrying an 'items' key is validated as a revision brief; every other object is validated as a run envelope. To validate a bare finding, reference #/$defs/finding directly. Rules this schema cannot express are listed in contract/README.md and MUST be implemented by the validator.",
   "type": "object",
   "if": {
     "type": "object",
@@ -13,7 +13,16 @@
     "$ref": "#/$defs/dispositionLog"
   },
   "else": {
-    "$ref": "#/$defs/envelope"
+    "if": {
+      "type": "object",
+      "required": ["items"]
+    },
+    "then": {
+      "$ref": "#/$defs/revisionBrief"
+    },
+    "else": {
+      "$ref": "#/$defs/envelope"
+    }
   },
 
   "$defs": {
@@ -251,6 +260,12 @@
           "$ref": "#/$defs/envelopeRef",
           "description": "The run whose findings are being dispositioned. Finding IDs are unique only within a run, so a log without this reference is unresolvable."
         },
+        "iteration": {
+          "title": "Iteration",
+          "description": "Which pass of the revision loop this log records, counting from 1. Optional, added at contract 1.1.0; a log with no iteration field is a single, unchained run. No schema maximum: the revision-loop chain's own stop-check enforces the three-iteration bound of methodology section 10, so a change to that bound is not a contract change. See docs/internal/decisions/0042-contract-1-1-0-iteration-revision-brief-selector.md.",
+          "type": "integer",
+          "minimum": 1
+        },
         "dispositions": {
           "title": "Dispositions",
           "description": "One entry per finding decided. A log need not cover every finding in the envelope; undecided findings are simply absent.",
@@ -291,6 +306,64 @@
         "decided_at": {
           "$ref": "#/$defs/timestamp",
           "description": "When the decision was recorded. Optional."
+        }
+      }
+    },
+
+    "revisionBrief": {
+      "$anchor": "revisionBrief",
+      "title": "Revision brief",
+      "description": "What the revision loop hands a person when it pauses: one item per finding the person accepted, projected from the run envelope and its disposition log with no model call. The library never revises the artifact; the person, or a tool the person runs on their own authority, does. Added at contract 1.1.0. See docs/internal/decisions/0040-revision-loop-pauses-with-a-revision-brief.md and 0042-contract-1-1-0-iteration-revision-brief-selector.md.",
+      "type": "object",
+      "required": ["envelope", "iteration", "items"],
+      "additionalProperties": false,
+      "properties": {
+        "envelope": {
+          "$ref": "#/$defs/envelopeRef",
+          "description": "The run whose accepted findings this brief carries. The same reference shape a disposition log uses."
+        },
+        "iteration": {
+          "title": "Iteration",
+          "description": "The revision-loop iteration that paused to write this brief, counting from 1. It equals the iteration of the disposition log the brief was projected from.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "items": {
+          "title": "Brief items",
+          "description": "One entry per accepted finding, in the order the disposition log records them. A brief is written only when there is something to revise, so an empty list is rejected.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/revisionBriefItem"
+          }
+        }
+      }
+    },
+
+    "revisionBriefItem": {
+      "title": "Revision brief item",
+      "description": "One accepted finding, carried with the finding object's own field names so nothing is renamed at the brief boundary.",
+      "type": "object",
+      "required": ["finding_id", "criterion", "location", "fix"],
+      "additionalProperties": false,
+      "properties": {
+        "finding_id": {
+          "$ref": "#/$defs/findingId",
+          "description": "The id of the accepted finding in the referenced envelope. Resolvability is a validator rule, checked whenever the envelope is available."
+        },
+        "criterion": {
+          "$ref": "#/$defs/criterionId",
+          "description": "The finding's criterion, copied from the referenced envelope."
+        },
+        "location": {
+          "$ref": "#/$defs/locationText",
+          "description": "The finding's location, copied from the referenced envelope."
+        },
+        "fix": {
+          "$ref": "#/$defs/prose",
+          "maxLength": 1000,
+          "description": "The finding's fix, copied from the referenced envelope."
         }
       }
     },
@@ -372,7 +445,8 @@
 
     "selector": {
       "title": "Structured selector",
-      "description": "RESERVED. A structured, machine-resolvable pointer to the same place location names in prose: a CSS selector, a heading path, a page and bounding box, a slide index. Deliberately unvalidated in contract 1.x, and the only object in this schema that accepts unknown properties. No vocabulary has been agreed across text, HTML, and visual artifacts, and freezing the wrong one is worse than freezing none. Producers MAY write it, consumers MUST NOT depend on it, and no v0.1 metric reads it. Unvalidated does not mean exempt from house style: because this object is the one place a schema pattern cannot reach, the validator's rule 9 rejects an em dash or en dash in any string inside it, keys included. See docs/internal/decisions/0012-location-grammar-freetext-plus-reserved-selector.md.",
+      "deprecated": true,
+      "description": "DEPRECATED as of contract 1.1.0, and never used: no shipped skill, committed envelope, golden example, or bench run has written it. Kept rather than deleted, because removing a property is a major change and a 1.0.0 document carrying one must stay valid. Producers should stop writing it. Originally RESERVED: a structured, machine-resolvable pointer to the same place location names in prose: a CSS selector, a heading path, a page and bounding box, a slide index. Deliberately unvalidated in contract 1.x, and the only object in this schema that accepts unknown properties. No vocabulary has been agreed across text, HTML, and visual artifacts, and freezing the wrong one is worse than freezing none. Producers MAY write it, consumers MUST NOT depend on it, and no v0.1 metric reads it. Unvalidated does not mean exempt from house style: because this object is the one place a schema pattern cannot reach, the validator's rule 9 rejects an em dash or en dash in any string inside it, keys included. See docs/internal/decisions/0012-location-grammar-freetext-plus-reserved-selector.md.",
       "type": "object",
       "minProperties": 1
     },

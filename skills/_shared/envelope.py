@@ -23,10 +23,10 @@ SEVERITY_KEYS: tuple[str, ...] = ("0", "1", "2", "3", "4")
 OUTPUT_BOUND_BELOW_SEVERITY_3 = 5
 
 # contract/critique-contract.schema.json's own header: "This file is
-# contract version 1.0.0". Not machine-readable from the schema file
+# contract version 1.1.0". Not machine-readable from the schema file
 # itself (the version lives in prose, not a queryable field), so it is
 # duplicated here; bump it if that header's version ever changes.
-CONTRACT_VERSION = "1.0.0"
+CONTRACT_VERSION = "1.1.0"
 
 
 def _rank_key(raw: RawFinding) -> tuple[int, str, str]:
