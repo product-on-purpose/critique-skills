@@ -535,6 +535,96 @@ def test_execute_grid_keeps_the_response_of_a_contract_invalid_cell(tmp_path: Pa
     assert '"suppressed_count": 5' in text
 
 
+def _one_skill_cell(tmp_path: Path) -> list[GridCell]:
+    _write_fake_skill(tmp_path, "critique-toy", scripted=["TOY-ALPHA"], judged=["TOY-BETA"])
+    corpus_dir = tmp_path / "bench" / "corpus"
+    _write_corpus_artifact(corpus_dir, "toy", "toy-001", "Body one.\n")
+    tiers = [Tier(alias="haiku", model_id="claude-haiku-4-5-20251001")]
+    return plan_grid(["critique-toy"], tiers, k=1, corpus_dir=corpus_dir, out_dir=tmp_path / "runs", include_baseline=False)
+
+
+def test_execute_grid_records_a_first_attempt_success_as_one(tmp_path: Path) -> None:
+    """E81: every skill cell's attempt count is kept, including the ordinary case."""
+    cells = _one_skill_cell(tmp_path)
+    client = FakeClient([FakeResponse(json.dumps(_toy_envelope_from_skill()))])
+
+    results = execute_grid(cells, client=client, repo_root=tmp_path, now_fn=_now)
+
+    assert [(r.ok, r.attempts) for r in results] == [(True, 1)]
+    assert run_bench.attempts_path(cells[0].out_path).read_text(encoding="utf-8") == "1\n"
+
+
+def test_execute_grid_records_a_cell_that_needed_a_retry(tmp_path: Path) -> None:
+    """E81: a cell that succeeds on its second attempt was indistinguishable from a first-attempt
+    success, so a fix that made a skill finish more reliably could not be measured."""
+    cells = _one_skill_cell(tmp_path)
+    client = FakeClient(
+        [FakeResponse("Still running in the background."), FakeResponse(json.dumps(_toy_envelope_from_skill()))]
+    )
+
+    results = execute_grid(cells, client=client, repo_root=tmp_path, now_fn=_now)
+
+    assert [(r.ok, r.attempts) for r in results] == [(True, 2)]
+    assert cells[0].out_path.is_file()
+    assert run_bench.attempts_path(cells[0].out_path).read_text(encoding="utf-8") == "2\n"
+
+
+def test_execute_grid_records_the_full_budget_for_a_cell_that_never_finished(tmp_path: Path) -> None:
+    cells = _one_skill_cell(tmp_path)
+    client = FakeClient([FakeResponse("Still running.")] * run_bench.SKILL_RUN_ATTEMPTS)
+
+    results = execute_grid(cells, client=client, repo_root=tmp_path, now_fn=_now)
+
+    assert [(r.ok, r.attempts) for r in results] == [(False, run_bench.SKILL_RUN_ATTEMPTS)]
+    assert not cells[0].out_path.exists()
+    assert run_bench.refused_text_path(cells[0].out_path).is_file()
+    count = run_bench.attempts_path(cells[0].out_path).read_text(encoding="utf-8")
+    assert count == f"{run_bench.SKILL_RUN_ATTEMPTS}\n"
+
+
+def test_a_baseline_cell_records_no_attempt_count(tmp_path: Path) -> None:
+    """The baseline is one API-shaped call with no retry loop, so a count of 1 would be invented."""
+    _write_fake_skill(tmp_path, "critique-toy", scripted=["TOY-ALPHA"], judged=["TOY-BETA"])
+    corpus_dir = tmp_path / "bench" / "corpus"
+    _write_corpus_artifact(corpus_dir, "toy", "toy-001", "Body one.\n")
+    tiers = [Tier(alias="haiku", model_id="claude-haiku-4-5-20251001")]
+    cells = [c for c in plan_grid(["critique-toy"], tiers, k=1, corpus_dir=corpus_dir, out_dir=tmp_path / "runs") if c.condition == "baseline"]
+    client = FakeClient([FakeResponse("No problems found.")])
+
+    results = execute_grid(cells, client=client, repo_root=tmp_path, now_fn=_now)
+
+    assert [(r.ok, r.attempts) for r in results] == [(True, None)]
+    assert not run_bench.attempts_path(cells[0].out_path).exists()
+
+
+def test_attempt_summary_counts_calls_and_retried_cells_per_skill(tmp_path: Path) -> None:
+    cells = _one_skill_cell(tmp_path)
+    cell = cells[0]
+    results = [
+        run_bench.CellResult(cell=cell, ok=True, attempts=1),
+        run_bench.CellResult(cell=cell, ok=True, attempts=2),
+        run_bench.CellResult(cell=cell, ok=False, attempts=3),
+        run_bench.CellResult(cell=cell, ok=False, attempts=None),
+    ]
+
+    assert run_bench.attempt_summary(results) == [
+        "attempts critique-toy: 6 call(s) for 3 cell(s), 2 cell(s) needed more than one"
+    ]
+
+
+def test_an_attempt_count_is_invisible_to_every_envelope_reader(tmp_path: Path) -> None:
+    from bench.metrics.__main__ import _discover_envelopes
+    from contract.validate_envelopes import find_envelope_files
+
+    count = run_bench.attempts_path(tmp_path / "critique-toy" / "toy-001" / "haiku-r1.json")
+    count.parent.mkdir(parents=True)
+    count.write_text("2\n", encoding="utf-8")
+
+    assert not count.name.endswith(".json")
+    assert find_envelope_files(tmp_path) == []
+    assert _discover_envelopes(tmp_path) == []
+
+
 def test_a_refused_cells_text_names_no_local_path(tmp_path: Path) -> None:
     """The text is committed to a public repository, and the run narrates from a staging
     directory that, on a workstation, sits under the user's home directory."""

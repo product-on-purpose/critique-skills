@@ -100,7 +100,7 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**8 items depend on nothing and can start today.** Derived from each item's own
+**7 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
@@ -112,7 +112,6 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E78 | Rule on the TOULMIN.md note that landed after critique-argument 0.1.1 was measured | S | v0.3.0 |
 | E79 | Decide whether SKILL.md's top-level checks and rubric_sources keys should move for portability | M | unscheduled |
 | E80 | Decide whether the output bound should rank scripted findings ahead of judged ones | M | unscheduled |
-| E81 | Record how many attempts each skill cell took | S | unscheduled |
 
 With S-07's AC-4 closed, every criterion in that spec passes and
 [ADR 0034](../decisions/0034-v0.1.x-exit-gate-declaration.md)'s two named conditions for calling

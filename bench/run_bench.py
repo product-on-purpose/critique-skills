@@ -380,11 +380,13 @@ class JudgedLaneError(RuntimeError):
 
     `raw_text` carries what the CLI printed, when there was a response at all, so execute_grid can
     keep it beside the cell it failed. It is evidence of the failure, never a measurement.
+    `attempts` is how many CLI calls the cell made before it was refused, when that is known (E81).
     """
 
-    def __init__(self, message: str, *, raw_text: str | None = None) -> None:
+    def __init__(self, message: str, *, raw_text: str | None = None, attempts: int | None = None) -> None:
         super().__init__(message)
         self.raw_text = raw_text
+        self.attempts = attempts
 
 
 class ContractInvalidError(RuntimeError):
@@ -396,9 +398,10 @@ class ContractInvalidError(RuntimeError):
     read back.
     """
 
-    def __init__(self, message: str, *, raw_text: str | None = None) -> None:
+    def __init__(self, message: str, *, raw_text: str | None = None, attempts: int | None = None) -> None:
         super().__init__(message)
         self.raw_text = raw_text
+        self.attempts = attempts
 
 
 def _strip_code_fence(text: str) -> str:
@@ -665,7 +668,7 @@ def call_skill_lane(
     directory, so the corpus path never reaches the skill and the sibling seeded-defect manifest
     is not discoverable. See staged_artifact().
     """
-    envelope, _ = _call_skill_lane_with_text(
+    envelope, _text, _attempts = _call_skill_lane_with_text(
         client,
         model_id=model_id,
         skill=skill,
@@ -684,8 +687,10 @@ def _call_skill_lane_with_text(
     staged_path: Path,
     repo_root: Path,
     severity_3_threshold: int = 0,
-) -> tuple[dict[str, Any], str]:
-    """call_skill_lane, also returning the response text the envelope came from.
+) -> tuple[dict[str, Any], str, int]:
+    """call_skill_lane, also returning the response text the envelope came from and the number of
+    CLI calls it took (E81). A cell that needed its third attempt otherwise looks exactly like one
+    that succeeded on its first, so a fix that makes a skill finish more reliably could not be seen.
 
     execute_skill_cell needs the text for one case: an envelope it refuses after the fact. Four
     such cells in `bench-2026-10-28` kept nothing, so whether the critic judged and missed or never
@@ -710,7 +715,7 @@ def _call_skill_lane_with_text(
         last_text = _strip_code_fence(_response_text(response))
         envelope = _extract_envelope(last_text)
         if envelope is not None:
-            return _sanitize_envelope_prose(envelope), last_text
+            return _sanitize_envelope_prose(envelope), last_text, attempt
         # No envelope is usually a NON-FINAL response rather than a refusal. Measured 2026-08-09, a
         # cell returned "The critique-critic agent is running in the background to evaluate
         # clarity-001.md. I'll output the final run envelope when it completes." In a one-shot
@@ -724,6 +729,7 @@ def _call_skill_lane_with_text(
         f"{skill}: no run envelope after {SKILL_RUN_ATTEMPTS} attempts. The last response was "
         f"probably non-final (the run had not finished when the process exited): {last_text[:300]}",
         raw_text=last_text,
+        attempts=SKILL_RUN_ATTEMPTS,
     )
 
 
@@ -916,7 +922,7 @@ def execute_skill_cell(
 
     See _execute_skill_cell_with_text, which does the work and also returns the response text.
     """
-    envelope, _raw_text = _execute_skill_cell_with_text(
+    envelope, _raw_text, _attempts = _execute_skill_cell_with_text(
         cell,
         client=client,
         repo_root=repo_root,
@@ -935,8 +941,9 @@ def _execute_skill_cell_with_text(
     frontmatter: dict[str, Any],
     now_fn: Callable[[], str],
     severity_3_threshold: int = 0,
-) -> tuple[dict[str, Any], str]:
-    """execute_skill_cell, also returning the response text, with local paths scrubbed.
+) -> tuple[dict[str, Any], str, int]:
+    """execute_skill_cell, also returning the response text, with local paths scrubbed, and the
+    number of CLI calls the cell took (E81).
 
     execute_grid needs the text when it refuses the envelope on contract validation (E77).
 
@@ -957,7 +964,7 @@ def _execute_skill_cell_with_text(
         local_paths = {staged.parent: "<staging>", plugin: "<plugin>", Path.home(): "<home>"}
         before = tree_snapshot(plugin)
         try:
-            envelope, raw_text = _call_skill_lane_with_text(
+            envelope, raw_text, attempts = _call_skill_lane_with_text(
                 client,
                 model_id=cell.tier.model_id,
                 skill=cell.skill,
@@ -1015,6 +1022,7 @@ def _execute_skill_cell_with_text(
                 f"{sorted(l for l in lanes if l)}. A scripted-only envelope is not a complete run "
                 "and must not be scored as one.",
                 raw_text=raw_text,
+                attempts=attempts,
             )
 
     envelope["run"] = {
@@ -1027,7 +1035,7 @@ def _execute_skill_cell_with_text(
         "timestamp": now_fn(),
         "rubrics": list(frontmatter["rubrics"]),
     }
-    return envelope, raw_text
+    return envelope, raw_text, attempts
 
 
 def execute_baseline_cell(
@@ -1081,11 +1089,20 @@ def refused_text_path(out_path: Path) -> Path:
     return out_path.with_name(out_path.name + ".refused.txt")
 
 
+def attempts_path(out_path: Path) -> Path:
+    """Where a skill cell's attempt count goes: `haiku-r4.json.attempts.txt` (E81). It ends in
+    .txt for the same reason refused_text_path does: every envelope reader walks *.json."""
+    return out_path.with_name(out_path.name + ".attempts.txt")
+
+
 @dataclass
 class CellResult:
     cell: GridCell
     ok: bool
     detail: str = ""
+    # How many CLI calls a skill cell made (E81). None for a baseline cell, and for a skill cell that
+    # failed before or outside the CLI call, such as a sha256 mismatch or a stray write.
+    attempts: int | None = None
 
 
 def execute_grid(
@@ -1113,7 +1130,7 @@ def execute_grid(
             if cell.condition == "skill":
                 if cell.skill not in frontmatter_cache:
                     frontmatter_cache[cell.skill] = load_skill_frontmatter(cell.skill, repo_root=repo_root)
-                envelope, raw_text = _execute_skill_cell_with_text(
+                envelope, raw_text, attempts = _execute_skill_cell_with_text(
                     cell,
                     client=client,
                     repo_root=repo_root,
@@ -1126,8 +1143,12 @@ def execute_grid(
                     raise ContractInvalidError(
                         f"assembled envelope is not contract-valid: {validation.errors[0]}",
                         raw_text=raw_text,
+                        attempts=attempts,
                     )
                 _write_json(cell.out_path, envelope)
+                _write_text(attempts_path(cell.out_path), str(attempts))
+                results.append(CellResult(cell=cell, ok=True, attempts=attempts))
+                continue
             else:
                 envelope, raw_text = execute_baseline_cell(
                     cell, client=client, repo_root=repo_root, max_tokens=max_tokens, now_fn=now_fn
@@ -1148,9 +1169,33 @@ def execute_grid(
                 # (bench.metrics, contract/validate_envelopes.py, bench.variance) walks *.json, so
                 # a refused run's text can never be scored or counted as one.
                 _write_text(refused_text_path(cell.out_path), f"{exc}\n\n{raw_text}")
-            results.append(CellResult(cell=cell, ok=False, detail=str(exc)))
+            attempts = getattr(exc, "attempts", None)
+            if attempts is not None:
+                _write_text(attempts_path(cell.out_path), str(attempts))
+            results.append(CellResult(cell=cell, ok=False, detail=str(exc), attempts=attempts))
 
     return results
+
+
+def attempt_summary(results: Sequence[CellResult]) -> list[str]:
+    """One line per skill: how many CLI calls its cells made, and how many cells needed a retry.
+
+    E81. Each cell's count is also kept in its .attempts.txt file. Cells with no known count (the
+    baseline, and failures before the CLI call) are left out rather than counted as one attempt.
+    """
+    by_skill: dict[str, list[int]] = {}
+    for result in results:
+        if result.attempts is not None:
+            by_skill.setdefault(result.cell.skill, []).append(result.attempts)
+    lines = []
+    for skill in sorted(by_skill):
+        counts = by_skill[skill]
+        retried = sum(1 for n in counts if n > 1)
+        lines.append(
+            f"attempts {skill}: {sum(counts)} call(s) for {len(counts)} cell(s), "
+            f"{retried} cell(s) needed more than one"
+        )
+    return lines
 
 
 # ---------------------------------------------------------------------------
@@ -1492,6 +1537,8 @@ def main(argv: list[str] | None = None) -> int:
     )
     failures = [r for r in results if not r.ok]
     print(f"bench: {len(results) - len(failures)} of {len(results)} cell(s) written to {out_dir}")
+    for line in attempt_summary(results):
+        print(f"bench: {line}")
     for failure in failures:
         cell = failure.cell
         print(
