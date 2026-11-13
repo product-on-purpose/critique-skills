@@ -11,6 +11,10 @@ level: intermediate
 walks one artifact through the full loop the library supports: critique, disposition, revise,
 re-critique, converging to zero findings at severity 3 or above.
 
+This recipe runs the loop by hand. The [`critique-revision-loop` workflow](../../_workflows/critique-revision-loop.md)
+runs the same loop, with its bookkeeping scripted: the stop-check, the revision brief of accepted
+findings, the resume, and the comparison of two runs. Neither one edits the artifact.
+
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'primaryColor':'#eef2ff','primaryBorderColor':'#c7d2fe','lineColor':'#6366f1','fontFamily':'system-ui, sans-serif'}}}%%
 flowchart TD

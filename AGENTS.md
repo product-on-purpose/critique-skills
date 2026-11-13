@@ -37,6 +37,14 @@ freeform opinion. See `library.json` for the authoritative name, version, and ti
   registered in `library.json`.
 - **Subagents:** `critique-critic` (`agents/critique-critic.md`, v0.1.0, `active`, Claude-only) - the
   clean-context critic every `critique-<domain>` skill delegates to.
+- **Workflows:** `critique-revision-loop` (`_workflows/critique-revision-loop.md`, v0.1.0, `active`,
+  Claude-only) - N4 (the revision-loop chain): critique, dispositions, a stop-check, and a revision
+  brief, then re-critique and compare on a second invocation. Its deterministic steps are
+  `skills/_shared/revision_loop.py`. It never writes the artifact
+  ([ADR 0040](docs/internal/decisions/0040-revision-loop-pauses-with-a-revision-brief.md)).
+- **Chain contract:** `agents/_chain-permitted.yaml` permits the seven `critique-<domain>` to
+  `critique-critic` edges. Each edge has an eval set in `evals/`, and
+  `skills/_shared/tests/test_revision_loop_evals.py` executes every case.
 - **Commands:** none yet.
 
 ## Checks

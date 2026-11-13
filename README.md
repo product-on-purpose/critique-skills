@@ -240,6 +240,8 @@ flowchart LR
 
 **A gate you can act on.** `--gate` turns any skill into a document linter: exit 0 clean, exit 1 on any severity 4, exit 2 above a configurable severity-3 threshold ([`docs/how-to/gate-in-ci.md`](docs/how-to/gate-in-ci.md)). Nothing auto-applies: skills report, a human disposes, and the disposition log is both the safety property and the telemetry.
 
+**A revision loop in two invocations.** The [`critique-revision-loop`](_workflows/critique-revision-loop.md) workflow runs critique, your dispositions, and a stop-check. Unless no finding at severity 3 or above remains, or three iterations have run, it pauses with a revision brief of the findings you accepted. You revise the artifact, then a second invocation re-critiques it and compares the two runs. The library never edits the artifact ([what the loop leaves to you](docs/explanation/revision-loop-boundary.md)).
+
 > Full detail, with the four-pass protocol and the contract field by field: [the methodology](https://product-on-purpose.github.io/critique-skills/explanation/methodology/).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

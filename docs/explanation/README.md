@@ -22,3 +22,5 @@ trade-offs.
   mentioned anywhere and wondered whether it applied to you. It does not.
 - [`methodology.md`](methodology.md) - How this library decides what belongs in it, how its
   skills produce findings, and how those findings are measured.
+- [`revision-loop-boundary.md`](revision-loop-boundary.md) - Why the revision loop takes two
+  invocations, why the library never revises your artifact, and where its commitment ends.

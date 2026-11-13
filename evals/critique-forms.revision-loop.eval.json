@@ -1,0 +1,34 @@
+{
+  "covers": {
+    "chain": [
+      "critique-forms",
+      "critique-critic"
+    ]
+  },
+  "description": "The revision loop over a critique-forms run, whose critique critique-forms delegates to critique-critic: the stop-check continues at iteration 1 and writes a revision brief of the accepted findings, and stops without one at the three-iteration bound.",
+  "cases": [
+    {
+      "given": "examples/forms/envelope.json, a critique-forms envelope with 5 finding(s) at severity 3 or 4, and examples/forms/dispositions.json, which accepts F-001, F-002, F-003, F-004, F-005, F-006, F-008, at iteration 1 (the log has no iteration field)",
+      "expect": "stop-check decides continue, and the brief step writes a revision brief with 7 item(s), F-001, F-002, F-003, F-004, F-005, F-006, F-008, byte-identical to evals/expected/forms.revision-brief.json",
+      "run": {
+        "command": "brief",
+        "envelope": "examples/forms/envelope.json",
+        "dispositions": "examples/forms/dispositions.json",
+        "decision": "continue",
+        "brief": "evals/expected/forms.revision-brief.json"
+      }
+    },
+    {
+      "given": "the same envelope and log, with the log's iteration set to 3",
+      "expect": "stop-check decides stop-bound-reached, and no revision brief is written",
+      "run": {
+        "command": "brief",
+        "envelope": "examples/forms/envelope.json",
+        "dispositions": "examples/forms/dispositions.json",
+        "iteration": 3,
+        "decision": "stop-bound-reached",
+        "brief": null
+      }
+    }
+  ]
+}
