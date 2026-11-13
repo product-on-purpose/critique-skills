@@ -2065,4 +2065,7 @@ and the repository did not have.
   read.
 - **Blocks:** Measuring any prompt fix whose benefit is fewer retries.
 - **Depends on:** Nothing
-- **Rank at intake:** unranked (added 2026-11-12). **Status:** open.
+- **Rank at intake:** unranked (added 2026-11-12). **Status:** done 2026-11-12. Every skill cell
+  writes `<tier>-r<n>.json.attempts.txt` with its CLI call count, on success and on a refusal that
+  reached the CLI, and `run_bench.py` prints a per-skill total after the cell count. Baseline cells
+  record none. Held by six tests in `bench/tests/test_run_bench.py`.
