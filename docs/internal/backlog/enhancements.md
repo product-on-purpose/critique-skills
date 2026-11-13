@@ -934,8 +934,11 @@ and the repository did not have.
   when N4 (the revision-loop chain) ships its chain contract and G3 evaluates real edges.
 - **Revisit condition met 2026-11-13.** N4 merged, G3 now evaluates seven real edges, and E55
   (chain and hook evaluation coverage) closed. G1 still passes only because no hooks exist, which
-  is a true statement about the plugin rather than a gap. Whether `library.json` declares
-  `tier: advanced` is a maintainer ruling, and it is not yet made.
+  is a true statement about the plugin rather than a gap.
+- **Ruled 2026-11-13: keep `tier: convergent`.** The maintainer chose to keep the declared tier
+  after the revisit condition was met, although the tier report shows no Gold check blocked. The
+  ruling sets no new revisit condition, so a later move to `tier: advanced` is a fresh maintainer
+  decision.
 
 ## E34 - Close the SKIP_DIRS carry-forward note - fixed upstream and already adopted
 
@@ -1317,7 +1320,8 @@ and the repository did not have.
   component no user asked for, so G1 stays not applicable until a hook has a reason to exist. A
   tier report on `main` at `37152eb` returned `"blocked": {}`, meaning no Gold check fails. That
   meets the revisit condition in E33 (correct the Gold-tier groundwork entry), so the
-  `tier: advanced` question is the maintainer's again.
+  `tier: advanced` question went back to the maintainer, who ruled the same day to keep
+  `tier: convergent` (see E33).
 
 ## E56 - Plan the external-consumer path for the v1.0 criterion
 
