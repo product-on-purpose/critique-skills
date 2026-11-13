@@ -3,7 +3,7 @@
 Local-first, version-controlled backlogs (Standard sec 7.1). Two files, plus this index:
 
 - **[enhancements.md](enhancements.md)** - features, fixes and refinements to components that already
-  exist. 80 items, `E1` through `E80`.
+  exist. 81 items, `E1` through `E81`.
 - **[new-components.md](new-components.md)** - proposals to ADD a skill, command, subagent, hook or
   chain. 5 items, `N1` through `N5`, each with a recorded why-gate verdict.
 
@@ -100,20 +100,19 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**9 items depend on nothing and can start today.** Derived from each item's own
+**8 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
 |---|---|---|---|
 | E38 | Measure critique-accessibility's location fix on id-poor markup | S | v0.3.0 |
 | E42 | Reconcile 'frozen with a JSON Schema' against 'freezes at v1.0' | S | unscheduled |
-| E43 | Create a v1.0 readiness tracker for the four declaration criteria | S | v1.0.0 |
 | E51 | Give the precision and corpus-provenance limitations a retirement path or an explicit 'accepted' | S | unscheduled |
 | E59 | Verify what the marketplace consumes the homepage field for | S | unscheduled |
-| E69 | Revisit ADR 0011's npm option now that the toolkit ships on npm | S | unscheduled |
 | E78 | Rule on the TOULMIN.md note that landed after critique-argument 0.1.1 was measured | S | v0.3.0 |
 | E79 | Decide whether SKILL.md's top-level checks and rubric_sources keys should move for portability | M | unscheduled |
 | E80 | Decide whether the output bound should rank scripted findings ahead of judged ones | M | unscheduled |
+| E81 | Record how many attempts each skill cell took | S | unscheduled |
 
 With S-07's AC-4 closed, every criterion in that spec passes and
 [ADR 0034](../decisions/0034-v0.1.x-exit-gate-declaration.md)'s two named conditions for calling
