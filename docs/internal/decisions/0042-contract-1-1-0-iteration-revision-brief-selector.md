@@ -13,8 +13,10 @@
   in one release window for no consumer's benefit.
 - **Ruled:** by the maintainer on 2026-10-30, in the decision walks of the N4 (revision-loop chain)
   and E54 (cross-library composition) drafts, and the backlog ruling on E36 (reserved selector).
-- **Status:** Accepted (2026-10-30). **Not built.** The schema still reads 1.0.0. N4's
-  implementation builds it.
+- **Status:** Accepted (2026-10-30). **Built 2026-11-12**, as the first of N4's two pull requests.
+  The root-dispatch rule this ADR left to the build: after the `dispositions` test, a document
+  carrying an `items` key is a revision brief. Rule 7 also checks each brief item's `criterion`,
+  `location` and `fix` against the referenced envelope, since a brief is a projection of it.
 
 - **Status:** Accepted
 - **Date:** 2026-10-30

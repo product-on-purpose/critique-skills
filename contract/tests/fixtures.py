@@ -147,3 +147,21 @@ def envelope_for(
             "severity_3_threshold": severity_3_threshold,
         },
     }
+
+
+def example_revision_brief() -> dict[str, Any]:
+    """A contract 1.1.0 revision brief carrying example_envelope()'s single
+    finding, which example_disposition_log() accepts."""
+    finding = example_finding()
+    return {
+        "envelope": example_disposition_log()["envelope"],
+        "iteration": 1,
+        "items": [
+            {
+                "finding_id": finding["id"],
+                "criterion": finding["criterion"],
+                "location": finding["location"],
+                "fix": finding["fix"],
+            }
+        ],
+    }

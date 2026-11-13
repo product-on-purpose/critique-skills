@@ -227,10 +227,16 @@ def _schema_errors(validator: jsonschema.Draft202012Validator, instance: Any) ->
 
 def document_kind(doc: Any) -> str:
     """Classify a document the way the schema root does: a document
-    carrying a 'dispositions' key is a disposition log, everything else
-    (including a malformed document) is treated as a run envelope."""
+    carrying a 'dispositions' key is a disposition log; otherwise one
+    carrying an 'items' key is a revision brief (contract 1.1.0);
+    everything else (including a malformed document) is treated as a run
+    envelope. The 'dispositions' test runs first, so a document carrying
+    both keys is a disposition log, and the schema then rejects 'items'
+    as an unknown property."""
     if isinstance(doc, dict) and "dispositions" in doc:
         return "dispositionLog"
+    if isinstance(doc, dict) and "items" in doc:
+        return "revisionBrief"
     return "envelope"
 
 
@@ -487,8 +493,17 @@ def _rule_integer_literal(doc: dict[str, Any]) -> list[Issue]:
     load-bearing case: those three feed rules 2, 3, and 4, and a
     by_severity of {"4": 0.0} beside an emitted severity-4 finding would
     otherwise be a contract-valid envelope that exits the gate at 0.
+
+    Contract 1.1.0 adds one integer field, `iteration`, on a disposition
+    log and on a revision brief. It is covered here so that
+    "iteration": 2.0 is rejected like every other integral float.
     """
     issues: list[Issue] = []
+
+    if "iteration" in doc:
+        issue = _integer_literal_issue("iteration", doc.get("iteration"))
+        if issue is not None:
+            issues.append(issue)
 
     findings = doc.get("findings")
     if isinstance(findings, list):
@@ -670,6 +685,60 @@ def _rule_disposition_entries_resolve(
     return issues
 
 
+# The fields a revision brief item copies from its finding. Rule 7 checks
+# each against the referenced envelope, because a brief is a projection
+# and a projection that disagrees with its source is not one.
+BRIEF_COPIED_FIELDS: tuple[str, ...] = ("criterion", "location", "fix")
+
+
+def _rule_brief_items_resolve(
+    doc: dict[str, Any], referenced_envelope: dict[str, Any] | None
+) -> list[Issue]:
+    """Rule 7, applied to a revision brief (contract 1.1.0): whenever the
+    referenced envelope is available, every item's finding_id exists in
+    it, and the item's criterion, location and fix equal that finding's."""
+    if referenced_envelope is None:
+        return []
+    items = doc.get("items")
+    envelope_findings = referenced_envelope.get("findings")
+    if not isinstance(items, list) or not isinstance(envelope_findings, list):
+        return []
+    by_id: dict[str, dict[str, Any]] = {}
+    for finding in envelope_findings:
+        if isinstance(finding, dict) and isinstance(finding.get("id"), str):
+            by_id[finding["id"]] = finding
+    issues: list[Issue] = []
+    for index, item in enumerate(items):
+        if not isinstance(item, dict):
+            continue
+        finding_id = item.get("finding_id")
+        if not isinstance(finding_id, str):
+            continue
+        finding = by_id.get(finding_id)
+        if finding is None:
+            issues.append(
+                Issue(
+                    path=f"items[{index}].finding_id",
+                    message=f"finding id '{finding_id}' does not exist in the referenced envelope",
+                    rule="disposition-entries-resolve",
+                )
+            )
+            continue
+        for field in BRIEF_COPIED_FIELDS:
+            if field in item and item[field] != finding.get(field):
+                issues.append(
+                    Issue(
+                        path=f"items[{index}].{field}",
+                        message=(
+                            f"does not match the referenced finding's {field}; a "
+                            f"brief item copies it verbatim"
+                        ),
+                        rule="disposition-entries-resolve",
+                    )
+                )
+    return issues
+
+
 def _logical_errors(
     doc: Any, *, referenced_envelope: dict[str, Any] | None = None
 ) -> list[Issue]:
@@ -677,6 +746,13 @@ def _logical_errors(
         return _rule_no_dash(doc)
     if document_kind(doc) == "dispositionLog":
         issues = _rule_disposition_entries_resolve(doc, referenced_envelope)
+        issues += _rule_integer_literal(doc)
+        issues += _rule_no_dash(doc)
+        issues += _rule_calendar_valid_timestamps(doc)
+        return issues
+    if document_kind(doc) == "revisionBrief":
+        issues = _rule_brief_items_resolve(doc, referenced_envelope)
+        issues += _rule_integer_literal(doc)
         issues += _rule_no_dash(doc)
         issues += _rule_calendar_valid_timestamps(doc)
         return issues
@@ -769,11 +845,13 @@ def _rule_producer_declared_threshold(doc: Any) -> list[Issue]:
 def validate_document(
     doc: Any, *, referenced_envelope: dict[str, Any] | None = None
 ) -> ValidationResult:
-    """Validate a full document (run envelope or disposition log) against
-    the schema, then against the rules the schema cannot express.
+    """Validate a full document (run envelope, disposition log, or
+    revision brief) against the schema, then against the rules the schema
+    cannot express.
 
     `referenced_envelope`, when given, is used to resolve rule 7
-    (disposition entries resolve) for a disposition log document.
+    (disposition entries resolve) for a disposition log or a revision
+    brief.
     """
     errors = _schema_errors(_root_validator(), doc)
     errors += _logical_errors(doc, referenced_envelope=referenced_envelope)
