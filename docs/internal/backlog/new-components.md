@@ -229,10 +229,11 @@ as the record of 2026-09-14.
   ruled 2026-10-30.
 - **Built 2026-11-12,** in two pull requests: PR 130 (contract 1.1.0, ADR 0042) and PR 131 (the
   workflow, `skills/_shared/revision_loop.py`, the chain contract, and seven executed eval sets).
-  One part of decision D6 waits on a ruling: the `metadata.chain: critique-critic` frontmatter key
-  in each skill. The critic reads a skill's `SKILL.md` in full, frontmatter included, so the key
-  changes what a run reads, which is the condition D6's follow-up named for raising the version
-  question. The gate does not need the key: the contract's edges alone give G3 seven real edges.
+  Decision D6's `metadata.chain: critique-critic` frontmatter key was ruled out for now on
+  2026-11-13. The critic reads a skill's `SKILL.md` in full, frontmatter included, so the key
+  changes what a run reads, and the gate does not need it: the contract's edges alone give G3
+  seven real edges. The key lands with each skill's next version move, as the spec's D6 ruling
+  records.
 
 ## N5 - critique-payment-checkout (checkout and payment flow critique, its own research base)
 
