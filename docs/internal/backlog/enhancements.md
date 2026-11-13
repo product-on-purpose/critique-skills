@@ -1969,7 +1969,11 @@ and the repository did not have.
   missing file were both read.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
-- **Rank at intake:** unranked (added 2026-11-04). **Status:** open.
+- **Rank at intake:** unranked (added 2026-11-04). **Status:** done 2026-11-12. `execute_grid` now
+  raises `ContractInvalidError`, which carries the scrubbed response text, so a contract-invalid
+  cell writes its `.refused.txt` like every other refused cell. The baseline lane's contract check
+  carries its text the same way. Held by
+  `test_execute_grid_keeps_the_response_of_a_contract_invalid_cell`, which fails without the fix.
 
 ## E78 - Rule on the TOULMIN.md note that landed after critique-argument 0.1.1 was measured
 
