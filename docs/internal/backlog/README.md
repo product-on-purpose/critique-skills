@@ -138,7 +138,9 @@ v0.1.x finished are both discharged.
 - **Gold tier.** E52 (who performs revise) gates N4 (the revision-loop chain) gates E55 (G1 and G3
   coverage) gates any tier declaration above Convergent. E52 was ruled on 2026-10-25
   ([ADR 0040 (the revision loop pauses with a revision brief)](../decisions/0040-revision-loop-pauses-with-a-revision-brief.md)),
-  so N4 was unblocked, and N4 was built on 2026-11-12, so E55 is unblocked.
+  so N4 was unblocked, and N4 was built on 2026-11-12, so E55 was unblocked. E55 closed on
+  2026-11-13: G3 evaluates seven real edges, and G1 does not apply because the plugin ships no
+  hooks. What remains is the maintainer's ruling on declaring `tier: advanced` (E33's revisit).
 - **The v0.3.0 re-measure: done 2026-10-28.** One shared paid dispatch measured E73 (merge runs the
   scripted lane itself) and E67 (accessibility expansion) across all seven skills, under run set
   `bench-2026-10-28`. Every skill's version moved with it, and both items closed that day. E63

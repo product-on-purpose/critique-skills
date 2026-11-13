@@ -932,6 +932,10 @@ and the repository did not have.
   (chain eval coverage) pass only vacuously, because the plugin declares no hooks and no chain
   contract, and declaring Advanced on vacuous passes would claim more than the plugin shows. Revisit
   when N4 (the revision-loop chain) ships its chain contract and G3 evaluates real edges.
+- **Revisit condition met 2026-11-13.** N4 merged, G3 now evaluates seven real edges, and E55
+  (chain and hook evaluation coverage) closed. G1 still passes only because no hooks exist, which
+  is a true statement about the plugin rather than a gap. Whether `library.json` declares
+  `tier: advanced` is a maintainer ruling, and it is not yet made.
 
 ## E34 - Close the SKIP_DIRS carry-forward note - fixed upstream and already adopted
 
@@ -1300,10 +1304,20 @@ and the repository did not have.
 - **Size:** M. **Release:** v0.4.0+. **Category:** ci. **Confidence:** verified.
 - **Blocks:** The tier: advanced declaration (E33, second half)
 - **Depends on:** N4
-- **Rank at intake:** 59 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Rank at intake:** 59 of 64. **Status:** closed 2026-11-13.
 - **Moved 2026-10-21 from v0.3.0 to v0.4.0+**, together with the roadmap's "Gold-tier groundwork"
   bullet, when the v0.3.0 exit gate was set. The coverage needs N4 built first, so as a v0.3.0 gate
   condition it would hold the version open until the chain was built and then evaluated.
+- **CLOSED 2026-11-13.** N4 (the revision-loop chain) delivered the G3 half when PR 131 merged on
+  2026-11-13. `agents/_chain-permitted.yaml` declares seven real edges, each has an eval set in
+  `evals/`, and `skills/_shared/tests/test_revision_loop_evals.py` executes every case in the
+  `unit-python` CI job, so the Standard's execution clause holds too, not only the presence half the
+  toolkit checks. The G1 half has nothing to earn: G1 is conditional on `hooks/hooks.json`
+  existing, and this plugin ships no hooks. Adding a hook only to make G1 non-vacuous would add a
+  component no user asked for, so G1 stays not applicable until a hook has a reason to exist. A
+  tier report on `main` at `37152eb` returned `"blocked": {}`, meaning no Gold check fails. That
+  meets the revisit condition in E33 (correct the Gold-tier groundwork entry), so the
+  `tier: advanced` question is the maintainer's again.
 
 ## E56 - Plan the external-consumer path for the v1.0 criterion
 
