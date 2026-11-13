@@ -21,13 +21,13 @@ Ruled by the maintainer on 2026-10-30 (the nine decisions below), and built on 2
 
 ## Task Summary
 
-**Status:** built 2026-11-12, except D6's frontmatter key, which waits on a version ruling
-**Last updated:** 2026-11-12 by Claude, after the build
+**Status:** built 2026-11-12; D6's frontmatter key ruled out for now on 2026-11-13
+**Last updated:** 2026-11-13 by Claude, recording the D6 frontmatter ruling
 
 **Where the build differs from this spec.**
 
 - **The brief is in the contract.** Requirement 3 says the brief stays outside the contract until E54 consumes it. ADR 0042, written after this spec, moved it into contract 1.1.0 as a fourth document type, and PR 130 built that.
-- **No skill's frontmatter gained `metadata.chain` yet.** D6 chose to declare each edge both in the contract and in the skill's frontmatter, and its follow-up said to raise the version question if the key changes what a skill run reads. It does: `critique-critic` reads the skill's `SKILL.md` in full, frontmatter included. So the edges live in `agents/_chain-permitted.yaml` only, which is all the toolkit's S4 and G3 checks read, and the frontmatter key waits on the maintainer's ruling.
+- **No skill's frontmatter gained `metadata.chain` yet.** D6 chose to declare each edge both in the contract and in the skill's frontmatter, and its follow-up said to raise the version question if the key changes what a skill run reads. It does: `critique-critic` reads the skill's `SKILL.md` in full, frontmatter included. So the edges live in `agents/_chain-permitted.yaml` only, which is all the toolkit's S4 and G3 checks read. The maintainer ruled on 2026-11-13 to keep the key out for now, and the ruling is recorded under D6.
 - **A fourth stop decision exists.** When findings at severity 3 or above remain but the person accepted none, the loop stops with `stop-nothing-accepted`, because an empty brief asks for no revision and the contract rejects one. The spec names only the two stops.
 - **`INDEX.md` lists the chain contract but not the workflow.** The toolkit's index generator renders no workflow section, and inserting one locally makes the toolkit's G4 drift check fail, which is a Gold burndown regression. The workflow is listed in `library.json`, `AGENTS.md`, and `README.md`.
 **Linked plan:** not yet planned
@@ -601,6 +601,14 @@ recommendation (all seven skills) sizes the resulting edge count directly.
 > * **Reasoning:** "ok", accepting every recommendation in the 2026-10-30 walk. The draft's note about riding E73's version moves is stale: E73 is built and its moves happened on 2026-10-28. The walk read a frontmatter metadata key as not a prose change to the measured prompt, so it moves no skill version (medium confidence, inferred).
 > * **Follow-up:** Build in N4's implementation, after this draft moves to `docs/internal/release-plans/_unassigned/N4_revision-loop-chain/spec.md`; if the build finds the key does change what a skill run reads, raise the version question before merging.
 > * **Decided by / date:** jprisant / 2026-10-30
+>
+> **Maintainer ruling on the follow-up:** Decided 2026-11-13 by jprisant
+>
+> * **Finding that triggered it:** the build found that the key does change what a run reads. `critique-critic` reads each skill's `SKILL.md` in full, frontmatter included.
+> * **Choice:** keep `metadata.chain` out of every skill's frontmatter for now. The seven edges live only in `agents/_chain-permitted.yaml`, which is the single source the toolkit's G3 check reads, and S4 passes without the key.
+> * **Reasoning:** adding the key without a version move would change what a measured skill reads while its published bench numbers stay attached to it. Adding it with a version move would hide all seven skills' bench cells on the site until a paid re-measure, to gain one redundant line per skill. Neither cost buys anything the gate needs.
+> * **Follow-up:** add `metadata.chain: critique-critic` to a skill's frontmatter in the same change as that skill's next version move, which rides a re-measure anyway. Until then the contract is the only place an edge is declared.
+> * **Decided by / date:** jprisant / 2026-11-13, accepting the recommendation "keep it out"
 
 ### D7: Which skills the chain accepts (Decided)
 
