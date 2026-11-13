@@ -508,6 +508,33 @@ def test_execute_grid_keeps_the_response_of_a_refused_scripted_only_cell(tmp_pat
     assert '"TOY-ALPHA"' in text
 
 
+def test_execute_grid_keeps_the_response_of_a_contract_invalid_cell(tmp_path: Path) -> None:
+    """E77: dispatch 41741268703 lost clarity-002 repetition 5 to a histogram that did not add up,
+    and kept no text, because the contract check raised an error that carried none. The cell must
+    still write no envelope, and its response text must survive beside the path it never got."""
+    _write_fake_skill(tmp_path, "critique-toy", scripted=["TOY-ALPHA"], judged=["TOY-BETA"])
+    corpus_dir = tmp_path / "bench" / "corpus"
+    _write_corpus_artifact(corpus_dir, "toy", "toy-001", "Body one.\n")
+    out_dir = tmp_path / "runs"
+    tiers = [Tier(alias="haiku", model_id="claude-haiku-4-5-20251001")]
+    cells = plan_grid(["critique-toy"], tiers, k=1, corpus_dir=corpus_dir, out_dir=out_dir, include_baseline=False)
+    invalid = _toy_envelope_from_skill()
+    invalid["summary"]["suppressed_count"] = 5  # the histogram no longer adds up
+    response = "Merged both lanes.\n" + json.dumps(invalid)
+    client = FakeClient([FakeResponse(response)])
+
+    results = execute_grid(cells, client=client, repo_root=tmp_path, now_fn=_now)
+
+    assert [r.ok for r in results] == [False]
+    assert "not contract-valid" in results[0].detail
+    skill_path = out_dir / "critique-toy" / "toy-001" / "haiku-r1.json"
+    assert not skill_path.exists()
+    text = run_bench.refused_text_path(skill_path).read_text(encoding="utf-8")
+    assert text.startswith("assembled envelope is not contract-valid")
+    assert "Merged both lanes." in text
+    assert '"suppressed_count": 5' in text
+
+
 def test_a_refused_cells_text_names_no_local_path(tmp_path: Path) -> None:
     """The text is committed to a public repository, and the run narrates from a staging
     directory that, on a workstation, sits under the user's home directory."""

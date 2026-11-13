@@ -30,6 +30,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, "..", "..");
 const SRC_GEN_PLUGIN_MANIFEST = resolve(REPO_ROOT, "scripts", "gen-plugin-manifest.mjs");
 const SRC_GEN_INDEX = resolve(REPO_ROOT, "scripts", "gen-index.mjs");
+const SRC_GEN_CATALOG = resolve(REPO_ROOT, "scripts", "gen-readme-catalog.mjs");
 const SRC_LIB_DIR = resolve(REPO_ROOT, "scripts", "lib");
 
 const toolkitAvailable = Boolean(resolveToolkit(REPO_ROOT));
@@ -39,6 +40,7 @@ test("gen --check fails with a clear message when the toolkit cannot be resolved
   const scriptPath = resolve(root, "scripts", "gen-plugin-manifest.mjs");
   copyInto(scriptPath, SRC_GEN_PLUGIN_MANIFEST);
   copyInto(resolve(root, "scripts", "gen-index.mjs"), SRC_GEN_INDEX);
+  copyInto(resolve(root, "scripts", "gen-readme-catalog.mjs"), SRC_GEN_CATALOG);
   copyDirInto(resolve(root, "scripts", "lib"), SRC_LIB_DIR);
 
   const { status, stderr } = runNode(scriptPath, ["--check"], {
@@ -153,4 +155,10 @@ test("the inline `needs: [a, b]` form is understood as well as the block form", 
   const inline = fixtureCi().replace("    needs:\n      - alpha\n      - beta", "    needs: [alpha, beta]");
   assert.deepEqual(findJobNeeds(inline, GATE_JOB), ["alpha", "beta"]);
   assert.equal(checkCiGate(inline).ok, true);
+});
+
+// The README catalog once went stale for a week because the drift job never called its check.
+test("gen --check runs the README catalog check", () => {
+  const source = readFileSync(SRC_GEN_PLUGIN_MANIFEST, "utf8");
+  assert.match(source, /const results = \[[^\]]*checkCatalogDrift\(\)/);
 });

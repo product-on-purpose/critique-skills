@@ -143,6 +143,10 @@ own docstring says which future effort replaces the vacuous path. `unit-node` (`
 guard, the version manifest, release-notes extraction, and a smoke test per generator `--check`
 mode (`scripts/tests/README.md` has the current inventory).
 
+`npm run gen -- --check` also fails when `README.md`'s skill-catalog table differs from
+`library.json`; regenerate it with `npm run gen:catalog`. The hand-authored skill shelf above that
+table is not generated, so a version move edits it by hand, along with its anchors.
+
 `npm run gen -- --check` also enforces that every command in the table above appears in this file:
 edit both together, or the `drift` job fails (S-07 CI-pipeline spec, AC-5).
 

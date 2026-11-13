@@ -387,6 +387,20 @@ class JudgedLaneError(RuntimeError):
         self.raw_text = raw_text
 
 
+class ContractInvalidError(RuntimeError):
+    """Raised by execute_grid when a cell's envelope parsed but fails contract validation.
+
+    It carries `raw_text` for the same reason JudgedLaneError does (E77). Before it existed, this
+    failure raised a plain RuntimeError, so the one refusal decided after the envelope was built
+    kept no text: dispatch 41741268703 lost clarity-002 repetition 5 on 2026-11-03 with nothing to
+    read back.
+    """
+
+    def __init__(self, message: str, *, raw_text: str | None = None) -> None:
+        super().__init__(message)
+        self.raw_text = raw_text
+
+
 def _strip_code_fence(text: str) -> str:
     """Models wrap JSON in a fence regardless of instruction, so an envelope arrives fenced often
     enough that treating it as a failure would throw away good cells."""
@@ -900,6 +914,32 @@ def execute_skill_cell(
     """Run the real skill against a staged copy of the artifact and return its envelope, with the
     provenance the skill could not know filled in by the harness.
 
+    See _execute_skill_cell_with_text, which does the work and also returns the response text.
+    """
+    envelope, _raw_text = _execute_skill_cell_with_text(
+        cell,
+        client=client,
+        repo_root=repo_root,
+        frontmatter=frontmatter,
+        now_fn=now_fn,
+        severity_3_threshold=severity_3_threshold,
+    )
+    return envelope
+
+
+def _execute_skill_cell_with_text(
+    cell: GridCell,
+    *,
+    client: Any,
+    repo_root: Path,
+    frontmatter: dict[str, Any],
+    now_fn: Callable[[], str],
+    severity_3_threshold: int = 0,
+) -> tuple[dict[str, Any], str]:
+    """execute_skill_cell, also returning the response text, with local paths scrubbed.
+
+    execute_grid needs the text when it refuses the envelope on contract validation (E77).
+
     Two responsibilities, split on who can be trusted to know what:
 
     * The **skill** owns `findings` and `summary`. It is what is being measured, it runs both of
@@ -987,7 +1027,7 @@ def execute_skill_cell(
         "timestamp": now_fn(),
         "rubrics": list(frontmatter["rubrics"]),
     }
-    return envelope
+    return envelope, raw_text
 
 
 def execute_baseline_cell(
@@ -1073,7 +1113,7 @@ def execute_grid(
             if cell.condition == "skill":
                 if cell.skill not in frontmatter_cache:
                     frontmatter_cache[cell.skill] = load_skill_frontmatter(cell.skill, repo_root=repo_root)
-                envelope = execute_skill_cell(
+                envelope, raw_text = _execute_skill_cell_with_text(
                     cell,
                     client=client,
                     repo_root=repo_root,
@@ -1083,7 +1123,10 @@ def execute_grid(
                 )
                 validation = validate_document(envelope)
                 if not validation.ok:
-                    raise RuntimeError(f"assembled envelope is not contract-valid: {validation.errors[0]}")
+                    raise ContractInvalidError(
+                        f"assembled envelope is not contract-valid: {validation.errors[0]}",
+                        raw_text=raw_text,
+                    )
                 _write_json(cell.out_path, envelope)
             else:
                 envelope, raw_text = execute_baseline_cell(
@@ -1091,7 +1134,10 @@ def execute_grid(
                 )
                 validation = validate_document(envelope)
                 if not validation.ok:
-                    raise RuntimeError(f"baseline envelope is not contract-valid: {validation.errors[0]}")
+                    raise ContractInvalidError(
+                        f"baseline envelope is not contract-valid: {validation.errors[0]}",
+                        raw_text=raw_text,
+                    )
                 _write_json(cell.out_path, envelope)
                 _write_text(cell.out_path.with_name(cell.out_path.name + ".raw.txt"), raw_text)
             results.append(CellResult(cell=cell, ok=True))

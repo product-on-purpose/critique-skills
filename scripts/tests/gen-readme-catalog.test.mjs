@@ -123,3 +123,19 @@ test("smoke: the real generator's --check runs against this repo without crashin
   assert.ok(status === 0 || status === 1, `expected exit 0 or 1, got ${status}. stderr: ${stderr}`);
   assert.match(stdout, /gen:catalog --check:/);
 });
+
+test("checkCatalogDrift treats a CRLF checkout of a current table as clean, and stale content as drift", async (t) => {
+  const { root, scriptPath } = buildFixture(t);
+  const target = resolve(root, "README.md");
+  writeFileSync(target, ["# Fixture", "", MARKERS[0], "stale content", MARKERS[1], ""].join("\n"));
+
+  const { checkCatalogDrift, writeCatalog } = await importFixtureModule(scriptPath);
+  assert.equal(writeCatalog(target), 0);
+
+  const current = readFileSync(target, "utf8");
+  writeFileSync(target, current.replace(/\r?\n/g, "\r\n"));
+  assert.equal(checkCatalogDrift(target).ok, true);
+
+  writeFileSync(target, current.replace("0.1.0", "9.9.9").replace(/\r?\n/g, "\r\n"));
+  assert.equal(checkCatalogDrift(target).ok, false);
+});

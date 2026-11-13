@@ -52,7 +52,7 @@ Ask a general-purpose model to critique your work and you get fluent, confident,
 
 ## ⚡ Install
 
-The `product-on-purpose` marketplace pins `critique-skills` to the `v0.2.0` release tag, so `/plugin install` gives you exactly that commit rather than whatever `main` happens to hold.
+The `product-on-purpose` marketplace pins `critique-skills` to the `v0.2.0` release tag, so `/plugin install` gives you exactly that commit rather than whatever `main` happens to hold. The skill versions on this page describe `main`, and they reach an install at the next release.
 
 ```bash
 # Claude Code (recommended)
@@ -81,72 +81,72 @@ Every figure below is location-level, both pinned model tiers, k=5, against a se
 <!-- skill-shelf:start -->
 <!-- Hand-authored cards: name, rubric, version, one-line scope, a prompt to try, and the boundary against the sibling skill. NO MEASURED FIGURES LIVE HERE. They are in the generated scoreboard above and on each skill's own page, and a third hand-typed copy is exactly the drift this README is being rebuilt to remove. The real generated skill-catalog pair is kept below, collapsed. -->
 
-### `critique-accessibility` · WCAG 2.2 AA · v0.1.1
+### `critique-accessibility` · WCAG 2.2 AA · v0.2.0
 
 Reviews HTML pages and fragments (markdown where mappable) for contrast, alt text, heading hierarchy, link text, and keyboard and screen-reader access. It checks 27 of WCAG 2.2's 55 Level A and AA success criteria, so a clean report is not a conformance claim.
 
 **Try:** `review this page for accessibility problems`
-**Not this skill:** general interface flow, controls, and states, which is [`critique-usability`](#critique-usability--nielsens-10-usability-heuristics--v010).
+**Not this skill:** general interface flow, controls, and states, which is [`critique-usability`](#critique-usability--nielsens-10-usability-heuristics--v011).
 [SKILL.md](skills/critique-accessibility/SKILL.md) · [full page](https://product-on-purpose.github.io/critique-skills/skills/critique-accessibility/)
 
 ---
 
-### `critique-argument` · The Toulmin model · v0.1.0
+### `critique-argument` · The Toulmin model · v0.1.1
 
 Reviews argumentative prose (essays, proposals, position papers, recommendation memos, strategy docs, op-eds) for whether claim, grounds, warrant, backing, qualifier, and rebuttal are present, explicit, and actually hold together.
 
 **Try:** `check whether this proposal's argument actually holds together`
-**Not this skill:** prose readability or sentence mechanics, which is [`critique-clarity`](#critique-clarity--federal-plain-language--williams-style--v010).
+**Not this skill:** prose readability or sentence mechanics, which is [`critique-clarity`](#critique-clarity--federal-plain-language--williams-style--v011).
 [SKILL.md](skills/critique-argument/SKILL.md) · [full page](https://product-on-purpose.github.io/critique-skills/skills/critique-argument/)
 
 ---
 
-### `critique-clarity` · Federal Plain Language + Williams' *Style* · v0.1.0
+### `critique-clarity` · Federal Plain Language + Williams' *Style* · v0.1.1
 
 Reviews markdown or plain-text prose for readability, passive voice, sentence length, and nominalization density.
 
 **Try:** `give me a clarity pass on this memo before it goes out`
-**Not this skill:** whether an argument's claim is supported, which is [`critique-argument`](#critique-argument--the-toulmin-model--v010).
+**Not this skill:** whether an argument's claim is supported, which is [`critique-argument`](#critique-argument--the-toulmin-model--v011).
 [SKILL.md](skills/critique-clarity/SKILL.md) · [full page](https://product-on-purpose.github.io/critique-skills/skills/critique-clarity/)
 
 ---
 
-### `critique-docs` · Diataxis · v0.1.0
+### `critique-docs` · Diataxis · v0.1.1
 
 Reviews technical documentation pages and page trees in markdown for tutorial, how-to, reference, and explanation mode fit, plus heading structure, orphaned pages, cross-mode linking, and navigation-list length.
 
 **Try:** `does this documentation page match the mode it claims to be`
-**Not this skill:** prose quality inside a page, which is [`critique-clarity`](#critique-clarity--federal-plain-language--williams-style--v010).
+**Not this skill:** prose quality inside a page, which is [`critique-clarity`](#critique-clarity--federal-plain-language--williams-style--v011).
 [SKILL.md](skills/critique-docs/SKILL.md) · [full page](https://product-on-purpose.github.io/critique-skills/skills/critique-docs/)
 
 ---
 
-### `critique-forms` · FORMS, synthesized from 16 sources · v0.1.0
+### `critique-forms` · FORMS, synthesized from 16 sources · v0.1.1
 
 Reviews HTML forms for how easy they are to complete, especially on a phone: input types and mobile keyboards, autofill tokens, field widths, required and optional marking, password rules, button labels, and layout.
 
 **Try:** `check how easy this sign-up form is to fill in on a phone`
-**Not this skill:** WCAG conformance, which is [`critique-accessibility`](#critique-accessibility--wcag-22-aa--v011); the wording of error and validation messages, which is [`critique-microcopy`](#critique-microcopy--nng-error-message-guidelines--v010).
+**Not this skill:** WCAG conformance, which is [`critique-accessibility`](#critique-accessibility--wcag-22-aa--v020); the wording of error and validation messages, which is [`critique-microcopy`](#critique-microcopy--nng-error-message-guidelines--v011).
 [SKILL.md](skills/critique-forms/SKILL.md) · [full page](https://product-on-purpose.github.io/critique-skills/skills/critique-forms/)
 
 ---
 
-### `critique-microcopy` · NN/g error-message guidelines · v0.1.0
+### `critique-microcopy` · NN/g error-message guidelines · v0.1.1
 
 Reviews error messages, empty states, and other short microcopy strings for plain language, specificity, constructive next steps, neutral tone, and recovery grace.
 
 **Try:** `review these error messages`
-**Not this skill:** the surrounding screen's flow, controls, or confirmation behavior, which is [`critique-usability`](#critique-usability--nielsens-10-usability-heuristics--v010).
+**Not this skill:** the surrounding screen's flow, controls, or confirmation behavior, which is [`critique-usability`](#critique-usability--nielsens-10-usability-heuristics--v011).
 [SKILL.md](skills/critique-microcopy/SKILL.md) · [full page](https://product-on-purpose.github.io/critique-skills/skills/critique-microcopy/)
 
 ---
 
-### `critique-usability` · Nielsen's 10 usability heuristics · v0.1.0
+### `critique-usability` · Nielsen's 10 usability heuristics · v0.1.1
 
 Reviews HTML or markdown UI specs, wireframe write-ups, and page mockups for system status, user control and exits, consistency, error prevention, recognition over recall, and minimalist design. Static specs and mockups, **not** live running applications.
 
 **Try:** `run a heuristic evaluation on this wireframe spec`
-**Not this skill:** error and empty-state wording, which is [`critique-microcopy`](#critique-microcopy--nng-error-message-guidelines--v010); accessibility conformance, which is [`critique-accessibility`](#critique-accessibility--wcag-22-aa--v011).
+**Not this skill:** error and empty-state wording, which is [`critique-microcopy`](#critique-microcopy--nng-error-message-guidelines--v011); accessibility conformance, which is [`critique-accessibility`](#critique-accessibility--wcag-22-aa--v020).
 [SKILL.md](skills/critique-usability/SKILL.md) · [full page](https://product-on-purpose.github.io/critique-skills/skills/critique-usability/)
 <!-- skill-shelf:end -->
 
@@ -158,13 +158,13 @@ Reviews HTML or markdown UI specs, wireframe write-ups, and page mockups for sys
 
 | Skill | Reviews | Rubric | Version |
 |---|---|---|---|
-| [`critique-accessibility`](skills/critique-accessibility/SKILL.md) | Reviews HTML pages and fragments (markdown where mappable) against 27 of the 55 WCAG 2.2 Level A and AA success criteria: contrast, alt text, heading hierarchy for screen readers, link text, input purpose, target size, orientation, focus visibility, status messages, and keyboard and screen-reader access. Judges conformance against WCAG, not an interface's general usability, flow, or controls (critique-usability covers that), or how much effort a form's fields cost to fill in on a phone (critique-forms covers that). | WCAG | 0.1.1 |
-| [`critique-argument`](skills/critique-argument/SKILL.md) | Reviews argumentative prose - essays, proposals, position papers, recommendation memos, strategy docs, and op-eds - against the Toulmin model of argument: whether the claim, grounds, warrant, backing, qualifier, and rebuttal are present, explicit, and actually hold together. Judges the argument's structure, not prose readability or sentence mechanics (critique-clarity covers that). | TOULMIN | 0.1.0 |
-| [`critique-clarity`](skills/critique-clarity/SKILL.md) | Reviews markdown or plain-text prose for clarity against the Federal Plain Language Guidelines and Williams' Style: readability, passive voice, sentence length, and nominalization density. Judges sentence- and passage-level readability, not whether an argument's claim is supported or its structure holds together (critique-argument covers that). | PLAIN, WILLIAMS | 0.1.0 |
-| [`critique-docs`](skills/critique-docs/SKILL.md) | Reviews technical documentation pages and page trees written in markdown against the Diataxis framework: tutorial, how-to, reference, and explanation mode fit, plus heading structure, orphaned pages, cross-mode linking, and navigation-list length. | DIATAXIS | 0.1.0 |
-| [`critique-forms`](skills/critique-forms/SKILL.md) | Reviews the usability of HTML forms, meaning how easy they are to complete, especially on a phone: input types and mobile keyboards, autofill tokens, field widths, required and optional marking, password rules, button labels, and layout, against convergent research from Baymard, GOV.UK, web.dev, NN/g and others. Judges the cost of filling the form in from its markup, not WCAG conformance (critique-accessibility covers that), a whole interface's flow against Nielsen's heuristics (critique-usability covers that), or the wording of a form's error and validation messages, even as a list of strings (critique-microcopy covers that). | BAYMARD, GOOGLE, GOVUK, WHATWG, NNGROUP, ZUKO, WROBLEWSKI, SILVER, ALHARBI, PENZO, SPEERO, HUBSPOT, CXL, VENTUREHARBOUR, PASCHAL, DESIGNLAB | 0.1.0 |
-| [`critique-microcopy`](skills/critique-microcopy/SKILL.md) | Reviews error messages, empty states, and other short microcopy strings, including screens annotated with placement, container, timing, and behavior context, against NN/g's error-message guidelines: plain language, specificity, constructive next steps, neutral tone, and recovery grace. Judges the message text itself, not the surrounding screen's flow, controls, or confirmation behavior (critique-usability covers that), or a form's field types, autofill, and required-field marking (critique-forms covers that). | NNG-EM | 0.1.0 |
-| [`critique-usability`](skills/critique-usability/SKILL.md) | Reviews HTML or markdown UI specs, wireframe write-ups, and page mockups against Nielsen's 10 usability heuristics: system status, user control and exits, consistency, error prevention and recovery, recognition over recall, and minimalist design. Judges the interface's flow, controls, and states, not the wording of error or empty-state message text (critique-microcopy covers that), not conformance against accessibility standards such as contrast or screen-reader access (critique-accessibility covers that), and not how easy a single form is to fill in, such as its input types, autofill, and password rules (critique-forms covers that). | NNG-HEURISTICS, NNG-SEVERITY | 0.1.0 |
+| [`critique-accessibility`](skills/critique-accessibility/SKILL.md) | Reviews HTML pages and fragments (markdown where mappable) against 27 of the 55 WCAG 2.2 Level A and AA success criteria: contrast, alt text, heading hierarchy for screen readers, link text, input purpose, target size, orientation, focus visibility, status messages, and keyboard and screen-reader access. Judges conformance against WCAG, not an interface's general usability, flow, or controls (critique-usability covers that), or how much effort a form's fields cost to fill in on a phone (critique-forms covers that). | WCAG | 0.2.0 |
+| [`critique-argument`](skills/critique-argument/SKILL.md) | Reviews argumentative prose - essays, proposals, position papers, recommendation memos, strategy docs, and op-eds - against the Toulmin model of argument: whether the claim, grounds, warrant, backing, qualifier, and rebuttal are present, explicit, and actually hold together. Judges the argument's structure, not prose readability or sentence mechanics (critique-clarity covers that). | TOULMIN | 0.1.1 |
+| [`critique-clarity`](skills/critique-clarity/SKILL.md) | Reviews markdown or plain-text prose for clarity against the Federal Plain Language Guidelines and Williams' Style: readability, passive voice, sentence length, and nominalization density. Judges sentence- and passage-level readability, not whether an argument's claim is supported or its structure holds together (critique-argument covers that). | PLAIN, WILLIAMS | 0.1.1 |
+| [`critique-docs`](skills/critique-docs/SKILL.md) | Reviews technical documentation pages and page trees written in markdown against the Diataxis framework: tutorial, how-to, reference, and explanation mode fit, plus heading structure, orphaned pages, cross-mode linking, and navigation-list length. | DIATAXIS | 0.1.1 |
+| [`critique-forms`](skills/critique-forms/SKILL.md) | Reviews the usability of HTML forms, meaning how easy they are to complete, especially on a phone: input types and mobile keyboards, autofill tokens, field widths, required and optional marking, password rules, button labels, and layout, against convergent research from Baymard, GOV.UK, web.dev, NN/g and others. Judges the cost of filling the form in from its markup, not WCAG conformance (critique-accessibility covers that), a whole interface's flow against Nielsen's heuristics (critique-usability covers that), or the wording of a form's error and validation messages, even as a list of strings (critique-microcopy covers that). | BAYMARD, GOOGLE, GOVUK, WHATWG, NNGROUP, ZUKO, WROBLEWSKI, SILVER, ALHARBI, PENZO, SPEERO, HUBSPOT, CXL, VENTUREHARBOUR, PASCHAL, DESIGNLAB | 0.1.1 |
+| [`critique-microcopy`](skills/critique-microcopy/SKILL.md) | Reviews error messages, empty states, and other short microcopy strings, including screens annotated with placement, container, timing, and behavior context, against NN/g's error-message guidelines: plain language, specificity, constructive next steps, neutral tone, and recovery grace. Judges the message text itself, not the surrounding screen's flow, controls, or confirmation behavior (critique-usability covers that), or a form's field types, autofill, and required-field marking (critique-forms covers that). | NNG-EM | 0.1.1 |
+| [`critique-usability`](skills/critique-usability/SKILL.md) | Reviews HTML or markdown UI specs, wireframe write-ups, and page mockups against Nielsen's 10 usability heuristics: system status, user control and exits, consistency, error prevention and recovery, recognition over recall, and minimalist design. Judges the interface's flow, controls, and states, not the wording of error or empty-state message text (critique-microcopy covers that), not conformance against accessibility standards such as contrast or screen-reader access (critique-accessibility covers that), and not how easy a single form is to fill in, such as its input types, autofill, and password rules (critique-forms covers that). | NNG-HEURISTICS, NNG-SEVERITY | 0.1.1 |
 <!-- skill-catalog:end -->
 
 </details>
