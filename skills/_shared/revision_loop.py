@@ -56,6 +56,18 @@ STOP_NOTHING_ACCEPTED = "stop-nothing-accepted"
 
 BRIEF_SUFFIX = ".revision-brief.json"
 
+# $defs/envelopeRef's property order in the contract schema. The brief writes its envelope reference
+# in this order, whatever order the disposition log used, so its bytes depend on content alone.
+ENVELOPE_REF_KEYS: tuple[str, ...] = (
+    "skill",
+    "skill_version",
+    "artifact",
+    "artifact_sha256",
+    "timestamp",
+    "path",
+    "envelope_sha256",
+)
+
 EXIT_OK = 0
 EXIT_INVALID = 3
 EXIT_USAGE = 4
@@ -79,6 +91,8 @@ def _load_json(path: Path) -> Any:
         text = path.read_text(encoding="utf-8")
     except OSError as exc:
         raise UsageError(f"cannot read '{path}': {exc}") from exc
+    except UnicodeDecodeError as exc:
+        raise UsageError(f"'{path}' is not UTF-8 text: {exc}") from exc
     try:
         return json.loads(text)
     except json.JSONDecodeError as exc:
@@ -106,7 +120,22 @@ def load_disposition_log(path: Path, *, envelope: Mapping[str, Any] | None = Non
     if not isinstance(doc, dict) or "dispositions" not in doc:
         raise LoopError(f"'{path}' is not a disposition log (it has no 'dispositions' list)")
     _require_valid(doc, what="disposition log", path=path, referenced_envelope=envelope)
+    check_one_decision_per_finding(doc)
     return doc
+
+
+def check_one_decision_per_finding(log: Mapping[str, Any]) -> None:
+    """A finding decided twice in one log is ambiguous, and the contract does not forbid it, so
+    the loop does: an accept followed by a reject must not silently become an accept."""
+    seen: set[str] = set()
+    for entry in log["dispositions"]:
+        finding_id = entry["finding_id"]
+        if finding_id in seen:
+            raise LoopError(
+                f"the disposition log decides finding '{finding_id}' more than once; keep one "
+                "decision per finding"
+            )
+        seen.add(finding_id)
 
 
 def _envelope_key(envelope: Mapping[str, Any]) -> tuple[Any, Any, Any]:
@@ -194,16 +223,13 @@ def build_brief(envelope: Mapping[str, Any], log: Mapping[str, Any]) -> dict[str
     No model call, no clock, no randomness: the same two inputs always give the same brief.
     """
     check_log_references_envelope(log, envelope)
+    check_one_decision_per_finding(log)
     findings = {f["id"]: f for f in envelope["findings"]}
     items: list[dict[str, Any]] = []
-    seen: set[str] = set()
     for entry in log["dispositions"]:
         if entry["disposition"] != "accept":
             continue
         finding_id = entry["finding_id"]
-        if finding_id in seen:
-            continue
-        seen.add(finding_id)
         finding = findings.get(finding_id)
         if finding is None:
             raise LoopError(f"accepted finding '{finding_id}' is not in the envelope")
@@ -215,7 +241,9 @@ def build_brief(envelope: Mapping[str, Any], log: Mapping[str, Any]) -> dict[str
                 "fix": finding["fix"],
             }
         )
-    return {"envelope": dict(log["envelope"]), "iteration": log_iteration(log), "items": items}
+    ref = log["envelope"]
+    envelope_ref = {key: ref[key] for key in ENVELOPE_REF_KEYS if key in ref}
+    return {"envelope": envelope_ref, "iteration": log_iteration(log), "items": items}
 
 
 def serialize_brief(brief: Mapping[str, Any]) -> str:
@@ -292,6 +320,12 @@ def resume(
         listing = ", ".join(f"{name} = '{candidates[name]}'" for name in candidates)
         raise LoopError(f"conflicting prior envelopes: {listing}; pass exactly one")
     prior_path = next(iter(candidates.values()))
+    if not prior_path.is_file():
+        raise UsageError(
+            f"prior envelope '{prior_path}' not found. A relative envelope.path is read from the "
+            "current directory, as run.artifact is, so run resume from the directory the first "
+            "invocation ran in, or pass --envelope"
+        )
     envelope = load_envelope(prior_path)
     check_log_references_envelope(log, envelope)
     expected_sha = log["envelope"].get("envelope_sha256")
@@ -313,6 +347,11 @@ def resume(
             f"the loop already reached its bound of {ITERATION_BOUND} iterations; disposition the "
             "remaining findings as they stand rather than starting a fourth"
         )
+    if not any(entry["disposition"] == "accept" for entry in log["dispositions"]):
+        raise LoopError(
+            f"iteration {prior_iteration} accepted no finding, so the loop stopped there with "
+            "nothing to revise"
+        )
     if _sha256_file(artifact) == envelope["run"]["artifact_sha256"]:
         raise LoopError(
             f"'{artifact}' is byte-identical to the artifact iteration {prior_iteration} "
@@ -322,6 +361,7 @@ def resume(
         "step": "resume",
         "skill": envelope["run"]["skill"],
         "artifact": artifact.as_posix(),
+        "prior_artifact": envelope["run"]["artifact"],
         "prior_envelope": prior_path.as_posix(),
         "prior_iteration": prior_iteration,
         "iteration": prior_iteration + 1,
@@ -352,6 +392,15 @@ def compare(previous: Mapping[str, Any], current: Mapping[str, Any]) -> dict[str
             f"the two envelopes come from different skills ('{prev_skill}' and '{curr_skill}'); "
             "a comparison across rubrics means nothing"
         )
+    prev_artifact = previous["run"]["artifact"]
+    curr_artifact = current["run"]["artifact"]
+    if prev_artifact != curr_artifact:
+        raise LoopError(
+            f"the two envelopes critique different artifacts ('{prev_artifact}' and "
+            f"'{curr_artifact}'); compare runs of one artifact across a revision"
+        )
+    if previous["run"]["timestamp"] == current["run"]["timestamp"]:
+        raise LoopError("the two envelopes are the same run (same timestamp); nothing to compare")
     prev_counts = _criterion_counts(previous)
     curr_counts = _criterion_counts(current)
     by_criterion = {
@@ -457,13 +506,21 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
         check, brief = pause(envelope, log)
         result = check.as_json()
         result["step"] = "brief"
+        out = args.out if args.out is not None else default_brief_path(envelope)
         if brief is None:
             result["brief"] = None
+            if out.is_file():
+                # Not deleted: removing a file the person may still want is not this step's call.
+                result["stale_brief"] = out.as_posix()
             return result
-        out = args.out if args.out is not None else default_brief_path(envelope)
-        artifact = Path(envelope["run"]["artifact"])
-        if out.resolve() == artifact.resolve():
-            raise UsageError(f"refusing to write the brief over the artifact itself ('{artifact}')")
+        protected = {
+            "the artifact": Path(envelope["run"]["artifact"]),
+            "the envelope": args.envelope,
+            "the disposition log": args.dispositions,
+        }
+        for name, path in protected.items():
+            if out.resolve() == path.resolve():
+                raise UsageError(f"refusing to write the brief over {name} ('{path}')")
         try:
             out.parent.mkdir(parents=True, exist_ok=True)
             out.write_text(serialize_brief(brief), encoding="utf-8", newline="\n")

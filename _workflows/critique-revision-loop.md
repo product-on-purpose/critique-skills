@@ -32,7 +32,9 @@ artifact. The second invocation hands the revised artifact back and the loop res
 workflow writes to the artifact. What a person builds on top of the brief is theirs, not the
 library's: see [what the revision loop does and does not do](../docs/explanation/revision-loop-boundary.md).
 
-`<plugin>` below is the directory the plugin is installed in. Every command prints one JSON object.
+`<plugin>` below is the directory the plugin is installed in. Run every command from the same
+working directory, because relative paths are read from there: `run.artifact`, a log's
+`envelope.path`, and the default brief location. Every command prints one JSON object.
 Exit code 0 means the step ran, including a decision to stop. Exit code 3 means an input is not
 contract-valid or two inputs disagree. Exit code 4 is a usage error.
 
@@ -45,7 +47,8 @@ contract-valid or two inputs disagree. Exit code 4 is a usage error.
    example as `memo.envelope.json`. Hands on: the envelope.
 2. **Record dispositions.** The person decides accept, reject, or defer on each finding and records
    it in a disposition log ([how to record dispositions](../docs/how-to/dispositions.md)). On the
-   first iteration the log may omit `iteration`, which means 1. Hands on: the log, for example
+   first iteration the log may omit `iteration`, which means 1. Each finding gets at most one
+   decision; a log that decides one finding twice is refused. Hands on: the log, for example
    `memo.dispositions.json`.
 3. **Stop-check, and 4. pause with a brief.** One command does both:
 
@@ -65,8 +68,12 @@ contract-valid or two inputs disagree. Exit code 4 is a usage error.
    On `continue`, the brief is written to `<artifact-stem>.revision-brief.json` beside the artifact,
    or to `--out`. It holds one item per accepted finding, `{finding_id, criterion, location, fix}`,
    copied from the envelope, and it validates as a contract 1.1.0 revision brief. The same envelope
-   and log always produce the same bytes. Hands on: the brief, to the person. **The loop pauses
-   here.**
+   and log always produce the same bytes. The step refuses an `--out` that names the artifact, the
+   envelope, or the log. A later iteration's brief replaces an earlier one at the default path, and
+   its `iteration` field says which pass wrote it. When a later call stops the loop, it writes
+   nothing and deletes nothing: if an earlier brief is still at that path, the JSON names it as
+   `stale_brief`, so nothing acts on it by mistake. Hands on: the brief, to the person. **The loop
+   pauses here.**
 
    `stop-check` alone answers the stop question without writing anything:
    `python3 <plugin>/skills/_shared/revision_loop.py stop-check --envelope memo.envelope.json --dispositions memo.dispositions.json`.
@@ -82,9 +89,10 @@ contract-valid or two inputs disagree. Exit code 4 is a usage error.
    The person passes the prior iteration's disposition log by path (N4 decision D2). The prior
    envelope is the log's `envelope.path`, or `--envelope` when the log does not record one. If both
    are given and name different files, the step fails and names both, rather than guessing. It also
-   fails when the loop already stopped, or when the artifact is byte-identical to the one the prior
-   run critiqued. Its JSON names the skill to run and the `iteration` the new disposition log must
-   carry.
+   fails when the loop already stopped, when the prior pass accepted nothing, or when the artifact
+   is byte-identical to the one the prior run critiqued. It does not require the revised artifact
+   to keep its name, so its JSON reports `prior_artifact` beside `artifact` for the person to
+   check. It also names the skill to run and the `iteration` the new disposition log must carry.
 
    Then run the same skill on the revised artifact, save its envelope, and compare the two runs:
 
@@ -92,7 +100,9 @@ contract-valid or two inputs disagree. Exit code 4 is a usage error.
    python3 <plugin>/skills/_shared/revision_loop.py compare --previous memo.envelope.json --current memo.v2.envelope.json
    ```
 
-   The comparison reports, per criterion and per severity, the count in each run and the change.
+   Both envelopes must come from the same skill, record the same `run.artifact` path, and be
+   different runs. The comparison reports, per criterion and per severity, the count in each run
+   and the change.
    It never claims that a finding in one run is "the same" finding as one in the other, because a
    finding id is unique only within its own envelope. Then return to step 2 with the new envelope,
    writing the log with the `iteration` that `resume` reported.

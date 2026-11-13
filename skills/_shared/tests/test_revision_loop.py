@@ -295,6 +295,7 @@ def test_every_example_log_binds_its_envelope_bytes():
 def test_compare_reports_criterion_and_severity_deltas():
     previous = _envelope()
     current = _converged(previous)
+    current["run"]["timestamp"] = "2026-08-01T09:00:00Z"
     result = rl.compare(previous, current)
     assert result["by_criterion"]["TOULMIN-CLAIM"] == {"previous": 1, "current": 0, "delta": -1}
     assert result["by_criterion"]["TOULMIN-CLAIM-MARKER"] == {"previous": 1, "current": 1, "delta": 0}
@@ -315,3 +316,97 @@ def test_cli_exit_codes(tmp_path: Path):
     bad = tmp_path / "bad.json"
     bad.write_text('{"run": {}}', encoding="utf-8")
     assert rl.main(["stop-check", "--envelope", str(bad)]) == rl.EXIT_INVALID
+
+
+# --------------------------------------------------------------------------
+# Review fixes (PR 131)
+# --------------------------------------------------------------------------
+
+
+def test_a_finding_decided_twice_is_refused():
+    log = _log()
+    log["dispositions"].append({"finding_id": "F-001", "disposition": "reject"})
+    with pytest.raises(rl.LoopError, match="more than once"):
+        rl.build_brief(_envelope(), log)
+
+
+def test_a_non_utf8_file_is_a_usage_error(tmp_path: Path):
+    u16 = tmp_path / "u16.json"
+    u16.write_text('{"run": {}}', encoding="utf-16")
+    assert rl.main(["stop-check", "--envelope", str(u16)]) == rl.EXIT_USAGE
+
+
+def test_brief_envelope_reference_is_in_contract_order():
+    log = _log()
+    log["envelope"] = dict(reversed(list(log["envelope"].items())))
+    keys = list(rl.build_brief(_envelope(), log)["envelope"])
+    assert keys == [k for k in rl.ENVELOPE_REF_KEYS if k in keys]
+
+
+@pytest.mark.parametrize("target", ["envelope", "dispositions"])
+def test_brief_refuses_to_overwrite_its_inputs(tmp_path: Path, monkeypatch, target: str):
+    artifact, env_path, log_path = _workspace(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    victim = env_path if target == "envelope" else log_path
+    before = victim.read_bytes()
+    code = rl.main(
+        ["brief", "--envelope", str(env_path), "--dispositions", str(log_path), "--out", str(victim)]
+    )
+    assert code == rl.EXIT_USAGE
+    assert victim.read_bytes() == before
+
+
+def test_a_stop_reports_a_brief_left_from_an_earlier_pause(tmp_path: Path, monkeypatch, capsys):
+    artifact, env_path, log_path = _workspace(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    assert rl.main(["brief", "--envelope", str(env_path), "--dispositions", str(log_path)]) == 0
+    capsys.readouterr()
+    log = json.loads(log_path.read_text("utf-8"))
+    log["contract_version"] = "1.1.0"
+    log["iteration"] = 3
+    log_path.write_text(json.dumps(log), encoding="utf-8")
+    assert rl.main(["brief", "--envelope", str(env_path), "--dispositions", str(log_path)]) == 0
+    result = json.loads(capsys.readouterr().out)
+    assert result["decision"] == rl.STOP_BOUND
+    assert result["stale_brief"].endswith(rl.BRIEF_SUFFIX)
+
+
+def test_resume_explains_a_missing_relative_envelope(tmp_path: Path, monkeypatch):
+    artifact, env_path, log_path = _workspace(tmp_path)
+    _revise(artifact)
+    elsewhere = tmp_path / "elsewhere"
+    elsewhere.mkdir()
+    monkeypatch.chdir(elsewhere)
+    with pytest.raises(rl.UsageError, match="current directory"):
+        rl.resume(artifact, log_path)
+
+
+def test_resume_refuses_a_pass_that_accepted_nothing(tmp_path: Path, monkeypatch):
+    artifact, env_path, log_path = _workspace(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    _revise(artifact)
+    log = json.loads(log_path.read_text("utf-8"))
+    for entry in log["dispositions"]:
+        entry["disposition"] = "reject"
+    log_path.write_text(json.dumps(log), encoding="utf-8")
+    del log  # the log's envelope_sha256 still binds the unchanged envelope
+    with pytest.raises(rl.LoopError, match="accepted no finding"):
+        rl.resume(artifact, log_path)
+
+
+def test_resume_reports_the_prior_artifact(tmp_path: Path, monkeypatch):
+    artifact, env_path, log_path = _workspace(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    _revise(artifact)
+    assert rl.resume(artifact, log_path)["prior_artifact"] == _envelope()["run"]["artifact"]
+
+
+def test_compare_refuses_different_artifacts_and_the_same_run():
+    previous = _envelope()
+    other = copy.deepcopy(previous)
+    other["run"]["artifact"] = "docs/other.md"
+    other["run"]["timestamp"] = "2026-08-01T09:00:00Z"
+    with pytest.raises(rl.LoopError, match="different artifacts"):
+        rl.compare(previous, other)
+    with pytest.raises(rl.LoopError, match="same run"):
+        rl.compare(previous, copy.deepcopy(previous))
