@@ -140,7 +140,7 @@ v0.1.x finished are both discharged.
   ([ADR 0040 (the revision loop pauses with a revision brief)](../decisions/0040-revision-loop-pauses-with-a-revision-brief.md)),
   so N4 was unblocked, and N4 was built on 2026-11-12, so E55 was unblocked. E55 closed on
   2026-11-13: G3 evaluates seven real edges, and G1 does not apply because the plugin ships no
-  hooks. What remains is the maintainer's ruling on declaring `tier: advanced` (E33's revisit).
+  hooks. On E33's revisit the same day, the maintainer ruled to keep `tier: convergent`.
 - **The v0.3.0 re-measure: done 2026-10-28.** One shared paid dispatch measured E73 (merge runs the
   scripted lane itself) and E67 (accessibility expansion) across all seven skills, under run set
   `bench-2026-10-28`. Every skill's version moved with it, and both items closed that day. E63
