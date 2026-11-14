@@ -46,7 +46,7 @@ is for reading the job log afterward.
 The validator ships inside the critique-skills repository itself, not as a separate package, so a
 consumer's CI checks out a pinned copy of it the same way this repository checks out
 `agent-skills-toolkit` in its own CI (`.github/workflows/ci.yml`, job `conformance`). Pin `ref` to a
-released tag or a specific commit; a moving branch is not reproducible. The example pins `v0.2.0`,
+released tag or a specific commit; a moving branch is not reproducible. The example pins `v0.3.0`,
 the latest release when this page was last revised. The
 [releases page](https://github.com/product-on-purpose/critique-skills/releases) lists newer tags.
 
@@ -68,7 +68,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: product-on-purpose/critique-skills
-          ref: v0.2.0
+          ref: v0.3.0
           path: .critique-skills
 
       - name: Setup Python

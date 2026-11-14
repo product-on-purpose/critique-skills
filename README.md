@@ -28,7 +28,7 @@ Every skill operationalizes a published external standard, cites a permanent cri
 | **Build on it or contribute** | [How a critique runs](#-how-a-critique-runs) and [where this stops](#-where-this-stops) | [The methodology](https://product-on-purpose.github.io/critique-skills/explanation/methodology/), the [Critique Contract](docs/reference/critique-contract.md), and [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 
 > [!NOTE]
-> **v0.2.0.** The finding contract, the severity scale, and the criterion IDs are stable commitments. The measured numbers are honest but young: one benchmark cycle on two pinned model tiers, with consistency floors set per tier at **0.404** on Sonnet and **0.357** on Haiku, well below the 0.7 proposed before any data existed ([ADR 0038](docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md), amended 2026-10-30).
+> **v0.3.0.** The finding contract, the severity scale, and the criterion IDs are stable commitments. The measured numbers are honest but young: one benchmark cycle on two pinned model tiers, with consistency floors set per tier at **0.404** on Sonnet and **0.357** on Haiku, well below the 0.7 proposed before any data existed ([ADR 0038](docs/internal/decisions/0038-consistency-threshold-v2-per-tier-floors.md), amended 2026-10-30).
 
 ---
 
@@ -302,17 +302,18 @@ Everything on the site is a rendering of something in this repo. Nothing lives o
 
 ## 📈 Project status
 
-`v0.2.0`. The contract, the severity scale, and the criterion IDs are stable commitments; the measured numbers are one honest cycle, not a settled science.
+`v0.3.0`. The contract, the severity scale, and the criterion IDs are stable commitments; the measured numbers are one honest cycle, not a settled science.
 
 |  |  |
 |---|---|
-| **Current version** | v0.2.0 |
+| **Current version** | v0.3.0 |
 | **Skills** | 7, across design, communication, and documentation |
 | **Criteria** | 125 (61 scripted, 64 judged), each with a permanent ID |
 | **Subagents** | 1 (`critique-critic`, clean-context) |
+| **Workflows** | 1 (`critique-revision-loop`) |
 | **Conformance** | convergent (Silver), 0 errors / 0 warnings; reproduce with `node scripts/check.mjs` |
-| **Measurement** | 1477 committed run envelopes, k=5, two pinned model tiers, 27-artifact seeded corpus |
-| **Tests** | 1166 Python, 154 Node; reproduce with `python -m pytest -q` and `npm test` |
+| **Measurement** | 1477 committed run envelopes, k=5, two pinned model tiers, 28-artifact seeded corpus |
+| **Tests** | 1570 Python, 168 Node; reproduce with `python -m pytest -q` and `npm test` |
 | **License** | [Apache-2.0](LICENSE) (code) / CC-BY-4.0 (corpus) |
 
 History: [`CHANGELOG.md`](CHANGELOG.md) for technical detail, [`RELEASE-NOTES.md`](RELEASE-NOTES.md) for curated highlights, [`ROADMAP.md`](ROADMAP.md) for what is next.
