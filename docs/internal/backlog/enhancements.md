@@ -1118,8 +1118,8 @@ and the repository did not have.
 - **Depends on:** Nothing to create; rows depend on E44, E48 and E56
 - **Rank at intake:** 43 of 64. **Status:** done 2026-11-12. The tracker is
   `docs/internal/v1-readiness.md`, with one row per condition. Rows 1, 2 and 4 read "Not met" and
-  name E48, E44 and E56 as what closes them. Row 3 needs the maintainer to rule which two minor
-  releases count.
+  name E48, E44 and E56 as what closes them. Row 3 was ruled met on 2026-11-13: the v0.1 and v0.2
+  minor releases count, and the gate graded both tags Convergent.
 
 ## E44 - Run the taxonomy survey and triage the Gemini audit's slate through it
 
@@ -1191,7 +1191,7 @@ and the repository did not have.
 - **Why:** The only path that closes the 'No human acceptance data yet' limitation, and it needs usage volume no session count can buy, so starting late costs calendar time.
 - **Evidence:** ROADMAP.md:62; ROADMAP.md:124 (Known limitations: 'No human acceptance data yet'); docs/reference/criterion-ids.md:41
 - **Derives from:** ROADMAP.md v0.2.0 E6; retires the 'No human acceptance data yet' known limitation
-- **Size:** L. **Release:** v0.3.0. **Category:** measurement. **Confidence:** verified.
+- **Size:** L. **Release:** v0.4.0+ (moved from v0.3.0 on 2026-11-13). **Category:** measurement. **Confidence:** verified.
 - **Blocks:** The v1.0 per-skill pruning criterion (E43 row 1)
 - **Depends on:** E1; real usage volume
 - **Rank at intake:** 48 of 64. **Status:** backlog (recorded 2026-09-11).
@@ -1288,7 +1288,7 @@ and the repository did not have.
 - **Why:** The difference between an asserted positioning claim and a demonstrated one.
 - **Evidence:** ROADMAP.md:80; README.md ('The family' section, asserts the think-make-judge chain with no worked cross-library example); examples/recipes/ (revision-loop.md, gate-in-ci.md, critic-delegation.md - none cross-library)
 - **Derives from:** ROADMAP.md v0.3.0 E3 (Cross-library composition)
-- **Size:** M. **Release:** v0.3.0. **Category:** docs. **Confidence:** verified.
+- **Size:** M. **Release:** v0.4.0+ (moved from v0.3.0 on 2026-11-13). **Category:** docs. **Confidence:** verified.
 - **Blocks:** Nothing
 - **Depends on:** N4 (the revision-loop chain) being built (added 2026-10-30). The maintainer ruled
   that the recipe produces a revision brief with N4's brief writer, so E54 is built after N4, and the
@@ -2017,7 +2017,12 @@ and the repository did not have.
   low on whether the note affects results.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
-- **Rank at intake:** unranked (added 2026-11-04). **Status:** open.
+- **Rank at intake:** unranked (added 2026-11-04). **Status:** closed 2026-11-13.
+- **CLOSED 2026-11-13.** The maintainer ruled to revert the note. `references/TOULMIN.md` is
+  restored byte for byte to its text at `9822b52`, the commit `bench-2026-10-28` measured, so
+  the file shipped as 0.1.1 is the file that was measured, and no version moves. The fixture
+  facts the note carried stay in `skills/critique-argument/README.md`, which the critic does not
+  read at run time.
 
 ## E79 - Decide whether SKILL.md's top-level checks and rubric_sources keys should move for portability
 
