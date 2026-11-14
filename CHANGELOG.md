@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- **The README's install section now says the marketplace pins `v0.3.0`.** The `product-on-purpose` registry re-pinned `critique-skills` to `v0.3.0` (`ff8a1f3`) at registry 1.123.0, the day it was released, and the line had named `v0.2.0`. The registry's listing description still names the same seven domains, so it did not move.
+
 ## [0.3.0] - 2026-11-13
 
 The release that makes the revision loop a workflow you can invoke and stops the merge step trusting the model's copy of the scripted checks. `critique-revision-loop` runs critique, dispositions, a stop-check and a revision brief, and compares the next run against the last, with every step but the critique scripted. Contract 1.1.0 adds the disposition log's `iteration`, the revision brief as a fourth document type, and deprecates `selector`. `merge.py` now runs each skill's `checks.py` itself ([ADR 0041](docs/internal/decisions/0041-merge-runs-the-scripted-lane-itself.md)), `critique-accessibility` checks 27 of WCAG 2.2's 55 A and AA criteria, and every skill was re-measured in run set `bench-2026-10-28` before its version moved. E48 (disposition telemetry) and E54 (cross-library composition) moved from this version's gate to v0.4.0+.
