@@ -16,11 +16,11 @@ This is a public statement of sequence, not a schedule. It says what shipped, wh
 
 ---
 
-## Now: v0.2.0
+## Now: v0.3.0
 
-v0.2.0 is the first minor release since `v0.1.0`, after six patch releases. It added one skill, `critique-forms`, and made the receipts behind every published number whole. `CHANGELOG.md` carries the detail.
+v0.3.0 makes the revision loop an invokable workflow, `critique-revision-loop`, and moves the finding contract to 1.1.0. The merge step now runs each skill's scripted checks itself, `critique-accessibility` checks 27 of the 55 WCAG 2.2 Level A and AA criteria, and every skill was re-measured on both pinned tiers before its version moved. `CHANGELOG.md` carries the detail.
 
-Shipped: seven measured critique skills (`critique-accessibility`, `critique-argument`, `critique-clarity`, `critique-docs`, `critique-forms`, `critique-microcopy`, `critique-usability`), a documentation site generated from this repository, the Critique Contract (finding schema, run envelope, disposition log) frozen with a JSON Schema and validator, the `critique-critic` clean-context subagent, a deterministic seeded-defect benchmark with 1477 committed run envelopes across two pinned model tiers, `--gate` mode for CI, and Convergent (Silver) conformance with 0 errors and 0 warnings.
+Shipped: seven measured critique skills (`critique-accessibility`, `critique-argument`, `critique-clarity`, `critique-docs`, `critique-forms`, `critique-microcopy`, `critique-usability`), the `critique-revision-loop` workflow, a documentation site generated from this repository, the Critique Contract 1.1.0 (finding schema, run envelope, disposition log, revision brief) with a JSON Schema and validator, the `critique-critic` clean-context subagent, a deterministic seeded-defect benchmark with 1477 committed run envelopes across two pinned model tiers, `--gate` mode for CI, and Convergent (Silver) conformance with 0 errors and 0 warnings.
 
 Full detail: [`CHANGELOG.md`](CHANGELOG.md) and [`RELEASE-NOTES.md`](RELEASE-NOTES.md). Measured numbers: [`bench/results/README.md`](bench/results/README.md).
 
@@ -100,7 +100,9 @@ Carried alongside that pass: any fix-list items still open from the v0.1.0 run t
 
 <a id="next-v030"></a>
 
-## Next: v0.3.0
+## Done: v0.3.0
+
+**Released 2026-11-13.** Every exit-gate condition below is met, after E48 and E54 moved to v0.4.0+ the same day.
 
 - **Revision loop as a first-class chain.** The critique, disposition, revise, re-critique loop exists today as a documented recipe (`examples/recipes/revision-loop.md`); this version makes it a real, invokable chain with a defined convergence rule.
 - **Gate hardening.** `--gate` exit codes exercised and documented across every shipped skill as a CI recipe for consumer repositories, not just this one.

@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-13
+
+The release that makes the revision loop a workflow you can invoke and stops the merge step trusting the model's copy of the scripted checks. `critique-revision-loop` runs critique, dispositions, a stop-check and a revision brief, and compares the next run against the last, with every step but the critique scripted. Contract 1.1.0 adds the disposition log's `iteration`, the revision brief as a fourth document type, and deprecates `selector`. `merge.py` now runs each skill's `checks.py` itself ([ADR 0041](docs/internal/decisions/0041-merge-runs-the-scripted-lane-itself.md)), `critique-accessibility` checks 27 of WCAG 2.2's 55 A and AA criteria, and every skill was re-measured in run set `bench-2026-10-28` before its version moved. E48 (disposition telemetry) and E54 (cross-library composition) moved from this version's gate to v0.4.0+.
+
 ### Changed
 
 - **v0.3.0 is cut from the work already on `main`, and its gate drops two conditions.** The maintainer ruled on 2026-11-13 to release now rather than hold the version open. [E48 (disposition telemetry)](docs/internal/backlog/enhancements.md) needs months of real-use dispositions, and [E54 (cross-library composition)](docs/internal/backlog/enhancements.md) was unbuilt, so both move from the v0.3.0 gate in `ROADMAP.md` to v0.4.0+.

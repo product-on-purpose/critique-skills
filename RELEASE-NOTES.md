@@ -6,6 +6,63 @@ Curated, user-facing highlights. For the full technical history, see `CHANGELOG.
 
 Nothing yet.
 
+## 0.3.0 - 2026-11-13
+
+**A revision loop you can run, a merge step that no longer trusts the model's copy of the scripted checks, and five more accessibility criteria.**
+
+Every skill's version moved in this release, and every one of them was re-measured on both pinned tiers before it moved.
+
+### The revision loop is a workflow you can invoke
+
+**`critique-revision-loop` runs critique, your decisions, and a revision brief, then compares the next run against the last.** Critique an artifact with any of the seven skills and record accept, reject or defer on each finding. The loop then either stops or writes a revision brief: one item per finding you accepted, with its criterion, location and fix. Revise the artifact yourself, hand it back, and the loop re-critiques it and reports what changed per criterion and per severity.
+
+**It stops on its own.** The loop stops when no finding at severity 3 or above remains, after the third iteration, or when you accepted nothing. It never edits your artifact: the brief is for you, or for a tool you choose to run on your own authority. See `docs/explanation/revision-loop-boundary.md` for exactly where that line sits.
+
+**Every step except the critique itself is a script.** `skills/_shared/revision_loop.py` runs the stop-check, the brief, the resume and the comparison with no model call, and the same inputs always produce the same brief.
+
+### The contract is at 1.1.0
+
+The finding contract gains three things, and every envelope, example and disposition log from 1.0.0 still validates.
+
+- A disposition log can record which `iteration` of the loop it belongs to.
+- The revision brief is a fourth document type, validated like the other three.
+- `selector` is marked deprecated. It still validates, so nothing that sets it breaks.
+
+Envelopes from every skill now carry `contract_version: 1.1.0`.
+
+### The ones that affect what you can trust
+
+**The merge step now runs each skill's scripted checks itself.** Before this release, the model wrote one file holding both the scripted and the judged findings, and the merge step trusted it. A model could drop a scripted finding, or relabel a judged finding as scripted, and the envelope recorded either as fact, at high confidence. Now `merge.py` runs the skill's own `checks.py` and takes the scripted lane only from that output. A finding's lane comes from the skill's declaration, never from the model. A judged finding with no stated confidence now defaults to `medium`, not `high`.
+
+**A judged finding whose prose is an object now fails the merge instead of being stringified.** A location written as an object used to become that object's Python representation, which was contract-valid text and read as nonsense.
+
+**Every skill was re-measured on Sonnet and Haiku, in one run set, `bench-2026-10-28`.** That is why every version moved: `critique-accessibility` to 0.2.0 and the other six to 0.1.1. Two published verdicts changed, both on Sonnet. `critique-microcopy` now reads "no pass on this tier (qualifies via haiku)": the baseline's location recall rose to 0.973 against the skill's 0.947, while the skill still wins precision 0.910 to 0.349. `critique-usability` now reads "below baseline".
+
+**The consistency floors were re-derived from the shipped versions.** The floor moved from 0.450 to 0.404 on Sonnet, and from 0.309 to 0.357 on Haiku. One shipped skill now sits below a floor: `critique-argument` on Haiku, at 0.343. Its ship verdict stands, because a floor gates a new skill when it ships and a re-measure does not reopen a shipped one. We say so rather than leave the number to be found.
+
+**`critique-argument`'s hedge-density check has a documented false-positive class.** It fires on arguments that hedge only their genuinely uncertain claims, and its README now says so, with the two fixtures that show it.
+
+### `critique-accessibility` checks 27 of WCAG 2.2's 55 Level A and AA criteria
+
+It adds five success criteria it can check from markup and declared CSS: 1.3.4 Orientation, 1.3.5 Identify Input Purpose, 2.4.7 Focus Visible, 2.5.8 Target Size (Minimum) and 4.1.3 Status Messages. Its benchmark corpus was corrected along the way. Every earlier artifact, including the clean one, carried real defects nobody had planted, such as form fields with no `autocomplete` token, so a correct finding on them counted against the skill's precision. The old corpus is kept frozen beside the new one, so earlier results stay reproducible.
+
+### Smaller changes
+
+- The `--gate` exit codes are exercised on every shipped skill, and the CI recipe for other repositories covers any of them (`docs/how-to/gate-in-ci.md`).
+- Each skill's README states the version that ships, and a test holds it there.
+- The benchmark harness keeps the response of a cell it refuses or that fails contract validation, and it records how many attempts each cell took.
+- The documentation site's diagram labels no longer clip.
+
+### What changed in the plan
+
+**Disposition telemetry and cross-library composition moved to v0.4.0+.** Both were v0.3.0 gate conditions. Telemetry needs months of real-use dispositions, and the cross-library workflow was not built, so holding v0.3.0 for them would have kept the fixes above from anyone installing the plugin. **BYOR (bring your own rubric) moved to v0.4.0+ earlier,** on 2026-11-03. **The declared conformance tier stays Convergent,** although no Gold check is now blocked.
+
+### Still open, stated rather than buried
+
+- `critique-argument` on Haiku is below the consistency floor, as described above.
+- Consistency still has no uncertainty estimate, because the variance method cannot band it.
+- Haiku's acceptance bands are 2.3 times wider than Sonnet's, so the cheap tier is the weaker test.
+
 ## 0.2.0 - 2026-10-15
 
 **One new skill, a documentation site, and the receipts behind every published number made whole.**
