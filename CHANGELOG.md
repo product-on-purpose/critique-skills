@@ -7,6 +7,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- **The held E69 branch is backed up on GitHub.** [E69 (the npm option for the gate)](docs/internal/backlog/enhancements.md) keeps its edits on `build/e69-gate-on-npm-toolkit` until the maintainer decides whether agent-skills-toolkit deprecates its tier levels. Those commits existed on one machine only, so the branch was pushed on 2026-11-15, with no pull request. No workflow runs on a push to a branch other than `main`.
 - **The README's install section now says the marketplace pins `v0.3.0`.** The `product-on-purpose` registry re-pinned `critique-skills` to `v0.3.0` (`ff8a1f3`) at registry 1.123.0, the day it was released, and the line had named `v0.2.0`. The registry's listing description still names the same seven domains, so it did not move.
 
 ## [0.3.0] - 2026-11-13
