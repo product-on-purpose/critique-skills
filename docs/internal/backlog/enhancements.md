@@ -1293,11 +1293,13 @@ and the repository did not have.
 - **Depends on:** N4 (the revision-loop chain) being built (added 2026-10-30). The maintainer ruled
   that the recipe produces a revision brief with N4's brief writer, so E54 is built after N4, and the
   brief joins the contract in [ADR 0042 (contract 1.1.0)](../decisions/0042-contract-1-1-0-iteration-revision-brief-selector.md).
-- **Rank at intake:** 58 of 64. **Status:** built 2026-11-15, not closed. The recipe is
+- **Rank at intake:** 58 of 64. **Status:** closed 2026-11-15. The recipe is
   `examples/recipes/cross-library-composition.md`, and its one paid run happened on 2026-11-15. The
   run showed that `critique-clarity` misreads markdown tables (E82) and that the output bound hid
-  every judged finding (E80), so closing waits on the maintainer's ruling on shipping the recipe
-  with both open.
+  every judged finding (E80). The maintainer delegated the ruling, and the recipe shipped with both
+  defects shown rather than waiting on E82, because the recipe says what the run got wrong and a
+  fix needs a version move and a paid re-measure. Re-running the recipe after E82 is fixed is part
+  of E83 (best-in-class examples), not of E54.
 - **Spec:** [E54's spec (cross-library composition)](../release-plans/_unassigned/E54_cross-library-composition/spec.md),
   ruled 2026-10-30, built 2026-11-15.
 
