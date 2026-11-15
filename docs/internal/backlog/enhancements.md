@@ -1735,9 +1735,12 @@ and the repository did not have.
   for the premise, inference for the trade-off.
 - **Blocks:** Nothing
 - **Depends on:** The maintainer's decision on whether agent-skills-toolkit deprecates its tier
-  levels, which was deferred on 2026-11-04. The edits are committed only on the local branch
+  levels, which was deferred on 2026-11-04. The edits are committed on the branch
   `build/e69-gate-on-npm-toolkit` and wait for that decision. (Updated 2026-11-12. The field said
-  "Nothing" until then, which kept this item in the Ready now table while it was held.)
+  "Nothing" until then, which kept this item in the Ready now table while it was held.) The branch
+  was pushed to GitHub on 2026-11-15 as a backup, because its commits existed on one machine only.
+  It has no pull request and must not be merged until the decision is made. It is ten commits
+  behind `main` and needs a catch-up merge first.
 - **Rank at intake:** unranked (added 2026-09-30). **Status:** backlog.
 
 ## E70 - Teach the skill template how a synthesized rubric lays out its references and anchors
