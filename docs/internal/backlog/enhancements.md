@@ -2155,9 +2155,8 @@ and the repository did not have.
 - **Size:** L. **Release:** unscheduled. **Category:** docs. **Confidence:** verified for the
   inventory; the plan's recommendations are medium confidence and are the maintainer's to rule.
 - **Blocks:** Nothing
-- **Depends on:** The maintainer's rulings on the plan's eight decisions. Its paid phase also
-  depends on E82 (tables read as prose) and E80 (output-bound ranking), per decision D8. Phases 1
-  and 2 depend on nothing.
+- **Depends on:** Its paid phase depends on E82 (tables read as prose) and E80 (output-bound
+  ranking), per decision D8, and on a separate go. Phases 1 and 2 depend on nothing.
 - **Rank at intake:** unranked (added 2026-11-15). **Status:** open.
 - **Plan:** [E83's plan (best-in-class examples)](../release-plans/_unassigned/E83_best-in-class-examples/plan.md),
-  drafted 2026-11-15, awaiting review.
+  drafted 2026-11-15; all eight decisions ruled 2026-11-15, every recommendation accepted.
