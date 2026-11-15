@@ -2,7 +2,7 @@
 id: E54
 title: "Ship one documented cross-library composition workflow"
 type: spec
-status: committed
+status: fulfilled
 created: 2026-10-27
 updated: 2026-11-15
 linked-effort: docs/internal/backlog/enhancements.md
@@ -21,7 +21,7 @@ Ruled by the maintainer on 2026-10-30 (the six decisions below), and not built y
 
 ## Task Summary
 
-**Status:** built 2026-11-15; not closed, pending the maintainer's ruling on shipping with E82 and E80 open
+**Status:** fulfilled 2026-11-15; shipped with E82 (tables read as prose) and E80 (output-bound ranking) open and shown in the recipe, on the maintainer's delegated ruling
 **Last updated:** 2026-11-15 by Claude, after the build and its one live run
 **Linked plan:** not yet planned
 **Open questions:** 0 (all six were decided 2026-10-30; see Open Questions / Decisions)
