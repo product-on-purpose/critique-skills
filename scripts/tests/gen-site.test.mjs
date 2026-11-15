@@ -914,8 +914,13 @@ test("exampleRoutes maps each README to its directory and every other file to a 
   assert.equal(routes.get("examples/docs/README.md"), "/examples/docs/");
   assert.equal(routes.get("examples/docs/artifact.md"), "/examples/docs/artifact/");
   assert.equal(routes.get("examples/recipes/gate-in-ci.md"), "/examples/recipes/gate-in-ci/");
+  // A nested folder under recipes/ routes the same way: E54's sibling PRD becomes a leaf page.
+  assert.equal(
+    routes.get("examples/recipes/cross-library-prd/prd.md"),
+    "/examples/recipes/cross-library-prd/prd/",
+  );
   // Discovered, not listed: every markdown file under examples/ is routed.
-  assert.equal(routes.size, 17);
+  assert.equal(routes.size, 19);
 });
 
 test("every routed source exists, and a missing one fails the build rather than emitting a stub", () => {

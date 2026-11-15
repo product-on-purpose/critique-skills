@@ -4,7 +4,7 @@ title: "Ship one documented cross-library composition workflow"
 type: spec
 status: committed
 created: 2026-10-27
-updated: 2026-11-03
+updated: 2026-11-15
 linked-effort: docs/internal/backlog/enhancements.md
 linked-plan: null
 linked-release: v0.3.0
@@ -21,21 +21,33 @@ Ruled by the maintainer on 2026-10-30 (the six decisions below), and not built y
 
 ## Task Summary
 
-**Status:** ruled 2026-10-30, not built
-**Last updated:** 2026-11-03 by Claude, promoted from a local draft after the 2026-10-30 walk
+**Status:** built 2026-11-15; not closed, pending the maintainer's ruling on shipping with E82 and E80 open
+**Last updated:** 2026-11-15 by Claude, after the build and its one live run
 **Linked plan:** not yet planned
 **Open questions:** 0 (all six were decided 2026-10-30; see Open Questions / Decisions)
 **Revisions:** 0
 
 ### Acceptance Criteria Fulfillment
 
-- [ ] **AC-1** - The recipe names one sibling library, one concrete output artifact of that sibling, and one critique-skills skill whose published "Artifact claim" already covers that artifact type
-- [ ] **AC-2** - The recipe is reachable from README.md's "The family" section and from `examples/recipes/`, both added in the same change
-- [ ] **AC-3** - The recipe runs at least one critique-skills run against a real, sibling-produced file, with that file's provenance (repo, skill, version) stated
-- [ ] **AC-4** - Any model-calling step in the recipe is dispatched only after the maintainer's own, separate, recorded approval
-- [ ] **AC-5** - The recipe does not write, revise, or modify the sibling's output on this library's own authority; it stops at a critique envelope or, if chosen, a documented revision brief with a named human actor
-- [ ] **AC-6** - The recipe states plainly that it is a same-org demonstration and does not satisfy the v1.0 external-consumer criterion
-- [ ] **AC-7** - Whatever evidence the recipe commits is dated, states the CLI/model version it was produced under, and is covered by a stated drift check
+- [x] **AC-1** - The recipe names one sibling library, one concrete output artifact of that sibling, and one critique-skills skill whose published "Artifact claim" already covers that artifact type
+- [x] **AC-2** - The recipe is reachable from README.md's "The family" section and from `examples/recipes/`, both added in the same change
+- [x] **AC-3** - The recipe runs at least one critique-skills run against a real, sibling-produced file, with that file's provenance (repo, skill, version) stated
+- [x] **AC-4** - Any model-calling step in the recipe is dispatched only after the maintainer's own, separate, recorded approval
+- [x] **AC-5** - The recipe does not write, revise, or modify the sibling's output on this library's own authority; it stops at a critique envelope or, if chosen, a documented revision brief with a named human actor
+- [x] **AC-6** - The recipe states plainly that it is a same-org demonstration and does not satisfy the v1.0 external-consumer criterion
+- [x] **AC-7** - Whatever evidence the recipe commits is dated, states the CLI/model version it was produced under, and is covered by a stated drift check
+
+### Build notes (2026-11-15)
+
+- **AC-3:** the input is `pm-skills`' committed `deliver-prd` sample at tag `v2.35.1`, which `pm-skills`
+  itself labels a written worked example rather than an executed run. AC-3 allows an existing committed
+  sample, and the recipe states the label.
+- **AC-4:** the one model call ran once, one attempt, after the maintainer's go on 2026-11-15 (D3 A of
+  the 2026-11-13 walk). Nothing was re-run.
+- **AC-7:** per D5 Option A, the drift check is the dated `provenance.json` beside the envelope; no
+  automated test was added.
+- **The result cuts against the claim.** 8 of the 29 findings shown misread markdown tables (E82), and
+  the output bound hid all 5 judged findings (evidence added to E80). The recipe reports both.
 
 ## Purpose
 

@@ -5,8 +5,14 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- **A cross-library recipe, run live: a `pm-skills` PRD critiqued by `critique-clarity`.** [E54 (cross-library composition)](docs/internal/backlog/enhancements.md) is built as `examples/recipes/cross-library-composition.md`. The input is an extract of `pm-skills`' committed `deliver-prd` sample at tag `v2.35.1`. One live run on 2026-11-15 (Claude Code 2.1.325, `claude-sonnet-5`, one attempt) produced the committed envelope, unedited, with its provenance beside it. Authored dispositions, labeled as such in every note, feed `revision_loop.py brief`, which writes a four-item revision brief for the PRD's owner. It is the first envelope in `examples/` from a live run. It is a same-organization demonstration and does not satisfy the v1.0 external-consumer criterion. The README's "The family" section links it.
+- **[E82 (tables read as prose)](docs/internal/backlog/enhancements.md) is filed from that run.** `critique-clarity`'s scripted lane reads markdown table rows as prose sentences and paragraphs: 8 of the 29 findings shown quoted table text, six of them at severity 3. No bench corpus file or clarity fixture holds a table, which is why measurement never surfaced it. The same run gives [E80 (output-bound ranking)](docs/internal/backlog/enhancements.md) its reverse case: scripted findings filled every slot below severity 3, so the envelope shows none of the judged lane's 5 findings.
+
 ### Changed
 
+- **`examples/recipes/README.md` names all seven walkthrough folders.** It said "five folders" and omitted `docs/` and `forms/`. `examples/README.md` now counts four recipes and no longer says that no page ran a model live.
 - **The held E69 branch is backed up on GitHub.** [E69 (the npm option for the gate)](docs/internal/backlog/enhancements.md) keeps its edits on `build/e69-gate-on-npm-toolkit` until the maintainer decides whether agent-skills-toolkit deprecates its tier levels. Those commits existed on one machine only, so the branch was pushed on 2026-11-15, with no pull request. No workflow runs on a push to a branch other than `main`.
 - **The README's install section now says the marketplace pins `v0.3.0`.** The `product-on-purpose` registry re-pinned `critique-skills` to `v0.3.0` (`ff8a1f3`) at registry 1.123.0, the day it was released, and the line had named `v0.2.0`. The registry's listing description still names the same seven domains, so it did not move.
 

@@ -3,7 +3,7 @@
 Local-first, version-controlled backlogs (Standard sec 7.1). Two files, plus this index:
 
 - **[enhancements.md](enhancements.md)** - features, fixes and refinements to components that already
-  exist. 81 items, `E1` through `E81`.
+  exist. 82 items, `E1` through `E82`.
 - **[new-components.md](new-components.md)** - proposals to ADD a skill, command, subagent, hook or
   chain. 5 items, `N1` through `N5`, each with a recorded why-gate verdict.
 
@@ -109,9 +109,9 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E42 | Reconcile 'frozen with a JSON Schema' against 'freezes at v1.0' | S | unscheduled |
 | E51 | Give the precision and corpus-provenance limitations a retirement path or an explicit 'accepted' | S | unscheduled |
 | E59 | Verify what the marketplace consumes the homepage field for | S | unscheduled |
-| E78 | Rule on the TOULMIN.md note that landed after critique-argument 0.1.1 was measured | S | v0.3.0 |
 | E79 | Decide whether SKILL.md's top-level checks and rubric_sources keys should move for portability | M | unscheduled |
 | E80 | Decide whether the output bound should rank scripted findings ahead of judged ones | M | unscheduled |
+| E82 | critique-clarity's scripted lane reads markdown tables as prose | M | unscheduled |
 
 With S-07's AC-4 closed, every criterion in that spec passes and
 [ADR 0034](../decisions/0034-v0.1.x-exit-gate-declaration.md)'s two named conditions for calling
