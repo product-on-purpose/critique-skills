@@ -275,6 +275,8 @@ This library is also **not code review** (well served elsewhere, out of scope by
 
 None depend on each other technically. They compose along one value chain: **think** with one, **make** with another, **judge** the result with this one.
 
+One worked example of that chain: [a `pm-skills` PRD critiqued by `critique-clarity`](examples/recipes/cross-library-composition.md) in one live, dated run, through dispositions to a revision brief that a person acts on, including what the run got wrong.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ---

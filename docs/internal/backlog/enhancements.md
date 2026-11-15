@@ -1293,9 +1293,13 @@ and the repository did not have.
 - **Depends on:** N4 (the revision-loop chain) being built (added 2026-10-30). The maintainer ruled
   that the recipe produces a revision brief with N4's brief writer, so E54 is built after N4, and the
   brief joins the contract in [ADR 0042 (contract 1.1.0)](../decisions/0042-contract-1-1-0-iteration-revision-brief-selector.md).
-- **Rank at intake:** 58 of 64. **Status:** backlog (recorded 2026-09-11).
+- **Rank at intake:** 58 of 64. **Status:** built 2026-11-15, not closed. The recipe is
+  `examples/recipes/cross-library-composition.md`, and its one paid run happened on 2026-11-15. The
+  run showed that `critique-clarity` misreads markdown tables (E82) and that the output bound hid
+  every judged finding (E80), so closing waits on the maintainer's ruling on shipping the recipe
+  with both open.
 - **Spec:** [E54's spec (cross-library composition)](../release-plans/_unassigned/E54_cross-library-composition/spec.md),
-  ruled 2026-10-30, not built. Its one paid run is deferred until N4 (the revision-loop chain) is built.
+  ruled 2026-10-30, built 2026-11-15.
 
 ## E55 - Build chain and hook evaluation coverage (Gold checks G1 and G3)
 
@@ -2060,7 +2064,11 @@ and the repository did not have.
   report, so it needs version moves and a paid re-measure.
 - **Evidence:** `skills/_shared/envelope.py` sets `OUTPUT_BOUND_BELOW_SEVERITY_3 = 5`, and
   `_rank_key` has no lane term. `critique-clarity`'s scripted lane reads 0.881 on Sonnet in ADR
-  0038, whose amendment states "What this amendment does not decide."
+  0038, whose amendment states "What this amendment does not decide." Added 2026-11-15: E54's
+  live run shows the reverse case. On a 91-line PRD, `critique-clarity` found 68 scripted and 5
+  judged findings, and the five slots below severity 3 all went to scripted findings, so the
+  envelope shows no judged finding at all and does not say which lane was suppressed
+  (`examples/recipes/cross-library-composition.md`). Any ruling here should weigh both directions.
 - **Derives from:** ADR 0038 (per-tier consistency floors), amended 2026-10-30.
 - **Size:** M. **Release:** unscheduled. **Category:** contract. **Confidence:** high; the code and
   the ADR were both read.
@@ -2095,3 +2103,35 @@ and the repository did not have.
   writes `<tier>-r<n>.json.attempts.txt` with its CLI call count, on success and on a refusal that
   reached the CLI, and `run_bench.py` prints a per-skill total after the cell count. Baseline cells
   record none. Held by six tests in `bench/tests/test_run_bench.py`.
+
+## E82 - critique-clarity's scripted lane reads markdown tables as prose
+
+- **Target:** `skills/critique-clarity/scripts/checks.py` and the shared paragraph and sentence
+  segmentation it relies on
+- **Change:** The scripted lane splits a markdown table into "sentences" and "paragraphs" as if it
+  were prose, so table rows trigger prose criteria. On a 91-line PRD, 8 of the 29 findings shown
+  quoted table text as their evidence: a four-row table reported as a "104-word sentence"
+  (PLAIN-SENTENCE-LENGTH, WILLIAMS-SHAPE), negations in separate cells counted as one double
+  negative (PLAIN-DOUBLE-NEGATIVE), and a header row read as a paragraph's opening sentence
+  (PLAIN-PARAGRAPH). Six of the eight were severity 3, enough on their own to fail any gate
+  threshold below six. A second, less certain pattern from the same run: a paragraph that opens with
+  a bold run-in label (`**What this release does.**`) appears to have the label alone read as its
+  opening sentence (four PLAIN-PARAGRAPH findings). Done: table rows, and probably run-in labels, are
+  excluded from prose segmentation or handled explicitly, with a golden fixture that holds a table.
+- **Why:** `critique-clarity`'s Artifact claim names PRDs, and PRDs routinely carry tables. A skill
+  whose scripted lane fires on every table produces findings a reader has to reject one by one, and
+  severity-3 false positives fail a CI gate on documents that are not unclear.
+- **Evidence:** `examples/recipes/cross-library-composition.md` and its
+  `cross-library-prd/envelope.json` (findings F-001, F-007, F-012, F-013, F-015, F-024, F-025,
+  F-026). The scripted lane reproduces them with no model call: `python scripts/checks.py
+  --repo-root ../../examples/recipes/cross-library-prd ../../examples/recipes/cross-library-prd/prd.md`
+  from `skills/critique-clarity/`. No file in `bench/corpus/` or `skills/critique-clarity/examples/`
+  contains a markdown table delimiter row (`|---`, checked 2026-11-15), which is why measurement never
+  surfaced it.
+- **Derives from:** E54 (cross-library composition), its one live run on 2026-11-15.
+- **Size:** M. **Release:** unscheduled. **Category:** skills. **Confidence:** high for tables, read
+  from the evidence text of each finding; medium for run-in labels.
+- **Blocks:** Nothing
+- **Depends on:** Nothing. A fix changes what a shipped skill reports, so it needs a version move
+  and a paid re-measure of `critique-clarity`.
+- **Rank at intake:** unranked (added 2026-11-15). **Status:** open.

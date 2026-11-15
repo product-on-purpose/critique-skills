@@ -7,12 +7,13 @@ level: beginner
 
 # critique-skills examples
 
-Ten pages, each self-contained and runnable or verifiable against files sitting right next to it.
+Eleven pages, each self-contained and runnable or verifiable against files sitting right next to it.
 Seven are one-skill walkthroughs: an artifact, one skill's critique of it, and a human's disposition
-on each finding. Three are recipes: how the pieces of this library click together across a CI
-pipeline, a multi-round revision, and the clean-context subagent every skill delegates to. Start
+on each finding. Four are recipes: how the pieces of this library click together across a CI
+pipeline, a multi-round revision, the clean-context subagent every skill delegates to, and a
+sibling library's output. Start
 with whichever row below matches what you are actually trying to do; the seven walkthroughs assume
-nothing beyond QUICKSTART.md, and the three recipes assume you have already read at least one of
+nothing beyond QUICKSTART.md, and the four recipes assume you have already read at least one of
 them.
 
 ## Honesty labeling, explained once
@@ -25,15 +26,16 @@ which at the point it matters, not only here:
   for envelope and disposition-log checks. Run the exact command printed on the page yourself and
   you get the same output, field for field; only a timestamp or a file path ever differs.
 - **Judged lane, curated from a validated golden fixture.** Findings described as `lane: judged`
-  come from a model reading an artifact's meaning against a rubric. No page in this folder ran that
-  model call live and pasted in the result; each one is copied verbatim from the skill's own golden
+  come from a model reading an artifact's meaning against a rubric. No walkthrough ran that model
+  call live and pasted in the result; each one is copied verbatim from the skill's own golden
   envelope, a fixture checked into that skill's test suite and validated with
   `python -m contract.validate` before it was accepted. A fresh judged-lane run against the same
   artifact should land on the same criteria and severities; the exact wording of a `violation` or
   `fix` can vary run to run, the way any model output does. Because of this, every golden envelope
   that carries a judged-lane finding reads `run.model: "illustrative"`: no measured model run ever
   produced these bytes, and that sentinel says so in the field itself rather than only in this
-  prose.
+  prose. The one exception is the cross-library recipe, whose envelope is the unedited output of
+  one live run, dated and with its model and CLI version recorded in `provenance.json` beside it.
 - **Curated illustration.** Disposition logs, findings-tour commentary, and (inside `recipes/`) one
   fictional consumer repository are authored for these pages, not sampled from a live run. Each page
   says so at the point it matters.
@@ -58,6 +60,7 @@ Nothing here presents authored content as a live run, and nothing here hides whi
 |---|---|---|
 | Wire a quality gate into CI | [`recipes/gate-in-ci.md`](recipes/gate-in-ci.md) | A fictional storefront repo's CI job running `contract/validate.py --gate`: one run that fails the build on a seeded defect, one that passes after the fix, both exit codes real. |
 | Run a full revision loop: critique, disposition, revise, re-critique | [`recipes/revision-loop.md`](recipes/revision-loop.md) | Two severity-3 findings from a real golden fixture, a human's accept decisions, a revision that answers both, and a re-critique that converges to zero, plus the three-iteration bound and why it exists. |
+| Critique a sibling library's output | [`recipes/cross-library-composition.md`](recipes/cross-library-composition.md) | A `pm-skills` PRD through one live `critique-clarity` run, dispositions and a revision brief, including the 8 findings that misread tables and the judged findings the output bound hid. |
 | Delegate critique to a clean-context subagent | [`recipes/critic-delegation.md`](recipes/critic-delegation.md) | What clean-context critique means, how to invoke `critique-critic` directly, steering-strip evidence pulled from recorded bench runs, and the inline fallback a skill uses when no subagent tool is available. |
 
 [`recipes/README.md`](recipes/README.md) is that folder's own entry point if you want the recipes'
