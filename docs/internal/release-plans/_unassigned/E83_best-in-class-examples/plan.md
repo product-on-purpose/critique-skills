@@ -2,7 +2,7 @@
 id: E83
 title: "Best-in-class worked examples for every skill"
 type: plan
-status: draft
+status: ruled
 created: 2026-11-15
 updated: 2026-11-15
 linked-effort: docs/internal/backlog/enhancements.md
@@ -12,9 +12,9 @@ requires-human-review: true
 
 # Plan: best-in-class worked examples for every skill (E83)
 
-A draft for the maintainer's review. It proposes what each skill's worked example should become,
-in what order, and at what cost. It decides nothing: the eight decisions at the end are the
-maintainer's, and no paid run in it starts without a separate go.
+It proposes what each skill's worked example should become, in what order, and at what cost. The
+maintainer ruled its eight decisions on 2026-11-15 and accepted every recommendation; the rulings
+are recorded at the top of the decisions section. No paid run in it starts without a separate go.
 
 ## The goal
 
@@ -126,6 +126,22 @@ can produce them honestly (decision D5 below).
 Phases 1 and 2 are free and could ship as one small PR before any decision is made.
 
 ## Decisions for the maintainer
+
+**Ruled by the maintainer on 2026-11-15, every recommendation accepted:**
+
+| Decision | Ruling |
+|---|---|
+| D1 (live or curated findings) | A: live, one attempt, committed unedited |
+| D2 (where the artifacts come from) | Sibling-library outputs where a sibling produces the artifact type, licensed public documents for the rest |
+| D3 (flagships beside or instead of walkthroughs) | A: beside them |
+| D4 (who dispositions the findings) | A: the maintainer, for real, named in the log |
+| D5 (clean and severity-4 flagships) | B: one flagship per skill first, the others as a follow-up |
+| D6 (one tier or both) | A: Sonnet only, 7 runs |
+| D7 (flagships and specimens) | A: kept separate |
+| D8 (wait for E82 and E80) | A: the paid runs wait until both are resolved or ruled |
+
+Phases 1 and 2 can start now. Phase 4, the paid runs, still needs a separate go after E82 (tables
+read as prose) and E80 (output-bound ranking). The options as drafted follow.
 
 **D1. Should flagship judged findings come from a live run, or stay curated?** Option A: live, one
 attempt, committed unedited, whatever it says. Option B: curated from goldens, as today. Option C:
