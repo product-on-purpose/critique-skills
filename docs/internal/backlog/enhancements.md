@@ -2135,3 +2135,27 @@ and the repository did not have.
 - **Depends on:** Nothing. A fix changes what a shipped skill reports, so it needs a version move
   and a paid re-measure of `critique-clarity`.
 - **Rank at intake:** unranked (added 2026-11-15). **Status:** open.
+
+## E83 - Best-in-class worked examples for every skill
+
+- **Target:** `examples/<domain>/` for all seven skills, and a new `examples/<domain>/flagship/`
+- **Change:** Every skill's worked example is a copied golden fixture, 9 to 78 lines, whose judged
+  findings are curated and stamped `run.model: "illustrative"`. No example shows a live judged
+  finding, a severity-4 finding, or a clean result, and three READMEs print stale scripted output.
+  Done: each skill keeps its corrected walkthrough and gains a flagship, one live, dated run on a
+  realistic artifact, meeting the eight criteria in the plan.
+- **Why:** A worked example exists so a reader can decide whether to trust a skill. Today the
+  judged lane, the part a reader most needs evidence for, is the part no example has run.
+- **Evidence:** the 2026-11-15 inventory of `examples/`, summarized in the plan; E54's live run
+  (`examples/recipes/cross-library-composition.md`), which showed what a realistic artifact exposes.
+- **Derives from:** the maintainer's request on 2026-11-15 for a plan for best-in-class examples of
+  each skill's output.
+- **Size:** L. **Release:** unscheduled. **Category:** docs. **Confidence:** verified for the
+  inventory; the plan's recommendations are medium confidence and are the maintainer's to rule.
+- **Blocks:** Nothing
+- **Depends on:** The maintainer's rulings on the plan's eight decisions. Its paid phase also
+  depends on E82 (tables read as prose) and E80 (output-bound ranking), per decision D8. Phases 1
+  and 2 depend on nothing.
+- **Rank at intake:** unranked (added 2026-11-15). **Status:** open.
+- **Plan:** [E83's plan (best-in-class examples)](../release-plans/_unassigned/E83_best-in-class-examples/plan.md),
+  drafted 2026-11-15, awaiting review.
