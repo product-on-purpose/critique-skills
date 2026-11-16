@@ -26,6 +26,11 @@ skill.
   is reimplemented; `tests/test_gate.py` asserts function identity, not just equivalent behavior.
 - `runner.py` - `run_scripted_lane()`: the whole body of a skill's `checks.py` `main()`, parameterized
   by that skill's own check function.
+- `stdio.py` - `write_json()`: the one way these modules print JSON to stdout. It writes UTF-8 on
+  every platform, because a Windows pipe defaults to cp1252 and a finding quoting a character outside
+  it, such as an arrow, crashed the CLI with a traceback (E84, Windows output encoding).
+  `tests/test_stdio.py` reproduces that console on any platform with `PYTHONIOENCODING=cp1252` and
+  fails if a module prints JSON any other way.
 - `revision_loop.py` - the revision loop's deterministic steps, for
   [the revision-loop workflow](../../_workflows/critique-revision-loop.md): `stop-check`, `brief`,
   `resume`, and `compare`. Bookkeeping over contract documents only. It never calls a model and never

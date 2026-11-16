@@ -70,6 +70,7 @@ from contract.validate import MissingDependencyError, validate_document  # noqa:
 from skills._shared.artifact import Artifact  # noqa: E402
 from skills._shared.envelope import assemble_envelope  # noqa: E402
 from skills._shared.findings import RawFinding  # noqa: E402
+from skills._shared.stdio import write_json  # noqa: E402
 
 # Built with chr() so this file carries none of the punctuation it exists to strip, matching
 # contract/validate.py's and bench/baseline/postprocess.py's own convention.
@@ -591,8 +592,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  {error}", file=sys.stderr)
         return 1
 
-    json.dump(envelope, sys.stdout, ensure_ascii=False, indent=2, sort_keys=True)
-    sys.stdout.write("\n")
+    write_json(envelope, sort_keys=True)
     return 0
 
 

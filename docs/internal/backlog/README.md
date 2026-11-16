@@ -100,7 +100,7 @@ One consequence worth naming: because Option C's skill must be measured on both 
 
 ## Ready now
 
-**7 items depend on nothing and can start today.** Derived from each item's own
+**9 items depend on nothing and can start today.** Derived from each item's own
 `Depends on` field rather than asserted, and regenerated whenever an item closes.
 
 | ID | Item | Size | Release |
@@ -112,7 +112,6 @@ One consequence worth naming: because Option C's skill must be measured on both 
 | E79 | Decide whether SKILL.md's top-level checks and rubric_sources keys should move for portability | M | unscheduled |
 | E80 | Decide whether the output bound should rank scripted findings ahead of judged ones | M | unscheduled |
 | E82 | critique-clarity's scripted lane reads markdown tables as prose | M | unscheduled |
-| E84 | Scripted lanes crash on Windows when a finding holds a non-cp1252 character | S | unscheduled |
 | E85 | critique-accessibility reads a `background:` shorthand holding `var()` as no background | S | unscheduled |
 | E86 | critique-microcopy grades a document that is not in its format | M | unscheduled |
 
