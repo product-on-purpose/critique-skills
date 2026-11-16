@@ -70,11 +70,11 @@ should not):
   "run": {
     "artifact": "examples/argument/artifact.md",
     "artifact_sha256": "f8df42e689f882da0e5d6910158466c48a03b1a02f93ae3d6b9df76d49aa9082",
-    "contract_version": "1.0.0",
+    "contract_version": "1.1.0",
     "model": "none",
     "rubrics": ["TOULMIN"],
     "skill": "critique-argument",
-    "skill_version": "0.1.0",
+    "skill_version": "0.1.1",
     "timestamp": "2026-08-02T14:35:06Z"
   },
   "summary": {

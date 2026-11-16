@@ -123,7 +123,10 @@ can produce them honestly (decision D5 below).
 | 5. Write the flagship walkthroughs | Per skill: the artifact, the envelope unedited, the findings explained, a named-actor disposition log, links to the skill's bench result | 0 | Phase 4 |
 | 6. Surface them | Link each flagship from the skill's README and its docs-site page; the site already routes every `.md` under `examples/` | 0 | Phase 5 |
 
-Phases 1 and 2 are free and could ship as one small PR before any decision is made.
+Phases 1 and 2 are free and could ship as one small PR before any decision is made. **Done
+2026-11-15.** Phase 1 found a fourth defect the inventory missed: every artifact copy checked out
+with CRLF on Windows, so no README's hash claim held there. Phase 2's guard is
+`scripts/tests/test_worked_examples.py`.
 
 ## Decisions for the maintainer
 
@@ -140,7 +143,7 @@ Phases 1 and 2 are free and could ship as one small PR before any decision is ma
 | D7 (flagships and specimens) | A: kept separate |
 | D8 (wait for E82 and E80) | A: the paid runs wait until both are resolved or ruled |
 
-Phases 1 and 2 can start now. Phase 4, the paid runs, still needs a separate go after E82 (tables
+Phases 1 and 2 were done the same day. Phase 4, the paid runs, still needs a separate go after E82 (tables
 read as prose) and E80 (output-bound ranking). The options as drafted follow.
 
 **D1. Should flagship judged findings come from a live run, or stay curated?** Option A: live, one

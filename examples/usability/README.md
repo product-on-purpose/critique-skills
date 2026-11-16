@@ -53,7 +53,7 @@ From the repository root:
 python skills/critique-usability/scripts/checks.py examples/usability/artifact.md
 ```
 
-This is what that command actually printed when this example was built:
+This is what that command printed on 2026-11-15, at skill version 0.1.1 and contract 1.1.0:
 
 ```json
 {
@@ -73,11 +73,11 @@ This is what that command actually printed when this example was built:
   "run": {
     "artifact": "examples/usability/artifact.md",
     "artifact_sha256": "1d4fcad7631afb2897d6efc03302a07ad81096d055a3d98e4abf33f3137ff547",
-    "contract_version": "1.0.0",
+    "contract_version": "1.1.0",
     "model": "none",
     "rubrics": ["NNG"],
     "skill": "critique-usability",
-    "skill_version": "0.1.0",
+    "skill_version": "0.1.1",
     "timestamp": "2026-08-02T14:34:07Z"
   },
   "summary": {

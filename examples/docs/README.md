@@ -59,7 +59,7 @@ From the repository root:
 python skills/critique-docs/scripts/checks.py examples/docs/artifact.md
 ```
 
-This is what that command actually printed when this example was built:
+This is what that command printed on 2026-11-15, at skill version 0.1.1 and contract 1.1.0:
 
 ```json
 {
@@ -79,11 +79,11 @@ This is what that command actually printed when this example was built:
   "run": {
     "artifact": "examples/docs/artifact.md",
     "artifact_sha256": "39ef4cd8fe88e52eb2e2862774b5957bee5c609ca545be9a0c64edae81d1f4a3",
-    "contract_version": "1.0.0",
+    "contract_version": "1.1.0",
     "model": "none",
     "rubrics": ["DIATAXIS"],
     "skill": "critique-docs",
-    "skill_version": "0.1.0",
+    "skill_version": "0.1.1",
     "timestamp": "2026-08-04T04:29:59Z"
   },
   "summary": {
