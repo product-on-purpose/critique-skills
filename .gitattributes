@@ -33,3 +33,9 @@ examples/*/envelope.json -text
 # produced against it (artifact_sha256 is that file's hash), and the dispositions and revision
 # brief bound to the envelope by hash. Every file in it is hashed by another, so all of it is -text.
 examples/recipes/cross-library-prd/** -text
+
+# examples/<domain>/artifact.* is a byte-for-byte copy of the golden fixture its envelope
+# hashes, and each README tells the reader the scripted lane reproduces that hash exactly. Without
+# this rule every copy checked out with CRLF on Windows, so the claim was false on every Windows
+# clone until 2026-11-15. Guarded by scripts/tests/test_worked_examples.py.
+examples/*/artifact.* -text

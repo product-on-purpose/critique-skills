@@ -2157,6 +2157,6 @@ and the repository did not have.
 - **Blocks:** Nothing
 - **Depends on:** Its paid phase depends on E82 (tables read as prose) and E80 (output-bound
   ranking), per decision D8, and on a separate go. Phases 1 and 2 depend on nothing.
-- **Rank at intake:** unranked (added 2026-11-15). **Status:** open.
+- **Rank at intake:** unranked (added 2026-11-15). **Status:** open; phases 1 and 2 done 2026-11-15.
 - **Plan:** [E83's plan (best-in-class examples)](../release-plans/_unassigned/E83_best-in-class-examples/plan.md),
   drafted 2026-11-15; all eight decisions ruled 2026-11-15, every recommendation accepted.
