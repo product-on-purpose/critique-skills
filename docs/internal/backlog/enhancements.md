@@ -2186,8 +2186,14 @@ and the repository did not have.
 - **Size:** S. **Release:** unscheduled. **Category:** skills. **Confidence:** high that the crash
   occurs; medium that a live skill run on Windows hits it, because E54's Windows run succeeded.
 - **Blocks:** Nothing
-- **Depends on:** Nothing. The fix changes no byte of any envelope that prints today.
-- **Rank at intake:** unranked (added 2026-11-16). **Status:** open.
+- **Depends on:** Nothing. The fix changes no byte of output on Linux or macOS. On Windows,
+  characters inside cp1252, such as curly quotes, are now written as UTF-8 rather than cp1252
+  bytes, which is what every reader expects. No skill's prose changed, so no version moves.
+- **Rank at intake:** unranked (added 2026-11-16). **Status:** closed 2026-11-16.
+  `skills/_shared/stdio.py`'s `write_json()` now prints JSON for the scripted runner, `merge.py` and
+  `revision_loop.py`, which all had the same print. `skills/_shared/tests/test_stdio.py` forces a
+  cp1252 stdout and covers the crash end to end. The pre-screen document that crashed now prints
+  through a plain pipe, byte-identical to its `PYTHONUTF8=1` run apart from the timestamp.
 
 ## E85 - critique-accessibility reads a `background:` shorthand holding `var()` as no background
 

@@ -11,7 +11,6 @@ full worked example a pipeline agent copies.
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 from datetime import datetime, timezone
 from typing import Callable, Sequence
@@ -20,6 +19,7 @@ from skills._shared.artifact import Artifact, ArtifactError, load_artifact
 from skills._shared.envelope import assemble_envelope
 from skills._shared.findings import RawFinding
 from skills._shared.gate import MissingDependencyError, gate_exit_code, validate_document
+from skills._shared.stdio import write_json
 
 CheckFn = Callable[[Artifact], Sequence[RawFinding]]
 
@@ -148,7 +148,7 @@ def _run(
             print(f"internal error: checks.py produced an invalid envelope: {issue}", file=sys.stderr)
         return 3 if args.gate else 1
 
-    print(json.dumps(envelope, ensure_ascii=False, indent=2, sort_keys=True))
+    write_json(envelope, sort_keys=True)
 
     if not args.gate:
         return 0

@@ -42,6 +42,7 @@ if __package__ in (None, ""):
             break
 
 from contract.validate import validate_document  # noqa: E402
+from skills._shared.stdio import write_json  # noqa: E402
 
 # Methodology section 10: the loop runs at most three iterations. The contract deliberately sets no
 # maximum on `iteration` (N4 decision D4), so this constant is the only place the bound lives.
@@ -549,7 +550,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     except LoopError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return EXIT_INVALID
-    print(json.dumps(result, indent=2, ensure_ascii=False))
+    write_json(result)
     return EXIT_OK
 
 
