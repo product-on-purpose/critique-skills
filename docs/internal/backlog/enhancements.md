@@ -2130,6 +2130,12 @@ and the repository did not have.
   from `skills/critique-clarity/`. No file in `bench/corpus/` or `skills/critique-clarity/examples/`
   contains a markdown table delimiter row (`|---`, checked 2026-11-15), which is why measurement never
   surfaced it.
+  Added 2026-11-16 from E83's free pre-screen: the class is wider than tables. On a 25-line email of
+  plain prose, bold label lines, a salutation, a sign-off and list items each drew PLAIN-TRANSITIONS at
+  severity 3 (10 of 11 severity-3 findings), and list items were joined into one 43-word sentence; on
+  the unextracted sample, YAML inside a code fence and `---` rules were read as paragraphs. The
+  run-in-label pattern above is therefore confirmed. Details:
+  [E83's pre-screen record](../release-plans/_unassigned/E83_best-in-class-examples/phase-3-prescreen.md).
 - **Derives from:** E54 (cross-library composition), its one live run on 2026-11-15.
 - **Size:** M. **Release:** unscheduled. **Category:** skills. **Confidence:** high for tables, read
   from the evidence text of each finding; medium for run-in labels.
@@ -2157,6 +2163,68 @@ and the repository did not have.
 - **Blocks:** Nothing
 - **Depends on:** Its paid phase depends on E82 (tables read as prose) and E80 (output-bound
   ranking), per decision D8, and on a separate go. Phases 1 and 2 depend on nothing.
-- **Rank at intake:** unranked (added 2026-11-15). **Status:** open; phases 1 and 2 done 2026-11-15.
+- **Rank at intake:** unranked (added 2026-11-15). **Status:** open; phases 1 and 2 done 2026-11-15; phases 3 and 3b done 2026-11-16 for six skills (microcopy's source is open), recorded in [E83's pre-screen record](../release-plans/_unassigned/E83_best-in-class-examples/phase-3-prescreen.md).
 - **Plan:** [E83's plan (best-in-class examples)](../release-plans/_unassigned/E83_best-in-class-examples/plan.md),
   drafted 2026-11-15; all eight decisions ruled 2026-11-15, every recommendation accepted.
+
+## E84 - Scripted lanes crash on Windows when a finding holds a non-cp1252 character
+
+- **Target:** `skills/_shared/runner.py`, which every skill's `scripts/checks.py` prints through
+- **Change:** The runner prints the envelope with `ensure_ascii=False`. When stdout is a pipe on
+  Windows, Python encodes it with the locale code page (cp1252), so a finding that quotes a character
+  outside cp1252, such as "→", raises `UnicodeEncodeError` and the skill gets a traceback instead of
+  an envelope. Done: the runner writes UTF-8 whatever the platform (for example by reconfiguring
+  stdout), and a test runs a scripted lane through a pipe with such a character in its evidence.
+- **Why:** Step 2 of every skill's protocol runs the scripted lane through a shell and reads its
+  stdout. On Windows that is a pipe, and Claude Code's Bash tool sets neither `PYTHONUTF8` nor
+  `PYTHONIOENCODING`, so any document quoting an arrow, a mathematical symbol or most non-Latin text
+  can break a run.
+- **Evidence:** `critique-clarity`'s scripted lane on the pm-skills stakeholder-update sample crashed
+  through Claude Code's Bash tool on 2026-11-16 and succeeded with `PYTHONUTF8=1`. CI runs on Linux,
+  where stdout is UTF-8, which is why no job saw it. [E83's pre-screen record](../release-plans/_unassigned/E83_best-in-class-examples/phase-3-prescreen.md).
+- **Derives from:** E83 (best-in-class examples), phase 3b.
+- **Size:** S. **Release:** unscheduled. **Category:** skills. **Confidence:** high that the crash
+  occurs; medium that a live skill run on Windows hits it, because E54's Windows run succeeded.
+- **Blocks:** Nothing
+- **Depends on:** Nothing. The fix changes no byte of any envelope that prints today.
+- **Rank at intake:** unranked (added 2026-11-16). **Status:** open.
+
+## E85 - critique-accessibility reads a `background:` shorthand holding `var()` as no background
+
+- **Target:** `skills/critique-accessibility/scripts/checks.py`, background resolution for WCAG-1.4.3
+- **Change:** The file documents that a colour it cannot parse, such as a CSS variable, skips the
+  check for that element. `background-color: var(--x)` is skipped, but `background: var(--x)` is
+  treated as no background: the resolver walks up to the page default and reports, for white text,
+  "#ffffff on background #ffffff, contrast ratio 1.00:1". Done: a shorthand whose colour cannot be
+  parsed is "cannot determine", the same as the longhand, with a golden fixture that holds one.
+- **Why:** The finding's evidence is a number a reader will check, and it is false. On the
+  pm-skills lean-canvas sample the true ratios are 2.15:1 and 3.76:1, so the verdict happened to be
+  right, but a variable holding a dark colour would draw a false failure.
+- **Evidence:** a five-line reproduction, and nine severity-3 findings on the lean-canvas sample's
+  confidence badges ([E83's pre-screen record](../release-plans/_unassigned/E83_best-in-class-examples/phase-3-prescreen.md)).
+- **Derives from:** E83 (best-in-class examples), phase 3b.
+- **Size:** S. **Release:** unscheduled. **Category:** skills. **Confidence:** high.
+- **Blocks:** Nothing
+- **Depends on:** Nothing. A fix changes what a shipped skill reports, so it needs a version move
+  and a re-measure of `critique-accessibility`.
+- **Rank at intake:** unranked (added 2026-11-16). **Status:** open.
+
+## E86 - critique-microcopy grades a document that is not in its format
+
+- **Target:** `skills/critique-microcopy/scripts/checks.py`, and the skill's input step
+- **Change:** ADR 0018 sets the artifact format as annotated screens, with a bare list of strings
+  accepted as degraded input. Given a product edge-cases document, which is neither, the scripted
+  lane treats every paragraph as a message: 31 NNG-EM-CONSTRUCTIVE findings at severity 3 on
+  headings, a list of related documents, a code fence and a table row. Done: an input with no
+  recognizable message annotations and no string list is refused or reported as unreadable, the way
+  `critique-docs` reports an undeclared mode, rather than graded.
+- **Why:** Product documents are where error copy is usually first written, so this input is
+  likely. A wall of severity-3 findings on a document the skill does not claim fails any CI gate
+  and tells the reader nothing about its messages.
+- **Evidence:** [E83's pre-screen record](../release-plans/_unassigned/E83_best-in-class-examples/phase-3-prescreen.md), the microcopy row.
+- **Derives from:** E83 (best-in-class examples), phase 3b.
+- **Size:** M. **Release:** unscheduled. **Category:** skills. **Confidence:** high for the
+  behaviour; the remedy (refuse, or report unreadable) is the maintainer's call.
+- **Blocks:** Nothing
+- **Depends on:** Nothing. A fix changes what a shipped skill reports, so it needs a version move.
+- **Rank at intake:** unranked (added 2026-11-16). **Status:** open.

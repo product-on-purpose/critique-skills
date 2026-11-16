@@ -126,7 +126,8 @@ can produce them honestly (decision D5 below).
 Phases 1 and 2 are free and could ship as one small PR before any decision is made. **Done
 2026-11-15.** Phase 1 found a fourth defect the inventory missed: every artifact copy checked out
 with CRLF on Windows, so no README's hash claim held there. Phase 2's guard is
-`scripts/tests/test_worked_examples.py`.
+`scripts/tests/test_worked_examples.py`. Phases 3 and 3b ran on 2026-11-16, free, for six skills;
+see [the pre-screen record](phase-3-prescreen.md). It filed E84 to E86 and widened E82's evidence.
 
 ## Decisions for the maintainer
 
