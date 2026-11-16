@@ -7,6 +7,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **E83 phases 3 and 3b: flagship candidates and a free pre-screen.** `docs/internal/release-plans/_unassigned/E83_best-in-class-examples/phase-3-prescreen.md` names a pinned sibling-library source for six skills' flagships and records each skill's scripted lane on its candidate, with no model call. It filed [E84 (Windows output-encoding crash)](docs/internal/backlog/enhancements.md), [E85 (accessibility `background:` shorthand with `var()`)](docs/internal/backlog/enhancements.md) and [E86 (microcopy grades out-of-format input)](docs/internal/backlog/enhancements.md), and showed that [E82 (tables read as prose)](docs/internal/backlog/enhancements.md) covers labels, salutations, list items, code fences and rules as well. The microcopy source and criterion 4 for zero-scripted flagships wait on the maintainer.
 - **A guard on every worked example, E83 (best-in-class examples) phase 2.** `scripts/tests/test_worked_examples.py` validates every envelope, disposition log and revision brief under `examples/` against the contract, checks every recorded hash against the bytes on disk, checks that each artifact copy matches the fixture its envelope names and that each disposition log is bound to its envelope, and re-runs each README's printed scripted-lane command to compare the output with what is printed. Nothing checked the examples before; `validate:envelopes` covers `bench/results/` only.
 
 ### Fixed
