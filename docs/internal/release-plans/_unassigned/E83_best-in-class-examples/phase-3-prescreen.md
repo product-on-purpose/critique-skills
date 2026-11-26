@@ -12,8 +12,9 @@ This record covers the plan's phase 3 (choose one realistic artifact per skill) 
 each skill's scripted lane on its candidate, free, and read every finding for misfires). No model
 was called. The pre-screen found four scripted-lane defects, filed below as E84 to E86, plus new
 evidence for E82. Following the plan's rule, a misfire becomes a backlog item, not a reason to swap
-the artifact. The microcopy candidate is still open, but for a different reason: that document is
-outside the skill's artifact claim.
+the artifact. The microcopy candidate was left open for a different reason: that document is
+outside the skill's artifact claim. The maintainer ruled both open decisions on 2026-11-26; see
+the end of "Open decisions for the maintainer".
 
 ## The candidates
 
@@ -29,7 +30,7 @@ named tag, so phase 4 can extract exactly the same input.
 | `critique-clarity` | pm-skills `v2.35.1`, `library/skill-output-samples/foundation-stakeholder-update/sample_foundation-stakeholder-update_brainshelf_resurface-email-beta-users.md`, lines 68 to 92 (the "Shareable update" email, without the sample's wrapper) | 25 of 139 | whole file: `727514a79eb1eeac20275777d68e8babf7abc13bcb7ef654b73d0b609c11c916` |
 | `critique-docs` | pm-skills `v2.35.1`, `site/src/content/docs/getting-started/quickstart.md` | 139 | `d0468d709d77c1bf5c15e0fbbd03b61834a4995b17cf4dcac4384565220d4061` |
 | `critique-forms` | writing-style-catalog `v0.15.0`, `docs/internal/ui-mockups/04-brand-voice-builder.html` | 936 | `0aac9d6063bbf49a287f3624df11522623ea2dc359dc6609b3b2428d2a1cf350` |
-| `critique-microcopy` | **Open.** The pre-screened candidate was pm-skills `v2.35.1`, `library/skill-output-samples/deliver-edge-cases/sample_deliver-edge-cases_storevine_campaigns.md` (200 lines, `ab1fa9aab1764474f856910e0c2db548eeace3bfa1947995367909607aaaa7ab`) | | |
+| `critique-microcopy` | **Ruled B on 2026-11-26:** this document's own error strings, restructured into ADR 0018's annotation format. The pre-screened candidate was pm-skills `v2.35.1`, `library/skill-output-samples/deliver-edge-cases/sample_deliver-edge-cases_storevine_campaigns.md` (200 lines, `ab1fa9aab1764474f856910e0c2db548eeace3bfa1947995367909607aaaa7ab`) | | |
 | `critique-usability` | writing-style-catalog `v0.15.0`, `docs/internal/ui-mockups/01-composer.html` | 594 | `4fe99169b83480876c66e4fedd608a28cbacdfe553a7d3b08b07ef9c72ec906c` |
 
 **The clarity extract.** E54 took only its PRD's Output section. For the same reason, the clarity
@@ -109,6 +110,18 @@ minimal file of a few lines.
      and the flagship reports its zero scripted findings and says why.
    - **Why not swap:** choosing inputs until the scripted lane fires would be selecting evidence,
      which D1 rules out.
+
+**Ruled by the maintainer on 2026-11-26, both recommendations accepted:**
+
+| Decision | Ruling |
+|---|---|
+| 1 (microcopy flagship source) | B: the edge-cases document's quoted error strings, restructured into ADR 0018's annotation format, using only the document's own words for placement and trigger. A field the document never states is left out or marked unknown, not invented. The flagship walkthrough says the layout is authored and the words are not. |
+| 2 (criterion 4 for zero-scripted flagships) | The skill's existing walkthrough satisfies criterion 4. The docs, forms and usability flagships each report zero scripted findings and say why. |
+
+E80 (output-bound ranking) was ruled the same day, which settles D8's condition for it. Its ruled
+design gives each lane its own slots, so a flagship run before that change ships would show a
+bound that changes at the next version move. The order this suggests is E82 and E80 built and
+re-measured first, then phase 4.
 
 ## Not verified
 
