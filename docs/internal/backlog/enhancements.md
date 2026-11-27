@@ -2076,7 +2076,27 @@ and the repository did not have.
   the ADR were both read.
 - **Blocks:** Nothing
 - **Depends on:** Nothing
-- **Rank at intake:** unranked (added 2026-11-04). **Status:** open.
+- **Rank at intake:** unranked (added 2026-11-04). **Status:** open; ruled 2026-11-26, build not
+  started.
+- **Ruled 2026-11-26 by the maintainer: give each lane its own slots below severity 3.** The
+  ruling rejected two alternatives. Keeping the lane-blind rule fixes neither failure. Ranking
+  scripted ahead of judged makes the scripted lane deterministic but guarantees E54's failure,
+  because any run with five or more scripted findings below severity 3 would show no judged one.
+  The ruled design:
+  - Scripted findings fill up to 3 of the 5 slots, ranked as `_rank_key` ranks them today.
+  - Judged findings fill the remaining slots, so they always get at least 2.
+  - When scripted findings fill fewer than 3 slots, judged findings may take the spare ones.
+  - Spare judged slots never pass to the scripted lane. If they did, which scripted findings
+    appear would depend on how many judged findings a repetition produced, which is the
+    nondeterminism this item exists to remove.
+  - The 3-and-2 split was proposed in the walk and has not been measured. The re-measure that
+    ships it is also its test.
+- **What the build needs:** a change to `rank_and_bound` and its tests. `contract/validate.py`
+  keeps its own copy of the bound for a warning rule, so it is read for agreement. Every shipped
+  skill reports differently afterwards, so each needs a version move, and the change needs a paid
+  re-measure on both tiers. Each of those needs the maintainer's go. E82 (non-prose markdown read
+  as prose) also needs a version move and a re-measure, so the two can share one dispatch, as E73
+  and E67 did on 2026-10-28.
 
 ## E81 - Record how many attempts each skill cell took
 
@@ -2163,7 +2183,7 @@ and the repository did not have.
 - **Blocks:** Nothing
 - **Depends on:** Its paid phase depends on E82 (tables read as prose) and E80 (output-bound
   ranking), per decision D8, and on a separate go. Phases 1 and 2 depend on nothing.
-- **Rank at intake:** unranked (added 2026-11-15). **Status:** open; phases 1 and 2 done 2026-11-15; phases 3 and 3b done 2026-11-16 for six skills (microcopy's source is open), recorded in [E83's pre-screen record](../release-plans/_unassigned/E83_best-in-class-examples/phase-3-prescreen.md).
+- **Rank at intake:** unranked (added 2026-11-15). **Status:** open; phases 1 and 2 done 2026-11-15; phases 3 and 3b done 2026-11-16 for six skills, with microcopy's source and criterion 4 ruled on 2026-11-26, recorded in [E83's pre-screen record](../release-plans/_unassigned/E83_best-in-class-examples/phase-3-prescreen.md).
 - **Plan:** [E83's plan (best-in-class examples)](../release-plans/_unassigned/E83_best-in-class-examples/plan.md),
   drafted 2026-11-15; all eight decisions ruled 2026-11-15, every recommendation accepted.
 
